@@ -162,7 +162,16 @@ body::before{
 @keyframes crystalShimmer{0%{background-position:200% center}50%{background-position:0% center}100%{background-position:200% center}}
 @keyframes shimmer{to{background-position:250% center}}
 .cover-sub{font-size:.58rem;letter-spacing:.38em;text-transform:uppercase;color:#9090b8;margin-bottom:.3rem}
-.cover-tag{font-size:.64rem;letter-spacing:.1em;color:var(--text2);opacity:.6;margin-bottom:1.5rem}
+.cover-tag{font-size:.64rem;letter-spacing:.1em;color:var(--text2);opacity:.6;margin-bottom:.75rem}
+#eyeLetterWrap{
+  display:inline-block;width:0.75em;height:0.9em;
+  vertical-align:middle;position:relative;top:-0.05em;
+}
+@media(max-width:767px){
+  #eyeLetterWrap{width:0.44em;height:0.52em;top:-0.03em;}
+  .cover-title{font-size:clamp(2.4rem,11vw,3.4rem);}
+  .cover-tag{margin-bottom:.35rem;}
+}
 .cover-quote{
   font-family:'Cormorant Garamond',serif;font-style:italic;
   font-size:.98rem;color:var(--white);
@@ -390,21 +399,30 @@ body::before{
   position:relative;overflow:hidden;
   backdrop-filter:blur(20px) saturate(180%);
   -webkit-backdrop-filter:blur(20px) saturate(180%);
-  transition:all .3s cubic-bezier(.25,.46,.45,.94)!important;
+  transition:transform .45s cubic-bezier(.22,1,.36,1),box-shadow .45s ease,border-color .45s ease,background .45s ease,color .45s ease!important;
 }
 .btn-primary::before,.btn-gold::before,.btn-purple::before,.btn-futura::before{
   content:'';position:absolute;top:0;left:0;right:0;height:50%;
   background:linear-gradient(to bottom,rgba(255,255,255,.18),transparent);
-  border-radius:980px 980px 0 0;pointer-events:none;
+  border-radius:980px 980px 0 0;pointer-events:none;z-index:1;
 }
+.cover-cta .btn-primary::after,.cover-cta .btn-gold::after,.cover-cta .btn-futura::after{
+  content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:0;
+  background:linear-gradient(105deg,transparent 38%,rgba(255,255,255,.14) 50%,transparent 62%);
+  transform:translateX(-130%);transition:transform .75s cubic-bezier(.22,1,.36,1);
+}
+.cover-cta .btn-primary:hover::after,.cover-cta .btn-gold:hover::after,.cover-cta .btn-futura:hover::after{transform:translateX(130%);}
 .btn-primary{background:rgba(255,255,255,.1)!important;border:1px solid rgba(255,255,255,.25)!important;color:#fff!important;box-shadow:0 4px 20px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.2)!important;}
-.btn-primary:hover{background:rgba(255,255,255,.18)!important;transform:translateY(-2px) scale(1.02)!important;}
+.btn-primary:hover{background:rgba(255,255,255,.18)!important;transform:translateY(-3px) scale(1.03)!important;box-shadow:0 10px 32px rgba(0,0,0,.35),0 0 24px rgba(255,255,255,.08),inset 0 1px 0 rgba(255,255,255,.28)!important;}
 .btn-gold{background:rgba(201,160,96,.15)!important;border:1px solid rgba(201,160,96,.45)!important;color:#e8c870!important;box-shadow:0 4px 20px rgba(201,160,96,.12),inset 0 1px 0 rgba(255,255,255,.15)!important;}
-.btn-gold:hover{background:rgba(201,160,96,.25)!important;transform:translateY(-2px) scale(1.02)!important;}
+.btn-gold:hover{background:rgba(201,160,96,.28)!important;transform:translateY(-3px) scale(1.03)!important;box-shadow:0 12px 36px rgba(201,160,96,.22),0 0 28px rgba(201,160,96,.18),inset 0 1px 0 rgba(255,255,255,.22)!important;border-color:rgba(232,200,130,.65)!important;}
 .btn-purple{background:rgba(130,100,210,.15)!important;border:1px solid rgba(150,120,230,.4)!important;color:rgba(200,175,255,.9)!important;box-shadow:0 4px 20px rgba(130,100,210,.12),inset 0 1px 0 rgba(255,255,255,.12)!important;text-decoration:none!important;display:inline-flex!important;align-items:center!important;}
 .btn-purple:hover{background:rgba(130,100,210,.25)!important;transform:translateY(-2px) scale(1.02)!important;}
 .btn-futura{background:rgba(20,60,80,.25)!important;border:1px solid rgba(60,160,180,.4)!important;color:rgba(160,220,235,.9)!important;box-shadow:0 4px 20px rgba(20,120,150,.12),inset 0 1px 0 rgba(255,255,255,.12)!important;cursor:pointer;}
-.btn-futura:hover{background:rgba(25,80,105,.35)!important;border-color:rgba(80,190,210,.6)!important;transform:translateY(-2px) scale(1.02)!important;}
+.btn-futura:hover{background:rgba(25,80,105,.38)!important;border-color:rgba(100,210,230,.55)!important;transform:translateY(-3px) scale(1.03)!important;box-shadow:0 12px 36px rgba(40,140,170,.25),0 0 26px rgba(80,190,210,.2),inset 0 1px 0 rgba(255,255,255,.2)!important;}
+.cover-cta .btn-primary,.cover-cta .btn-gold,.cover-cta .btn-futura{min-width:11.5rem;z-index:0;}
+.ac-card.ac-highlight{outline:1px solid rgba(212,175,95,.55);box-shadow:0 0 0 1px rgba(212,175,95,.2),0 12px 40px rgba(201,160,96,.18)!important;animation:cardPulse 1.2s ease 2;}
+@keyframes cardPulse{0%,100%{box-shadow:0 0 0 1px rgba(212,175,95,.2),0 12px 40px rgba(201,160,96,.18)}50%{box-shadow:0 0 0 2px rgba(232,200,130,.45),0 16px 48px rgba(201,160,96,.28)}}
 
 /* ── 3D SOCIAL ICONS ── */
 .soc-ball{border-radius:18px!important;backdrop-filter:blur(16px) saturate(160%)!important;-webkit-backdrop-filter:blur(16px) saturate(160%)!important;box-shadow:0 8px 24px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.35),inset 0 -1px 0 rgba(0,0,0,.15)!important;position:relative;transition:all .3s cubic-bezier(.25,.46,.45,.94)!important;}
@@ -521,6 +539,77 @@ body::before{
 @media(min-width:900px){.ac-grid{grid-template-columns:repeat(3,1fr);}}
 @media(min-width:1200px){.ac-grid{grid-template-columns:repeat(4,1fr);}}
 
+/* ── MICHAEL JACKSON + ICON AURA ── */
+#mjHeroBlock{
+  display:flex;flex-direction:column;align-items:center;gap:.65rem;
+  visibility:hidden;pointer-events:none;
+}
+#page-cover.active #mjHeroBlock{visibility:visible;}
+#mjFloatWrap{
+  width:clamp(160px,32vw,340px);
+  height:clamp(220px,44vw,460px);
+  contain:layout style size;
+  pointer-events:none;
+}
+#mjFloatWrap model-viewer{
+  width:100%;height:100%;
+  --poster-color:transparent;
+  background-color:transparent;
+  --progress-bar-color:transparent;
+}
+.btn-icon-aura{
+  position:relative;pointer-events:auto;cursor:pointer;
+  font-family:'Cormorant Garamond',serif;font-size:.92rem;font-weight:500;
+  letter-spacing:.28em;text-transform:uppercase;
+  padding:.72rem 1.85rem;border-radius:980px;border:1px solid rgba(212,175,95,.55);
+  color:#f0ddb0;background:linear-gradient(135deg,rgba(212,175,95,.18),rgba(155,109,255,.12));
+  backdrop-filter:blur(18px) saturate(160%);-webkit-backdrop-filter:blur(18px) saturate(160%);
+  box-shadow:0 4px 24px rgba(0,0,0,.3),0 0 20px rgba(212,175,95,.15),inset 0 1px 0 rgba(255,255,255,.22);
+  transition:transform .45s cubic-bezier(.22,1,.36,1),box-shadow .5s ease,border-color .45s ease;
+  overflow:hidden;
+}
+.btn-icon-aura::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:52%;
+  background:linear-gradient(to bottom,rgba(255,255,255,.22),transparent);
+  border-radius:980px 980px 0 0;pointer-events:none;
+}
+.btn-icon-aura-glow{
+  position:absolute;inset:-2px;border-radius:inherit;pointer-events:none;z-index:-1;
+  background:radial-gradient(ellipse 80% 60% at 50% 50%,rgba(232,200,130,.35),transparent 70%);
+  animation:auraGlow 2.8s ease-in-out infinite;
+}
+@keyframes auraGlow{
+  0%,100%{opacity:.55;transform:scale(1);}
+  50%{opacity:1;transform:scale(1.04);}
+}
+.btn-icon-aura:hover{
+  transform:translateY(-3px) scale(1.04);
+  border-color:rgba(240,215,160,.85);
+  box-shadow:0 10px 36px rgba(0,0,0,.35),0 0 32px rgba(212,175,95,.35),0 0 48px rgba(155,109,255,.15),inset 0 1px 0 rgba(255,255,255,.3);
+}
+.btn-icon-aura-label{position:relative;z-index:1;}
+@media(min-width:768px){
+  #mjHeroBlock{
+    position:fixed;top:clamp(3.5rem,8vh,5rem);right:clamp(0.5rem,2vw,1.25rem);
+    left:auto;z-index:4;align-items:flex-end;
+  }
+}
+@media(max-width:767px){
+  #mjHeroBlock{
+    position:relative;width:100%;margin:.15rem auto 1.1rem;
+    pointer-events:none;z-index:1;
+  }
+  #mjFloatWrap{
+    width:clamp(200px,62vw,320px);
+    height:clamp(268px,82vw,420px);
+  }
+  .cover .soc-row,.cover .cover-cta{position:relative;z-index:2;}
+}
+@media(prefers-reduced-motion:reduce){
+  #mjHeroBlock{display:none!important;}
+  .btn-icon-aura-glow{animation:none;}
+}
+
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
@@ -571,17 +660,35 @@ body::before{
         </svg>
       </div>
       
-      <h1 class="cover-title">ERI<span id="eyeLetterWrap" style="
-  display:inline-block;
-  width:0.75em;
-  height:0.9em;
-  vertical-align:middle;
-  position:relative;
-  top:-0.05em;
-">
+      <h1 class="cover-title">ERI<span id="eyeLetterWrap">
   <canvas id="eyeCanvas" style="width:100%;height:100%;display:block;"></canvas>
 </span>R<em>CENTER</em><canvas id="titleDust" style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:700px;height:100%;pointer-events:none;z-index:10;overflow:visible;"></canvas></h1>
       <div class="cover-tag">Guía interactiva para utilizar tus audios</div>
+
+      <div id="mjHeroBlock" aria-hidden="true">
+        <div id="mjFloatWrap">
+          <model-viewer
+            id="mjModel"
+            data-src="michael_jackson_clean.glb"
+            loading="lazy"
+            autoplay
+            interaction-prompt="none"
+            disable-zoom
+            disable-pan
+            disable-tap
+            shadow-intensity="0"
+            exposure="1.1"
+            camera-orbit="0deg 78deg 72%"
+            min-camera-orbit="auto 60deg 55%"
+            max-camera-orbit="auto 90deg 95%"
+            style="width:100%;height:100%;background-color:transparent;"
+          ></model-viewer>
+        </div>
+        <button type="button" class="btn-icon-aura" onclick="goToIconAura()">
+          <span class="btn-icon-aura-glow" aria-hidden="true"></span>
+          <span class="btn-icon-aura-label">Icon Aura</span>
+        </button>
+      </div>
 
       <!-- 3D Social Icons -->
       <div class="soc-row">
@@ -613,10 +720,9 @@ body::before{
       </div>
       <!-- CTAs --><!-- CTAs -->
       <div class="cover-cta">
-        <button class="btn-primary" onclick="goTo('catalogo')">Ver Catálogo</button>
-        <a href="https://eriorrabbithole.netlify.app" target="_blank" class="btn-purple">Rabbit Hole</a>
-        <button class="btn-gold" onclick="mmOpen()">Mind Movie</button>
-        <button class="btn-futura" onclick="futuraOpen()">Futura · Próximamente</button>
+        <button class="btn-primary btn-premium" onclick="goTo('catalogo')">Ver Catálogo</button>
+        <button class="btn-gold btn-premium" onclick="mmOpen()">Mind Movie</button>
+        <button class="btn-futura btn-premium" onclick="futuraOpen()">Futura · Próximamente</button>
       </div>
       
     </div>
@@ -784,6 +890,24 @@ function goTo(id){
   
   window.scrollTo(0,0);
 }
+
+function goToIconAura(){
+  goTo('catalogo');
+  curCat='autoestima';
+  buildCatalog();
+  setTimeout(function(){
+    var aud=lang==='es'?audiosEs:audiosEn;
+    var cats=lang==='es'?CATS_ES:CATS_EN;
+    var item=aud.find(function(a){return /ICON AURA/i.test(a.nombre);});
+    var card=document.querySelector('.ac-card[data-audio-key="icon-aura"]');
+    if(card){
+      card.scrollIntoView({behavior:'smooth',block:'center'});
+      card.classList.add('ac-highlight');
+      setTimeout(function(){card.classList.remove('ac-highlight');},2800);
+    }
+    if(item)openModal(item,cats);
+  },320);
+}
 function nextPage(){
   if(curPage<PAGES.length-1){curPage++;goTo(PAGES[curPage]);}
 }
@@ -906,6 +1030,7 @@ function buildCatalog(){
   items.forEach(function(a){
     var d=document.createElement('div');
     d.className='ac-card';
+    if(/ICON AURA/i.test(a.nombre))d.dataset.audioKey='icon-aura';
     d.addEventListener('click',function(e){if(!e.target.closest('a'))openModal(a,cats);});
     var imgH=a.img
       ?'<img src="'+a.img+'" alt="'+a.nombre+'" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block">'
@@ -1118,6 +1243,93 @@ initAlicia();
     window.addEventListener('resize',function(){var nW=cv.offsetWidth,nH=cv.offsetHeight;camera.aspect=nW/nH;camera.updateProjectionMatrix();renderer.setSize(nW,nH);});
   }
   setTimeout(init,400);
+})();
+
+// ── FLOATING GLB (model-viewer, lazy) ──
+(function(){
+  var hero=document.getElementById('mjHeroBlock');
+  var wrap=document.getElementById('mjFloatWrap');
+  var viewer=document.getElementById('mjModel');
+  var cover=document.getElementById('page-cover');
+  if(!hero||!wrap||!viewer||!cover)return;
+  var scriptLoaded=false,modelReady=false;
+  var glbSrc=viewer.getAttribute('data-src');
+
+  function loadModelViewerScript(cb){
+    if(scriptLoaded){cb();return;}
+    if(customElements.get('model-viewer')){scriptLoaded=true;cb();return;}
+    var s=document.createElement('script');
+    s.type='module';
+    s.src='https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js';
+    s.onload=function(){scriptLoaded=true;cb();};
+    s.onerror=function(){wrap.style.display='none';};
+    document.head.appendChild(s);
+  }
+
+  function pickDanceAnimation(){
+    var list=viewer.availableAnimations||[];
+    if(!list.length)return null;
+    var dance=list.find(function(name){
+      return /danc|baile|dance|moonwalk|groove|move|choreo|hip|thriller/i.test(name);
+    });
+    return dance||list[0];
+  }
+
+  function applyLayoutCamera(){
+    if(window.matchMedia('(max-width:767px)').matches){
+      viewer.setAttribute('camera-orbit','0deg 80deg 70%');
+    }else{
+      viewer.setAttribute('camera-orbit','0deg 78deg 72%');
+    }
+  }
+
+  function playDance(){
+    var anim=pickDanceAnimation();
+    if(anim)viewer.animationName=anim;
+    if(viewer.play)viewer.play({repetitions:Infinity});
+  }
+
+  function attachModel(){
+    if(modelReady||!glbSrc)return;
+    modelReady=true;
+    viewer.setAttribute('src',glbSrc);
+    viewer.addEventListener('load',function(){
+      applyLayoutCamera();
+      if(cover.classList.contains('active'))playDance();
+    },{once:true});
+    window.addEventListener('resize',applyLayoutCamera);
+  }
+
+  function activate(){
+    loadModelViewerScript(function(){
+      attachModel();
+      if(modelReady)playDance();
+    });
+  }
+
+  function deactivate(){
+    if(viewer.pause)viewer.pause();
+  }
+
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting)activate();
+        else deactivate();
+      });
+    },{rootMargin:'80px',threshold:0.05});
+    io.observe(hero);
+  }else{
+    setTimeout(activate,600);
+  }
+
+  new MutationObserver(function(){
+    if(cover.classList.contains('active')){
+      if(modelReady)playDance();
+    }else{
+      deactivate();
+    }
+  }).observe(cover,{attributes:true,attributeFilter:['class']});
 })();
 
 // ── OPAL TORNASOL ──
