@@ -164,14 +164,22 @@ body::before{
 .cover-sub{font-size:.58rem;letter-spacing:.38em;text-transform:uppercase;color:#9090b8;margin-bottom:.3rem}
 .cover-tag{font-size:.64rem;letter-spacing:.1em;color:var(--text2);opacity:.6;margin-bottom:.75rem}
 #eyeLetterWrap{
-  display:inline-block;width:0.75em;height:0.9em;
-  vertical-align:middle;position:relative;top:-0.05em;
+  display:inline-flex;align-items:center;justify-content:center;
+  width:0.88em;height:0.95em;
+  vertical-align:middle;position:relative;top:0.02em;
+  line-height:0;overflow:hidden;border-radius:50%;
+  filter:drop-shadow(0 0 6px rgba(100,180,255,.35));
 }
-@media(max-width:767px){
-  #eyeLetterWrap{width:0.44em;height:0.52em;top:-0.03em;}
-  .cover-title{font-size:clamp(2.4rem,11vw,3.4rem);}
-  .cover-tag{margin-bottom:.35rem;}
+#eyeLetterWrap model-viewer,#eyeModel{
+  width:100%;height:100%;display:block;
+  --poster-color:transparent;
+  background-color:transparent!important;
+  --progress-bar-color:transparent;
+  pointer-events:none;
+  transform:translateY(-0.06em);
+  transform-origin:center center;
 }
+.tg-svg{display:none;width:22px;height:22px;position:relative;z-index:2;}
 .cover-quote{
   font-family:'Cormorant Garamond',serif;font-style:italic;
   font-size:.98rem;color:var(--white);
@@ -194,16 +202,14 @@ body::before{
 .soc-icon:hover .soc-ball{box-shadow:0 14px 30px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.28);transform:perspective(100px) rotateX(-8deg)}
 .soc-ball::before{content:'';position:absolute;top:0;left:0;right:0;height:50%;background:linear-gradient(to bottom,rgba(255,255,255,.2),transparent);z-index:1}
 .soc-ball svg{width:24px;height:24px;position:relative;z-index:2}
-.soc-lbl{font-size:.52rem;letter-spacing:.09em;text-transform:uppercase;color:rgba(255,255,255,.75);transition:color .2s;}
+.soc-lbl{font-size:.52rem;letter-spacing:.09em;text-transform:lowercase;color:rgba(255,255,255,.75);transition:color .2s;}
 .soc-icon:hover .soc-lbl{color:rgba(255,255,255,1);text-shadow:0 0 10px rgba(255,255,255,.5);}
-#tgWrap .soc-lbl, a[href*='wa.me']:last-of-type .soc-lbl{
-  color:rgba(255,255,255,1);
-  text-shadow:0 0 8px rgba(100,200,255,.9),0 0 20px rgba(100,200,255,.5);
-  animation:tgGlow 2s ease-in-out infinite;
-  font-weight:600;
-}
-@keyframes tgGlow{0%,100%{text-shadow:0 0 6px rgba(100,200,255,.7),0 0 15px rgba(100,200,255,.3)}50%{text-shadow:0 0 12px rgba(100,220,255,1),0 0 30px rgba(100,200,255,.6),0 0 50px rgba(100,200,255,.2)}}
 .soc-icon:hover .soc-lbl{color:var(--white)}
+.soc-ig .soc-lbl{font-size:.5rem;letter-spacing:.04em;font-weight:400;}
+.soc-ig-erior .soc-lbl{color:rgba(220,210,240,.88);}
+.soc-ig-erior .soc-ball.ig-erior{background:linear-gradient(145deg,#c9a060 0%,#e6683c 35%,#dc2743 65%,#8b3a9e 100%)!important;box-shadow:0 8px 22px rgba(201,160,96,.25),inset 0 1px 0 rgba(255,255,255,.3)!important;}
+.soc-ig-magique .soc-lbl{color:rgba(255,210,230,.9);}
+.soc-ig-magique .soc-ball.ig-magique{background:linear-gradient(145deg,#ff9ecf 0%,#e6683c 30%,#bc1888 60%,#6b2d8a 100%)!important;box-shadow:0 8px 22px rgba(188,24,136,.28),inset 0 1px 0 rgba(255,255,255,.32)!important;}
 .ig{background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)}
 .yt{background:linear-gradient(135deg,#ff0000,#cc0000)}
 .sp{background:linear-gradient(135deg,#1db954,#158a3e)}
@@ -308,6 +314,100 @@ body::before{
 .modal-buy:hover{background:rgba(201,160,96,.25)}
 .modal-close{position:absolute;top:.85rem;right:.85rem;background:rgba(255,255,255,.07);border:1px solid var(--border);color:var(--text2);width:1.9rem;height:1.9rem;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.85rem;transition:all .2s}
 .modal-close:hover{color:var(--white);border-color:rgba(255,255,255,.2)}
+
+/* ── PAYMENT MODAL ── */
+#payModal{z-index:5100;}
+.pay-modal-box{
+  max-width:560px;border-radius:12px;
+  background:linear-gradient(165deg,#1a1b24 0%,#12131a 55%,#181920 100%);
+  border:1px solid rgba(201,160,96,.18);
+  box-shadow:0 28px 80px rgba(0,0,0,.65),inset 0 1px 0 rgba(255,255,255,.06);
+}
+.pay-modal-header{padding:1.75rem 1.75rem .5rem;border-bottom:1px solid rgba(255,255,255,.06);}
+.pay-modal-label{font-size:.55rem;letter-spacing:.28em;text-transform:uppercase;color:rgba(200,196,214,.45);margin-bottom:.35rem;}
+.pay-modal-product{font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-weight:400;color:var(--white);line-height:1.2;}
+.pay-methods{
+  display:flex;flex-wrap:wrap;gap:.45rem;
+  padding:1rem 1.75rem 0;
+}
+.pay-method-btn{
+  font-family:'Jost',sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;
+  padding:.45rem .85rem;border-radius:980px;cursor:pointer;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);
+  color:rgba(200,196,214,.65);transition:all .3s cubic-bezier(.22,1,.36,1);
+}
+.pay-method-btn:hover{border-color:rgba(201,160,96,.35);color:var(--white);}
+.pay-method-btn.active{
+  background:rgba(201,160,96,.14);border-color:rgba(201,160,96,.5);
+  color:var(--gold);box-shadow:0 0 18px rgba(201,160,96,.12);
+}
+.pay-panel{
+  margin:1rem 1.75rem 0;padding:1.15rem 1.25rem;
+  background:rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.07);
+  border-radius:8px;min-height:120px;
+}
+.pay-panel-title{
+  font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--gold);
+  margin-bottom:.75rem;letter-spacing:.04em;
+}
+.pay-detail{
+  font-size:.78rem;color:rgba(200,196,212,.72);line-height:1.75;
+  margin-bottom:.55rem;
+}
+.pay-detail strong{color:rgba(236,232,244,.92);font-weight:500;}
+.pay-detail-block{
+  padding:.75rem 0;border-top:1px solid rgba(255,255,255,.06);
+  margin-top:.5rem;
+}
+.pay-detail-block:first-child{border-top:none;padding-top:0;margin-top:0;}
+.pay-data{
+  font-family:'Jost',sans-serif;font-size:.72rem;letter-spacing:.06em;
+  color:rgba(220,216,232,.88);line-height:1.85;
+}
+.pay-data span{color:var(--gold);}
+.pay-copy-row{
+  display:flex;align-items:center;justify-content:space-between;gap:.65rem;
+  padding:.5rem 0;border-bottom:1px solid rgba(255,255,255,.05);
+}
+.pay-copy-row:last-child{border-bottom:none;padding-bottom:0;}
+.pay-copy-meta{flex:1;min-width:0;}
+.pay-copy-label{display:block;font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(200,196,214,.45);margin-bottom:.2rem;}
+.pay-copy-value{display:block;font-size:.74rem;color:rgba(236,232,244,.92);word-break:break-all;line-height:1.45;}
+.pay-copy-btn{
+  flex-shrink:0;font-family:'Jost',sans-serif;font-size:.52rem;letter-spacing:.14em;text-transform:uppercase;
+  padding:.38rem .7rem;border-radius:980px;cursor:pointer;
+  background:rgba(255,255,255,.05);border:1px solid rgba(201,160,96,.35);color:var(--gold);
+  transition:all .3s ease;
+}
+.pay-copy-btn:hover{background:rgba(201,160,96,.15);border-color:rgba(201,160,96,.55);}
+.pay-copy-btn.copied{background:rgba(125,184,154,.15);border-color:rgba(125,184,154,.5);color:#a8e0c8;}
+.pay-copy-all{
+  display:inline-flex;margin-top:.75rem;
+  font-family:'Jost',sans-serif;font-size:.56rem;letter-spacing:.16em;text-transform:uppercase;
+  padding:.5rem 1rem;border-radius:980px;cursor:pointer;
+  background:rgba(201,160,96,.1);border:1px solid rgba(201,160,96,.4);color:var(--gold);
+  transition:all .3s ease;
+}
+.pay-copy-all:hover{background:rgba(201,160,96,.2);}
+.pay-copy-all.copied{border-color:rgba(125,184,154,.5);color:#a8e0c8;}
+.pay-action{
+  display:inline-flex;align-items:center;justify-content:center;gap:.4rem;
+  margin-top:.85rem;padding:.7rem 1.35rem;
+  font-family:'Jost',sans-serif;font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;
+  text-decoration:none;border-radius:980px;cursor:pointer;
+  background:rgba(201,160,96,.12);border:1px solid rgba(201,160,96,.45);color:var(--gold);
+  transition:all .35s ease;
+}
+.pay-action:hover{background:rgba(201,160,96,.22);transform:translateY(-2px);box-shadow:0 8px 24px rgba(201,160,96,.15);}
+.pay-action.wa{background:rgba(37,211,102,.1);border-color:rgba(37,211,102,.4);color:#8fe8b0;}
+.pay-action.wa:hover{background:rgba(37,211,102,.18);box-shadow:0 8px 24px rgba(37,211,102,.12);}
+.pay-footer-note{
+  margin:1rem 1.75rem 1.75rem;padding:1rem 1.1rem;
+  background:rgba(201,160,96,.06);border:1px solid rgba(201,160,96,.2);
+  border-radius:8px;font-size:.72rem;color:rgba(200,196,212,.62);line-height:1.7;
+}
+.pay-footer-note strong{color:rgba(232,200,130,.85);font-weight:500;display:block;margin-bottom:.35rem;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;}
+.btn-buy{border:none;font:inherit;}
 
 /* ══════════════════════════════════
    ALICIA CHAT
@@ -497,7 +597,16 @@ body::before{
 .futura-input{flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;color:#fff;padding:.85rem 1.1rem;font-family:'Jost',sans-serif;font-size:.86rem;font-weight:300;outline:none;transition:border-color .3s;}
 .futura-input:focus{border-color:rgba(200,190,220,.35);}
 .futura-input::placeholder{color:rgba(255,255,255,.18);}
-.futura-submit{padding:.85rem 1.6rem;border-radius:12px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);color:rgba(220,216,232,.85);font-family:'Cormorant Garamond',serif;font-size:.9rem;font-weight:400;letter-spacing:.12em;cursor:pointer;transition:all .3s;white-space:nowrap;box-shadow:inset 0 1px 0 rgba(255,255,255,.15);backdrop-filter:blur(10px);}
+.futura-submit{
+  display:inline-block;width:100%;max-width:320px;margin-top:.25rem;
+  padding:.85rem 1.6rem;border-radius:14px;
+  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);
+  color:rgba(220,216,232,.85);font-family:'Jost',sans-serif;font-size:.72rem;
+  font-weight:400;letter-spacing:.12em;text-transform:uppercase;
+  cursor:pointer;transition:all .3s;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.15);backdrop-filter:blur(10px);
+  position:relative;z-index:1;
+}
 .futura-submit:hover{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.28);color:#fff;transform:scale(.98);}
 .futura-privacy{font-size:.58rem;color:rgba(255,255,255,.14);letter-spacing:.08em;position:relative;z-index:1;}
 
@@ -505,31 +614,78 @@ body::before{
 #catLangBtn{padding:.45rem 1.2rem;border-radius:980px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:rgba(200,196,214,.6);font-family:'Jost',sans-serif;font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;transition:all .25s;backdrop-filter:blur(10px);box-shadow:inset 0 1px 0 rgba(255,255,255,.1);}
 #catLangBtn:hover{background:rgba(255,255,255,.12);color:#fff;}
 
-/* ── GUIA PREMIUM ── */
+/* ── GUIA SWIPE CARDS ── */
 #page-guia.active{min-height:100vh;display:flex;flex-direction:column;overflow:hidden;}
-.guia-hero{padding:3.5rem 2rem 2rem;text-align:center;position:relative;border-bottom:1px solid var(--border);}
-.guia-hero-label{font-family:'Jost',sans-serif;font-size:.55rem;font-weight:400;letter-spacing:.35em;text-transform:uppercase;color:var(--text2);margin-bottom:.75rem;}
-.guia-hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.5rem,7vw,4rem);font-weight:300;line-height:1.05;color:var(--white);margin-bottom:.6rem;}
+.guia-hero{padding:3.75rem 1.5rem 1.35rem;text-align:center;position:relative;border-bottom:1px solid var(--border);flex-shrink:0;}
+.guia-hero-label{font-family:'Jost',sans-serif;font-size:.55rem;font-weight:400;letter-spacing:.35em;text-transform:uppercase;color:var(--text2);margin-bottom:.65rem;}
+.guia-hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,6vw,3.2rem);font-weight:300;line-height:1.05;color:var(--white);margin-bottom:.45rem;}
 .guia-hero-title em{font-style:italic;background:linear-gradient(135deg,#e8e0f0,#fff,#e0d8ec,#c8c0dc,#e8e0f0);background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:satinText 5s linear infinite;}
-.guia-hero-sub{font-size:.82rem;color:var(--text2);letter-spacing:.04em;margin-bottom:1.5rem;}
-.guia-progress-bar{width:180px;height:1px;background:rgba(255,255,255,.08);margin:0 auto;overflow:hidden;}
-.guia-progress-fill{height:100%;background:linear-gradient(90deg,rgba(200,190,220,.4),rgba(220,210,240,.8));width:20%;transition:width .5s cubic-bezier(.25,.46,.45,.94);}
-.guia-steps{flex:1;position:relative;overflow:hidden;min-height:420px;}
-.guia-step{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:3rem 2rem 5rem;text-align:center;opacity:0;transform:translateX(60px);transition:opacity .5s ease,transform .5s cubic-bezier(.25,.46,.45,.94);pointer-events:none;}
-.guia-step.active{opacity:1;transform:translateX(0);pointer-events:all;}
-.guia-step.prev{opacity:0;transform:translateX(-60px);}
-.guia-step-num{font-family:'Cormorant Garamond',serif;font-size:6rem;font-weight:300;line-height:1;color:rgba(255,255,255,.04);position:absolute;top:1.5rem;left:50%;transform:translateX(-50%);pointer-events:none;user-select:none;}
-.guia-step-icon{font-size:3rem;margin-bottom:1.25rem;filter:drop-shadow(0 0 16px rgba(200,190,220,.3));animation:iconFloat 4s ease-in-out infinite;}
-@keyframes iconFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
-.guia-step-content{max-width:480px;}
-.guia-step-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:300;color:var(--white);margin-bottom:.85rem;line-height:1.1;}
-.guia-step-desc{font-size:.9rem;color:rgba(200,196,214,.6);line-height:1.8;margin-bottom:1.25rem;}
-.guia-step-tip{display:inline-flex;align-items:center;gap:.4rem;font-size:.68rem;color:rgba(200,190,220,.4);font-style:italic;letter-spacing:.04em;padding:.45rem 1.1rem;border:1px solid rgba(255,255,255,.06);border-radius:980px;background:rgba(255,255,255,.02);}
-.guia-step-next{margin-top:2rem;padding:.8rem 2.2rem;border-radius:980px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:rgba(220,216,232,.7);font-family:'Cormorant Garamond',serif;font-size:.9rem;font-weight:400;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;transition:all .3s ease;position:relative;overflow:hidden;backdrop-filter:blur(10px);box-shadow:inset 0 1px 0 rgba(255,255,255,.1);}
-.guia-step-next:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.22);color:var(--white);transform:translateY(-2px);}
-.guia-dots{position:absolute;bottom:1.5rem;left:50%;transform:translateX(-50%);display:flex;gap:.5rem;z-index:2;}
-.guia-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.15);cursor:pointer;transition:all .3s ease;}
-.guia-dot.active{background:rgba(220,210,240,.7);width:22px;border-radius:3px;}
+.guia-hero-sub{font-size:.78rem;color:var(--text2);letter-spacing:.04em;margin-bottom:.85rem;}
+.guia-progress-bar{width:min(220px,70vw);height:2px;background:rgba(255,255,255,.08);margin:0 auto;overflow:hidden;border-radius:2px;}
+.guia-progress-fill{height:100%;background:linear-gradient(90deg,rgba(200,190,220,.45),rgba(220,210,240,.9));width:6%;transition:width .45s cubic-bezier(.25,.46,.45,.94);}
+.guia-swipe-zone{flex:1;display:flex;flex-direction:column;min-height:0;position:relative;padding-bottom:.5rem;}
+.guia-swipe-hint{font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(200,196,214,.35);text-align:center;margin-bottom:.65rem;}
+.guia-swipe-track{
+  display:flex;gap:1rem;
+  overflow-x:auto;overflow-y:hidden;
+  scroll-snap-type:x mandatory;
+  scroll-behavior:smooth;
+  -webkit-overflow-scrolling:touch;
+  padding:0 1.15rem 1rem;
+  flex:1;align-items:stretch;
+  scrollbar-width:none;
+}
+.guia-swipe-track::-webkit-scrollbar{display:none;}
+.guia-card{
+  flex:0 0 min(92vw,420px);
+  scroll-snap-align:center;
+  scroll-snap-stop:always;
+  background:linear-gradient(165deg,rgba(32,33,42,.95) 0%,rgba(18,19,26,.98) 55%,rgba(24,25,34,.95) 100%);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:22px;
+  padding:1.65rem 1.5rem 1.5rem;
+  box-shadow:0 20px 50px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.08);
+  display:flex;flex-direction:column;align-items:center;text-align:center;
+  position:relative;overflow:hidden;
+}
+.guia-card::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 90% 50% at 50% 0%,rgba(200,190,230,.08) 0%,transparent 60%);
+}
+.guia-card-num{
+  font-family:'Jost',sans-serif;font-size:.52rem;letter-spacing:.28em;
+  text-transform:uppercase;color:rgba(201,160,96,.55);margin-bottom:1rem;position:relative;z-index:1;
+}
+.guia-card-icon{
+  font-size:2.6rem;line-height:1;margin-bottom:1rem;
+  filter:drop-shadow(0 0 20px rgba(200,190,230,.25));
+  animation:iconFloat 4s ease-in-out infinite;position:relative;z-index:1;
+}
+@keyframes iconFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.guia-card-text{
+  font-size:clamp(.82rem,3.6vw,.92rem);color:rgba(210,206,222,.72);
+  line-height:1.75;max-width:36em;position:relative;z-index:1;
+}
+.guia-swipe-meta{
+  flex-shrink:0;padding:.5rem 1.25rem 1.75rem;
+  display:flex;flex-direction:column;align-items:center;gap:.75rem;
+}
+.guia-card-counter{font-family:'Jost',sans-serif;font-size:.58rem;letter-spacing:.18em;color:rgba(200,196,214,.45);}
+.guia-dots{display:flex;flex-wrap:wrap;justify-content:center;gap:.35rem;max-width:320px;}
+.guia-dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.18);cursor:pointer;transition:all .35s ease;border:none;padding:0;}
+.guia-dot.active{background:rgba(220,210,240,.85);width:18px;border-radius:3px;}
+.guia-swipe-nav{
+  display:flex;gap:.65rem;margin-top:.25rem;
+}
+.guia-nav-btn{
+  font-family:'Jost',sans-serif;font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;
+  padding:.55rem 1.25rem;border-radius:14px;cursor:pointer;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);
+  color:rgba(220,216,232,.75);backdrop-filter:blur(12px);
+  transition:all .3s ease;
+}
+.guia-nav-btn:hover{background:rgba(255,255,255,.1);color:#fff;}
+.guia-nav-btn.primary{background:rgba(201,160,96,.12);border-color:rgba(201,160,96,.35);color:var(--gold);}
 
 /* Scrollbar */
 ::-webkit-scrollbar{width:3px;}
@@ -539,17 +695,50 @@ body::before{
 @media(min-width:900px){.ac-grid{grid-template-columns:repeat(3,1fr);}}
 @media(min-width:1200px){.ac-grid{grid-template-columns:repeat(4,1fr);}}
 
-/* ── MICHAEL JACKSON + ICON AURA ── */
+/* ── COVER BRAND + HERO (centrado simétrico) ── */
+.page#page-cover .cover{
+  align-items:center;
+  overflow-x:hidden;
+  overflow-y:auto;
+}
+.page#page-cover .cover-brand{
+  width:100%;max-width:100%;
+  display:flex;flex-direction:column;align-items:center;
+  flex-shrink:0;
+}
+#coverHeroZone{
+  width:100%;max-width:min(540px,94vw);
+  margin:0 auto;
+  display:flex;flex-direction:column;align-items:center;
+  flex-shrink:1;min-height:0;
+}
+#coverHeroRow{
+  display:flex;align-items:flex-end;justify-content:center;
+  gap:clamp(.65rem,3.5vw,1.5rem);
+  width:100%;
+  max-width:min(500px,100%);
+  margin:0 auto;
+  padding:0 .25rem;
+}
+.cover-mj-col{
+  flex:0 0 auto;display:flex;flex-direction:column;align-items:center;
+  margin-top:clamp(-.4rem,-1.2vh,-.15rem);
+}
 #mjHeroBlock{
-  display:flex;flex-direction:column;align-items:center;gap:.65rem;
+  display:flex;flex-direction:column;align-items:center;
+  gap:.38rem;width:100%;
   visibility:hidden;pointer-events:none;
 }
+#mjHeroBlock .btn-cover-chip{pointer-events:auto;}
 #page-cover.active #mjHeroBlock{visibility:visible;}
 #mjFloatWrap{
-  width:clamp(160px,32vw,340px);
-  height:clamp(220px,44vw,460px);
-  contain:layout style size;
+  width:clamp(88px,22vw,170px);
+  height:clamp(132px,34vw,255px);
+  contain:layout style;
   pointer-events:none;
+  overflow:visible;
+  display:flex;align-items:flex-end;justify-content:center;
+  padding-top:.35rem;
 }
 #mjFloatWrap model-viewer{
   width:100%;height:100%;
@@ -557,57 +746,203 @@ body::before{
   background-color:transparent;
   --progress-bar-color:transparent;
 }
-.btn-icon-aura{
+.cover-cta-stack{
+  display:flex;flex-direction:column;align-items:stretch;justify-content:flex-end;
+  gap:clamp(.52rem,2.2vw,.68rem);
+  flex:0 0 auto;width:min(220px,48vw);min-width:min(168px,44vw);
+}
+.cover-cta-stack .btn-metallic{width:100%;}
+/* Chip buttons: Icon Aura, Mind Movie, Futura, Telegram — mismo tamaño y forma */
+.btn-cover-chip{
   position:relative;pointer-events:auto;cursor:pointer;
-  font-family:'Cormorant Garamond',serif;font-size:.92rem;font-weight:500;
-  letter-spacing:.28em;text-transform:uppercase;
-  padding:.72rem 1.85rem;border-radius:980px;border:1px solid rgba(212,175,95,.55);
-  color:#f0ddb0;background:linear-gradient(135deg,rgba(212,175,95,.18),rgba(155,109,255,.12));
-  backdrop-filter:blur(18px) saturate(160%);-webkit-backdrop-filter:blur(18px) saturate(160%);
-  box-shadow:0 4px 24px rgba(0,0,0,.3),0 0 20px rgba(212,175,95,.15),inset 0 1px 0 rgba(255,255,255,.22);
-  transition:transform .45s cubic-bezier(.22,1,.36,1),box-shadow .5s ease,border-color .45s ease;
+  width:100%;
+  font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI','Jost',sans-serif;
+  font-size:clamp(.5rem,2.2vw,.58rem);font-weight:500;
+  letter-spacing:.1em;text-transform:uppercase;
+  padding:.34rem .75rem;border-radius:16px;
+  border:1px solid rgba(255,255,255,.22);
+  color:rgba(252,250,255,.96);
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.14) 0%,rgba(255,255,255,.04) 40%),
+    linear-gradient(180deg,rgba(40,40,52,.7) 0%,rgba(10,10,14,.92) 100%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 4px 14px rgba(0,0,0,.25);
+  backdrop-filter:blur(20px) saturate(160%);
+  -webkit-backdrop-filter:blur(20px) saturate(160%);
+  transition:transform .35s ease,border-color .35s ease,box-shadow .35s ease;
+  -webkit-tap-highlight-color:transparent;
   overflow:hidden;
 }
-.btn-icon-aura::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:52%;
-  background:linear-gradient(to bottom,rgba(255,255,255,.22),transparent);
-  border-radius:980px 980px 0 0;pointer-events:none;
+.cover-mj-col .btn-cover-chip{width:auto;min-width:min(100%,9.5rem);}
+.btn-cover-chip:hover{transform:translateY(-1px);border-color:rgba(255,255,255,.32);}
+.btn-cover-chip.btn-cover-gold{
+  border-color:rgba(212,175,95,.42);
+  color:rgba(248,228,190,.95);
+  background:
+    linear-gradient(145deg,rgba(212,175,95,.18) 0%,rgba(255,255,255,.05) 40%),
+    linear-gradient(180deg,rgba(28,24,18,.85) 0%,rgba(10,10,14,.92) 100%);
 }
-.btn-icon-aura-glow{
-  position:absolute;inset:-2px;border-radius:inherit;pointer-events:none;z-index:-1;
-  background:radial-gradient(ellipse 80% 60% at 50% 50%,rgba(232,200,130,.35),transparent 70%);
-  animation:auraGlow 2.8s ease-in-out infinite;
+.btn-cover-chip.btn-cover-gold:hover{border-color:rgba(232,200,130,.75);}
+.btn-cover-chip.btn-cover-cyan{
+  border-color:rgba(80,180,210,.38);
+  color:rgba(190,230,245,.95);
+  background:
+    linear-gradient(145deg,rgba(60,160,200,.14) 0%,rgba(255,255,255,.04) 40%),
+    linear-gradient(180deg,rgba(18,32,42,.85) 0%,rgba(10,12,18,.92) 100%);
 }
-@keyframes auraGlow{
-  0%,100%{opacity:.55;transform:scale(1);}
-  50%{opacity:1;transform:scale(1.04);}
+.btn-cover-chip.btn-cover-cyan:hover{border-color:rgba(100,210,230,.55);}
+.btn-cover-chip.btn-cover-tg{
+  border-color:rgba(100,200,255,.28);
+  color:rgba(220,240,255,.96);
+  background:
+    linear-gradient(145deg,rgba(80,200,255,.15) 0%,rgba(255,255,255,.06) 35%),
+    linear-gradient(180deg,rgba(30,50,65,.6) 0%,rgba(12,18,28,.9) 100%);
 }
-.btn-icon-aura:hover{
-  transform:translateY(-3px) scale(1.04);
-  border-color:rgba(240,215,160,.85);
-  box-shadow:0 10px 36px rgba(0,0,0,.35),0 0 32px rgba(212,175,95,.35),0 0 48px rgba(155,109,255,.15),inset 0 1px 0 rgba(255,255,255,.3);
+.btn-cover-chip.btn-cover-tg:hover{border-color:rgba(120,210,255,.45);}
+/* Liquid glass iOS-style + shatter */
+.btn-metallic{
+  position:relative;overflow:hidden;cursor:pointer;
+  font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI','Jost',sans-serif;
+  font-size:clamp(.58rem,2.4vw,.67rem);
+  font-weight:500;letter-spacing:.04em;text-transform:none;
+  padding:clamp(.56rem,2.2vw,.66rem) clamp(.75rem,2.8vw,1rem);
+  border-radius:16px;
+  color:rgba(252,250,255,.96);
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.22) 0%,rgba(255,255,255,.06) 28%,rgba(255,255,255,.02) 45%),
+    linear-gradient(180deg,rgba(55,55,68,.55) 0%,rgba(22,22,30,.75) 50%,rgba(12,12,18,.88) 100%);
+  border:1px solid rgba(255,255,255,.24);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.38),
+    inset 0 -1px 0 rgba(0,0,0,.25),
+    0 6px 20px rgba(0,0,0,.28),
+    0 1px 0 rgba(255,255,255,.06);
+  backdrop-filter:blur(28px) saturate(190%);
+  -webkit-backdrop-filter:blur(28px) saturate(190%);
+  transition:transform .35s cubic-bezier(.34,1.2,.64,1),box-shadow .4s ease,border-color .35s ease;
+  -webkit-tap-highlight-color:transparent;
 }
-.btn-icon-aura-label{position:relative;z-index:1;}
+.btn-metallic::before{
+  content:'';position:absolute;inset:0;pointer-events:none;z-index:1;border-radius:inherit;
+  background:linear-gradient(118deg,transparent 32%,rgba(255,255,255,.22) 48%,rgba(255,255,255,.08) 52%,transparent 68%);
+  transform:translateX(-130%);
+  transition:transform .85s cubic-bezier(.22,1,.36,1);
+}
+.btn-metallic::after{
+  content:'';position:absolute;top:0;left:8%;right:8%;height:48%;pointer-events:none;z-index:1;border-radius:16px 16px 50% 50%;
+  background:linear-gradient(to bottom,rgba(255,255,255,.18),transparent);
+}
+.btn-metallic:hover::before{transform:translateX(130%);}
+.btn-metallic:hover{
+  border-color:rgba(255,255,255,.32);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 10px 28px rgba(0,0,0,.32),0 0 20px rgba(180,170,220,.08);
+}
+.btn-metallic:active{transform:scale(.96);}
+.btn-metallic .btn-metallic-txt{
+  position:relative;z-index:2;
+  text-transform:uppercase;letter-spacing:.13em;font-size:.92em;
+}
+.btn-metallic-tg{
+  background:
+    linear-gradient(145deg,rgba(80,200,255,.15) 0%,rgba(255,255,255,.06) 35%),
+    linear-gradient(180deg,rgba(30,50,65,.6) 0%,rgba(12,18,28,.9) 100%);
+  border-color:rgba(100,200,255,.28);
+}
+.btn-metallic-tg:hover{box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 10px 28px rgba(0,0,0,.3),0 0 18px rgba(41,168,232,.12);}
+.btn-metallic.shattering,.btn-cover-chip.shattering{pointer-events:none;transform:scale(.94);}
+.btn-metallic.shattering .btn-metallic-txt{opacity:0;transition:opacity .1s;}
+.btn-cover-chip.shattering{color:transparent;transition:color .1s;}
+.btn-metallic .liquid-splash{
+  position:absolute;border-radius:50%;pointer-events:none;z-index:3;
+  background:radial-gradient(circle,rgba(255,255,255,.35) 0%,transparent 70%);
+  transform:scale(0);animation:liquidSplash .55s ease-out forwards;
+}
+@keyframes liquidSplash{to{transform:scale(2.8);opacity:0;}}
+.glass-shatter-layer{
+  position:absolute;inset:-2px;pointer-events:none;z-index:6;overflow:visible;border-radius:inherit;
+}
+.glass-shard{
+  position:absolute;
+  background:linear-gradient(135deg,rgba(255,255,255,.5),rgba(220,218,235,.12));
+  border:1px solid rgba(255,255,255,.35);
+  border-radius:2px;
+  box-shadow:0 0 10px rgba(255,255,255,.25);
+  opacity:1;
+  animation:shardFly .6s cubic-bezier(.22,1,.36,1) forwards;
+}
+@keyframes shardFly{
+  0%{opacity:1;transform:translate(0,0) rotate(0deg) scale(1);}
+  100%{opacity:0;transform:translate(var(--dx),var(--dy)) rotate(var(--shard-r)) scale(.12);}
+}
+#coverHeroZone .soc-row{
+  margin:clamp(1.15rem,4.5vh,1.65rem) auto 0;
+  padding-top:clamp(.25rem,1vh,.5rem);
+  flex-wrap:nowrap;justify-content:center;align-items:flex-start;
+  gap:clamp(.4rem,2.2vw,.7rem);
+  width:100%;max-width:100%;
+  overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;
+  padding-left:.2rem;padding-right:.2rem;
+}
+#coverHeroZone .soc-row::-webkit-scrollbar{display:none;}
+#coverHeroZone .soc-icon{
+  display:flex;flex-direction:column;align-items:center;
+  gap:.3rem;flex:0 0 auto;
+}
+#coverHeroZone .soc-icon-slot{
+  height:clamp(34px,9vw,46px);
+  display:flex;align-items:center;justify-content:center;
+}
+.page#page-cover .soc-ig .soc-lbl{
+  display:block;font-size:clamp(.42rem,2.8vw,.5rem);white-space:nowrap;
+  line-height:1.15;min-height:1.05rem;
+}
+#coverHeroZone .soc-icon:not(.soc-ig) .soc-lbl{
+  visibility:hidden;height:1.05rem;margin:0;padding:0;overflow:hidden;
+}
+.page#page-cover .cover-tag{margin-bottom:clamp(.35rem,1.2vh,.55rem);}
+.page#page-cover .cover-title{margin-bottom:clamp(.3rem,1vh,.45rem);}
+#coverHeroZone .soc-ball{
+  width:clamp(34px,9vw,46px);height:clamp(34px,9vw,46px);
+  border-radius:11px;
+}
 @media(min-width:768px){
-  #mjHeroBlock{
-    position:fixed;top:clamp(3.5rem,8vh,5rem);right:clamp(0.5rem,2vw,1.25rem);
-    left:auto;z-index:4;align-items:flex-end;
-  }
+  #coverHeroZone{max-width:min(560px,90vw);}
+  #coverHeroRow{gap:1.55rem;}
+  .cover-mj-col{margin-top:-.2rem;}
+  #mjFloatWrap{width:clamp(100px,14vw,170px);height:clamp(150px,21vw,255px);}
+  .cover-cta-stack{width:min(220px,38vw);gap:.62rem;}
+  .btn-metallic{font-size:.64rem;padding:.62rem 1.05rem;border-radius:18px;}
+  #coverHeroZone .soc-row{margin-top:1.5rem;}
+  #coverHeroZone .soc-ball{width:46px;height:46px;}
+  .page#page-cover .soc-ig .soc-lbl{font-size:.5rem;}
 }
 @media(max-width:767px){
-  #mjHeroBlock{
-    position:relative;width:100%;margin:.15rem auto 1.1rem;
-    pointer-events:none;z-index:1;
+  .page#page-cover .cover{
+    min-height:100dvh;max-height:100dvh;
+    overflow-x:hidden;overflow-y:auto;
+    justify-content:flex-start;
+    padding:3.5rem .75rem .65rem;
+    gap:0;
   }
-  #mjFloatWrap{
-    width:clamp(200px,62vw,320px);
-    height:clamp(268px,82vw,420px);
-  }
-  .cover .soc-row,.cover .cover-cta{position:relative;z-index:2;}
+  .page#page-cover .logo-wrap{margin-bottom:.35rem;}
+  .page#page-cover .logo-svg{width:clamp(52px,14vw,68px);}
+  .page#page-cover .cover-title{font-size:clamp(1.85rem,9vw,2.65rem);line-height:.92;margin-bottom:.15rem;}
+  .page#page-cover .cover-tag{margin-bottom:.25rem;font-size:.52rem;}
+  #eyeLetterWrap{width:0.52em;height:0.58em;top:0.02em;}
+  #eyeModel{transform:translateY(-0.05em);}
+  #coverHeroRow{align-items:flex-end;justify-content:center;}
+  .cover-mj-col{margin-top:-.3rem;}
+  .cover-cta-stack{width:min(200px,52vw);gap:.55rem;}
+  #coverHeroZone .soc-row{margin-top:clamp(1rem,3.5vh,1.35rem);}
+}
+@media(max-width:767px) and (max-height:700px){
+  .page#page-cover .cover-title{font-size:clamp(1.65rem,8.5vw,2.2rem);}
+  #mjFloatWrap{width:clamp(76px,20vw,120px);height:clamp(114px,30vw,172px);}
+  .btn-metallic{padding:.42rem .6rem;font-size:.48rem;}
+  #coverHeroZone .soc-ball{width:32px;height:32px;}
 }
 @media(prefers-reduced-motion:reduce){
-  #mjHeroBlock{display:none!important;}
   .btn-icon-aura-glow{animation:none;}
+  .glass-shard{animation-duration:.2s;}
 }
 
 </style>
@@ -645,7 +980,7 @@ body::before{
 
   <!-- ══ COVER ══ -->
   <div class="page active" id="page-cover">
-    <div class="cover"><div class="logo-wrap">
+    <div class="cover"><div class="cover-brand"><div class="logo-wrap">
         <svg class="logo-svg" viewBox="0 0 120 155" fill="none" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <linearGradient id="holo" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -660,69 +995,84 @@ body::before{
         </svg>
       </div>
       
-      <h1 class="cover-title">ERI<span id="eyeLetterWrap">
-  <canvas id="eyeCanvas" style="width:100%;height:100%;display:block;"></canvas>
+      <h1 class="cover-title">ERI<span id="eyeLetterWrap" aria-hidden="true">
+  <model-viewer
+    id="eyeModel"
+    data-src="cyber_eye.glb"
+    autoplay
+    interaction-prompt="none"
+    disable-zoom
+    disable-pan
+    disable-tap
+    shadow-intensity="0"
+    exposure="1.15"
+    camera-orbit="0deg 75deg auto"
+    field-of-view="22deg"
+    style="width:100%;height:100%;background-color:transparent;"
+  ></model-viewer>
 </span>R<em>CENTER</em><canvas id="titleDust" style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:700px;height:100%;pointer-events:none;z-index:10;overflow:visible;"></canvas></h1>
       <div class="cover-tag">Guía interactiva para utilizar tus audios</div>
-
-      <div id="mjHeroBlock" aria-hidden="true">
-        <div id="mjFloatWrap">
-          <model-viewer
-            id="mjModel"
-            data-src="michael_jackson_clean.glb"
-            loading="lazy"
-            autoplay
-            interaction-prompt="none"
-            disable-zoom
-            disable-pan
-            disable-tap
-            shadow-intensity="0"
-            exposure="1.1"
-            camera-orbit="0deg 78deg 72%"
-            min-camera-orbit="auto 60deg 55%"
-            max-camera-orbit="auto 90deg 95%"
-            style="width:100%;height:100%;background-color:transparent;"
-          ></model-viewer>
-        </div>
-        <button type="button" class="btn-icon-aura" onclick="goToIconAura()">
-          <span class="btn-icon-aura-glow" aria-hidden="true"></span>
-          <span class="btn-icon-aura-label">Icon Aura</span>
-        </button>
       </div>
 
-      <!-- 3D Social Icons -->
-      <div class="soc-row">
-        <a href="https://www.instagram.com/eriorcenter" target="_blank" class="soc-icon">
-          <div class="soc-ball ig"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.2" fill="white" stroke="none"/></svg></div>
+      <div id="coverHeroZone">
+        <div id="coverHeroRow">
+          <div class="cover-mj-col">
+            <div id="mjHeroBlock" aria-hidden="true">
+              <div id="mjFloatWrap">
+                <model-viewer
+                  id="mjModel"
+                  data-src="michael_jackson_clean.glb"
+                  autoplay
+                  interaction-prompt="none"
+                  disable-zoom
+                  disable-pan
+                  disable-tap
+                  shadow-intensity="0"
+                  exposure="1.1"
+                  camera-orbit="0deg 68deg auto"
+                  min-camera-orbit="auto 55deg auto"
+                  max-camera-orbit="auto 85deg auto"
+                  field-of-view="26deg"
+                  camera-target="0m 1.1m 0m"
+                  style="width:100%;height:100%;background-color:transparent;"
+                ></model-viewer>
+              </div>
+              <button type="button" class="btn-cover-chip btn-cover-gold" onclick="goToIconAura()">Icon Aura</button>
+            </div>
+          </div>
+          <div class="cover-cta-stack">
+            <button type="button" class="btn-metallic" data-shatter-action="catalog"><span class="btn-metallic-txt">Ver Catálogo</span></button>
+            <button type="button" class="btn-metallic" data-shatter-action="mindmovie"><span class="btn-metallic-txt">Mind Movie</span></button>
+            <button type="button" class="btn-metallic" data-shatter-action="futura"><span class="btn-metallic-txt">Futura</span></button>
+            <button type="button" class="btn-metallic" data-shatter-action="telegram"><span class="btn-metallic-txt">Telegram</span></button>
+          </div>
+        </div>
+        <div class="soc-row">
+        <a href="https://www.instagram.com/eriorcenter" target="_blank" rel="noopener" class="soc-icon soc-ig soc-ig-erior">
+          <div class="soc-icon-slot"><div class="soc-ball ig ig-erior"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.2" fill="white" stroke="none"/></svg></div></div>
           <span class="soc-lbl">@eriorcenter</span>
         </a>
-        <a href="https://www.instagram.com/sheismagique" target="_blank" class="soc-icon">
-          <div class="soc-ball ig"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.2" fill="white" stroke="none"/></svg></div>
+        <a href="https://www.instagram.com/sheismagique" target="_blank" rel="noopener" class="soc-icon soc-ig soc-ig-magique">
+          <div class="soc-icon-slot"><div class="soc-ball ig ig-magique"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.2" fill="white" stroke="none"/></svg></div></div>
           <span class="soc-lbl">@sheismagique</span>
         </a>
-        <a href="https://www.youtube.com/@sheismagique" target="_blank" class="soc-icon">
-          <div class="soc-ball yt"><svg viewBox="0 0 24 24" fill="white"><path d="M22.5 6.5s-.3-2-1.2-2.8c-1.1-1.2-2.4-1.2-3-1.3C15.6 2.2 12 2.2 12 2.2s-3.6 0-6.3.2c-.6.1-1.9.1-3 1.3C1.8 4.5 1.5 6.5 1.5 6.5S1.2 8.8 1.2 11v2.1c0 2.2.3 4.4.3 4.4s.3 2 1.2 2.8c1.1 1.2 2.6 1.1 3.3 1.2C8.4 21.8 12 21.8 12 21.8s3.6 0 6.3-.3c.6-.1 1.9-.1 3-1.3.9-.8 1.2-2.8 1.2-2.8s.3-2.2.3-4.4V11c0-2.2-.3-4.5-.3-4.5zM9.7 15.5V8.4l6.6 3.6-6.6 3.5z"/></svg></div>
+        <a href="https://www.youtube.com/@sheismagique" target="_blank" rel="noopener" class="soc-icon">
+          <div class="soc-icon-slot"><div class="soc-ball yt"><svg viewBox="0 0 24 24" fill="white"><path d="M22.5 6.5s-.3-2-1.2-2.8c-1.1-1.2-2.4-1.2-3-1.3C15.6 2.2 12 2.2 12 2.2s-3.6 0-6.3.2c-.6.1-1.9.1-3 1.3C1.8 4.5 1.5 6.5 1.5 6.5S1.2 8.8 1.2 11v2.1c0 2.2.3 4.4.3 4.4s.3 2 1.2 2.8c1.1 1.2 2.6 1.1 3.3 1.2C8.4 21.8 12 21.8 12 21.8s3.6 0 6.3-.3c.6-.1 1.9-.1 3-1.3.9-.8 1.2-2.8 1.2-2.8s.3-2.2.3-4.4V11c0-2.2-.3-4.5-.3-4.5zM9.7 15.5V8.4l6.6 3.6-6.6 3.5z"/></svg></div></div>
           <span class="soc-lbl">YouTube</span>
         </a>
-        <a href="https://open.spotify.com/show/1tI7Avbjxvxu1jlQyvV3OY" target="_blank" class="soc-icon">
-          <div class="soc-ball sp"><svg viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.65 14.39c-.19.31-.6.41-.91.21-2.49-1.52-5.63-1.86-9.33-1.02-.36.08-.71-.14-.79-.5-.08-.36.14-.71.5-.79 4.04-.92 7.51-.53 10.32 1.19.31.19.4.6.21.91zm1.24-2.76c-.24.38-.74.5-1.12.27-2.85-1.75-7.19-2.26-10.56-1.24-.44.13-.9-.12-1.03-.56-.13-.44.12-.9.56-1.03 3.85-1.17 8.63-.6 11.88 1.44.38.23.5.74.27 1.12zm.11-2.87c-3.41-2.03-9.04-2.21-12.3-1.23-.52.16-1.07-.14-1.23-.66-.16-.52.14-1.07.66-1.23 3.74-1.14 9.97-.92 13.91 1.42.47.28.62.89.34 1.36-.28.46-.89.62-1.38.34z"/></svg></div>
+        <a href="https://open.spotify.com/show/1tI7Avbjxvxu1jlQyvV3OY" target="_blank" rel="noopener" class="soc-icon">
+          <div class="soc-icon-slot"><div class="soc-ball sp"><svg viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.65 14.39c-.19.31-.6.41-.91.21-2.49-1.52-5.63-1.86-9.33-1.02-.36.08-.71-.14-.79-.5-.08-.36.14-.71.5-.79 4.04-.92 7.51-.53 10.32 1.19.31.19.4.6.21.91zm1.24-2.76c-.24.38-.74.5-1.12.27-2.85-1.75-7.19-2.26-10.56-1.24-.44.13-.9-.12-1.03-.56-.13-.44.12-.9.56-1.03 3.85-1.17 8.63-.6 11.88 1.44.38.23.5.74.27 1.12zm.11-2.87c-3.41-2.03-9.04-2.21-12.3-1.23-.52.16-1.07-.14-1.23-.66-.16-.52.14-1.07.66-1.23 3.74-1.14 9.97-.92 13.91 1.42.47.28.62.89.34 1.36-.28.46-.89.62-1.38.34z"/></svg></div></div>
           <span class="soc-lbl">Podcast</span>
         </a>
-        <a href="https://x.com/sheismagique" target="_blank" class="soc-icon">
-          <div class="soc-ball tw"><svg viewBox="0 0 24 24" fill="white"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.26 5.632 5.904-5.632Zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></div>
+        <a href="https://x.com/sheismagique" target="_blank" rel="noopener" class="soc-icon">
+          <div class="soc-icon-slot"><div class="soc-ball tw"><svg viewBox="0 0 24 24" fill="white"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.26 5.632 5.904-5.632Zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></div></div>
           <span class="soc-lbl">Twitter/X</span>
         </a>
-        <a href="https://wa.me/c/5214432311761" target="_blank" class="soc-icon">
-          <div class="soc-ball wa"><svg viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></div>
+        <a href="https://wa.me/5214432311761?text=Hola!%20Me%20interesa%20adquirir%20un%20audio%2C%20%C2%BFtienen%20alguna%20promoci%C3%B3n%20disponible%3F" target="_blank" rel="noopener" class="soc-icon soc-icon-wa" id="socWhatsApp">
+          <div class="soc-icon-slot"><div class="soc-ball wa"><svg viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></div></div>
           <span class="soc-lbl">WhatsApp</span>
         </a>
-        <a href="https://wa.me/c/5214432311761" target="_blank" class="soc-icon" style="filter:drop-shadow(0 0 8px rgba(41,168,232,.5));"><div class="soc-ball" style="background:#fff;overflow:hidden;"><canvas id="tgCanvas" style="width:100%;height:100%;display:block;border-radius:22%;"></canvas></div><span class="soc-lbl">Telegram</span></a>
-      </div>
-      <!-- CTAs --><!-- CTAs -->
-      <div class="cover-cta">
-        <button class="btn-primary btn-premium" onclick="goTo('catalogo')">Ver Catálogo</button>
-        <button class="btn-gold btn-premium" onclick="mmOpen()">Mind Movie</button>
-        <button class="btn-futura btn-premium" onclick="futuraOpen()">Futura · Próximamente</button>
+        </div>
       </div>
       
     </div>
@@ -731,19 +1081,24 @@ body::before{
   <!-- ══ GUIA AUDIOS ══ -->
   <div class="page" id="page-guia">
     <div class="guia-hero">
-      <div class="guia-hero-label">Instrucciones</div>
-      <h1 class="guia-hero-title">Cómo usar<br><em>tus audios</em></h1>
-      <p class="guia-hero-sub">Una guía para activar la reprogramación de tu subconsciente</p>
+      <div class="guia-hero-label">Guía de Audios</div>
+      <h1 class="guia-hero-title">Instrucciones</h1>
+      <p class="guia-hero-sub">Desliza para conocer cada recomendación</p>
       <div class="guia-progress-bar"><div class="guia-progress-fill" id="guiaProgressFill"></div></div>
     </div>
-    <div class="guia-steps" id="guiaSteps">
-      <div class="guia-step" data-step="1"><div class="guia-step-num">01</div><div class="guia-step-content"><div class="guia-step-icon">🎧</div><h3 class="guia-step-title">Audífonos siempre</h3><p class="guia-step-desc">El audio trabaja con frecuencias binaurales que requieren un canal por oído. Sin audífonos, el efecto se pierde. Usa los mejores que tengas.</p><div class="guia-step-tip">✦ Preferible audífonos over-ear o in-ear de buena calidad</div></div><button class="guia-step-next" onclick="guiaNext(1)">Siguiente →</button></div>
-      <div class="guia-step" data-step="2"><div class="guia-step-num">02</div><div class="guia-step-content"><div class="guia-step-icon">🌙</div><h3 class="guia-step-title">El momento ideal</h3><p class="guia-step-desc">Tu mente es más receptiva justo antes de dormir y al despertar. En esos estados tu subconsciente absorbe las sugestiones con mayor profundidad.</p><div class="guia-step-tip">✦ También puedes escucharlo mientras descansas, meditas o trabajas</div></div><button class="guia-step-next" onclick="guiaNext(2)">Siguiente →</button></div>
-      <div class="guia-step" data-step="3"><div class="guia-step-num">03</div><div class="guia-step-content"><div class="guia-step-icon">🔁</div><h3 class="guia-step-title">21 días mínimo</h3><p class="guia-step-desc">La reprogramación neuronal requiere repetición. Escúchalo todos los días durante al menos 21 días para crear nuevos patrones en tu mente.</p><div class="guia-step-tip">✦ La consistencia es más importante que la intensidad</div></div><button class="guia-step-next" onclick="guiaNext(3)">Siguiente →</button></div>
-      <div class="guia-step" data-step="4"><div class="guia-step-num">04</div><div class="guia-step-content"><div class="guia-step-icon">💫</div><h3 class="guia-step-title">Confía en el proceso</h3><p class="guia-step-desc">Los cambios son sutiles al principio. Nuevas perspectivas, pensamientos diferentes, situaciones que se presentan de otra manera. No los busques — obsérvelos.</p><div class="guia-step-tip">✦ No analices mientras escuchas. Solo recibe</div></div><button class="guia-step-next" onclick="guiaNext(4)">Siguiente →</button></div>
-      <div class="guia-step" data-step="5"><div class="guia-step-num">05</div><div class="guia-step-content"><div class="guia-step-icon">🎬</div><h3 class="guia-step-title">Potencia con Mind Movie</h3><p class="guia-step-desc">Combina tu audio con el Mind Movie para reprogramación visual y auditiva simultánea. El inconsciente se programa mucho más rápido a través de imágenes.</p><div class="guia-step-tip">✦ Audio + imágenes = reprogramación acelerada</div></div><button class="guia-step-next" onclick="guiaNext(5)">Ver Catálogo →</button></div>
+    <div class="guia-swipe-zone">
+      <p class="guia-swipe-hint">← Desliza →</p>
+      <div class="guia-swipe-track" id="guiaSwipeTrack"></div>
     </div>
-    <div class="guia-dots" id="guiaDots"><span class="guia-dot active" onclick="guiaGoTo(1)"></span><span class="guia-dot" onclick="guiaGoTo(2)"></span><span class="guia-dot" onclick="guiaGoTo(3)"></span><span class="guia-dot" onclick="guiaGoTo(4)"></span><span class="guia-dot" onclick="guiaGoTo(5)"></span></div>
+    <div class="guia-swipe-meta">
+      <span class="guia-card-counter" id="guiaCardCounter">1 / 16</span>
+      <div class="guia-dots" id="guiaDots"></div>
+      <div class="guia-swipe-nav">
+        <button type="button" class="guia-nav-btn" id="guiaBtnPrev">Anterior</button>
+        <button type="button" class="guia-nav-btn" id="guiaBtnNext">Siguiente</button>
+        <button type="button" class="guia-nav-btn primary" id="guiaBtnCatalog" style="display:none">Ver Catálogo →</button>
+      </div>
+    </div>
   </div>
 
 <!-- ══ CATALOGO ══ -->
@@ -802,19 +1157,12 @@ body::before{
 <div id="futuraModal">
   <div class="futura-box">
     <button onclick="futuraClose()" style="position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.5);width:2rem;height:2rem;border-radius:50%;cursor:pointer;font-size:.85rem;display:flex;align-items:center;justify-content:center;z-index:2;">✕</button>
-    <div class="futura-badge-modal">Próximamente · 2025</div>
+    <div class="futura-badge-modal">Próximamente · 2026</div>
     <h2 class="futura-modal-title">FUTURA</h2>
     <p class="futura-modal-sub">Coaching con tu yo del futuro</p>
-    <p class="futura-modal-desc">Conversa con la versión más evolucionada de ti mismo a través de voz clonada, inteligencia artificial avanzada y un avatar 3D inmersivo.</p>
-    <div class="futura-feats-row"><span class="futura-feat">🎙 Voz IA</span><span class="futura-feat">🌌 Avatar 3D</span><span class="futura-feat">📈 Coaching</span></div>
-    <form id="futuraForm" onsubmit="futuraSubmit(event)">
-      <div class="futura-input-wrap">
-        <input type="email" id="futuraEmail" class="futura-input" placeholder="tu@email.com" required>
-        <button type="submit" class="futura-submit" id="futuraSubmitBtn">Únirme →</button>
-      </div>
-      <p class="futura-privacy">Tu información es privada. Solo recibirás novedades de FUTURA.</p>
-    </form>
-    <div id="futuraSuccess" style="display:none;text-align:center;padding:1rem 0"><div style="font-size:2rem;margin-bottom:.75rem">✦</div><p style="font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:#fff;margin-bottom:.5rem">¡Estás en la lista!</p><p style="font-size:.78rem;color:rgba(255,255,255,.4)">Te avisaremos cuando FUTURA esté lista.</p></div>
+    <p class="futura-modal-desc">Conversa con la versión más evolucionada de ti mismo mediante inteligencia artificial avanzada y un avatar 3D inmersivo.</p>
+    <div class="futura-feats-row"><span class="futura-feat">🌌 Avatar 3D</span><span class="futura-feat">📈 Coaching</span></div>
+    <button type="button" class="futura-submit" id="futuraWaitlistBtn" onclick="futuraJoinWaitlist()">Unirme a lista de espera</button>
   </div>
 </div>
 
@@ -827,7 +1175,27 @@ body::before{
       <div class="modal-cat" id="modalCat"></div>
       <div class="modal-name" id="modalName"></div>
       <div class="modal-desc" id="modalDesc"></div>
-      <a class="modal-buy" id="modalBuy" href="#" target="_blank">Adquirir →</a>
+      <button type="button" class="modal-buy" id="modalBuy" onclick="openPaymentFromModal()">Adquirir →</button>
+    </div>
+  </div>
+</div>
+
+<!-- PAYMENT MODAL -->
+<div class="modal-bg" id="payModal">
+  <div class="modal-box pay-modal-box">
+    <button class="modal-close" onclick="closePaymentModal()">✕</button>
+    <div class="pay-modal-header">
+      <div class="pay-modal-label" id="payModalLabel">Opciones de pago</div>
+      <div class="pay-modal-product" id="payProductName"></div>
+    </div>
+    <div class="pay-methods" id="payMethods"></div>
+    <div class="pay-panel" id="payPanel"></div>
+    <div class="pay-footer-note">
+      <strong>Después de pagar</strong>
+      <span id="payFooterText">Realiza el pago, manda el comprobante a eriorcenter@gmail.com indicando en el asunto el programa elegido y tu Instagram. Te enviaremos una forma digital para personalizar tu audio binaural y lo recibirás por mail con PDF de instrucciones.</span>
+      <div style="margin-top:.65rem">
+        <button type="button" class="pay-copy-btn" id="payCopyEmail" data-copy="eriorcenter@gmail.com">Copiar correo</button>
+      </div>
     </div>
   </div>
 </div>
@@ -928,7 +1296,7 @@ function closeMenu(){
   document.getElementById('menuBtn').classList.remove('open');
   document.body.style.overflow='';
 }
-document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeMenu();closeModal();}});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeMenu();closePaymentModal();closeModal();}});
 
 // ══════════════════════════════════
 // MIND MOVIE
@@ -1031,33 +1399,204 @@ function buildCatalog(){
     var d=document.createElement('div');
     d.className='ac-card';
     if(/ICON AURA/i.test(a.nombre))d.dataset.audioKey='icon-aura';
-    d.addEventListener('click',function(e){if(!e.target.closest('a'))openModal(a,cats);});
+    d.addEventListener('click',function(e){if(!e.target.closest('a,.btn-buy'))openModal(a,cats);});
     var imgH=a.img
       ?'<img src="'+a.img+'" alt="'+a.nombre+'" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block">'
       :'<div class="ac-img-emoji">'+a.emoji+'</div>';
     d.innerHTML=(a.isNew?'<div class="ac-new">NEW</div>':'')+
       '<div class="ac-img">'+imgH+'<div class="ac-img-overlay"></div><div class="ac-cat-badge">'+(cats[a.cat]||a.cat)+'</div></div>'+
       '<div class="ac-body"><div class="ac-name">'+a.nombre+'</div><div class="ac-desc">'+a.desc+'</div>'+
-      '<div class="ac-footer"><a class="btn-buy" href="'+(a.link||'https://wa.me/c/5214432311761')+'" target="_blank">'+(a.btnTxt||(lang==='es'?'Adquirir':'Get it'))+' →</a></div></div>';
+      '<div class="ac-footer"></div></div>';
+    var footer=d.querySelector('.ac-footer');
+    var buyBtn=document.createElement('button');
+    buyBtn.type='button';
+    buyBtn.className='btn-buy';
+    buyBtn.textContent=(a.btnTxt||(lang==='es'?'Adquirir':'Get it'))+' →';
+    buyBtn.onclick=function(ev){ev.stopPropagation();openPaymentModal(a.nombre);};
+    footer.appendChild(buyBtn);
     grid.appendChild(d);
   });
 }
 
+var currentModalAudio=null;
+var payCurrentMethod='oxxo';
+var payCurrentProduct='';
+var PAY_WHATSAPP='5214432311761';
+var WA_PROMO_MSG='Hola! Me interesa adquirir un audio, ¿tienen alguna promoción disponible?';
+var PAY_FOOTER_ES='Realiza el pago, manda el comprobante a eriorcenter@gmail.com indicando en el asunto el programa elegido y tu Instagram. Te enviaremos una forma digital para personalizar tu audio binaural y lo recibirás por mail con PDF de instrucciones.';
+var PAY_FOOTER_EN='Complete your payment and send the receipt to eriorcenter@gmail.com with the program name and your Instagram in the subject line. We will send you a digital form to personalize your binaural audio and deliver it by email with a PDF guide.';
+var PAY_METHODS=[
+  {id:'oxxo',labelEs:'OXXO',labelEn:'OXXO'},
+  {id:'transfer',labelEs:'Transferencia',labelEn:'Bank transfer'},
+  {id:'paypal',labelEs:'PayPal',labelEn:'PayPal'},
+  {id:'alt',labelEs:'Crypto / WU / USD',labelEn:'Crypto / WU / USD'},
+  {id:'other',labelEs:'Otro método',labelEn:'Other method'}
+];
+
+function payUi(key,es,en){return lang==='en'?en:es;}
+
+function buildPayMethods(){
+  var el=document.getElementById('payMethods');
+  if(!el||el.dataset.built)return;
+  el.dataset.built='1';
+  el.innerHTML='';
+  PAY_METHODS.forEach(function(m){
+    var b=document.createElement('button');
+    b.type='button';
+    b.className='pay-method-btn';
+    b.dataset.method=m.id;
+    b.textContent=payUi(m.id,m.labelEs,m.labelEn);
+    b.onclick=function(){selectPayMethod(m.id);};
+    el.appendChild(b);
+  });
+}
+
+function payWaUrl(msg){
+  return 'https://wa.me/'+PAY_WHATSAPP+'?text='+encodeURIComponent(msg);
+}
+
+function payPurchaseWaMsg(){
+  var name=payCurrentProduct||(document.getElementById('payProductName')&&document.getElementById('payProductName').textContent)||'';
+  return 'Hola, estoy interesado en comprar el audio: '+name.trim();
+}
+
+var PAY_COPY_ALL_TRANSFER='Paulina López Gutiérrez\nBanco NVIO\nCLABE: 710969000048503916\n\nBanco Banregio\nCLABE: 058470000010260425\nCuenta: 996812170013\nTarjeta: 4741 7435 2658 3795';
+var PAY_COPY_ALL_OXXO='Número de tarjeta: 4741 7435 2658 3795\nBanco: Banregio';
+
+function payCopyRow(label,value,copyText){
+  var ct=(copyText!=null?copyText:value);
+  return '<div class="pay-copy-row">'+
+    '<div class="pay-copy-meta"><span class="pay-copy-label">'+label+'</span>'+
+    '<span class="pay-copy-value">'+value+'</span></div>'+
+    '<button type="button" class="pay-copy-btn" data-copy="'+ct.replace(/"/g,'&quot;')+'">'+payUi('copy','Copiar','Copy')+'</button></div>';
+}
+
+function copyPayData(btn,text){
+  if(!text||!btn)return;
+  var ok=function(){
+    var orig=btn.dataset.label||btn.textContent;
+    if(!btn.dataset.label)btn.dataset.label=orig;
+    btn.textContent=payUi('copied','¡Copiado!','Copied!');
+    btn.classList.add('copied');
+    setTimeout(function(){btn.textContent=btn.dataset.label;btn.classList.remove('copied');},1800);
+  };
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(ok).catch(function(){payCopyFallback(text,ok);});
+  }else payCopyFallback(text,ok);
+}
+
+function payCopyFallback(text,cb){
+  var ta=document.createElement('textarea');
+  ta.value=text;ta.setAttribute('readonly','');ta.style.cssText='position:fixed;left:-9999px;top:0';
+  document.body.appendChild(ta);ta.select();
+  try{document.execCommand('copy');}catch(e){}
+  document.body.removeChild(ta);
+  if(cb)cb();
+}
+
+function bindPayCopyButtons(root){
+  (root||document).querySelectorAll('.pay-copy-btn[data-copy]').forEach(function(btn){
+    btn.onclick=function(){copyPayData(btn,btn.getAttribute('data-copy'));};
+  });
+  (root||document).querySelectorAll('.pay-copy-all[data-copy]').forEach(function(btn){
+    btn.onclick=function(){copyPayData(btn,btn.getAttribute('data-copy'));};
+  });
+}
+
+function renderPayPanel(methodId){
+  var panel=document.getElementById('payPanel');
+  if(!panel)return;
+  var html='';
+  if(methodId==='oxxo'){
+    html='<div class="pay-panel-title">'+payUi('oxxo','Depósito OXXO','OXXO deposit')+'</div>'+
+      '<p class="pay-detail">'+payUi('oxxo','Utiliza estos datos en tienda OXXO:','Use these details at any OXXO store:')+'</p>'+
+      payCopyRow(payUi('oxxo','Número de tarjeta','Card number'),'4741 7435 2658 3795','4741743526583795')+
+      payCopyRow(payUi('oxxo','Banco','Bank'),'Banregio','Banregio')+
+      '<button type="button" class="pay-copy-all" data-copy="'+PAY_COPY_ALL_OXXO.replace(/"/g,'&quot;')+'">'+payUi('oxxo','Copiar todos los datos','Copy all details')+'</button>';
+  }else if(methodId==='transfer'){
+    html='<div class="pay-panel-title">'+payUi('transfer','Transferencia bancaria','Bank transfer')+'</div>'+
+      '<div class="pay-detail-block">'+
+      '<p class="pay-data" style="margin-bottom:.65rem"><strong>Paulina López Gutiérrez</strong></p>'+
+      payCopyRow('Banco NVIO — CLABE','710969000048503916','710969000048503916')+
+      '</div><div class="pay-detail-block">'+
+      '<p class="pay-data" style="margin-bottom:.65rem"><strong>'+payUi('transfer','Banco Banregio','Banregio Bank')+'</strong></p>'+
+      payCopyRow('CLABE','058470000010260425','058470000010260425')+
+      payCopyRow(payUi('transfer','Cuenta','Account'),'996812170013','996812170013')+
+      payCopyRow(payUi('transfer','Tarjeta','Card'),'4741 7435 2658 3795','4741743526583795')+
+      '</div>'+
+      '<button type="button" class="pay-copy-all" data-copy="'+PAY_COPY_ALL_TRANSFER.replace(/"/g,'&quot;')+'">'+payUi('transfer','Copiar todos los datos','Copy all details')+'</button>';
+  }else if(methodId==='paypal'){
+    html='<div class="pay-panel-title">PayPal</div>'+
+      '<p class="pay-detail">'+payUi('paypal','Paga de forma segura con PayPal:','Pay securely with PayPal:')+'</p>'+
+      '<a class="pay-action" href="https://www.paypal.me/sheismagique" target="_blank" rel="noopener">'+payUi('paypal','Ir a PayPal →','Go to PayPal →')+'</a>';
+  }else if(methodId==='alt'){
+    html='<div class="pay-panel-title">'+payUi('alt','Crypto / Western Union / Dólares','Crypto / Western Union / USD')+'</div>'+
+      '<p class="pay-detail">'+payUi('alt','Coordina tu pago por WhatsApp:','Coordinate your payment via WhatsApp:')+'</p>'+
+      '<a class="pay-action wa" href="'+payWaUrl(payPurchaseWaMsg())+'" target="_blank" rel="noopener">'+payUi('alt','Abrir WhatsApp →','Open WhatsApp →')+'</a>';
+  }else if(methodId==='other'){
+    html='<div class="pay-panel-title">'+payUi('other','Otro método / Contactar equipo','Other method / Contact team')+'</div>'+
+      '<p class="pay-detail">'+payUi('other','Escríbenos y te ayudamos con la mejor opción para ti:','Message us and we will help you find the best option:')+'</p>'+
+      '<a class="pay-action wa" href="'+payWaUrl(payPurchaseWaMsg())+'" target="_blank" rel="noopener">'+payUi('other','Contactar por WhatsApp →','Contact via WhatsApp →')+'</a>';
+  }
+  panel.innerHTML=html;
+  bindPayCopyButtons(panel);
+}
+
+function selectPayMethod(id){
+  payCurrentMethod=id;
+  document.querySelectorAll('.pay-method-btn').forEach(function(b){
+    b.classList.toggle('active',b.dataset.method===id);
+  });
+  renderPayPanel(id);
+}
+
+function openPaymentModal(productName){
+  buildPayMethods();
+  payCurrentProduct=productName||'';
+  document.getElementById('payProductName').textContent=payCurrentProduct;
+  document.getElementById('payModalLabel').textContent=payUi('title','Opciones de pago','Payment options');
+  document.getElementById('payFooterText').textContent=lang==='en'?PAY_FOOTER_EN:PAY_FOOTER_ES;
+  selectPayMethod(payCurrentMethod||'oxxo');
+  var emailBtn=document.getElementById('payCopyEmail');
+  if(emailBtn)emailBtn.textContent=payUi('email','Copiar correo','Copy email');
+  bindPayCopyButtons(document.getElementById('payModal'));
+  document.getElementById('payModal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function openPaymentFromModal(){
+  var name=document.getElementById('modalName').textContent;
+  if(name)openPaymentModal(name);
+}
+
+function closePaymentModal(){
+  document.getElementById('payModal').classList.remove('open');
+  if(!document.getElementById('audioModal').classList.contains('open')&&!document.getElementById('fsMenu').classList.contains('open')){
+    document.body.style.overflow='';
+  }
+}
+
+document.getElementById('payModal').addEventListener('click',function(e){if(e.target===this)closePaymentModal();});
+
 function openModal(a,cats){
+  currentModalAudio=a;
   cats=cats||(lang==='es'?CATS_ES:CATS_EN);
   document.getElementById('modalCat').textContent=cats[a.cat]||a.cat;
   document.getElementById('modalName').textContent=a.nombre;
   document.getElementById('modalDesc').textContent=a.desc;
-  var buy=document.getElementById('modalBuy');
-  buy.href=a.link||'https://wa.me/c/5214432311761';
-  buy.textContent=(a.btnTxt||(lang==='es'?'Adquirir':'Get it'))+' →';
+  document.getElementById('modalBuy').textContent=(a.btnTxt||(lang==='es'?'Adquirir':'Get it'))+' →';
   document.getElementById('modalImg').innerHTML=a.img
     ?'<img class="modal-img" src="'+a.img+'" alt="'+a.nombre+'">'
     :'<div class="modal-emoji">'+a.emoji+'</div>';
   document.getElementById('audioModal').classList.add('open');
   document.body.style.overflow='hidden';
 }
-function closeModal(){document.getElementById('audioModal').classList.remove('open');document.body.style.overflow='';}
+function closeModal(){
+  document.getElementById('audioModal').classList.remove('open');
+  if(!document.getElementById('payModal').classList.contains('open')){
+    document.body.style.overflow='';
+  }
+}
 document.getElementById('audioModal').addEventListener('click',function(e){if(e.target===this)closeModal();});
 
 // ══════════════════════════════════
@@ -1170,82 +1709,129 @@ function stopBreath(){
 buildCatalog();
 buildTarot();
 initAlicia();
+(function(){
+  var wa=document.getElementById('socWhatsApp');
+  if(wa)wa.href=payWaUrl(WA_PROMO_MSG);
+})();
 
 
 (function(){
-  var cv=document.getElementById('eyeCanvas');
-  if(!cv)return;
-  function init(){
-    var W=cv.offsetWidth||60,H=cv.offsetHeight||60;
-    cv.width=W*devicePixelRatio;cv.height=H*devicePixelRatio;
-    var renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:true});
-    renderer.setPixelRatio(devicePixelRatio);renderer.setSize(W,H);
-    var scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(40,W/H,0.1,100);
-    camera.position.set(0,0,2.8);
-    scene.add(new THREE.AmbientLight(0xffffff,0.6));
-    var key=new THREE.DirectionalLight(0xffffff,1.2);key.position.set(2,2,3);scene.add(key);
-    var group=new THREE.Group();
-    var scl=new THREE.Mesh(new THREE.SphereGeometry(1,64,64),new THREE.MeshStandardMaterial({color:0xf5f0ee,roughness:0.15}));
-    scl.scale.z=0.78;group.add(scl);
-    var ic=document.createElement('canvas');ic.width=256;ic.height=256;
-    var ctx=ic.getContext('2d'),g=ctx.createRadialGradient(128,128,8,128,128,128);
-    // Paleta de colores para el iris — cicla entre ellos
-    var irisColors=[
-      ['#000814','#000814','#1a6abf','#0e4a9e','#0a3580','rgba(0,10,30,0)'],   // azul
-      ['#080014','#080014','#8b1abf','#6a0e9e','#3d0a80','rgba(10,0,30,0)'],   // morado
-      ['#001408','#001408','#0abf6a','#0a8050','#005030','rgba(0,30,10,0)'],   // verde esmeralda
-      ['#140800','#140800','#bf6a0a','#9e4a00','#7a2e00','rgba(30,10,0,0)'],   // dorado
-      ['#14000a','#14000a','#bf0a5a','#9e0a40','#7a0030','rgba(30,0,10,0)'],   // rojo rubí
-    ];
-    var irisColorIdx=0, irisNextIdx=1, irisProgress=0;
-    var irisCanvas2=document.createElement('canvas');irisCanvas2.width=256;irisCanvas2.height=256;
-    var ictx=irisCanvas2.getContext('2d');
-    function drawIris(stops){
-      ictx.clearRect(0,0,256,256);
-      var g2=ictx.createRadialGradient(128,128,8,128,128,128);
-      g2.addColorStop(0,stops[0]);g2.addColorStop(0.08,stops[1]);
-      g2.addColorStop(0.25,stops[2]);g2.addColorStop(0.5,stops[3]);
-      g2.addColorStop(0.7,stops[4]);g2.addColorStop(1,stops[5]);
-      ictx.fillStyle=g2;ictx.beginPath();ictx.arc(128,128,128,0,Math.PI*2);ictx.fill();
-      ictx.globalCompositeOperation='overlay';
-      for(var k2=0;k2<24;k2++){var a2=k2/24*Math.PI*2;ictx.strokeStyle='rgba(200,200,255,0.18)';ictx.lineWidth=1.5;ictx.beginPath();ictx.moveTo(128,128);ictx.lineTo(128+Math.cos(a2)*120,128+Math.sin(a2)*120);ictx.stroke();}
-      ictx.globalCompositeOperation='source-over';
-    }
-    drawIris(irisColors[0]);
-    var itex=new THREE.CanvasTexture(irisCanvas2);
-    var iris=new THREE.Mesh(new THREE.CircleGeometry(0.42,64),new THREE.MeshStandardMaterial({map:itex,roughness:0.1,transparent:true}));
-    iris.position.z=0.775;iris.renderOrder=1;group.add(iris);
-    // Actualizar textura del iris cada frame
-    setInterval(function(){
-      irisProgress+=0.008;
-      if(irisProgress>=1){irisProgress=0;irisColorIdx=irisNextIdx;irisNextIdx=(irisNextIdx+1)%irisColors.length;}
-      drawIris(irisColors[irisColorIdx]);
-      itex.needsUpdate=true;
-    },16);
-    var pupil=new THREE.Mesh(new THREE.CircleGeometry(0.13,32),new THREE.MeshStandardMaterial({color:0x000000,roughness:0.05}));
-    pupil.position.z=0.78;pupil.renderOrder=2;group.add(pupil);
-    var cornea=new THREE.Mesh(new THREE.SphereGeometry(1.01,64,64),new THREE.MeshStandardMaterial({color:0xffffff,roughness:0.0,transparent:true,opacity:0.12}));
-    cornea.scale.z=0.79;cornea.renderOrder=3;group.add(cornea);
-    var spec=new THREE.Mesh(new THREE.CircleGeometry(0.055,16),new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:0.85}));
-    spec.position.set(0.18,0.22,0.78);spec.renderOrder=4;group.add(spec);
-    scene.add(group);
-    var t=0,mx2=0,my2=0,blinkT=0,blinkS=0,nextB=Math.random()*180+120;
-    document.addEventListener('mousemove',function(e){mx2=e.clientX/innerWidth-0.5;my2=e.clientY/innerHeight-0.5;});
-    (function loop(){
-      requestAnimationFrame(loop);t+=1;
-      group.rotation.y=mx2*0.5;group.rotation.x=my2*0.35;
-      blinkT++;
-      if(blinkT>=nextB){blinkS++;var p=blinkS/8;
-        if(blinkS<=4)group.scale.y=1-p*0.95;else group.scale.y=0.05+(blinkS-4)/4*0.95;
-        if(blinkS>=8){blinkS=0;blinkT=0;nextB=Math.random()*200+100;group.scale.y=1;}}
-      renderer.render(scene,camera);
-    })();
-    window.addEventListener('resize',function(){var nW=cv.offsetWidth,nH=cv.offsetHeight;camera.aspect=nW/nH;camera.updateProjectionMatrix();renderer.setSize(nW,nH);});
+  var viewer=document.getElementById('eyeModel');
+  var wrap=document.getElementById('eyeLetterWrap');
+  if(!viewer||!wrap)return;
+  var glbSrc=viewer.getAttribute('data-src');
+  var scriptLoaded=false,modelReady=false;
+
+  function loadModelViewerScript(cb){
+    if(scriptLoaded){cb();return;}
+    if(customElements.get('model-viewer')){scriptLoaded=true;cb();return;}
+    var s=document.createElement('script');
+    s.type='module';
+    s.src='https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js';
+    s.onload=function(){scriptLoaded=true;cb();};
+    document.head.appendChild(s);
   }
-  setTimeout(init,400);
+
+  function pickEyeAnimation(){
+    var list=viewer.availableAnimations||[];
+    if(!list.length)return null;
+    var preferred=list.find(function(n){
+      return /blink|eye|idle|anim|loop|move/i.test(n);
+    });
+    return preferred||list[0];
+  }
+
+  function playEyeAnim(){
+    var anim=pickEyeAnimation();
+    if(anim)viewer.animationName=anim;
+    if(viewer.play)viewer.play({repetitions:Infinity});
+  }
+
+  function applyEyeCamera(){
+    viewer.setAttribute('field-of-view','22deg');
+    viewer.setAttribute('camera-orbit','0deg 75deg auto');
+    viewer.setAttribute('camera-target','0m 0m 0m');
+  }
+
+  function attachEye(){
+    if(modelReady||!glbSrc)return;
+    modelReady=true;
+    viewer.setAttribute('src',glbSrc);
+    viewer.addEventListener('load',function(){
+      applyEyeCamera();
+      playEyeAnim();
+    },{once:true});
+  }
+
+  loadModelViewerScript(function(){
+    attachEye();
+    if(modelReady)playEyeAnim();
+  });
 })();
 
-// ── FLOATING GLB (model-viewer, lazy) ──
+(function(){
+  var TELEGRAM_WA='https://wa.me/5214432311761?text='+encodeURIComponent('Hola, me interesa unirme al Telegram de Erior Center');
+  function runShatterAction(action){
+    if(action==='catalog')goTo('catalogo');
+    else if(action==='mindmovie')mmOpen();
+    else if(action==='futura')futuraOpen();
+    else if(action==='telegram')window.open(TELEGRAM_WA,'_blank','noopener');
+  }
+  function spawnLiquidSplash(btn){
+    var r=btn.getBoundingClientRect();
+    var splash=document.createElement('span');
+    splash.className='liquid-splash';
+    var size=Math.max(r.width,r.height)*1.2;
+    splash.style.width=splash.style.height=size+'px';
+    splash.style.left=(r.width/2-size/2)+'px';
+    splash.style.top=(r.height/2-size/2)+'px';
+    btn.appendChild(splash);
+    setTimeout(function(){if(splash.parentNode)splash.parentNode.removeChild(splash);},600);
+  }
+  function spawnGlassShatter(btn){
+    var layer=btn.querySelector('.glass-shatter-layer');
+    if(!layer){
+      layer=document.createElement('div');
+      layer.className='glass-shatter-layer';
+      btn.appendChild(layer);
+    }
+    layer.innerHTML='';
+    for(var i=0;i<18;i++){
+      var s=document.createElement('span');
+      s.className='glass-shard';
+      s.style.width=(5+Math.random()*11)+'px';
+      s.style.height=(4+Math.random()*9)+'px';
+      s.style.left=(Math.random()*82+6)+'%';
+      s.style.top=(Math.random()*70+12)+'%';
+      var dx=((Math.random()-.5)*90)|0,dy=((Math.random()-.5)*70-15)|0,rot=((Math.random()-.5)*160)|0;
+      s.style.setProperty('--dx',dx+'px');
+      s.style.setProperty('--dy',dy+'px');
+      s.style.setProperty('--shard-r',rot+'deg');
+      layer.appendChild(s);
+    }
+  }
+  function shatterThen(btn,action){
+    if(btn.classList.contains('shattering'))return;
+    btn.classList.add('shattering');
+    spawnLiquidSplash(btn);
+    spawnGlassShatter(btn);
+    setTimeout(function(){
+      runShatterAction(action);
+      btn.classList.remove('shattering');
+      var layer=btn.querySelector('.glass-shatter-layer');
+      if(layer)layer.innerHTML='';
+    },520);
+  }
+  document.querySelectorAll('.cover-cta-stack [data-shatter-action]').forEach(function(btn){
+    btn.addEventListener('click',function(e){
+      e.preventDefault();
+      var a=btn.getAttribute('data-shatter-action');
+      if(a)shatterThen(btn,a);
+    });
+  });
+})();
+
+// ── FLOATING GLB (model-viewer) ──
 (function(){
   var hero=document.getElementById('mjHeroBlock');
   var wrap=document.getElementById('mjFloatWrap');
@@ -1254,6 +1840,7 @@ initAlicia();
   if(!hero||!wrap||!viewer||!cover)return;
   var scriptLoaded=false,modelReady=false;
   var glbSrc=viewer.getAttribute('data-src');
+  var io=null;
 
   function loadModelViewerScript(cb){
     if(scriptLoaded){cb();return;}
@@ -1276,10 +1863,12 @@ initAlicia();
   }
 
   function applyLayoutCamera(){
+    viewer.setAttribute('field-of-view','24deg');
+    viewer.setAttribute('camera-target','0m 1.15m 0m');
     if(window.matchMedia('(max-width:767px)').matches){
-      viewer.setAttribute('camera-orbit','0deg 80deg 70%');
+      viewer.setAttribute('camera-orbit','0deg 64deg 112%');
     }else{
-      viewer.setAttribute('camera-orbit','0deg 78deg 72%');
+      viewer.setAttribute('camera-orbit','0deg 66deg 108%');
     }
   }
 
@@ -1311,16 +1900,18 @@ initAlicia();
     if(viewer.pause)viewer.pause();
   }
 
+  if(cover.classList.contains('active'))activate();
+
   if('IntersectionObserver' in window){
-    var io=new IntersectionObserver(function(entries){
+    io=new IntersectionObserver(function(entries){
       entries.forEach(function(e){
-        if(e.isIntersecting)activate();
-        else deactivate();
+        if(e.isIntersecting){
+          if(!modelReady)activate();
+          else if(cover.classList.contains('active'))playDance();
+        }else deactivate();
       });
     },{rootMargin:'80px',threshold:0.05});
     io.observe(hero);
-  }else{
-    setTimeout(activate,600);
   }
 
   new MutationObserver(function(){
@@ -1350,22 +1941,101 @@ initAlicia();
   },{passive:true});
 })();
 
-// ── GUIA STEPS ──
-var guiaCurrent=1,guiaTotal=5;
-function guiaGoTo(step){
-  document.querySelectorAll('.guia-step').forEach(function(s){
-    var n=parseInt(s.getAttribute('data-step'));
-    s.classList.remove('active','prev');
-    if(n===step)s.classList.add('active');
-    else if(n<step)s.classList.add('prev');
+// ── GUIA SWIPE CARDS ──
+var GUIA_CARDS=[
+  {icon:'🧠',text:'Este audio trabaja mediante repetición neuronal, neuroplasticidad y reprogramación subconsciente. Entre más tiempo lo escuches, más rápido tu cerebro fortalece nuevas conexiones neuronales y automatiza esta nueva versión de ti como una identidad natural.'},
+  {icon:'🌙',text:'Por eso recomendamos escucharlo mínimo 5 horas diarias, aunque de preferencia puede reproducirse toda la noche mientras duermes.'},
+  {icon:'✨',text:'La exposición prolongada acelera la familiarización cerebral y ayuda a que el subconsciente deje de percibir esta nueva programación como algo externo para comenzar a integrarla como parte de tu realidad automática.'},
+  {icon:'📅',text:'Debes escucharlo todos los días, ya sea de día o de noche. La constancia diaria es indispensable, porque el cerebro aprende por repetición continua. Si dejas de escucharlo constantemente, el proceso de consolidación neuronal se interrumpe y las nuevas conexiones pierden fuerza.'},
+  {icon:'📈',text:'Entre más lo escuches, más funciona.'},
+  {icon:'🔁',text:'La repetición sostenida hace que el cerebro refuerce las rutas neuronales asociadas con esta nueva identidad hasta volverlas cada vez más dominantes y naturales.'},
+  {icon:'🎧',text:'De preferencia escúchalo con audífonos, ya que esto aumenta la inmersión auditiva y facilita que el cerebro procese los estímulos sonoros de forma más profunda y directa.'},
+  {icon:'🔉',text:'Puedes escucharlo a volumen bajo; no es necesario poner atención consciente a lo que dice, porque gran parte del proceso ocurre a nivel subconsciente y automático.'},
+  {icon:'👁️',text:'Puedes visualizar mientras escuchas el audio y esto puede potenciar aún más los resultados.'},
+  {icon:'🌌',text:'Cuando combinas audio + visualización, el cerebro activa múltiples áreas neuronales al mismo tiempo, haciendo que la experiencia se registre con mayor intensidad emocional y cognitiva.'},
+  {icon:'🚶',text:'Puedes escucharlo realizando cualquier actividad: trabajando, estudiando, descansando, caminando o haciendo tareas cotidianas.'},
+  {icon:'🧘',text:'Sin embargo, cuando lo escuchas en estado meditativo, relajado o durante una siesta, el cerebro entra en frecuencias más receptivas, facilitando la absorción subconsciente y acelerando la integración mental y emocional del audio.'},
+  {icon:'💧',text:'También es muy importante tomar mucha agua. El cerebro necesita hidratación adecuada para mantener actividad eléctrica eficiente, comunicación neuronal óptima y plasticidad cerebral saludable. La hidratación favorece el funcionamiento del sistema nervioso mientras tu mente integra esta nueva programación.'},
+  {icon:'🔐',text:'Este audio es completamente personalizado y debe ser utilizado únicamente por la persona para la que fue creado, ya que está programado con su nombre, intención y enfoque mental específico.'},
+  {icon:'📲',text:'Te recomendamos descargar aplicaciones como VLC media player o Muzio Player para reproducir el audio desde tu celular.'},
+  {icon:'♾️',text:'Activa la opción de repetir automáticamente para que el audio continúe reproduciéndose durante horas seguidas y así aumentar la repetición neuronal y la consolidación subconsciente.'}
+];
+var guiaCurrent=0,guiaTotal=GUIA_CARDS.length;
+var guiaTrack,guiaScrollTimer;
+
+function buildGuiaSwipe(){
+  var track=document.getElementById('guiaSwipeTrack');
+  var dots=document.getElementById('guiaDots');
+  if(!track||!dots)return;
+  track.innerHTML='';
+  dots.innerHTML='';
+  GUIA_CARDS.forEach(function(c,i){
+    var card=document.createElement('article');
+    card.className='guia-card';
+    card.dataset.index=i;
+    var num=(i+1)<10?'0'+(i+1):''+(i+1);
+    card.innerHTML='<div class="guia-card-num">'+num+' / '+guiaTotal+'</div>'+
+      '<div class="guia-card-icon">'+c.icon+'</div>'+
+      '<p class="guia-card-text">'+c.text+'</p>';
+    track.appendChild(card);
+    var dot=document.createElement('button');
+    dot.type='button';
+    dot.className='guia-dot'+(i===0?' active':'');
+    dot.setAttribute('aria-label','Tarjeta '+(i+1));
+    dot.onclick=function(){guiaScrollTo(i);};
+    dots.appendChild(dot);
   });
-  document.querySelectorAll('.guia-dot').forEach(function(d,i){d.classList.toggle('active',i+1===step);});
-  var fill=document.getElementById('guiaProgressFill');
-  if(fill)fill.style.width=(step/guiaTotal*100)+'%';
-  guiaCurrent=step;
+  guiaTrack=track;
+  track.addEventListener('scroll',function(){
+    clearTimeout(guiaScrollTimer);
+    guiaScrollTimer=setTimeout(guiaSyncFromScroll,80);
+  },{passive:true});
+  var prev=document.getElementById('guiaBtnPrev');
+  var next=document.getElementById('guiaBtnNext');
+  var cat=document.getElementById('guiaBtnCatalog');
+  if(prev)prev.onclick=function(){guiaScrollTo(guiaCurrent-1);};
+  if(next)next.onclick=function(){if(guiaCurrent>=guiaTotal-1)goTo('catalogo');else guiaScrollTo(guiaCurrent+1);};
+  if(cat)cat.onclick=function(){goTo('catalogo');};
+  guiaSyncUI(0);
 }
-function guiaNext(current){if(current<guiaTotal)guiaGoTo(current+1);else goTo('catalogo');}
-guiaGoTo(1);
+
+function guiaScrollTo(idx){
+  if(!guiaTrack)return;
+  idx=Math.max(0,Math.min(guiaTotal-1,idx));
+  var card=guiaTrack.querySelector('.guia-card[data-index="'+idx+'"]');
+  if(card)card.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+  guiaSyncUI(idx);
+}
+
+function guiaSyncFromScroll(){
+  if(!guiaTrack)return;
+  var cards=guiaTrack.querySelectorAll('.guia-card');
+  var cx=guiaTrack.scrollLeft+guiaTrack.clientWidth/2;
+  var best=0,bestD=1e9;
+  cards.forEach(function(card,i){
+    var cc=card.offsetLeft+card.offsetWidth/2;
+    var d=Math.abs(cc-cx);
+    if(d<bestD){bestD=d;best=i;}
+  });
+  guiaSyncUI(best);
+}
+
+function guiaSyncUI(idx){
+  guiaCurrent=idx;
+  document.querySelectorAll('.guia-dot').forEach(function(d,i){d.classList.toggle('active',i===idx);});
+  var fill=document.getElementById('guiaProgressFill');
+  if(fill)fill.style.width=((idx+1)/guiaTotal*100)+'%';
+  var counter=document.getElementById('guiaCardCounter');
+  if(counter)counter.textContent=(idx+1)+' / '+guiaTotal;
+  var prev=document.getElementById('guiaBtnPrev');
+  var next=document.getElementById('guiaBtnNext');
+  var cat=document.getElementById('guiaBtnCatalog');
+  if(prev)prev.style.visibility=idx<=0?'hidden':'visible';
+  if(next)next.style.display=idx>=guiaTotal-1?'none':'inline-block';
+  if(cat)cat.style.display=idx>=guiaTotal-1?'inline-block':'none';
+}
+
+buildGuiaSwipe();
 
 // ── CATALOG LANG TOGGLE ──
 var catLang='es';
@@ -1383,22 +2053,19 @@ function toggleCatLang(){
 function futuraOpen(){document.getElementById('futuraModal').classList.add('open');document.getElementById('futuraModal').style.display='flex';document.body.style.overflow='hidden';}
 function futuraClose(){document.getElementById('futuraModal').style.display='none';document.getElementById('futuraModal').classList.remove('open');document.body.style.overflow='';}
 document.getElementById('futuraModal').addEventListener('click',function(e){if(e.target===this)futuraClose();});
-async function futuraSubmit(e){
-  e.preventDefault();
-  var email=document.getElementById('futuraEmail').value.trim();if(!email)return;
-  var btn=document.getElementById('futuraSubmitBtn');btn.textContent='Enviando...';btn.disabled=true;
-  try{
-    var res=await fetch('https://formspree.io/f/xzzbjwgr',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({email:email,_subject:'FUTURA Early Access — '+email})});
-    if(res.ok){document.getElementById('futuraForm').style.display='none';document.getElementById('futuraSuccess').style.display='block';}
-    else{btn.textContent='Únirme →';btn.disabled=false;alert('Hubo un error. Intenta de nuevo.');}
-  }catch(err){btn.textContent='Únirme →';btn.disabled=false;alert('Error de conexión.');}
+function futuraJoinWaitlist(){
+  var subject=encodeURIComponent('Early Access FUTURA');
+  var body=encodeURIComponent('Hola, estoy interesado en unirme a la preventa de FUTURA, quedo pendiente de noticias.');
+  window.location.href='mailto:eriorcenter@gmail.com?subject='+subject+'&body='+body;
 }
 
 
 
 (function(){
   var cv=document.getElementById('tgCanvas');if(!cv)return;
-  function init(){var W=cv.offsetWidth||0,H=cv.offsetHeight||0;if(!W||!H){setTimeout(init,200);return;}
+  function init(){
+    if(window.matchMedia('(max-width:767px)').matches)return;
+    var W=cv.offsetWidth||0,H=cv.offsetHeight||0;if(!W||!H){setTimeout(init,200);return;}
     cv.width=W*devicePixelRatio;cv.height=H*devicePixelRatio;
     var renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:true});
     renderer.setPixelRatio(devicePixelRatio);renderer.setSize(W,H);
