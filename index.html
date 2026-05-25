@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <title>ERIORCENTER · She is Magique</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400;500;600&family=Syne:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
 /* ══════════════════════════════════
    RESET & BASE
@@ -326,6 +326,41 @@ body::before{
 .pay-modal-header{padding:1.75rem 1.75rem .5rem;border-bottom:1px solid rgba(255,255,255,.06);}
 .pay-modal-label{font-size:.55rem;letter-spacing:.28em;text-transform:uppercase;color:rgba(200,196,214,.45);margin-bottom:.35rem;}
 .pay-modal-product{font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-weight:400;color:var(--white);line-height:1.2;}
+.pay-modal-price{
+  margin-top:.65rem;font-family:'Jost',sans-serif;font-size:.72rem;
+  letter-spacing:.06em;color:var(--gold);line-height:1.55;
+}
+.pay-promo-banner{
+  margin:0 1.75rem 1rem;padding:1.1rem 1.15rem;border-radius:14px;
+  text-align:center;position:relative;overflow:hidden;
+  background:linear-gradient(135deg,rgba(201,160,96,.22) 0%,rgba(155,109,255,.18) 50%,rgba(37,211,102,.12) 100%);
+  border:1px solid rgba(201,160,96,.5);
+  box-shadow:0 0 28px rgba(201,160,96,.15),inset 0 1px 0 rgba(255,255,255,.12);
+  animation:payPromoPulse 2.8s ease-in-out infinite;
+}
+@keyframes payPromoPulse{0%,100%{box-shadow:0 0 20px rgba(201,160,96,.12)}50%{box-shadow:0 0 36px rgba(201,160,96,.28),0 0 48px rgba(155,109,255,.12)}}
+.pay-promo-banner::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,.12) 50%,transparent 70%);
+  animation:payPromoShine 3s ease-in-out infinite;
+}
+@keyframes payPromoShine{0%,100%{transform:translateX(-120%)}50%{transform:translateX(120%)}}
+.pay-promo-title{
+  font-family:'Syne',sans-serif;font-size:clamp(.85rem,3.5vw,1rem);font-weight:700;
+  letter-spacing:.04em;color:#fff;margin-bottom:.75rem;position:relative;z-index:1;
+  text-shadow:0 0 20px rgba(201,160,96,.35);
+}
+.pay-promo-wa{
+  display:inline-flex;align-items:center;justify-content:center;gap:.4rem;
+  padding:.65rem 1.35rem;border-radius:980px;text-decoration:none;
+  font-family:'Syne',sans-serif;font-size:.62rem;font-weight:600;
+  letter-spacing:.12em;text-transform:uppercase;
+  background:linear-gradient(145deg,#25d366,#128c7e);
+  border:1px solid rgba(255,255,255,.25);color:#fff;
+  box-shadow:0 6px 22px rgba(37,211,102,.35);position:relative;z-index:1;
+  transition:transform .25s ease,box-shadow .25s ease;
+}
+.pay-promo-wa:hover{transform:scale(1.04);box-shadow:0 8px 28px rgba(37,211,102,.45);}
 .pay-methods{
   display:flex;flex-wrap:wrap;gap:.45rem;
   padding:1rem 1.75rem 0;
@@ -729,7 +764,7 @@ body::before{
   gap:.38rem;width:100%;
   visibility:hidden;pointer-events:none;
 }
-#mjHeroBlock .btn-cover-chip{pointer-events:auto;}
+#mjHeroBlock .btn-cover-chip,#mjHeroBlock .btn-icon-aura-glass{pointer-events:auto;}
 #page-cover.active #mjHeroBlock{visibility:visible;}
 #mjFloatWrap{
   width:clamp(88px,22vw,170px);
@@ -848,7 +883,83 @@ body::before{
   border-color:rgba(100,200,255,.28);
 }
 .btn-metallic-tg:hover{box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 10px 28px rgba(0,0,0,.3),0 0 18px rgba(41,168,232,.12);}
-.btn-metallic.shattering,.btn-cover-chip.shattering{pointer-events:none;transform:scale(.94);}
+/* Liquid iOS — colores por botón */
+.btn-liquid{
+  font-family:'Syne',sans-serif;font-weight:600;
+  letter-spacing:.1em;text-transform:uppercase;
+  border-radius:20px;
+}
+.btn-liquid .btn-metallic-txt{font-size:.95em;letter-spacing:.14em;}
+.btn-liquid-catalog{
+  color:rgba(235,255,252,.98);
+  background:
+    linear-gradient(145deg,rgba(120,255,240,.35) 0%,rgba(255,255,255,.12) 32%,rgba(255,255,255,.04) 48%),
+    linear-gradient(180deg,rgba(20,140,155,.75) 0%,rgba(8,72,88,.92) 100%);
+  border-color:rgba(100,230,220,.45);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 8px 26px rgba(0,180,170,.28),0 0 24px rgba(64,220,200,.12);
+}
+.btn-liquid-catalog:hover{border-color:rgba(140,255,245,.55);box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 12px 32px rgba(0,200,185,.35),0 0 32px rgba(80,240,220,.18);}
+.btn-liquid-mind{
+  color:rgba(240,255,248,.98);
+  background:
+    linear-gradient(145deg,rgba(120,255,180,.32) 0%,rgba(255,255,255,.1) 32%,rgba(255,255,255,.03) 48%),
+    linear-gradient(180deg,rgba(24,130,85,.78) 0%,rgba(8,58,42,.94) 100%);
+  border-color:rgba(90,220,150,.42);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.38),0 8px 26px rgba(20,160,90,.3),0 0 22px rgba(60,200,120,.1);
+}
+.btn-liquid-mind:hover{border-color:rgba(130,255,190,.5);box-shadow:inset 0 1px 0 rgba(255,255,255,.48),0 12px 30px rgba(30,180,100,.38),0 0 28px rgba(80,230,150,.15);}
+.btn-liquid-futura{
+  color:rgba(248,248,252,.96);
+  background:
+    linear-gradient(145deg,rgba(200,205,220,.12) 0%,rgba(255,255,255,.04) 35%),
+    linear-gradient(180deg,rgba(18,18,22,.95) 0%,rgba(4,4,8,.98) 100%);
+  border:1.5px solid rgba(190,198,215,.55);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 8px 24px rgba(0,0,0,.45),0 0 20px rgba(180,190,210,.08);
+}
+.btn-liquid-futura:hover{border-color:rgba(220,228,245,.75);box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 10px 28px rgba(0,0,0,.5),0 0 28px rgba(200,210,230,.12);}
+.btn-liquid-tg{
+  color:rgba(235,248,255,.98);
+  background:
+    linear-gradient(145deg,rgba(80,190,255,.28) 0%,rgba(255,255,255,.1) 30%),
+    linear-gradient(180deg,rgba(22,120,190,.82) 0%,rgba(10,55,100,.95) 100%);
+  border-color:rgba(100,200,255,.4);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 8px 26px rgba(30,140,220,.32),0 0 22px rgba(41,168,232,.14);
+}
+.btn-liquid-tg:hover{border-color:rgba(130,220,255,.55);box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 12px 30px rgba(35,150,230,.4),0 0 30px rgba(41,168,232,.2);}
+/* Icon Aura — cristal */
+.btn-icon-aura-glass{
+  position:relative;z-index:12;cursor:pointer;pointer-events:auto;
+  font-family:'Syne',sans-serif;font-size:clamp(.52rem,2.4vw,.62rem);font-weight:600;
+  letter-spacing:.14em;text-transform:uppercase;
+  padding:.5rem 1.25rem;border-radius:980px;
+  color:rgba(255,245,220,.96);
+  background:linear-gradient(145deg,rgba(255,255,255,.22) 0%,rgba(255,255,255,.06) 40%,rgba(212,175,95,.12) 100%);
+  border:1px solid rgba(212,175,95,.45);
+  backdrop-filter:blur(22px) saturate(180%);
+  -webkit-backdrop-filter:blur(22px) saturate(180%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 6px 24px rgba(0,0,0,.35),0 0 28px rgba(212,175,95,.15);
+  transition:transform .35s ease,box-shadow .35s ease;
+  -webkit-tap-highlight-color:transparent;
+}
+.btn-icon-aura-glass:hover{transform:translateY(-2px);box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 10px 32px rgba(212,175,95,.25),0 0 40px rgba(212,175,95,.22);}
+.btn-icon-aura-glass.aura-animating{
+  animation:auraBurst .75s cubic-bezier(.34,1.3,.64,1) forwards;
+  pointer-events:none;
+}
+@keyframes auraBurst{
+  0%{transform:translateX(-50%) scale(1);filter:brightness(1);}
+  35%{transform:translateX(-50%) scale(1.14);filter:brightness(1.35);box-shadow:0 0 50px rgba(212,175,95,.55),0 0 80px rgba(155,109,255,.25),inset 0 0 20px rgba(255,255,255,.4);}
+  100%{transform:translateX(-50%) scale(1);filter:brightness(1);}
+}
+.aura-ring-burst{
+  position:absolute;left:50%;top:50%;width:120%;height:120%;
+  transform:translate(-50%,-50%) scale(.4);border-radius:50%;
+  border:2px solid rgba(212,175,95,.7);
+  pointer-events:none;z-index:11;
+  animation:auraRing .7s ease-out forwards;
+}
+@keyframes auraRing{to{transform:translate(-50%,-50%) scale(2.2);opacity:0;}}
+.btn-metallic.shattering,.btn-cover-chip.shattering,.btn-liquid.shattering{pointer-events:none;transform:scale(.94);}
 .btn-metallic.shattering .btn-metallic-txt{opacity:0;transition:opacity .1s;}
 .btn-cover-chip.shattering{color:transparent;transition:color .1s;}
 .btn-metallic .liquid-splash{
@@ -906,8 +1017,11 @@ body::before{
 }
 @media(min-width:768px){
   #coverHeroZone{max-width:min(560px,90vw);}
-  #coverHeroRow{gap:1.55rem;}
-  .cover-mj-col{margin-top:-.2rem;}
+  #coverHeroRow{gap:1.55rem;flex-direction:row;align-items:flex-end;}
+  .cover-mj-col{order:1;margin-top:-.2rem;}
+  .cover-cta-stack{order:2;}
+  #coverHeroRow .cover-cta-stack{order:2;}
+  #coverHeroRow .cover-mj-col{order:1;}
   #mjFloatWrap{width:clamp(100px,14vw,170px);height:clamp(150px,21vw,255px);}
   .cover-cta-stack{width:min(220px,38vw);gap:.62rem;}
   .btn-metallic{font-size:.64rem;padding:.62rem 1.05rem;border-radius:18px;}
@@ -920,25 +1034,81 @@ body::before{
     min-height:100dvh;max-height:100dvh;
     overflow-x:hidden;overflow-y:auto;
     justify-content:flex-start;
-    padding:3.5rem .75rem .65rem;
+    padding:3.25rem .65rem .85rem;
     gap:0;
   }
-  .page#page-cover .logo-wrap{margin-bottom:.35rem;}
-  .page#page-cover .logo-svg{width:clamp(52px,14vw,68px);}
-  .page#page-cover .cover-title{font-size:clamp(1.85rem,9vw,2.65rem);line-height:.92;margin-bottom:.15rem;}
-  .page#page-cover .cover-tag{margin-bottom:.25rem;font-size:.52rem;}
-  #eyeLetterWrap{width:0.52em;height:0.58em;top:0.02em;}
-  #eyeModel{transform:translateY(-0.05em);}
-  #coverHeroRow{align-items:flex-end;justify-content:center;}
-  .cover-mj-col{margin-top:-.3rem;}
-  .cover-cta-stack{width:min(200px,52vw);gap:.55rem;}
-  #coverHeroZone .soc-row{margin-top:clamp(1rem,3.5vh,1.35rem);}
+  .page#page-cover .cover-brand{margin-bottom:clamp(.5rem,2vh,.85rem);}
+  .page#page-cover .logo-wrap{margin-bottom:.45rem;}
+  .page#page-cover .logo-svg{width:clamp(64px,18vw,88px);}
+  .page#page-cover .cover-title{
+    font-size:clamp(2.35rem,11vw,3.15rem);line-height:.9;
+    margin-bottom:.2rem;letter-spacing:.05em;
+  }
+  .page#page-cover .cover-tag{margin-bottom:.35rem;font-size:.54rem;}
+  #eyeLetterWrap{width:0.58em;height:0.64em;top:0.03em;}
+  #eyeModel{transform:translateY(-0.04em);}
+  #coverHeroZone{max-width:min(100%,96vw);padding:0 .15rem;}
+  #coverHeroRow{
+    flex-direction:column;align-items:center;
+    gap:clamp(1rem,3.2vh,1.45rem);
+    max-width:100%;padding:0;
+  }
+  .cover-cta-stack{
+    order:1;width:min(94vw,420px);max-width:100%;
+    gap:clamp(.62rem,2.4vh,.78rem);
+  }
+  .cover-cta-stack .btn-liquid{
+    width:100%;padding:.72rem 1.1rem;font-size:clamp(.58rem,3.2vw,.68rem);
+    border-radius:22px;
+  }
+  .cover-mj-col{
+    order:2;width:100%;max-width:min(300px,88vw);
+    margin-top:0;position:relative;
+    align-items:center;
+  }
+  #mjHeroBlock{gap:0;width:100%;}
+  .btn-icon-aura-glass{
+    position:absolute;top:10%;left:50%;
+    transform:translateX(-50%);
+    margin:0;white-space:nowrap;
+    padding:.55rem 1.4rem;font-size:clamp(.56rem,3vw,.65rem);
+  }
+  #mjFloatWrap{
+    width:clamp(148px,44vw,228px);
+    height:clamp(222px,66vw,342px);
+    margin-top:.25rem;
+  }
+  #coverHeroZone .soc-row{
+    margin-top:clamp(1.1rem,4vh,1.6rem);
+    flex-wrap:wrap;justify-content:center;align-content:flex-start;
+    gap:clamp(.55rem,3vw,.85rem);
+    overflow-x:visible;padding:0 .1rem;
+  }
+  #coverHeroZone .soc-icon-slot{height:clamp(44px,12vw,52px);}
+  #coverHeroZone .soc-ball{
+    width:clamp(44px,12vw,52px);height:clamp(44px,12vw,52px);
+    border-radius:13px;
+  }
+  .page#page-cover .soc-ig .soc-lbl{font-size:clamp(.44rem,2.6vw,.52rem);}
+}
+@media(min-width:768px){
+  #mjHeroBlock{flex-direction:column-reverse;gap:.38rem;}
+  .cover-mj-col .btn-icon-aura-glass{
+    position:static;transform:none;
+    margin:0;
+  }
+  .btn-icon-aura-glass.aura-animating{animation:auraBurstDesk .75s cubic-bezier(.34,1.3,.64,1) forwards;}
+}
+@keyframes auraBurstDesk{
+  0%{transform:scale(1);}
+  35%{transform:scale(1.12);box-shadow:0 0 50px rgba(212,175,95,.5);}
+  100%{transform:scale(1);}
 }
 @media(max-width:767px) and (max-height:700px){
-  .page#page-cover .cover-title{font-size:clamp(1.65rem,8.5vw,2.2rem);}
-  #mjFloatWrap{width:clamp(76px,20vw,120px);height:clamp(114px,30vw,172px);}
-  .btn-metallic{padding:.42rem .6rem;font-size:.48rem;}
-  #coverHeroZone .soc-ball{width:32px;height:32px;}
+  .page#page-cover .cover-title{font-size:clamp(2rem,10vw,2.65rem);}
+  #mjFloatWrap{width:clamp(120px,38vw,180px);height:clamp(180px,57vw,270px);}
+  .cover-cta-stack .btn-liquid{padding:.58rem .9rem;font-size:.54rem;}
+  #coverHeroZone .soc-ball{width:40px;height:40px;}
 }
 @media(prefers-reduced-motion:reduce){
   .btn-icon-aura-glow{animation:none;}
@@ -1018,6 +1188,7 @@ body::before{
         <div id="coverHeroRow">
           <div class="cover-mj-col">
             <div id="mjHeroBlock" aria-hidden="true">
+              <button type="button" class="btn-icon-aura-glass" id="btnIconAura" onclick="goToIconAuraAnimated()">Icon Aura</button>
               <div id="mjFloatWrap">
                 <model-viewer
                   id="mjModel"
@@ -1037,14 +1208,13 @@ body::before{
                   style="width:100%;height:100%;background-color:transparent;"
                 ></model-viewer>
               </div>
-              <button type="button" class="btn-cover-chip btn-cover-gold" onclick="goToIconAura()">Icon Aura</button>
             </div>
           </div>
           <div class="cover-cta-stack">
-            <button type="button" class="btn-metallic" data-shatter-action="catalog"><span class="btn-metallic-txt">Ver Catálogo</span></button>
-            <button type="button" class="btn-metallic" data-shatter-action="mindmovie"><span class="btn-metallic-txt">Mind Movie</span></button>
-            <button type="button" class="btn-metallic" data-shatter-action="futura"><span class="btn-metallic-txt">Futura</span></button>
-            <button type="button" class="btn-metallic" data-shatter-action="telegram"><span class="btn-metallic-txt">Telegram</span></button>
+            <button type="button" class="btn-metallic btn-liquid btn-liquid-catalog" data-shatter-action="catalog"><span class="btn-metallic-txt">Ver Catálogo</span></button>
+            <button type="button" class="btn-metallic btn-liquid btn-liquid-mind" data-shatter-action="mindmovie"><span class="btn-metallic-txt">Mind Movie</span></button>
+            <button type="button" class="btn-metallic btn-liquid btn-liquid-futura" data-shatter-action="futura"><span class="btn-metallic-txt">Futura</span></button>
+            <button type="button" class="btn-metallic btn-liquid btn-liquid-tg" data-shatter-action="telegram"><span class="btn-metallic-txt">Telegram</span></button>
           </div>
         </div>
         <div class="soc-row">
@@ -1187,6 +1357,11 @@ body::before{
     <div class="pay-modal-header">
       <div class="pay-modal-label" id="payModalLabel">Opciones de pago</div>
       <div class="pay-modal-product" id="payProductName"></div>
+      <div class="pay-modal-price" id="payModalPrice">$1,170 MXN / $68 USD / €59 EUR</div>
+    </div>
+    <div class="pay-promo-banner" id="payPromoBanner">
+      <div class="pay-promo-title">¡Aprovecha nuestra promoción especial!</div>
+      <a href="#" class="pay-promo-wa" id="payPromoWaBtn" target="_blank" rel="noopener noreferrer">WhatsApp</a>
     </div>
     <div class="pay-methods" id="payMethods"></div>
     <div class="pay-panel" id="payPanel"></div>
@@ -1259,6 +1434,20 @@ function goTo(id){
   window.scrollTo(0,0);
 }
 
+function goToIconAuraAnimated(){
+  var btn=document.getElementById('btnIconAura');
+  if(!btn){goToIconAura();return;}
+  if(btn.classList.contains('aura-animating'))return;
+  btn.classList.add('aura-animating');
+  var ring=document.createElement('span');
+  ring.className='aura-ring-burst';
+  btn.appendChild(ring);
+  setTimeout(function(){
+    btn.classList.remove('aura-animating');
+    if(ring.parentNode)ring.remove();
+    goToIconAura();
+  },720);
+}
 function goToIconAura(){
   goTo('catalogo');
   curCat='autoestima';
@@ -1560,6 +1749,9 @@ function openPaymentModal(productName){
   var emailBtn=document.getElementById('payCopyEmail');
   if(emailBtn)emailBtn.textContent=payUi('email','Copiar correo','Copy email');
   bindPayCopyButtons(document.getElementById('payModal'));
+  var promoWa='https://wa.me/5214432311761?text='+encodeURIComponent('Hola, estoy interesado en la promoción');
+  var promoBtn=document.getElementById('payPromoWaBtn');
+  if(promoBtn)promoBtn.href=promoWa;
   document.getElementById('payModal').classList.add('open');
   document.body.style.overflow='hidden';
 }
