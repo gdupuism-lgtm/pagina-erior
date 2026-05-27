@@ -330,31 +330,64 @@ body::before{
   margin-top:.65rem;font-family:'Jost',sans-serif;font-size:.72rem;
   letter-spacing:.06em;color:var(--gold);line-height:1.55;
 }
-.pay-promo-banner{
-  margin:0 1.75rem 1rem;padding:1.1rem 1.15rem;border-radius:14px;
-  text-align:center;position:relative;overflow:hidden;
+.pay-promo-popup{
+  position:fixed;left:50%;bottom:max(1.25rem,env(safe-area-inset-bottom));
+  width:min(420px,calc(100vw - 2rem));z-index:5200;
+  padding:1.15rem 1.2rem 1.2rem;border-radius:16px;text-align:center;
   background:linear-gradient(135deg,rgba(201,160,96,.22) 0%,rgba(155,109,255,.18) 50%,rgba(37,211,102,.12) 100%);
   border:1px solid rgba(201,160,96,.5);
-  box-shadow:0 0 28px rgba(201,160,96,.15),inset 0 1px 0 rgba(255,255,255,.12);
-  animation:payPromoPulse 2.8s ease-in-out infinite;
+  box-shadow:0 0 28px rgba(201,160,96,.15),0 18px 50px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.12);
+  opacity:0;pointer-events:none;visibility:hidden;
+  transform:translateX(-50%) translateY(calc(100% + 1.5rem)) scale(.96);
+  overflow:hidden;
 }
-@keyframes payPromoPulse{0%,100%{box-shadow:0 0 20px rgba(201,160,96,.12)}50%{box-shadow:0 0 36px rgba(201,160,96,.28),0 0 48px rgba(155,109,255,.12)}}
-.pay-promo-banner::before{
+.pay-promo-popup.visible{
+  visibility:visible;pointer-events:auto;
+  animation:payPromoFloatIn .55s cubic-bezier(.22,1,.36,1) forwards,payPromoPulse 2.8s ease-in-out 0.55s infinite;
+}
+@keyframes payPromoFloatIn{
+  from{opacity:0;transform:translateX(-50%) translateY(calc(100% + 1.5rem)) scale(.96);}
+  to{opacity:1;transform:translateX(-50%) translateY(0) scale(1);}
+}
+@keyframes payPromoPulse{0%,100%{box-shadow:0 0 20px rgba(201,160,96,.12),0 18px 50px rgba(0,0,0,.55)}50%{box-shadow:0 0 36px rgba(201,160,96,.28),0 0 48px rgba(155,109,255,.12),0 18px 50px rgba(0,0,0,.55)}}
+.pay-promo-popup::before{
   content:'';position:absolute;inset:0;pointer-events:none;
   background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,.12) 50%,transparent 70%);
   animation:payPromoShine 3s ease-in-out infinite;
 }
 @keyframes payPromoShine{0%,100%{transform:translateX(-120%)}50%{transform:translateX(120%)}}
+.pay-promo-close{
+  position:absolute;top:.55rem;right:.6rem;z-index:2;
+  width:1.75rem;height:1.75rem;border-radius:50%;border:none;cursor:pointer;
+  background:rgba(255,255,255,.08);color:rgba(255,255,255,.65);
+  font-size:.75rem;line-height:1;display:flex;align-items:center;justify-content:center;
+  transition:background .2s ease,color .2s ease;
+}
+.pay-promo-close:hover{background:rgba(255,255,255,.16);color:#fff;}
+.pay-promo-kicker{
+  font-family:'Syne',sans-serif;font-size:clamp(.72rem,3.1vw,.88rem);font-weight:700;
+  letter-spacing:.03em;line-height:1.35;margin-bottom:.5rem;position:relative;z-index:1;padding-right:1.25rem;
+  background:linear-gradient(92deg,#ffd966 0%,#ffb347 18%,#fff4c2 36%,#e6a817 52%,#ffecb3 68%,#daa520 85%,#fff8dc 100%);
+  background-size:220% auto;
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  animation:payPromoKickerGold 4s ease-in-out infinite;
+  filter:drop-shadow(0 0 14px rgba(255,200,90,.55)) drop-shadow(0 2px 4px rgba(0,0,0,.35));
+}
+@keyframes payPromoKickerGold{
+  0%,100%{background-position:0% 50%;}
+  50%{background-position:100% 50%;}
+}
 .pay-promo-title{
-  font-family:'Syne',sans-serif;font-size:clamp(.85rem,3.5vw,1rem);font-weight:700;
-  letter-spacing:.04em;color:#fff;margin-bottom:.75rem;position:relative;z-index:1;
+  font-family:'Syne',sans-serif;font-size:clamp(.78rem,3.2vw,.92rem);font-weight:600;
+  letter-spacing:.02em;color:#fff;margin-bottom:.85rem;position:relative;z-index:1;
+  line-height:1.45;padding-right:1.25rem;
   text-shadow:0 0 20px rgba(201,160,96,.35);
 }
 .pay-promo-wa{
   display:inline-flex;align-items:center;justify-content:center;gap:.4rem;
   padding:.65rem 1.35rem;border-radius:980px;text-decoration:none;
   font-family:'Syne',sans-serif;font-size:.62rem;font-weight:600;
-  letter-spacing:.12em;text-transform:uppercase;
+  letter-spacing:.08em;text-transform:none;
   background:linear-gradient(145deg,#25d366,#128c7e);
   border:1px solid rgba(255,255,255,.25);color:#fff;
   box-shadow:0 6px 22px rgba(37,211,102,.35);position:relative;z-index:1;
@@ -883,49 +916,79 @@ body::before{
   border-color:rgba(100,200,255,.28);
 }
 .btn-metallic-tg:hover{box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 10px 28px rgba(0,0,0,.3),0 0 18px rgba(41,168,232,.12);}
-/* Liquid iOS — colores por botón */
+/* Liquid iOS — tornasol iridiscente (catálogo, Mind Movie, Futura, Telegram: mismo aspecto, sin color sólido base) */
 .btn-liquid{
   font-family:'Syne',sans-serif;font-weight:600;
   letter-spacing:.1em;text-transform:uppercase;
   border-radius:20px;
 }
 .btn-liquid .btn-metallic-txt{font-size:.95em;letter-spacing:.14em;}
-.btn-liquid-catalog{
-  color:rgba(235,255,252,.98);
-  background:
-    linear-gradient(145deg,rgba(120,255,240,.35) 0%,rgba(255,255,255,.12) 32%,rgba(255,255,255,.04) 48%),
-    linear-gradient(180deg,rgba(20,140,155,.75) 0%,rgba(8,72,88,.92) 100%);
-  border-color:rgba(100,230,220,.45);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 8px 26px rgba(0,180,170,.28),0 0 24px rgba(64,220,200,.12);
+.btn-metallic.btn-liquid{
+  background-color:transparent;
+  background-repeat:no-repeat;
+  background-blend-mode:overlay,soft-light,soft-light,normal;
+  background-image:
+    conic-gradient(from 210deg at 50% 50%,
+      hsla(330,95%,78%,.52) 0deg,
+      hsla(270,92%,76%,.48) 40deg,
+      hsla(210,95%,74%,.5) 80deg,
+      hsla(165,90%,72%,.46) 120deg,
+      hsla(95,88%,70%,.48) 160deg,
+      hsla(48,100%,72%,.52) 200deg,
+      hsla(12,95%,74%,.5) 240deg,
+      hsla(285,92%,76%,.49) 280deg,
+      hsla(330,95%,78%,.52) 360deg
+    ),
+    linear-gradient(
+      118deg,
+      rgba(255,170,210,.55) 0%,
+      rgba(186,130,255,.5) 14%,
+      rgba(130,200,255,.52) 28%,
+      rgba(120,235,200,.48) 42%,
+      rgba(245,210,140,.5) 56%,
+      rgba(200,160,255,.49) 70%,
+      rgba(255,185,195,.52) 84%,
+      rgba(160,220,255,.5) 100%
+    ),
+    linear-gradient(
+      -72deg,
+      rgba(255,200,230,.42) 0%,
+      transparent 20%,
+      rgba(165,210,255,.4) 40%,
+      rgba(190,255,220,.36) 55%,
+      rgba(255,230,160,.4) 72%,
+      transparent 86%,
+      rgba(210,170,255,.42) 100%
+    ),
+    linear-gradient(145deg,rgba(255,255,255,.38) 0%,rgba(255,255,255,.14) 32%,rgba(255,255,255,.06) 48%,transparent 70%);
+  background-size:200% 200%,380% 380%,320% 320%,100% 100%;
+  background-position:42% 58%,10% 40%,90% 26%,0 0;
+  animation:btnLiquidIridescent 14s ease-in-out infinite;
+  border:1.5px solid rgba(255,255,255,.34);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.52),
+    inset 0 -1px 0 rgba(255,255,255,.1),
+    0 8px 26px rgba(0,0,0,.24),
+    0 0 36px rgba(255,255,255,.08);
+  backdrop-filter:blur(28px) saturate(220%);
+  -webkit-backdrop-filter:blur(28px) saturate(220%);
+  color:rgba(255,252,255,.97);
+  text-shadow:0 1px 2px rgba(0,0,0,.28);
 }
-.btn-liquid-catalog:hover{border-color:rgba(140,255,245,.55);box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 12px 32px rgba(0,200,185,.35),0 0 32px rgba(80,240,220,.18);}
-.btn-liquid-mind{
-  color:rgba(240,255,248,.98);
-  background:
-    linear-gradient(145deg,rgba(120,255,180,.32) 0%,rgba(255,255,255,.1) 32%,rgba(255,255,255,.03) 48%),
-    linear-gradient(180deg,rgba(24,130,85,.78) 0%,rgba(8,58,42,.94) 100%);
-  border-color:rgba(90,220,150,.42);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.38),0 8px 26px rgba(20,160,90,.3),0 0 22px rgba(60,200,120,.1);
+.btn-metallic.btn-liquid:hover{
+  border-color:rgba(255,255,255,.48);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.58),
+    inset 0 -1px 0 rgba(255,255,255,.12),
+    0 12px 34px rgba(0,0,0,.28),
+    0 0 52px rgba(255,255,255,.14);
 }
-.btn-liquid-mind:hover{border-color:rgba(130,255,190,.5);box-shadow:inset 0 1px 0 rgba(255,255,255,.48),0 12px 30px rgba(30,180,100,.38),0 0 28px rgba(80,230,150,.15);}
-.btn-liquid-futura{
-  color:rgba(248,248,252,.96);
-  background:
-    linear-gradient(145deg,rgba(200,205,220,.12) 0%,rgba(255,255,255,.04) 35%),
-    linear-gradient(180deg,rgba(18,18,22,.95) 0%,rgba(4,4,8,.98) 100%);
-  border:1.5px solid rgba(190,198,215,.55);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 8px 24px rgba(0,0,0,.45),0 0 20px rgba(180,190,210,.08);
+@keyframes btnLiquidIridescent{
+  0%,100%{background-position:42% 58%,8% 38%,92% 22%,0 0;}
+  25%{background-position:58% 42%,46% 16%,58% 70%,0 0;}
+  50%{background-position:38% 62%,90% 54%,14% 76%,0 0;}
+  75%{background-position:52% 48%,52% 74%,68% 14%,0 0;}
 }
-.btn-liquid-futura:hover{border-color:rgba(220,228,245,.75);box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 10px 28px rgba(0,0,0,.5),0 0 28px rgba(200,210,230,.12);}
-.btn-liquid-tg{
-  color:rgba(235,248,255,.98);
-  background:
-    linear-gradient(145deg,rgba(80,190,255,.28) 0%,rgba(255,255,255,.1) 30%),
-    linear-gradient(180deg,rgba(22,120,190,.82) 0%,rgba(10,55,100,.95) 100%);
-  border-color:rgba(100,200,255,.4);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 8px 26px rgba(30,140,220,.32),0 0 22px rgba(41,168,232,.14);
-}
-.btn-liquid-tg:hover{border-color:rgba(130,220,255,.55);box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 12px 30px rgba(35,150,230,.4),0 0 30px rgba(41,168,232,.2);}
 /* Icon Aura — cristal */
 .btn-icon-aura-glass{
   position:relative;z-index:12;cursor:pointer;pointer-events:auto;
@@ -1113,6 +1176,9 @@ body::before{
 @media(prefers-reduced-motion:reduce){
   .btn-icon-aura-glow{animation:none;}
   .glass-shard{animation-duration:.2s;}
+  .pay-promo-popup.visible{animation:none;opacity:1;transform:translateX(-50%) translateY(0) scale(1);}
+  .pay-promo-kicker{animation:none;background-position:50% 50%;}
+  .btn-metallic.btn-liquid{animation:none;background-position:42% 58%,45% 45%,55% 55%,0 0;}
 }
 
 </style>
@@ -1359,10 +1425,6 @@ body::before{
       <div class="pay-modal-product" id="payProductName"></div>
       <div class="pay-modal-price" id="payModalPrice">$1,170 MXN / $68 USD / €59 EUR</div>
     </div>
-    <div class="pay-promo-banner" id="payPromoBanner">
-      <div class="pay-promo-title">¡Aprovecha nuestra promoción especial!</div>
-      <a href="#" class="pay-promo-wa" id="payPromoWaBtn" target="_blank" rel="noopener noreferrer">WhatsApp</a>
-    </div>
     <div class="pay-methods" id="payMethods"></div>
     <div class="pay-panel" id="payPanel"></div>
     <div class="pay-footer-note">
@@ -1372,6 +1434,12 @@ body::before{
         <button type="button" class="pay-copy-btn" id="payCopyEmail" data-copy="eriorcenter@gmail.com">Copiar correo</button>
       </div>
     </div>
+  </div>
+  <div class="pay-promo-popup" id="payPromoPopup" aria-hidden="true" role="dialog" aria-labelledby="payPromoTitle">
+    <button type="button" class="pay-promo-close" id="payPromoClose" aria-label="Cerrar">✕</button>
+    <div class="pay-promo-kicker" id="payPromoKicker">🎉 ¡Aprovecha nuestra promoción especial!</div>
+    <div class="pay-promo-title" id="payPromoTitle">¿Quieres una recomendación personalizada? Escríbenos y te ayudamos a elegir el audio perfecto para ti ✨</div>
+    <a href="#" class="pay-promo-wa" id="payPromoWaBtn" target="_blank" rel="noopener noreferrer">Escribir al equipo</a>
   </div>
 </div>
 
@@ -1739,6 +1807,38 @@ function selectPayMethod(id){
   renderPayPanel(id);
 }
 
+var payPromoTimer=null;
+
+function hidePayPromoPopup(){
+  var popup=document.getElementById('payPromoPopup');
+  if(popup){
+    popup.classList.remove('visible');
+    popup.setAttribute('aria-hidden','true');
+  }
+  if(payPromoTimer){clearTimeout(payPromoTimer);payPromoTimer=null;}
+}
+
+function showPayPromoPopup(){
+  var popup=document.getElementById('payPromoPopup');
+  if(!popup||!document.getElementById('payModal').classList.contains('open'))return;
+  if(popup.dataset.dismissed==='1')return;
+  popup.classList.add('visible');
+  popup.setAttribute('aria-hidden','false');
+}
+
+function schedulePayPromoPopup(){
+  hidePayPromoPopup();
+  var popup=document.getElementById('payPromoPopup');
+  if(popup)delete popup.dataset.dismissed;
+  payPromoTimer=setTimeout(showPayPromoPopup,2000);
+}
+
+function dismissPayPromoPopup(){
+  var popup=document.getElementById('payPromoPopup');
+  if(popup)popup.dataset.dismissed='1';
+  hidePayPromoPopup();
+}
+
 function openPaymentModal(productName){
   buildPayMethods();
   payCurrentProduct=productName||'';
@@ -1749,11 +1849,13 @@ function openPaymentModal(productName){
   var emailBtn=document.getElementById('payCopyEmail');
   if(emailBtn)emailBtn.textContent=payUi('email','Copiar correo','Copy email');
   bindPayCopyButtons(document.getElementById('payModal'));
-  var promoWa='https://wa.me/5214432311761?text='+encodeURIComponent('Hola, estoy interesado en la promoción');
+  var promoWa='https://wa.me/5214432311761?text='+encodeURIComponent('Hola, me gustaría una recomendación personalizada para elegir el audio perfecto para mí');
   var promoBtn=document.getElementById('payPromoWaBtn');
   if(promoBtn)promoBtn.href=promoWa;
+  hidePayPromoPopup();
   document.getElementById('payModal').classList.add('open');
   document.body.style.overflow='hidden';
+  schedulePayPromoPopup();
 }
 
 function openPaymentFromModal(){
@@ -1762,11 +1864,14 @@ function openPaymentFromModal(){
 }
 
 function closePaymentModal(){
+  hidePayPromoPopup();
   document.getElementById('payModal').classList.remove('open');
   if(!document.getElementById('audioModal').classList.contains('open')&&!document.getElementById('fsMenu').classList.contains('open')){
     document.body.style.overflow='';
   }
 }
+
+document.getElementById('payPromoClose').addEventListener('click',dismissPayPromoPopup);
 
 document.getElementById('payModal').addEventListener('click',function(e){if(e.target===this)closePaymentModal();});
 
@@ -1792,9 +1897,9 @@ function closeModal(){
 document.getElementById('audioModal').addEventListener('click',function(e){if(e.target===this)closeModal();});
 
 // ══════════════════════════════════
-// ALICIA IA
+// ALICIA IA (respuestas vía Netlify Function → Anthropic; ver netlify/functions/claude.js)
 // ══════════════════════════════════
-var SYS='Eres Alicia, la asistente virtual de ERIORCENTER creada por She Is Magique (Pauline). Eres cálida, empática y expansiva. Hablas con elegancia en español. Tu misión: guiar hacia el audio ERIORCENTER perfecto según la situación del usuario. Audios disponibles: Éclat (belleza), Amor Magic 2.0 (amor propio), Amor Propio Magic 3.0, Mesmerizing Love (atracción), Master Mind (autoconocimiento), Identity, Erior Love (relaciones), Curious-Curiouser (miedos), 11:11, Attraction, Satori (desbloqueo), Master Abundance (dinero), Money Tech (finanzas), Lucky, Audio YOU (personalizado), Vitamind (salud), Fit Wave (cuerpo), Simulation-U, Keep Cool (meditación), Booster, Wonderland Coherence, Select, Audio Erior 3.0, Emergency 999 (crisis), Mental Glow Up, Erior Kids, Mind Movie, Telegram Privado, Icon Aura. Responde en español, cálido y breve (máx 3 párrafos).';
+var ALICIA_FN='/.netlify/functions/claude';
 var hist=[];
 
 function initAlicia(){
@@ -1817,21 +1922,29 @@ async function sendMsg(){
   var inp=document.getElementById('chatIn');
   var txt=inp.value.trim();if(!txt)return;
   inp.value='';addMsg('u',txt);hist.push({role:'user',content:txt});
-  document.querySelector('.chat-send').disabled=true;showDots();
+  var sendBtn=document.querySelector('.chat-send');
+  sendBtn.disabled=true;showDots();
   try{
-    var r=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,system:SYS,messages:hist})
+    var r=await fetch(ALICIA_FN,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({messages:hist})
     });
-    var data=await r.json();
-    var reply=data.content&&data.content[0]?data.content[0].text:'Lo siento, hubo un error 💜';
+    var data={};
+    try{data=await r.json();}catch(parseErr){data={};}
     var dm=document.getElementById('dotMsg');if(dm)dm.remove();
-    addMsg('b',reply);hist.push({role:'assistant',content:reply});
+    if(!r.ok){
+      var errTxt=(data&&data.error)?String(data.error):('Error '+r.status);
+      addMsg('b','Alicia no pudo responder ahora: '+errTxt+'. Si estás en tu computadora, prueba con `netlify dev` o revisa que el sitio esté en Netlify con ANTHROPIC_API_KEY configurada 💜');
+    }else{
+      var reply=(data&&data.reply)?String(data.reply):'Lo siento, hubo un error 💜';
+      addMsg('b',reply);hist.push({role:'assistant',content:reply});
+    }
   }catch(e){
     var dm=document.getElementById('dotMsg');if(dm)dm.remove();
-    addMsg('b','Error de conexión, intenta de nuevo 💜');
+    addMsg('b','No hay conexión con el servidor de Alicia. Publica el proyecto en Netlify (con la función claude) o ejecuta `netlify dev` y abre la URL local que muestra el CLI 💜');
   }
-  document.querySelector('.chat-send').disabled=false;
+  sendBtn.disabled=false;
 }
 
 // ══════════════════════════════════
