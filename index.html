@@ -599,15 +599,27 @@ body::before{
 @keyframes aliciaTitleShine{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
 .alicia-tagline{font-size:.86rem;color:rgba(210,205,230,.55);line-height:1.55;max-width:28rem;margin:0 auto}
 .alicia-avatar-wrap{
-  width:min(280px,72vw);height:min(280px,72vw);margin:.25rem auto 0;
+  width:min(300px,78vw);height:min(300px,78vw);margin:.35rem auto 0;
   display:flex;align-items:center;justify-content:center;position:relative;
+  min-height:min(260px,70vw);
 }
 .alicia-avatar-wrap::after{
   content:'';position:absolute;inset:8%;border-radius:50%;pointer-events:none;
   background:radial-gradient(circle,rgba(160,120,255,.2) 0%,transparent 70%);
   filter:blur(12px);
 }
-#aliciaModel{width:100%;height:100%;--poster-color:transparent;background:transparent}
+#aliciaModel{
+  width:100%;height:100%;display:block;position:relative;z-index:1;
+  --poster-color:transparent;--progress-bar-color:transparent;
+  background:transparent!important;
+}
+.chat-promo-img{
+  display:block;width:100%;max-width:min(240px,100%);height:auto;
+  margin-top:.55rem;border-radius:12px;
+  border:1px solid rgba(255,255,255,.15);
+  box-shadow:0 8px 24px rgba(0,0,0,.35);
+}
+.cbub .chat-promo-img:first-child{margin-top:0}
 .alicia-chat-card{
   width:100%;border-radius:20px;overflow:hidden;
   background:rgba(8,6,22,.45);border:1px solid rgba(255,255,255,.08);
@@ -681,7 +693,7 @@ body::before{
 .dot:nth-child(2){animation-delay:.15s}.dot:nth-child(3){animation-delay:.3s}
 @keyframes dot{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
 @media(max-width:600px){
-  .alicia-avatar-wrap{width:min(220px,65vw);height:min(220px,65vw)}
+  .alicia-avatar-wrap{width:min(240px,70vw);height:min(240px,70vw);min-height:min(200px,62vw)}
   .chat-window{height:min(320px,38vh)}
 }
 @media(prefers-reduced-motion:reduce){
@@ -1549,7 +1561,7 @@ body::before{
         <div class="alicia-avatar-wrap">
           <model-viewer
             id="aliciaModel"
-            src="cyber_core_optimized.glb"
+            data-src="cyber_core_optimized.glb"
             alt="Avatar Alicia"
             autoplay
             auto-rotate
@@ -1559,11 +1571,11 @@ body::before{
             disable-pan
             disable-tap
             shadow-intensity="0"
-            exposure="1.15"
-            camera-orbit="0deg 75deg auto"
-            min-camera-orbit="auto 60deg auto"
-            max-camera-orbit="auto 88deg auto"
-            field-of-view="28deg"
+            exposure="1.2"
+            camera-orbit="0deg 72deg auto"
+            min-camera-orbit="auto 58deg auto"
+            max-camera-orbit="auto 86deg auto"
+            field-of-view="26deg"
             style="width:100%;height:100%;background-color:transparent;"
           ></model-viewer>
         </div>
@@ -2202,11 +2214,58 @@ function initAlicia(){
 function initAliciaModel(){
   var mv=document.getElementById('aliciaModel');
   if(!mv||mv.dataset.ready==='1')return;
-  var src=mv.getAttribute('src')||mv.getAttribute('data-src');
+  var src=mv.getAttribute('data-src')||mv.getAttribute('src');
+  if(!src)return;
   loadModelViewerScript(function(){
-    if(src&&!mv.getAttribute('src'))mv.setAttribute('src',src);
+    if(!mv.getAttribute('src'))mv.setAttribute('src',src);
+    mv.addEventListener('load',function onAliciaModelLoad(){
+      if(mv.availableAnimations&&mv.availableAnimations.length){
+        mv.animationName=mv.availableAnimations[0];
+      }
+      if(mv.play)mv.play({repetitions:Infinity});
+    },{once:true});
     mv.dataset.ready='1';
   });
+}
+var CHAT_IMG_BASE='https://raw.githubusercontent.com/gdupuism-lgtm/pagina-erior/main/';
+function sanitizeAliciaText(t){
+  return String(t)
+    .replace(/\*\*([^*]+)\*\*/g,'$1')
+    .replace(/\*([^*]+)\*/g,'$1')
+    .replace(/^#{1,6}\s+/gm,'')
+    .replace(/`([^`]+)`/g,'$1')
+    .replace(/^\s*[-*]\s+/gm,'');
+}
+function appendChatBubbleContent(bub,t){
+  var re=/\[IMG:([^\]]+)\]/gi;
+  var last=0,m,s=String(t);
+  while((m=re.exec(s))!==null){
+    if(m.index>last)bub.appendChild(document.createTextNode(s.slice(last,m.index)));
+    var img=document.createElement('img');
+    img.className='chat-promo-img';
+    img.alt='Promoción Erior';
+    img.loading='lazy';
+    img.decoding='async';
+    var file=encodeURI(m[1].trim());
+    img.src=CHAT_IMG_BASE+file;
+    bub.appendChild(img);
+    last=m.index+m[0].length;
+  }
+  if(last<s.length)bub.appendChild(document.createTextNode(s.slice(last)));
+}
+function addMsg(r,t){
+  var w=document.getElementById('chatWin');
+  var d=document.createElement('div');
+  d.className='cmsg '+(r==='u'?'u':'b');
+  var who=document.createElement('div');
+  who.className='cwho';
+  who.textContent=(r==='u'?'Tú':'✦ Alicia');
+  var bub=document.createElement('div');
+  bub.className='cbub';
+  var txt=r==='b'?sanitizeAliciaText(t):String(t);
+  appendChatBubbleContent(bub,txt);
+  d.appendChild(who);d.appendChild(bub);
+  w.appendChild(d);w.scrollTop=w.scrollHeight;
 }
 function initAliciaParticles(){
   if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
@@ -2240,19 +2299,6 @@ function initAliciaParticles(){
     requestAnimationFrame(tick);
   }
   tick();
-}
-function addMsg(r,t){
-  var w=document.getElementById('chatWin');
-  var d=document.createElement('div');
-  d.className='cmsg '+(r==='u'?'u':'b');
-  var who=document.createElement('div');
-  who.className='cwho';
-  who.textContent=(r==='u'?'Tú':'✦ Alicia');
-  var bub=document.createElement('div');
-  bub.className='cbub';
-  bub.textContent=t;
-  d.appendChild(who);d.appendChild(bub);
-  w.appendChild(d);w.scrollTop=w.scrollHeight;
 }
 function showDots(){
   var w=document.getElementById('chatWin');
