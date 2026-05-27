@@ -2202,8 +2202,9 @@ function initAlicia(){
 function initAliciaModel(){
   var mv=document.getElementById('aliciaModel');
   if(!mv||mv.dataset.ready==='1')return;
+  var src=mv.getAttribute('src')||mv.getAttribute('data-src');
   loadModelViewerScript(function(){
-    if(mv.dataset.src&&!mv.getAttribute('src'))mv.setAttribute('src',mv.dataset.src);
+    if(src&&!mv.getAttribute('src'))mv.setAttribute('src',src);
     mv.dataset.ready='1';
   });
 }
@@ -2352,9 +2353,29 @@ function stopBreath(){
 // ══════════════════════════════════
 // INIT
 // ══════════════════════════════════
+// model-viewer (carga única compartida)
+var _mvScriptQueue=[];
+var _mvScriptLoading=false;
+function loadModelViewerScript(cb){
+  if(typeof cb!=='function')return;
+  if(customElements.get('model-viewer')){cb();return;}
+  _mvScriptQueue.push(cb);
+  if(_mvScriptLoading)return;
+  _mvScriptLoading=true;
+  var s=document.createElement('script');
+  s.type='module';
+  s.src='https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js';
+  s.onload=function(){
+    _mvScriptLoading=false;
+    var q=_mvScriptQueue.slice();
+    _mvScriptQueue=[];
+    q.forEach(function(fn){try{fn();}catch(e){console.warn(e);}});
+  };
+  s.onerror=function(){_mvScriptLoading=false;_mvScriptQueue=[];};
+  document.head.appendChild(s);
+}
 buildCatalog();
 buildTarot();
-initAlicia();
 (function(){
   var wa=document.getElementById('socWhatsApp');
   if(wa)wa.href=payWaUrl(WA_PROMO_MSG);
@@ -2366,17 +2387,7 @@ initAlicia();
   var wrap=document.getElementById('eyeLetterWrap');
   if(!viewer||!wrap)return;
   var glbSrc=viewer.getAttribute('data-src');
-  var scriptLoaded=false,modelReady=false;
-
-  function loadModelViewerScript(cb){
-    if(scriptLoaded){cb();return;}
-    if(customElements.get('model-viewer')){scriptLoaded=true;cb();return;}
-    var s=document.createElement('script');
-    s.type='module';
-    s.src='https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js';
-    s.onload=function(){scriptLoaded=true;cb();};
-    document.head.appendChild(s);
-  }
+  var modelReady=false;
 
   function pickEyeAnimation(){
     var list=viewer.availableAnimations||[];
@@ -2484,19 +2495,15 @@ initAlicia();
   var viewer=document.getElementById('mjModel');
   var cover=document.getElementById('page-cover');
   if(!hero||!wrap||!viewer||!cover)return;
-  var scriptLoaded=false,modelReady=false;
+  var modelReady=false;
   var glbSrc=viewer.getAttribute('data-src');
   var io=null;
 
-  function loadModelViewerScript(cb){
-    if(scriptLoaded){cb();return;}
-    if(customElements.get('model-viewer')){scriptLoaded=true;cb();return;}
-    var s=document.createElement('script');
-    s.type='module';
-    s.src='https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js';
-    s.onload=function(){scriptLoaded=true;cb();};
-    s.onerror=function(){wrap.style.display='none';};
-    document.head.appendChild(s);
+  function loadMjModelViewer(cb){
+    loadModelViewerScript(function(){
+      if(!customElements.get('model-viewer')){wrap.style.display='none';return;}
+      cb();
+    });
   }
 
   function pickDanceAnimation(){
@@ -2536,7 +2543,7 @@ initAlicia();
   }
 
   function activate(){
-    loadModelViewerScript(function(){
+    loadMjModelViewer(function(){
       attachModel();
       if(modelReady)playDance();
     });
@@ -2568,6 +2575,8 @@ initAlicia();
     }
   }).observe(cover,{attributes:true,attributeFilter:['class']});
 })();
+
+initAlicia();
 
 // ── OPAL TORNASOL ──
 (function(){
