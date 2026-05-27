@@ -7,7 +7,14 @@
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
 const ANTHROPIC_VERSION = '2023-06-01';
 const MODEL = 'claude-haiku-4-5-20251001';
-const CATALOG = require('./alicia-catalog');
+let CATALOG = '';
+try {
+  CATALOG = require('./alicia-catalog');
+} catch (catalogErr) {
+  console.error('alicia-catalog load failed:', catalogErr.message);
+  CATALOG =
+    'Catálogo Erior: audios de amor propio, pareja, dinero, salud, niños y crisis. Recomienda según la necesidad del cliente.';
+}
 
 const SYSTEM = `Eres Alicia, la asistente virtual de ERIOR CENTER (ERIORCENTER), creada por She Is Magique (Pauline). Eres cálida, empática, elegante y persuasiva sin ser agresiva. Siempre respondes en español salvo que el usuario escriba claramente en otro idioma.
 
