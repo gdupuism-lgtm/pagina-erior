@@ -613,15 +613,37 @@ body::before{
   --poster-color:transparent;--progress-bar-color:transparent;
   background:transparent!important;
 }
+.chat-promo-wrap{
+  position:relative;display:block;width:100%;
+  min-width:min(300px,100%);max-width:min(360px,100%);
+  margin-top:.55rem;cursor:pointer;border-radius:12px;overflow:hidden;
+}
+.chat-promo-wrap:first-child{margin-top:0}
 .chat-promo-img{
-  display:block;width:100%;min-width:min(300px,100%);max-width:min(360px,100%);
-  height:auto;margin-top:.55rem;border-radius:12px;cursor:pointer;
+  display:block;width:100%;height:auto;border-radius:12px;
   border:1px solid rgba(255,255,255,.15);
   box-shadow:0 8px 24px rgba(0,0,0,.35);
   transition:transform .2s ease,box-shadow .2s ease;
 }
-.chat-promo-img:hover{transform:scale(1.02);box-shadow:0 10px 28px rgba(0,0,0,.45)}
-.cbub .chat-promo-img:first-child{margin-top:0}
+.chat-promo-wrap:hover .chat-promo-img{transform:scale(1.02);box-shadow:0 10px 28px rgba(0,0,0,.45)}
+.chat-promo-zoom{
+  position:absolute;top:.5rem;right:.5rem;z-index:2;
+  width:38px;height:38px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.05rem;line-height:1;
+  background:rgba(8,6,18,.82);border:1px solid rgba(255,255,255,.28);
+  box-shadow:0 4px 14px rgba(0,0,0,.45);
+  pointer-events:none;
+}
+.cbub .chat-msg-p{margin:0 0 .7rem;line-height:1.58}
+.cbub .chat-msg-p:last-child{margin-bottom:0}
+.cbub .chat-msg-list{
+  margin:.35rem 0 .75rem;padding-left:1.15rem;
+  list-style:disc;
+}
+.cbub .chat-msg-list li{margin-bottom:.4rem;line-height:1.5;padding-left:.15rem}
+.cbub .chat-msg-list li:last-child{margin-bottom:0}
+.cbub .chat-msg-br{display:block;height:.45rem}
 .cmsg.b:has(.chat-promo-img){max-width:min(400px,96%)}
 .chat-img-lightbox{
   position:fixed;inset:0;z-index:5600;
@@ -680,6 +702,7 @@ body::before{
 }
 .cmsg.b .cbub{
   color:rgba(252,250,255,.96);
+  white-space:normal;
   border:1px solid rgba(255,255,255,.28);
   background-color:rgba(18,14,32,.35);
   background-image:
@@ -1597,8 +1620,8 @@ body::before{
         <div class="alicia-avatar-wrap">
           <model-viewer
             id="aliciaModel"
-            src="animated_effect.glb"
-            alt="Efecto Alicia"
+            src="spheron.glb"
+            alt="Avatar Spheron Alicia"
             autoplay
             interaction-prompt="none"
             disable-zoom
@@ -2299,33 +2322,89 @@ function sanitizeAliciaText(t){
     .replace(/\*\*([^*]+)\*\*/g,'$1')
     .replace(/\*([^*]+)\*/g,'$1')
     .replace(/^#{1,6}\s+/gm,'')
-    .replace(/`([^`]+)`/g,'$1')
-    .replace(/^\s*[-*]\s+/gm,'');
+    .replace(/`([^`]+)`/g,'$1');
+}
+function appendFormattedChatText(bub,text){
+  var s=String(text).replace(/\r\n/g,'\n').trim();
+  if(!s)return;
+  var blocks=s.split(/\n{2,}/);
+  blocks.forEach(function(block,i){
+    if(i>0){
+      var gap=document.createElement('span');
+      gap.className='chat-msg-br';
+      gap.setAttribute('aria-hidden','true');
+      bub.appendChild(gap);
+    }
+    block=block.trim();
+    if(!block)return;
+    var lines=block.split('\n').map(function(ln){return ln.trim();}).filter(Boolean);
+    if(!lines.length)return;
+    var listLines=lines.filter(function(ln){
+      return /^[-•*–]\s+/.test(ln)||/^\d+[.)]\s+/.test(ln);
+    });
+    if(listLines.length===lines.length){
+      var ul=document.createElement('ul');
+      ul.className='chat-msg-list';
+      lines.forEach(function(ln){
+        var li=document.createElement('li');
+        li.textContent=ln.replace(/^[-•*–]\s+/,'').replace(/^\d+[.)]\s+/,'');
+        ul.appendChild(li);
+      });
+      bub.appendChild(ul);
+      return;
+    }
+    if(lines.length===1){
+      var p=document.createElement('p');
+      p.className='chat-msg-p';
+      p.textContent=lines[0];
+      bub.appendChild(p);
+      return;
+    }
+    var pMulti=document.createElement('p');
+    pMulti.className='chat-msg-p';
+    lines.forEach(function(ln,idx){
+      if(idx>0)pMulti.appendChild(document.createElement('br'));
+      pMulti.appendChild(document.createTextNode(ln));
+    });
+    bub.appendChild(pMulti);
+  });
+}
+function appendPromoImage(bub,filename){
+  var file=encodeURI(String(filename).trim());
+  var fullSrc=CHAT_IMG_BASE+file;
+  var wrap=document.createElement('div');
+  wrap.className='chat-promo-wrap';
+  wrap.setAttribute('role','button');
+  wrap.setAttribute('tabindex','0');
+  wrap.title='Ver promoción en grande';
+  var img=document.createElement('img');
+  img.className='chat-promo-img';
+  img.alt='Promoción Erior';
+  img.loading='lazy';
+  img.decoding='async';
+  img.src=fullSrc;
+  var zoom=document.createElement('span');
+  zoom.className='chat-promo-zoom';
+  zoom.textContent='\uD83D\uDD0D';
+  zoom.setAttribute('aria-hidden','true');
+  wrap.appendChild(img);
+  wrap.appendChild(zoom);
+  function openLb(){openChatPromoLightbox(fullSrc);}
+  wrap.addEventListener('click',openLb);
+  wrap.addEventListener('keydown',function(ev){
+    if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();openLb();}
+  });
+  bub.appendChild(wrap);
 }
 function appendChatBubbleContent(bub,t){
   var re=/\[IMG:([^\]]+)\]/gi;
   var last=0,m,s=String(t);
   while((m=re.exec(s))!==null){
-    if(m.index>last)bub.appendChild(document.createTextNode(s.slice(last,m.index)));
-    var img=document.createElement('img');
-    img.className='chat-promo-img';
-    img.alt='Promoción Erior';
-    img.loading='lazy';
-    img.decoding='async';
-    var file=encodeURI(m[1].trim());
-    var fullSrc=CHAT_IMG_BASE+file;
-    img.src=fullSrc;
-    img.setAttribute('role','button');
-    img.setAttribute('tabindex','0');
-    img.title='Ver promoción en grande';
-    img.addEventListener('click',function(){openChatPromoLightbox(fullSrc);});
-    img.addEventListener('keydown',function(ev){
-      if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();openChatPromoLightbox(fullSrc);}
-    });
-    bub.appendChild(img);
+    if(m.index>last)appendFormattedChatText(bub,s.slice(last,m.index));
+    appendPromoImage(bub,m[1]);
     last=m.index+m[0].length;
   }
-  if(last<s.length)bub.appendChild(document.createTextNode(s.slice(last)));
+  if(last<s.length)appendFormattedChatText(bub,s.slice(last));
 }
 function addMsg(r,t){
   var w=document.getElementById('chatWin');
