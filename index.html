@@ -599,9 +599,9 @@ body::before{
 @keyframes aliciaTitleShine{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
 .alicia-tagline{font-size:.86rem;color:rgba(210,205,230,.55);line-height:1.55;max-width:28rem;margin:0 auto}
 .alicia-avatar-wrap{
-  width:min(300px,78vw);height:min(300px,78vw);margin:.35rem auto 0;
+  width:300px;height:300px;margin:.35rem auto 0;
+  max-width:min(300px,92vw);max-height:min(300px,92vw);
   display:flex;align-items:center;justify-content:center;position:relative;
-  min-height:min(260px,70vw);
 }
 .alicia-avatar-wrap::after{
   content:'';position:absolute;inset:8%;border-radius:50%;pointer-events:none;
@@ -614,12 +614,47 @@ body::before{
   background:transparent!important;
 }
 .chat-promo-img{
-  display:block;width:100%;max-width:min(240px,100%);height:auto;
-  margin-top:.55rem;border-radius:12px;
+  display:block;width:100%;min-width:min(300px,100%);max-width:min(360px,100%);
+  height:auto;margin-top:.55rem;border-radius:12px;cursor:pointer;
   border:1px solid rgba(255,255,255,.15);
   box-shadow:0 8px 24px rgba(0,0,0,.35);
+  transition:transform .2s ease,box-shadow .2s ease;
 }
+.chat-promo-img:hover{transform:scale(1.02);box-shadow:0 10px 28px rgba(0,0,0,.45)}
 .cbub .chat-promo-img:first-child{margin-top:0}
+.cmsg.b:has(.chat-promo-img){max-width:min(400px,96%)}
+.chat-img-lightbox{
+  position:fixed;inset:0;z-index:5600;
+  background:rgba(4,3,14,.94);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.25rem;
+  padding:1.5rem;opacity:0;visibility:hidden;pointer-events:none;
+  transition:opacity .3s ease,visibility .3s;
+}
+.chat-img-lightbox.open{opacity:1;visibility:visible;pointer-events:auto}
+.chat-img-lightbox-close{
+  position:absolute;top:1rem;right:1rem;width:44px;height:44px;border-radius:50%;
+  border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.08);
+  color:#fff;font-size:1.25rem;cursor:pointer;z-index:2;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .2s ease,transform .2s ease;
+}
+.chat-img-lightbox-close:hover{background:rgba(255,255,255,.16);transform:scale(1.05)}
+.chat-img-lightbox-img{
+  max-width:min(96vw,900px);max-height:min(72vh,900px);width:auto;height:auto;
+  object-fit:contain;border-radius:14px;
+  box-shadow:0 24px 64px rgba(0,0,0,.55);
+}
+.chat-img-lightbox-cta{
+  display:inline-flex;align-items:center;justify-content:center;
+  padding:.85rem 1.6rem;border-radius:999px;text-decoration:none;
+  font-family:'Syne',sans-serif;font-size:.72rem;font-weight:600;
+  letter-spacing:.12em;text-transform:uppercase;color:#fff;
+  border:1px solid rgba(255,255,255,.35);
+  background:linear-gradient(118deg,rgba(255,120,80,.55) 0%,rgba(220,80,255,.5) 50%,rgba(255,160,60,.55) 100%);
+  box-shadow:0 8px 28px rgba(0,0,0,.35),0 0 24px rgba(255,100,80,.2);
+  transition:transform .2s ease,box-shadow .2s ease;
+}
+.chat-img-lightbox-cta:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(0,0,0,.4),0 0 32px rgba(255,120,80,.35)}
 .alicia-chat-card{
   width:100%;border-radius:20px;overflow:hidden;
   background:rgba(8,6,22,.45);border:1px solid rgba(255,255,255,.08);
@@ -693,8 +728,9 @@ body::before{
 .dot:nth-child(2){animation-delay:.15s}.dot:nth-child(3){animation-delay:.3s}
 @keyframes dot{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
 @media(max-width:600px){
-  .alicia-avatar-wrap{width:min(240px,70vw);height:min(240px,70vw);min-height:min(200px,62vw)}
+  .alicia-avatar-wrap{width:240px;height:240px;max-width:min(240px,88vw);max-height:min(240px,88vw)}
   .chat-window{height:min(320px,38vh)}
+  .chat-promo-img{min-width:min(300px,100%)}
 }
 @media(prefers-reduced-motion:reduce){
   .alicia-title,.cmsg.b .cbub,.chat-send{animation:none}
@@ -1561,21 +1597,17 @@ body::before{
         <div class="alicia-avatar-wrap">
           <model-viewer
             id="aliciaModel"
-            data-src="cyber_core_optimized.glb"
-            alt="Avatar Alicia"
+            src="animated_effect.glb"
+            alt="Efecto Alicia"
             autoplay
-            auto-rotate
-            rotation-per-second="18deg"
             interaction-prompt="none"
             disable-zoom
             disable-pan
             disable-tap
             shadow-intensity="0"
-            exposure="1.2"
-            camera-orbit="0deg 72deg auto"
-            min-camera-orbit="auto 58deg auto"
-            max-camera-orbit="auto 86deg auto"
-            field-of-view="26deg"
+            exposure="1.15"
+            camera-orbit="0deg 75deg auto"
+            field-of-view="28deg"
             style="width:100%;height:100%;background-color:transparent;"
           ></model-viewer>
         </div>
@@ -1720,6 +1752,12 @@ body::before{
   </div>
 </div>
 
+<div class="chat-img-lightbox" id="chatImgLightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Vista de promoción">
+  <button type="button" class="chat-img-lightbox-close" onclick="closeChatPromoLightbox()" aria-label="Cerrar">✕</button>
+  <img class="chat-img-lightbox-img" id="chatImgLightboxImg" src="" alt="Promoción Erior">
+  <a class="chat-img-lightbox-cta" id="chatImgLightboxWa" href="https://wa.me/5214432311761?text=Hola%2C%20me%20interesa%20esta%20promoci%C3%B3n" target="_blank" rel="noopener noreferrer" onclick="closeChatPromoLightbox()">Quiero esta promo 🔥</a>
+</div>
+
 <!-- MIND MOVIE MODAL -->
 <div id="mmModal">
   <div class="mm-box">
@@ -1752,7 +1790,7 @@ function closePromoModal(){
   if(!m)return;
   m.classList.remove('open');
   m.setAttribute('aria-hidden','true');
-  if(!document.querySelector('.modal-bg.open,#mmModal.open,#futuraModal.open'))document.body.style.overflow='';
+  if(!document.querySelector('.modal-bg.open,#mmModal.open,#futuraModal.open,#chatImgLightbox.open'))document.body.style.overflow='';
 }
 function switchPromoTab(id){
   document.querySelectorAll('.promo-tab').forEach(function(t){
@@ -1762,6 +1800,37 @@ function switchPromoTab(id){
   document.getElementById('promoPanelMatrix').classList.toggle('active',id==='matrix');
 }
 document.getElementById('promoModal').addEventListener('click',function(e){if(e.target===this)closePromoModal();});
+
+// ══════════════════════════════════
+// CHAT PROMO IMAGE LIGHTBOX
+// ══════════════════════════════════
+var CHAT_PROMO_WA='https://wa.me/5214432311761?text='+encodeURIComponent('Hola, me interesa esta promoción');
+function openChatPromoLightbox(src){
+  var lb=document.getElementById('chatImgLightbox');
+  var img=document.getElementById('chatImgLightboxImg');
+  var wa=document.getElementById('chatImgLightboxWa');
+  if(!lb||!img||!src)return;
+  img.src=src;
+  if(wa)wa.href=CHAT_PROMO_WA;
+  lb.classList.add('open');
+  lb.setAttribute('aria-hidden','false');
+  document.body.style.overflow='hidden';
+}
+function closeChatPromoLightbox(){
+  var lb=document.getElementById('chatImgLightbox');
+  if(!lb)return;
+  lb.classList.remove('open');
+  lb.setAttribute('aria-hidden','true');
+  if(!document.querySelector('.modal-bg.open,#mmModal.open,#futuraModal.open,.chat-img-lightbox.open'))document.body.style.overflow='';
+}
+(function(){
+  var lb=document.getElementById('chatImgLightbox');
+  if(!lb)return;
+  lb.addEventListener('click',function(e){if(e.target===lb)closeChatPromoLightbox();});
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape'&&lb.classList.contains('open'))closeChatPromoLightbox();
+  });
+})();
 
 // ══════════════════════════════════
 // COSMOS (original stars - safe)
@@ -2214,10 +2283,7 @@ function initAlicia(){
 function initAliciaModel(){
   var mv=document.getElementById('aliciaModel');
   if(!mv||mv.dataset.ready==='1')return;
-  var src=mv.getAttribute('data-src')||mv.getAttribute('src');
-  if(!src)return;
   loadModelViewerScript(function(){
-    if(!mv.getAttribute('src'))mv.setAttribute('src',src);
     mv.addEventListener('load',function onAliciaModelLoad(){
       if(mv.availableAnimations&&mv.availableAnimations.length){
         mv.animationName=mv.availableAnimations[0];
@@ -2247,7 +2313,15 @@ function appendChatBubbleContent(bub,t){
     img.loading='lazy';
     img.decoding='async';
     var file=encodeURI(m[1].trim());
-    img.src=CHAT_IMG_BASE+file;
+    var fullSrc=CHAT_IMG_BASE+file;
+    img.src=fullSrc;
+    img.setAttribute('role','button');
+    img.setAttribute('tabindex','0');
+    img.title='Ver promoción en grande';
+    img.addEventListener('click',function(){openChatPromoLightbox(fullSrc);});
+    img.addEventListener('keydown',function(ev){
+      if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();openChatPromoLightbox(fullSrc);}
+    });
     bub.appendChild(img);
     last=m.index+m[0].length;
   }
