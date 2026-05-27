@@ -335,56 +335,82 @@ body::before{
   transition:transform .2s ease,box-shadow .2s ease;
 }
 .cover-promo-countdown:hover{transform:translateY(-2px);box-shadow:0 0 32px rgba(201,160,96,.2)}
-/* Testimonios */
-.testi-grid{
-  display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));
-  gap:1.25rem;margin-top:1.5rem;
+/* Testimonios — video inmersivo */
+#page-testimonios{
+  min-height:100vh;padding:0;
+  background:
+    radial-gradient(ellipse 80% 55% at 50% 0%,rgba(120,60,160,.18) 0%,transparent 55%),
+    radial-gradient(ellipse 70% 50% at 80% 90%,rgba(201,160,96,.1) 0%,transparent 50%),
+    linear-gradient(180deg,#0a0812 0%,#12101c 45%,#0c0a14 100%);
 }
-.testi-card{
-  border-radius:18px;overflow:hidden;
-  background:rgba(12,10,20,.85);border:1px solid rgba(255,255,255,.08);
-  box-shadow:0 16px 40px rgba(0,0,0,.4);
-  transition:transform .25s ease,border-color .25s ease;
+#page-testimonios .mod-wrap{max-width:920px;padding:2.5rem 1.25rem 3rem}
+.testi-scene-head{text-align:center;margin-bottom:2rem}
+.testi-scene-head .mod-title{margin-bottom:.65rem}
+.testi-scene-sub{
+  font-size:.84rem;color:rgba(210,205,225,.55);max-width:28rem;margin:0 auto;line-height:1.6;
 }
-.testi-card:hover{transform:translateY(-3px);border-color:rgba(212,175,95,.25)}
-.testi-wa .testi-screen{background:#0b141a;border:1px solid rgba(255,255,255,.06)}
-.testi-wa .testi-top{
-  display:flex;align-items:center;gap:.65rem;padding:.7rem .85rem;
-  background:#1f2c34;border-bottom:1px solid rgba(255,255,255,.05);
+.testi-video-stage{
+  position:relative;display:flex;justify-content:center;margin:0 auto 1.75rem;
+  max-width:min(720px,100%);
 }
-.testi-ig .testi-screen{background:linear-gradient(180deg,#1a1028 0%,#0e0c14 100%);border:1px solid rgba(255,255,255,.08)}
-.testi-ig .testi-top{
-  display:flex;align-items:center;gap:.65rem;padding:.75rem .9rem;
-  border-bottom:1px solid rgba(255,255,255,.06);
+.testi-video-dim{
+  position:fixed;inset:0;z-index:200;
+  background:rgba(4,2,12,.82);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  opacity:0;pointer-events:none;transition:opacity .45s ease;
 }
-.testi-avatar{
-  width:40px;height:40px;border-radius:50%;flex-shrink:0;
+#page-testimonios.testi-playing .testi-video-dim{opacity:1;pointer-events:auto}
+.testi-video-wrap{
+  position:relative;width:100%;max-width:min(720px,96vw);
+  border-radius:22px;padding:3px;
+  background:linear-gradient(118deg,#ff9fff,#c9a84c,#a0f4ff,#ffd6ff,#e8b86d,#b794f6,#ff9fff);
+  background-size:320% 320%;
+  animation:testiFrameIri 8s ease-in-out infinite;
+  box-shadow:0 20px 60px rgba(0,0,0,.55),0 0 48px rgba(201,160,96,.15);
+  transition:transform .45s cubic-bezier(.22,1,.36,1),box-shadow .45s ease;
+  z-index:210;
+}
+@keyframes testiFrameIri{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+#page-testimonios.testi-playing .testi-video-wrap{
+  transform:scale(1.06);
+  box-shadow:0 28px 80px rgba(0,0,0,.7),0 0 72px rgba(212,175,95,.28);
+}
+.testi-video-inner{
+  border-radius:19px;overflow:hidden;background:#050408;
+  line-height:0;
+}
+.testi-video-inner video{
+  display:block;width:100%;height:auto;max-height:min(72vh,640px);
+  object-fit:contain;background:#000;
+}
+.testi-video-tagline{
+  font-family:'Cormorant Garamond',serif;font-size:clamp(1.35rem,4.5vw,1.85rem);
+  font-weight:400;font-style:italic;text-align:center;color:var(--white);
+  line-height:1.45;margin:0 auto 1.35rem;max-width:22rem;
+  text-shadow:0 0 32px rgba(212,175,95,.2);
+}
+.btn-testi-attraction{
   display:flex;align-items:center;justify-content:center;
-  font-family:'Syne',sans-serif;font-size:.75rem;font-weight:700;color:#fff;
+  margin:0 auto;padding:.9rem 2.2rem;border-radius:999px;cursor:pointer;border:none;
+  font-family:'Syne',sans-serif;font-size:.72rem;font-weight:600;
+  letter-spacing:.14em;text-transform:uppercase;color:#fff;
+  background:linear-gradient(118deg,rgba(255,170,210,.45) 0%,rgba(201,160,96,.5) 35%,rgba(186,130,255,.45) 70%,rgba(255,200,140,.45) 100%);
+  background-size:220% 220%;animation:testiFrameIri 10s ease-in-out infinite;
+  border:1px solid rgba(255,255,255,.35);
+  box-shadow:0 10px 36px rgba(0,0,0,.4),0 0 28px rgba(201,160,96,.2),inset 0 1px 0 rgba(255,255,255,.35);
+  transition:transform .25s ease,box-shadow .25s ease;
 }
-.testi-wa .testi-avatar{background:linear-gradient(135deg,#25d366,#128c7e)}
-.testi-ig .testi-avatar{background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)}
-.testi-meta{flex:1;min-width:0}
-.testi-name{font-size:.78rem;font-weight:500;color:#fff;line-height:1.2}
-.testi-date{font-size:.58rem;color:rgba(180,175,195,.45);margin-top:.12rem}
-.testi-body{padding:.85rem .9rem 1rem}
-.testi-wa .testi-bubble{
-  display:inline-block;max-width:100%;padding:.65rem .75rem;border-radius:0 14px 14px 14px;
-  background:#005c4b;font-size:.76rem;line-height:1.55;color:#e9edef;
-  box-shadow:0 1px 2px rgba(0,0,0,.2);
+.btn-testi-attraction:hover{
+  transform:translateY(-3px);
+  box-shadow:0 14px 44px rgba(0,0,0,.45),0 0 40px rgba(212,175,95,.35),inset 0 1px 0 rgba(255,255,255,.45);
 }
-.testi-ig .testi-bubble{
-  font-size:.76rem;line-height:1.55;color:rgba(236,234,244,.92);
-  padding:.5rem 0 0;
+@media(max-width:600px){
+  #page-testimonios .mod-wrap{padding:2rem .65rem 2.5rem}
+  .testi-video-wrap{max-width:min(96vw,100%);width:96vw}
+  .testi-video-inner video{max-height:58vh}
+  #page-testimonios.testi-playing .testi-video-wrap{transform:scale(1.03)}
 }
-.testi-tag{
-  display:inline-block;margin-top:.5rem;font-size:.58rem;letter-spacing:.08em;
-  color:rgba(212,175,95,.85);padding:.2rem .45rem;border-radius:6px;
-  background:rgba(201,160,96,.1);border:1px solid rgba(201,160,96,.2);
-}
-.testi-platform{
-  font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;
-  color:rgba(180,175,195,.4);padding:.35rem .85rem 0;
+@media(prefers-reduced-motion:reduce){
+  .testi-video-wrap,.btn-testi-attraction{animation:none}
 }
 /* FAQ */
 .faq-list{display:flex;flex-direction:column;gap:.75rem;margin-top:1.5rem}
@@ -755,7 +781,7 @@ body::before{
   box-shadow:0 4px 14px rgba(0,0,0,.45);
   pointer-events:none;
 }
-.cbub .chat-msg-p{margin:0 0 .7rem;line-height:1.58}
+.cbub .chat-msg-p{margin:0 0 .8rem;line-height:1.65}
 .cbub .chat-msg-p:last-child{margin-bottom:0}
 .cbub .chat-msg-list{
   margin:.35rem 0 .75rem;padding-left:1.15rem;
@@ -819,8 +845,8 @@ body::before{
   pointer-events:none;z-index:5800;display:none;
 }
 .chat-window{
-  height:min(380px,42vh);overflow-y:auto;padding:1.15rem 1.1rem;
-  display:flex;flex-direction:column;gap:.75rem;
+  height:min(520px,58vh);overflow-y:auto;padding:1.35rem 1.25rem;
+  display:flex;flex-direction:column;gap:1rem;
   background:transparent;border:none;border-radius:0;
 }
 .chat-window::-webkit-scrollbar{width:4px}
@@ -832,7 +858,7 @@ body::before{
 .cmsg.b .cwho{color:rgba(200,185,240,.5)}
 .cmsg.u .cwho{color:rgba(180,175,200,.4)}
 .cbub{
-  padding:.72rem 1rem;border-radius:16px;font-size:.84rem;line-height:1.58;
+  padding:.85rem 1.15rem;border-radius:16px;font-size:.84rem;line-height:1.65;
   position:relative;overflow:hidden;
 }
 .cmsg.b .cbub{
@@ -887,7 +913,7 @@ body::before{
 @keyframes dot{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
 @media(max-width:600px){
   .alicia-avatar-wrap{width:240px;height:240px;max-width:min(240px,88vw);max-height:min(240px,88vw)}
-  .chat-window{height:min(320px,38vh)}
+  .chat-window{height:min(440px,52vh);padding:1.2rem 1rem;gap:.9rem}
   .chat-promo-img{min-width:min(300px,100%)}
 }
 @media(prefers-reduced-motion:reduce){
@@ -1810,90 +1836,22 @@ body::before{
 
   <!-- ══ TESTIMONIOS ══ -->
   <div class="page" id="page-testimonios">
+    <div class="testi-video-dim" id="testiVideoDim" aria-hidden="true"></div>
     <div class="mod-wrap">
-      <div class="mod-label">Comunidad Erior</div>
-      <h2 class="mod-title">Testimonios <em>reales</em></h2>
-      <p style="font-size:.84rem;color:var(--text2);max-width:36rem;line-height:1.6">Mensajes auténticos de clientas y clientes que ya transformaron su vida con los audios. (Edita nombre, fecha y texto cuando quieras.)</p>
-      <div class="testi-grid">
-        <article class="testi-card testi-wa">
-          <div class="testi-screen">
-            <div class="testi-top">
-              <div class="testi-avatar" style="background:linear-gradient(135deg,#7c5cbf,#b794f6)">AM</div>
-              <div class="testi-meta"><div class="testi-name">Ana M. · CDMX</div><div class="testi-date">14 may 2026 · 9:42 p.m.</div></div>
-            </div>
-            <div class="testi-body">
-              <div class="testi-bubble">Chicas llevo 3 semanas con Booster y siento que mi mente por fin está en calma. Duermo mejor y dejé de darle vueltas a todo. Gracias Erior 🙏✨</div>
-              <span class="testi-tag">🐇 Booster</span>
-            </div>
-            <div class="testi-platform">WhatsApp</div>
+      <header class="testi-scene-head">
+        <div class="mod-label">Comunidad Erior</div>
+        <h2 class="mod-title">Testimonios <em>reales</em></h2>
+        <p class="testi-scene-sub">Historias de transformación con los audios de Erior Center.</p>
+      </header>
+      <div class="testi-video-stage">
+        <div class="testi-video-wrap" id="testiVideoWrap">
+          <div class="testi-video-inner">
+            <video id="testiVideo" src="testimonio1.mp4" playsinline controls preload="metadata" aria-label="Testimonio en video"></video>
           </div>
-        </article>
-        <article class="testi-card testi-ig">
-          <div class="testi-screen">
-            <div class="testi-top">
-              <div class="testi-avatar">VR</div>
-              <div class="testi-meta"><div class="testi-name">valeria.reprograma</div><div class="testi-date">8 may 2026</div></div>
-            </div>
-            <div class="testi-body">
-              <div class="testi-bubble">Después de ATTRACTION mi energía cambió por completo. Volvimos a hablar y siento que todo fluye sin ansiedad. Esto es otro nivel 💕</div>
-              <span class="testi-tag">🌹 ATTRACTION</span>
-            </div>
-            <div class="testi-platform">Instagram DM</div>
-          </div>
-        </article>
-        <article class="testi-card testi-wa">
-          <div class="testi-screen">
-            <div class="testi-top">
-              <div class="testi-avatar" style="background:linear-gradient(135deg,#e8a0d4,#9b59b6)">CL</div>
-              <div class="testi-meta"><div class="testi-name">Carmen L.</div><div class="testi-date">22 abr 2026 · 11:15 a.m.</div></div>
-            </div>
-            <div class="testi-body">
-              <div class="testi-bubble">Amor Propio Magic 2.0 me devolvió la confianza. Ya no busco validación afuera y eso se nota en todo. Mi piel, mi actitud, todo glow up 🦋</div>
-              <span class="testi-tag">🦋 Amor Propio Magic 2.0</span>
-            </div>
-            <div class="testi-platform">WhatsApp</div>
-          </div>
-        </article>
-        <article class="testi-card testi-wa">
-          <div class="testi-screen">
-            <div class="testi-top">
-              <div class="testi-avatar" style="background:linear-gradient(135deg,#c9a060,#d4af37)">DR</div>
-              <div class="testi-meta"><div class="testi-name">Diego R. · Guadalajara</div><div class="testi-date">3 may 2026 · 7:08 p.m.</div></div>
-            </div>
-            <div class="testi-body">
-              <div class="testi-bubble">Escucho Lucky todas las mañanas y me gané un sorteo la semana pasada. Coincidencia? No lo creo 🍀🔥</div>
-              <span class="testi-tag">🍀 Lucky</span>
-            </div>
-            <div class="testi-platform">WhatsApp</div>
-          </div>
-        </article>
-        <article class="testi-card testi-ig">
-          <div class="testi-screen">
-            <div class="testi-top">
-              <div class="testi-avatar">SM</div>
-              <div class="testi-meta"><div class="testi-name">sofia.magnetica</div><div class="testi-date">18 may 2026</div></div>
-            </div>
-            <div class="testi-body">
-              <div class="testi-bubble">Éclat es magia pura. Me siento radiante sin esfuerzo. Varias personas me han dicho que brillo distinto ✨👑</div>
-              <span class="testi-tag">✨ Éclat</span>
-            </div>
-            <div class="testi-platform">Instagram DM</div>
-          </div>
-        </article>
-        <article class="testi-card testi-wa">
-          <div class="testi-screen">
-            <div class="testi-top">
-              <div class="testi-avatar" style="background:linear-gradient(135deg,#64b5f6,#7c5cbf)">LP</div>
-              <div class="testi-meta"><div class="testi-name">Lucía P.</div><div class="testi-date">1 jun 2026 · 2:33 p.m.</div></div>
-            </div>
-            <div class="testi-body">
-              <div class="testi-bubble">Master Abundance me ayudó a cerrar dos clientes nuevos en mi negocio. Mi mente ya cree que merezco más 💰🙌</div>
-              <span class="testi-tag">💰 Master Abundance</span>
-            </div>
-            <div class="testi-platform">WhatsApp</div>
-          </div>
-        </article>
+        </div>
       </div>
+      <p class="testi-video-tagline">Manifiesta más rápido a tu persona ✨</p>
+      <button type="button" class="btn-testi-attraction" onclick="goToAttractionFromTestimonial()">Attraction ✨</button>
     </div>
   </div>
 
@@ -2296,6 +2254,39 @@ function goToIconAura(){
     if(item)openModal(item,cats);
   },320);
 }
+function goToAttractionFromTestimonial(){
+  var testiPage=document.getElementById('page-testimonios');
+  var vid=document.getElementById('testiVideo');
+  if(vid&&!vid.paused)vid.pause();
+  if(testiPage)testiPage.classList.remove('testi-playing');
+  goTo('catalogo');
+  curCat='amor';
+  buildCatalog();
+  setTimeout(function(){
+    var card=document.querySelector('.ac-card[data-audio-key="attraction"]');
+    if(card){
+      card.scrollIntoView({behavior:'smooth',block:'center'});
+      card.classList.add('ac-highlight');
+      setTimeout(function(){card.classList.remove('ac-highlight');},3200);
+    }
+  },320);
+}
+function initTestimonialVideo(){
+  var page=document.getElementById('page-testimonios');
+  var video=document.getElementById('testiVideo');
+  var dim=document.getElementById('testiVideoDim');
+  if(!page||!video)return;
+  function setPlaying(on){page.classList.toggle('testi-playing',on);}
+  video.addEventListener('play',function(){setPlaying(true);});
+  video.addEventListener('pause',function(){setPlaying(false);});
+  video.addEventListener('ended',function(){setPlaying(false);});
+  if(dim){
+    dim.addEventListener('click',function(){
+      video.pause();
+      setPlaying(false);
+    });
+  }
+}
 function nextPage(){
   if(curPage<PAGES.length-1){curPage++;goTo(PAGES[curPage]);}
 }
@@ -2419,6 +2410,7 @@ function buildCatalog(){
     var d=document.createElement('div');
     d.className='ac-card';
     if(/ICON AURA/i.test(a.nombre))d.dataset.audioKey='icon-aura';
+    if(/ATTRACTION/i.test(a.nombre))d.dataset.audioKey='attraction';
     d.addEventListener('click',function(e){if(!e.target.closest('a,.btn-buy'))openModal(a,cats);});
     var imgH=a.img
       ?'<img src="'+a.img+'" alt="'+a.nombre+'" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block">'
@@ -3055,6 +3047,7 @@ buildCatalog();
 buildTarot();
 initPromoCountdown();
 initFaqAccordion();
+initTestimonialVideo();
 (function(){
   var coverCd=document.querySelector('.cover-promo-countdown');
   if(coverCd){
