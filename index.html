@@ -2658,13 +2658,16 @@ var ALICIA_FN='/.netlify/functions/claude';
 var hist=[];
 var aliciaClient={nombre:'',contacto:'',leadSent:false};
 var CALLMEBOT_BASE='https://api.callmebot.com/whatsapp.php';
-var CALLMEBOT_PHONE='5214791936105';
-var CALLMEBOT_KEY='2412047';
-var aliciaSaleAlerts={};
+var CALLMEBOT_RECIPIENTS=[
+  {phone:'5214791936105',apikey:'2412047'},
+  {phone:'5214432311761',apikey:'6870409'}
+];
+var aliciaAlertsSent={};
 
 var aliciaParticlesStarted=false;
 function initAlicia(){
   loadAliciaClientFromStorage();
+  loadAliciaAlertsFromStorage();
   var welcome='Hola! Soy Alicia ✨ Antes de empezar, ¿me compartes tu nombre y tu WhatsApp o email para enviarte información exclusiva y acompañarte en tu proceso? 🌟';
   addMsg('b',welcome);
   if(!hist.length)hist.push({role:'assistant',content:welcome});
@@ -2674,9 +2677,37 @@ function initAlicia(){
 function sendCallMeBotAlert(message){
   var text=String(message||'').trim();
   if(!text)return;
-  var url=CALLMEBOT_BASE+'?phone='+encodeURIComponent(CALLMEBOT_PHONE)+'&text='+encodeURIComponent(text)+'&apikey='+encodeURIComponent(CALLMEBOT_KEY);
-  fetch(url,{method:'GET',mode:'no-cors'}).catch(function(){});
-  try{var img=new Image();img.src=url;}catch(e){}
+  CALLMEBOT_RECIPIENTS.forEach(function(rec){
+    var url=CALLMEBOT_BASE+'?phone='+encodeURIComponent(rec.phone)+'&text='+encodeURIComponent(text)+'&apikey='+encodeURIComponent(rec.apikey);
+    fetch(url,{method:'GET',mode:'no-cors'}).catch(function(){});
+    try{var img=new Image();img.src=url;}catch(e){}
+  });
+}
+function aliciaAlertOnce(key,message){
+  if(aliciaAlertsSent[key])return false;
+  aliciaAlertsSent[key]=Date.now();
+  try{sessionStorage.setItem('alicia_alert_'+key,'1');}catch(st){}
+  sendCallMeBotAlert(message);
+  return true;
+}
+function loadAliciaAlertsFromStorage(){
+  try{
+    for(var i=0;i<sessionStorage.length;i++){
+      var k=sessionStorage.key(i);
+      if(k&&k.indexOf('alicia_alert_')===0)aliciaAlertsSent[k.slice(13)]=1;
+    }
+  }catch(st){}
+}
+function getAliciaNombre(){
+  loadAliciaClientFromStorage();
+  reconcileAliciaClientFromHistory();
+  return aliciaClient.nombre||'Sin nombre';
+}
+function getAliciaContacto(){
+  return aliciaClient.contacto||'Sin contacto';
+}
+function audioAlertSlug(audio){
+  return String(audio||'audio').replace(/[^\w]+/g,'_').toLowerCase().slice(0,48);
 }
 function extractAliciaEmail(t){
   var m=String(t).match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
@@ -2736,19 +2767,7 @@ function reconcileAliciaClientFromHistory(){
     if(m.role==='user')updateAliciaClientFromMessage(m.content);
   });
 }
-function notifyAliciaNewLeadIfReady(){
-  loadAliciaClientFromStorage();
-  reconcileAliciaClientFromHistory();
-  if(aliciaClient.leadSent||!aliciaClient.nombre||!aliciaClient.contacto)return;
-  aliciaClient.leadSent=true;
-  try{sessionStorage.setItem('alicia_lead_sent','1');}catch(st){}
-  sendCallMeBotAlert('NUEVO CLIENTE ERIOR: '+aliciaClient.nombre+' '+aliciaClient.contacto);
-}
-function isPurchaseIntent(txt){
-  if(isPaymentCelebration(txt))return true;
-  return /quiero comprar|quiero adquirir|voy a comprar|me lo llevo|lo quiero comprar|lo compro|reservar|res[eé]rvalo|p[aá]same los datos|datos de pago|c[oó]mo (lo )?pago|m[eé]todo de pago|listo para comprar|hacer el pedido|empezamos con este|adquirirlo hoy|te compro|me interesa comprar/i.test(String(txt));
-}
-function guessAudioForSaleAlert(txt){
+function guessAudioFromMessage(txt){
   var corpus=String(txt)+' ';
   hist.slice(-8).forEach(function(m){corpus+=m.content+' ';});
   var best='';
@@ -2757,26 +2776,70 @@ function guessAudioForSaleAlert(txt){
       var n=a.nombre||'';
       var tokens=n.replace(/[^\w\sáéíóúñÁÉÍÓÚÑ]/gi,' ').split(/\s+/).filter(function(w){return w.length>3;});
       tokens.forEach(function(tok){
-        if(new RegExp(tok,'i').test(corpus))best=n;
+        if(new RegExp(tok.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'i').test(corpus))best=n;
       });
       if(/ATTRACTION/i.test(n)&&/attraction/i.test(corpus))best=n;
       if(/BOOSTER/i.test(n)&&/booster/i.test(corpus))best=n;
       if(/ICON AURA/i.test(n)&&/icon\s*aura/i.test(corpus))best=n;
+      if(/WONDERLAND/i.test(n)&&/wonderland/i.test(corpus))best=n;
+      if(/MESMERIZING/i.test(n)&&/mesmerizing/i.test(corpus))best=n;
+      if(/ÉCLAT|ECLAT/i.test(n)&&/eclat|éclat/i.test(corpus))best=n;
+      if(/VITAMIND/i.test(n)&&/vitamind/i.test(corpus))best=n;
+      if(/ERIOR LOVE/i.test(n)&&/erior\s*love/i.test(corpus))best=n;
     });
   }
-  if(!best&&/hot sale|pares/i.test(corpus))best='Hot Sale de los Pares';
-  if(!best&&/telegram|matrix/i.test(corpus))best='Telegram / Matrix';
-  return best||'audio Erior';
+  return best;
 }
-function notifyAliciaSaleIfNeeded(txt){
-  if(!isPurchaseIntent(txt))return;
+function guessAudioForSaleAlert(txt){
+  var a=guessAudioFromMessage(txt);
+  if(a)return a;
+  var corpus=String(txt)+' ';
+  hist.slice(-6).forEach(function(m){corpus+=m.content+' ';});
+  if(/hot sale|pares/i.test(corpus))return 'Hot Sale de los Pares';
+  if(/telegram|matrix/i.test(corpus))return 'Telegram / Matrix';
+  return 'audio Erior';
+}
+function isPurchaseIntent(txt){
+  return /quiero comprar|quiero adquirir|voy a comprar|me lo llevo|lo quiero comprar|lo compro|reservar|res[eé]rvalo|p[aá]same los datos|datos de pago|c[oó]mo (lo )?pago|m[eé]todo de pago|listo para comprar|hacer el pedido|empezamos con este|adquirirlo hoy|te compro|me interesa comprar/i.test(String(txt));
+}
+function isPromoInterest(txt){
+  return /promo|promoci[oó]n|hot sale|descuento|oferta|hot sale de los pares|para salir de la m|salir de la matrix|1[,.]?777|combo|pares|lucky|edici[oó]n limitada/i.test(String(txt));
+}
+function isAudioInterest(txt){
+  var s=String(txt);
+  var audio=guessAudioFromMessage(txt);
+  if(!audio)return false;
+  if(isPurchaseIntent(s)||isPaymentCelebration(s))return false;
+  return /[?¿]|\b(qu[eé]|cu[aá]nto|cuesta|precio|informaci|cu[eé]ntame|platic|saber|interesa|recomiend|funciona|incluye|vale|diferencia|tienen|ofrecen|venden|workshop|audio)\b/i.test(s);
+}
+function processAliciaCallMeBotAlerts(txt){
+  updateAliciaClientFromMessage(txt);
   loadAliciaClientFromStorage();
-  var nombre=aliciaClient.nombre||'Cliente';
+  loadAliciaAlertsFromStorage();
+  reconcileAliciaClientFromHistory();
+  var nombre=getAliciaNombre();
+  var contacto=getAliciaContacto();
+  if(aliciaClient.nombre&&aliciaClient.contacto&&!aliciaClient.leadSent){
+    aliciaClient.leadSent=true;
+    try{sessionStorage.setItem('alicia_lead_sent','1');}catch(st){}
+    aliciaAlertOnce('prospect','👤 NUEVO PROSPECTO ERIOR: Nombre: '+nombre+' Contacto: '+contacto);
+  }
   var audio=guessAudioForSaleAlert(txt);
-  var key=(nombre+'|'+audio+'|'+String(txt).slice(0,80)).toLowerCase();
-  if(aliciaSaleAlerts[key])return;
-  aliciaSaleAlerts[key]=Date.now();
-  sendCallMeBotAlert('VENTA ERIOR: '+nombre+' quiere '+audio);
+  var slug=audioAlertSlug(audio);
+  if(isPaymentCelebration(txt)){
+    aliciaAlertOnce('payment_'+slug,'🎉 PAGO CONFIRMADO ERIOR: '+nombre+' pagó '+audio+' Contacto: '+contacto);
+    return;
+  }
+  if(isPurchaseIntent(txt)){
+    aliciaAlertOnce('sale_'+slug,'💰 VENTA ERIOR: '+nombre+' quiere comprar '+audio+' Contacto: '+contacto);
+  }
+  if(isPromoInterest(txt)){
+    aliciaAlertOnce('promo','🔥 PROMO ERIOR: '+nombre+' pregunta por promociones');
+  }
+  var specific=guessAudioFromMessage(txt);
+  if(specific&&isAudioInterest(txt)){
+    aliciaAlertOnce('interest_'+audioAlertSlug(specific),'🎧 INTERÉS ERIOR: '+nombre+' pregunta por '+specific);
+  }
 }
 var aliciaSalesSparkleTimer=null;
 var aliciaSalesSparkleRaf=null;
@@ -3046,9 +3109,7 @@ async function sendMsg(){
   var inp=document.getElementById('chatIn');
   var txt=inp.value.trim();if(!txt)return;
   inp.value='';addMsg('u',txt);hist.push({role:'user',content:txt});
-  updateAliciaClientFromMessage(txt);
-  notifyAliciaNewLeadIfReady();
-  notifyAliciaSaleIfNeeded(txt);
+  processAliciaCallMeBotAlerts(txt);
   if(isPaymentCelebration(txt))launchAliciaConfetti();
   var sendBtn=document.querySelector('.chat-send');
   sendBtn.disabled=true;showDots();
