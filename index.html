@@ -2656,12 +2656,127 @@ document.getElementById('audioModal').addEventListener('click',function(e){if(e.
 // ══════════════════════════════════
 var ALICIA_FN='/.netlify/functions/claude';
 var hist=[];
+var aliciaClient={nombre:'',contacto:'',leadSent:false};
+var CALLMEBOT_BASE='https://api.callmebot.com/whatsapp.php';
+var CALLMEBOT_PHONE='5214791936105';
+var CALLMEBOT_KEY='2412047';
+var aliciaSaleAlerts={};
 
 var aliciaParticlesStarted=false;
 function initAlicia(){
-  addMsg('b','¡Hola! Soy Alicia ✦ Antes de empezar, ¿cómo te llamas y de dónde nos escribes? Quiero conocerte para guiarte al audio que tu subconsciente necesita hoy 💜');
+  loadAliciaClientFromStorage();
+  var welcome='Hola! Soy Alicia ✨ Antes de empezar, ¿me compartes tu nombre y tu WhatsApp o email para enviarte información exclusiva y acompañarte en tu proceso? 🌟';
+  addMsg('b',welcome);
+  if(!hist.length)hist.push({role:'assistant',content:welcome});
   initAliciaModel();
   if(!aliciaParticlesStarted){aliciaParticlesStarted=true;initAliciaParticles();}
+}
+function sendCallMeBotAlert(message){
+  var text=String(message||'').trim();
+  if(!text)return;
+  var url=CALLMEBOT_BASE+'?phone='+encodeURIComponent(CALLMEBOT_PHONE)+'&text='+encodeURIComponent(text)+'&apikey='+encodeURIComponent(CALLMEBOT_KEY);
+  fetch(url,{method:'GET',mode:'no-cors'}).catch(function(){});
+  try{var img=new Image();img.src=url;}catch(e){}
+}
+function extractAliciaEmail(t){
+  var m=String(t).match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
+  return m?m[0]:'';
+}
+function extractAliciaPhone(t){
+  var s=String(t);
+  var m=s.match(/(?:\+?\d{1,3}[\s.-]?)?\(?\d{2,4}\)?[\s.-]?\d{3,4}[\s.-]?\d{3,4}(?:[\s.-]?\d{2,4})?/g);
+  if(!m)return '';
+  for(var i=0;i<m.length;i++){
+    var d=m[i].replace(/\D/g,'');
+    if(d.length>=10)return m[i].trim();
+  }
+  return '';
+}
+function extractAliciaName(t){
+  var s=String(t).trim();
+  var m=s.match(/(?:me llamo|soy|mi nombre es|me dicen)\s+([a-záéíóúñüA-ZÁÉÍÓÚÑÜ][a-záéíóúñüA-ZÁÉÍÓÚÑÜ\s'.-]{1,35})/i);
+  if(m)return m[1].trim().split(/\s+/).slice(0,3).join(' ');
+  var email=extractAliciaEmail(s);
+  var phone=extractAliciaPhone(s);
+  if(email||phone){
+    var rest=s.replace(email,'').replace(phone,'').replace(/whatsapp|correo|email|tel[eé]fono/gi,'').trim();
+    rest=rest.replace(/^[,.\s:-]+|[,.\s:-]+$/g,'').trim();
+    if(rest.length>=2&&rest.length<=45&&!/\d{6,}/.test(rest))return rest.split(/\s+/).slice(0,3).join(' ');
+    var parts=s.split(/[,;|]/);
+    if(parts.length>=2){
+      var first=parts[0].trim();
+      if(first.length>=2&&first.length<=45&&!extractAliciaEmail(first)&&!extractAliciaPhone(first)&&!/\d{6,}/.test(first))return first.split(/\s+/).slice(0,3).join(' ');
+    }
+    return '';
+  }
+  if(s.length>=2&&s.length<=45&&!/\d{6,}/.test(s)&&/^[\p{L}\s'.-]+$/u.test(s))return s.split(/\s+/).slice(0,3).join(' ');
+  return '';
+}
+function updateAliciaClientFromMessage(txt){
+  var email=extractAliciaEmail(txt);
+  var phone=extractAliciaPhone(txt);
+  var contact=email||phone;
+  if(contact)aliciaClient.contacto=contact;
+  var name=extractAliciaName(txt);
+  if(name)aliciaClient.nombre=name;
+  try{
+    if(aliciaClient.nombre)sessionStorage.setItem('alicia_nombre',aliciaClient.nombre);
+    if(aliciaClient.contacto)sessionStorage.setItem('alicia_contacto',aliciaClient.contacto);
+  }catch(st){}
+}
+function loadAliciaClientFromStorage(){
+  try{
+    if(!aliciaClient.nombre)aliciaClient.nombre=sessionStorage.getItem('alicia_nombre')||'';
+    if(!aliciaClient.contacto)aliciaClient.contacto=sessionStorage.getItem('alicia_contacto')||'';
+    aliciaClient.leadSent=sessionStorage.getItem('alicia_lead_sent')==='1';
+  }catch(st){}
+}
+function reconcileAliciaClientFromHistory(){
+  hist.forEach(function(m){
+    if(m.role==='user')updateAliciaClientFromMessage(m.content);
+  });
+}
+function notifyAliciaNewLeadIfReady(){
+  loadAliciaClientFromStorage();
+  reconcileAliciaClientFromHistory();
+  if(aliciaClient.leadSent||!aliciaClient.nombre||!aliciaClient.contacto)return;
+  aliciaClient.leadSent=true;
+  try{sessionStorage.setItem('alicia_lead_sent','1');}catch(st){}
+  sendCallMeBotAlert('NUEVO CLIENTE ERIOR: '+aliciaClient.nombre+' '+aliciaClient.contacto);
+}
+function isPurchaseIntent(txt){
+  if(isPaymentCelebration(txt))return true;
+  return /quiero comprar|quiero adquirir|voy a comprar|me lo llevo|lo quiero comprar|lo compro|reservar|res[eé]rvalo|p[aá]same los datos|datos de pago|c[oó]mo (lo )?pago|m[eé]todo de pago|listo para comprar|hacer el pedido|empezamos con este|adquirirlo hoy|te compro|me interesa comprar/i.test(String(txt));
+}
+function guessAudioForSaleAlert(txt){
+  var corpus=String(txt)+' ';
+  hist.slice(-8).forEach(function(m){corpus+=m.content+' ';});
+  var best='';
+  if(typeof aud!=='undefined'&&aud.length){
+    aud.forEach(function(a){
+      var n=a.nombre||'';
+      var tokens=n.replace(/[^\w\sáéíóúñÁÉÍÓÚÑ]/gi,' ').split(/\s+/).filter(function(w){return w.length>3;});
+      tokens.forEach(function(tok){
+        if(new RegExp(tok,'i').test(corpus))best=n;
+      });
+      if(/ATTRACTION/i.test(n)&&/attraction/i.test(corpus))best=n;
+      if(/BOOSTER/i.test(n)&&/booster/i.test(corpus))best=n;
+      if(/ICON AURA/i.test(n)&&/icon\s*aura/i.test(corpus))best=n;
+    });
+  }
+  if(!best&&/hot sale|pares/i.test(corpus))best='Hot Sale de los Pares';
+  if(!best&&/telegram|matrix/i.test(corpus))best='Telegram / Matrix';
+  return best||'audio Erior';
+}
+function notifyAliciaSaleIfNeeded(txt){
+  if(!isPurchaseIntent(txt))return;
+  loadAliciaClientFromStorage();
+  var nombre=aliciaClient.nombre||'Cliente';
+  var audio=guessAudioForSaleAlert(txt);
+  var key=(nombre+'|'+audio+'|'+String(txt).slice(0,80)).toLowerCase();
+  if(aliciaSaleAlerts[key])return;
+  aliciaSaleAlerts[key]=Date.now();
+  sendCallMeBotAlert('VENTA ERIOR: '+nombre+' quiere '+audio);
 }
 var aliciaSalesSparkleTimer=null;
 var aliciaSalesSparkleRaf=null;
@@ -2931,6 +3046,9 @@ async function sendMsg(){
   var inp=document.getElementById('chatIn');
   var txt=inp.value.trim();if(!txt)return;
   inp.value='';addMsg('u',txt);hist.push({role:'user',content:txt});
+  updateAliciaClientFromMessage(txt);
+  notifyAliciaNewLeadIfReady();
+  notifyAliciaSaleIfNeeded(txt);
   if(isPaymentCelebration(txt))launchAliciaConfetti();
   var sendBtn=document.querySelector('.chat-send');
   sendBtn.disabled=true;showDots();
