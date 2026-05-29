@@ -1913,24 +1913,9 @@ body::before{
             <input class="chat-in" id="chatIn" placeholder="¿Qué quieres transformar hoy?" onkeydown="if(event.key==='Enter')sendMsg()">
             <button type="button" class="chat-send" onclick="sendMsg()">Enviar</button>
           </div>
-          <button id="btnPauline" onclick="aliciaPaulineWA()" style="
-  display:flex;align-items:center;justify-content:center;gap:.5rem;
-  width:100%;max-width:420px;margin:1rem auto 0;
-  padding:.85rem 1.5rem;border-radius:14px;cursor:pointer;
-  border:1px solid rgba(37,211,102,.35);
-  background:rgba(37,211,102,.08);
-  font-family:'Jost',sans-serif;font-size:.72rem;font-weight:500;
-  letter-spacing:.1em;text-transform:uppercase;
-  color:rgba(37,211,102,.9);
-  transition:all .25s;
-"
-onmouseover="this.style.background='rgba(37,211,102,.18)'"
-onmouseout="this.style.background='rgba(37,211,102,.08)'"
->
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-  Hablar con Pauline
-</button>
         </div>
+        <button type="button" id="aliciaQuieroPagar" onclick="openPaymentModal(typeof aliciaClient!=='undefined' && aliciaClient.ultimoAudio ? aliciaClient.ultimoAudio : 'Audio Erior')" style="display:none;align-items:center;justify-content:center;gap:.5rem;width:100%;max-width:420px;margin:1rem auto 0;padding:.95rem 1.5rem;border-radius:14px;cursor:pointer;border:1px solid rgba(201,160,96,.45);background:rgba(201,160,96,.12);font-family:'Jost',sans-serif;font-size:.75rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);transition:all .25s;">💳 Quiero pagar ahora</button>
+        <a id="btnPauline" href="#" onclick="aliciaPaulineWA();return false;" style="display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;max-width:420px;margin:.6rem auto 0;padding:.85rem 1.5rem;border-radius:14px;cursor:pointer;border:1px solid rgba(37,211,102,.35);background:rgba(37,211,102,.08);font-family:'Jost',sans-serif;font-size:.72rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:rgba(37,211,102,.9);text-decoration:none;transition:all .25s;">💬 Hablar con Pauline</a>
       </div>
     </div>
   </div>
@@ -2111,8 +2096,7 @@ onmouseout="this.style.background='rgba(37,211,102,.08)'"
       <strong>Después de pagar</strong>
       <span id="payFooterText">Realiza el pago, manda el comprobante a eriorcenter@gmail.com indicando en el asunto el programa elegido y tu Instagram. Te enviaremos una forma digital para personalizar tu audio binaural y lo recibirás por mail con PDF de instrucciones.</span>
       <div style="margin-top:.65rem">
-        <button type="button" class="pay-copy-btn" id="payCopyEmail" data-copy="eriorcenter@gmail.com">Copiar correo</button>
-        <button type="button" id="payYaPague" style="display:block;width:100%;margin-top:.8rem;padding:.9rem 1.5rem;border-radius:14px;cursor:pointer;border:1px solid rgba(120,200,120,.45);background:rgba(80,200,120,.12);font-family:'Jost',sans-serif;font-size:.75rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:rgba(140,230,160,.95);transition:all .25s;">✅ Ya hice mi pago</button>
+        <a id="payEnviarComprobante" href="#" style="display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;margin-top:.9rem;padding:.95rem 1.5rem;border-radius:14px;cursor:pointer;border:1px solid rgba(120,200,120,.45);background:rgba(80,200,120,.12);font-family:'Jost',sans-serif;font-size:.78rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:rgba(140,230,160,.95);text-decoration:none;transition:all .25s;">📧 Enviar mi comprobante a Erior</a>
       </div>
     </div>
     <a href="https://wa.me/5214432311761?text=Hola!%20Vengo%20de%20la%20pagina%20de%20Erior%20Center%20y%20quiero%20hablar%20con%20Pauline" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;margin-top:1rem;padding:.85rem 1.5rem;border-radius:14px;border:1px solid rgba(37,211,102,.35);background:rgba(37,211,102,.08);font-family:'Jost',sans-serif;font-size:.7rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:rgba(37,211,102,.9);text-decoration:none;transition:all .25s;" onmouseover="this.style.background='rgba(37,211,102,.18)'" onmouseout="this.style.background='rgba(37,211,102,.08)'">💬 ¿Prefieres? Habla directo con Pauline</a>
@@ -2698,8 +2682,7 @@ function renderPayPanel(methodId){
 
 function selectPayMethod(id){
   payCurrentMethod=id;
-  var metodoLabel={oxxo:'OXXO',transfer:'Transferencia',paypal:'PayPal',alt:'Crypto/WU/USD',other:'Otro'}[id]||id;
-  notifCompra('metodo',payCurrentProduct,metodoLabel);
+  (function(){var lbl={oxxo:'OXXO',transfer:'Transferencia',paypal:'PayPal',alt:'Crypto/WU/USD',other:'Otro'}[id]||id;var n=(typeof aliciaClient!=='undefined'&&aliciaClient.nombre)?aliciaClient.nombre:'Cliente web';var m='🟠 ELIGIENDO PAGO ERIOR: '+n+' eligió '+lbl+' para '+(payCurrentProduct||'audio')+' — está por pagar';Promise.all([fetch('https://api.callmebot.com/whatsapp.php?phone=5214791936105&text='+encodeURIComponent(m)+'&apikey=2412047'),fetch('https://api.callmebot.com/whatsapp.php?phone=5214432311761&text='+encodeURIComponent(m)+'&apikey=6870409')]).catch(function(){});})();
   document.querySelectorAll('.pay-method-btn').forEach(function(b){
     b.classList.toggle('active',b.dataset.method===id);
   });
@@ -2741,13 +2724,10 @@ function dismissPayPromoPopup(){
 function openPaymentModal(productName){
   buildPayMethods();
   payCurrentProduct=productName||'';
-  notifCompra('ver',payCurrentProduct,'');
   document.getElementById('payProductName').textContent=payCurrentProduct;
   document.getElementById('payModalLabel').textContent=payUi('title','Elige cómo pagar y empieza hoy','Choose how to pay');
   document.getElementById('payFooterText').textContent=lang==='en'?PAY_FOOTER_EN:PAY_FOOTER_ES;
   selectPayMethod(payCurrentMethod||'oxxo');
-  var emailBtn=document.getElementById('payCopyEmail');
-  if(emailBtn)emailBtn.textContent=payUi('email','Copiar correo','Copy email');
   bindPayCopyButtons(document.getElementById('payModal'));
   var promoWa='https://wa.me/5214432311761?text='+encodeURIComponent('Hola, me gustaría una recomendación personalizada para elegir el audio perfecto para mí');
   var promoBtn=document.getElementById('payPromoWaBtn');
@@ -2756,6 +2736,27 @@ function openPaymentModal(productName){
   document.getElementById('payModal').classList.add('open');
   document.body.style.overflow='hidden';
   schedulePayPromoPopup();
+  (function(){
+    var prod=payCurrentProduct||'Audio Erior';
+    var asunto=encodeURIComponent('Comprobante de pago - '+prod);
+    var cuerpo=encodeURIComponent('Hola equipo Erior! Acabo de realizar mi pago.\n\nAudio que compre: '+prod+'\nMi Instagram: (escribe tu usuario aqui)\n\nAdjunto la captura de mi comprobante (transferencia o ticket).\n\nGracias! ✨');
+    var mail='mailto:eriorcenter@gmail.com?subject='+asunto+'&body='+cuerpo;
+    var link=document.getElementById('payEnviarComprobante');
+    if(link){
+      link.href=mail;
+      link.onclick=function(){
+        var nombre=(typeof aliciaClient!=='undefined'&&aliciaClient.nombre)?aliciaClient.nombre:'Cliente web';
+        var contacto=(typeof aliciaClient!=='undefined'&&aliciaClient.contacto)?aliciaClient.contacto:'sin contacto';
+        var metodo={oxxo:'OXXO',transfer:'Transferencia',paypal:'PayPal',alt:'Crypto/WU/USD',other:'Otro'}[payCurrentMethod]||'no especificado';
+        var msg='🎉 POSIBLE VENTA ERIOR\nCliente: '+nombre+'\nAudio: '+prod+'\nMetodo: '+metodo+'\nContacto: '+contacto+'\nAccion: va a enviar su comprobante por correo. DAR SEGUIMIENTO.';
+        Promise.all([
+          fetch('https://api.callmebot.com/whatsapp.php?phone=5214791936105&text='+encodeURIComponent(msg)+'&apikey=2412047'),
+          fetch('https://api.callmebot.com/whatsapp.php?phone=5214432311761&text='+encodeURIComponent(msg)+'&apikey=6870409')
+        ]).catch(function(){});
+        if(typeof launchAliciaConfetti==='function')launchAliciaConfetti();
+      };
+    }
+  })();
 }
 
 function openPaymentFromModal(){
@@ -3378,21 +3379,20 @@ function showDots(){
   w.appendChild(d);w.scrollTop=w.scrollHeight;
 }
 function aliciaPaulineWA(){
-  var nombre=aliciaClient.nombre||'';
-  var audio=aliciaClient.ultimoAudio||'';
-  var base='Hola! Vengo de hablar con Alicia IA de Erior Center';
-  var msg=base;
+  var nombre=(typeof aliciaClient!=='undefined'&&aliciaClient.nombre)?aliciaClient.nombre:'';
+  var audio=(typeof aliciaClient!=='undefined'&&aliciaClient.ultimoAudio)?aliciaClient.ultimoAudio:'';
+  var msg='Hola! Vengo de hablar con Alicia IA de Erior Center';
   if(nombre)msg+=', mi nombre es '+nombre;
   if(audio)msg+='. Estoy interesad@ en información sobre '+audio;
   else msg+='. Estoy interesad@ en más información';
-  var url='https://wa.me/5214432311761?text='+encodeURIComponent(msg);
-  window.open(url,'_blank');
+  window.open('https://wa.me/5214432311761?text='+encodeURIComponent(msg),'_blank');
 }
 async function sendMsg(){
   var inp=document.getElementById('chatIn');
   var txt=inp.value.trim();if(!txt)return;
   inp.value='';addMsg('u',txt);hist.push({role:'user',content:txt});
   processAliciaCallMeBotAlerts(txt);
+  if(isPurchaseIntent(txt)){var qp2=document.getElementById('aliciaQuieroPagar');if(qp2)qp2.style.display='flex';}
   if(isPaymentCelebration(txt))launchAliciaConfetti();
   var sendBtn=document.querySelector('.chat-send');
   sendBtn.disabled=true;showDots();
@@ -3411,7 +3411,7 @@ async function sendMsg(){
     }else{
       var reply=(data&&data.reply)?String(data.reply):'Lo siento, hubo un error 💜';
       addMsg('b',reply);hist.push({role:'assistant',content:reply});
-      if(isSalesCloseMoment(reply))triggerSalesSparkle();
+      if(isSalesCloseMoment(reply)){triggerSalesSparkle();var qp=document.getElementById('aliciaQuieroPagar');if(qp)qp.style.display='flex';}
     }
   }catch(e){
     var dm=document.getElementById('dotMsg');if(dm)dm.remove();
@@ -3896,32 +3896,6 @@ function futuraJoinWaitlist(){
   particles.forEach(function(p,i){p.x+=p.vx+Math.sin(p.wobble)*.2*devicePixelRatio;p.y+=p.vy;p.wobble+=p.ws;p.alpha-=p.decay;
   if(p.alpha<=0){particles[i]=spawn();return;}
   ctx.save();ctx.globalAlpha=p.alpha;ctx.fillStyle=p.color+p.alpha+')';ctx.beginPath();ctx.arc(p.x,p.y,p.size,0,Math.PI*2);ctx.fill();ctx.restore();});})();
-})();
-
-function notifCompra(etapa,producto,metodo){
-  var nombre=(typeof aliciaClient!=='undefined'&&aliciaClient.nombre)?aliciaClient.nombre:'Cliente web';
-  var contacto=(typeof aliciaClient!=='undefined'&&aliciaClient.contacto)?aliciaClient.contacto:'sin contacto';
-  var msg='';
-  if(etapa==='ver')msg='🟡 VIENDO PAGO ERIOR: Alguien abrió opciones de pago de '+(producto||'audio');
-  else if(etapa==='metodo')msg='🟠 ELIGIENDO PAGO ERIOR: '+nombre+' eligió pagar '+(producto||'audio')+' por '+(metodo||'')+' — está por pagar. Contacto: '+contacto;
-  else if(etapa==='pague')msg='🎉 POSIBLE VENTA ERIOR: '+nombre+' dice que YA PAGÓ '+(producto||'audio')+'. Contacto: '+contacto+' — DAR SEGUIMIENTO';
-  if(!msg)return;
-  Promise.all([
-    fetch('https://api.callmebot.com/whatsapp.php?phone=5214791936105&text='+encodeURIComponent(msg)+'&apikey=2412047'),
-    fetch('https://api.callmebot.com/whatsapp.php?phone=5214432311761&text='+encodeURIComponent(msg)+'&apikey=6870409')
-  ]).catch(function(){});
-}
-
-(function(){
-  var btn=document.getElementById('payYaPague');
-  if(btn){
-    btn.onclick=function(){
-      notifCompra('pague',payCurrentProduct,'');
-      btn.textContent='🎉 ¡Recibido! Manda tu comprobante al correo';
-      btn.style.pointerEvents='none';
-      setTimeout(function(){if(typeof launchAliciaConfetti==='function')launchAliciaConfetti();},100);
-    };
-  }
 })();
 
 </script>
