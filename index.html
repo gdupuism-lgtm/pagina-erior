@@ -1695,6 +1695,24 @@ body::before{
   .btn-metallic.btn-liquid{animation:none;background-position:42% 58%,45% 45%,55% 55%,0 0;}
 }
 
+.stripe-pay-btn{
+  display:flex;align-items:center;justify-content:center;
+  width:100%;padding:.85rem 1.5rem;border-radius:14px;
+  border:1px solid rgba(201,160,96,.45);
+  background:rgba(201,160,96,.08);
+  font-family:'Jost',sans-serif;font-size:.73rem;font-weight:500;
+  letter-spacing:.08em;text-transform:uppercase;
+  color:rgba(201,160,96,.95);text-decoration:none;
+  transition:all .25s;
+}
+.stripe-pay-btn:hover{background:rgba(201,160,96,.2);}
+.stripe-pay-btn-gold{
+  border-color:rgba(255,160,80,.5);
+  background:rgba(255,140,60,.07);
+  color:rgba(255,170,90,.95);
+}
+.stripe-pay-btn-gold:hover{background:rgba(255,140,60,.18);}
+
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <meta name="google-site-verification" content="K0Vn3yHd4ZIlBo8WdaWAlDR5Abt-uv_1CAtp3mA_ePQ" />
@@ -1913,6 +1931,29 @@ body::before{
             <input class="chat-in" id="chatIn" placeholder="¿Qué quieres transformar hoy?" onkeydown="if(event.key==='Enter')sendMsg()">
             <button type="button" class="chat-send" onclick="sendMsg()">Enviar</button>
           </div>
+          <a id="aliciaStripeBtn" href="https://buy.stripe.com/28E6oH3WN4hvePg2T34sE00" target="_blank" rel="noopener" class="stripe-pay-btn" style="display:none;max-width:420px;margin:1rem auto 0;" onclick="notificarClickStripe('Audio Individual $1,170 MXN')">
+  💳 Pagar con tarjeta — $1,170 MXN
+</a>
+<a id="aliciaHotSaleBtn" href="https://buy.stripe.com/cNi00jalb29naz09hr4sE01" target="_blank" rel="noopener" class="stripe-pay-btn stripe-pay-btn-gold" style="display:none;max-width:420px;margin:.5rem auto 0;" onclick="notificarClickStripe('Hot Sale de los Pares $1,777 MXN')">
+  🔥 Hot Sale de los Pares — $1,777 MXN
+</a>
+          <button id="btnPauline" onclick="aliciaPaulineWA()" style="
+  display:flex;align-items:center;justify-content:center;gap:.5rem;
+  width:100%;max-width:420px;margin:1rem auto 0;
+  padding:.85rem 1.5rem;border-radius:14px;cursor:pointer;
+  border:1px solid rgba(37,211,102,.35);
+  background:rgba(37,211,102,.08);
+  font-family:'Jost',sans-serif;font-size:.72rem;font-weight:500;
+  letter-spacing:.1em;text-transform:uppercase;
+  color:rgba(37,211,102,.9);
+  transition:all .25s;
+"
+onmouseover="this.style.background='rgba(37,211,102,.18)'"
+onmouseout="this.style.background='rgba(37,211,102,.08)'"
+>
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  Hablar con Pauline
+</button>
         </div>
       </div>
     </div>
@@ -2088,6 +2129,14 @@ body::before{
       <div class="pay-modal-product" id="payProductName"></div>
       <div class="pay-modal-price" id="payModalPrice">$1,170 MXN / $68 USD / €59 EUR</div>
     </div>
+    <div style="display:flex;flex-direction:column;gap:.6rem;margin-bottom:1rem;">
+  <a href="https://buy.stripe.com/28E6oH3WN4hvePg2T34sE00" target="_blank" rel="noopener" class="stripe-pay-btn" onclick="notificarClickStripe('Audio Individual $1,170 MXN')">
+    💳 Pagar audio individual — $1,170 MXN
+  </a>
+  <a href="https://buy.stripe.com/cNi00jalb29naz09hr4sE01" target="_blank" rel="noopener" class="stripe-pay-btn stripe-pay-btn-gold" onclick="notificarClickStripe('Hot Sale de los Pares $1,777 MXN')">
+    🔥 Hot Sale de los Pares — $1,777 MXN
+  </a>
+</div>
     <div class="pay-methods" id="payMethods"></div>
     <div class="pay-panel" id="payPanel"></div>
     <div class="pay-footer-note">
@@ -2318,7 +2367,17 @@ function goTo(id){
   if(pg) pg.classList.add('active');
   var idx=PAGES.indexOf(id);
   if(idx>=0) curPage=idx;
-  if(id==='alicia')initAliciaModel();
+  if(id==='alicia'){
+    if(!sessionStorage.getItem('alicia_visit_sent')){
+      sessionStorage.setItem('alicia_visit_sent','1');
+      var visitMsg='👁️ VISITA ERIOR: Alguien abrió el chat de Alicia';
+      Promise.all([
+        fetch('https://api.callmebot.com/whatsapp.php?phone=5214791936105&text='+encodeURIComponent(visitMsg)+'&apikey=2412047'),
+        fetch('https://api.callmebot.com/whatsapp.php?phone=5214432311761&text='+encodeURIComponent(visitMsg)+'&apikey=6870409')
+      ]).catch(function(){});
+    }
+    initAliciaModel();
+  }
   window.scrollTo(0,0);
 }
 
@@ -3053,6 +3112,16 @@ function processAliciaCallMeBotAlerts(txt){
   }
   var audioNombre=getAliciaAudioForAlert(txt)||'audio Erior';
   var slug=audioAlertSlug(audioNombre);
+  var intentWords=/cu[aá]nto cuesta|cu[aá]nto vale|cu[aá]l es el precio|c[oó]mo pago|c[oó]mo lo compro|formas de pago|m[eé]todo de pago|aceptan|precio del audio|me gustar[ií]a comprarlo|lo quiero|quiero ese audio/i;
+  if(intentWords.test(String(txt))&&!aliciaAlertsSent['price_intent_'+audioAlertSlug(getAliciaAudioForAlert(txt)||'audio')]){
+    var audioTemp=getAliciaAudioForAlert(txt)||'audio sin identificar';
+    var intentMsg='🔥 PRECIO/COMPRA ERIOR: '+(aliciaClient.nombre||'Sin nombre')+' preguntó por precio de '+audioTemp+' — Contacto: '+(aliciaClient.contacto||'sin contacto');
+    aliciaAlertsSent['price_intent_'+audioAlertSlug(audioTemp)]=true;
+    Promise.all([
+      fetch('https://api.callmebot.com/whatsapp.php?phone=5214791936105&text='+encodeURIComponent(intentMsg)+'&apikey=2412047'),
+      fetch('https://api.callmebot.com/whatsapp.php?phone=5214432311761&text='+encodeURIComponent(intentMsg)+'&apikey=6870409')
+    ]).catch(function(){});
+  }
   if(isPaymentCelebration(txt)){
     aliciaAlertOnce('payment_'+slug,buildPagoAlertMessage(nombre,audioNombre,contacto));
     return;
@@ -3335,6 +3404,17 @@ function showDots(){
   d.innerHTML='<div class="cbub"><div class="dots-wrap"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>';
   w.appendChild(d);w.scrollTop=w.scrollHeight;
 }
+function aliciaPaulineWA(){
+  var nombre=aliciaClient.nombre||'';
+  var audio=aliciaClient.ultimoAudio||'';
+  var base='Hola! Vengo de hablar con Alicia IA de Erior Center';
+  var msg=base;
+  if(nombre)msg+=', mi nombre es '+nombre;
+  if(audio)msg+='. Estoy interesad@ en información sobre '+audio;
+  else msg+='. Estoy interesad@ en más información';
+  var url='https://wa.me/5214432311761?text='+encodeURIComponent(msg);
+  window.open(url,'_blank');
+}
 async function sendMsg(){
   var inp=document.getElementById('chatIn');
   var txt=inp.value.trim();if(!txt)return;
@@ -3359,6 +3439,10 @@ async function sendMsg(){
       var reply=(data&&data.reply)?String(data.reply):'Lo siento, hubo un error 💜';
       addMsg('b',reply);hist.push({role:'assistant',content:reply});
       if(isSalesCloseMoment(reply))triggerSalesSparkle();
+      var sb1=document.getElementById('aliciaStripeBtn');
+      var sb2=document.getElementById('aliciaHotSaleBtn');
+      if(sb1)sb1.style.display='flex';
+      if(sb2)sb2.style.display='flex';
     }
   }catch(e){
     var dm=document.getElementById('dotMsg');if(dm)dm.remove();
@@ -3844,6 +3928,29 @@ function futuraJoinWaitlist(){
   if(p.alpha<=0){particles[i]=spawn();return;}
   ctx.save();ctx.globalAlpha=p.alpha;ctx.fillStyle=p.color+p.alpha+')';ctx.beginPath();ctx.arc(p.x,p.y,p.size,0,Math.PI*2);ctx.fill();ctx.restore();});})();
 })();
+
+// Detectar retorno de Stripe con pago exitoso
+(function(){
+  var params=new URLSearchParams(window.location.search);
+  if(params.get('pago')==='ok'||params.get('stripe')==='success'){
+    var producto=params.get('producto')||'Audio Erior';
+    var msg='💳 PAGO STRIPE ERIOR: Alguien pagó '+producto+' con tarjeta';
+    Promise.all([
+      fetch('https://api.callmebot.com/whatsapp.php?phone=5214791936105&text='+encodeURIComponent(msg)+'&apikey=2412047'),
+      fetch('https://api.callmebot.com/whatsapp.php?phone=5214432311761&text='+encodeURIComponent(msg)+'&apikey=6870409')
+    ]).catch(function(){});
+  }
+})();
+
+function notificarClickStripe(producto){
+  var nombre=(aliciaClient&&aliciaClient.nombre)?aliciaClient.nombre:'Sin nombre';
+  var contacto=(aliciaClient&&aliciaClient.contacto)?aliciaClient.contacto:'Sin contacto';
+  var msg='💳 CLICK STRIPE ERIOR: '+nombre+' dio click en pagar '+producto+' — Contacto: '+contacto;
+  Promise.all([
+    fetch('https://api.callmebot.com/whatsapp.php?phone=5214791936105&text='+encodeURIComponent(msg)+'&apikey=2412047'),
+    fetch('https://api.callmebot.com/whatsapp.php?phone=5214432311761&text='+encodeURIComponent(msg)+'&apikey=6870409')
+  ]).catch(function(){});
+}
 
 </script>
 </body>
