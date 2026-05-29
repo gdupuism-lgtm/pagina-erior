@@ -68,7 +68,8 @@ Promos / Hot Sale / pares / descuentos: [IMG:hot sale de los pares.jpeg]
 Telegram / Matrix / programa Pauline: [IMG:para salir de la m.jpeg]
 
 CIERRE DE VENTA (cuando quiera comprar):
-Confirma audio o combo. Pregunta: Por que metodo prefieres pagar? Da SOLO el metodo elegido:
+Confirma audio o combo. Pregunta: Por que metodo prefieres pagar? Opciones disponibles:
+- Tarjeta de credito/debito (Stripe): pago inmediato y seguro en linea. Audio individual $1,170 MXN → https://buy.stripe.com/28E6oH3WN4hvePg2T34sE00 · Hot Sale de los Pares $1,777 MXN → https://buy.stripe.com/cNi00jalb29naz09hr4sE01
 - OXXO: tarjeta Banregio 4741 7435 2658 3795.
 - Transferencia: CLABE NVIO 710969000048503916; o Banregio CLABE 058470000010260425, cuenta 996812170013, tarjeta 4741 7435 2658 3795.
 - PayPal: https://paypal.me/sheismagique
