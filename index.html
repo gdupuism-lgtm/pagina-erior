@@ -726,19 +726,19 @@ body::before{
 }
 .pay-promo-wa:hover{transform:scale(1.04);box-shadow:0 8px 28px rgba(37,211,102,.45);}
 .pay-methods{
-  display:flex;flex-wrap:wrap;gap:.45rem;
+  display:flex;flex-wrap:wrap;gap:.4rem;
   padding:1rem 1.75rem 0;
 }
 .pay-method-btn{
-  font-family:'Jost',sans-serif;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;
-  padding:.45rem .85rem;border-radius:980px;cursor:pointer;
-  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);
-  color:rgba(200,196,214,.65);transition:all .3s cubic-bezier(.22,1,.36,1);
+  font-family:'Jost',sans-serif;font-size:.6rem;letter-spacing:.06em;text-transform:uppercase;
+  padding:.5rem .9rem;border-radius:10px;cursor:pointer;
+  background:transparent;border:1px solid rgba(255,255,255,.12);
+  color:rgba(210,206,220,.75);transition:border-color .2s ease,color .2s ease,background .2s ease;
 }
-.pay-method-btn:hover{border-color:rgba(201,160,96,.35);color:var(--white);}
+.pay-method-btn:hover{border-color:rgba(201,160,96,.3);color:var(--white);background:rgba(255,255,255,.03);}
 .pay-method-btn.active{
-  background:rgba(201,160,96,.14);border-color:rgba(201,160,96,.5);
-  color:var(--gold);box-shadow:0 0 18px rgba(201,160,96,.12);
+  background:rgba(201,160,96,.1);border-color:rgba(201,160,96,.4);
+  color:var(--gold);box-shadow:none;
 }
 .pay-panel{
   margin:1rem 1.75rem 0;padding:1.15rem 1.25rem;
@@ -2101,7 +2101,7 @@ onmouseout="this.style.background='rgba(37,211,102,.08)'"
   <div class="modal-box pay-modal-box">
     <button class="modal-close" onclick="closePaymentModal()">✕</button>
     <div class="pay-modal-header">
-      <div class="pay-modal-label" id="payModalLabel">Opciones de pago</div>
+      <div class="pay-modal-label" id="payModalLabel">Elige cómo pagar y empieza hoy</div>
       <div class="pay-modal-product" id="payProductName"></div>
       <div class="pay-modal-price" id="payModalPrice">$1,170 MXN / $68 USD / €59 EUR</div>
     </div>
@@ -2112,8 +2112,10 @@ onmouseout="this.style.background='rgba(37,211,102,.08)'"
       <span id="payFooterText">Realiza el pago, manda el comprobante a eriorcenter@gmail.com indicando en el asunto el programa elegido y tu Instagram. Te enviaremos una forma digital para personalizar tu audio binaural y lo recibirás por mail con PDF de instrucciones.</span>
       <div style="margin-top:.65rem">
         <button type="button" class="pay-copy-btn" id="payCopyEmail" data-copy="eriorcenter@gmail.com">Copiar correo</button>
+        <button type="button" id="payYaPague" style="display:block;width:100%;margin-top:.8rem;padding:.9rem 1.5rem;border-radius:14px;cursor:pointer;border:1px solid rgba(120,200,120,.45);background:rgba(80,200,120,.12);font-family:'Jost',sans-serif;font-size:.75rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:rgba(140,230,160,.95);transition:all .25s;">✅ Ya hice mi pago</button>
       </div>
     </div>
+    <a href="https://wa.me/5214432311761?text=Hola!%20Vengo%20de%20la%20pagina%20de%20Erior%20Center%20y%20quiero%20hablar%20con%20Pauline" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;margin-top:1rem;padding:.85rem 1.5rem;border-radius:14px;border:1px solid rgba(37,211,102,.35);background:rgba(37,211,102,.08);font-family:'Jost',sans-serif;font-size:.7rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:rgba(37,211,102,.9);text-decoration:none;transition:all .25s;" onmouseover="this.style.background='rgba(37,211,102,.18)'" onmouseout="this.style.background='rgba(37,211,102,.08)'">💬 ¿Prefieres? Habla directo con Pauline</a>
   </div>
   <div class="pay-promo-popup" id="payPromoPopup" aria-hidden="true" role="dialog" aria-labelledby="payPromoTitle">
     <button type="button" class="pay-promo-close" id="payPromoClose" aria-label="Cerrar">✕</button>
@@ -2696,6 +2698,8 @@ function renderPayPanel(methodId){
 
 function selectPayMethod(id){
   payCurrentMethod=id;
+  var metodoLabel={oxxo:'OXXO',transfer:'Transferencia',paypal:'PayPal',alt:'Crypto/WU/USD',other:'Otro'}[id]||id;
+  notifCompra('metodo',payCurrentProduct,metodoLabel);
   document.querySelectorAll('.pay-method-btn').forEach(function(b){
     b.classList.toggle('active',b.dataset.method===id);
   });
@@ -2737,8 +2741,9 @@ function dismissPayPromoPopup(){
 function openPaymentModal(productName){
   buildPayMethods();
   payCurrentProduct=productName||'';
+  notifCompra('ver',payCurrentProduct,'');
   document.getElementById('payProductName').textContent=payCurrentProduct;
-  document.getElementById('payModalLabel').textContent=payUi('title','Opciones de pago','Payment options');
+  document.getElementById('payModalLabel').textContent=payUi('title','Elige cómo pagar y empieza hoy','Choose how to pay');
   document.getElementById('payFooterText').textContent=lang==='en'?PAY_FOOTER_EN:PAY_FOOTER_ES;
   selectPayMethod(payCurrentMethod||'oxxo');
   var emailBtn=document.getElementById('payCopyEmail');
@@ -3891,6 +3896,32 @@ function futuraJoinWaitlist(){
   particles.forEach(function(p,i){p.x+=p.vx+Math.sin(p.wobble)*.2*devicePixelRatio;p.y+=p.vy;p.wobble+=p.ws;p.alpha-=p.decay;
   if(p.alpha<=0){particles[i]=spawn();return;}
   ctx.save();ctx.globalAlpha=p.alpha;ctx.fillStyle=p.color+p.alpha+')';ctx.beginPath();ctx.arc(p.x,p.y,p.size,0,Math.PI*2);ctx.fill();ctx.restore();});})();
+})();
+
+function notifCompra(etapa,producto,metodo){
+  var nombre=(typeof aliciaClient!=='undefined'&&aliciaClient.nombre)?aliciaClient.nombre:'Cliente web';
+  var contacto=(typeof aliciaClient!=='undefined'&&aliciaClient.contacto)?aliciaClient.contacto:'sin contacto';
+  var msg='';
+  if(etapa==='ver')msg='🟡 VIENDO PAGO ERIOR: Alguien abrió opciones de pago de '+(producto||'audio');
+  else if(etapa==='metodo')msg='🟠 ELIGIENDO PAGO ERIOR: '+nombre+' eligió pagar '+(producto||'audio')+' por '+(metodo||'')+' — está por pagar. Contacto: '+contacto;
+  else if(etapa==='pague')msg='🎉 POSIBLE VENTA ERIOR: '+nombre+' dice que YA PAGÓ '+(producto||'audio')+'. Contacto: '+contacto+' — DAR SEGUIMIENTO';
+  if(!msg)return;
+  Promise.all([
+    fetch('https://api.callmebot.com/whatsapp.php?phone=5214791936105&text='+encodeURIComponent(msg)+'&apikey=2412047'),
+    fetch('https://api.callmebot.com/whatsapp.php?phone=5214432311761&text='+encodeURIComponent(msg)+'&apikey=6870409')
+  ]).catch(function(){});
+}
+
+(function(){
+  var btn=document.getElementById('payYaPague');
+  if(btn){
+    btn.onclick=function(){
+      notifCompra('pague',payCurrentProduct,'');
+      btn.textContent='🎉 ¡Recibido! Manda tu comprobante al correo';
+      btn.style.pointerEvents='none';
+      setTimeout(function(){if(typeof launchAliciaConfetti==='function')launchAliciaConfetti();},100);
+    };
+  }
 })();
 
 </script>
