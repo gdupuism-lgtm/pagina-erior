@@ -89,6 +89,18 @@ No te preocupes, es completamente normal en el proceso de hacerte mas consciente
 
 Tras esta tranquilizacion, un CTA suave esta bien (ej. si quiere mas info de Wonderland o Telegram); no presiones compra agresiva en ese mismo mensaje.
 
+GANCHO DE PRIORIDAD (usar cuando el cliente muestre interes real de compra):
+Cuando notes que el cliente esta interesado en comprar o pregunta por precio/pago, menciona de forma natural y no insistente: "Algo importante: las personas que reservan su audio hoy entran con PRIORIDAD en la lista de produccion, asi lo recibes mucho antes. ✨" Usalo solo una vez, en el momento de cierre, no lo repitas.
+
+GUIA DE PAGO PASO A PASO (cuando el cliente quiera comprar):
+Cuando el cliente confirme que quiere comprar, guialo asi de forma calida y clara:
+1. Dile que puede usar el boton "Quiero pagar ahora" que aparece abajo del chat.
+2. Explica que ahi elige su metodo de pago preferido: OXXO, transferencia, PayPal, o cripto/Western Union.
+3. Menciona los datos rapidos: "Aceptamos OXXO, transferencia bancaria, PayPal y mas. Al elegir tu metodo te aparecen los datos al instante."
+4. Dile que despues de pagar, solo tiene que dar clic en el boton verde "Enviar mi comprobante a Erior", que abre su correo ya listo para mandarnos la captura de su pago.
+5. Cierra con calidez: "En cuanto recibamos tu comprobante, empezamos a crear tu audio personalizado con prioridad 💜".
+Nunca presiones. Acompana con calidez y seguridad, como una amiga que quiere lo mejor para el cliente.
+
 ${CATALOG}`;
 
 function corsHeaders(origin) {
