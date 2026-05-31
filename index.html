@@ -1698,6 +1698,7 @@ body::before{
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <meta name="google-site-verification" content="K0Vn3yHd4ZIlBo8WdaWAlDR5Abt-uv_1CAtp3mA_ePQ" />
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 <canvas id="cosmos"></canvas>
@@ -2188,6 +2189,31 @@ body::before{
 <!-- CONTACT BANNER -->
 
 <script>
+const SUPABASE_URL='https://moamgixswoykfamysavs.supabase.co';
+const SUPABASE_KEY='sb_publishable_kgdHKLCnY-gdYlPDj7StVg_6Xm_ekXW';
+let supabaseClient=null;
+try{supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);}catch(e){console.log('supabase init',e);}
+
+function getVisitanteId(){
+  let id=localStorage.getItem('erior_visitante_id');
+  if(!id){id='v_'+Date.now()+'_'+Math.random().toString(36).slice(2,8);localStorage.setItem('erior_visitante_id',id);}
+  return id;
+}
+
+async function registrarEvento(tipo,detalle){
+  if(!supabaseClient)return;
+  try{
+    await supabaseClient.from('eventos').insert([{visitante_id:getVisitanteId(),tipo_evento:tipo,detalle:(detalle||'').toString().slice(0,300)}]);
+  }catch(e){console.log('evento error',e);}
+}
+
+async function guardarProspecto(datos){
+  if(!supabaseClient)return;
+  try{
+    await supabaseClient.from('prospectos').insert([Object.assign({visitante_id:getVisitanteId()},datos)]);
+  }catch(e){console.log('prospecto error',e);}
+}
+
 // ══════════════════════════════════
 // PROMOS MODAL
 // ══════════════════════════════════
@@ -2322,6 +2348,7 @@ function goTo(id){
   var idx=PAGES.indexOf(id);
   if(idx>=0) curPage=idx;
   if(id==='alicia'){
+    registrarEvento('abrio_alicia','visita');
     if(!sessionStorage.getItem('alicia_visit_sent')){
       sessionStorage.setItem('alicia_visit_sent','1');
       var visitMsg='👁️ VISITA ERIOR: Alguien abrió el chat de Alicia';
@@ -2682,6 +2709,7 @@ function renderPayPanel(methodId){
 
 function selectPayMethod(id){
   payCurrentMethod=id;
+  registrarEvento('eligio_metodo',id+' / '+(payCurrentProduct||'audio'));
   (function(){var lbl={oxxo:'OXXO',transfer:'Transferencia',paypal:'PayPal',alt:'Crypto/WU/USD',other:'Otro'}[id]||id;var n=(typeof aliciaClient!=='undefined'&&aliciaClient.nombre)?aliciaClient.nombre:'Cliente web';var m='🟠 ELIGIENDO PAGO ERIOR: '+n+' eligió '+lbl+' para '+(payCurrentProduct||'audio')+' — está por pagar';Promise.all([fetch('https://api.callmebot.com/whatsapp.php?phone=5214791936105&text='+encodeURIComponent(m)+'&apikey=2412047'),fetch('https://api.callmebot.com/whatsapp.php?phone=5214432311761&text='+encodeURIComponent(m)+'&apikey=6870409')]).catch(function(){});})();
   document.querySelectorAll('.pay-method-btn').forEach(function(b){
     b.classList.toggle('active',b.dataset.method===id);
@@ -2724,6 +2752,7 @@ function dismissPayPromoPopup(){
 function openPaymentModal(productName){
   buildPayMethods();
   payCurrentProduct=productName||'';
+  registrarEvento('abrio_pago',payCurrentProduct||'audio');
   document.getElementById('payProductName').textContent=payCurrentProduct;
   document.getElementById('payModalLabel').textContent=payUi('title','Elige cómo pagar y empieza hoy','Choose how to pay');
   document.getElementById('payFooterText').textContent=lang==='en'?PAY_FOOTER_EN:PAY_FOOTER_ES;
@@ -2745,6 +2774,8 @@ function openPaymentModal(productName){
     if(link){
       link.href=mail;
       link.onclick=function(){
+        registrarEvento('envio_comprobante',payCurrentProduct||'audio');
+        guardarProspecto({audio_interes:payCurrentProduct||'audio',metodo_pago:payCurrentMethod||'',envio_comprobante:true,origen:'modal_pago'});
         var nombre=(typeof aliciaClient!=='undefined'&&aliciaClient.nombre)?aliciaClient.nombre:'Cliente web';
         var contacto=(typeof aliciaClient!=='undefined'&&aliciaClient.contacto)?aliciaClient.contacto:'sin contacto';
         var metodo={oxxo:'OXXO',transfer:'Transferencia',paypal:'PayPal',alt:'Crypto/WU/USD',other:'Otro'}[payCurrentMethod]||'no especificado';
