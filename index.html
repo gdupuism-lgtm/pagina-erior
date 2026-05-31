@@ -2836,6 +2836,8 @@ document.getElementById('audioModal').addEventListener('click',function(e){if(e.
 var ALICIA_FN='/.netlify/functions/claude';
 var hist=[];
 var aliciaClient={nombre:'',contacto:'',leadSent:false,ultimoAudio:''};
+var aliciaUserName='';
+var aliciaUserContact='';
 var CALLMEBOT_BASE='https://api.callmebot.com/whatsapp.php';
 var CALLMEBOT_RECIPIENTS=[
   {phone:'5214791936105',apikey:'2412047'},
@@ -2928,17 +2930,36 @@ function extractAliciaName(t){
   if(s.length>=2&&s.length<=32&&!/\d{6,}/.test(s)&&/^[\p{L}\s'.-]+$/u.test(s)&&!isLikelyNotAliciaPersonName(s))return s.split(/\s+/).slice(0,3).join(' ');
   return '';
 }
+function syncAliciaDatosSupabase(prevNombre,prevContacto){
+  var nombre=aliciaClient.nombre||aliciaUserName||'';
+  var contacto=aliciaClient.contacto||aliciaUserContact||'';
+  if(!nombre)return;
+  var gotName=nombre&&nombre!==prevNombre;
+  var gotContact=contacto&&contacto!==prevContacto;
+  if(!gotName&&!gotContact)return;
+  registrarEvento('dio_datos',nombre+' / '+(contacto||''));
+  guardarProspecto({nombre:nombre,contacto:contacto||'',origen:'alicia_chat'});
+}
 function updateAliciaClientFromMessage(txt){
+  var prevNombre=aliciaClient.nombre||'';
+  var prevContacto=aliciaClient.contacto||'';
   var email=extractAliciaEmail(txt);
   var phone=extractAliciaPhone(txt);
   var contact=email||phone;
-  if(contact)aliciaClient.contacto=contact;
+  if(contact){
+    aliciaClient.contacto=contact;
+    aliciaUserContact=contact;
+  }
   var name=extractAliciaName(txt);
-  if(name)aliciaClient.nombre=name;
+  if(name){
+    aliciaClient.nombre=name;
+    aliciaUserName=name;
+  }
   try{
     if(aliciaClient.nombre)sessionStorage.setItem('alicia_nombre',aliciaClient.nombre);
     if(aliciaClient.contacto)sessionStorage.setItem('alicia_contacto',aliciaClient.contacto);
   }catch(st){}
+  syncAliciaDatosSupabase(prevNombre,prevContacto);
 }
 function loadAliciaClientFromStorage(){
   try{
@@ -2946,6 +2967,8 @@ function loadAliciaClientFromStorage(){
     if(!aliciaClient.contacto)aliciaClient.contacto=sessionStorage.getItem('alicia_contacto')||'';
     if(!aliciaClient.ultimoAudio)aliciaClient.ultimoAudio=sessionStorage.getItem('alicia_ultimo_audio')||'';
     aliciaClient.leadSent=sessionStorage.getItem('alicia_lead_sent')==='1';
+    aliciaUserName=aliciaClient.nombre||'';
+    aliciaUserContact=aliciaClient.contacto||'';
   }catch(st){}
 }
 function audioLabelFromCatalog(nombre){
