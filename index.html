@@ -2371,6 +2371,7 @@ function goTo(id){
     }
     initAliciaModel();
   }
+  try{history.replaceState(null,'','#'+id);}catch(e){}
   window.scrollTo(0,0);
 }
 
@@ -4011,6 +4012,20 @@ function futuraJoinWaitlist(){
   if(p.alpha<=0){particles[i]=spawn();return;}
   ctx.save();ctx.globalAlpha=p.alpha;ctx.fillStyle=p.color+p.alpha+')';ctx.beginPath();ctx.arc(p.x,p.y,p.size,0,Math.PI*2);ctx.fill();ctx.restore();});})();
 })();
+
+(function abrirSeccionDesdeURL(){
+  var hash=(window.location.hash||'').replace('#','').trim();
+  var validas=['cover','guia','catalogo','alicia','tarot','testimonios','faq','respiracion'];
+  if(hash&&validas.indexOf(hash)>=0){
+    goTo(hash);
+  }
+})();
+
+window.addEventListener('hashchange',function(){
+  var hash=(window.location.hash||'').replace('#','').trim();
+  var validas=['cover','guia','catalogo','alicia','tarot','testimonios','faq','respiracion'];
+  if(hash&&validas.indexOf(hash)>=0){goTo(hash);}
+});
 
 </script>
 </body>
