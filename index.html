@@ -1035,6 +1035,41 @@ body::before{
 .br-btn{padding:.6rem 1.5rem;background:rgba(255,255,255,.06);border:1px solid var(--border);color:var(--text);font-family:'Jost',sans-serif;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:all .2s;margin:.3rem}
 .br-btn:hover{background:rgba(255,255,255,.12);color:var(--white)}
 
+/* EBOOK ERIOR */
+.ebook-wrap{max-width:640px;text-align:center;padding:2.5rem 1.25rem 3rem}
+.ebook-lock-icon{font-size:2.5rem;margin:.5rem 0 1rem;opacity:.85}
+.ebook-cover-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,5vw,3rem);font-weight:300;color:var(--gold);margin:.25rem 0 .75rem;line-height:1.15}
+.ebook-exclusive{font-family:'Jost',sans-serif;font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(201,160,96,.75);margin-bottom:1rem}
+.ebook-desc{font-size:.88rem;color:var(--text2);line-height:1.65;max-width:28rem;margin:0 auto 1.75rem}
+.ebook-key-input{
+  width:100%;max-width:340px;margin:0 auto 1rem;padding:.85rem 1.1rem;border-radius:12px;
+  border:1px solid rgba(201,160,96,.35);background:rgba(0,0,0,.35);color:var(--white);
+  font-family:'Jost',sans-serif;font-size:.82rem;letter-spacing:.04em;text-align:center;
+  outline:none;transition:border-color .25s,box-shadow .25s;
+}
+.ebook-key-input:focus{border-color:rgba(201,160,96,.6);box-shadow:0 0 20px rgba(201,160,96,.12)}
+.ebook-key-input::placeholder{color:rgba(200,196,214,.45)}
+.ebook-btn-gold{
+  display:inline-flex;align-items:center;justify-content:center;gap:.45rem;
+  width:100%;max-width:340px;margin:.35rem auto;padding:.9rem 1.5rem;border-radius:14px;cursor:pointer;
+  border:1px solid rgba(201,160,96,.5);background:rgba(201,160,96,.14);
+  font-family:'Jost',sans-serif;font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--gold);text-decoration:none;transition:all .25s;
+}
+.ebook-btn-gold:hover{background:rgba(201,160,96,.26);transform:translateY(-1px)}
+.ebook-btn-secondary{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:100%;max-width:340px;margin:.75rem auto 0;padding:.75rem 1.25rem;border-radius:12px;
+  border:1px solid rgba(255,255,255,.12);background:transparent;
+  font-family:'Jost',sans-serif;font-size:.68rem;letter-spacing:.06em;color:rgba(210,205,230,.75);
+  text-decoration:none;transition:all .25s;
+}
+.ebook-btn-secondary:hover{border-color:rgba(201,160,96,.35);color:var(--gold)}
+.ebook-key-error{min-height:1.25rem;font-size:.78rem;color:rgba(232,128,138,.9);margin:.5rem auto 0;max-width:340px}
+.ebook-welcome{font-family:'Cormorant Garamond',serif;font-size:clamp(1.5rem,3.5vw,2.2rem);color:var(--gold);margin-bottom:1.25rem}
+.ebook-download{margin-bottom:1.25rem}
+.ebook-frame-wrap{margin-top:.5rem;border-radius:12px;overflow:hidden;background:rgba(0,0,0,.25)}
+
 /* ══════════════════════════════════
    MIND MOVIE MODAL
 ══════════════════════════════════ */
@@ -1719,6 +1754,7 @@ body::before{
     <li><a onclick="goTo('alicia')">Alicia IA</a></li>
     <li><a onclick="goTo('testimonios')">Testimonios</a></li>
     <li><a onclick="goTo('faq')">FAQ</a></li>
+    <li><a onclick="goTo('ebook')">📖 Ebook Erior</a></li>
     <li><a href="https://eriorrabbithole.netlify.app" target="_blank" onclick="closeMenu()">Rabbit Hole</a></li>
   </ul>
   <div class="fsm-line"></div>
@@ -2053,6 +2089,30 @@ body::before{
     </div>
   </div>
 
+  <!-- ══ EBOOK ERIOR ══ -->
+  <div class="page" id="page-ebook">
+    <div class="mod-wrap ebook-wrap">
+      <div id="ebookLocked">
+        <div class="mod-label">Contenido exclusivo</div>
+        <div class="ebook-lock-icon" aria-hidden="true">🔒</div>
+        <h2 class="ebook-cover-title">Despertar de la Matrix</h2>
+        <p class="ebook-exclusive">Contenido exclusivo para miembros Erior</p>
+        <p class="ebook-desc">Un viaje de 10 capítulos para despertar tu consciencia y reprogramar tu realidad. Disponible solo para quienes ya tienen su audio Erior.</p>
+        <input type="text" id="ebookKeyInput" class="ebook-key-input" placeholder="Ingresa tu clave de acceso" autocomplete="off" onkeydown="if(event.key==='Enter')unlockEbook()">
+        <p class="ebook-key-error" id="ebookKeyError" role="alert"></p>
+        <button type="button" class="ebook-btn-gold" onclick="unlockEbook()">Desbloquear ebook</button>
+        <a class="ebook-btn-secondary" id="ebookAccessWa" href="https://wa.me/5214432311761?text=Hola%20%F0%9F%92%9C%20Ya%20tengo%20mi%20audio%20Erior%20y%20quiero%20mi%20acceso%20al%20Ebook%20exclusivo%20%27Despertar%20de%20la%20Matrix%27%20%F0%9F%93%96%E2%9C%A8%20Aqu%C3%AD%20les%20mando%20mi%20comprobante%20de%20compra%3A" target="_blank" rel="noopener">¿Cómo obtengo acceso? 💜</a>
+      </div>
+      <div id="ebookUnlocked" style="display:none">
+        <p class="ebook-welcome">✨ Bienvenid@ a tu Ebook Erior ✨</p>
+        <a class="ebook-btn-gold ebook-download" href="ebook-erior.pdf" download>⬇️ Descargar ebook</a>
+        <div class="ebook-frame-wrap">
+          <iframe src="ebook-erior.pdf" title="Ebook Erior — Despertar de la Matrix" style="width:100%;height:80vh;border-radius:12px;border:1px solid #C9A060;"></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div><!-- /main -->
 
 
@@ -2348,8 +2408,8 @@ function closeChatPromoLightbox(){
 // ══════════════════════════════════
 // NAVIGATION
 // ══════════════════════════════════
-var PAGES=['cover','guia','catalogo','alicia','testimonios','faq','tarot','respiracion'];
-var TITLES={cover:'Inicio',guia:'Guía Audios',catalogo:'Catálogo',alicia:'Alicia IA',testimonios:'Testimonios',faq:'FAQ',tarot:'Tarot',respiracion:'Respiración'};
+var PAGES=['cover','guia','catalogo','alicia','testimonios','faq','tarot','respiracion','ebook'];
+var TITLES={cover:'Inicio',guia:'Guía Audios',catalogo:'Catálogo',alicia:'Alicia IA',testimonios:'Testimonios',faq:'FAQ',tarot:'Tarot',respiracion:'Respiración',ebook:'Ebook Erior'};
 var curPage=0;
 
 function goTo(id){
@@ -2371,6 +2431,7 @@ function goTo(id){
     }
     initAliciaModel();
   }
+  if(id==='ebook')initEbookPage();
   try{history.replaceState(null,'','#'+id);}catch(e){}
   window.scrollTo(0,0);
 }
@@ -2460,6 +2521,38 @@ function closeMenu(){
   document.body.style.overflow='';
 }
 document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeMenu();closePaymentModal();closeModal();}});
+
+var EBOOK_ACCESS_KEY='ERIOR2026';
+var EBOOK_WA_MSG='Hola 💜 Ya tengo mi audio Erior y quiero mi acceso al Ebook exclusivo \'Despertar de la Matrix\' 📖✨ Aquí les mando mi comprobante de compra:';
+function isEbookUnlocked(){
+  try{return localStorage.getItem('erior_ebook_unlocked')==='true';}catch(e){return false;}
+}
+function showEbookState(unlocked){
+  var locked=document.getElementById('ebookLocked');
+  var open=document.getElementById('ebookUnlocked');
+  if(locked)locked.style.display=unlocked?'none':'block';
+  if(open)open.style.display=unlocked?'block':'none';
+}
+function initEbookPage(){
+  var wa=document.getElementById('ebookAccessWa');
+  if(wa)wa.href='https://wa.me/5214432311761?text='+encodeURIComponent(EBOOK_WA_MSG);
+  var err=document.getElementById('ebookKeyError');
+  if(err)err.textContent='';
+  showEbookState(isEbookUnlocked());
+}
+function unlockEbook(){
+  var inp=document.getElementById('ebookKeyInput');
+  var err=document.getElementById('ebookKeyError');
+  var key=inp?String(inp.value||'').trim():'';
+  if(key===EBOOK_ACCESS_KEY){
+    try{localStorage.setItem('erior_ebook_unlocked','true');}catch(e){}
+    showEbookState(true);
+    if(err)err.textContent='';
+    registrarEvento('ebook_desbloqueado','ok');
+    return;
+  }
+  if(err)err.textContent='Clave incorrecta 🔒 Si ya tienes tu audio Erior, pide tu acceso por WhatsApp 💜';
+}
 
 // ══════════════════════════════════
 // MIND MOVIE
@@ -4015,7 +4108,7 @@ function futuraJoinWaitlist(){
 
 (function abrirSeccionDesdeURL(){
   var hash=(window.location.hash||'').replace('#','').trim();
-  var validas=['cover','guia','catalogo','alicia','tarot','testimonios','faq','respiracion'];
+  var validas=['cover','guia','catalogo','alicia','tarot','testimonios','faq','respiracion','ebook'];
   if(hash&&validas.indexOf(hash)>=0){
     goTo(hash);
   }
@@ -4023,7 +4116,7 @@ function futuraJoinWaitlist(){
 
 window.addEventListener('hashchange',function(){
   var hash=(window.location.hash||'').replace('#','').trim();
-  var validas=['cover','guia','catalogo','alicia','tarot','testimonios','faq','respiracion'];
+  var validas=['cover','guia','catalogo','alicia','tarot','testimonios','faq','respiracion','ebook'];
   if(hash&&validas.indexOf(hash)>=0){goTo(hash);}
 });
 
