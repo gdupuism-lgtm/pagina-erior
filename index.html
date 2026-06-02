@@ -1015,16 +1015,89 @@ body::before{
 }
 
 /* ══════════════════════════════════
-   TAROT
+   TAROT ORÁCULO ALIENÍGENA
 ══════════════════════════════════ */
-.tarot-grid{display:flex;flex-wrap:wrap;gap:.65rem;justify-content:center;margin-bottom:1.75rem}
-.t-card{width:74px;aspect-ratio:2/3;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .3s;color:rgba(255,255,255,.15);font-size:.7rem}
-.t-card:hover{border-color:rgba(201,160,96,.4);transform:translateY(-3px);background:rgba(255,255,255,.06)}
-.t-card.flipped{background:rgba(201,160,96,.08);border-color:rgba(201,160,96,.3)}
-.t-reveal{background:rgba(10,10,18,.7);border:1px solid var(--border);border-radius:4px;padding:2rem;text-align:center;display:none;max-width:480px;margin:0 auto}
-.t-reveal.show{display:block}
-.t-reveal-name{font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:var(--gold);margin-bottom:.65rem}
-.t-reveal-msg{font-size:.86rem;color:rgba(200,196,212,.65);line-height:1.65}
+.tarot-oracle{position:relative;min-height:100vh;padding:2rem 0 3rem;overflow:hidden}
+.tarot-oracle-bg{position:absolute;inset:0;pointer-events:none;z-index:0}
+#tarotStars{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:.55}
+.tarot-oracle-inner{position:relative;z-index:1;max-width:720px;margin:0 auto;padding:0 1rem;text-align:center}
+.tarot-oracle-head{margin-bottom:1.75rem}
+.tarot-oracle-mark{width:52px;height:52px;margin:0 auto 1rem;color:var(--gold);opacity:.85}
+.tarot-oracle-mark svg{width:100%;height:100%;display:block}
+.tarot-oracle-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,5vw,3rem);font-weight:300;color:var(--gold);line-height:1.1;margin-bottom:.5rem}
+.tarot-oracle-title em{font-style:italic;color:rgba(255,255,255,.92)}
+.tarot-oracle-sub{font-family:'Jost',sans-serif;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(201,160,96,.65);margin-bottom:.65rem}
+.tarot-oracle-desc{font-size:.88rem;color:var(--text2);line-height:1.65;max-width:32rem;margin:0 auto}
+.tarot-panel{max-width:480px;margin:0 auto;text-align:center}
+.tarot-cooldown-title{font-family:'Cormorant Garamond',serif;font-size:1.65rem;color:var(--gold);margin-bottom:.5rem}
+.tarot-cooldown-desc{font-size:.86rem;color:var(--text2);line-height:1.6;margin-bottom:1.25rem}
+.tarot-countdown{font-family:'Syne',sans-serif;font-size:clamp(2rem,6vw,3.2rem);letter-spacing:.08em;color:rgba(255,255,255,.9);font-variant-numeric:tabular-nums;margin:1rem 0 1.5rem;text-shadow:0 0 24px rgba(201,160,96,.25)}
+.tarot-field-label{display:block;text-align:left;font-family:'Jost',sans-serif;font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(201,160,96,.7);margin-bottom:.4rem}
+.tarot-textarea{
+  width:100%;min-height:120px;max-height:200px;padding:1rem 1.1rem;border-radius:14px;resize:vertical;
+  border:1px solid rgba(201,160,96,.32);background:rgba(0,0,0,.38);color:var(--white);
+  font-family:'Jost',sans-serif;font-size:.86rem;line-height:1.55;outline:none;transition:border-color .25s,box-shadow .25s;
+}
+.tarot-textarea:focus{border-color:rgba(201,160,96,.55);box-shadow:0 0 24px rgba(201,160,96,.1)}
+.tarot-textarea::placeholder{color:rgba(200,196,214,.4)}
+.tarot-char-count{display:block;text-align:right;font-size:.62rem;color:rgba(200,196,214,.45);margin:.35rem 0 1.1rem}
+.tarot-shuffle-wrap{margin:2rem auto;max-width:280px;height:140px;position:relative;perspective:900px}
+.tarot-shuffle-deck{position:relative;width:100%;height:100%}
+.tarot-shuffle-card{
+  position:absolute;left:50%;top:50%;width:64px;height:96px;margin:-48px 0 0 -32px;border-radius:10px;
+  border:1px solid rgba(201,160,96,.35);background:linear-gradient(145deg,rgba(20,18,32,.95),rgba(8,8,14,.98));
+  box-shadow:0 8px 24px rgba(0,0,0,.45);transform-origin:center center;
+}
+.tarot-shuffle-card svg{width:28px;height:28px;margin:34px auto 0;display:block;color:rgba(201,160,96,.55)}
+.tarot-oracle-grid{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(.4rem,2vw,.75rem);
+  max-width:min(420px,92vw);margin:1.5rem auto 0;width:100%;
+}
+.tarot-pick-card{aspect-ratio:2/3;width:100%;max-width:100%;perspective:700px;cursor:pointer;border:none;background:transparent;padding:0;-webkit-tap-highlight-color:transparent}
+.tarot-pick-card:disabled{cursor:default;opacity:.65}
+.tarot-pick-inner{
+  position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .85s cubic-bezier(.22,1,.36,1);
+  border-radius:12px;
+}
+.tarot-pick-card.revealed .tarot-pick-inner{transform:rotateY(180deg)}
+.tarot-pick-face{
+  position:absolute;inset:0;border-radius:12px;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  display:flex;align-items:center;justify-content:center;border:1px solid rgba(201,160,96,.28);
+  background:linear-gradient(160deg,rgba(18,16,28,.96),rgba(6,6,12,.98));
+  box-shadow:0 6px 20px rgba(0,0,0,.35);overflow:hidden;
+}
+.tarot-pick-face.front{transform:rotateY(180deg);flex-direction:column;gap:.35rem;padding:.5rem}
+.tarot-pick-face.back{color:rgba(201,160,96,.5)}
+.tarot-pick-face.back svg{width:42%;height:auto;max-height:55%}
+.tarot-pick-glyph{width:52%;height:auto;color:var(--gold);opacity:.9}
+.tarot-pick-label{font-family:'Jost',sans-serif;font-size:clamp(.42rem,2.2vw,.52rem);letter-spacing:.06em;text-transform:uppercase;color:rgba(201,160,96,.75);text-align:center;line-height:1.2;padding:0 .25rem}
+.tarot-pick-card:not(.revealed):not(:disabled):hover .tarot-pick-face.back{border-color:rgba(201,160,96,.5);box-shadow:0 0 22px rgba(201,160,96,.12)}
+.tarot-reveal-panel{max-width:520px;margin:2rem auto 0;text-align:center}
+.tarot-reveal-card-wrap{width:min(160px,42vw);margin:0 auto 1.25rem;perspective:900px}
+.tarot-reveal-flip{transform-style:preserve-3d;transition:transform 1s cubic-bezier(.22,1,.36,1);aspect-ratio:2/3}
+.tarot-reveal-flip.flipped{transform:rotateY(180deg)}
+.tarot-reveal-face{
+  position:absolute;inset:0;border-radius:14px;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  border:1px solid rgba(201,160,96,.4);background:linear-gradient(165deg,rgba(22,18,34,.98),rgba(8,8,14,.99));
+  display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 12px 40px rgba(0,0,0,.45);
+}
+.tarot-reveal-face.front{transform:rotateY(180deg);padding:1rem}
+.tarot-reveal-face.back{color:rgba(201,160,96,.45)}
+.tarot-reveal-face.back svg{width:46%;height:auto}
+.tarot-reveal-glyph{width:58%;height:auto;color:var(--gold)}
+.tarot-reveal-name{font-family:'Cormorant Garamond',serif;font-size:clamp(1.5rem,4vw,2rem);color:var(--gold);margin-bottom:1rem;line-height:1.15}
+.tarot-reveal-loading{font-family:'Jost',sans-serif;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(201,160,96,.6);margin:1rem 0}
+.tarot-reveal-text{font-size:.9rem;color:rgba(210,206,220,.78);line-height:1.7;text-align:left;margin-bottom:1.25rem;white-space:pre-wrap}
+.tarot-reveal-audio-label{font-family:'Jost',sans-serif;font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(201,160,96,.65);margin-bottom:.65rem}
+.tarot-audio-btn{display:inline-flex;margin:0 auto}
+#tarotParticles{position:fixed;inset:0;pointer-events:none;z-index:800;overflow:hidden}
+.tarot-burst{position:absolute;width:6px;height:6px;border-radius:50%;background:var(--gold);opacity:.85;animation:tarotBurst 1.2s ease-out forwards}
+@keyframes tarotBurst{0%{transform:translate(0,0) scale(1);opacity:.9}100%{transform:translate(var(--tx),var(--ty)) scale(0);opacity:0}}
+@media(max-width:480px){
+  .tarot-oracle{padding:1.5rem 0 2.5rem}
+  .tarot-oracle-grid{gap:.35rem;max-width:min(340px,94vw)}
+  .tarot-pick-label{font-size:.38rem}
+}
 
 /* ══════════════════════════════════
    BREATHING
@@ -1780,6 +1853,7 @@ body::before{
     <li><a onclick="goTo('alicia')">Alicia IA</a></li>
     <li><a onclick="goTo('testimonios')">Testimonios</a></li>
     <li><a onclick="goTo('faq')">FAQ</a></li>
+    <li><a onclick="goTo('tarot')">Tarot Alienígena</a></li>
     <li><a onclick="goTo('ebook')">Ebook Erior</a></li>
     <li><a onclick="goTo('soporte')">Soporte</a></li>
     <li><a href="https://eriorrabbithole.netlify.app" target="_blank" onclick="closeMenu()">Rabbit Hole</a></li>
@@ -1984,17 +2058,51 @@ body::before{
     </div>
   </div>
 
-  <!-- ══ TAROT ══ -->
+  <!-- ══ TAROT ORÁCULO ══ -->
   <div class="page" id="page-tarot">
-    <div class="mod-wrap" style="max-width:800px;text-align:center">
-      <div class="mod-label">Oráculo</div>
-      <h2 class="mod-title">Tarot <em>Alienígena</em></h2>
-      <p style="font-size:.84rem;color:var(--text2);margin-bottom:2rem">Elige una carta y recibe tu mensaje del universo</p>
-      <div class="tarot-grid" id="tarotGrid"></div>
-      <div class="t-reveal" id="tReveal">
-        <div class="t-reveal-name" id="tName"></div>
-        <p class="t-reveal-msg" id="tMsg"></p>
-        <button class="br-btn" style="margin-top:1.5rem" onclick="resetTarot()">Nueva lectura</button>
+    <div class="tarot-oracle">
+      <div class="tarot-oracle-bg"><canvas id="tarotStars" aria-hidden="true"></canvas></div>
+      <div id="tarotParticles" aria-hidden="true"></div>
+      <div class="tarot-oracle-inner">
+        <header class="tarot-oracle-head">
+          <div class="tarot-oracle-mark" aria-hidden="true"></div>
+          <p class="tarot-oracle-sub">Oráculo Alienígena</p>
+          <h2 class="tarot-oracle-title">Tarot <em>Cósmico</em></h2>
+          <p class="tarot-oracle-desc">Escribe lo que estás viviendo. Las nueve cartas del cosmos escuchan. Elige una y recibe tu transmisión con un audio Erior alineado a tu proceso.</p>
+        </header>
+        <div id="tarotCooldown" class="tarot-panel" hidden>
+          <h3 class="tarot-cooldown-title">El oráculo descansa</h3>
+          <p class="tarot-cooldown-desc">Una lectura cada 24 horas para honrar la señal. Tu próxima ventana se abre en:</p>
+          <div id="tarotCountdown" class="tarot-countdown">00:00:00</div>
+        </div>
+        <div id="tarotInput" class="tarot-panel">
+          <label class="tarot-field-label" for="tarotQuestion">¿Qué estás viviendo ahora?</label>
+          <textarea id="tarotQuestion" class="tarot-textarea" maxlength="300" placeholder="Comparte tu situación, emoción o pregunta para el cosmos..."></textarea>
+          <span id="tarotCharCount" class="tarot-char-count">0 / 300</span>
+          <button type="button" class="btn-metallic btn-liquid tarot-audio-btn" id="tarotShuffleBtn"><span class="btn-metallic-txt">Barajear las cartas</span></button>
+        </div>
+        <div id="tarotShuffle" class="tarot-panel" hidden>
+          <div class="tarot-shuffle-wrap">
+            <div class="tarot-shuffle-deck" id="tarotShuffleDeck"></div>
+          </div>
+          <p class="tarot-reveal-loading">Sincronizando frecuencias...</p>
+        </div>
+        <div id="tarotGrid" class="tarot-oracle-grid" hidden></div>
+        <div id="tarotReveal" class="tarot-reveal-panel" hidden>
+          <div class="tarot-reveal-card-wrap">
+            <div class="tarot-reveal-flip" id="tarotRevealFlip">
+              <div class="tarot-reveal-face back"></div>
+              <div class="tarot-reveal-face front">
+                <span class="tarot-reveal-glyph" id="tarotRevealGlyph"></span>
+              </div>
+            </div>
+          </div>
+          <h3 class="tarot-reveal-name" id="tarotRevealName"></h3>
+          <p class="tarot-reveal-loading" id="tarotRevealLoading">Canalizando interpretación...</p>
+          <div class="tarot-reveal-text" id="tarotRevealText" hidden></div>
+          <p class="tarot-reveal-audio-label" id="tarotAudioLabel" hidden>Audio recomendado para tu proceso</p>
+          <button type="button" class="btn-metallic btn-liquid tarot-audio-btn" id="tarotAudioBtn" hidden><span class="btn-metallic-txt" id="tarotAudioBtnTxt">Ver audio recomendado</span></button>
+        </div>
       </div>
     </div>
   </div>
@@ -2486,6 +2594,7 @@ function goTo(id){
   }
   if(id==='ebook')initEbookPage();
   if(id==='soporte')initSoportePage();
+  if(id==='tarot')initTarotPage();
   try{history.replaceState(null,'','#'+id);}catch(e){}
   window.scrollTo(0,0);
 }
@@ -3717,36 +3826,326 @@ async function sendMsg(){
 }
 
 // ══════════════════════════════════
-// TAROT
+// TAROT ORÁCULO ALIENÍGENA
 // ══════════════════════════════════
-var TR=[
-  {n:'🌟 La Estrella Cósmica',m:'El universo te envía señal: confía en tu brillo interior. Lo que sembraste florece ahora.'},
-  {n:'🌑 El Portal Oscuro',m:'Hay algo listo para soltar. Este vacío es el umbral hacia tu nueva versión.'},
-  {n:'⚡ La Transmisión',m:'Energía de activación llega a tu campo. Ideas y oportunidades te buscan ahora.'},
-  {n:'🌀 El Vórtice',m:'Transformación profunda. Las viejas estructuras se disuelven para algo más alineado contigo.'},
-  {n:'💎 El Cristal',m:'Tu intuición está en su punto más alto. El conocimiento que buscas ya vive en ti.'},
-  {n:'🐍 La Serpiente',m:'Tiempo de mudanza de piel. Lo que no sirve está siendo liberado. Abraza el proceso.'},
-  {n:'🌸 El Florecimiento',m:'Tu energía está lista para expresarse. Es el momento de actuar desde tu autenticidad.'},
-  {n:'🔮 El Espejo',m:'Lo que ves en otros refleja tu mundo interior. Pon atención a los mensajes de tu entorno.'},
-  {n:'🌊 La Gran Ola',m:'Una ola de cambio llega. Cabalga sobre ella. Tienes todo para navegarla con gracia.'},
+var TAROT_LASTREAD_KEY='erior_tarot_lastread';
+var TAROT_COOLDOWN_MS=86400000;
+var tarotCountdownIv=null;
+var tarotStarsStarted=false;
+var tarotState={question:'',picked:null,recommendedAudio:null,recommendedName:''};
+
+var TAROT_MARK_SVG='<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.1"><circle cx="32" cy="32" r="27" stroke-opacity=".35"/><path d="M32 6v10M32 48v10M6 32h10M48 32h10"/><ellipse cx="32" cy="32" rx="12" ry="6" transform="rotate(45 32 32)"/><ellipse cx="32" cy="32" rx="12" ry="6" transform="rotate(-45 32 32)"/><circle cx="32" cy="32" r="2.5" fill="currentColor" stroke="none"/></svg>';
+
+var TAROT_GLYPHS={
+  star:'<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.15"><circle cx="32" cy="32" r="28" stroke-opacity=".3"/><path d="M32 10 L35 26 L51 28 L35 30 L32 46 L29 30 L13 28 L29 26 Z"/><circle cx="32" cy="32" r="2.5" fill="currentColor" stroke="none"/></svg>',
+  portal:'<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.15"><circle cx="32" cy="32" r="24" stroke-opacity=".35"/><path d="M32 8 A24 24 0 0 0 32 56 A16 16 0 0 1 32 8"/><circle cx="32" cy="32" r="4" fill="currentColor" stroke="none" opacity=".6"/></svg>',
+  transmit:'<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.15"><circle cx="32" cy="32" r="4" fill="currentColor" stroke="none"/><path d="M32 32 L32 12"/><path d="M32 32 L48 20"/><path d="M32 32 L52 32"/><path d="M32 32 L48 44"/><path d="M32 32 L32 52"/><path d="M32 32 L16 44"/><path d="M32 32 L12 32"/><path d="M32 32 L16 20"/><circle cx="32" cy="12" r="2"/><circle cx="48" cy="20" r="2"/><circle cx="52" cy="32" r="2"/></svg>',
+  vortex:'<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.15"><path d="M32 8 C44 14 48 24 40 32 C32 40 18 42 14 32 C10 22 20 12 32 8"/><path d="M32 20 C38 24 40 30 36 34 C32 38 24 39 22 34 C20 29 26 22 32 20"/><circle cx="32" cy="32" r="2.5" fill="currentColor" stroke="none"/></svg>',
+  crystal:'<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.15"><path d="M32 8 L48 24 L32 56 L16 24 Z"/><path d="M16 24 L48 24"/><path d="M32 8 L32 56"/><path d="M22 24 L32 40 L42 24"/></svg>',
+  serpent:'<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.15"><path d="M12 44 C20 20 28 48 36 24 C44 8 52 28 52 40"/><circle cx="12" cy="44" r="2.5" fill="currentColor" stroke="none"/><circle cx="52" cy="40" r="2" fill="currentColor" stroke="none"/></svg>',
+  bloom:'<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.15"><circle cx="32" cy="32" r="5" fill="currentColor" stroke="none" opacity=".7"/><ellipse cx="32" cy="18" rx="8" ry="12"/><ellipse cx="32" cy="46" rx="8" ry="12"/><ellipse cx="18" cy="32" rx="12" ry="8"/><ellipse cx="46" cy="32" rx="12" ry="8"/></svg>',
+  mirror:'<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.15"><ellipse cx="24" cy="32" rx="14" ry="22" stroke-opacity=".5"/><ellipse cx="40" cy="32" rx="14" ry="22"/><line x1="32" y1="10" x2="32" y2="54" stroke-opacity=".35"/><path d="M24 32 C24 38 28 42 32 42 C36 42 40 38 40 32"/></svg>',
+  wave:'<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.15"><path d="M8 36 C16 28 24 44 32 32 C40 20 48 36 56 28"/><path d="M8 48 C16 40 24 52 32 42 C40 32 48 46 56 38" stroke-opacity=".45"/><circle cx="48" cy="22" r="3" fill="currentColor" stroke="none" opacity=".5"/></svg>'
+};
+
+var TAROT_CARDS=[
+  {id:'estrella',name:'La Estrella Cósmica',glyph:'star',fallback:'El universo envia senal: confia en tu brillo interior. Lo que sembraste florece cuando te permites brillar sin pedir permiso.',fallbackAudio:'Amor Propio Magic 3.0'},
+  {id:'portal',name:'El Portal Oscuro',glyph:'portal',fallback:'Hay algo listo para soltar. Este vacio es el umbral hacia tu nueva version; no temas cruzarlo.',fallbackAudio:'Booster'},
+  {id:'transmision',name:'La Transmisión',glyph:'transmit',fallback:'Energia de activacion llega a tu campo. Ideas y oportunidades te buscan ahora; mantente receptiv@.',fallbackAudio:'MASTER MIND'},
+  {id:'vortice',name:'El Vórtice',glyph:'vortex',fallback:'Transformacion profunda. Las viejas estructuras se disuelven para dar paso a algo mas alineado contigo.',fallbackAudio:'Identity'},
+  {id:'cristal',name:'El Cristal',glyph:'crystal',fallback:'Tu intuicion esta en su punto mas alto. El conocimiento que buscas ya vive en ti; escuchalo.',fallbackAudio:'Éclat'},
+  {id:'serpiente',name:'La Serpiente',glyph:'serpent',fallback:'Tiempo de mudanza de piel. Lo que ya no sirve se libera; abraza el proceso de renacer.',fallbackAudio:'Satori'},
+  {id:'florecimiento',name:'El Florecimiento',glyph:'bloom',fallback:'Tu energia esta lista para expresarse. Es el momento de actuar desde tu autenticidad.',fallbackAudio:'Mesmerizing Love'},
+  {id:'espejo',name:'El Espejo',glyph:'mirror',fallback:'Lo que ves en otros refleja tu mundo interior. Pon atencion a los mensajes de tu entorno.',fallbackAudio:'CURIOUS-CURIOUSER'},
+  {id:'ola',name:'La Gran Ola',glyph:'wave',fallback:'Una ola de cambio llega. Cabalga sobre ella; tienes todo para navegarla con gracia.',fallbackAudio:'11:11'}
 ];
-var selT=null;
-function buildTarot(){
-  var el=document.getElementById('tarotGrid');el.innerHTML='';
-  TR.forEach(function(c,i){
-    var d=document.createElement('div');d.className='t-card';d.textContent='✦';
-    d.onclick=function(){
-      if(selT!==null)return;selT=i;
-      d.classList.add('flipped');d.textContent=c.n.split(' ')[0];
-      document.getElementById('tName').textContent=c.n;
-      document.getElementById('tMsg').textContent=c.m;
-      var rv=document.getElementById('tReveal');rv.classList.add('show');
-      rv.scrollIntoView({behavior:'smooth',block:'center'});
-    };
-    el.appendChild(d);
+
+function tarotBackSvg(){return TAROT_MARK_SVG;}
+function tarotGlyphSvg(key){return TAROT_GLYPHS[key]||TAROT_MARK_SVG;}
+
+function getTarotLastRead(){
+  try{var v=localStorage.getItem(TAROT_LASTREAD_KEY);return v?parseInt(v,10):0;}catch(e){return 0;}
+}
+function setTarotLastRead(){try{localStorage.setItem(TAROT_LASTREAD_KEY,String(Date.now()));}catch(e){}}
+function tarotCooldownRemaining(){
+  var last=getTarotLastRead();
+  if(!last)return 0;
+  var rem=TAROT_COOLDOWN_MS-(Date.now()-last);
+  return rem>0?rem:0;
+}
+function formatTarotCountdown(ms){
+  var s=Math.floor(ms/1000);
+  var h=Math.floor(s/3600);
+  var m=Math.floor((s%3600)/60);
+  var sec=s%60;
+  return String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0');
+}
+function tarotShowPanel(id){
+  ['tarotCooldown','tarotInput','tarotShuffle','tarotGrid','tarotReveal'].forEach(function(pid){
+    var el=document.getElementById(pid);
+    if(el)el.hidden=(pid!==id);
   });
 }
-function resetTarot(){selT=null;document.getElementById('tReveal').classList.remove('show');buildTarot();}
+function stopTarotCountdown(){
+  if(tarotCountdownIv){clearInterval(tarotCountdownIv);tarotCountdownIv=null;}
+}
+function updateTarotCountdown(){
+  var rem=tarotCooldownRemaining();
+  var el=document.getElementById('tarotCountdown');
+  if(!rem){
+    stopTarotCountdown();
+    initTarotPage();
+    return;
+  }
+  if(el)el.textContent=formatTarotCountdown(rem);
+}
+function initTarotStars(){
+  if(tarotStarsStarted)return;
+  var cv=document.getElementById('tarotStars');
+  if(!cv)return;
+  tarotStarsStarted=true;
+  var ctx=cv.getContext('2d');
+  var stars=[];
+  function resize(){
+    var p=cv.parentElement;
+    if(!p)return;
+    cv.width=p.offsetWidth*devicePixelRatio;
+    cv.height=p.offsetHeight*devicePixelRatio;
+    cv.style.width=p.offsetWidth+'px';
+    cv.style.height=p.offsetHeight+'px';
+  }
+  function seed(){
+    stars=[];
+    var n=Math.floor((cv.width*cv.height)/(9000*devicePixelRatio));
+    for(var i=0;i<Math.min(n,90);i++){
+      stars.push({x:Math.random()*cv.width,y:Math.random()*cv.height,r:(Math.random()*1.2+.3)*devicePixelRatio,a:Math.random()*.5+.15,ph:Math.random()*Math.PI*2});
+    }
+  }
+  function draw(){
+    if(!cv.width||!cv.height){requestAnimationFrame(draw);return;}
+    ctx.clearRect(0,0,cv.width,cv.height);
+    var t=Date.now()*.001;
+    stars.forEach(function(s){
+      var a=s.a*(.65+.35*Math.sin(t*1.4+s.ph));
+      ctx.beginPath();
+      ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.fillStyle='rgba(210,200,255,'+a+')';
+      ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+  resize();seed();draw();
+  window.addEventListener('resize',function(){resize();seed();});
+  var mark=document.querySelector('.tarot-oracle-mark');
+  if(mark)mark.innerHTML=TAROT_MARK_SVG;
+  document.querySelectorAll('.tarot-reveal-face.back,.tarot-pick-face.back').forEach(function(el){
+    if(!el.innerHTML.trim())el.innerHTML=tarotBackSvg();
+  });
+}
+
+function getTarotCatalogEntries(){
+  var aud=(typeof lang!=='undefined'&&lang==='en'&&typeof audiosEn!=='undefined'&&audiosEn.length)?audiosEn:(typeof audiosEs!=='undefined'?audiosEs:[]);
+  return aud.map(function(a){
+    return {item:a,raw:a.nombre,label:(typeof audioLabelFromCatalog==='function'?audioLabelFromCatalog(a.nombre):String(a.nombre||'').replace(/^[\s\p{Extended_Pictographic}\u2600-\u27BF]+/u,'').trim())};
+  });
+}
+
+function matchTarotAudio(suggested){
+  var s=String(suggested||'').trim();
+  if(!s)return null;
+  var list=getTarotCatalogEntries();
+  var i,sl=s.toLowerCase();
+  for(i=0;i<list.length;i++){
+    if(list[i].raw===s||list[i].label===s)return list[i].item;
+  }
+  for(i=0;i<list.length;i++){
+    if(list[i].raw.toLowerCase()===sl||list[i].label.toLowerCase()===sl)return list[i].item;
+  }
+  return null;
+}
+
+function buildTarotCatalogPromptList(){
+  return getTarotCatalogEntries().map(function(e){return e.label;}).join('\n');
+}
+
+function parseTarotOracleReply(text){
+  var t=String(text||'');
+  var audioMatch=t.match(/AUDIO\s*:\s*(.+?)(?:\n|$)/i);
+  var interpMatch=t.match(/INTERPRETACION\s*:\s*([\s\S]+?)(?=\n\s*AUDIO\s*:|$)/i);
+  return {
+    interpretation:interpMatch?interpMatch[1].trim():t.trim(),
+    audioSuggested:audioMatch?audioMatch[1].trim():''
+  };
+}
+
+function launchTarotParticles(){
+  var box=document.getElementById('tarotParticles');
+  if(!box)return;
+  box.innerHTML='';
+  var cx=window.innerWidth/2,cy=window.innerHeight/2;
+  for(var i=0;i<36;i++){
+    var p=document.createElement('span');
+    p.className='tarot-burst';
+    var ang=(Math.PI*2*i)/36+Math.random()*.4;
+    var dist=80+Math.random()*160;
+    p.style.left=cx+'px';
+    p.style.top=cy+'px';
+    p.style.setProperty('--tx',Math.cos(ang)*dist+'px');
+    p.style.setProperty('--ty',Math.sin(ang)*dist+'px');
+    box.appendChild(p);
+  }
+  setTimeout(function(){if(box)box.innerHTML='';},1400);
+}
+
+function initTarotPage(){
+  initTarotStars();
+  stopTarotCountdown();
+  tarotState={question:'',picked:null,recommendedAudio:null,recommendedName:''};
+  var rem=tarotCooldownRemaining();
+  if(rem>0){
+    tarotShowPanel('tarotCooldown');
+    updateTarotCountdown();
+    tarotCountdownIv=setInterval(updateTarotCountdown,1000);
+    return;
+  }
+  tarotShowPanel('tarotInput');
+  var ta=document.getElementById('tarotQuestion');
+  var cc=document.getElementById('tarotCharCount');
+  if(ta&&cc){
+    cc.textContent=ta.value.length+' / 300';
+    ta.oninput=function(){cc.textContent=ta.value.length+' / 300';};
+  }
+  var btn=document.getElementById('tarotShuffleBtn');
+  if(btn)btn.onclick=startTarotShuffle;
+  document.querySelector('.tarot-reveal-face.back').innerHTML=tarotBackSvg();
+}
+
+function startTarotShuffle(){
+  var ta=document.getElementById('tarotQuestion');
+  var q=ta?String(ta.value||'').trim():'';
+  if(!q){
+    if(ta){ta.focus();ta.style.borderColor='rgba(232,128,138,.55)';}
+    return;
+  }
+  if(ta)ta.style.borderColor='';
+  tarotState.question=q;
+  tarotShowPanel('tarotShuffle');
+  var deck=document.getElementById('tarotShuffleDeck');
+  if(!deck)return;
+  deck.innerHTML='';
+  for(var i=0;i<7;i++){
+    var c=document.createElement('div');
+    c.className='tarot-shuffle-card';
+    c.innerHTML=tarotBackSvg();
+    c.style.transform='translate('+(Math.random()*40-20)+'px,'+(Math.random()*20-10)+'px) rotate('+(Math.random()*24-12)+'deg)';
+    c.style.zIndex=String(i);
+    c.style.transition='transform .45s cubic-bezier(.22,1,.36,1) '+(i*.05)+'s';
+    deck.appendChild(c);
+  }
+  requestAnimationFrame(function(){
+    deck.querySelectorAll('.tarot-shuffle-card').forEach(function(c,i){
+      c.style.transform='translate('+(i*8-24)+'px,'+(Math.sin(i)*12)+'px) rotate('+(i*6-18)+'deg)';
+    });
+  });
+  setTimeout(buildTarotPickGrid,1800);
+}
+
+function buildTarotPickGrid(){
+  tarotShowPanel('tarotGrid');
+  var grid=document.getElementById('tarotGrid');
+  if(!grid)return;
+  grid.innerHTML='';
+  TAROT_CARDS.forEach(function(card,idx){
+    var btn=document.createElement('button');
+    btn.type='button';
+    btn.className='tarot-pick-card';
+    btn.setAttribute('aria-label','Elegir carta '+(idx+1));
+    btn.innerHTML='<div class="tarot-pick-inner"><div class="tarot-pick-face back">'+tarotBackSvg()+'</div><div class="tarot-pick-face front"><span class="tarot-pick-glyph">'+tarotGlyphSvg(card.glyph)+'</span><span class="tarot-pick-label">'+card.name+'</span></div></div>';
+    btn.onclick=function(){pickTarotCard(card,btn);};
+    grid.appendChild(btn);
+  });
+}
+
+function pickTarotCard(card,btnEl){
+  gridDisableTarotPick();
+  tarotState.picked=card;
+  if(btnEl)btnEl.classList.add('revealed');
+  setTimeout(function(){showTarotReveal(card);},500);
+}
+
+function gridDisableTarotPick(){
+  document.querySelectorAll('.tarot-pick-card').forEach(function(b){b.disabled=true;});
+}
+
+function showTarotReveal(card){
+  tarotShowPanel('tarotReveal');
+  setTarotLastRead();
+  var flip=document.getElementById('tarotRevealFlip');
+  var glyphEl=document.getElementById('tarotRevealGlyph');
+  var nameEl=document.getElementById('tarotRevealName');
+  var loadEl=document.getElementById('tarotRevealLoading');
+  var textEl=document.getElementById('tarotRevealText');
+  var audioLbl=document.getElementById('tarotAudioLabel');
+  var audioBtn=document.getElementById('tarotAudioBtn');
+  var audioBtnTxt=document.getElementById('tarotAudioBtnTxt');
+  if(glyphEl)glyphEl.innerHTML=tarotGlyphSvg(card.glyph);
+  if(nameEl)nameEl.textContent=card.name;
+  if(flip){flip.classList.remove('flipped');void flip.offsetWidth;setTimeout(function(){flip.classList.add('flipped');launchTarotParticles();},80);}
+  if(loadEl){loadEl.hidden=false;loadEl.textContent='Canalizando interpretación...';}
+  if(textEl){textEl.hidden=true;textEl.textContent='';}
+  if(audioLbl)audioLbl.hidden=true;
+  if(audioBtn)audioBtn.hidden=true;
+  fetchTarotOracle(card);
+}
+
+async function fetchTarotOracle(card){
+  var loadEl=document.getElementById('tarotRevealLoading');
+  var textEl=document.getElementById('tarotRevealText');
+  var audioLbl=document.getElementById('tarotAudioLabel');
+  var audioBtn=document.getElementById('tarotAudioBtn');
+  var audioBtnTxt=document.getElementById('tarotAudioBtnTxt');
+  var catalogList=buildTarotCatalogPromptList();
+  var prompt='INSTRUCCION UNICA PARA ESTA RESPUESTA: Actua SOLO como el Oraculo Alienigena de ERIOR CENTER. No eres Alicia vendedora. Sin emojis. Texto limpio.\n\n'+
+    'Carta elegida: '+card.name+'\n'+
+    'Situacion del consultante: '+tarotState.question+'\n\n'+
+    'Catalogo de audios (elige UNO; copia el nombre EXACTAMENTE como aparece):\n'+catalogList+'\n\n'+
+    'Responde SOLO en este formato:\nINTERPRETACION: (2-4 parrafos cortos, personalizados a su situacion)\nAUDIO: (nombre exacto de un audio del catalogo)';
+  var interpretation=card.fallback;
+  var audioSuggested=card.fallbackAudio;
+  try{
+    var r=await fetch(typeof ALICIA_FN!=='undefined'?ALICIA_FN:'/.netlify/functions/claude',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({messages:[{role:'user',content:prompt}]})
+    });
+    var data={};
+    try{data=await r.json();}catch(pe){data={};}
+    if(r.ok&&data&&data.reply){
+      var parsed=parseTarotOracleReply(data.reply);
+      if(parsed.interpretation)interpretation=parsed.interpretation;
+      if(parsed.audioSuggested)audioSuggested=parsed.audioSuggested;
+    }
+  }catch(e){}
+  var matched=matchTarotAudio(audioSuggested)||matchTarotAudio(card.fallbackAudio);
+  tarotState.recommendedAudio=matched;
+  tarotState.recommendedName=matched?(typeof audioLabelFromCatalog==='function'?audioLabelFromCatalog(matched.nombre):matched.nombre):(audioSuggested||card.fallbackAudio);
+  if(loadEl)loadEl.hidden=true;
+  if(textEl){textEl.hidden=false;textEl.textContent=interpretation;}
+  if(audioLbl)audioLbl.hidden=false;
+  if(audioBtn&&audioBtnTxt){
+    audioBtn.hidden=false;
+    audioBtnTxt.textContent=matched?('Ver '+tarotState.recommendedName):'Explorar catálogo Erior';
+    audioBtn.onclick=function(){
+      if(tarotState.recommendedAudio){
+        var cats=(typeof lang!=='undefined'&&lang==='en'&&typeof CATS_EN!=='undefined')?CATS_EN:CATS_ES;
+        openModal(tarotState.recommendedAudio,cats);
+      }else{
+        goTo('catalogo');
+      }
+    };
+  }
+  if(textEl)textEl.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
 
 // ══════════════════════════════════
 // BREATHING
@@ -3802,7 +4201,6 @@ function loadModelViewerScript(cb){
   document.head.appendChild(s);
 }
 buildCatalog();
-buildTarot();
 initPromoCountdown();
 initFaqAccordion();
 initTestimonialVideo();
