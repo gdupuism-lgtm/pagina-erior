@@ -3469,7 +3469,7 @@ function isPurchaseIntent(txt){
   return /quiero comprar|quiero adquirir|voy a comprar|me lo llevo|lo quiero comprar|lo compro|reservar|res[eé]rvalo|p[aá]same los datos|datos de pago|c[oó]mo (lo )?pago|m[eé]todo de pago|listo para comprar|hacer el pedido|empezamos con este|adquirirlo hoy|te compro|me interesa comprar/i.test(String(txt));
 }
 function isPromoInterest(txt){
-  return /promo|promoci[oó]n|father upgrade|upgrade pack|descuento|oferta|para salir de la m|salir de la matrix|1[,.]?888|1888|father pack|dia del padre|d[ií]a del padre|lucky|edici[oó]n limitada/i.test(String(txt));
+  return /promo|promoci[oó]n|father upgrade|upgrade pack|descuento|oferta|que promos|qu[eé] promos|ofertas tienen|1[,.]?888|1888|father pack|dia del padre|d[ií]a del padre|lucky|edici[oó]n limitada/i.test(String(txt));
 }
 function isAudioInterest(txt){
   var s=String(txt);
@@ -3524,7 +3524,7 @@ function isPaymentCelebration(txt){
   return /ya\s+(pagu[eé]|pague|mand[eé]|mande|envi[eé]|envie|transfer[ií]|transferi)|comprobante|ya\s+lo\s+compr[eé]|listo\s*,?\s*pagu[eé]|hice\s+el\s+pago|ya\s+est[aá]\s+pagado|mand[eé]\s+el\s+comprobante/i.test(String(txt));
 }
 function isSalesCloseMoment(txt){
-  return /\$[\d,.]+|1[,.]?777|1[,.]?170|\bMXN\b|\bUSD\b|\bEUR\b|adquirirlo|adquirirlo hoy|te gustar[ií]a adquirir|empezamos con este|precio del audio|inversi[oó]n de|por qu[eé] m[eé]todo prefieres pagar|m[eé]todo prefieres pagar/i.test(String(txt));
+  return /\$[\d,.]+|1[,.]?888|1[,.]?777|1[,.]?170|\bMXN\b|\bUSD\b|\bEUR\b|adquirirlo|adquirirlo hoy|te gustar[ií]a adquirir|empezamos con este|precio del audio|inversi[oó]n de|por qu[eé] m[eé]todo prefieres pagar|m[eé]todo prefieres pagar/i.test(String(txt));
 }
 function launchAliciaConfetti(){
   if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
@@ -3647,6 +3647,30 @@ function sanitizeAliciaText(t){
     .replace(/^#{1,6}\s+/gm,'')
     .replace(/`([^`]+)`/g,'$1');
 }
+function isMatrixProgramInterest(txt){
+  return /para salir de la matrix|salir de la m|programa matrix|telegram privado de pauline|entrar a matrix|promo matrix/i.test(String(txt||''));
+}
+function normalizePromoImageFile(filename){
+  var f=String(filename||'').trim();
+  var low=f.toLowerCase();
+  if(/hot\s*sale|de los pares|pares\.jpe?g/i.test(low))return 'father upgrade pack.jpeg';
+  return f;
+}
+function stripAliciaChatImages(reply){
+  return String(reply||'').replace(/\s*\[IMG:[^\]]+\]\s*/gi,'\n').replace(/\n{3,}/g,'\n\n').trim();
+}
+function normalizeAliciaPromoReply(reply,userTxt){
+  var r=String(reply||'');
+  r=r.replace(/Hot Sale de los Pares/gi,'Father Upgrade Pack');
+  r=r.replace(/HOT SALE DE LOS PARES/gi,'FATHER UPGRADE PACK');
+  r=r.replace(/hot sale de los pares/gi,'Father Upgrade Pack');
+  r=r.replace(/\$1[,.]?777\s*MXN/gi,'$1,888 MXN');
+  r=r.replace(/\$111\s*USD/gi,'$118 USD');
+  r=r.replace(/€93\s*EUR/gi,'€99 EUR');
+  r=r.replace(/\b(?:solo|solamente|nada mas que|nada más que)\s+(?:dos|2)\s*horas?\b/gi,'muchas horas en loop (entre más escucha, mejor)');
+  r=r.replace(/\bcon\s+(?:dos|2)\s*horas?\s+(?:al\s+d[ií]a\s+)?(?:es\s+)?(?:suficiente|basta)\b/gi,'cuanto más horas en loop, más profundo el cambio');
+  return stripAliciaChatImages(r);
+}
 function appendFormattedChatText(bub,text){
   var s=String(text).replace(/\r\n/g,'\n').trim();
   if(!s)return;
@@ -3693,7 +3717,7 @@ function appendFormattedChatText(bub,text){
   });
 }
 function appendPromoImage(bub,filename){
-  var file=encodeURI(String(filename).trim());
+  var file=encodeURI(normalizePromoImageFile(filename));
   var fullSrc=CHAT_IMG_BASE+file;
   var wrap=document.createElement('div');
   wrap.className='chat-promo-wrap';
@@ -3709,6 +3733,14 @@ function appendPromoImage(bub,filename){
   img.loading='lazy';
   img.decoding='async';
   img.src=fullSrc;
+  img.onerror=function(){
+    if(this.dataset.fallback)return;
+    var low=String(filename||'').toLowerCase();
+    if(/father upgrade|hot sale|pares/i.test(low)){
+      this.dataset.fallback='1';
+      this.src=CHAT_IMG_BASE+encodeURI('hot sale de los pares.jpeg');
+    }
+  };
   var zoom=document.createElement('span');
   zoom.className='chat-promo-zoom';
   zoom.textContent='\uD83D\uDD0D';
@@ -3817,6 +3849,7 @@ async function sendMsg(){
       addMsg('b','Alicia no pudo responder ahora: '+errTxt+'. Si estás en tu computadora, prueba con `netlify dev` o revisa que el sitio esté en Netlify con ANTHROPIC_API_KEY configurada 💜');
     }else{
       var reply=(data&&data.reply)?String(data.reply):'Lo siento, hubo un error 💜';
+      reply=stripAliciaChatImages(normalizeAliciaPromoReply(reply,txt));
       addMsg('b',reply);hist.push({role:'assistant',content:reply});
       if(isSalesCloseMoment(reply)){triggerSalesSparkle();var qp=document.getElementById('aliciaQuieroPagar');if(qp)qp.style.display='flex';}
     }
