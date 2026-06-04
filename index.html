@@ -79,7 +79,7 @@
         "@type": "AggregateOffer",
         "priceCurrency": "MXN",
         "lowPrice": "1170",
-        "highPrice": "1777",
+        "highPrice": "1888",
         "offerCount": "25",
         "availability": "https://schema.org/OnlineOnly",
         "url": "https://eriorcenter.netlify.app/"
@@ -424,10 +424,22 @@ body::before{
   color:rgba(200,195,220,.55);margin-top:.25rem;
 }
 .cover-promo-countdown{
-  margin:.85rem auto 0;max-width:min(340px,92vw);cursor:pointer;
+  margin:.85rem auto 0;max-width:min(360px,92vw);cursor:pointer;
   transition:transform .2s ease,box-shadow .2s ease;
 }
 .cover-promo-countdown:hover{transform:translateY(-2px);box-shadow:0 0 32px rgba(201,160,96,.2)}
+.cover-promo-offer{margin-bottom:.75rem;text-align:center}
+.cover-promo-title{
+  display:block;font-family:'Syne',sans-serif;font-size:.72rem;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:#fff;margin-bottom:.4rem;line-height:1.35;
+}
+.cover-promo-line{font-size:.68rem;color:rgba(210,205,225,.75);line-height:1.45;margin:0 0 .35rem}
+.cover-promo-prices{
+  font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:var(--gold);
+  line-height:1.35;margin:0 0 .4rem;
+}
+.cover-promo-bonus{font-size:.64rem;color:rgba(200,180,255,.82);line-height:1.45;margin:0}
+.cover-promo-countdown .promo-countdown-label{margin-top:.15rem;margin-bottom:.55rem;font-size:.52rem}
 /* Testimonios — video inmersivo */
 #page-testimonios{
   min-height:100vh;padding:0;
@@ -1906,8 +1918,14 @@ body::before{
 </span>R<em>CENTER</em><canvas id="titleDust" style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:700px;height:100%;pointer-events:none;z-index:10;overflow:visible;"></canvas></h1>
       <div class="cover-tag">Guía interactiva para utilizar tus audios</div>
       <button type="button" class="btn-alicia-glow" onclick="goTo('alicia')">✨ Habla con Alicia IA</button>
-      <div class="cover-promo-countdown promo-countdown-block" onclick="openPromoModal()" role="button" tabindex="0" aria-label="Ver promociones Hot Sale">
-        <span class="promo-countdown-label">🔥 Hot Sale termina en</span>
+      <div class="cover-promo-countdown promo-countdown-block" onclick="openPromoModal()" role="button" tabindex="0" aria-label="Ver Father Upgrade Pack">
+        <div class="cover-promo-offer">
+          <strong class="cover-promo-title">🚀 FATHER UPGRADE PACK</strong>
+          <p class="cover-promo-line">2 audios de tu elección · Por tiempo limitado</p>
+          <p class="cover-promo-prices">$1,888 MXN · $118 USD · €99 EUR</p>
+          <p class="cover-promo-bonus">🎁 Sorteo Telegram VIP + Audio exclusivo + Ebook de regalo</p>
+        </div>
+        <span class="promo-countdown-label">Termina en</span>
         <div class="promo-countdown-grid" id="coverCountdown">
           <div class="promo-countdown-unit"><strong class="promo-countdown-num" data-cd="days">00</strong><span>días</span></div>
           <div class="promo-countdown-unit"><strong class="promo-countdown-num" data-cd="hours">00</strong><span>horas</span></div>
@@ -2175,7 +2193,7 @@ body::before{
           <button type="button" class="faq-q" aria-expanded="false">¿Cómo sé cuál audio es para mí?<span class="faq-q-icon">+</span></button>
           <div class="faq-a"><div class="faq-a-inner">
             <p>Habla con Alicia IA en esta misma página: te hace preguntas y te recomienda el audio exacto según lo que vives hoy. También puedes explorar el catálogo por categoría: amor, dinero, autoestima, salud y más.</p>
-            <p>Si dudas entre dos, el Hot Sale de los Pares te permite llevar dos audios con descuento, o Booster como complemento poderoso para cualquier proceso.</p>
+            <p>Si dudas entre dos, el Father Upgrade Pack te permite llevar 2 audios de tu elección con descuento (hasta el 30 de junio), o Booster como complemento poderoso para cualquier proceso.</p>
             <p>¿Quieres que Alicia te guíe ahora mismo?</p>
             <button type="button" class="faq-cta-btn" onclick="goTo('alicia')">Hablar con Alicia ✦</button>
           </div></div>
@@ -2183,7 +2201,7 @@ body::before{
         <div class="faq-item">
           <button type="button" class="faq-q" aria-expanded="false">¿Qué incluye mi compra?<span class="faq-q-icon">+</span></button>
           <div class="faq-a"><div class="faq-a-inner">
-            <p>Recibes tu audio binaural personalizado (con tu nombre e intención), instrucciones de uso, acceso al envío por correo y soporte del equipo Erior. Según la promo, puedes incluir Telegram privado de Pauline o beneficios del Hot Sale.</p>
+            <p>Recibes tu audio binaural personalizado (con tu nombre e intención), instrucciones de uso, acceso al envío por correo y soporte del equipo Erior. Según la promo, puedes incluir Telegram privado de Pauline o beneficios del Father Upgrade Pack.</p>
             <p>No es un MP3 genérico: es una pieza creada para ti y tu transformación específica.</p>
             <p>¿Lista para recibir el tuyo?</p>
             <button type="button" class="faq-cta-btn" onclick="openPaymentModal('Audio Erior')">Quiero mi audio 🎧</button>
@@ -2332,19 +2350,19 @@ body::before{
 </div>
 
 <!-- PROMOS MODAL -->
-<button type="button" class="promo-float-btn" id="promoFloatBtn" onclick="openPromoModal()" aria-label="Ver promociones">🔥 PROMOS</button>
+<button type="button" class="promo-float-btn" id="promoFloatBtn" onclick="openPromoModal()" aria-label="Ver Father Upgrade Pack">🚀 FATHER PACK</button>
 <div class="modal-bg" id="promoModal" aria-hidden="true">
   <div class="modal-box promo-modal-box">
     <div class="promo-modal-inner">
       <div class="promo-modal-head">
         <div>
-          <div class="promo-modal-title">Promociones Erior</div>
-          <p class="promo-modal-sub">Ofertas exclusivas · She Is Magique</p>
+          <div class="promo-modal-title">🚀 Father Upgrade Pack</div>
+          <p class="promo-modal-sub">Día del Padre · Por tiempo limitado · She Is Magique</p>
         </div>
         <button type="button" class="modal-close" onclick="closePromoModal()" aria-label="Cerrar">✕</button>
       </div>
       <div class="promo-countdown-block" id="modalPromoCountdown">
-        <span class="promo-countdown-label">⏳ Termina el 2 de junio · 23:59</span>
+        <span class="promo-countdown-label">⏳ Termina el 30 de junio · 23:59</span>
         <div class="promo-countdown-grid">
           <div class="promo-countdown-unit"><strong class="promo-countdown-num" data-cd="days">00</strong><span>días</span></div>
           <div class="promo-countdown-unit"><strong class="promo-countdown-num" data-cd="hours">00</strong><span>horas</span></div>
@@ -2353,27 +2371,25 @@ body::before{
         </div>
       </div>
       <div class="promo-tabs" role="tablist">
-        <button type="button" class="promo-tab active" data-promo-tab="hotsale" onclick="switchPromoTab('hotsale')">Hot Sale de los Pares</button>
+        <button type="button" class="promo-tab active" data-promo-tab="fatherpack" onclick="switchPromoTab('fatherpack')">Father Upgrade Pack</button>
         <button type="button" class="promo-tab" data-promo-tab="matrix" onclick="switchPromoTab('matrix')">Para Salir de la Matrix</button>
       </div>
-      <div class="promo-panel active" id="promoPanelHotsale" role="tabpanel">
-        <p class="promo-dates">Disponible del 25 de mayo al 2 de junio</p>
+      <div class="promo-panel active" id="promoPanelFatherpack" role="tabpanel">
+        <p class="promo-dates">Día del Padre · Disponible hasta el 30 de junio</p>
+        <p class="promo-desc">Papá merece una actualización también. Todo el año resuelve, trabaja, cuida y da lo mejor de sí. Este pack le regala más calma, claridad mental y bienestar.</p>
         <div class="promo-prices">
-          <span class="promo-price-old">$2,222 MXN / $139 USD / €116 EUR</span>
-          <div class="promo-price-new">$1,777 MXN / $111 USD / €93 EUR</div>
+          <span class="promo-price-old">$2,398 MXN (2 audios × $1,199)</span>
+          <div class="promo-price-new">$1,888 MXN / $118 USD / €99 EUR</div>
         </div>
-        <p class="promo-combos-title">Combos disponibles</p>
+        <p class="promo-combos-title">El pack incluye</p>
         <ul class="promo-combo-list">
-          <li>✨ Éclat + Vitamind</li>
-          <li>🧸 Audio You + Mesmerizing Love</li>
-          <li>🐇 Booster + Mastermind</li>
-          <li>👑 Amor Propio Magic 2.0 + Icon Aura</li>
-          <li>🌿 Vitamind + Mastermind</li>
-          <li>✨ Éclat + Mesmerizing Love</li>
-          <li>🐇 Booster + Audio You</li>
+          <li>🎧 2 audios de tu elección (personalizados)</li>
+          <li>🎁 Sorteo: 1 año de acceso a Telegram VIP</li>
+          <li>🎵 Audio exclusivo para liberar tensión y relajar el cuerpo</li>
+          <li>📖 Ebook digital de regalo</li>
         </ul>
-        <p class="promo-bonus">🎁 Tú y tu amig@ entran al Telegram privado gratis</p>
-        <a href="https://wa.me/5214432311761?text=Hola%2C%20estoy%20interesada%20en%20el%20Hot%20Sale%20de%20los%20Pares%20%F0%9F%94%A5" target="_blank" rel="noopener noreferrer" class="promo-cta" onclick="closePromoModal()">Quiero mi combo 🔥</a>
+        <p class="promo-bonus">🎁 Más valor por tu dinero: herramientas para seguir creciendo y más tiempo para ti</p>
+        <a href="https://wa.me/5214432311761?text=Hola%2C%20estoy%20interesad%40%20en%20el%20Father%20Upgrade%20Pack%20%F0%9F%9A%80%20(D%C3%ADa%20del%20Padre)" target="_blank" rel="noopener noreferrer" class="promo-cta" onclick="closePromoModal()">Quiero mi Father Upgrade Pack 🚀</a>
       </div>
       <div class="promo-panel" id="promoPanelMatrix" role="tabpanel">
         <p class="promo-desc">Adquiere cualquier audio y entras al Telegram privado de Pauline gratis.</p>
@@ -2450,7 +2466,7 @@ async function guardarProspecto(datos){
 // ══════════════════════════════════
 // PROMOS MODAL
 // ══════════════════════════════════
-var PROMO_COUNTDOWN_END=new Date('2026-06-02T23:59:59');
+var PROMO_COUNTDOWN_END=new Date('2026-06-30T23:59:59');
 function padCountdown(n){return String(Math.max(0,n)).padStart(2,'0');}
 function updatePromoCountdowns(){
   var diff=Math.max(0,PROMO_COUNTDOWN_END-new Date());
@@ -2506,7 +2522,7 @@ function switchPromoTab(id){
   document.querySelectorAll('.promo-tab').forEach(function(t){
     t.classList.toggle('active',t.getAttribute('data-promo-tab')===id);
   });
-  document.getElementById('promoPanelHotsale').classList.toggle('active',id==='hotsale');
+  document.getElementById('promoPanelFatherpack').classList.toggle('active',id==='fatherpack');
   document.getElementById('promoPanelMatrix').classList.toggle('active',id==='matrix');
 }
 document.getElementById('promoModal').addEventListener('click',function(e){if(e.target===this)closePromoModal();});
@@ -2614,21 +2630,7 @@ function goToIconAuraAnimated(){
   },720);
 }
 function goToIconAura(){
-  goTo('catalogo');
-  curCat='autoestima';
-  buildCatalog();
-  setTimeout(function(){
-    var aud=lang==='es'?audiosEs:audiosEn;
-    var cats=lang==='es'?CATS_ES:CATS_EN;
-    var item=aud.find(function(a){return /ICON AURA/i.test(a.nombre);});
-    var card=document.querySelector('.ac-card[data-audio-key="icon-aura"]');
-    if(card){
-      card.scrollIntoView({behavior:'smooth',block:'center'});
-      card.classList.add('ac-highlight');
-      setTimeout(function(){card.classList.remove('ac-highlight');},2800);
-    }
-    if(item)openModal(item,cats);
-  },320);
+  window.open('https://iconaura-erior.netlify.app/icon-aura.html','_blank','noopener,noreferrer');
 }
 function goToAttractionFromTestimonial(){
   var testiPage=document.getElementById('page-testimonios');
@@ -3440,7 +3442,7 @@ function getAliciaAudioForAlert(txt){
   if(found)return found;
   var corpus=String(txt||'').toLowerCase();
   hist.slice(-6).forEach(function(m){corpus+=' '+String(m.content||'').toLowerCase();});
-  if(/hot sale|pares/i.test(corpus))return 'Hot Sale de los Pares';
+  if(/father upgrade|upgrade pack|father pack|dia del padre|d[ií]a del padre/i.test(corpus))return 'Father Upgrade Pack';
   if(/telegram|matrix|salir de la m/i.test(corpus))return 'Telegram Privado / Matrix';
   return '';
 }
@@ -3467,7 +3469,7 @@ function isPurchaseIntent(txt){
   return /quiero comprar|quiero adquirir|voy a comprar|me lo llevo|lo quiero comprar|lo compro|reservar|res[eé]rvalo|p[aá]same los datos|datos de pago|c[oó]mo (lo )?pago|m[eé]todo de pago|listo para comprar|hacer el pedido|empezamos con este|adquirirlo hoy|te compro|me interesa comprar/i.test(String(txt));
 }
 function isPromoInterest(txt){
-  return /promo|promoci[oó]n|hot sale|descuento|oferta|hot sale de los pares|para salir de la m|salir de la matrix|1[,.]?777|combo|pares|lucky|edici[oó]n limitada/i.test(String(txt));
+  return /promo|promoci[oó]n|father upgrade|upgrade pack|descuento|oferta|para salir de la m|salir de la matrix|1[,.]?888|1888|father pack|dia del padre|d[ií]a del padre|lucky|edici[oó]n limitada/i.test(String(txt));
 }
 function isAudioInterest(txt){
   var s=String(txt);
