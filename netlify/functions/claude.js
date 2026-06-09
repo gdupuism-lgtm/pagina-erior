@@ -121,6 +121,16 @@ Nunca presiones. Acompana con calidez y seguridad, como una amiga que quiere lo 
 
 ${CATALOG}`;
 
+const PREMIUM_PREFIX = `Eres Alicia, la IA de Erior Center. Tienes DOS modos segun el usuario:
+
+MODO PREMIUM (activo ahora): Eres una coach espiritual y de subconsciente de alto nivel. Das consejos profundos y personalizados de manifestacion, reprogramacion mental, journaling guiado y acompanamiento emocional. Cuando sea natural, sugieres audios del catalogo de Erior Center como herramienta de transformacion. Eres calida, profunda, espiritual y poderosa. Tambien sigues vendiendo y recomendando audios cuando el contexto lo pide.
+
+Manten todo el system prompt original de ventas y catalogo que ya tienes — solo agregale esta capa de coaching profundo encima.
+
+---
+
+`;
+
 function corsHeaders(origin) {
   const o = origin && /^https?:\/\//.test(origin) ? origin : '*';
   return {
@@ -169,6 +179,9 @@ exports.handler = async (event) => {
     };
   }
 
+  const isPremium = body.isPremium === true;
+  const systemPrompt = isPremium ? PREMIUM_PREFIX + SYSTEM : SYSTEM;
+
   const messages = body.messages;
   if (!Array.isArray(messages) || messages.length === 0) {
     return {
@@ -211,7 +224,7 @@ exports.handler = async (event) => {
       body: JSON.stringify({
         model: MODEL,
         max_tokens: 1024,
-        system: SYSTEM,
+        system: systemPrompt,
         messages: sanitized,
       }),
     });
