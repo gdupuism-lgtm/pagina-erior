@@ -1024,124 +1024,161 @@ body::before{
 @media(prefers-reduced-motion:reduce){
   .alicia-title,.cmsg.b .cbub,.chat-send{animation:none}
   #aliciaParticles{display:none}
-  .alicia-premium-badge,.alicia-premium-cta{animation:none}
+  .alicia-mode-premium-cta,.alicia-mode-premium-card{animation:none}
 }
 
-/* Alicia Premium */
-.alicia-premium{
-  width:100%;position:relative;border-radius:22px;overflow:hidden;
+/* Alicia — pantalla de selección de modo */
+.alicia-mode-select{width:100%}
+.alicia-mode-head{text-align:center;width:100%;margin-bottom:clamp(1rem,3vh,1.5rem)}
+.alicia-mode-head .alicia-label{margin-bottom:.35rem}
+.alicia-mode-headline{
+  font-family:'Syne',sans-serif;font-size:clamp(1.35rem,4.5vw,1.75rem);font-weight:600;
+  color:rgba(240,235,255,.92);margin:0 0 .4rem;letter-spacing:.02em;
+}
+.alicia-mode-sub{font-size:.82rem;color:rgba(200,190,230,.5);margin:0;line-height:1.5}
+.alicia-mode-cards{
+  display:grid;grid-template-columns:1fr 1fr;gap:clamp(.75rem,2.5vw,1.15rem);
+  width:100%;align-items:stretch;
+}
+.alicia-mode-card{
+  position:relative;border-radius:22px;overflow:hidden;
+  display:flex;flex-direction:column;padding:clamp(1.1rem,3vw,1.5rem);
+  min-height:100%;
+}
+.alicia-mode-card-title{
+  font-family:'Syne',sans-serif;font-size:clamp(1rem,3.2vw,1.15rem);font-weight:700;
+  margin:0 0 .35rem;line-height:1.2;
+}
+.alicia-mode-card-sub{
+  font-size:clamp(.72rem,2.4vw,.78rem);line-height:1.45;margin:0 0 1rem;
+  opacity:.75;
+}
+.alicia-mode-card-list{
+  list-style:none;margin:0 0 1.15rem;padding:0;flex:1;
+  display:flex;flex-direction:column;gap:.5rem;
+}
+.alicia-mode-card-list li{
+  font-size:clamp(.74rem,2.4vw,.8rem);line-height:1.45;padding-left:.1rem;
+}
+/* Tarjeta Gratis */
+.alicia-mode-free{
   background:
-    radial-gradient(ellipse 80% 60% at 50% 0%,rgba(120,70,200,.18) 0%,transparent 55%),
-    linear-gradient(155deg,#050508 0%,#120820 38%,#0a0618 72%,#030306 100%);
-  border:1px solid rgba(201,160,96,.28);
+    radial-gradient(ellipse 80% 50% at 20% 0%,rgba(140,100,220,.2) 0%,transparent 55%),
+    linear-gradient(160deg,#0a0814 0%,#12102a 50%,#080612 100%);
+  border:1px solid rgba(160,130,255,.22);
+  box-shadow:0 20px 48px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.05);
+}
+.alicia-mode-free .alicia-mode-card-title{
+  background:linear-gradient(118deg,#e8e0ff,#c4b8ff,#f0ebff);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+}
+.alicia-mode-free .alicia-mode-card-sub{color:rgba(200,190,240,.65)}
+.alicia-mode-free .alicia-mode-card-list li{color:rgba(210,200,240,.72)}
+.alicia-mode-free-btn{
+  display:flex;align-items:center;justify-content:center;width:100%;
+  padding:.9rem 1rem;border-radius:14px;cursor:pointer;border:none;
+  font-family:'Syne',sans-serif;font-size:clamp(.65rem,2.6vw,.72rem);font-weight:600;
+  letter-spacing:.12em;text-transform:uppercase;color:#fff;
+  background:linear-gradient(118deg,rgba(140,100,255,.55) 0%,rgba(100,70,200,.65) 50%,rgba(160,120,255,.5) 100%);
+  border:1px solid rgba(180,150,255,.35);
+  box-shadow:0 8px 24px rgba(0,0,0,.3),0 0 24px rgba(140,100,255,.15);
+  transition:transform .25s ease,box-shadow .25s ease;
+}
+.alicia-mode-free-btn:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(0,0,0,.35),0 0 32px rgba(140,100,255,.22)}
+/* Tarjeta Premium */
+.alicia-mode-premium-card{
+  background:
+    radial-gradient(ellipse 90% 55% at 50% 0%,rgba(201,160,96,.14) 0%,transparent 55%),
+    linear-gradient(155deg,#050508 0%,#100a06 35%,#0a0618 70%,#030306 100%);
+  border:1.5px solid rgba(201,160,96,.55);
   box-shadow:
     0 28px 64px rgba(0,0,0,.55),
     inset 0 1px 0 rgba(255,255,255,.06),
-    0 0 48px rgba(90,50,160,.12);
+    0 0 40px rgba(201,160,96,.12);
+  animation:aliciaModePremiumBorder 5s ease-in-out infinite;
 }
-.alicia-premium::before{
-  content:'';position:absolute;inset:0;pointer-events:none;
-  background:linear-gradient(135deg,rgba(201,160,96,.08) 0%,transparent 42%,rgba(140,90,220,.06) 100%);
+@keyframes aliciaModePremiumBorder{
+  0%,100%{border-color:rgba(201,160,96,.45);box-shadow:0 28px 64px rgba(0,0,0,.55),0 0 40px rgba(201,160,96,.1)}
+  50%{border-color:rgba(255,220,140,.7);box-shadow:0 28px 64px rgba(0,0,0,.55),0 0 56px rgba(201,160,96,.22)}
 }
-.alicia-premium-inner{position:relative;z-index:1;padding:clamp(1.15rem,3.5vw,1.65rem) clamp(1rem,3.5vw,1.5rem)}
-.alicia-premium-badge{
-  display:inline-flex;align-items:center;gap:.45rem;
-  font-family:'Syne',sans-serif;font-size:clamp(.62rem,2.8vw,.72rem);font-weight:700;
-  letter-spacing:.18em;text-transform:uppercase;
-  padding:.45rem .85rem;border-radius:999px;margin-bottom:1rem;
-  background:linear-gradient(118deg,rgba(201,160,96,.22) 0%,rgba(140,90,220,.18) 50%,rgba(201,160,96,.15) 100%);
-  border:1px solid rgba(201,160,96,.45);
+.alicia-mode-premium-badge{
+  display:inline-flex;align-items:center;gap:.35rem;align-self:flex-start;
+  font-family:'Syne',sans-serif;font-size:.58rem;font-weight:700;
+  letter-spacing:.16em;text-transform:uppercase;
+  padding:.35rem .7rem;border-radius:999px;margin-bottom:.75rem;
+  background:rgba(201,160,96,.15);border:1px solid rgba(201,160,96,.45);
   color:rgba(255,236,200,.95);
-  box-shadow:0 0 24px rgba(201,160,96,.15);
-  animation:aliciaPremiumBadgeGlow 5s ease-in-out infinite;
 }
-.alicia-premium-crown{font-size:1rem;line-height:1;filter:drop-shadow(0 0 6px rgba(255,200,90,.5))}
-@keyframes aliciaPremiumBadgeGlow{0%,100%{box-shadow:0 0 24px rgba(201,160,96,.15)}50%{box-shadow:0 0 36px rgba(201,160,96,.28)}}
-.alicia-premium-benefits{
-  list-style:none;margin:0 0 1.15rem;padding:0;
-  display:flex;flex-direction:column;gap:.55rem;
+.alicia-mode-premium .alicia-mode-card-title{color:rgba(255,236,200,.98)}
+.alicia-mode-premium .alicia-mode-card-sub{color:rgba(201,160,96,.7)}
+.alicia-mode-premium .alicia-mode-card-list li{color:rgba(220,210,200,.78)}
+.alicia-mode-prices{
+  font-family:'Syne',sans-serif;font-size:clamp(.72rem,2.5vw,.78rem);font-weight:600;
+  color:rgba(255,230,180,.9);text-align:center;margin-bottom:.85rem;
+  letter-spacing:.02em;
 }
-.alicia-premium-benefits li{
-  font-size:clamp(.78rem,2.6vw,.84rem);line-height:1.5;color:rgba(220,210,240,.78);
-  padding-left:.15rem;
-}
-.alicia-premium-pricing{
-  display:grid;grid-template-columns:1fr 1fr;gap:.65rem;margin-bottom:1rem;
-}
-.alicia-premium-price{
-  text-align:center;padding:.75rem .5rem;border-radius:14px;
-  background:rgba(0,0,0,.35);border:1px solid rgba(201,160,96,.22);
-}
-.alicia-premium-price-val{
-  display:block;font-family:'Syne',sans-serif;font-size:clamp(.95rem,3.5vw,1.1rem);
-  font-weight:700;color:rgba(255,230,180,.95);letter-spacing:.02em;
-}
-.alicia-premium-price-period{
-  display:block;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;
-  color:rgba(201,160,96,.65);margin-top:.25rem;
-}
-.alicia-premium-cta{
+.alicia-mode-premium-cta{
   display:flex;align-items:center;justify-content:center;width:100%;
-  padding:.95rem 1.25rem;border-radius:14px;text-decoration:none;
-  font-family:'Syne',sans-serif;font-size:clamp(.68rem,2.8vw,.74rem);font-weight:700;
-  letter-spacing:.14em;text-transform:uppercase;color:#1a1208;
+  padding:.9rem 1rem;border-radius:14px;text-decoration:none;
+  font-family:'Syne',sans-serif;font-size:clamp(.65rem,2.6vw,.72rem);font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;color:#1a1208;
   background:linear-gradient(118deg,#ffd966 0%,#e6b84d 28%,#fff4c2 52%,#c9a060 78%,#ffe8a8 100%);
-  background-size:200% auto;animation:aliciaPremiumCtaShine 6s ease-in-out infinite;
+  background-size:200% auto;animation:aliciaModePremiumCtaShine 6s ease-in-out infinite;
   border:1px solid rgba(255,230,160,.55);
   box-shadow:0 8px 28px rgba(0,0,0,.35),0 0 32px rgba(201,160,96,.25);
   transition:transform .25s ease,box-shadow .25s ease;
 }
-.alicia-premium-cta:hover{
-  transform:translateY(-2px);
-  box-shadow:0 12px 36px rgba(0,0,0,.4),0 0 44px rgba(201,160,96,.35);
+.alicia-mode-premium-cta:hover{transform:translateY(-2px);box-shadow:0 12px 36px rgba(0,0,0,.4),0 0 44px rgba(201,160,96,.35)}
+@keyframes aliciaModePremiumCtaShine{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+.alicia-mode-code-wrap{margin-top:.85rem}
+.alicia-mode-code-label{
+  display:block;font-size:.62rem;letter-spacing:.06em;color:rgba(180,170,200,.55);
+  margin-bottom:.4rem;text-align:center;
 }
-@keyframes aliciaPremiumCtaShine{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
-.alicia-premium-note{
-  font-size:.68rem;line-height:1.55;color:rgba(180,170,200,.5);
-  text-align:center;margin:.75rem 0 1rem;
-}
-.alicia-premium-activate{
-  display:flex;gap:.5rem;align-items:stretch;
-}
-.alicia-premium-code{
-  flex:1;min-width:0;padding:.75rem 1rem;border-radius:12px;
+.alicia-mode-code-row{display:flex;gap:.45rem;align-items:stretch}
+.alicia-mode-code-input{
+  flex:1;min-width:0;padding:.65rem .85rem;border-radius:10px;
   background:rgba(0,0,0,.45);border:1px solid rgba(201,160,96,.25);
-  color:rgba(240,235,255,.9);font-family:'Jost',sans-serif;font-size:.82rem;
-  outline:none;transition:border-color .25s ease,box-shadow .25s ease;
+  color:rgba(240,235,255,.9);font-family:'Jost',sans-serif;font-size:.76rem;
+  outline:none;transition:border-color .25s ease;
 }
-.alicia-premium-code::placeholder{color:rgba(160,150,180,.45)}
-.alicia-premium-code:focus{
-  border-color:rgba(201,160,96,.55);
-  box-shadow:0 0 0 3px rgba(201,160,96,.12);
+.alicia-mode-code-input::placeholder{color:rgba(160,150,180,.45);font-size:.72rem}
+.alicia-mode-code-input:focus{border-color:rgba(201,160,96,.55)}
+.alicia-mode-code-btn{
+  flex-shrink:0;padding:.65rem .85rem;border-radius:10px;cursor:pointer;
+  font-family:'Syne',sans-serif;font-size:.58rem;font-weight:600;
+  letter-spacing:.1em;text-transform:uppercase;
+  color:rgba(255,236,200,.95);background:rgba(201,160,96,.15);
+  border:1px solid rgba(201,160,96,.4);transition:background .25s ease;
 }
-.alicia-premium-btn{
-  flex-shrink:0;padding:.75rem 1.1rem;border-radius:12px;cursor:pointer;
-  font-family:'Syne',sans-serif;font-size:.65rem;font-weight:600;
-  letter-spacing:.12em;text-transform:uppercase;
-  color:rgba(255,236,200,.95);
-  background:rgba(201,160,96,.15);border:1px solid rgba(201,160,96,.4);
-  transition:background .25s ease,border-color .25s ease,transform .25s ease;
+.alicia-mode-code-btn:hover{background:rgba(201,160,96,.28)}
+.alicia-mode-feedback{font-size:.68rem;text-align:center;margin:.5rem 0 0;min-height:1em}
+.alicia-mode-feedback.success{color:rgba(120,220,160,.9)}
+.alicia-mode-feedback.error{color:rgba(255,140,140,.85)}
+.alicia-chat-view{width:100%;display:flex;flex-direction:column;align-items:center;gap:clamp(.85rem,2.5vh,1.25rem)}
+.alicia-chat-view[hidden],.alicia-mode-select[hidden]{display:none!important}
+.alicia-tier-badge{
+  position:absolute;top:.65rem;right:.65rem;z-index:4;
+  padding:.35rem .65rem;border-radius:999px;
+  font-family:'Jost',sans-serif;font-size:.58rem;font-weight:500;
+  letter-spacing:.06em;line-height:1.3;max-width:calc(100% - 1.3rem);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  transition:opacity .2s ease,transform .2s ease;
 }
-.alicia-premium-btn:hover{background:rgba(201,160,96,.25);border-color:rgba(201,160,96,.6);transform:translateY(-1px)}
-.alicia-premium-feedback{
-  font-size:.72rem;text-align:center;margin:.65rem 0 0;min-height:1.1em;
+.alicia-tier-badge--upgrade{
+  cursor:pointer;border:1px solid rgba(201,160,96,.35);
+  background:rgba(201,160,96,.12);color:rgba(255,230,180,.9);
 }
-.alicia-premium-feedback.success{color:rgba(120,220,160,.9)}
-.alicia-premium-feedback.error{color:rgba(255,140,140,.85)}
-.alicia-premium-active-bar{
-  display:flex;align-items:center;justify-content:center;gap:.55rem;
-  padding:1rem 1.25rem;text-align:center;
+.alicia-tier-badge--upgrade:hover{background:rgba(201,160,96,.22);transform:scale(1.03)}
+.alicia-tier-badge--active{
+  cursor:default;pointer-events:none;
+  border:1px solid rgba(201,160,96,.45);
+  background:rgba(201,160,96,.18);color:rgba(255,236,200,.95);
 }
-.alicia-premium-active-bar span{
-  font-family:'Syne',sans-serif;font-size:clamp(.72rem,2.8vw,.78rem);font-weight:600;
-  letter-spacing:.12em;text-transform:uppercase;
-  background:linear-gradient(92deg,#ffd966,#fff4c2,#e6b84d);
-  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
-}
-.alicia-premium.is-active{border-color:rgba(201,160,96,.45);box-shadow:0 20px 48px rgba(0,0,0,.45),0 0 40px rgba(201,160,96,.1)}
-@media(max-width:480px){
-  .alicia-premium-pricing{grid-template-columns:1fr}
-  .alicia-premium-activate{flex-direction:column}
+.alicia-inner--wide{max-width:min(920px,96vw)!important}
+@media(max-width:720px){
+  .alicia-mode-cards{grid-template-columns:1fr}
+  .alicia-mode-code-row{flex-direction:column}
 }
 
 /* ══════════════════════════════════
@@ -2156,76 +2193,87 @@ body::before{
     <canvas class="alicia-confetti-canvas" id="aliciaConfetti" aria-hidden="true"></canvas>
     <div class="alicia-nebula">
       <canvas id="aliciaParticles" aria-hidden="true"></canvas>
-      <div class="alicia-inner">
-        <header class="alicia-header">
-          <p class="alicia-label">Asistente IA</p>
-          <h1 class="alicia-title">Alicia <em>Virtual</em></h1>
-          <p class="alicia-tagline">Cuéntame cómo te sientes y te guío al audio perfecto para ti.</p>
-        </header>
-        <div class="alicia-avatar-wrap">
-          <model-viewer
-            id="aliciaModel"
-            src="spheron.glb"
-            alt="Avatar 3D Alicia, asistente virtual de Erior Center para elegir audios binaurales de manifestación"
-            title="Alicia IA — Erior Center"
-            autoplay
-            interaction-prompt="none"
-            disable-zoom
-            disable-pan
-            disable-tap
-            shadow-intensity="0"
-            exposure="1.15"
-            camera-orbit="0deg 75deg auto"
-            field-of-view="28deg"
-            style="width:100%;height:100%;background-color:transparent;"
-          ></model-viewer>
-        </div>
-        <div class="alicia-premium" id="aliciaPremiumBlock">
-          <div class="alicia-premium-inner" id="aliciaPremiumUpsell">
-            <div class="alicia-premium-badge">
-              <span class="alicia-premium-crown" aria-hidden="true">👑</span>
-              ✨ ALICIA PREMIUM
-            </div>
-            <ul class="alicia-premium-benefits">
-              <li>🧠 Guía personalizada de subconsciente</li>
-              <li>🌙 Coaching de manifestación profunda</li>
-              <li>💫 Consejos de vida y reprogramación mental</li>
-              <li>🎯 Sesiones ilimitadas sin restricciones</li>
-              <li>🔮 Sugerencias de audios según tu evolución personal</li>
-            </ul>
-            <div class="alicia-premium-pricing">
-              <div class="alicia-premium-price">
-                <span class="alicia-premium-price-val">$499 MXN</span>
-                <span class="alicia-premium-price-period">/ mes</span>
+      <div class="alicia-inner" id="aliciaInner">
+        <!-- Pantalla de selección de modo -->
+        <div class="alicia-mode-select" id="aliciaModeSelect">
+          <header class="alicia-mode-head">
+            <p class="alicia-label">Asistente IA</p>
+            <h2 class="alicia-mode-headline">Elige tu experiencia con Alicia</h2>
+            <p class="alicia-mode-sub">Selecciona cómo quieres que te acompañe hoy</p>
+          </header>
+          <div class="alicia-mode-cards">
+            <article class="alicia-mode-card alicia-mode-free">
+              <h3 class="alicia-mode-card-title">✨ Alicia IA</h3>
+              <p class="alicia-mode-card-sub">Tu guía para encontrar el audio perfecto</p>
+              <ul class="alicia-mode-card-list">
+                <li>🎵 Te recomienda el audio ideal para ti</li>
+                <li>💬 Responde tus dudas del catálogo</li>
+                <li>🛒 Te acompaña en tu proceso de compra</li>
+              </ul>
+              <button type="button" class="alicia-mode-free-btn" onclick="startAliciaFree()">COMENZAR GRATIS →</button>
+            </article>
+            <article class="alicia-mode-card alicia-mode-premium alicia-mode-premium-card">
+              <div class="alicia-mode-premium-badge">👑 PREMIUM</div>
+              <h3 class="alicia-mode-card-title">Alicia Premium</h3>
+              <p class="alicia-mode-card-sub">Tu coach personal de subconsciente</p>
+              <ul class="alicia-mode-card-list">
+                <li>🧠 Guía personalizada de subconsciente</li>
+                <li>🌙 Coaching de manifestación profunda</li>
+                <li>💫 Consejos de vida y reprogramación mental</li>
+                <li>🔮 Sugerencias de audios según tu evolución</li>
+                <li>♾️ Sesiones ilimitadas sin restricciones</li>
+              </ul>
+              <p class="alicia-mode-prices">$499 MXN/mes · $3,333 MXN/año</p>
+              <a href="https://wa.me/5214432311761?text=Hola!%20quiero%20el%20acceso%20a%20Alicia%20Premium%20🌟" target="_blank" rel="noopener noreferrer" class="alicia-mode-premium-cta">OBTENER PREMIUM ✨</a>
+              <div class="alicia-mode-code-wrap">
+                <label class="alicia-mode-code-label" for="aliciaPremiumCode">¿Ya tienes código? Ingrésalo aquí</label>
+                <div class="alicia-mode-code-row">
+                  <input type="text" class="alicia-mode-code-input" id="aliciaPremiumCode" placeholder="Código de acceso" autocomplete="off" onkeydown="if(event.key==='Enter')activateAliciaPremium()">
+                  <button type="button" class="alicia-mode-code-btn" onclick="activateAliciaPremium()">Activar</button>
+                </div>
               </div>
-              <div class="alicia-premium-price">
-                <span class="alicia-premium-price-val">$3,333 MXN</span>
-                <span class="alicia-premium-price-period">/ año</span>
-              </div>
-            </div>
-            <a href="https://wa.me/5214432311761?text=Hola!%20quiero%20el%20acceso%20a%20Alicia%20Premium%20🌟" target="_blank" rel="noopener noreferrer" class="alicia-premium-cta">OBTENER ACCESO PREMIUM ✨</a>
-            <p class="alicia-premium-note">Una vez confirmado tu pago, recibirás tu código de acceso por WhatsApp en menos de 24 horas.</p>
-            <div class="alicia-premium-activate">
-              <input type="text" class="alicia-premium-code" id="aliciaPremiumCode" placeholder="Ingresa tu código de acceso" autocomplete="off" onkeydown="if(event.key==='Enter')activateAliciaPremium()">
-              <button type="button" class="alicia-premium-btn" onclick="activateAliciaPremium()">Activar</button>
-            </div>
-            <p class="alicia-premium-feedback" id="aliciaPremiumFeedback" aria-live="polite"></p>
-          </div>
-          <div class="alicia-premium-active-bar" id="aliciaPremiumActive" hidden>
-            <span aria-hidden="true">👑</span>
-            <span>Premium activo — coaching profundo desbloqueado</span>
+              <p class="alicia-mode-feedback" id="aliciaPremiumFeedback" aria-live="polite"></p>
+            </article>
           </div>
         </div>
-        <div class="alicia-chat-card" id="aliciaChatCard">
-          <canvas class="alicia-sales-sparkle" id="aliciaSalesSparkle" aria-hidden="true"></canvas>
-          <div class="chat-window" id="chatWin"></div>
-          <div class="chat-bar">
-            <input class="chat-in" id="chatIn" placeholder="¿Qué quieres transformar hoy?" onkeydown="if(event.key==='Enter')sendMsg()">
-            <button type="button" class="chat-send" onclick="sendMsg()">Enviar</button>
+
+        <!-- Vista del chat (gratis o premium) -->
+        <div class="alicia-chat-view" id="aliciaChatView" hidden>
+          <header class="alicia-header">
+            <p class="alicia-label">Asistente IA</p>
+            <h1 class="alicia-title">Alicia <em>Virtual</em></h1>
+            <p class="alicia-tagline" id="aliciaTagline">Cuéntame cómo te sientes y te guío al audio perfecto para ti.</p>
+          </header>
+          <div class="alicia-avatar-wrap">
+            <model-viewer
+              id="aliciaModel"
+              src="spheron.glb"
+              alt="Avatar 3D Alicia, asistente virtual de Erior Center para elegir audios binaurales de manifestación"
+              title="Alicia IA — Erior Center"
+              autoplay
+              interaction-prompt="none"
+              disable-zoom
+              disable-pan
+              disable-tap
+              shadow-intensity="0"
+              exposure="1.15"
+              camera-orbit="0deg 75deg auto"
+              field-of-view="28deg"
+              style="width:100%;height:100%;background-color:transparent;"
+            ></model-viewer>
           </div>
+          <div class="alicia-chat-card" id="aliciaChatCard">
+            <button type="button" class="alicia-tier-badge alicia-tier-badge--upgrade" id="aliciaTierBadge" onclick="showAliciaModeSelect()">👑 Upgrade a Premium</button>
+            <canvas class="alicia-sales-sparkle" id="aliciaSalesSparkle" aria-hidden="true"></canvas>
+            <div class="chat-window" id="chatWin"></div>
+            <div class="chat-bar">
+              <input class="chat-in" id="chatIn" placeholder="¿Qué quieres transformar hoy?" onkeydown="if(event.key==='Enter')sendMsg()">
+              <button type="button" class="chat-send" onclick="sendMsg()">Enviar</button>
+            </div>
+          </div>
+          <button type="button" id="aliciaQuieroPagar" onclick="openPaymentModal(typeof aliciaClient!=='undefined' && aliciaClient.ultimoAudio ? aliciaClient.ultimoAudio : 'Audio Erior')" style="display:none;align-items:center;justify-content:center;gap:.5rem;width:100%;max-width:420px;margin:1rem auto 0;padding:.95rem 1.5rem;border-radius:14px;cursor:pointer;border:1px solid rgba(201,160,96,.45);background:rgba(201,160,96,.12);font-family:'Jost',sans-serif;font-size:.75rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);transition:all .25s;">💳 Quiero pagar ahora</button>
+          <a id="btnPauline" href="#" onclick="aliciaPaulineWA();return false;" style="display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;max-width:420px;margin:.6rem auto 0;padding:.85rem 1.5rem;border-radius:14px;cursor:pointer;border:1px solid rgba(37,211,102,.35);background:rgba(37,211,102,.08);font-family:'Jost',sans-serif;font-size:.72rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:rgba(37,211,102,.9);text-decoration:none;transition:all .25s;">💬 Hablar con Pauline</a>
         </div>
-        <button type="button" id="aliciaQuieroPagar" onclick="openPaymentModal(typeof aliciaClient!=='undefined' && aliciaClient.ultimoAudio ? aliciaClient.ultimoAudio : 'Audio Erior')" style="display:none;align-items:center;justify-content:center;gap:.5rem;width:100%;max-width:420px;margin:1rem auto 0;padding:.95rem 1.5rem;border-radius:14px;cursor:pointer;border:1px solid rgba(201,160,96,.45);background:rgba(201,160,96,.12);font-family:'Jost',sans-serif;font-size:.75rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);transition:all .25s;">💳 Quiero pagar ahora</button>
-        <a id="btnPauline" href="#" onclick="aliciaPaulineWA();return false;" style="display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;max-width:420px;margin:.6rem auto 0;padding:.85rem 1.5rem;border-radius:14px;cursor:pointer;border:1px solid rgba(37,211,102,.35);background:rgba(37,211,102,.08);font-family:'Jost',sans-serif;font-size:.72rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:rgba(37,211,102,.9);text-decoration:none;transition:all .25s;">💬 Hablar con Pauline</a>
       </div>
     </div>
   </div>
@@ -2760,7 +2808,7 @@ function goTo(id){
         fetch('https://api.callmebot.com/whatsapp.php?phone=5214432311761&text='+encodeURIComponent(visitMsg)+'&apikey=6870409')
       ]).catch(function(){});
     }
-    initAliciaModel();
+    resolveAliciaEntry();
   }
   if(id==='ebook')initEbookPage();
   if(id==='soporte')initSoportePage();
@@ -3294,9 +3342,19 @@ document.getElementById('audioModal').addEventListener('click',function(e){if(e.
 // ══════════════════════════════════
 var ALICIA_FN='/.netlify/functions/claude';
 var ALICIA_PREMIUM_CODES=['ERIORPREMIUM2026','MAGIQUE2026','PREMIUM888'];
+var ALICIA_MODE_KEY='alicia_mode';
 var hist=[];
+var aliciaChatStarted=false;
+var aliciaParticlesStarted=false;
+
 function isAliciaPremiumActive(){
   try{return localStorage.getItem('alicia_premium')==='true';}catch(e){return false;}
+}
+function getAliciaStoredMode(){
+  try{return localStorage.getItem(ALICIA_MODE_KEY);}catch(e){return null;}
+}
+function hasAliciaModeChosen(){
+  return isAliciaPremiumActive()||getAliciaStoredMode()==='free';
 }
 function getAliciaWelcomeMessage(){
   if(isAliciaPremiumActive()){
@@ -3309,39 +3367,105 @@ function showAliciaPremiumWelcomeInChat(){
   addMsg('b',welcome);
   hist.push({role:'assistant',content:welcome});
 }
-function updateAliciaPremiumUI(){
-  var upsell=document.getElementById('aliciaPremiumUpsell');
-  var active=document.getElementById('aliciaPremiumActive');
-  var block=document.getElementById('aliciaPremiumBlock');
-  if(!block)return;
-  var prem=isAliciaPremiumActive();
-  if(prem){
-    if(upsell)upsell.hidden=true;
-    if(active)active.hidden=false;
-    block.classList.add('is-active');
+function showAliciaModeSelect(){
+  var sel=document.getElementById('aliciaModeSelect');
+  var chat=document.getElementById('aliciaChatView');
+  var inner=document.getElementById('aliciaInner');
+  if(sel)sel.hidden=false;
+  if(chat)chat.hidden=true;
+  if(inner)inner.classList.add('alicia-inner--wide');
+}
+function enterAliciaChat(){
+  var sel=document.getElementById('aliciaModeSelect');
+  var chat=document.getElementById('aliciaChatView');
+  var inner=document.getElementById('aliciaInner');
+  if(sel)sel.hidden=true;
+  if(chat)chat.hidden=false;
+  if(inner)inner.classList.remove('alicia-inner--wide');
+  updateAliciaTierBadge();
+  updateAliciaTagline();
+}
+function updateAliciaTagline(){
+  var tag=document.getElementById('aliciaTagline');
+  if(!tag)return;
+  tag.textContent=isAliciaPremiumActive()
+    ?'Coaching profundo de subconsciente y manifestación — este espacio es solo para ti.'
+    :'Cuéntame cómo te sientes y te guío al audio perfecto para ti.';
+}
+function updateAliciaTierBadge(){
+  var badge=document.getElementById('aliciaTierBadge');
+  if(!badge)return;
+  if(isAliciaPremiumActive()){
+    badge.textContent='👑 Premium Activo';
+    badge.className='alicia-tier-badge alicia-tier-badge--active';
+    badge.removeAttribute('onclick');
+    badge.setAttribute('aria-disabled','true');
   }else{
-    if(upsell)upsell.hidden=false;
-    if(active)active.hidden=true;
-    block.classList.remove('is-active');
+    badge.textContent='👑 Upgrade a Premium';
+    badge.className='alicia-tier-badge alicia-tier-badge--upgrade';
+    badge.setAttribute('onclick','showAliciaModeSelect()');
+    badge.removeAttribute('aria-disabled');
   }
+}
+function startAliciaChatSession(){
+  var win=document.getElementById('chatWin');
+  if(win&&win.children.length)return;
+  var welcome=getAliciaWelcomeMessage();
+  addMsg('b',welcome);
+  if(!hist.length)hist.push({role:'assistant',content:welcome});
+  aliciaChatStarted=true;
+}
+function startAliciaFree(){
+  try{localStorage.setItem(ALICIA_MODE_KEY,'free');}catch(st){}
+  enterAliciaChat();
+  startAliciaChatSession();
+}
+function enterAliciaPremiumChat(){
+  enterAliciaChat();
+  var win=document.getElementById('chatWin');
+  var hadMessages=aliciaChatStarted||(win&&win.children.length>0)||hist.length>0;
+  if(hadMessages){
+    showAliciaPremiumWelcomeInChat();
+  }else{
+    startAliciaChatSession();
+  }
+  aliciaChatStarted=true;
 }
 function activateAliciaPremium(){
   var inp=document.getElementById('aliciaPremiumCode');
   var fb=document.getElementById('aliciaPremiumFeedback');
   var code=(inp&&inp.value?inp.value:'').trim().toUpperCase();
   if(!code){
-    if(fb){fb.textContent='Ingresa tu código de acceso.';fb.className='alicia-premium-feedback error';}
+    if(fb){fb.textContent='Ingresa tu código de acceso.';fb.className='alicia-mode-feedback error';}
     return;
   }
   if(ALICIA_PREMIUM_CODES.indexOf(code)>=0){
     try{localStorage.setItem('alicia_premium','true');}catch(st){}
     if(inp)inp.value='';
-    if(fb){fb.textContent='✨ Premium activado. Disfruta coaching profundo con Alicia.';fb.className='alicia-premium-feedback success';}
-    updateAliciaPremiumUI();
-    showAliciaPremiumWelcomeInChat();
+    if(fb){fb.textContent='✨ Premium activado. Bienvenid@ a tu espacio de transformación.';fb.className='alicia-mode-feedback success';}
+    setTimeout(function(){enterAliciaPremiumChat();},400);
   }else{
-    if(fb){fb.textContent='Código inválido. Verifica e intenta de nuevo.';fb.className='alicia-premium-feedback error';}
+    if(fb){fb.textContent='Código inválido. Verifica e intenta de nuevo.';fb.className='alicia-mode-feedback error';}
   }
+}
+function resolveAliciaEntry(){
+  loadAliciaClientFromStorage();
+  loadAliciaAlertsFromStorage();
+  initAliciaModel();
+  if(!aliciaParticlesStarted){aliciaParticlesStarted=true;initAliciaParticles();}
+  var inner=document.getElementById('aliciaInner');
+  if(isAliciaPremiumActive()){
+    enterAliciaChat();
+    startAliciaChatSession();
+    return;
+  }
+  if(getAliciaStoredMode()==='free'){
+    enterAliciaChat();
+    startAliciaChatSession();
+    return;
+  }
+  if(inner)inner.classList.add('alicia-inner--wide');
+  showAliciaModeSelect();
 }
 var aliciaClient={nombre:'',contacto:'',leadSent:false,ultimoAudio:''};
 var aliciaUserName='';
@@ -3353,17 +3477,6 @@ var CALLMEBOT_RECIPIENTS=[
 ];
 var aliciaAlertsSent={};
 
-var aliciaParticlesStarted=false;
-function initAlicia(){
-  loadAliciaClientFromStorage();
-  loadAliciaAlertsFromStorage();
-  updateAliciaPremiumUI();
-  var welcome=getAliciaWelcomeMessage();
-  addMsg('b',welcome);
-  if(!hist.length)hist.push({role:'assistant',content:welcome});
-  initAliciaModel();
-  if(!aliciaParticlesStarted){aliciaParticlesStarted=true;initAliciaParticles();}
-}
 function sendCallMeBotAlert(message){
   var text=String(message||'').trim();
   if(!text)return;
@@ -4650,8 +4763,6 @@ initTestimonialVideo();
     }
   }).observe(cover,{attributes:true,attributeFilter:['class']});
 })();
-
-initAlicia();
 
 // ── OPAL TORNASOL ──
 (function(){
