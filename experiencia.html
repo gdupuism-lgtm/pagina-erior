@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>ERIOR CENTER — Experiencia Subconsciente</title>
+<meta name="robots" content="noindex">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/dist/tabler-icons.min.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#020b06;
+  --green:#1D9E75;
+  --pink:#D4537E;
+  --green-soft:#5DCAA5;
+  --pink-soft:#ED93B1;
+  --muted:rgba(255,255,255,.45);
+  --radius-lg:16px;
+}
+html,body{height:100%;overflow:hidden}
+body{
+  font-family:'Jost',sans-serif;
+  background:var(--bg);
+  color:#fff;
+  -webkit-font-smoothing:antialiased;
+}
+#app{
+  position:fixed;inset:0;overflow:hidden;
+  background-color:var(--bg);
+}
+.grid-bg{
+  position:absolute;inset:0;pointer-events:none;z-index:0;
+  background-image:
+    linear-gradient(rgba(29,200,140,.06) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(29,200,140,.06) 1px,transparent 1px);
+  background-size:36px 36px;
+}
+.glow-pink{
+  position:absolute;width:320px;height:320px;border-radius:50%;pointer-events:none;z-index:0;
+  left:50%;top:45%;transform:translate(-50%,-50%);
+  background:rgba(212,83,126,.07);
+  animation:pulse 4s ease-in-out infinite;
+}
+.glow-green{
+  position:absolute;width:220px;height:220px;border-radius:50%;pointer-events:none;z-index:0;
+  left:55%;top:55%;transform:translate(-50%,-50%);
+  background:rgba(29,200,140,.06);
+  animation:pulse 3s ease-in-out infinite 1s;
+}
+@keyframes pulse{0%,100%{opacity:.6;transform:translate(-50%,-50%) scale(1)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.08)}}
+.scan-static{
+  position:absolute;inset:0;pointer-events:none;z-index:1;
+  background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.04) 3px,rgba(0,0,0,.04) 4px);
+}
+.scan-move{
+  position:absolute;left:0;right:0;height:60px;pointer-events:none;z-index:2;
+  background:linear-gradient(180deg,transparent,rgba(29,200,140,.04),transparent);
+  animation:scanDown 6s linear infinite;
+}
+@keyframes scanDown{0%{top:-60px}100%{top:100%}}
+.hud-corner{
+  position:absolute;width:20px;height:20px;pointer-events:none;z-index:3;
+  border-color:var(--green);border-style:solid;opacity:.5;
+}
+.hud-tl{top:1rem;left:1rem;border-width:2px 0 0 2px}
+.hud-tr{top:1rem;right:1rem;border-width:2px 2px 0 0}
+.hud-bl{bottom:1rem;left:1rem;border-width:0 0 2px 2px}
+.hud-br{bottom:1rem;right:1rem;border-width:0 2px 2px 0}
+.hud-top{
+  position:absolute;top:1.1rem;left:50%;transform:translateX(-50%);z-index:4;
+  font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--green);
+  animation:blink 2s step-end infinite;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+@keyframes flicker{
+  0%,100%{opacity:1}
+  92%{opacity:1}
+  93%{opacity:.75}
+  94%{opacity:1}
+  96%{opacity:.85}
+  97%{opacity:1}
+}
+.screen{
+  position:absolute;inset:0;z-index:5;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:clamp(1.25rem,4vw,2.5rem) clamp(1rem,4vw,2rem);
+  overflow-y:auto;
+  opacity:0;visibility:hidden;pointer-events:none;
+  transform:translateY(12px);
+  transition:opacity .6s ease,transform .6s ease,visibility .6s;
+}
+.screen.active{opacity:1;visibility:visible;pointer-events:auto;transform:translateY(0)}
+.screen-inner{width:100%;max-width:720px;text-align:center}
+.title-main{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.75rem,5.5vw,2.65rem);font-weight:400;line-height:1.15;
+  margin-bottom:.85rem;
+  background:linear-gradient(118deg,#fff 0%,var(--green-soft) 45%,var(--pink-soft) 100%);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  animation:flicker 5s infinite;
+}
+.sub-muted{font-size:clamp(.82rem,2.5vw,.92rem);color:var(--muted);line-height:1.6;max-width:32rem;margin:0 auto 1.5rem}
+.tag-row{
+  display:flex;align-items:center;justify-content:center;gap:.75rem;
+  font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--green);
+  margin-bottom:1rem;
+}
+.tag-row::before,.tag-row::after{content:'';width:32px;height:1px;background:linear-gradient(90deg,transparent,var(--green))}
+.tag-row::after{background:linear-gradient(90deg,var(--green),transparent)}
+.tag-only{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--green);margin-bottom:.75rem}
+.btn-main{
+  display:inline-flex;align-items:center;justify-content:center;gap:.4rem;
+  padding:.95rem 1.75rem;border:none;border-radius:999px;cursor:pointer;
+  font-family:'Jost',sans-serif;font-size:clamp(.68rem,2.5vw,.76rem);font-weight:600;
+  letter-spacing:.12em;text-transform:uppercase;color:#fff;
+  background:linear-gradient(135deg,var(--green),var(--pink));
+  box-shadow:0 8px 32px rgba(29,158,117,.25),0 0 24px rgba(212,83,126,.15);
+  transition:transform .25s ease,box-shadow .25s ease,opacity .25s;
+}
+.btn-main:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 40px rgba(29,158,117,.35),0 0 32px rgba(212,83,126,.2)}
+.btn-main:disabled{opacity:.35;cursor:not-allowed;transform:none}
+.sound-hint{font-size:10px;letter-spacing:.14em;color:var(--muted);margin-top:1.25rem;animation:blink 2.5s step-end infinite}
+.brain-wrap{position:relative;width:72px;height:72px;margin:0 auto 1.25rem}
+.brain-wrap .ti{font-size:26px;color:var(--green);position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:2}
+.brain-ring{
+  position:absolute;inset:0;border-radius:50%;
+  border:1.5px solid var(--pink);
+  animation:spin 5s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.progress-dots{display:flex;justify-content:center;gap:.5rem;margin-bottom:1.25rem}
+.progress-dots span{
+  width:8px;height:8px;border-radius:50%;
+  background:rgba(255,255,255,.12);transition:background .3s,box-shadow .3s;
+}
+.progress-dots span.done{background:var(--green);box-shadow:0 0 10px rgba(29,158,117,.5)}
+.progress-dots span.current{background:var(--pink);box-shadow:0 0 12px rgba(212,83,126,.6);animation:pulseDot 1.2s ease-in-out infinite}
+@keyframes pulseDot{0%,100%{transform:scale(1)}50%{transform:scale(1.25)}}
+.question{font-family:'Cormorant Garamond',serif;font-size:clamp(1.35rem,4vw,1.85rem);font-weight:400;margin-bottom:.5rem;line-height:1.2}
+.doors{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(.5rem,2vw,.85rem);margin:1.25rem 0 1.5rem}
+.door{
+  cursor:pointer;border:1px solid rgba(255,255,255,.12);border-radius:12px;
+  padding:.75rem .5rem 1rem;background:rgba(255,255,255,.02);
+  transition:border-color .25s,transform .25s,background .25s,box-shadow .25s;
+}
+.door-num{font-size:9px;letter-spacing:.15em;color:var(--muted);margin-bottom:.5rem}
+.door-frame{
+  position:relative;height:88px;margin:0 auto .65rem;max-width:72px;
+  border:2px solid rgba(255,255,255,.18);border-radius:4px 4px 2px 2px;
+  background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(0,0,0,.2));
+  display:flex;align-items:center;justify-content:center;
+  transition:border-color .25s,transform .25s;
+}
+.door-handle{
+  position:absolute;right:6px;top:50%;transform:translateY(-50%);
+  width:7px;height:7px;border-radius:50%;
+  background:rgba(255,255,255,.25);transition:background .25s;
+}
+.door .ti{font-size:22px;color:rgba(255,255,255,.55);transition:color .25s}
+.door-label{font-size:clamp(.62rem,2vw,.72rem);line-height:1.35;color:var(--muted)}
+.door:hover{border-color:var(--green);transform:translateY(-3px);box-shadow:0 8px 24px rgba(29,158,117,.15)}
+.door:hover .door-frame{border-color:rgba(29,158,117,.5)}
+.door.selected{border:1px solid var(--green);background:rgba(29,158,117,.08);box-shadow:0 0 24px rgba(29,158,117,.2)}
+.door.selected .door-frame{border-color:var(--green);transform:scale(1.03);box-shadow:0 0 16px rgba(29,158,117,.35)}
+.door.selected .door-handle,.door.selected .ti{color:var(--green)}
+.door.selected .door-label{color:rgba(255,255,255,.75)}
+.doors-verify{grid-template-columns:repeat(2,1fr);max-width:520px;margin-left:auto;margin-right:auto}
+.doors-verify .door-frame{max-width:88px;height:72px}
+#existingAudiosWrap{margin-top:.5rem;text-align:left}
+#existingAudiosWrap[hidden]{display:none!important}
+#existingAudiosWrap .textarea-field{margin-bottom:0}
+.textarea-field{
+  width:100%;min-height:120px;resize:vertical;
+  padding:1rem;border-radius:var(--radius-lg);
+  background:rgba(255,255,255,.02);
+  border:.5px solid rgba(29,158,117,.45);
+  color:#fff;font-family:'Jost',sans-serif;font-size:.88rem;line-height:1.55;
+  outline:none;margin:1rem 0 1.25rem;
+  transition:border-color .25s,box-shadow .25s;
+}
+.textarea-field::placeholder{color:rgba(255,255,255,.28)}
+.textarea-field:focus{border-color:var(--green-soft);box-shadow:0 0 0 3px rgba(29,158,117,.12)}
+.loader-wrap{position:relative;width:120px;height:120px;margin:0 auto 1.5rem}
+.loader-ring{
+  position:absolute;inset:0;border-radius:50%;
+  border:2px solid transparent;
+}
+.loader-ring:nth-child(1){border-top-color:rgba(29,158,117,.6);animation:spin 3s linear infinite}
+.loader-ring:nth-child(2){inset:12px;border-right-color:rgba(212,83,126,.5);animation:spin 5s linear infinite reverse}
+.loader-ring:nth-child(3){inset:24px;border-bottom-color:rgba(29,158,117,.35);animation:spin 7s linear infinite}
+.loader-wrap .ti{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:28px;color:var(--green);z-index:2}
+.load-bar-wrap{width:100%;max-width:360px;height:4px;background:rgba(255,255,255,.08);border-radius:99px;margin:1rem auto;overflow:hidden}
+.load-bar{height:100%;width:0;background:linear-gradient(90deg,var(--green),var(--pink));border-radius:99px;transition:width .15s linear}
+.load-status{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--green);margin-top:.75rem;min-height:1.2em}
+.result-card{
+  text-align:left;border:1px solid rgba(29,158,117,.45);border-radius:var(--radius-lg);
+  padding:1.25rem 1.35rem;margin-bottom:1.25rem;background:rgba(255,255,255,.02);
+}
+.result-label{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--green);margin-bottom:.65rem}
+.result-text{font-size:.9rem;line-height:1.65;color:rgba(255,255,255,.88);min-height:4.5em}
+.audio-badges{display:flex;flex-wrap:wrap;gap:.65rem;justify-content:center;margin-bottom:1.25rem}
+.audio-badge{
+  display:inline-flex;align-items:center;gap:.45rem;
+  padding:.55rem 1rem;border-radius:999px;font-size:.78rem;font-weight:500;
+}
+.audio-badge .ti{font-size:16px}
+.audio-badge.green{background:rgba(29,158,117,.15);border:1px solid rgba(29,158,117,.4);color:var(--green-soft)}
+.audio-badge.pink{background:rgba(212,83,126,.12);border:1px solid rgba(212,83,126,.35);color:var(--pink-soft)}
+.price-block{margin-bottom:1rem}
+.price-big{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,6vw,2.75rem);color:#fff}
+.price-sub{font-size:.78rem;color:var(--muted);display:block;margin-top:.25rem}
+.pack-desc{font-size:.78rem;color:var(--muted);line-height:1.5;margin-bottom:1.25rem}
+.pay-grid{display:grid;grid-template-columns:1fr 1fr;gap:.55rem;margin-bottom:.55rem}
+.pay-btn{
+  padding:.7rem .5rem;border-radius:10px;cursor:pointer;
+  font-family:'Jost',sans-serif;font-size:.62rem;font-weight:600;
+  letter-spacing:.08em;text-transform:uppercase;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);
+  color:#fff;transition:background .2s,border-color .2s;
+}
+.pay-btn:hover{background:rgba(29,158,117,.12);border-color:rgba(29,158,117,.35)}
+.pay-btn.full{grid-column:1/-1}
+.pay-detail{
+  display:none;text-align:left;font-size:.72rem;line-height:1.55;color:var(--muted);
+  padding:.75rem;border-radius:10px;margin-top:.35rem;
+  background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);
+}
+.pay-detail.open{display:block}
+.footer-note{font-size:.68rem;color:var(--muted);margin-top:1rem;line-height:1.5}
+@media(max-width:600px){
+  .doors{grid-template-columns:1fr;max-width:280px;margin-left:auto;margin-right:auto}
+  .doors-verify{grid-template-columns:1fr;max-width:280px}
+  .pay-grid{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){
+  .brain-ring,.scan-move,.glow-pink,.glow-green,.title-main,.hud-top,.sound-hint,.progress-dots span.current,.loader-ring{animation:none}
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="grid-bg" aria-hidden="true"></div>
+  <div class="glow-pink" aria-hidden="true"></div>
+  <div class="glow-green" aria-hidden="true"></div>
+  <div class="scan-static" aria-hidden="true"></div>
+  <div class="scan-move" aria-hidden="true"></div>
+  <div class="hud-corner hud-tl" aria-hidden="true"></div>
+  <div class="hud-corner hud-tr" aria-hidden="true"></div>
+  <div class="hud-corner hud-bl" aria-hidden="true"></div>
+  <div class="hud-corner hud-br" aria-hidden="true"></div>
+  <div class="hud-top">ERIOR — SISTEMA ACTIVO</div>
+
+  <!-- PANTALLA 0 -->
+  <section class="screen active" id="screen-0" data-step="0">
+    <div class="screen-inner">
+      <div class="brain-wrap">
+        <div class="brain-ring" aria-hidden="true"></div>
+        <i class="ti ti-brain" aria-hidden="true"></i>
+      </div>
+      <div class="tag-row">ERIOR CENTER — EXPERIENCIA</div>
+      <h1 class="title-main">Estás a punto de entrar a tu subconsciente</h1>
+      <p class="sub-muted">3 puertas. Un campo de transmisión. El mapa exacto de lo que te detiene.</p>
+      <button type="button" class="btn-main" id="btnStart">⬡ INICIAR PROTOCOLO</button>
+      <p class="sound-hint">ACTIVA EL SONIDO PARA LA EXPERIENCIA COMPLETA</p>
+    </div>
+  </section>
+
+  <!-- PANTALLA 1 -->
+  <section class="screen" id="screen-1" data-step="1">
+    <div class="screen-inner">
+      <div class="progress-dots" id="prog-1"><span class="current"></span><span></span><span></span><span></span></div>
+      <div class="tag-only">PUERTA 1 — EL ESPEJO</div>
+      <h2 class="question">Elige la puerta que sientes más cercana a ti</h2>
+      <p class="sub-muted">Confía en tu primer instinto</p>
+      <div class="doors" id="doors-1">
+        <button type="button" class="door" data-value="escasez">
+          <div class="door-num">01</div>
+          <div class="door-frame"><i class="ti ti-coin"></i><span class="door-handle"></span></div>
+          <div class="door-label">El dinero nunca es suficiente</div>
+        </button>
+        <button type="button" class="door" data-value="amor">
+          <div class="door-num">02</div>
+          <div class="door-frame"><i class="ti ti-heart"></i><span class="door-handle"></span></div>
+          <div class="door-label">El amor siempre se complica</div>
+        </button>
+        <button type="button" class="door" data-value="duda">
+          <div class="door-num">03</div>
+          <div class="door-frame"><i class="ti ti-user"></i><span class="door-handle"></span></div>
+          <div class="door-label">No me siento suficiente</div>
+        </button>
+      </div>
+      <button type="button" class="btn-main" id="btn-1" disabled>ABRIR SIGUIENTE PUERTA →</button>
+    </div>
+  </section>
+
+  <!-- PANTALLA 2 -->
+  <section class="screen" id="screen-2" data-step="2">
+    <div class="screen-inner">
+      <div class="progress-dots" id="prog-2"><span class="done"></span><span class="current"></span><span></span><span></span></div>
+      <div class="tag-only">PUERTA 2 — LA RAÍZ</div>
+      <h2 class="question">¿Qué frena tu avance cuando estás cerca de lograrlo?</h2>
+      <p class="sub-muted">Hay una sola puerta verdadera para ti</p>
+      <div class="doors" id="doors-2">
+        <button type="button" class="door" data-value="miedo">
+          <div class="door-num">01</div>
+          <div class="door-frame"><i class="ti ti-alert-triangle"></i><span class="door-handle"></span></div>
+          <div class="door-label">Miedo a no ser suficiente</div>
+        </button>
+        <button type="button" class="door" data-value="sabotaje">
+          <div class="door-num">02</div>
+          <div class="door-frame"><i class="ti ti-refresh"></i><span class="door-handle"></span></div>
+          <div class="door-label">Me autosaboteo siempre</div>
+        </button>
+        <button type="button" class="door" data-value="creencia">
+          <div class="door-num">03</div>
+          <div class="door-frame"><i class="ti ti-brain"></i><span class="door-handle"></span></div>
+          <div class="door-label">Creo que no lo merezco</div>
+        </button>
+      </div>
+      <button type="button" class="btn-main" id="btn-2" disabled>ABRIR SIGUIENTE PUERTA →</button>
+    </div>
+  </section>
+
+  <!-- PANTALLA 3 -->
+  <section class="screen" id="screen-3" data-step="3">
+    <div class="screen-inner">
+      <div class="progress-dots" id="prog-3"><span class="done"></span><span class="done"></span><span class="current"></span><span></span></div>
+      <div class="tag-only">PUERTA 3 — EL DESTINO</div>
+      <h2 class="question">Si tu subconsciente estuviera libre, ¿qué cambiaría primero?</h2>
+      <p class="sub-muted">Esta es la puerta más importante</p>
+      <div class="doors" id="doors-3">
+        <button type="button" class="door" data-value="dinero">
+          <div class="door-num">01</div>
+          <div class="door-frame"><i class="ti ti-trending-up"></i><span class="door-handle"></span></div>
+          <div class="door-label">Dinero y abundancia</div>
+        </button>
+        <button type="button" class="door" data-value="amor2">
+          <div class="door-num">02</div>
+          <div class="door-frame"><i class="ti ti-heart"></i><span class="door-handle"></span></div>
+          <div class="door-label">Amor y relaciones</div>
+        </button>
+        <button type="button" class="door" data-value="poder">
+          <div class="door-num">03</div>
+          <div class="door-frame"><i class="ti ti-star"></i><span class="door-handle"></span></div>
+          <div class="door-label">Seguridad y poder</div>
+        </button>
+      </div>
+      <button type="button" class="btn-main" id="btn-3" disabled>ABRIR SIGUIENTE PUERTA →</button>
+    </div>
+  </section>
+
+  <!-- PANTALLA 4 -->
+  <section class="screen" id="screen-4" data-step="4">
+    <div class="screen-inner">
+      <div class="progress-dots"><span class="done"></span><span class="done"></span><span class="done"></span><span class="done"></span></div>
+      <div class="tag-only">CAMPO DE TRANSMISIÓN</div>
+      <h2 class="title-main" style="font-size:clamp(1.5rem,4.5vw,2rem)">Escribe directamente a tu subconsciente</h2>
+      <p class="sub-muted">Cuéntanos lo que estás sintiendo y lo que deseas manifestar en tu vida. Sin filtros.</p>
+      <textarea class="textarea-field" id="txField" rows="5" placeholder="Ejemplo: Me siento bloqueado en el trabajo, quiero atraer abundancia, mejorar mi relación con el dinero, sentirme más seguro/a..."></textarea>
+      <button type="button" class="btn-main" id="btn-4" disabled>GENERAR MI MAPA MENTAL ⬡</button>
+    </div>
+  </section>
+
+  <!-- PANTALLA 5 — VERIFICACIÓN -->
+  <section class="screen" id="screen-5" data-step="5">
+    <div class="screen-inner">
+      <div class="progress-dots"><span class="done"></span><span class="done"></span><span class="done"></span><span class="done"></span></div>
+      <div class="tag-only">VERIFICACIÓN DEL SISTEMA</div>
+      <h2 class="question">¿Ya tienes audios Erior activos?</h2>
+      <p class="sub-muted">Así el sistema te recomienda algo nuevo y más poderoso para ti</p>
+      <div class="doors doors-verify" id="verify-cards">
+        <button type="button" class="door verify-card" data-value="yes">
+          <div class="door-frame"><i class="ti ti-user-check"></i><span class="door-handle"></span></div>
+          <div class="door-label">Sí, ya tengo audios</div>
+        </button>
+        <button type="button" class="door verify-card" data-value="no">
+          <div class="door-frame"><i class="ti ti-sparkles"></i><span class="door-handle"></span></div>
+          <div class="door-label">No, es mi primera vez</div>
+        </button>
+      </div>
+      <div id="existingAudiosWrap" hidden>
+        <textarea class="textarea-field" id="existingAudiosField" rows="4" placeholder="Escribe los nombres de los audios que ya tienes. Ejemplo: MoneyTech, Booster, YOU..."></textarea>
+      </div>
+      <button type="button" class="btn-main" id="btn-5" disabled style="margin-top:1.25rem">CONTINUAR AL ANÁLISIS →</button>
+    </div>
+  </section>
+
+  <!-- PANTALLA 6 — CARGA -->
+  <section class="screen" id="screen-6" data-step="6">
+    <div class="screen-inner">
+      <div class="loader-wrap">
+        <div class="loader-ring"></div>
+        <div class="loader-ring"></div>
+        <div class="loader-ring"></div>
+        <i class="ti ti-antenna-bars-5" aria-hidden="true"></i>
+      </div>
+      <div class="tag-only" style="animation:blink 1.5s step-end infinite">TRANSMITIENDO A TU SUBCONSCIENTE</div>
+      <div class="load-bar-wrap"><div class="load-bar" id="loadBar"></div></div>
+      <p class="load-status" id="loadStatus">ESCANEANDO FRECUENCIAS...</p>
+    </div>
+  </section>
+
+  <!-- PANTALLA 7 — RESULTADO -->
+  <section class="screen" id="screen-7" data-step="7">
+    <div class="screen-inner">
+      <div class="tag-only">TU MAPA MENTAL</div>
+      <div class="result-card">
+        <div class="result-label">PATRÓN IDENTIFICADO POR IA</div>
+        <p class="result-text" id="mapText"></p>
+      </div>
+      <div class="result-label" style="text-align:center;margin-bottom:.65rem">TUS 2 AUDIOS RECOMENDADOS</div>
+      <div class="audio-badges">
+        <span class="audio-badge green" id="badgeA1"><i class="ti ti-headphones"></i><span></span></span>
+        <span class="audio-badge pink" id="badgeA2"><i class="ti ti-headphones"></i><span></span></span>
+      </div>
+      <div class="price-block">
+        <div class="price-big">$1,888 MXN</div>
+        <span class="price-sub">/ $109 USD — Father Upgrade Pack</span>
+      </div>
+      <p class="pack-desc">2 audios personalizados + audio exclusivo de regalo + Ebook + sorteo 1 año Telegram VIP</p>
+      <div class="pay-grid">
+        <button type="button" class="pay-btn" id="payWa">WhatsApp</button>
+        <button type="button" class="pay-btn" data-detail="oxxo">OXXO</button>
+        <button type="button" class="pay-btn" data-detail="paypal">PayPal</button>
+        <button type="button" class="pay-btn" data-detail="transfer">Transferencia</button>
+        <button type="button" class="pay-btn full" data-detail="crypto">Crypto</button>
+      </div>
+      <div class="pay-detail" id="detail-oxxo">Tarjeta Banregio: 4741 7435 2658 3795 — Deposita $1,888 MXN y envía comprobante a eriorcenter@gmail.com indicando tus audios</div>
+      <div class="pay-detail" id="detail-paypal"><a href="https://paypal.me/sheismagique" target="_blank" rel="noopener" style="color:var(--green-soft)">Abrir PayPal → paypal.me/sheismagique</a></div>
+      <div class="pay-detail" id="detail-transfer">NVIO CLABE: 710969000048503916 / Banregio CLABE: 058470000010260425 — Envía comprobante a eriorcenter@gmail.com con el nombre de tus audios</div>
+      <div class="pay-detail" id="detail-crypto">Escríbenos por WhatsApp para coordinar el pago y recibir la dirección de wallet</div>
+      <p class="footer-note">Envía tu comprobante a eriorcenter@gmail.com indicando el nombre de tus 2 audios</p>
+    </div>
+  </section>
+</div>
+
+<script>
+(function(){
+  var CLAUDE_FN='/.netlify/functions/claude';
+  var state={q1:'',q2:'',q3:'',text:'',hasExisting:'',existingAudiosText:''};
+  var SYSTEM_PROMPT='Eres el sistema de diagnóstico subconsciente de Erior Center. Analiza las respuestas del usuario y genera un mapa mental de 3-4 líneas que identifique su patrón limitante principal. Tono: misterioso, poderoso, directo, como si el sistema los conociera desde siempre. Sin listas ni bullets, solo párrafo continuo.\n\nAl final del análisis, si el texto libre del usuario menciona alguno de estos temas, recomienda UN audio complementario adicional con una línea corta:\n- Ansiedad o sistema nervioso → Keep Cool\n- Múltiples metas muy específicas → Select\n- Crisis o urgencia → Emergency 999\n- Salud, cuerpo o energía física → VitaMind o Fit Wave\n- Belleza o magnetismo físico → Éclat\n- Señales, sincronías o despertar espiritual → 11:11\n- Confusión mental o dispersión → Wonderland\n- Falta de energía o motivación → Booster\n- Una persona específica en mente → Amor Magic 2.0 o Mesmerizing Love\n- Ya tiene audios y quiere potenciarlos → Audio Erior 3.0\n- Metas visuales o cinematográficas → Mind Movie\n\nCatálogo completo de referencia:\nMoneyTech — reprograma relación con el dinero y abre flujo financiero\nMaster Abundance — mentalidad de abundancia profunda y sostenida\nLucky — activa sincronías, suerte y manifestación acelerada\nYOU — identidad y autoconcepto profundo desde la raíz\nIcon Aura — presencia, magnetismo y aura personal poderosa\nBooster — energía, estado mental y campo de manifestación\nAttraction — atrae y sostiene el amor, disuelve bloqueos amorosos\nErior Love — amor profundo y pareja ideal\n11:11 — sincronías, despertar y señales del universo\nAmor Propio Magic 3.0 — amor propio, suelta la autocrítica\nMesmerizing Love — atracción irresistible hacia una persona específica\nAmor Magic 2.0 — manifestar una persona específica\nIdentity — solidifica quién eres y cómo te percibes\nÉclat — belleza, presencia física y magnetismo visual\nFit Wave — salud, cuerpo y energía física\nVitaMind — bienestar mental y físico integral\nKeep Cool — calma, sistema nervioso, ecuanimidad\nSelect — 5 intenciones completamente personalizadas\nSimulation-U — reprogramación total de la realidad personal\nWonderland — claridad mental y limpieza de patrones\nWonderland Coherence — coherencia corazón-mente y flujo\nSatori — soltar el apego, la obsesión y la resistencia\nAudio Erior 3.0 — potenciador de todos los audios activos\nEmergency 999 — reset urgente de bloqueos y sistema nervioso\nMind Movie — visualización cinematográfica de metas (complemento visual)\nMaster Mind — mentalidad de alto rendimiento y liderazgo\n\nIMPORTANTE: Si el usuario ya tiene audios, NUNCA recomiendes los mismos que ya tiene. Si los 2 audios recomendados coinciden con audios que ya tiene, sustitúyelos por los siguientes más relevantes del catálogo para su patrón. Menciona en el análisis que los audios recomendados potencian y complementan su proceso actual.';
+  var LABELS={
+    escasez:'El dinero nunca es suficiente (escasez)',
+    amor:'El amor siempre se complica',
+    duda:'No me siento suficiente',
+    miedo:'Miedo a no ser suficiente',
+    sabotaje:'Me autosaboteo siempre',
+    creencia:'Creo que no lo merezco',
+    dinero:'Dinero y abundancia',
+    amor2:'Amor y relaciones',
+    poder:'Seguridad y poder'
+  };
+  var AUDIO_MATRIX={
+    escasez:{dinero:['MoneyTech','Master Abundance'],amor2:['MoneyTech','Lucky'],poder:['MoneyTech','Booster']},
+    amor:{dinero:['Erior Love','Attraction'],amor2:['Amor Propio Magic 3.0','Erior Love'],poder:['Satori','Amor Propio Magic 3.0']},
+    duda:{dinero:['YOU','Identity'],amor2:['YOU','Mesmerizing Love'],poder:['Identity','Icon Aura']}
+  };
+  var FULL_CATALOG=[
+    'MoneyTech','Master Abundance','Lucky','YOU','Icon Aura','Booster','Attraction','Erior Love','11:11',
+    'Amor Propio Magic 3.0','Mesmerizing Love','Amor Magic 2.0','Identity','Éclat','Fit Wave','VitaMind',
+    'Keep Cool','Select','Simulation-U','Wonderland','Wonderland Coherence','Satori','Audio Erior 3.0',
+    'Emergency 999','Mind Movie','Master Mind'
+  ];
+  var LOAD_MSGS=[
+    'ESCANEANDO FRECUENCIAS...',
+    'MAPEANDO PATRONES SUBCONSCIENTES...',
+    'CALIBRANDO FRECUENCIAS NEURONALES...',
+    'ANALIZANDO TU CAMPO ENERGÉTICO...',
+    'GENERANDO TU MAPA MENTAL...',
+    'PROTOCOLO COMPLETADO'
+  ];
+  var recommended=['',''];
+  var currentScreen=0;
+
+  function showScreen(n){
+    document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
+    var el=document.getElementById('screen-'+n);
+    if(el)el.classList.add('active');
+    currentScreen=n;
+  }
+
+  function setupDoors(containerId,btnId,key){
+    var container=document.getElementById(containerId);
+    var btn=document.getElementById(btnId);
+    if(!container||!btn)return;
+    container.querySelectorAll('.door').forEach(function(door){
+      door.addEventListener('click',function(){
+        container.querySelectorAll('.door').forEach(function(d){d.classList.remove('selected');});
+        door.classList.add('selected');
+        state[key]=door.getAttribute('data-value')||'';
+        btn.disabled=!state[key];
+      });
+    });
+    btn.addEventListener('click',function(){
+      if(!state[key])return;
+      showScreen(currentScreen+1);
+    });
+  }
+
+  document.getElementById('btnStart').addEventListener('click',function(){showScreen(1);});
+  setupDoors('doors-1','btn-1','q1');
+  setupDoors('doors-2','btn-2','q2');
+  setupDoors('doors-3','btn-3','q3');
+
+  var tx=document.getElementById('txField');
+  var btn4=document.getElementById('btn-4');
+  if(tx&&btn4){
+    tx.addEventListener('input',function(){
+      state.text=tx.value.trim();
+      btn4.disabled=state.text.length<10;
+    });
+    btn4.addEventListener('click',function(){
+      if(state.text.length<10)return;
+      showScreen(5);
+    });
+  }
+
+  var verifyCards=document.getElementById('verify-cards');
+  var existingWrap=document.getElementById('existingAudiosWrap');
+  var existingField=document.getElementById('existingAudiosField');
+  var btn5=document.getElementById('btn-5');
+  if(verifyCards&&btn5){
+    verifyCards.querySelectorAll('.verify-card').forEach(function(card){
+      card.addEventListener('click',function(){
+        verifyCards.querySelectorAll('.verify-card').forEach(function(c){c.classList.remove('selected');});
+        card.classList.add('selected');
+        state.hasExisting=card.getAttribute('data-value')||'';
+        if(state.hasExisting==='yes'){
+          if(existingWrap)existingWrap.hidden=false;
+        }else{
+          if(existingWrap)existingWrap.hidden=true;
+          state.existingAudiosText='';
+          if(existingField)existingField.value='';
+        }
+        btn5.disabled=!state.hasExisting;
+      });
+    });
+    if(existingField){
+      existingField.addEventListener('input',function(){
+        state.existingAudiosText=existingField.value.trim();
+      });
+    }
+    btn5.addEventListener('click',function(){
+      if(!state.hasExisting)return;
+      if(state.hasExisting==='yes'&&existingField){
+        state.existingAudiosText=existingField.value.trim();
+      }
+      showScreen(6);
+      runTransmission();
+    });
+  }
+
+  function normalizeAudioName(s){
+    return String(s).toLowerCase().replace(/[^a-z0-9]/g,'');
+  }
+
+  function parseExistingAudios(){
+    if(state.hasExisting!=='yes')return [];
+    return state.existingAudiosText.split(/[,;\n]+/).map(function(s){return s.trim();}).filter(Boolean);
+  }
+
+  function substituteExisting(pair){
+    var existing=parseExistingAudios().map(normalizeAudioName);
+    if(!existing.length)return pair.slice();
+    var out=[],used={};
+    pair.forEach(function(a){
+      if(existing.indexOf(normalizeAudioName(a))<0&&!used[a]){out.push(a);used[a]=true;}
+    });
+    FULL_CATALOG.forEach(function(a){
+      if(out.length>=2)return;
+      if(existing.indexOf(normalizeAudioName(a))>=0||used[a])return;
+      out.push(a);used[a]=true;
+    });
+    return out.length>=2?out.slice(0,2):pair.slice();
+  }
+
+  function getRecommendedAudios(){
+    var row=AUDIO_MATRIX[state.q1];
+    var pair=row&&row[state.q3]?row[state.q3].slice():['Booster','Identity'];
+    return substituteExisting(pair);
+  }
+
+  function getExistingAudiosLine(){
+    if(state.hasExisting==='yes'){
+      return state.existingAudiosText.trim()||'sin especificar';
+    }
+    return 'ninguno, es su primera vez';
+  }
+
+  function runTransmission(){
+    var bar=document.getElementById('loadBar');
+    var status=document.getElementById('loadStatus');
+    var progress=0;
+    var lastMsg=0;
+    bar.style.width='0%';
+    status.textContent=LOAD_MSGS[0];
+    var iv=setInterval(function(){
+      progress+=2;
+      if(progress>100)progress=100;
+      bar.style.width=progress+'%';
+      var idx=Math.min(Math.floor(progress/20),LOAD_MSGS.length-1);
+      if(idx!==lastMsg){lastMsg=idx;status.textContent=LOAD_MSGS[idx];}
+      if(progress>=100){
+        clearInterval(iv);
+        fetchMap().then(showResult).catch(showResultFallback);
+      }
+    },80);
+  }
+
+  function buildPrompt(){
+    return SYSTEM_PROMPT+'\n\n---\n\nEmoción dominante: '+(LABELS[state.q1]||state.q1)+
+      '\nBloqueo principal: '+(LABELS[state.q2]||state.q2)+
+      '\nDestino deseado: '+(LABELS[state.q3]||state.q3)+
+      '\nTexto libre del usuario: '+state.text+
+      '\nAudios que el usuario ya tiene: '+getExistingAudiosLine();
+  }
+
+  function fetchMap(){
+    return fetch(CLAUDE_FN,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({messages:[{role:'user',content:buildPrompt()}]})
+    }).then(function(r){return r.json().then(function(d){return{ok:r.ok,data:d};});})
+      .then(function(res){
+        if(res.ok&&res.data&&res.data.reply)return res.data.reply;
+        throw new Error((res.data&&res.data.error)||'Error');
+      });
+  }
+
+  function fallbackMap(){
+    return 'Tu campo energético revela una tensión entre lo que deseas y lo que tu subconsciente aún protege. Hay un patrón repetido — una creencia instalada hace tiempo — que se activa justo cuando la abundancia, el amor o la seguridad empiezan a acercarse. Tu sistema no está roto: está en modo supervivencia. El mapa indica que la reprogramación consciente, sostenida y personalizada es el puente hacia la versión de ti que ya intuyes que existe.';
+  }
+
+  function showResultFallback(){showResult(fallbackMap());}
+
+  function showResult(text){
+    recommended=getRecommendedAudios();
+    document.getElementById('badgeA1').querySelector('span').textContent=recommended[0];
+    document.getElementById('badgeA2').querySelector('span').textContent=recommended[1];
+    showScreen(7);
+    typewriter(document.getElementById('mapText'),String(text||fallbackMap()),25);
+    setupPayments();
+  }
+
+  function typewriter(el,text,delay){
+    if(!el)return;
+    el.textContent='';
+    var i=0;
+    function tick(){
+      if(i<text.length){el.textContent+=text.charAt(i);i++;setTimeout(tick,delay);}
+    }
+    tick();
+  }
+
+  function setupPayments(){
+    var wa=document.getElementById('payWa');
+    if(wa){
+      wa.onclick=function(){
+        var msg='Hola quiero el Father Upgrade Pack con '+recommended[0]+' y '+recommended[1];
+        window.open('https://wa.me/5214432311761?text='+encodeURIComponent(msg),'_blank');
+      };
+    }
+    document.querySelectorAll('.pay-btn[data-detail]').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        var id=btn.getAttribute('data-detail');
+        if(id==='paypal'){
+          window.open('https://paypal.me/sheismagique','_blank');
+          return;
+        }
+        if(id==='crypto'){
+          window.open('https://wa.me/5214432311761?text='+encodeURIComponent('Hola, quiero pagar el Father Upgrade Pack con crypto'),'_blank');
+        }
+        document.querySelectorAll('.pay-detail').forEach(function(d){d.classList.remove('open');});
+        var det=document.getElementById('detail-'+id);
+        if(det)det.classList.add('open');
+      });
+    });
+  }
+})();
+</script>
+</body>
+</html>
