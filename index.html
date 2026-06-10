@@ -1168,6 +1168,10 @@ body::before{
   border:1px solid rgba(201,160,96,.4);transition:background .25s ease;
 }
 .alicia-mode-code-btn:hover{background:rgba(201,160,96,.28)}
+.alicia-premium-code-sep{height:1px;background:rgba(201,160,96,.18);margin:1rem 0 .85rem}
+.alicia-premium-code-feedback{font-size:.68rem;text-align:center;margin-top:.45rem;min-height:1em;line-height:1.4}
+.alicia-premium-code-feedback.error{color:rgba(255,140,140,.85)}
+.alicia-premium-code-feedback.success{color:rgba(120,220,160,.9)}
 .alicia-mode-feedback{font-size:.68rem;text-align:center;margin:.5rem 0 0;min-height:1em}
 .alicia-mode-feedback.success{color:rgba(120,220,160,.9)}
 .alicia-mode-feedback.error{color:rgba(255,140,140,.85)}
@@ -2284,7 +2288,14 @@ button.alicia-mode-premium-cta{font:inherit;width:100%;cursor:pointer}
                 <li>🔮 Sugerencias de audios según tu evolución</li>
                 <li>♾️ Sesiones ilimitadas sin restricciones</li>
               </ul>
-              <button type="button" class="alicia-mode-premium-cta" onclick="showAliciaPremiumGate()">ACCEDER A PREMIUM ✨</button>
+              <button type="button" class="alicia-mode-premium-cta" onclick="window.open('https://wa.me/5214432311761?text=Hola+quiero+acceso+a+Alicia+IA+Premium+%C2%BFc%C3%B3mo+lo+obtengo%3F','_blank','noopener,noreferrer')">ACCEDER A PREMIUM ✨</button>
+              <div class="alicia-premium-code-sep" aria-hidden="true"></div>
+              <p class="alicia-mode-code-label">¿Ya tienes tu código de acceso?</p>
+              <div class="alicia-mode-code-row">
+                <input type="text" class="alicia-mode-code-input" id="aliciaPremiumCodeInput" placeholder="Ingresa tu código aquí" autocomplete="off" onkeydown="if(event.key==='Enter')activateAliciaPremiumCode()">
+                <button type="button" class="alicia-mode-code-btn" onclick="activateAliciaPremiumCode()">Activar →</button>
+              </div>
+              <p class="alicia-premium-code-feedback" id="aliciaPremiumCodeFeedback" aria-live="polite"></p>
             </article>
           </div>
         </div>
@@ -3392,6 +3403,7 @@ document.getElementById('audioModal').addEventListener('click',function(e){if(e.
 // ══════════════════════════════════
 // ALICIA IA (respuestas vía Netlify Function → Anthropic; ver netlify/functions/claude.js)
 // ══════════════════════════════════
+const PREMIUM_CODE='ERIOR2024';
 var ALICIA_FN='/.netlify/functions/claude';
 var ALICIA_MODE_KEY='alicia_mode';
 var hist=[];
@@ -3425,6 +3437,22 @@ function showAliciaPremiumGate(){
 function hideAliciaPremiumGate(){
   var gate=document.getElementById('aliciaPremiumGate');
   if(gate)gate.hidden=true;
+}
+function activateAliciaPremiumCode(){
+  var inp=document.getElementById('aliciaPremiumCodeInput');
+  var fb=document.getElementById('aliciaPremiumCodeFeedback');
+  var code=(inp&&inp.value?inp.value:'').trim();
+  if(!code){
+    if(fb){fb.textContent='Código inválido. Escríbenos para obtener el tuyo 💛';fb.className='alicia-premium-code-feedback error';}
+    return;
+  }
+  if(code.toUpperCase()===PREMIUM_CODE.toUpperCase()){
+    try{localStorage.setItem('alicia_premium','true');}catch(st){}
+    if(fb){fb.textContent='¡Acceso activado! Recargando...';fb.className='alicia-premium-code-feedback success';}
+    setTimeout(function(){window.location.reload();},600);
+  }else{
+    if(fb){fb.textContent='Código inválido. Escríbenos para obtener el tuyo 💛';fb.className='alicia-premium-code-feedback error';}
+  }
 }
 function showAliciaModeSelect(){
   var sel=document.getElementById('aliciaModeSelect');
