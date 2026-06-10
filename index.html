@@ -321,6 +321,22 @@ body::before{
   transition:transform .25s ease;
 }
 .btn-alicia-glow:hover{transform:translateY(-2px) scale(1.03)}
+.btn-subconsciente{
+  display:inline-flex;align-items:center;justify-content:center;gap:.35rem;
+  margin:.55rem auto 0;padding:.72rem 1.65rem;border-radius:980px;cursor:pointer;
+  font-family:'Syne',sans-serif;font-size:clamp(.62rem,2.4vw,.72rem);font-weight:600;
+  letter-spacing:.1em;text-transform:none;color:#fff;border:none;
+  background:linear-gradient(135deg,#1D9E75,#D4537E);
+  box-shadow:0 8px 28px rgba(29,158,117,.28),0 0 24px rgba(212,83,126,.18);
+  transition:transform .25s ease,box-shadow .25s ease;
+}
+.btn-subconsciente:hover{transform:translateY(-2px) scale(1.03);box-shadow:0 12px 36px rgba(29,158,117,.35),0 0 32px rgba(212,83,126,.25)}
+.fsm-list a.fsm-exp-link{
+  background:linear-gradient(135deg,#1D9E75,#D4537E);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  filter:drop-shadow(0 0 12px rgba(29,158,117,.35));
+}
+.fsm-list a.fsm-exp-link:hover{filter:drop-shadow(0 0 20px rgba(212,83,126,.45)) drop-shadow(0 0 28px rgba(29,158,117,.35));}
 @keyframes aliciaBtnGlow{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
 @keyframes aliciaBtnPulse{0%,100%{box-shadow:0 0 20px rgba(180,120,255,.28),0 0 40px rgba(100,160,255,.1),inset 0 1px 0 rgba(255,255,255,.4)}50%{box-shadow:0 0 36px rgba(220,140,255,.5),0 0 64px rgba(130,100,255,.22),inset 0 1px 0 rgba(255,255,255,.5)}}
 /* Botón flotante PROMOS */
@@ -1175,6 +1191,42 @@ body::before{
   border:1px solid rgba(201,160,96,.45);
   background:rgba(201,160,96,.18);color:rgba(255,236,200,.95);
 }
+.alicia-premium-gate{
+  position:absolute;inset:0;z-index:25;
+  display:flex;align-items:center;justify-content:center;
+  padding:clamp(1rem,4vw,2rem);
+  background:rgba(2,6,12,.88);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+}
+.alicia-premium-gate[hidden]{display:none!important}
+.alicia-premium-gate-card{
+  width:100%;max-width:420px;text-align:center;
+  padding:clamp(1.25rem,4vw,1.75rem);border-radius:20px;
+  border:1px solid rgba(201,160,96,.35);
+  background:rgba(8,6,18,.96);
+  box-shadow:0 24px 64px rgba(0,0,0,.5),0 0 40px rgba(201,160,96,.08);
+}
+.alicia-premium-gate-text{
+  font-size:clamp(.84rem,2.6vw,.92rem);line-height:1.65;
+  color:rgba(220,210,240,.88);margin-bottom:1.15rem;
+}
+.alicia-premium-gate-wa{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:100%;padding:.85rem 1.25rem;border-radius:14px;text-decoration:none;
+  font-family:'Syne',sans-serif;font-size:.68rem;font-weight:600;
+  letter-spacing:.1em;text-transform:uppercase;color:#fff;
+  background:linear-gradient(135deg,#25d366,#128c7e);
+  border:1px solid rgba(37,211,102,.4);
+  transition:transform .25s ease,box-shadow .25s ease;
+}
+.alicia-premium-gate-wa:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(37,211,102,.25)}
+.alicia-premium-gate-close{
+  display:block;margin:1rem auto 0;background:none;border:none;
+  font-family:'Jost',sans-serif;font-size:.68rem;color:rgba(180,170,200,.5);
+  cursor:pointer;letter-spacing:.06em;
+}
+.alicia-premium-gate-close:hover{color:rgba(255,255,255,.75)}
+button.alicia-mode-premium-cta{font:inherit;width:100%;cursor:pointer}
 .alicia-inner--wide{max-width:min(920px,96vw)!important}
 @media(max-width:720px){
   .alicia-mode-cards{grid-template-columns:1fr}
@@ -2024,6 +2076,7 @@ body::before{
     <li><a onclick="goTo('ebook')">Ebook Erior</a></li>
     <li><a onclick="goTo('soporte')">Soporte</a></li>
     <li><a href="https://eriorrabbithole.netlify.app" target="_blank" onclick="closeMenu()">Rabbit Hole</a></li>
+    <li><a href="experiencia.html" class="fsm-exp-link" onclick="closeMenu()">✦ Experiencia Erior</a></li>
   </ul>
   <div class="fsm-line"></div>
   <div class="fsm-socials">
@@ -2073,6 +2126,7 @@ body::before{
 </span>R<em>CENTER</em><canvas id="titleDust" style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:700px;height:100%;pointer-events:none;z-index:10;overflow:visible;"></canvas></h1>
       <div class="cover-tag">Guía interactiva para utilizar tus audios</div>
       <button type="button" class="btn-alicia-glow" onclick="goTo('alicia')">✨ Habla con Alicia IA</button>
+      <button type="button" class="btn-subconsciente" onclick="window.location.href='experiencia.html'">⬡ ENTRAR A MI SUBCONSCIENTE</button>
       <div class="cover-promo-countdown promo-countdown-block" onclick="openPromoModal()" role="button" tabindex="0" aria-label="Ver Father Upgrade Pack">
         <div class="cover-promo-offer">
           <strong class="cover-promo-title">🚀 FATHER UPGRADE PACK</strong>
@@ -2193,6 +2247,13 @@ body::before{
     <canvas class="alicia-confetti-canvas" id="aliciaConfetti" aria-hidden="true"></canvas>
     <div class="alicia-nebula">
       <canvas id="aliciaParticles" aria-hidden="true"></canvas>
+      <div class="alicia-premium-gate" id="aliciaPremiumGate" hidden role="dialog" aria-labelledby="aliciaPremiumGateTitle">
+        <div class="alicia-premium-gate-card">
+          <p class="alicia-premium-gate-text" id="aliciaPremiumGateTitle">El acceso al contenido premium de Alicia está disponible únicamente para clientes con 3 o más audios activos ✨ Si ya tienes tus audios o quieres comenzar tu proceso, escríbenos y te damos acceso directo. 💛</p>
+          <a href="https://wa.me/5214432311761" target="_blank" rel="noopener noreferrer" class="alicia-premium-gate-wa">Escríbenos por WhatsApp</a>
+          <button type="button" class="alicia-premium-gate-close" onclick="hideAliciaPremiumGate()">Cerrar</button>
+        </div>
+      </div>
       <div class="alicia-inner" id="aliciaInner">
         <!-- Pantalla de selección de modo -->
         <div class="alicia-mode-select" id="aliciaModeSelect">
@@ -2223,16 +2284,7 @@ body::before{
                 <li>🔮 Sugerencias de audios según tu evolución</li>
                 <li>♾️ Sesiones ilimitadas sin restricciones</li>
               </ul>
-              <p class="alicia-mode-prices">$499 MXN/mes · $3,333 MXN/año</p>
-              <a href="https://wa.me/5214432311761?text=Hola!%20quiero%20el%20acceso%20a%20Alicia%20Premium%20🌟" target="_blank" rel="noopener noreferrer" class="alicia-mode-premium-cta">OBTENER PREMIUM ✨</a>
-              <div class="alicia-mode-code-wrap">
-                <label class="alicia-mode-code-label" for="aliciaPremiumCode">¿Ya tienes código? Ingrésalo aquí</label>
-                <div class="alicia-mode-code-row">
-                  <input type="text" class="alicia-mode-code-input" id="aliciaPremiumCode" placeholder="Código de acceso" autocomplete="off" onkeydown="if(event.key==='Enter')activateAliciaPremium()">
-                  <button type="button" class="alicia-mode-code-btn" onclick="activateAliciaPremium()">Activar</button>
-                </div>
-              </div>
-              <p class="alicia-mode-feedback" id="aliciaPremiumFeedback" aria-live="polite"></p>
+              <button type="button" class="alicia-mode-premium-cta" onclick="showAliciaPremiumGate()">ACCEDER A PREMIUM ✨</button>
             </article>
           </div>
         </div>
@@ -2263,7 +2315,7 @@ body::before{
             ></model-viewer>
           </div>
           <div class="alicia-chat-card" id="aliciaChatCard">
-            <button type="button" class="alicia-tier-badge alicia-tier-badge--upgrade" id="aliciaTierBadge" onclick="showAliciaModeSelect()">👑 Upgrade a Premium</button>
+            <button type="button" class="alicia-tier-badge alicia-tier-badge--upgrade" id="aliciaTierBadge" onclick="showAliciaPremiumGate()">👑 Upgrade a Premium</button>
             <canvas class="alicia-sales-sparkle" id="aliciaSalesSparkle" aria-hidden="true"></canvas>
             <div class="chat-window" id="chatWin"></div>
             <div class="chat-bar">
@@ -3341,7 +3393,6 @@ document.getElementById('audioModal').addEventListener('click',function(e){if(e.
 // ALICIA IA (respuestas vía Netlify Function → Anthropic; ver netlify/functions/claude.js)
 // ══════════════════════════════════
 var ALICIA_FN='/.netlify/functions/claude';
-var ALICIA_PREMIUM_CODES=['ERIORPREMIUM2026','MAGIQUE2026','PREMIUM888'];
 var ALICIA_MODE_KEY='alicia_mode';
 var hist=[];
 var aliciaChatStarted=false;
@@ -3366,6 +3417,14 @@ function showAliciaPremiumWelcomeInChat(){
   var welcome=getAliciaWelcomeMessage();
   addMsg('b',welcome);
   hist.push({role:'assistant',content:welcome});
+}
+function showAliciaPremiumGate(){
+  var gate=document.getElementById('aliciaPremiumGate');
+  if(gate)gate.hidden=false;
+}
+function hideAliciaPremiumGate(){
+  var gate=document.getElementById('aliciaPremiumGate');
+  if(gate)gate.hidden=true;
 }
 function showAliciaModeSelect(){
   var sel=document.getElementById('aliciaModeSelect');
@@ -3403,7 +3462,7 @@ function updateAliciaTierBadge(){
   }else{
     badge.textContent='👑 Upgrade a Premium';
     badge.className='alicia-tier-badge alicia-tier-badge--upgrade';
-    badge.setAttribute('onclick','showAliciaModeSelect()');
+    badge.setAttribute('onclick','showAliciaPremiumGate()');
     badge.removeAttribute('aria-disabled');
   }
 }
@@ -3419,34 +3478,6 @@ function startAliciaFree(){
   try{localStorage.setItem(ALICIA_MODE_KEY,'free');}catch(st){}
   enterAliciaChat();
   startAliciaChatSession();
-}
-function enterAliciaPremiumChat(){
-  enterAliciaChat();
-  var win=document.getElementById('chatWin');
-  var hadMessages=aliciaChatStarted||(win&&win.children.length>0)||hist.length>0;
-  if(hadMessages){
-    showAliciaPremiumWelcomeInChat();
-  }else{
-    startAliciaChatSession();
-  }
-  aliciaChatStarted=true;
-}
-function activateAliciaPremium(){
-  var inp=document.getElementById('aliciaPremiumCode');
-  var fb=document.getElementById('aliciaPremiumFeedback');
-  var code=(inp&&inp.value?inp.value:'').trim().toUpperCase();
-  if(!code){
-    if(fb){fb.textContent='Ingresa tu código de acceso.';fb.className='alicia-mode-feedback error';}
-    return;
-  }
-  if(ALICIA_PREMIUM_CODES.indexOf(code)>=0){
-    try{localStorage.setItem('alicia_premium','true');}catch(st){}
-    if(inp)inp.value='';
-    if(fb){fb.textContent='✨ Premium activado. Bienvenid@ a tu espacio de transformación.';fb.className='alicia-mode-feedback success';}
-    setTimeout(function(){enterAliciaPremiumChat();},400);
-  }else{
-    if(fb){fb.textContent='Código inválido. Verifica e intenta de nuevo.';fb.className='alicia-mode-feedback error';}
-  }
 }
 function resolveAliciaEntry(){
   loadAliciaClientFromStorage();
