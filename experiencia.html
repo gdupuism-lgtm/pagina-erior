@@ -207,6 +207,11 @@ body{
 .audio-badge .ti{font-size:16px}
 .audio-badge.green{background:rgba(29,158,117,.15);border:1px solid rgba(29,158,117,.4);color:var(--green-soft)}
 .audio-badge.pink{background:rgba(212,83,126,.12);border:1px solid rgba(212,83,126,.35);color:var(--pink-soft)}
+.audio-badge-check{cursor:pointer;user-select:none;font:inherit}
+.audio-badge-check input{position:absolute;opacity:0;width:0;height:0;pointer-events:none}
+.audio-badge-check.unchecked{opacity:.4;filter:grayscale(.35)}
+.price-title{font-family:'Syne',sans-serif;font-size:clamp(.68rem,2.4vw,.74rem);font-weight:600;letter-spacing:.08em;color:var(--green-soft);margin-bottom:.35rem}
+.price-note{font-size:.72rem;color:var(--muted);margin-top:.55rem;line-height:1.45}
 .price-block{margin-bottom:1rem}
 .price-big{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,6vw,2.75rem);color:#fff}
 .price-sub{font-size:.78rem;color:var(--muted);display:block;margin-top:.25rem}
@@ -410,15 +415,22 @@ body{
         <p class="result-text" id="mapText"></p>
       </div>
       <div class="result-label" style="text-align:center;margin-bottom:.65rem">TUS 2 AUDIOS RECOMENDADOS</div>
-      <div class="audio-badges">
-        <span class="audio-badge green" id="badgeA1"><i class="ti ti-headphones"></i><span></span></span>
-        <span class="audio-badge pink" id="badgeA2"><i class="ti ti-headphones"></i><span></span></span>
+      <div class="audio-badges" id="audioPick">
+        <label class="audio-badge green audio-badge-check" id="pickA1">
+          <input type="checkbox" id="chkA1" checked>
+          <i class="ti ti-headphones"></i><span id="pickNameA1"></span>
+        </label>
+        <label class="audio-badge pink audio-badge-check" id="pickA2">
+          <input type="checkbox" id="chkA2" checked>
+          <i class="ti ti-headphones"></i><span id="pickNameA2"></span>
+        </label>
       </div>
-      <div class="price-block">
-        <div class="price-big">$1,888 MXN</div>
-        <span class="price-sub">/ $109 USD — Father Upgrade Pack</span>
+      <div class="price-block" id="priceBlock">
+        <div class="price-title" id="priceTitle"></div>
+        <div class="price-big" id="priceBig"></div>
+        <p class="pack-desc" id="priceDesc"></p>
+        <p class="price-note" id="priceNote" hidden></p>
       </div>
-      <p class="pack-desc">2 audios personalizados + audio exclusivo de regalo + Ebook + sorteo 1 año Telegram VIP</p>
       <div class="pay-grid">
         <button type="button" class="pay-btn" id="payWa">WhatsApp</button>
         <button type="button" class="pay-btn" data-detail="oxxo">OXXO</button>
@@ -439,7 +451,7 @@ body{
 (function(){
   var CLAUDE_FN='/.netlify/functions/claude';
   var state={q1:'',q2:'',q3:'',text:'',hasExisting:'',existingAudiosText:''};
-  var SYSTEM_PROMPT='Eres el sistema de diagnóstico subconsciente de Erior Center. Analiza las respuestas del usuario y genera un mapa mental de 3-4 líneas que identifique su patrón limitante principal. Tono: misterioso, poderoso, directo, como si el sistema los conociera desde siempre. Sin listas ni bullets, solo párrafo continuo.\n\nAl final del análisis, si el texto libre del usuario menciona alguno de estos temas, recomienda UN audio complementario adicional con una línea corta:\n- Ansiedad o sistema nervioso → Keep Cool\n- Múltiples metas muy específicas → Select\n- Crisis o urgencia → Emergency 999\n- Salud, cuerpo o energía física → VitaMind o Fit Wave\n- Belleza o magnetismo físico → Éclat\n- Señales, sincronías o despertar espiritual → 11:11\n- Confusión mental o dispersión → Wonderland\n- Falta de energía o motivación → Booster\n- Una persona específica en mente → Amor Magic 2.0 o Mesmerizing Love\n- Ya tiene audios y quiere potenciarlos → Audio Erior 3.0\n- Metas visuales o cinematográficas → Mind Movie\n\nCatálogo completo de referencia:\nMoneyTech — reprograma relación con el dinero y abre flujo financiero\nMaster Abundance — mentalidad de abundancia profunda y sostenida\nLucky — activa sincronías, suerte y manifestación acelerada\nYOU — identidad y autoconcepto profundo desde la raíz\nIcon Aura — presencia, magnetismo y aura personal poderosa\nBooster — energía, estado mental y campo de manifestación\nAttraction — atrae y sostiene el amor, disuelve bloqueos amorosos\nErior Love — amor profundo y pareja ideal\n11:11 — sincronías, despertar y señales del universo\nAmor Propio Magic 3.0 — amor propio, suelta la autocrítica\nMesmerizing Love — atracción irresistible hacia una persona específica\nAmor Magic 2.0 — manifestar una persona específica\nIdentity — solidifica quién eres y cómo te percibes\nÉclat — belleza, presencia física y magnetismo visual\nFit Wave — salud, cuerpo y energía física\nVitaMind — bienestar mental y físico integral\nKeep Cool — calma, sistema nervioso, ecuanimidad\nSelect — 5 intenciones completamente personalizadas\nSimulation-U — reprogramación total de la realidad personal\nWonderland — claridad mental y limpieza de patrones\nWonderland Coherence — coherencia corazón-mente y flujo\nSatori — soltar el apego, la obsesión y la resistencia\nAudio Erior 3.0 — potenciador de todos los audios activos\nEmergency 999 — reset urgente de bloqueos y sistema nervioso\nMind Movie — visualización cinematográfica de metas (complemento visual)\nMaster Mind — mentalidad de alto rendimiento y liderazgo\n\nIMPORTANTE: Si el usuario ya tiene audios, NUNCA recomiendes los mismos que ya tiene. Si los 2 audios recomendados coinciden con audios que ya tiene, sustitúyelos por los siguientes más relevantes del catálogo para su patrón. Menciona en el análisis que los audios recomendados potencian y complementan su proceso actual.';
+  var SYSTEM_PROMPT='Eres el sistema de diagnóstico subconsciente de Erior Center. Analiza las respuestas del usuario y genera un mapa mental de 3-4 líneas que identifique su patrón limitante principal. Tono: misterioso, poderoso, directo, como si el sistema los conociera desde siempre. Sin listas ni bullets, solo párrafo continuo.\n\nAl final del análisis, si el texto libre del usuario menciona alguno de estos temas, recomienda UN audio complementario adicional con una línea corta:\n- Ansiedad o sistema nervioso → Keep Cool\n- Múltiples metas muy específicas → Select\n- Crisis o urgencia → Emergency 999\n- Salud, cuerpo o energía física → VitaMind o Fit Wave\n- Belleza o magnetismo físico → Éclat\n- Señales, sincronías o despertar espiritual → 11:11\n- Confusión mental o dispersión → Wonderland\n- Falta de energía o motivación → Booster\n- Una persona específica en mente → Amor Magic 2.0 o Mesmerizing Love\n- Ya tiene audios y quiere potenciarlos → Audio Erior 3.0\n- Metas visuales o cinematográficas → Mind Movie\n\nCatálogo completo de referencia:\nMoneyTech — reprograma relación con el dinero y abre flujo financiero\nMaster Abundance — mentalidad de abundancia profunda y sostenida\nLucky — activa sincronías, suerte y manifestación acelerada\nYOU — identidad y autoconcepto profundo desde la raíz\nIcon Aura — presencia, magnetismo y aura personal poderosa\nBooster — energía, estado mental y campo de manifestación\nAttraction — atrae y sostiene el amor, disuelve bloqueos amorosos\nErior Love — amor profundo y pareja ideal\n11:11 — sincronías, despertar y señales del universo\nAmor Propio Magic 3.0 — amor propio, suelta la autocrítica\nMesmerizing Love — atracción irresistible hacia una persona específica\nAmor Magic 2.0 — manifestar una persona específica\nIdentity — solidifica quién eres y cómo te percibes\nÉclat — belleza, presencia física y magnetismo visual\nFit Wave — salud, cuerpo y energía física\nVitaMind — bienestar mental y físico integral\nKeep Cool — calma, sistema nervioso, ecuanimidad\nSelect — 5 intenciones completamente personalizadas\nSimulation-U — reprogramación total de la realidad personal\nWonderland — claridad mental y limpieza de patrones\nWonderland Coherence — coherencia corazón-mente y flujo\nSatori — soltar el apego, la obsesión y la resistencia\nAudio Erior 3.0 — potenciador de todos los audios activos\nEmergency 999 — reset urgente de bloqueos y sistema nervioso\nMind Movie — visualización cinematográfica de metas (complemento visual)\nMaster Mind — mentalidad de alto rendimiento y liderazgo\n\nIMPORTANTE: Si el usuario ya tiene audios, NUNCA recomiendes los mismos. Siempre recomienda audios que el usuario NO tenga. Menciona en el análisis que los audios recomendados complementan su proceso actual.';
   var LABELS={
     escasez:'El dinero nunca es suficiente (escasez)',
     amor:'El amor siempre se complica',
@@ -456,12 +468,11 @@ body{
     amor:{dinero:['Erior Love','Attraction'],amor2:['Amor Propio Magic 3.0','Erior Love'],poder:['Satori','Amor Propio Magic 3.0']},
     duda:{dinero:['YOU','Identity'],amor2:['YOU','Mesmerizing Love'],poder:['Identity','Icon Aura']}
   };
-  var FULL_CATALOG=[
-    'MoneyTech','Master Abundance','Lucky','YOU','Icon Aura','Booster','Attraction','Erior Love','11:11',
-    'Amor Propio Magic 3.0','Mesmerizing Love','Amor Magic 2.0','Identity','Éclat','Fit Wave','VitaMind',
-    'Keep Cool','Select','Simulation-U','Wonderland','Wonderland Coherence','Satori','Audio Erior 3.0',
-    'Emergency 999','Mind Movie','Master Mind'
-  ];
+  var CATEGORY_FALLBACK={
+    escasez:['MoneyTech','Master Abundance','Lucky','Booster','Select','Simulation-U','Audio Erior 3.0','Master Mind'],
+    amor:['Erior Love','Amor Propio Magic 3.0','Attraction','Satori','Mesmerizing Love','Amor Magic 2.0','11:11','YOU'],
+    duda:['YOU','Identity','Icon Aura','Éclat','Booster','Keep Cool','Wonderland','Select']
+  };
   var LOAD_MSGS=[
     'ESCANEANDO FRECUENCIAS...',
     'MAPEANDO PATRONES SUBCONSCIENTES...',
@@ -560,19 +571,41 @@ body{
     return state.existingAudiosText.split(/[,;\n]+/).map(function(s){return s.trim();}).filter(Boolean);
   }
 
+  function userHasAudio(name,existing){
+    return existing.indexOf(normalizeAudioName(name))>=0;
+  }
+
+  function pickReplacement(existing,used){
+    var cat=CATEGORY_FALLBACK[state.q1]||CATEGORY_FALLBACK.duda;
+    for(var i=0;i<cat.length;i++){
+      if(!userHasAudio(cat[i],existing)&&!used[cat[i]])return cat[i];
+    }
+    return null;
+  }
+
   function substituteExisting(pair){
     var existing=parseExistingAudios().map(normalizeAudioName);
     if(!existing.length)return pair.slice();
-    var out=[],used={};
+    var result=[],used={};
     pair.forEach(function(a){
-      if(existing.indexOf(normalizeAudioName(a))<0&&!used[a]){out.push(a);used[a]=true;}
+      var pick=a;
+      if(userHasAudio(a,existing)){
+        pick=pickReplacement(existing,used);
+      }
+      if(pick&&!used[pick]){
+        result.push(pick);
+        used[pick]=true;
+      }
     });
-    FULL_CATALOG.forEach(function(a){
-      if(out.length>=2)return;
-      if(existing.indexOf(normalizeAudioName(a))>=0||used[a])return;
-      out.push(a);used[a]=true;
+    var cat=CATEGORY_FALLBACK[state.q1]||CATEGORY_FALLBACK.duda;
+    cat.forEach(function(a){
+      if(result.length>=2)return;
+      if(!userHasAudio(a,existing)&&!used[a]){
+        result.push(a);
+        used[a]=true;
+      }
     });
-    return out.length>=2?out.slice(0,2):pair.slice();
+    return result.length>=2?result.slice(0,2):pair.slice();
   }
 
   function getRecommendedAudios(){
@@ -636,11 +669,54 @@ body{
 
   function showResult(text){
     recommended=getRecommendedAudios();
-    document.getElementById('badgeA1').querySelector('span').textContent=recommended[0];
-    document.getElementById('badgeA2').querySelector('span').textContent=recommended[1];
+    document.getElementById('pickNameA1').textContent=recommended[0];
+    document.getElementById('pickNameA2').textContent=recommended[1];
+    var chkA1=document.getElementById('chkA1');
+    var chkA2=document.getElementById('chkA2');
+    if(chkA1)chkA1.checked=true;
+    if(chkA2)chkA2.checked=true;
+    updateAudioPickUI();
     showScreen(7);
     typewriter(document.getElementById('mapText'),String(text||fallbackMap()),25);
     setupPayments();
+  }
+
+  function getSelectedAudios(){
+    var list=[];
+    var chkA1=document.getElementById('chkA1');
+    var chkA2=document.getElementById('chkA2');
+    if(chkA1&&chkA1.checked)list.push(recommended[0]);
+    if(chkA2&&chkA2.checked)list.push(recommended[1]);
+    return list;
+  }
+
+  function updateAudioPickUI(){
+    var chkA1=document.getElementById('chkA1');
+    var chkA2=document.getElementById('chkA2');
+    var pickA1=document.getElementById('pickA1');
+    var pickA2=document.getElementById('pickA2');
+    if(pickA1&&chkA1)pickA1.classList.toggle('unchecked',!chkA1.checked);
+    if(pickA2&&chkA2)pickA2.classList.toggle('unchecked',!chkA2.checked);
+    var selected=getSelectedAudios();
+    var titleEl=document.getElementById('priceTitle');
+    var bigEl=document.getElementById('priceBig');
+    var descEl=document.getElementById('priceDesc');
+    var noteEl=document.getElementById('priceNote');
+    if(!titleEl||!bigEl||!descEl)return;
+    if(selected.length<=1){
+      titleEl.textContent='Audio individual';
+      bigEl.textContent='$1,190 MXN / $69 USD';
+      descEl.textContent='1 audio personalizado con tu nombre e intención';
+      if(noteEl)noteEl.hidden=true;
+    }else{
+      titleEl.textContent='✦ Father Upgrade Pack — solo junio';
+      bigEl.textContent='$1,888 MXN / $109 USD';
+      descEl.textContent='2 audios personalizados + audio exclusivo de regalo + Ebook Despertar de la Matrix + entrada al sorteo 1 año Telegram VIP';
+      if(noteEl){
+        noteEl.hidden=false;
+        noteEl.textContent='Por solo $698 MXN más llevas el doble y todos los extras 🔥';
+      }
+    }
   }
 
   function typewriter(el,text,delay){
@@ -654,10 +730,18 @@ body{
   }
 
   function setupPayments(){
+    var chkA1=document.getElementById('chkA1');
+    var chkA2=document.getElementById('chkA2');
+    if(chkA1)chkA1.onchange=updateAudioPickUI;
+    if(chkA2)chkA2.onchange=updateAudioPickUI;
     var wa=document.getElementById('payWa');
     if(wa){
       wa.onclick=function(){
-        var msg='Hola quiero el Father Upgrade Pack con '+recommended[0]+' y '+recommended[1];
+        var sel=getSelectedAudios();
+        if(!sel.length)return;
+        var pack=sel.length>=2?'Father Upgrade Pack':'Individual';
+        var audiosPart=sel.length>=2?sel[0]+' y '+sel[1]:sel[0];
+        var msg='Hola quiero '+pack+' con '+audiosPart;
         window.open('https://wa.me/5214432311761?text='+encodeURIComponent(msg),'_blank');
       };
     }
