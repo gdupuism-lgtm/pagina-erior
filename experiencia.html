@@ -155,7 +155,7 @@ body{
 .door-handle{
   position:absolute;right:6px;top:50%;transform:translateY(-50%);
   width:7px;height:7px;border-radius:50%;
-  background:rgba(255,255,255,.25);transition:background .25s;
+  background:rgba(255,255,255,.25);transition:background .25s,transform .25s ease;
 }
 .door .ti{font-size:22px;color:rgba(255,255,255,.55);transition:color .25s}
 .door-label{font-size:clamp(.62rem,2vw,.72rem);line-height:1.35;color:var(--muted)}
@@ -165,6 +165,36 @@ body{
 .door.selected .door-frame{border-color:var(--green);transform:scale(1.03);box-shadow:0 0 16px rgba(29,158,117,.35)}
 .door.selected .door-handle,.door.selected .ti{color:var(--green)}
 .door.selected .door-label{color:rgba(255,255,255,.75)}
+.door.opening{transform:scale(1.08);border-color:var(--green-soft)!important;box-shadow:0 0 20px rgba(29,200,200,.4)!important;transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease}
+.door.opening .door-frame{border-color:var(--green-soft)!important;box-shadow:0 0 20px rgba(29,200,200,.4)}
+.door.opening .door-handle{transform:translateY(-50%) rotate(45deg);background:var(--green-soft)}
+.grid-bg.grid-flash{animation:gridFlash .1s ease-out}
+@keyframes gridFlash{0%{opacity:0}100%{opacity:1}}
+.door-overlay{
+  position:fixed;inset:0;z-index:100;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(2,11,6,.92);
+  opacity:0;visibility:hidden;pointer-events:none;
+  transition:opacity .35s ease,visibility .35s;
+}
+.door-overlay.active{opacity:.9;visibility:visible;pointer-events:auto}
+.door-overlay-text{
+  font-size:clamp(.85rem,3vw,1rem);letter-spacing:.28em;text-transform:uppercase;font-weight:600;
+  background:linear-gradient(118deg,var(--green-soft),var(--pink-soft),var(--green-soft));
+  background-size:200% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  animation:shimmer 2s linear infinite;
+}
+@keyframes shimmer{0%{background-position:0% center}100%{background-position:200% center}}
+.screen.screen-enter{animation:screenFadeIn .6s ease forwards}
+@keyframes screenFadeIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.btn-ghost-back{
+  display:inline-flex;align-items:center;justify-content:center;margin-top:1.25rem;
+  padding:.55rem 1rem;border:1px solid rgba(255,255,255,.12);border-radius:999px;
+  background:transparent;color:var(--muted);cursor:pointer;
+  font-family:'Jost',sans-serif;font-size:.68rem;letter-spacing:.1em;
+  transition:color .2s,border-color .2s,background .2s;
+}
+.btn-ghost-back:hover{color:var(--green-soft);border-color:rgba(29,158,117,.35);background:rgba(29,158,117,.06)}
 .doors-verify{grid-template-columns:repeat(2,1fr);max-width:520px;margin-left:auto;margin-right:auto}
 .doors-verify .door-frame{max-width:88px;height:72px}
 #existingAudiosWrap{margin-top:.5rem;text-align:left}
@@ -255,6 +285,9 @@ body{
   <div class="hud-corner hud-bl" aria-hidden="true"></div>
   <div class="hud-corner hud-br" aria-hidden="true"></div>
   <div class="hud-top">ERIOR — SISTEMA ACTIVO</div>
+  <div class="door-overlay" id="doorOverlay" aria-hidden="true">
+    <div class="door-overlay-text" id="doorOverlayText"></div>
+  </div>
 
   <!-- PANTALLA 0 -->
   <section class="screen active" id="screen-0" data-step="0">
@@ -443,6 +476,7 @@ body{
       <div class="pay-detail" id="detail-transfer">NVIO CLABE: 710969000048503916 / Banregio CLABE: 058470000010260425 — Envía comprobante a eriorcenter@gmail.com con el nombre de tus audios</div>
       <div class="pay-detail" id="detail-crypto">Escríbenos por WhatsApp para coordinar el pago y recibir la dirección de wallet</div>
       <p class="footer-note">Envía tu comprobante a eriorcenter@gmail.com indicando el nombre de tus 2 audios</p>
+      <button type="button" class="btn-ghost-back" onclick="window.location.href='index.html'">← Volver al inicio</button>
     </div>
   </section>
 </div>
@@ -481,31 +515,93 @@ body{
     'GENERANDO TU MAPA MENTAL...',
     'PROTOCOLO COMPLETADO'
   ];
-  var recommended=['',''];
+  var recommendedAudios=['',''];
   var currentScreen=0;
+  var doorAnimating=false;
 
-  function showScreen(n){
-    document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
+  function showScreen(n,fadeIn){
+    document.querySelectorAll('.screen').forEach(function(s){
+      s.classList.remove('active','screen-enter');
+    });
     var el=document.getElementById('screen-'+n);
-    if(el)el.classList.add('active');
+    if(el){
+      el.classList.add('active');
+      if(fadeIn)el.classList.add('screen-enter');
+    }
     currentScreen=n;
+  }
+
+  function normalizeText(s){
+    return String(s).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  }
+
+  function flashGrid(){
+    var grid=document.querySelector('.grid-bg');
+    if(!grid)return;
+    grid.classList.remove('grid-flash');
+    void grid.offsetWidth;
+    grid.classList.add('grid-flash');
+    setTimeout(function(){grid.classList.remove('grid-flash');},120);
+  }
+
+  function typeOverlayLetters(text){
+    var el=document.getElementById('doorOverlayText');
+    if(!el)return;
+    el.textContent='';
+    var i=0;
+    function tick(){
+      if(i<text.length){el.textContent+=text.charAt(i);i++;setTimeout(tick,55);}
+    }
+    tick();
+  }
+
+  function playDoorTransition(door,nextScreen){
+    if(doorAnimating)return;
+    doorAnimating=true;
+    door.classList.add('opening');
+    setTimeout(function(){
+      var overlay=document.getElementById('doorOverlay');
+      if(overlay){
+        overlay.setAttribute('aria-hidden','false');
+        overlay.classList.add('active');
+      }
+      flashGrid();
+      typeOverlayLetters('ACCEDIENDO...');
+      setTimeout(function(){
+        if(overlay){
+          overlay.classList.remove('active');
+          overlay.setAttribute('aria-hidden','true');
+        }
+        door.classList.remove('opening');
+        showScreen(nextScreen,true);
+        doorAnimating=false;
+      },1000);
+    },300);
   }
 
   function setupDoors(containerId,btnId,key){
     var container=document.getElementById(containerId);
     var btn=document.getElementById(btnId);
     if(!container||!btn)return;
+    var nextScreen=currentScreen+1;
+    if(containerId==='doors-1')nextScreen=2;
+    else if(containerId==='doors-2')nextScreen=3;
+    else if(containerId==='doors-3')nextScreen=4;
     container.querySelectorAll('.door').forEach(function(door){
       door.addEventListener('click',function(){
-        container.querySelectorAll('.door').forEach(function(d){d.classList.remove('selected');});
+        if(doorAnimating)return;
+        container.querySelectorAll('.door').forEach(function(d){d.classList.remove('selected','opening');});
         door.classList.add('selected');
         state[key]=door.getAttribute('data-value')||'';
         btn.disabled=!state[key];
+        if(!state[key])return;
+        playDoorTransition(door,nextScreen);
       });
     });
     btn.addEventListener('click',function(){
-      if(!state[key])return;
-      showScreen(currentScreen+1);
+      if(!state[key]||doorAnimating)return;
+      var selected=container.querySelector('.door.selected');
+      if(selected)playDoorTransition(selected,nextScreen);
     });
   }
 
@@ -557,6 +653,7 @@ body{
       if(state.hasExisting==='yes'&&existingField){
         state.existingAudiosText=existingField.value.trim();
       }
+      finalizeRecommendedAudios();
       showScreen(6);
       runTransmission();
     });
@@ -608,10 +705,97 @@ body{
     return result.length>=2?result.slice(0,2):pair.slice();
   }
 
-  function getRecommendedAudios(){
+  function getBaseAudiosFromDoors(){
     var row=AUDIO_MATRIX[state.q1];
-    var pair=row&&row[state.q3]?row[state.q3].slice():['Booster','Identity'];
-    return substituteExisting(pair);
+    return row&&row[state.q3]?row[state.q3].slice():['Booster','Identity'];
+  }
+
+  var TEXT_KEYWORD_RULES=[
+    {audio:'Emergency 999',keywords:['urgente','crisis','desesperado','auxilio'],priority:100},
+    {audio:'11:11',keywords:['11:11','señales','senales','sincronias','sincronías','universo'],priority:95},
+    {audio:'Mesmerizing Love',keywords:['persona especifica','persona específica','pareja'],priority:90},
+    {audio:'Mesmerizing Love',keywords:['\\bex\\b'],priority:88,regex:true},
+    {audio:'Fit Wave',keywords:['flaco','adelgazar','peso','dieta','bajar'],priority:85},
+    {audio:'Fit Wave',keywords:['cuerpo'],priority:80},
+    {audio:'Éclat',keywords:['bella','belleza','guapa','atractiva','fisico','físico'],priority:78},
+    {audio:'VitaMind',keywords:['salud','enfermedad','sanar','dolor'],priority:75},
+    {audio:'Keep Cool',keywords:['ansiedad','nervios','estres','estrés','angustia'],priority:72},
+    {audio:'Select',keywords:['ingles','inglés','idioma','aprender','estudiar'],priority:70},
+    {audio:'Master Mind',keywords:['negocio','emprender','empresa','liderazgo'],priority:68},
+    {audio:'Wonderland',keywords:['bloqueo','atascado','no avanzo'],priority:65},
+    {audio:'Booster',keywords:['energia','energía','cansado','sin fuerza','motivacion','motivación'],priority:62},
+    {audio:'Master Abundance',keywords:['viaje','viajar','conocer lugares'],priority:60},
+    {audio:'Mesmerizing Love',keywords:['amor'],priority:55}
+  ];
+
+  function textMatchesKeyword(text,rule){
+    var i,kw;
+    for(i=0;i<rule.keywords.length;i++){
+      kw=rule.keywords[i];
+      if(rule.regex){
+        try{if(new RegExp(kw,'i').test(text))return true;}catch(e){}
+      }else if(text.indexOf(normalizeText(kw))>=0)return true;
+    }
+    return false;
+  }
+
+  function findTextKeywordAudio(){
+    var text=normalizeText(state.text||'');
+    if(!text)return null;
+    var best=null,i,rule;
+    for(i=0;i<TEXT_KEYWORD_RULES.length;i++){
+      rule=TEXT_KEYWORD_RULES[i];
+      if(textMatchesKeyword(text,rule)){
+        if(!best||rule.priority>best.priority)best=rule;
+      }
+    }
+    return best?best.audio:null;
+  }
+
+  function pickLeastRelevantSlot(pair,overrideAudio){
+    if(pair[0]===overrideAudio||pair[1]===overrideAudio)return-1;
+    var base=getBaseAudiosFromDoors();
+    var a0Base=base.indexOf(pair[0])>=0;
+    var a1Base=base.indexOf(pair[1])>=0;
+    if(a0Base&&!a1Base)return 1;
+    if(a1Base&&!a0Base)return 0;
+    if(pair[0]===overrideAudio)return 0;
+    if(pair[1]===overrideAudio)return 1;
+    return 1;
+  }
+
+  function applyTextKeywordOverride(pair){
+    var result=pair.slice();
+    var override=findTextKeywordAudio();
+    if(!override)return result;
+    var slot=pickLeastRelevantSlot(result,override);
+    if(slot<0)return result;
+    result[slot]=override;
+    return result;
+  }
+
+  function ensureUniquePair(pair){
+    var existing=parseExistingAudios().map(normalizeAudioName);
+    var out=substituteExisting(pair);
+    if(out[0]===out[1]){
+      var rep=pickReplacement(existing,(function(){var u={};u[out[0]]=true;return u;})());
+      if(rep)out[1]=rep;
+    }
+    return out.length>=2?out.slice(0,2):pair.slice();
+  }
+
+  function finalizeRecommendedAudios(){
+    var pair=getBaseAudiosFromDoors();
+    pair=substituteExisting(pair);
+    pair=applyTextKeywordOverride(pair);
+    pair=ensureUniquePair(pair);
+    recommendedAudios=pair.length>=2?pair.slice(0,2):pair.concat(['Identity']).slice(0,2);
+    return recommendedAudios;
+  }
+
+  function renderRecommendedBadges(){
+    document.getElementById('pickNameA1').textContent=recommendedAudios[0];
+    document.getElementById('pickNameA2').textContent=recommendedAudios[1];
   }
 
   function getExistingAudiosLine(){
@@ -646,7 +830,8 @@ body{
       '\nBloqueo principal: '+(LABELS[state.q2]||state.q2)+
       '\nDestino deseado: '+(LABELS[state.q3]||state.q3)+
       '\nTexto libre del usuario: '+state.text+
-      '\nAudios que el usuario ya tiene: '+getExistingAudiosLine();
+      '\nAudios que el usuario ya tiene: '+getExistingAudiosLine()+
+      '\nAudios recomendados por el sistema (usa EXACTAMENTE estos dos en tu análisis, no sugieras otros distintos): '+recommendedAudios[0]+' y '+recommendedAudios[1];
   }
 
   function fetchMap(){
@@ -668,15 +853,13 @@ body{
   function showResultFallback(){showResult(fallbackMap());}
 
   function showResult(text){
-    recommended=getRecommendedAudios();
-    document.getElementById('pickNameA1').textContent=recommended[0];
-    document.getElementById('pickNameA2').textContent=recommended[1];
+    renderRecommendedBadges();
     var chkA1=document.getElementById('chkA1');
     var chkA2=document.getElementById('chkA2');
     if(chkA1)chkA1.checked=true;
     if(chkA2)chkA2.checked=true;
     updateAudioPickUI();
-    showScreen(7);
+    showScreen(7,true);
     typewriter(document.getElementById('mapText'),String(text||fallbackMap()),25);
     setupPayments();
   }
@@ -685,8 +868,8 @@ body{
     var list=[];
     var chkA1=document.getElementById('chkA1');
     var chkA2=document.getElementById('chkA2');
-    if(chkA1&&chkA1.checked)list.push(recommended[0]);
-    if(chkA2&&chkA2.checked)list.push(recommended[1]);
+    if(chkA1&&chkA1.checked)list.push(recommendedAudios[0]);
+    if(chkA2&&chkA2.checked)list.push(recommendedAudios[1]);
     return list;
   }
 
