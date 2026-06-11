@@ -321,22 +321,35 @@ body::before{
   transition:transform .25s ease;
 }
 .btn-alicia-glow:hover{transform:translateY(-2px) scale(1.03)}
-.btn-subconsciente{
-  display:inline-flex;align-items:center;justify-content:center;gap:.35rem;
-  margin:.55rem auto 0;padding:.72rem 1.65rem;border-radius:980px;cursor:pointer;
-  font-family:'Syne',sans-serif;font-size:clamp(.62rem,2.4vw,.72rem);font-weight:600;
-  letter-spacing:.1em;text-transform:none;color:#fff;border:none;
-  background:linear-gradient(135deg,#1D9E75,#D4537E);
-  box-shadow:0 8px 28px rgba(29,158,117,.28),0 0 24px rgba(212,83,126,.18);
-  transition:transform .25s ease,box-shadow .25s ease;
+.btn-eriorworld{
+  position:relative;display:inline-flex;align-items:center;justify-content:center;gap:.55rem;
+  margin:.55rem auto 0;padding:.82rem 2rem;border-radius:980px;cursor:pointer;overflow:hidden;
+  font-family:'Syne',sans-serif;font-size:clamp(.64rem,2.5vw,.74rem);font-weight:700;
+  letter-spacing:.14em;text-transform:lowercase;color:#f8ecd8;
+  border:1px solid rgba(212,175,95,.55);
+  background:linear-gradient(145deg,rgba(12,10,8,.98) 0%,rgba(38,32,22,.96) 45%,rgba(18,15,10,.98) 100%);
+  box-shadow:0 0 0 1px rgba(212,175,95,.12),0 10px 40px rgba(0,0,0,.55),0 0 48px rgba(201,160,96,.18),inset 0 1px 0 rgba(255,255,255,.1);
+  animation:eriorworldGlow 3.5s ease-in-out infinite;
+  transition:transform .28s ease,box-shadow .28s ease;
 }
-.btn-subconsciente:hover{transform:translateY(-2px) scale(1.03);box-shadow:0 12px 36px rgba(29,158,117,.35),0 0 32px rgba(212,83,126,.25)}
-.fsm-list a.fsm-exp-link{
-  background:linear-gradient(135deg,#1D9E75,#D4537E);
-  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
-  filter:drop-shadow(0 0 12px rgba(29,158,117,.35));
+.btn-eriorworld::before{
+  content:'';position:absolute;inset:-2px;border-radius:inherit;pointer-events:none;
+  background:linear-gradient(105deg,transparent 35%,rgba(255,235,180,.35) 50%,transparent 65%);
+  background-size:220% 100%;animation:eriorworldShine 4s ease-in-out infinite;
 }
-.fsm-list a.fsm-exp-link:hover{filter:drop-shadow(0 0 20px rgba(212,83,126,.45)) drop-shadow(0 0 28px rgba(29,158,117,.35));}
+.btn-eriorworld::after{
+  content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  box-shadow:inset 0 0 24px rgba(201,160,96,.08);
+}
+.btn-eriorworld span,.btn-eriorworld .ew-beta{position:relative;z-index:1}
+.btn-eriorworld .ew-beta{
+  font-size:.52rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;
+  padding:.18rem .42rem;border-radius:4px;
+  color:rgba(212,175,95,.95);background:rgba(201,160,96,.14);border:1px solid rgba(201,160,96,.28);
+}
+.btn-eriorworld:hover{transform:translateY(-3px) scale(1.04);box-shadow:0 0 0 1px rgba(212,175,95,.35),0 16px 48px rgba(0,0,0,.6),0 0 64px rgba(201,160,96,.32),inset 0 1px 0 rgba(255,255,255,.15)}
+@keyframes eriorworldGlow{0%,100%{border-color:rgba(212,175,95,.45);box-shadow:0 0 0 1px rgba(212,175,95,.1),0 10px 40px rgba(0,0,0,.55),0 0 40px rgba(201,160,96,.14),inset 0 1px 0 rgba(255,255,255,.1)}50%{border-color:rgba(255,220,150,.65);box-shadow:0 0 0 1px rgba(255,220,150,.2),0 12px 44px rgba(0,0,0,.55),0 0 56px rgba(201,160,96,.28),inset 0 1px 0 rgba(255,255,255,.14)}}
+@keyframes eriorworldShine{0%,100%{background-position:200% 0}50%{background-position:-20% 0}}
 @keyframes aliciaBtnGlow{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
 @keyframes aliciaBtnPulse{0%,100%{box-shadow:0 0 20px rgba(180,120,255,.28),0 0 40px rgba(100,160,255,.1),inset 0 1px 0 rgba(255,255,255,.4)}50%{box-shadow:0 0 36px rgba(220,140,255,.5),0 0 64px rgba(130,100,255,.22),inset 0 1px 0 rgba(255,255,255,.5)}}
 /* Botón flotante PROMOS */
@@ -2080,7 +2093,6 @@ button.alicia-mode-premium-cta{font:inherit;width:100%;cursor:pointer}
     <li><a onclick="goTo('ebook')">Ebook Erior</a></li>
     <li><a onclick="goTo('soporte')">Soporte</a></li>
     <li><a href="https://eriorrabbithole.netlify.app" target="_blank" onclick="closeMenu()">Rabbit Hole</a></li>
-    <li><a href="experiencia.html" class="fsm-exp-link" onclick="closeMenu()">✦ Experiencia Erior</a></li>
   </ul>
   <div class="fsm-line"></div>
   <div class="fsm-socials">
@@ -2130,7 +2142,7 @@ button.alicia-mode-premium-cta{font:inherit;width:100%;cursor:pointer}
 </span>R<em>CENTER</em><canvas id="titleDust" style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:700px;height:100%;pointer-events:none;z-index:10;overflow:visible;"></canvas></h1>
       <div class="cover-tag">Guía interactiva para utilizar tus audios</div>
       <button type="button" class="btn-alicia-glow" onclick="goTo('alicia')">✨ Habla con Alicia IA</button>
-      <button type="button" class="btn-subconsciente" onclick="window.location.href='experiencia.html'">⬡ ENTRAR A MI SUBCONSCIENTE</button>
+      <button type="button" class="btn-eriorworld" onclick="window.open('https://eriorworld.netlify.app','_blank','noopener,noreferrer')"><span>✦ eriorworld</span><span class="ew-beta">beta</span></button>
       <div class="cover-promo-countdown promo-countdown-block" onclick="openPromoModal()" role="button" tabindex="0" aria-label="Ver Father Upgrade Pack">
         <div class="cover-promo-offer">
           <strong class="cover-promo-title">🚀 FATHER UPGRADE PACK</strong>
