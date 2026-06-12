@@ -23,8 +23,12 @@ create table if not exists public.alicia_premium_activations (
   code_id uuid not null references public.alicia_premium_codes(id) on delete cascade,
   visitante_id text not null,
   activated_at timestamptz not null default now(),
+  expires_at timestamptz,
   unique (code_id, visitante_id)
 );
+
+alter table public.alicia_premium_activations
+  add column if not exists expires_at timestamptz;
 
 create index if not exists idx_premium_codes_code on public.alicia_premium_codes (code);
 create index if not exists idx_premium_codes_active on public.alicia_premium_codes (active);

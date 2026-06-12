@@ -81,6 +81,12 @@ async function fetchCodeById(codeId) {
   return Array.isArray(res.data) && res.data[0] ? res.data[0] : null;
 }
 
+function addPremiumDays(days) {
+  return new Date(Date.now() + days * 24 * 60 * 60 * 1000).toISOString();
+}
+
+const PREMIUM_ACCESS_DAYS = 30;
+
 async function validateAndActivateCode(code, visitanteId) {
   const row = await fetchCodeByValue(code);
   if (!row) return { ok: false, error: 'Código inválido' };
@@ -92,7 +98,7 @@ async function validateAndActivateCode(code, visitanteId) {
   const vid = String(visitanteId || 'anon').slice(0, 80);
 
   const existing = await sbFetch(
-    `alicia_premium_activations?code_id=eq.${row.id}&visitante_id=eq.${encodeURIComponent(vid)}&select=id&limit=1`,
+    `alicia_premium_activations?code_id=eq.${row.id}&visitante_id=eq.${encodeURIComponent(vid)}&select=id,expires_at,activated_at&limit=1`,
     { method: 'GET' }
   );
   if (
@@ -100,17 +106,36 @@ async function validateAndActivateCode(code, visitanteId) {
     Array.isArray(existing.data) &&
     existing.data[0]
   ) {
-    return { ok: true, code_id: row.id, client_name: row.client_name || '', reused: true };
+    let expiresAt = existing.data[0].expires_at;
+    if (!expiresAt) {
+      expiresAt = addPremiumDays(PREMIUM_ACCESS_DAYS);
+      await sbFetch(`alicia_premium_activations?id=eq.${existing.data[0].id}`, {
+        method: 'PATCH',
+        headers: { Prefer: 'return=minimal' },
+        body: JSON.stringify({ expires_at: expiresAt }),
+      });
+    }
+    if (new Date(expiresAt) < new Date()) {
+      return { ok: false, error: 'Tu acceso premium expiró' };
+    }
+    return {
+      ok: true,
+      code_id: row.id,
+      client_name: row.client_name || '',
+      expires_at: expiresAt,
+      reused: true,
+    };
   }
 
   if (row.activation_count >= row.max_activations) {
     return { ok: false, error: 'Código ya agotado' };
   }
 
+  const expiresAt = addPremiumDays(PREMIUM_ACCESS_DAYS);
   const ins = await sbFetch('alicia_premium_activations', {
     method: 'POST',
     headers: { Prefer: 'return=minimal' },
-    body: JSON.stringify([{ code_id: row.id, visitante_id: vid }]),
+    body: JSON.stringify([{ code_id: row.id, visitante_id: vid, expires_at: expiresAt }]),
   });
   if (!ins.ok) return { ok: false, error: 'No se pudo activar el código' };
 
@@ -124,7 +149,13 @@ async function validateAndActivateCode(code, visitanteId) {
     }),
   });
 
-  return { ok: true, code_id: row.id, client_name: row.client_name || '', reused: false };
+  return {
+    ok: true,
+    code_id: row.id,
+    client_name: row.client_name || '',
+    expires_at: expiresAt,
+    reused: false,
+  };
 }
 
 async function verifyPremiumCodeId(codeId) {
