@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Alicia Premium — Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Jost',sans-serif;background:#0a0a0c;color:#eee;min-height:100vh;padding:1.5rem}
+.wrap{max-width:920px;margin:0 auto}
+h1{font-size:1.35rem;font-weight:500;margin-bottom:.25rem;color:#f5e6c8}
+.sub{font-size:.78rem;color:rgba(255,255,255,.45);margin-bottom:1.5rem}
+.card{background:rgba(255,255,255,.03);border:1px solid rgba(201,160,96,.2);border-radius:14px;padding:1.25rem;margin-bottom:1rem}
+label{display:block;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:.35rem}
+input,textarea,select{width:100%;padding:.65rem .75rem;border-radius:8px;border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.35);color:#fff;font:inherit;margin-bottom:.75rem}
+input:focus,textarea:focus{outline:none;border-color:rgba(201,160,96,.5)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+@media(max-width:640px){.grid{grid-template-columns:1fr}}
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:.65rem 1.1rem;border-radius:999px;border:none;cursor:pointer;font:inherit;font-size:.72rem;font-weight:600;letter-spacing:.06em}
+.btn-gold{color:#1a1510;background:linear-gradient(135deg,#d4af5f,#c9a060);box-shadow:0 4px 20px rgba(201,160,96,.25)}
+.btn-ghost{color:rgba(255,255,255,.7);background:transparent;border:1px solid rgba(255,255,255,.15)}
+.btn-danger{color:#ffb4b4;border:1px solid rgba(255,100,100,.35);background:rgba(255,80,80,.08)}
+.btn-sm{padding:.4rem .75rem;font-size:.62rem}
+.row-actions{display:flex;gap:.4rem;flex-wrap:wrap}
+table{width:100%;border-collapse:collapse;font-size:.72rem;margin-top:.5rem}
+th,td{text-align:left;padding:.55rem .4rem;border-bottom:1px solid rgba(255,255,255,.06);vertical-align:top}
+th{color:rgba(255,255,255,.4);font-weight:500;font-size:.62rem;text-transform:uppercase;letter-spacing:.06em}
+code{font-family:ui-monospace,monospace;color:#f5e6c8;background:rgba(201,160,96,.1);padding:.15rem .35rem;border-radius:4px}
+.badge{display:inline-block;padding:.15rem .4rem;border-radius:4px;font-size:.58rem;font-weight:600}
+.badge-on{background:rgba(80,200,120,.15);color:#7ddea0}
+.badge-off{background:rgba(255,100,100,.12);color:#ff9999}
+.msg{font-size:.75rem;margin-top:.5rem;min-height:1.2em}
+.msg.err{color:#ff9999}
+.msg.ok{color:#7ddea0}
+#loginView{max-width:360px;margin:4rem auto 0}
+.hidden{display:none!important}
+.copy{cursor:pointer;opacity:.7}
+.copy:hover{opacity:1}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div id="loginView" class="card">
+    <h1>👑 Alicia Premium Admin</h1>
+    <p class="sub">Solo Pauline / equipo Erior</p>
+    <label for="adminKey">Clave de administrador</label>
+    <input type="password" id="adminKey" placeholder="Tu clave admin" autocomplete="current-password">
+    <button type="button" class="btn btn-gold" id="btnLogin" style="width:100%">Entrar</button>
+    <p class="msg err" id="loginMsg"></p>
+  </div>
+
+  <div id="panelView" class="hidden">
+    <h1>👑 Códigos Alicia Premium</h1>
+    <p class="sub">Genera y gestiona accesos para clientes</p>
+
+    <div class="card">
+      <h2 style="font-size:.85rem;margin-bottom:.75rem;color:#f5e6c8">Nuevo código</h2>
+      <div class="grid">
+        <div><label>Cliente</label><input id="fName" placeholder="María García"></div>
+        <div><label>WhatsApp / email</label><input id="fContact" placeholder="+52... o email"></div>
+      </div>
+      <div class="grid">
+        <div><label>Activaciones máx.</label><input type="number" id="fMax" value="1" min="1" max="99"></div>
+        <div><label>Código personalizado (opcional)</label><input id="fCode" placeholder="Auto: ERIOR-XXXX-XXXX"></div>
+      </div>
+      <label>Notas internas</label>
+      <textarea id="fNotes" rows="2" placeholder="Compró pack premium, pago PayPal..."></textarea>
+      <button type="button" class="btn btn-gold" id="btnCreate">Generar código ✨</button>
+      <p class="msg" id="createMsg"></p>
+    </div>
+
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem">
+        <h2 style="font-size:.85rem;color:#f5e6c8">Códigos activos</h2>
+        <button type="button" class="btn btn-ghost btn-sm" id="btnRefresh">Actualizar</button>
+      </div>
+      <div style="overflow-x:auto">
+        <table>
+          <thead>
+            <tr>
+              <th>Código</th>
+              <th>Cliente</th>
+              <th>Usos</th>
+              <th>Estado</th>
+              <th>Creado</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="codesBody"></tbody>
+        </table>
+      </div>
+      <p class="msg err" id="listMsg"></p>
+    </div>
+
+    <button type="button" class="btn btn-ghost btn-sm" id="btnLogout">Cerrar sesión</button>
+  </div>
+</div>
+<script>
+(function(){
+  var ADMIN_FN='/.netlify/functions/premium-admin';
+  var SESSION_KEY='erior_alicia_admin_key';
+
+  function getKey(){return sessionStorage.getItem(SESSION_KEY)||'';}
+  function setKey(k){sessionStorage.setItem(SESSION_KEY,k);}
+  function clearKey(){sessionStorage.removeItem(SESSION_KEY);}
+
+  function headers(){
+    return{'Content-Type':'application/json','X-Admin-Key':getKey()};
+  }
+
+  function showPanel(on){
+    document.getElementById('loginView').classList.toggle('hidden',on);
+    document.getElementById('panelView').classList.toggle('hidden',!on);
+  }
+
+  function fmtDate(s){
+    if(!s)return '—';
+    try{return new Date(s).toLocaleDateString('es-MX',{day:'2-digit',month:'short',year:'2-digit'});}catch(e){return s;}
+  }
+
+  function copyText(t){
+    if(navigator.clipboard){navigator.clipboard.writeText(t);}
+    else{window.prompt('Copia el código:',t);}
+  }
+
+  async function loadCodes(){
+    var msg=document.getElementById('listMsg');
+    msg.textContent='';
+    msg.className='msg';
+    try{
+      var r=await fetch(ADMIN_FN,{headers:{'X-Admin-Key':getKey()}});
+      var d=await r.json();
+      if(!r.ok||!d.ok){msg.textContent=(d&&d.error)||'Error al cargar';msg.className='msg err';return;}
+      var tbody=document.getElementById('codesBody');
+      tbody.innerHTML='';
+      (d.codes||[]).forEach(function(c){
+        var tr=document.createElement('tr');
+        var active=c.active!==false;
+        tr.innerHTML=
+          '<td><code class="copy" title="Copiar">'+c.code+'</code></td>'+
+          '<td>'+(c.client_name||'—')+'<br><span style="opacity:.5;font-size:.65rem">'+(c.client_email||c.client_whatsapp||'')+'</span></td>'+
+          '<td>'+(c.activation_count||0)+' / '+c.max_activations+'</td>'+
+          '<td><span class="badge '+(active?'badge-on':'badge-off')+'">'+(active?'Activo':'Off')+'</span></td>'+
+          '<td>'+fmtDate(c.created_at)+'</td>'+
+          '<td><div class="row-actions">'+
+            '<button type="button" class="btn btn-ghost btn-sm" data-copy="'+c.code+'">Copiar</button>'+
+            '<button type="button" class="btn btn-danger btn-sm" data-toggle="'+c.id+'" data-active="'+(active?'0':'1')+'">'+(active?'Desactivar':'Activar')+'</button>'+
+          '</div></td>';
+        tbody.appendChild(tr);
+      });
+      tbody.querySelectorAll('[data-copy]').forEach(function(btn){
+        btn.onclick=function(){copyText(btn.getAttribute('data-copy'));btn.textContent='✓';setTimeout(function(){btn.textContent='Copiar';},1200);};
+      });
+      tbody.querySelectorAll('[data-toggle]').forEach(function(btn){
+        btn.onclick=function(){toggleCode(btn.getAttribute('data-toggle'),btn.getAttribute('data-active')==='1');};
+      });
+    }catch(e){
+      msg.textContent='Sin conexión al servidor';
+      msg.className='msg err';
+    }
+  }
+
+  async function toggleCode(id,active){
+    await fetch(ADMIN_FN,{method:'POST',headers:headers(),body:JSON.stringify({action:'toggle',id:id,active:active})});
+    loadCodes();
+  }
+
+  document.getElementById('btnLogin').onclick=async function(){
+    var key=document.getElementById('adminKey').value.trim();
+    var msg=document.getElementById('loginMsg');
+    if(!key){msg.textContent='Ingresa la clave';return;}
+    setKey(key);
+    try{
+      var r=await fetch(ADMIN_FN,{headers:{'X-Admin-Key':key}});
+      var d=await r.json();
+      if(r.status===401){clearKey();msg.textContent='Clave incorrecta';return;}
+      if(!r.ok){clearKey();msg.textContent=(d&&d.error)||'Error';return;}
+      showPanel(true);
+      loadCodes();
+    }catch(e){
+      clearKey();
+      msg.textContent='No hay conexión. ¿Está desplegado en Netlify?';
+    }
+  };
+
+  document.getElementById('btnLogout').onclick=function(){clearKey();showPanel(false);document.getElementById('adminKey').value='';};
+  document.getElementById('btnRefresh').onclick=loadCodes;
+
+  document.getElementById('btnCreate').onclick=async function(){
+    var msg=document.getElementById('createMsg');
+    msg.textContent='Generando...';
+    msg.className='msg';
+    var body={
+      action:'create',
+      client_name:document.getElementById('fName').value.trim(),
+      client_whatsapp:document.getElementById('fContact').value.trim(),
+      notes:document.getElementById('fNotes').value.trim(),
+      max_activations:parseInt(document.getElementById('fMax').value,10)||1
+    };
+    var custom=document.getElementById('fCode').value.trim();
+    if(custom)body.code=custom;
+    try{
+      var r=await fetch(ADMIN_FN,{method:'POST',headers:headers(),body:JSON.stringify(body)});
+      var d=await r.json();
+      if(!r.ok||!d.ok){msg.textContent=(d&&d.error)||'Error';msg.className='msg err';return;}
+      msg.textContent='✓ Código creado: '+d.code.code+' — cópialo y envíaselo al cliente';
+      msg.className='msg ok';
+      copyText(d.code.code);
+      document.getElementById('fCode').value='';
+      loadCodes();
+    }catch(e){
+      msg.textContent='Error de conexión';
+      msg.className='msg err';
+    }
+  };
+
+  document.getElementById('adminKey').onkeydown=function(e){if(e.key==='Enter')document.getElementById('btnLogin').click();};
+
+  if(getKey()){
+    fetch(ADMIN_FN,{headers:{'X-Admin-Key':getKey()}}).then(function(r){
+      if(r.ok){showPanel(true);loadCodes();}
+      else clearKey();
+    }).catch(function(){clearKey();});
+  }
+})();
+</script>
+</body>
+</html>

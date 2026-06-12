@@ -1,0 +1,31 @@
+# ERIOR CENTER — no subir basura de Descargas
+node_modules/
+.futura/
+futura/
+erior-world/
+_tools/
+*.htm
+index (*).html
+index portal.html
+grand theft.htm
+Backrooms-*
+
+# PDFs / docs personales (excepto ebook del sitio)
+mental_glow_up*.pdf
+Ebook_Erior*.pdf
+
+# Secrets — NUNCA commitear
+.env
+.env.*
+*.local
+config.js
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.log
+.cursor/
+
+# Archivos grandes opcionales (descomenta si no quieres en GitHub)
+# testimonio1.mp4
+# *.glb
