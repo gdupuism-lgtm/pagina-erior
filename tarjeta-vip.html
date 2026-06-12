@@ -154,14 +154,17 @@ body{
 .card-top{
   display:flex;align-items:flex-start;justify-content:space-between;gap:.75rem;
   position:relative;z-index:2;
+  flex-shrink:0;
+  overflow:visible;
 }
 
 .card-logo{
   display:block;
-  height:clamp(40px,8vw,48px);
-  min-height:40px;
-  width:auto;max-width:42%;
+  height:clamp(70px,14vw,88px);
+  min-height:70px;
+  width:auto;max-width:58%;
   object-fit:contain;
+  flex-shrink:0;
   position:relative;z-index:2;
   mix-blend-mode:lighten;
   filter:drop-shadow(0 2px 10px rgba(0,0,0,.45)) brightness(1.08);
@@ -184,15 +187,16 @@ body{
   display:flex;align-items:center;justify-content:center;
   min-height:0;
   margin:.1rem 0;
+  background:none;
+  overflow:visible;
 }
 
 .card-figure{
   max-height:clamp(110px,28vw,150px);
   width:auto;max-width:72%;
   object-fit:contain;
-  opacity:.95;
-  mix-blend-mode:screen;
-  filter:contrast(1.4) brightness(0.88) saturate(1.12) drop-shadow(0 8px 24px rgba(0,0,0,.28));
+  display:block;
+  filter:drop-shadow(0 8px 20px rgba(0,0,0,.22));
   pointer-events:none;
   user-select:none;
 }
@@ -273,7 +277,7 @@ body{
       <div class="card-edge"></div>
       <div class="card-content">
         <div class="card-top">
-          <img class="card-logo" src="assets/logo-erior.png" alt="Erior Center" width="140" height="48">
+          <img class="card-logo" src="assets/logo-erior.png" alt="Erior Center" width="220" height="70">
           <span class="card-member">MEMBER</span>
         </div>
         <div class="card-hero">
