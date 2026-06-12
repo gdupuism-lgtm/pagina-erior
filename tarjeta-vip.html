@@ -18,14 +18,20 @@ body{
     radial-gradient(ellipse 60% 50% at 80% 100%,rgba(201,160,96,.06) 0%,transparent 50%),
     #060608;
   color:#fff;
-  display:flex;align-items:center;justify-content:center;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
   padding:clamp(1.25rem,4vw,2.5rem);
+  padding-bottom:clamp(2.5rem,6vw,3.5rem);
   overflow-x:hidden;
+}
+
+.page-shell{
+  width:min(600px,calc(100vw - 2rem));
+  display:flex;flex-direction:column;align-items:center;  gap:clamp(.85rem,3vw,1.15rem);
 }
 
 .scene{
   perspective:1200px;
-  width:min(600px,calc(100vw - 2rem));
+  width:100%;
 }
 
 .card-wrap{
@@ -203,6 +209,55 @@ body{
 
 .card-body{
   text-align:center;
+  position:relative;
+  z-index:4;
+  flex-shrink:0;
+}
+
+.share-bar{
+  display:flex;align-items:center;justify-content:center;
+  gap:clamp(.45rem,2vw,.65rem);
+  width:100%;flex-wrap:wrap;
+}
+
+.share-btn{
+  appearance:none;border:none;cursor:pointer;
+  font-family:'Syne',sans-serif;
+  font-size:clamp(.58rem,2.2vw,.66rem);font-weight:600;
+  letter-spacing:.06em;text-transform:uppercase;
+  color:rgba(255,252,255,.96);
+  padding:.55rem .85rem;border-radius:999px;
+  display:inline-flex;align-items:center;justify-content:center;gap:.35rem;
+  background-color:transparent;
+  background-image:
+    linear-gradient(118deg,rgba(255,170,210,.45) 0%,rgba(186,130,255,.4) 25%,rgba(130,200,255,.42) 50%,rgba(245,210,140,.44) 75%,rgba(200,160,255,.42) 100%),
+    linear-gradient(145deg,rgba(255,255,255,.28) 0%,rgba(255,255,255,.08) 45%,rgba(201,160,96,.12) 100%);
+  background-size:220% 220%,100% 100%;
+  background-position:42% 58%,0 0;
+  border:1px solid rgba(255,255,255,.32);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 6px 18px rgba(0,0,0,.28);
+  transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease;
+  -webkit-tap-highlight-color:transparent;
+}
+
+.share-btn:hover{
+  transform:translateY(-1px);
+  border-color:rgba(255,255,255,.45);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.48),0 8px 22px rgba(0,0,0,.32),0 0 20px rgba(201,160,96,.12);
+}
+
+.share-btn:active{transform:scale(.97)}
+
+.share-toast{
+  font-size:.72rem;color:rgba(255,236,200,.92);
+  text-align:center;min-height:1.2em;
+  padding:0 .5rem;
+  opacity:0;transform:translateY(4px);
+  transition:opacity .25s ease,transform .25s ease;
+}
+
+.share-toast.is-visible{
+  opacity:1;transform:translateY(0);
 }
 
 .card-title{
@@ -239,6 +294,7 @@ body{
 .card-foot{
   display:flex;align-items:flex-end;justify-content:space-between;
   margin-top:.35rem;
+  flex-shrink:0;
 }
 
 .card-valid{
@@ -255,6 +311,38 @@ body{
   pointer-events:none;
 }
 
+@media(max-width:600px){
+  .card-wrap{aspect-ratio:600/430}
+  .card-content{padding:clamp(.85rem,3vw,1.1rem) clamp(.95rem,3.5vw,1.2rem)}
+  .card-logo{
+    height:clamp(52px,11vw,62px);
+    min-height:52px;
+    max-width:52%;
+  }
+  .card-hero{
+    flex:0 0 auto;
+    max-height:72px;
+    margin:0;
+    align-items:flex-end;
+    z-index:1;
+  }
+  .card-figure{
+    max-height:68px;
+    max-width:52%;
+  }
+  .card-body{
+    margin-top:.2rem;
+    padding-top:.15rem;
+  }
+  .card-title{
+    font-size:clamp(1.05rem,4.2vw,1.3rem);
+    margin-bottom:.28rem;
+  }
+  .card-name{margin-bottom:.4rem}
+  .card-foot{margin-top:.2rem}
+  .share-btn{padding:.5rem .7rem;font-size:.56rem}
+}
+
 @media(max-width:520px){
   .card-member{letter-spacing:.28em;font-size:.48rem}
   .card-name{letter-spacing:.16em}
@@ -268,32 +356,40 @@ body{
 </style>
 </head>
 <body>
-<div class="scene">
-  <div class="card-wrap" id="cardWrap" aria-label="Tarjeta Alicia Premium VIP">
-    <div class="card" id="card">
-      <div class="card-holo" id="cardHolo"></div>
-      <div class="card-shine" id="cardShine"></div>
-      <div class="card-glare" id="cardGlare"></div>
-      <div class="card-edge"></div>
-      <div class="card-content">
-        <div class="card-top">
-          <img class="card-logo" src="assets/logo-erior.png" alt="Erior Center" width="220" height="70">
-          <span class="card-member">MEMBER</span>
-        </div>
-        <div class="card-hero">
-          <img class="card-figure" src="assets/alicia-premium-figure.png" alt="" aria-hidden="true">
-        </div>
-        <div class="card-body">
-          <h1 class="card-title">Alicia Premium</h1>
-          <p class="card-name" id="vipName">MIEMBRO VIP</p>
-          <p class="card-code" id="vipCode">ERIOR - XXXX - XXXX</p>
-        </div>
-        <div class="card-foot">
-          <span class="card-valid">Acceso válido por 60 días</span>
+<div class="page-shell">
+  <div class="scene">
+    <div class="card-wrap" id="cardWrap" aria-label="Tarjeta Alicia Premium VIP">
+      <div class="card" id="card">
+        <div class="card-holo" id="cardHolo"></div>
+        <div class="card-shine" id="cardShine"></div>
+        <div class="card-glare" id="cardGlare"></div>
+        <div class="card-edge"></div>
+        <div class="card-content">
+          <div class="card-top">
+            <img class="card-logo" src="assets/logo-erior.png" alt="Erior Center" width="220" height="70">
+            <span class="card-member">MEMBER</span>
+          </div>
+          <div class="card-hero">
+            <img class="card-figure" src="assets/alicia-premium-figure.png" alt="" aria-hidden="true">
+          </div>
+          <div class="card-body">
+            <h1 class="card-title">Alicia Premium</h1>
+            <p class="card-name" id="vipName">MIEMBRO VIP</p>
+            <p class="card-code" id="vipCode">ERIOR - XXXX - XXXX</p>
+          </div>
+          <div class="card-foot">
+            <span class="card-valid">Acceso válido por 60 días</span>
+          </div>
         </div>
       </div>
     </div>
   </div>
+  <div class="share-bar" aria-label="Compartir tarjeta VIP">
+    <button type="button" class="share-btn" id="shareInstagram">📷 Instagram</button>
+    <button type="button" class="share-btn" id="shareTikTok">🎵 TikTok</button>
+    <button type="button" class="share-btn" id="shareWhatsApp">💬 WhatsApp</button>
+  </div>
+  <p class="share-toast" id="shareToast" aria-live="polite"></p>
 </div>
 <p class="page-hint">Mueve el cursor sobre la tarjeta para ver el efecto holográfico</p>
 <script>
@@ -309,6 +405,79 @@ body{
   document.getElementById('vipName').textContent=(nombre||'MIEMBRO VIP').toUpperCase();
   document.getElementById('vipCode').textContent=formatCode(codigo);
   if(nombre){document.title='Alicia Premium — '+nombre;}
+
+  var toastEl=document.getElementById('shareToast');
+  var toastTimer=null;
+
+  function getShareText(){
+    return '¡Ya soy miembro Alicia Premium! ✨👑 @eriorcenter '+window.location.href;
+  }
+
+  function showShareToast(msg){
+    if(!toastEl)return;
+    toastEl.textContent=msg;
+    toastEl.classList.add('is-visible');
+    if(toastTimer)clearTimeout(toastTimer);
+    toastTimer=setTimeout(function(){
+      toastEl.classList.remove('is-visible');
+    },3200);
+  }
+
+  function copyShareText(){
+    var text=getShareText();
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      return navigator.clipboard.writeText(text).catch(function(){
+        fallbackCopy(text);
+      });
+    }
+    fallbackCopy(text);
+    return Promise.resolve();
+  }
+
+  function fallbackCopy(text){
+    var ta=document.createElement('textarea');
+    ta.value=text;
+    ta.setAttribute('readonly','');
+    ta.style.position='fixed';
+    ta.style.left='-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    try{document.execCommand('copy');}catch(e){}
+    ta.remove();
+  }
+
+  function tryOpenApp(appUrl,webUrl){
+    var isMobile=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    if(isMobile){
+      var opened=Date.now();
+      window.location.href=appUrl;
+      setTimeout(function(){
+        if(Date.now()-opened<1800){
+          window.open(webUrl,'_blank','noopener,noreferrer');
+        }
+      },900);
+    }else{
+      window.open(webUrl,'_blank','noopener,noreferrer');
+    }
+  }
+
+  document.getElementById('shareInstagram').onclick=function(){
+    copyShareText().then(function(){
+      showShareToast('¡Link copiado! Pégalo en tu historia 📋');
+      tryOpenApp('instagram://story-camera','https://www.instagram.com/');
+    });
+  };
+
+  document.getElementById('shareTikTok').onclick=function(){
+    copyShareText().then(function(){
+      showShareToast('¡Link copiado! Pégalo en tu historia 📋');
+      tryOpenApp('tiktok://','https://www.tiktok.com/');
+    });
+  };
+
+  document.getElementById('shareWhatsApp').onclick=function(){
+    window.open('https://wa.me/?text='+encodeURIComponent(getShareText()),'_blank','noopener,noreferrer');
+  };
 
   var wrap=document.getElementById('cardWrap');
   var holo=document.getElementById('cardHolo');
