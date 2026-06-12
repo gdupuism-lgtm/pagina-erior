@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Alicia Premium — Tarjeta VIP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600&family=Syne:wght@600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%}
+body{
+  font-family:'Jost',sans-serif;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 0%,rgba(120,100,180,.12) 0%,transparent 55%),
+    radial-gradient(ellipse 60% 50% at 80% 100%,rgba(201,160,96,.06) 0%,transparent 50%),
+    #060608;
+  color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  padding:clamp(1.25rem,4vw,2.5rem);
+  overflow-x:hidden;
+}
+
+.scene{
+  perspective:1200px;
+  width:min(600px,calc(100vw - 2rem));
+}
+
+.card-wrap{
+  position:relative;
+  width:100%;
+  aspect-ratio:600/380;
+  transform-style:preserve-3d;
+  will-change:transform;
+  cursor:pointer;
+  touch-action:none;
+}
+
+.card{
+  position:absolute;inset:0;
+  border-radius:22px;
+  overflow:hidden;
+  transform-style:preserve-3d;
+  border:1.5px solid rgba(255,255,255,.34);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.52),
+    inset 0 -1px 0 rgba(255,255,255,.1),
+    0 24px 64px rgba(0,0,0,.55),
+    0 0 48px rgba(255,255,255,.06);
+  transition:box-shadow .35s ease,border-color .35s ease;
+}
+
+.card-wrap.is-active .card{
+  border-color:rgba(255,255,255,.48);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.58),
+    inset 0 -1px 0 rgba(255,255,255,.12),
+    0 32px 80px rgba(0,0,0,.6),
+    0 0 72px rgba(255,255,255,.12);
+}
+
+.card-holo{
+  position:absolute;inset:0;
+  background-color:#121018;
+  background-repeat:no-repeat;
+  background-blend-mode:overlay,soft-light,soft-light,normal;
+  background-image:
+    conic-gradient(from 210deg at 50% 50%,
+      hsla(330,95%,78%,.58) 0deg,
+      hsla(270,92%,76%,.54) 40deg,
+      hsla(210,95%,74%,.56) 80deg,
+      hsla(165,90%,72%,.52) 120deg,
+      hsla(95,88%,70%,.54) 160deg,
+      hsla(48,100%,72%,.58) 200deg,
+      hsla(12,95%,74%,.56) 240deg,
+      hsla(285,92%,76%,.55) 280deg,
+      hsla(330,95%,78%,.58) 360deg
+    ),
+    linear-gradient(
+      118deg,
+      rgba(255,170,210,.62) 0%,
+      rgba(186,130,255,.56) 14%,
+      rgba(130,200,255,.58) 28%,
+      rgba(120,235,200,.54) 42%,
+      rgba(245,210,140,.56) 56%,
+      rgba(200,160,255,.55) 70%,
+      rgba(255,185,195,.58) 84%,
+      rgba(160,220,255,.56) 100%
+    ),
+    linear-gradient(
+      -72deg,
+      rgba(255,200,230,.48) 0%,
+      transparent 20%,
+      rgba(165,210,255,.46) 40%,
+      rgba(190,255,220,.42) 55%,
+      rgba(255,230,160,.46) 72%,
+      transparent 86%,
+      rgba(210,170,255,.48) 100%
+    ),
+    linear-gradient(145deg,rgba(255,255,255,.42) 0%,rgba(255,255,255,.16) 32%,rgba(255,255,255,.08) 48%,transparent 70%);
+  background-size:200% 200%,380% 380%,320% 320%,100% 100%;
+  background-position:42% 58%,10% 40%,90% 26%,0 0;
+  animation:cardHoloShift 14s ease-in-out infinite;
+}
+
+@keyframes cardHoloShift{
+  0%,100%{background-position:42% 58%,8% 38%,92% 22%,0 0;}
+  25%{background-position:58% 42%,46% 16%,58% 70%,0 0;}
+  50%{background-position:38% 62%,90% 54%,14% 76%,0 0;}
+  75%{background-position:52% 48%,52% 74%,68% 14%,0 0;}
+}
+
+.card-shine{
+  position:absolute;inset:0;pointer-events:none;z-index:3;
+  background:radial-gradient(
+    circle at var(--shine-x,50%) var(--shine-y,50%),
+    rgba(255,255,255,.42) 0%,
+    rgba(255,255,255,.14) 18%,
+    transparent 52%
+  );
+  mix-blend-mode:soft-light;
+  opacity:.85;
+  transition:opacity .25s ease;
+}
+
+.card-glare{
+  position:absolute;inset:0;pointer-events:none;z-index:4;
+  background:linear-gradient(
+    calc(var(--glare-angle,118deg)),
+    transparent 38%,
+    rgba(255,255,255,.28) 48%,
+    rgba(255,255,255,.08) 52%,
+    transparent 62%
+  );
+  mix-blend-mode:overlay;
+  opacity:var(--glare-opacity,.35);
+}
+
+.card-edge{
+  position:absolute;inset:0;pointer-events:none;z-index:5;border-radius:inherit;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.18),inset 0 1px 0 rgba(255,255,255,.35);
+}
+
+.card-content{
+  position:relative;z-index:2;
+  height:100%;
+  padding:clamp(1rem,3.5vw,1.35rem) clamp(1.1rem,3.8vw,1.5rem);
+  display:flex;flex-direction:column;
+  transform:translateZ(28px);
+}
+
+.card-top{
+  display:flex;align-items:flex-start;justify-content:space-between;gap:.75rem;
+}
+
+.card-logo{
+  height:clamp(28px,7vw,38px);
+  width:auto;object-fit:contain;
+  filter:drop-shadow(0 2px 8px rgba(0,0,0,.35));
+}
+
+.card-member{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(.52rem,2vw,.62rem);
+  font-weight:700;
+  letter-spacing:.42em;
+  text-transform:uppercase;
+  color:rgba(255,252,255,.92);
+  text-shadow:0 1px 3px rgba(0,0,0,.35);
+  padding-top:.15rem;
+}
+
+.card-hero{
+  position:relative;
+  flex:1;
+  display:flex;align-items:center;justify-content:center;
+  min-height:0;
+  margin:.1rem 0;
+}
+
+.card-figure{
+  max-height:clamp(110px,28vw,150px);
+  width:auto;max-width:72%;
+  object-fit:contain;
+  opacity:.88;
+  mix-blend-mode:soft-light;
+  filter:drop-shadow(0 8px 24px rgba(0,0,0,.25)) saturate(1.08);
+  pointer-events:none;
+  user-select:none;
+}
+
+.card-body{
+  text-align:center;
+}
+
+.card-title{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(1.35rem,5.2vw,1.85rem);
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:rgba(255,252,255,.98);
+  text-shadow:0 2px 12px rgba(0,0,0,.35);
+  line-height:1.1;
+  margin-bottom:.35rem;
+}
+
+.card-name{
+  font-size:clamp(.72rem,2.6vw,.88rem);
+  font-weight:500;
+  letter-spacing:.24em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,.88);
+  margin-bottom:.55rem;
+}
+
+.card-code{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(.82rem,3vw,1rem);
+  font-weight:600;
+  letter-spacing:.2em;
+  color:rgba(255,252,255,.95);
+  text-shadow:0 1px 8px rgba(0,0,0,.3);
+  word-break:break-word;
+}
+
+.card-foot{
+  display:flex;align-items:flex-end;justify-content:space-between;
+  margin-top:.35rem;
+}
+
+.card-valid{
+  font-size:clamp(.58rem,2vw,.68rem);
+  color:rgba(255,255,255,.52);
+  letter-spacing:.04em;
+}
+
+.page-hint{
+  position:fixed;bottom:1rem;left:0;right:0;
+  text-align:center;
+  font-size:.68rem;color:rgba(255,255,255,.28);
+  letter-spacing:.04em;
+  pointer-events:none;
+}
+
+@media(max-width:520px){
+  .card-member{letter-spacing:.28em;font-size:.48rem}
+  .card-name{letter-spacing:.16em}
+  .card-code{letter-spacing:.12em}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .card-holo{animation:none}
+  .card-wrap{transform:none!important}
+}
+</style>
+</head>
+<body>
+<div class="scene">
+  <div class="card-wrap" id="cardWrap" aria-label="Tarjeta Alicia Premium VIP">
+    <div class="card" id="card">
+      <div class="card-holo" id="cardHolo"></div>
+      <div class="card-shine" id="cardShine"></div>
+      <div class="card-glare" id="cardGlare"></div>
+      <div class="card-edge"></div>
+      <div class="card-content">
+        <div class="card-top">
+          <img class="card-logo" src="assets/logo-erior.png" alt="Erior Center" width="120" height="38">
+          <span class="card-member">MEMBER</span>
+        </div>
+        <div class="card-hero">
+          <img class="card-figure" src="assets/alicia-premium-figure.png" alt="" aria-hidden="true">
+        </div>
+        <div class="card-body">
+          <h1 class="card-title">Alicia Premium</h1>
+          <p class="card-name" id="vipName">MIEMBRO VIP</p>
+          <p class="card-code" id="vipCode">ERIOR - XXXX - XXXX</p>
+        </div>
+        <div class="card-foot">
+          <span class="card-valid">Acceso válido por 60 días</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<p class="page-hint">Mueve el cursor sobre la tarjeta para ver el efecto holográfico</p>
+<script>
+(function(){
+  var params=new URLSearchParams(window.location.search);
+  var nombre=(params.get('nombre')||params.get('name')||'').trim();
+  var codigo=(params.get('codigo')||params.get('code')||'').trim();
+
+  function formatCode(code){
+    return String(code||'').trim().toUpperCase().split('-').filter(Boolean).join(' - ')||'ERIOR - XXXX - XXXX';
+  }
+
+  document.getElementById('vipName').textContent=(nombre||'MIEMBRO VIP').toUpperCase();
+  document.getElementById('vipCode').textContent=formatCode(codigo);
+  if(nombre){document.title='Alicia Premium — '+nombre;}
+
+  var wrap=document.getElementById('cardWrap');
+  var holo=document.getElementById('cardHolo');
+  var shine=document.getElementById('cardShine');
+  var glare=document.getElementById('cardGlare');
+
+  var tiltX=0,tiltY=0,targetX=0,targetY=0;
+  var shineX=50,shineY=50,targetShineX=50,targetShineY=50;
+  var raf=null;
+  var reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function lerp(a,b,t){return a+(b-a)*t;}
+
+  function applyFrame(){
+    tiltX=lerp(tiltX,targetX,.12);
+    tiltY=lerp(tiltY,targetY,.12);
+    shineX=lerp(shineX,targetShineX,.18);
+    shineY=lerp(shineY,targetShineY,.18);
+
+    wrap.style.transform='rotateX('+tiltX.toFixed(2)+'deg) rotateY('+tiltY.toFixed(2)+'deg)';
+    shine.style.setProperty('--shine-x',shineX.toFixed(1)+'%');
+    shine.style.setProperty('--shine-y',shineY.toFixed(1)+'%');
+
+    var angle=118+(tiltY*2.2)-(tiltX*1.4);
+    glare.style.setProperty('--glare-angle',angle.toFixed(1)+'deg');
+    glare.style.setProperty('--glare-opacity',(0.28+Math.abs(tiltY)*0.012).toFixed(2));
+
+    var holoX=42+(tiltY*0.35);
+    var holoY=58-(tiltX*0.35);
+    holo.style.backgroundPosition=holoX.toFixed(1)+'% '+holoY.toFixed(1)+'%, '+(10+tiltY*0.2).toFixed(1)+'% '+(40-tiltX*0.15).toFixed(1)+'%, '+(90-tiltY*0.18).toFixed(1)+'% '+(26+tiltX*0.12).toFixed(1)+'%, 0 0';
+
+    raf=requestAnimationFrame(applyFrame);
+  }
+
+  function setFromNorm(nx,ny){
+    targetY=nx*14;
+    targetX=-ny*14;
+    targetShineX=50+nx*38;
+    targetShineY=50+ny*38;
+    wrap.classList.add('is-active');
+  }
+
+  function resetTilt(){
+    targetX=0;targetY=0;
+    targetShineX=50;targetShineY=50;
+    wrap.classList.remove('is-active');
+  }
+
+  if(!reduced){
+    wrap.addEventListener('mousemove',function(e){
+      var r=wrap.getBoundingClientRect();
+      var nx=((e.clientX-r.left)/r.width)*2-1;
+      var ny=((e.clientY-r.top)/r.height)*2-1;
+      setFromNorm(nx,ny);
+    });
+    wrap.addEventListener('mouseleave',resetTilt);
+
+    wrap.addEventListener('touchmove',function(e){
+      if(!e.touches[0])return;
+      var r=wrap.getBoundingClientRect();
+      var t=e.touches[0];
+      var nx=((t.clientX-r.left)/r.width)*2-1;
+      var ny=((t.clientY-r.top)/r.height)*2-1;
+      setFromNorm(nx,ny);
+    },{passive:true});
+    wrap.addEventListener('touchend',resetTilt);
+
+    if(window.DeviceOrientationEvent){
+      var gyroBound=false;
+      function onOrient(ev){
+        if(!gyroBound)return;
+        var gx=(ev.gamma||0)/45;
+        var gy=(ev.beta||0)/45;
+        setFromNorm(Math.max(-1,Math.min(1,gx)),Math.max(-1,Math.min(1,gy)));
+      }
+      function enableGyro(){
+        gyroBound=true;
+        window.addEventListener('deviceorientation',onOrient,true);
+      }
+      if(typeof DeviceOrientationEvent.requestPermission==='function'){
+        wrap.addEventListener('click',function once(){
+          DeviceOrientationEvent.requestPermission().then(function(res){
+            if(res==='granted')enableGyro();
+          }).catch(function(){});
+          wrap.removeEventListener('click',once);
+        });
+      }else if('ontouchstart' in window){
+        enableGyro();
+      }
+    }
+
+    applyFrame();
+  }
+})();
+</script>
+</body>
+</html>

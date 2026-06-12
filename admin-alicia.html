@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
 <title>Alicia Premium — Admin</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Jost:wght@300;400;500;600&family=Syne:wght@600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Jost',sans-serif;background:#0a0a0c;color:#eee;min-height:100vh;padding:1.5rem}
@@ -38,9 +38,7 @@ code{font-family:ui-monospace,monospace;color:#f5e6c8;background:rgba(201,160,96
 .hidden{display:none!important}
 .copy{cursor:pointer;opacity:.7}
 .copy:hover{opacity:1}
-.btn-vip{color:#1a1510;background:linear-gradient(135deg,#e8c878,#c9a060 45%,#f5e6c8 100%);border:1px solid rgba(201,160,96,.45)}
-.btn-vip:hover{filter:brightness(1.06)}
-#createVipActions{margin-top:.65rem}
+a.btn{text-decoration:none}
 </style>
 </head>
 <body>
@@ -72,9 +70,6 @@ code{font-family:ui-monospace,monospace;color:#f5e6c8;background:rgba(201,160,96
       <textarea id="fNotes" rows="2" placeholder="Compró pack premium, pago PayPal..."></textarea>
       <button type="button" class="btn btn-gold" id="btnCreate">Generar código ✨</button>
       <p class="msg" id="createMsg"></p>
-      <div id="createVipActions" class="hidden">
-        <button type="button" class="btn btn-vip" id="btnDownloadNewVip">🎴 Descargar Tarjeta VIP</button>
-      </div>
     </div>
 
     <div class="card">
@@ -135,164 +130,11 @@ code{font-family:ui-monospace,monospace;color:#f5e6c8;background:rgba(201,160,96
     return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
   }
 
-  function formatCodeDisplay(code){
-    return String(code||'').trim().toUpperCase().split('-').filter(Boolean).join(' - ');
-  }
-
-  function vipFilename(clientName){
-    var base=String(clientName||'Cliente')
-      .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
-      .replace(/[^a-zA-Z0-9]+/g,'-')
-      .replace(/^-|-$/g,'')||'Cliente';
-    return 'AliciaPremium_'+base+'.png';
-  }
-
-  var vipFontsReady=null;
-  function ensureVipFonts(){
-    if(vipFontsReady)return vipFontsReady;
-    vipFontsReady=Promise.all([
-      document.fonts.load('600 28px "Cormorant Garamond"'),
-      document.fonts.load('700 64px "Syne"'),
-      document.fonts.load('500 26px "Jost"'),
-      document.fonts.load('600 36px "Cormorant Garamond"'),
-      document.fonts.load('600 14px "Syne"'),
-      document.fonts.load('400 16px "Jost"')
-    ]).catch(function(){return null;});
-    return vipFontsReady;
-  }
-
-  function drawStar(ctx,x,y,r){
-    ctx.beginPath();
-    for(var i=0;i<5;i++){
-      var a=(i*4*Math.PI/5)-Math.PI/2;
-      var px=x+Math.cos(a)*r;
-      var py=y+Math.sin(a)*r;
-      if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py);
-    }
-    ctx.closePath();
-    ctx.fill();
-  }
-
-  async function downloadVipCard(code,clientName){
-    await ensureVipFonts();
-    var W=1080,H=680;
-    var canvas=document.createElement('canvas');
-    canvas.width=W;
-    canvas.height=H;
-    var ctx=canvas.getContext('2d');
-
-    var bg=ctx.createRadialGradient(W*0.25,H*0.15,0,W*0.55,H*0.55,W*1.1);
-    bg.addColorStop(0,'#222228');
-    bg.addColorStop(0.45,'#101014');
-    bg.addColorStop(1,'#040405');
-    ctx.fillStyle=bg;
-    ctx.fillRect(0,0,W,H);
-
-    ctx.save();
-    ctx.globalAlpha=0.035;
-    ctx.strokeStyle='#c9a060';
-    ctx.lineWidth=1;
-    for(var i=-H;i<W+H;i+=22){
-      ctx.beginPath();
-      ctx.moveTo(i,0);
-      ctx.lineTo(i+H,H);
-      ctx.stroke();
-    }
-    ctx.restore();
-
-    ctx.save();
-    ctx.globalAlpha=0.12;
-    ctx.fillStyle='#d4af5f';
-    [[90,110],[240,70],[920,130],[850,190],[420,45],[680,95],[1020,520],[120,580]].forEach(function(st){
-      drawStar(ctx,st[0],st[1],2.2);
-    });
-    ctx.globalAlpha=0.08;
-    [[160,200],[760,280],[980,400],[200,480]].forEach(function(st){
-      ctx.beginPath();
-      ctx.arc(st[0],st[1],1.2,0,Math.PI*2);
-      ctx.fill();
-    });
-    ctx.restore();
-
-    ctx.strokeStyle='#c9a060';
-    ctx.lineWidth=3;
-    ctx.strokeRect(18,18,W-36,H-36);
-    ctx.strokeStyle='rgba(201,160,96,0.32)';
-    ctx.lineWidth=1;
-    ctx.strokeRect(30,30,W-60,H-60);
-
-    var gold='#d4af5f';
-    var champagne='#f5e6c8';
-
-    ctx.fillStyle=gold;
-    ctx.font='600 30px "Cormorant Garamond", Georgia, serif';
-    ctx.fillText('✦  ERIOR CENTER',56,78);
-
-    ctx.font='600 13px "Syne", sans-serif';
-    ctx.fillStyle=champagne;
-    ctx.textAlign='right';
-    if(ctx.letterSpacing!==undefined)ctx.letterSpacing='0.42em';
-    ctx.fillText('MEMBER',W-56,74);
-    if(ctx.letterSpacing!==undefined)ctx.letterSpacing='0px';
-    ctx.textAlign='left';
-
-    ctx.font='700 62px "Syne", sans-serif';
-    ctx.fillStyle=champagne;
-    ctx.fillText('ALICIA PREMIUM',56,Math.round(H*0.46));
-
-    ctx.strokeStyle='rgba(201,160,96,0.45)';
-    ctx.lineWidth=1;
-    ctx.beginPath();
-    ctx.moveTo(56,Math.round(H*0.46)+16);
-    ctx.lineTo(340,Math.round(H*0.46)+16);
-    ctx.stroke();
-
-    ctx.font='500 24px "Jost", sans-serif';
-    ctx.fillStyle='#ffffff';
-    if(ctx.letterSpacing!==undefined)ctx.letterSpacing='0.2em';
-    var name=String(clientName||'MIEMBRO VIP').toUpperCase();
-    ctx.fillText(name,56,Math.round(H*0.46)+58);
-    if(ctx.letterSpacing!==undefined)ctx.letterSpacing='0px';
-
-    ctx.font='600 38px "Cormorant Garamond", Georgia, serif';
-    ctx.fillStyle=gold;
-    if(ctx.letterSpacing!==undefined)ctx.letterSpacing='0.16em';
-    ctx.fillText(formatCodeDisplay(code),56,H-68);
-    if(ctx.letterSpacing!==undefined)ctx.letterSpacing='0px';
-
-    ctx.font='400 15px "Jost", sans-serif';
-    ctx.fillStyle='rgba(255,255,255,0.42)';
-    ctx.textAlign='right';
-    ctx.fillText('Acceso válido 30 días',W-56,H-52);
-    ctx.textAlign='left';
-
-    canvas.toBlob(function(blob){
-      if(!blob)return;
-      var a=document.createElement('a');
-      a.href=URL.createObjectURL(blob);
-      a.download=vipFilename(clientName);
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      setTimeout(function(){URL.revokeObjectURL(a.href);},500);
-    },'image/png');
-  }
-
-  function bindVipButton(btn){
-    btn.onclick=function(){
-      var code=btn.getAttribute('data-vip-code');
-      var name=btn.getAttribute('data-vip-name')||'Cliente';
-      btn.disabled=true;
-      var prev=btn.textContent;
-      btn.textContent='Generando...';
-      downloadVipCard(code,name).then(function(){
-        btn.textContent=prev;
-        btn.disabled=false;
-      }).catch(function(){
-        btn.textContent=prev;
-        btn.disabled=false;
-      });
-    };
+  function vipCardUrl(code,clientName){
+    var params=new URLSearchParams();
+    params.set('nombre',String(clientName||'Cliente').trim()||'Cliente');
+    params.set('codigo',String(code||'').trim());
+    return 'tarjeta-vip.html?'+params.toString();
   }
 
   async function loadCodes(){
@@ -316,7 +158,7 @@ code{font-family:ui-monospace,monospace;color:#f5e6c8;background:rgba(201,160,96
           '<td>'+fmtDate(c.created_at)+'</td>'+
           '<td><div class="row-actions">'+
             '<button type="button" class="btn btn-ghost btn-sm" data-copy="'+c.code+'">Copiar</button>'+
-            '<button type="button" class="btn btn-vip btn-sm" data-vip-code="'+escAttr(c.code)+'" data-vip-name="'+escAttr(c.client_name||'Cliente')+'">🎴 Descargar Tarjeta VIP</button>'+
+            '<a class="btn btn-ghost btn-sm" href="'+escAttr(vipCardUrl(c.code,c.client_name||'Cliente'))+'" target="_blank" rel="noopener noreferrer">🎴 Ver Tarjeta VIP</a>'+
             '<button type="button" class="btn btn-danger btn-sm" data-toggle="'+c.id+'" data-active="'+(active?'0':'1')+'">'+(active?'Desactivar':'Activar')+'</button>'+
           '</div></td>';
         tbody.appendChild(tr);
@@ -324,7 +166,6 @@ code{font-family:ui-monospace,monospace;color:#f5e6c8;background:rgba(201,160,96
       tbody.querySelectorAll('[data-copy]').forEach(function(btn){
         btn.onclick=function(){copyText(btn.getAttribute('data-copy'));btn.textContent='✓';setTimeout(function(){btn.textContent='Copiar';},1200);};
       });
-      tbody.querySelectorAll('[data-vip-code]').forEach(bindVipButton);
       tbody.querySelectorAll('[data-toggle]').forEach(function(btn){
         btn.onclick=function(){toggleCode(btn.getAttribute('data-toggle'),btn.getAttribute('data-active')==='1');};
       });
@@ -362,9 +203,6 @@ code{font-family:ui-monospace,monospace;color:#f5e6c8;background:rgba(201,160,96
 
   document.getElementById('btnCreate').onclick=async function(){
     var msg=document.getElementById('createMsg');
-    var vipActions=document.getElementById('createVipActions');
-    var btnNewVip=document.getElementById('btnDownloadNewVip');
-    vipActions.classList.add('hidden');
     msg.textContent='Generando...';
     msg.className='msg';
     var body={
@@ -384,12 +222,6 @@ code{font-family:ui-monospace,monospace;color:#f5e6c8;background:rgba(201,160,96
       msg.className='msg ok';
       copyText(d.code.code);
       document.getElementById('fCode').value='';
-      var createdCode=d.code.code;
-      var createdName=body.client_name||d.code.client_name||'Cliente';
-      btnNewVip.setAttribute('data-vip-code',createdCode);
-      btnNewVip.setAttribute('data-vip-name',createdName);
-      bindVipButton(btnNewVip);
-      vipActions.classList.remove('hidden');
       loadCodes();
     }catch(e){
       msg.textContent='Error de conexión';
