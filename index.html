@@ -2116,11 +2116,84 @@ body::before{
 }
 
 .cover-actions-premium{
-  display:flex;flex-wrap:wrap;align-items:center;justify-content:center;
-  gap:clamp(.45rem,2vw,.65rem);
-  width:min(420px,94vw);margin:.15rem auto 0;
+  position:relative;
+  display:flex;flex-direction:column;align-items:center;
+  gap:clamp(.5rem,2vw,.65rem);
+  width:min(520px,96vw);margin:.25rem auto 0;
+  padding:clamp(.85rem,3vw,1.1rem) clamp(.75rem,2.8vw,1rem);
+  border-radius:24px;
 }
-.cover-actions-premium .cover-action-btn{margin:0!important;flex:1 1 auto;min-width:min(100%,11.5rem)}
+.cover-gateway{
+  position:absolute;inset:-8% -4% auto -4%;height:120%;pointer-events:none;z-index:0;
+  overflow:hidden;border-radius:inherit;
+}
+.cover-gateway-aurora{
+  position:absolute;left:50%;top:55%;width:min(420px,95vw);height:min(420px,95vw);
+  transform:translate(-50%,-50%);
+  background:
+    conic-gradient(from 210deg at 50% 50%,
+      hsla(330,90%,72%,.22) 0deg,
+      hsla(270,88%,70%,.18) 60deg,
+      hsla(210,92%,68%,.2) 120deg,
+      hsla(48,95%,68%,.24) 200deg,
+      hsla(330,90%,72%,.22) 360deg);
+  filter:blur(42px);
+  opacity:.75;
+  animation:gatewayAurora 18s linear infinite;
+}
+@keyframes gatewayAurora{to{transform:translate(-50%,-50%) rotate(360deg)}}
+.cover-gateway-tag{
+  position:relative;z-index:1;
+  font-family:'Jost',sans-serif;font-size:clamp(.48rem,2vw,.54rem);
+  letter-spacing:.38em;text-transform:uppercase;
+  color:rgba(200,195,220,.45);margin:0 0 .15rem;
+}
+.cover-actions-hero{
+  position:relative;z-index:1;
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:clamp(.5rem,2.2vw,.65rem);
+  width:100%;
+}
+.cover-actions-premium .cover-action-secondary{
+  position:relative;z-index:1;
+  width:min(280px,72vw);margin:0 auto!important;
+  padding:.58rem 1.15rem!important;font-size:clamp(.58rem,2.4vw,.66rem)!important;
+}
+.cover-actions-premium .cover-action-btn{margin:0!important}
+
+.btn-catalog-hero{
+  position:relative;overflow:hidden;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:.22rem;
+  min-height:58px;padding:.72rem 1rem!important;
+  border-radius:22px!important;
+  animation:btnLiquidIridescent 11s ease-in-out infinite,catalogHeroPulse 3.2s ease-in-out infinite;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.58),
+    inset 0 -1px 0 rgba(255,255,255,.1),
+    0 10px 32px rgba(0,0,0,.32),
+    0 0 48px rgba(201,160,96,.18),
+    0 0 72px rgba(255,200,140,.1)!important;
+}
+.btn-catalog-hero .btn-metallic-txt{
+  font-size:clamp(.62rem,2.8vw,.72rem)!important;letter-spacing:.16em!important;
+}
+.btn-hero-badge{
+  font-family:'Jost',sans-serif;font-size:clamp(.44rem,1.8vw,.5rem);
+  font-weight:500;letter-spacing:.14em;text-transform:uppercase;
+  color:rgba(255,248,235,.82);
+  padding:.12rem .45rem;border-radius:999px;
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);
+}
+.btn-alicia-hero{
+  min-height:58px;padding:.72rem 1rem!important;
+  display:flex;align-items:center;justify-content:center;
+}
+@keyframes catalogHeroPulse{
+  0%,100%{box-shadow:inset 0 1px 0 rgba(255,255,255,.58),inset 0 -1px 0 rgba(255,255,255,.1),0 10px 32px rgba(0,0,0,.32),0 0 40px rgba(201,160,96,.14)}
+  50%{box-shadow:inset 0 1px 0 rgba(255,255,255,.62),inset 0 -1px 0 rgba(255,255,255,.12),0 12px 36px rgba(0,0,0,.34),0 0 56px rgba(212,175,95,.26)}
+}
+.btn-catalog-hero:hover,.btn-alicia-hero:hover{transform:translateY(-3px) scale(1.02)!important}
 
 .page#page-cover .btn-alicia-glow{
   font-family:'Syne',sans-serif;font-weight:600;letter-spacing:.08em;
@@ -2309,8 +2382,9 @@ body::before{
 }
 
 @media(min-width:768px){
-  .cover-actions-premium{flex-direction:row;max-width:min(520px,88vw)}
-  .cover-actions-premium .cover-action-btn{flex:1 1 0;min-width:0}
+  .cover-actions-hero{max-width:min(480px,88vw)}
+  .cover-actions-premium{padding:clamp(.95rem,2vw,1.15rem) clamp(.85rem,2.5vw,1.1rem)}
+  .cover-actions-premium .cover-action-secondary{width:min(240px,55%)}
   .cover-promo-jewel{
     display:grid;grid-template-columns:1fr auto;grid-template-rows:auto auto;
     align-items:center;column-gap:1rem;row-gap:.35rem;
@@ -2325,13 +2399,33 @@ body::before{
 }
 
 @media(max-width:767px){
+  body::before{
+    animation:none!important;
+    filter:none!important;
+    will-change:auto;
+  }
+  #opalLayer,#opalLayer::after{filter:none!important;will-change:auto}
+  #cosmos{opacity:.2!important}
+  .cover-gateway-aurora{animation:none;opacity:.55}
+  .btn-catalog-hero{animation:btnLiquidIridescent 14s ease-in-out infinite!important}
+  .page#page-cover .btn-alicia-glow{animation:btnLiquidIridescent 14s ease-in-out infinite!important}
+  .cover-hero-glass,.cover-promo-jewel{
+    backdrop-filter:blur(24px) saturate(155%);
+    -webkit-backdrop-filter:blur(24px) saturate(155%);
+  }
+  .cover-hero-glass .btn-metallic.btn-liquid{animation-duration:16s}
   .page#page-cover .cover-title{
     filter:drop-shadow(0 0 8px rgba(255,255,255,.28)) drop-shadow(0 0 18px rgba(200,220,255,.12));
   }
   .page#page-cover .cover-promo-jewel{order:3}
   .page#page-cover .cover-hero-glass{order:2}
-  .cover-actions-premium{flex-direction:column;width:min(340px,92vw)}
-  .cover-actions-premium .cover-action-btn{width:100%;min-width:0}
+  .cover-actions-hero{grid-template-columns:1fr;gap:.55rem}
+  .btn-catalog-hero{order:-1}
+  .cover-actions-premium{
+    width:min(360px,92vw);
+    padding:clamp(.75rem,3vw,.95rem) clamp(.65rem,2.5vw,.85rem);
+  }
+  .cover-actions-premium .cover-action-secondary{width:100%;max-width:220px}
   .cover-promo-jewel .cover-promo-offer{margin-bottom:.15rem}
   .cover-promo-jewel .cover-promo-bonus{
     display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden;
@@ -2350,9 +2444,10 @@ body::before{
   .page#page-cover.active .cover-brand,
   .page#page-cover.active .cover-promo-jewel,
   .page#page-cover.active .cover-hero-glass{animation:none;opacity:1;transform:none}
-  .cover-promo-jewel::before,.cover-hero-glass::before,.page#page-cover .btn-alicia-glow,
-  .page#page-cover .btn-eriorworld,.page#page-cover .btn-icon-aura-glass,.promo-float-btn{
-    animation:none;background-position:42% 58%,0 0;
+  .cover-promo-jewel::before,.cover-hero-glass::before,.cover-gateway-aurora,
+  .page#page-cover .btn-alicia-glow,
+  .page#page-cover .btn-eriorworld,.page#page-cover .btn-icon-aura-glass,.promo-float-btn,.btn-catalog-hero{
+    animation:none!important;background-position:42% 58%,0 0;
   }
   .btn-icon-aura-glow{animation:none;}
   .glass-shard{animation-duration:.2s;}
@@ -2438,8 +2533,16 @@ body::before{
 </span>R<em>CENTER</em><canvas id="titleDust" style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:700px;height:100%;pointer-events:none;z-index:10;overflow:visible;"></canvas></h1>
       <div class="cover-tag">Guía interactiva para utilizar tus audios</div>
       <div class="cover-actions-premium">
-        <button type="button" class="btn-alicia-glow cover-action-btn" onclick="goTo('alicia')">✨ Habla con Alicia IA</button>
-        <button type="button" class="btn-eriorworld cover-action-btn" onclick="window.open('https://eriorworld.netlify.app','_blank','noopener,noreferrer')"><span>✦ eriorworld</span><span class="ew-beta">beta</span></button>
+        <div class="cover-gateway" aria-hidden="true"><span class="cover-gateway-aurora"></span></div>
+        <p class="cover-gateway-tag">Tu portal de transformación</p>
+        <div class="cover-actions-hero">
+          <button type="button" class="btn-metallic btn-liquid btn-catalog-hero cover-action-btn" data-shatter-action="catalog" id="btnCatalogHero">
+            <span class="btn-metallic-txt">Ver Catálogo</span>
+            <span class="btn-hero-badge">25+ audios</span>
+          </button>
+          <button type="button" class="btn-alicia-glow cover-action-btn btn-alicia-hero" onclick="goTo('alicia')">✨ Habla con Alicia IA</button>
+        </div>
+        <button type="button" class="btn-eriorworld cover-action-btn cover-action-secondary" onclick="window.open('https://eriorworld.netlify.app','_blank','noopener,noreferrer')"><span>✦ eriorworld</span><span class="ew-beta">beta</span></button>
       </div>
       </div>
 
@@ -2488,7 +2591,6 @@ body::before{
             </div>
           </div>
           <div class="cover-cta-stack">
-            <button type="button" class="btn-metallic btn-liquid btn-liquid-catalog" data-shatter-action="catalog"><span class="btn-metallic-txt">Ver Catálogo</span></button>
             <button type="button" class="btn-metallic btn-liquid btn-liquid-mind" data-shatter-action="mindmovie"><span class="btn-metallic-txt">Mind Movie</span></button>
             <button type="button" class="btn-metallic btn-liquid btn-liquid-futura" data-shatter-action="futura"><span class="btn-metallic-txt">Futura</span></button>
             <button type="button" class="btn-metallic btn-liquid btn-liquid-tg" data-shatter-action="telegram"><span class="btn-metallic-txt">Telegram</span></button>
@@ -3139,12 +3241,17 @@ function closeChatPromoLightbox(){
   var c=document.getElementById('cosmos');
   if(!c)return;
   var ctx=c.getContext('2d'),s=[];
+  var liteBg=window.matchMedia('(max-width:767px)').matches||window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  var starCount=liteBg?36:90;
+  var frameTick=0;
   function resize(){c.width=innerWidth;c.height=innerHeight;}
-  function init(){s=[];for(var i=0;i<90;i++)s.push({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*1.1+.2,o:Math.random()});}
+  function init(){s=[];for(var i=0;i<starCount;i++)s.push({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*1.1+.2,o:Math.random()});}
   function draw(){
+    frameTick++;
+    if(liteBg&&frameTick%5!==0){requestAnimationFrame(draw);return;}
     ctx.clearRect(0,0,c.width,c.height);
     for(var i=0;i<s.length;i++){
-      s[i].o+=(Math.random()-.5)*.012;
+      s[i].o+=(Math.random()-.5)*(liteBg?.006:.012);
       if(s[i].o<.05)s[i].o=.05;
       if(s[i].o>.8)s[i].o=.8;
       ctx.beginPath();ctx.arc(s[i].x,s[i].y,s[i].r,0,Math.PI*2);
@@ -3152,6 +3259,7 @@ function closeChatPromoLightbox(){
     }
     requestAnimationFrame(draw);
   }
+  if(liteBg)c.style.opacity='.22';
   resize();init();draw();
   window.addEventListener('resize',function(){resize();init();});
 })();
@@ -5096,7 +5204,7 @@ initTestimonialVideo();
       if(layer)layer.innerHTML='';
     },520);
   }
-  document.querySelectorAll('.cover-cta-stack [data-shatter-action]').forEach(function(btn){
+  document.querySelectorAll('#page-cover [data-shatter-action]').forEach(function(btn){
     btn.addEventListener('click',function(e){
       e.preventDefault();
       var a=btn.getAttribute('data-shatter-action');
@@ -5196,15 +5304,24 @@ initTestimonialVideo();
 // ── OPAL TORNASOL ──
 (function(){
   var layer=document.getElementById('opalLayer');if(!layer)return;
+  var liteBg=window.matchMedia('(max-width:767px)').matches
+    ||window.matchMedia('(pointer:coarse)').matches
+    ||window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  if(liteBg){
+    layer.style.filter='none';
+    return;
+  }
   var idleHue=0,idleTimer,scrollTimer;
-  function applyHue(h,b){layer.style.filter='hue-rotate('+h.toFixed(1)+'deg) brightness('+(b||1).toFixed(2)+') saturate(1.5)';}
-  function startIdle(){idleTimer=setInterval(function(){idleHue=(idleHue+0.4)%360;applyHue(idleHue);},40);}
+  function applyHue(h,b){layer.style.filter='hue-rotate('+h.toFixed(1)+'deg) brightness('+(b||1).toFixed(2)+') saturate(1.35)';}
+  function startIdle(){idleTimer=setInterval(function(){idleHue=(idleHue+0.25)%360;applyHue(idleHue);},120);}
   function stopIdle(){clearInterval(idleTimer);}
   startIdle();
   window.addEventListener('scroll',function(){
+    var cover=document.getElementById('page-cover');
+    if(cover&&cover.classList.contains('active'))return;
     stopIdle();
     var y=window.scrollY,total=Math.max(document.body.scrollHeight-window.innerHeight,1);
-    var p=Math.min(y/total,1),hue=p*240,bright=1+Math.sin(p*Math.PI*2)*0.18;
+    var p=Math.min(y/total,1),hue=p*240,bright=1+Math.sin(p*Math.PI*2)*0.12;
     applyHue(hue,bright);
     clearTimeout(scrollTimer);
     scrollTimer=setTimeout(function(){idleHue=p*240;startIdle();},1500);
