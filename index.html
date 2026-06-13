@@ -2146,7 +2146,7 @@ body::before{
   position:relative;z-index:1;
   font-family:'Jost',sans-serif;font-size:clamp(.48rem,2vw,.54rem);
   letter-spacing:.38em;text-transform:uppercase;
-  color:rgba(200,195,220,.45);margin:0 0 .15rem;
+  color:rgba(210,205,225,.72);margin:0 0 .15rem;
 }
 .cover-actions-hero{
   position:relative;z-index:1;
@@ -2179,57 +2179,67 @@ body::before{
 }
 .btn-hero-badge{
   font-family:'Jost',sans-serif;font-size:clamp(.44rem,1.8vw,.5rem);
-  font-weight:500;letter-spacing:.14em;text-transform:uppercase;
+  font-weight:600;letter-spacing:.14em;text-transform:uppercase;
   padding:.12rem .45rem;border-radius:999px;
-  background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);
-  background-image:linear-gradient(165deg,#fff8ec 0%,#d4b87a 45%,#fff5e6 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  background:rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.28);
+  color:#f5e6c8;
+  text-shadow:0 1px 2px rgba(0,0,0,.65);
 }
 .btn-alicia-hero{
   min-height:58px;padding:.72rem 1rem!important;
   display:flex;align-items:center;justify-content:center;
-  color:transparent!important;
 }
 .btn-catalog-hero:hover,.btn-alicia-hero:hover{transform:translateY(-3px) scale(1.02)!important}
 
-/* Premium gradient labels — cover buttons */
+/* Premium button labels — alto contraste, compatible con todos los navegadores */
 .page#page-cover .btn-premium-label,
 .page#page-cover .btn-metallic-txt.btn-premium-label{
-  position:relative;z-index:2;
+  position:relative;z-index:3;
+  display:inline-block;
   font-family:'Cormorant Garamond',serif!important;
-  font-weight:600!important;
+  font-weight:700!important;
   font-style:normal;
-  letter-spacing:.2em!important;
+  letter-spacing:.18em!important;
   text-transform:uppercase;
-  line-height:1.15;
-  background:linear-gradient(165deg,#ffffff 0%,#faf4e8 18%,#ffffff 38%,#e6d4b0 52%,#ffffff 68%,#f5ecd8 82%,#ffffff 100%)!important;
-  background-size:240% auto!important;
-  -webkit-background-clip:text!important;
-  -webkit-text-fill-color:transparent!important;
-  background-clip:text!important;
-  color:transparent!important;
-  filter:drop-shadow(0 1px 2px rgba(0,0,0,.45));
-  animation:btnLabelShimmer 8s ease-in-out infinite;
+  line-height:1.25;
+  background:none!important;
+  background-image:none!important;
+  -webkit-background-clip:unset!important;
+  background-clip:unset!important;
+  -webkit-text-fill-color:#fffef8!important;
+  color:#fffef8!important;
+  filter:none!important;
+  animation:none!important;
+  text-shadow:
+    0 1px 0 rgba(0,0,0,.85),
+    0 2px 8px rgba(0,0,0,.65),
+    0 0 1px rgba(0,0,0,.9);
 }
-.page#page-cover .btn-alicia-hero .btn-premium-label{
-  letter-spacing:.06em!important;
-  text-transform:none;
+.page#page-cover .btn-alicia-hero .btn-premium-label,
+.page#page-cover .btn-alicia-glow .btn-premium-label{
   font-family:'Syne',sans-serif!important;
-  font-weight:600!important;
-  background:linear-gradient(165deg,#fff 0%,#f0e8ff 25%,#fff 50%,#dce8ff 75%,#fff 100%)!important;
+  font-weight:700!important;
+  letter-spacing:.04em!important;
+  text-transform:none;
+  -webkit-text-fill-color:#ffffff!important;
+  color:#ffffff!important;
+  text-shadow:
+    0 1px 0 rgba(30,15,60,.9),
+    0 2px 10px rgba(0,0,0,.7),
+    0 0 18px rgba(180,160,255,.35);
 }
 .page#page-cover .btn-eriorworld .btn-premium-label{
-  background:linear-gradient(165deg,#fffef8 0%,#f5e6c8 30%,#fff 55%,#e8d4a8 75%,#fffef8 100%)!important;
-}
-@keyframes btnLabelShimmer{
-  0%,100%{background-position:0% 50%}
-  50%{background-position:100% 50%}
+  -webkit-text-fill-color:#fff6e4!important;
+  color:#fff6e4!important;
+  text-shadow:
+    0 1px 0 rgba(50,30,8,.9),
+    0 2px 10px rgba(0,0,0,.65),
+    0 0 16px rgba(212,175,95,.35);
 }
 
 .page#page-cover .btn-alicia-glow{
   font-family:'Syne',sans-serif;font-weight:600;letter-spacing:.08em;
   text-transform:none;padding:.68rem 1.35rem;
-  color:transparent;
   background-color:transparent;
   background-image:
     linear-gradient(118deg,rgba(186,130,255,.48) 0%,rgba(130,200,255,.44) 30%,rgba(255,185,210,.46) 65%,rgba(200,160,255,.48) 100%),
@@ -2248,7 +2258,6 @@ body::before{
 
 .page#page-cover .btn-eriorworld{
   padding:.68rem 1.35rem;
-  color:transparent;
   border:1.5px solid rgba(212,175,95,.48);
   background-color:transparent;
   background-image:
@@ -2263,9 +2272,15 @@ body::before{
 .page#page-cover .btn-eriorworld::before{
   background:linear-gradient(105deg,transparent 30%,rgba(255,240,200,.42) 50%,transparent 70%);
   animation:eriorworldShine 5s ease-in-out infinite;
+  z-index:1;
+}
+.page#page-cover .btn-eriorworld .btn-premium-label,
+.page#page-cover .btn-eriorworld .ew-beta{
+  position:relative;z-index:3;
 }
 .page#page-cover .btn-eriorworld .ew-beta{
-  background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.22);color:rgba(255,248,235,.92);
+  background:rgba(0,0,0,.35);border-color:rgba(255,255,255,.28);color:#f5e6c8;
+  text-shadow:0 1px 2px rgba(0,0,0,.6);
 }
 
 .cover-promo-jewel{
@@ -2342,14 +2357,16 @@ body::before{
 .cover-hero-glass .btn-metallic.btn-liquid{
   border-radius:22px;
   min-height:48px;
-  color:transparent;
+}
+.page#page-cover .btn-metallic .btn-premium-label{
+  font-size:clamp(.58rem,2.6vw,.68rem)!important;
+  letter-spacing:.16em!important;
 }
 .cover-hero-glass .btn-metallic.btn-liquid:hover{
   transform:translateY(-2px) scale(1.01);
 }
 
 .page#page-cover .btn-icon-aura-glass{
-  color:transparent;
   background:
     linear-gradient(118deg,rgba(245,210,140,.35) 0%,rgba(201,160,96,.4) 50%,rgba(255,230,190,.32) 100%),
     linear-gradient(145deg,rgba(255,255,255,.18) 0%,rgba(255,255,255,.04) 100%);
@@ -2465,14 +2482,10 @@ body::before{
   .page#page-cover .btn-eriorworld::before,
   .page#page-cover .btn-metallic::before{
     animation:none!important;
-    transform:none!important;
+    transform:translateX(-130%)!important;
+    opacity:.35;
   }
-  .page#page-cover .btn-premium-label,
-  .page#page-cover .btn-metallic-txt.btn-premium-label{
-    animation:none!important;
-    background-position:50% 50%!important;
-    filter:drop-shadow(0 1px 1px rgba(0,0,0,.4));
-  }
+  .page#page-cover .btn-eriorworld::before{z-index:1}
   .cover-hero-glass,.cover-promo-jewel{
     backdrop-filter:none!important;
     -webkit-backdrop-filter:none!important;
@@ -2510,9 +2523,11 @@ body::before{
   .page#page-cover.active .cover-hero-glass{animation:none;opacity:1;transform:none}
   .cover-promo-jewel::before,.cover-hero-glass::before,.cover-gateway-aurora,
   .page#page-cover .btn-alicia-glow,
-  .page#page-cover .btn-eriorworld,.page#page-cover .btn-icon-aura-glass,.promo-float-btn,.btn-catalog-hero{
+  .page#page-cover .btn-eriorworld,.page#page-cover .btn-icon-aura-glass,.btn-catalog-hero,
+  .page#page-cover .btn-premium-label{
     animation:none!important;background-position:42% 58%,0 0;
   }
+  .page#page-cover .btn-premium-label{background-position:unset!important}
   .btn-icon-aura-glow{animation:none;}
   .glass-shard{animation-duration:.2s;}
   .pay-promo-popup.visible{animation:none;opacity:1;transform:translateX(-50%) translateY(0) scale(1);}
