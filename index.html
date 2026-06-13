@@ -2167,13 +2167,12 @@ body::before{
   gap:.22rem;
   min-height:58px;padding:.72rem 1rem!important;
   border-radius:22px!important;
-  animation:btnLiquidIridescent 11s ease-in-out infinite,catalogHeroPulse 3.2s ease-in-out infinite;
+  animation:btnLiquidIridescent 11s ease-in-out infinite;
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,.58),
     inset 0 -1px 0 rgba(255,255,255,.1),
     0 10px 32px rgba(0,0,0,.32),
-    0 0 48px rgba(201,160,96,.18),
-    0 0 72px rgba(255,200,140,.1)!important;
+    0 0 48px rgba(201,160,96,.18)!important;
 }
 .btn-catalog-hero .btn-metallic-txt{
   font-size:clamp(.62rem,2.8vw,.72rem)!important;letter-spacing:.16em!important;
@@ -2181,29 +2180,62 @@ body::before{
 .btn-hero-badge{
   font-family:'Jost',sans-serif;font-size:clamp(.44rem,1.8vw,.5rem);
   font-weight:500;letter-spacing:.14em;text-transform:uppercase;
-  color:rgba(255,248,235,.82);
   padding:.12rem .45rem;border-radius:999px;
-  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);
+  background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);
+  background-image:linear-gradient(165deg,#fff8ec 0%,#d4b87a 45%,#fff5e6 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
 }
 .btn-alicia-hero{
   min-height:58px;padding:.72rem 1rem!important;
   display:flex;align-items:center;justify-content:center;
-}
-@keyframes catalogHeroPulse{
-  0%,100%{box-shadow:inset 0 1px 0 rgba(255,255,255,.58),inset 0 -1px 0 rgba(255,255,255,.1),0 10px 32px rgba(0,0,0,.32),0 0 40px rgba(201,160,96,.14)}
-  50%{box-shadow:inset 0 1px 0 rgba(255,255,255,.62),inset 0 -1px 0 rgba(255,255,255,.12),0 12px 36px rgba(0,0,0,.34),0 0 56px rgba(212,175,95,.26)}
+  color:transparent!important;
 }
 .btn-catalog-hero:hover,.btn-alicia-hero:hover{transform:translateY(-3px) scale(1.02)!important}
+
+/* Premium gradient labels — cover buttons */
+.page#page-cover .btn-premium-label,
+.page#page-cover .btn-metallic-txt.btn-premium-label{
+  position:relative;z-index:2;
+  font-family:'Cormorant Garamond',serif!important;
+  font-weight:600!important;
+  font-style:normal;
+  letter-spacing:.2em!important;
+  text-transform:uppercase;
+  line-height:1.15;
+  background:linear-gradient(165deg,#ffffff 0%,#faf4e8 18%,#ffffff 38%,#e6d4b0 52%,#ffffff 68%,#f5ecd8 82%,#ffffff 100%)!important;
+  background-size:240% auto!important;
+  -webkit-background-clip:text!important;
+  -webkit-text-fill-color:transparent!important;
+  background-clip:text!important;
+  color:transparent!important;
+  filter:drop-shadow(0 1px 2px rgba(0,0,0,.45));
+  animation:btnLabelShimmer 8s ease-in-out infinite;
+}
+.page#page-cover .btn-alicia-hero .btn-premium-label{
+  letter-spacing:.06em!important;
+  text-transform:none;
+  font-family:'Syne',sans-serif!important;
+  font-weight:600!important;
+  background:linear-gradient(165deg,#fff 0%,#f0e8ff 25%,#fff 50%,#dce8ff 75%,#fff 100%)!important;
+}
+.page#page-cover .btn-eriorworld .btn-premium-label{
+  background:linear-gradient(165deg,#fffef8 0%,#f5e6c8 30%,#fff 55%,#e8d4a8 75%,#fffef8 100%)!important;
+}
+@keyframes btnLabelShimmer{
+  0%,100%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+}
 
 .page#page-cover .btn-alicia-glow{
   font-family:'Syne',sans-serif;font-weight:600;letter-spacing:.08em;
   text-transform:none;padding:.68rem 1.35rem;
+  color:transparent;
   background-color:transparent;
   background-image:
     linear-gradient(118deg,rgba(186,130,255,.48) 0%,rgba(130,200,255,.44) 30%,rgba(255,185,210,.46) 65%,rgba(200,160,255,.48) 100%),
     linear-gradient(145deg,rgba(255,255,255,.24) 0%,rgba(255,255,255,.06) 50%,rgba(130,100,255,.1) 100%);
   background-size:220% 220%,100% 100%;
-  animation:btnLiquidIridescent 12s ease-in-out infinite,coverActionPulse 3s ease-in-out infinite;
+  animation:btnLiquidIridescent 12s ease-in-out infinite;
   border:1.5px solid rgba(255,255,255,.34);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 8px 28px rgba(0,0,0,.32),0 0 32px rgba(160,120,255,.14);
   backdrop-filter:blur(24px) saturate(200%);
@@ -2213,14 +2245,10 @@ body::before{
   transform:translateY(-2px) scale(1.02);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.52),0 12px 34px rgba(0,0,0,.36),0 0 44px rgba(180,130,255,.22);
 }
-@keyframes coverActionPulse{
-  0%,100%{box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 8px 28px rgba(0,0,0,.32),0 0 28px rgba(160,120,255,.12)}
-  50%{box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 10px 32px rgba(0,0,0,.34),0 0 40px rgba(180,140,255,.2)}
-}
 
 .page#page-cover .btn-eriorworld{
   padding:.68rem 1.35rem;
-  color:rgba(255,248,235,.96);
+  color:transparent;
   border:1.5px solid rgba(212,175,95,.48);
   background-color:transparent;
   background-image:
@@ -2314,12 +2342,14 @@ body::before{
 .cover-hero-glass .btn-metallic.btn-liquid{
   border-radius:22px;
   min-height:48px;
+  color:transparent;
 }
 .cover-hero-glass .btn-metallic.btn-liquid:hover{
   transform:translateY(-2px) scale(1.01);
 }
 
 .page#page-cover .btn-icon-aura-glass{
+  color:transparent;
   background:
     linear-gradient(118deg,rgba(245,210,140,.35) 0%,rgba(201,160,96,.4) 50%,rgba(255,230,190,.32) 100%),
     linear-gradient(145deg,rgba(255,255,255,.18) 0%,rgba(255,255,255,.04) 100%);
@@ -2398,22 +2428,56 @@ body::before{
   #coverHeroZone{max-width:min(600px,92vw)!important}
 }
 
+.promo-float-btn{display:none!important}
+
 @media(max-width:767px){
-  body::before{
+  html,body{-webkit-transform:translateZ(0)}
+  body::before,body::after{
     animation:none!important;
     filter:none!important;
-    will-change:auto;
+    transform:none!important;
+    will-change:auto!important;
   }
-  #opalLayer,#opalLayer::after{filter:none!important;will-change:auto}
-  #cosmos{opacity:.2!important}
-  .cover-gateway-aurora{animation:none;opacity:.55}
-  .btn-catalog-hero{animation:btnLiquidIridescent 14s ease-in-out infinite!important}
-  .page#page-cover .btn-alicia-glow{animation:btnLiquidIridescent 14s ease-in-out infinite!important}
+  #cosmos,#opalLayer{display:none!important}
+  .page#page-cover .logo-wrap{animation:none!important}
+  .page#page-cover .cover-title{
+    animation:none!important;
+    background-position:50% center!important;
+    filter:drop-shadow(0 0 8px rgba(255,255,255,.28));
+  }
+  .cover-gateway-aurora{display:none}
+  .cover-promo-jewel::before,
+  .cover-hero-glass::before{
+    animation:none!important;
+    background-position:50% 50%!important;
+    opacity:.45;
+  }
+  .page#page-cover .btn-metallic.btn-liquid,
+  .page#page-cover .btn-catalog-hero,
+  .page#page-cover .btn-alicia-glow,
+  .page#page-cover .btn-eriorworld,
+  .page#page-cover .btn-icon-aura-glass{
+    animation:none!important;
+    background-position:42% 58%,0 0!important;
+    backdrop-filter:none!important;
+    -webkit-backdrop-filter:none!important;
+  }
+  .page#page-cover .btn-eriorworld::before,
+  .page#page-cover .btn-metallic::before{
+    animation:none!important;
+    transform:none!important;
+  }
+  .page#page-cover .btn-premium-label,
+  .page#page-cover .btn-metallic-txt.btn-premium-label{
+    animation:none!important;
+    background-position:50% 50%!important;
+    filter:drop-shadow(0 1px 1px rgba(0,0,0,.4));
+  }
   .cover-hero-glass,.cover-promo-jewel{
-    backdrop-filter:blur(24px) saturate(155%);
-    -webkit-backdrop-filter:blur(24px) saturate(155%);
+    backdrop-filter:none!important;
+    -webkit-backdrop-filter:none!important;
+    background:linear-gradient(168deg,rgba(16,14,26,.96) 0%,rgba(8,7,14,.98) 100%)!important;
   }
-  .cover-hero-glass .btn-metallic.btn-liquid{animation-duration:16s}
   .page#page-cover .cover-title{
     filter:drop-shadow(0 0 8px rgba(255,255,255,.28)) drop-shadow(0 0 18px rgba(200,220,255,.12));
   }
@@ -2537,12 +2601,12 @@ body::before{
         <p class="cover-gateway-tag">Tu portal de transformación</p>
         <div class="cover-actions-hero">
           <button type="button" class="btn-metallic btn-liquid btn-catalog-hero cover-action-btn" data-shatter-action="catalog" id="btnCatalogHero">
-            <span class="btn-metallic-txt">Ver Catálogo</span>
+            <span class="btn-metallic-txt btn-premium-label">Ver Catálogo</span>
             <span class="btn-hero-badge">25+ audios</span>
           </button>
-          <button type="button" class="btn-alicia-glow cover-action-btn btn-alicia-hero" onclick="goTo('alicia')">✨ Habla con Alicia IA</button>
+          <button type="button" class="btn-alicia-glow cover-action-btn btn-alicia-hero" onclick="goTo('alicia')"><span class="btn-premium-label">✨ Habla con Alicia IA</span></button>
         </div>
-        <button type="button" class="btn-eriorworld cover-action-btn cover-action-secondary" onclick="window.open('https://eriorworld.netlify.app','_blank','noopener,noreferrer')"><span>✦ eriorworld</span><span class="ew-beta">beta</span></button>
+        <button type="button" class="btn-eriorworld cover-action-btn cover-action-secondary" onclick="window.open('https://eriorworld.netlify.app','_blank','noopener,noreferrer')"><span class="btn-premium-label">✦ eriorworld</span><span class="ew-beta">beta</span></button>
       </div>
       </div>
 
@@ -2566,7 +2630,7 @@ body::before{
         <div id="coverHeroRow">
           <div class="cover-mj-col">
             <div id="mjHeroBlock" aria-hidden="true">
-              <button type="button" class="btn-icon-aura-glass" id="btnIconAura" onclick="goToIconAuraAnimated()">Icon Aura</button>
+              <button type="button" class="btn-icon-aura-glass" id="btnIconAura" onclick="goToIconAuraAnimated()"><span class="btn-premium-label">Icon Aura</span></button>
               <div id="mjFloatWrap">
                 <model-viewer
                   id="mjModel"
@@ -2591,9 +2655,9 @@ body::before{
             </div>
           </div>
           <div class="cover-cta-stack">
-            <button type="button" class="btn-metallic btn-liquid btn-liquid-mind" data-shatter-action="mindmovie"><span class="btn-metallic-txt">Mind Movie</span></button>
-            <button type="button" class="btn-metallic btn-liquid btn-liquid-futura" data-shatter-action="futura"><span class="btn-metallic-txt">Futura</span></button>
-            <button type="button" class="btn-metallic btn-liquid btn-liquid-tg" data-shatter-action="telegram"><span class="btn-metallic-txt">Telegram</span></button>
+            <button type="button" class="btn-metallic btn-liquid btn-liquid-mind" data-shatter-action="mindmovie"><span class="btn-metallic-txt btn-premium-label">Mind Movie</span></button>
+            <button type="button" class="btn-metallic btn-liquid btn-liquid-futura" data-shatter-action="futura"><span class="btn-metallic-txt btn-premium-label">Futura</span></button>
+            <button type="button" class="btn-metallic btn-liquid btn-liquid-tg" data-shatter-action="telegram"><span class="btn-metallic-txt btn-premium-label">Telegram</span></button>
           </div>
         </div>
         <div class="soc-row">
@@ -3026,7 +3090,6 @@ body::before{
 </div>
 
 <!-- PROMOS MODAL -->
-<button type="button" class="promo-float-btn" id="promoFloatBtn" onclick="openPromoModal()" aria-label="Ver Father Upgrade Pack">🚀 FATHER PACK</button>
 <div class="modal-bg" id="promoModal" aria-hidden="true">
   <div class="modal-box promo-modal-box">
     <div class="promo-modal-inner">
@@ -3242,16 +3305,19 @@ function closeChatPromoLightbox(){
   if(!c)return;
   var ctx=c.getContext('2d'),s=[];
   var liteBg=window.matchMedia('(max-width:767px)').matches||window.matchMedia('(prefers-reduced-motion:reduce)').matches;
-  var starCount=liteBg?36:90;
+  if(liteBg){
+    c.style.display='none';
+    return;
+  }
+  var starCount=90;
   var frameTick=0;
   function resize(){c.width=innerWidth;c.height=innerHeight;}
   function init(){s=[];for(var i=0;i<starCount;i++)s.push({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*1.1+.2,o:Math.random()});}
   function draw(){
     frameTick++;
-    if(liteBg&&frameTick%5!==0){requestAnimationFrame(draw);return;}
     ctx.clearRect(0,0,c.width,c.height);
     for(var i=0;i<s.length;i++){
-      s[i].o+=(Math.random()-.5)*(liteBg?.006:.012);
+      s[i].o+=(Math.random()-.5)*.012;
       if(s[i].o<.05)s[i].o=.05;
       if(s[i].o>.8)s[i].o=.8;
       ctx.beginPath();ctx.arc(s[i].x,s[i].y,s[i].r,0,Math.PI*2);
@@ -3259,7 +3325,6 @@ function closeChatPromoLightbox(){
     }
     requestAnimationFrame(draw);
   }
-  if(liteBg)c.style.opacity='.22';
   resize();init();draw();
   window.addEventListener('resize',function(){resize();init();});
 })();
