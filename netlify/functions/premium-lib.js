@@ -52,14 +52,34 @@ function normalizeCode(code) {
     .replace(/\s+/g, '');
 }
 
-function generatePremiumCode() {
+function randPart(n) {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  const part = (n) => {
-    let s = '';
-    for (let i = 0; i < n; i += 1) s += chars[Math.floor(Math.random() * chars.length)];
-    return s;
-  };
-  return `ERIOR-${part(4)}-${part(4)}`;
+  let s = '';
+  for (let i = 0; i < n; i += 1) s += chars[Math.floor(Math.random() * chars.length)];
+  return s;
+}
+
+function generatePremiumCode() {
+  return `ERIOR-${randPart(4)}-${randPart(4)}`;
+}
+
+function generateReferralCode(ownerName) {
+  const slug = String(ownerName || '')
+    .trim()
+    .toUpperCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^A-Z0-9]/g, '')
+    .slice(0, 8);
+  if (slug.length >= 3) return `${slug}-${randPart(4)}`;
+  return `REF-${randPart(4)}-${randPart(4)}`;
+}
+
+function normalizeRefCode(code) {
+  return String(code || '')
+    .trim()
+    .toUpperCase()
+    .replace(/\s+/g, '');
 }
 
 async function fetchCodeByValue(code) {
@@ -158,13 +178,95 @@ async function validateAndActivateCode(code, visitanteId) {
   };
 }
 
-async function verifyPremiumCodeId(codeId) {
+async function verifyPremiumCodeId(codeId, visitanteId) {
   if (!codeId || typeof codeId !== 'string') return false;
   if (!getSupabaseConfig()) return false;
   const row = await fetchCodeById(codeId.trim());
   if (!row || !row.active) return false;
   if (row.expires_at && new Date(row.expires_at) < new Date()) return false;
-  return row.activation_count >= 1;
+  if (row.activation_count < 1) return false;
+
+  const vid = String(visitanteId || '').slice(0, 80);
+  if (!vid) return true;
+
+  const act = await sbFetch(
+    `alicia_premium_activations?code_id=eq.${encodeURIComponent(codeId.trim())}&visitante_id=eq.${encodeURIComponent(vid)}&select=id,expires_at&limit=1`,
+    { method: 'GET' }
+  );
+  if (!act.ok || !Array.isArray(act.data) || !act.data[0]) return false;
+  const expiresAt = act.data[0].expires_at;
+  if (expiresAt && new Date(expiresAt) < new Date()) return false;
+  return true;
+}
+
+async function fetchReferralByCode(refCode) {
+  const normalized = normalizeRefCode(refCode);
+  if (!normalized) return null;
+  const res = await sbFetch(
+    `erior_referidos?ref_code=eq.${encodeURIComponent(normalized)}&select=id,ref_code,owner_name,active,hit_count,lead_count,conversion_count,premium_code_id&limit=1`,
+    { method: 'GET' }
+  );
+  if (!res.ok) return null;
+  return Array.isArray(res.data) && res.data[0] ? res.data[0] : null;
+}
+
+async function createReferralForPremiumCode(premiumRow) {
+  if (!premiumRow || !premiumRow.id) return null;
+  const refCode = generateReferralCode(premiumRow.client_name || '');
+  const row = {
+    ref_code: refCode,
+    owner_name: premiumRow.client_name || null,
+    owner_contact: premiumRow.client_email || premiumRow.client_whatsapp || null,
+    premium_code_id: premiumRow.id,
+    active: true,
+    notes: `Auto-creado con código ${premiumRow.code}`,
+  };
+  const res = await sbFetch('erior_referidos', {
+    method: 'POST',
+    headers: { Prefer: 'return=representation' },
+    body: JSON.stringify([row]),
+  });
+  if (!res.ok) return null;
+  return Array.isArray(res.data) ? res.data[0] : res.data;
+}
+
+async function trackReferralHit(refCode, visitanteId, eventType, detalle) {
+  const row = await fetchReferralByCode(refCode);
+  if (!row || !row.active) return { ok: false, error: 'Código de referido inválido' };
+
+  const vid = String(visitanteId || 'anon').slice(0, 80);
+  const evt = String(eventType || 'llegada').slice(0, 40);
+
+  const ins = await sbFetch('erior_referral_hits', {
+    method: 'POST',
+    headers: { Prefer: 'return=minimal' },
+    body: JSON.stringify([
+      {
+        ref_code: row.ref_code,
+        visitante_id: vid,
+        event_type: evt,
+        detalle: String(detalle || '').slice(0, 300) || null,
+      },
+    ]),
+  });
+  if (!ins.ok) return { ok: false, error: 'No se pudo registrar el evento' };
+
+  const patch = {};
+  if (evt === 'llegada') patch.hit_count = (row.hit_count || 0) + 1;
+  if (evt === 'dio_datos') patch.lead_count = (row.lead_count || 0) + 1;
+  if (evt === 'compra_intento' || evt === 'premium_activado') {
+    patch.conversion_count = (row.conversion_count || 0) + 1;
+  }
+
+  if (Object.keys(patch).length) {
+    await sbFetch(`erior_referidos?id=eq.${row.id}`, {
+      method: 'PATCH',
+      headers: { Prefer: 'return=minimal' },
+      body: JSON.stringify(patch),
+    });
+  }
+
+  return { ok: true, ref_code: row.ref_code, owner_name: row.owner_name || '' };
 }
 
 function checkAdminKey(event) {
@@ -181,9 +283,14 @@ module.exports = {
   corsHeaders,
   getSupabaseConfig,
   normalizeCode,
+  normalizeRefCode,
   generatePremiumCode,
+  generateReferralCode,
   validateAndActivateCode,
   verifyPremiumCodeId,
+  fetchReferralByCode,
+  createReferralForPremiumCode,
+  trackReferralHit,
   checkAdminKey,
   sbFetch,
 };

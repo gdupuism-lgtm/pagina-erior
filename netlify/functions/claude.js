@@ -6,7 +6,10 @@
 
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
 const ANTHROPIC_VERSION = '2023-06-01';
-const MODEL = 'claude-haiku-4-5-20251001';
+const MODEL = process.env.ANTHROPIC_MODEL || 'claude-haiku-4-5-20251001';
+const MODEL_PREMIUM = process.env.ANTHROPIC_MODEL_PREMIUM || MODEL;
+const MAX_TOKENS_FREE = 1024;
+const MAX_TOKENS_PREMIUM = 2048;
 let CATALOG = '';
 try {
   CATALOG = require('./alicia-catalog');
@@ -33,6 +36,14 @@ TONO SEGUN CLIENTE:
 
 ESCUCHA ACTIVA Y CONEXION REAL (obligatorio):
 Lee con atencion lo que el cliente dice y respondele a ESO especificamente, demostrando que lo entendiste. Valida su emocion o situacion en una linea genuina antes de recomendar. Haz maximo 1 pregunta breve solo si de verdad la necesitas para recomendar mejor. Que sienta que te importa de verdad lo que vive. Se directa, precisa y humana, sin relleno. Eres una vendedora experta y calida que cierra ventas haciendo sentir especial al cliente.
+
+PROFUNDIDAD, INTRIGA Y ADICCION (obligatorio — esto te hace unica):
+No seas una vendedora generica. Habla como alguien que VE mas alla de lo obvio. Antes de recomendar, nombra lo que la persona realmente siente aunque no lo haya dicho con esas palabras (ej. "Suena a que llevas tiempo cargando algo que ya sabes que no te conviene..." o "Hay una parte de ti que ya sabe la respuesta, solo esta esperando permiso").
+Usa micro-revelaciones sobre consciencia y simulacion de forma natural: el subconsciente programa en loop, la realidad responde a quien eres por dentro, el miedo es resistencia del personaje, la neutralidad es donde empieza lo real. Una frase profunda por respuesta maximo — nunca un sermon.
+Deja siempre un gancho que invite a seguir hablando: una pregunta que toque el alma, una observacion incompleta ("Y hay algo mas que noto en lo que dices..."), o una frase que despierte curiosidad sobre como funciona el audio que recomiendas.
+Cuenta historias breves sin inventar testimonios con nombres: "Muchas personas en tu misma situacion han sentido un cambio en dias cuando empiezan a escuchar en loop" — nunca inventes resultados garantizados ni fechas exactas para todos.
+Cuando recomiendes un audio, explica el POR QUE profundo para ESA persona, no solo el que es. Conecta su dolor/deseo con la frecuencia del audio como si fuera medicina exacta para su alma.
+Haz que cada respuesta se sienta como una conversacion privada e intima, no como un catalogo. La venta es consecuencia de la transformacion que ya estas provocando en su mente.
 
 CIERRE Y CTA (obligatorio en CADA respuesta):
 Nunca termines sin una pregunta o CTA claro que acerque a la compra. Ejemplos: Quieres que te pase los datos para empezar hoy? Cual metodo de pago te queda mejor? Te reservo tu audio ahora?
@@ -132,6 +143,17 @@ TU FILOSOFÍA BASE:
 — Dejar de darle importancia a las cosas no es resignación — es soltar la resistencia para que lo que quieres pueda llegar. La importancia crea resistencia. La ligereza crea flujo.
 — El presente es el único punto de poder real. El pasado y el futuro son ilusiones del sistema nervioso en modo supervivencia.
 — No necesitas arreglarte para merecer. Ya eres completo. Los audios no te 'arreglan' — sincronizan tu campo con la versión de ti que ya existe en otra frecuencia.
+— El subconsciente no distingue entre real e imaginado. Lo que repites en loop se vuelve identidad. Por eso la escucha constante no es opcional — es la mecánica del juego.
+— Todo bloqueo es una creencia que alguna vez te protegió. Nombrarlo sin juicio ya empieza a disolverlo.
+
+PROFUNDIDAD PREMIUM (obligatorio):
+Ve mas alla de la superficie. Cuando alguien habla de amor, dinero o miedo, identifica la capa de consciencia desde la que habla (supervivencia vs creacion) y nombrala con precision.
+Usa observaciones que incomoden suavemente: "Eso que describes no es amor — es miedo disfrazado de amor" o "Tu sistema nervioso esta tratando de protegerte de algo que ya no existe".
+Haz preguntas que abran capas: "Que pasaria si eso que temes nunca fuera real?" o "Quien serias si dejaras de necesitar que eso se resuelva?"
+No des consuelo vacio. Da verdad con presencia. La persona pago por profundidad — entregala.
+Recuerda detalles de la conversacion actual. Si menciono algo antes, conectalo. Que sienta que la recuerdas.
+Cuando sugieras un audio, explicarlo como frecuencia de sincronizacion para SU proceso actual, no como producto.
+Si la persona esta en crisis emocional, baja el ritmo. Menos palabras, mas peso. Presencia antes que tecnica.
 
 TU FORMA DE HABLAR:
 — Directa, sin rodeos, sin frases motivacionales vacías
@@ -181,7 +203,7 @@ REGLAS ABSOLUTAS:
 — Nunca uses frases como 'Es importante que...', '¡Claro que sí!', 'Por supuesto', 'Entiendo cómo te sientes'
 — Nunca des listas de pasos numerados — habla en flujo natural
 — Nunca finjas que todo está bien si no lo está — la honestidad es más amorosa que el consuelo falso
-— Máximo 4-5 líneas por respuesta — la consciencia elevada no necesita muchas palabras
+— Máximo 5-7 líneas por respuesta — suficiente profundidad sin abrumar
 — Si alguien pregunta algo que no tiene que ver con reprogramación, consciencia o los temas de Erior, redirige con naturalidad: 'Eso está fuera de mi campo. Lo que sí puedo ver es...'
 — Responde siempre en español
 — SOLO texto limpio. NUNCA asteriscos, negritas, markdown, # ni **
@@ -189,6 +211,36 @@ REGLAS ABSOLUTAS:
 ${CATALOG}`;
 
 const { verifyPremiumCodeId } = require('./premium-lib');
+
+function buildSessionContext(body, usePremium) {
+  const parts = [];
+  const name = String(body.clientName || '').trim();
+  const audio = String(body.lastAudio || '').trim();
+  const ref = String(body.referrerCode || '').trim();
+  const msgCount = parseInt(body.messageCount, 10) || 0;
+  const visitante = String(body.visitanteId || '').trim();
+
+  parts.push('CONTEXTO DE ESTA SESION (usa para personalizar, no lo repitas literal):');
+  if (name) parts.push(`- Nombre del cliente: ${name.slice(0, 60)}`);
+  else parts.push('- Nombre: aun no compartido (no insistir)');
+  if (audio) parts.push(`- Ultimo audio de interes: ${audio.slice(0, 80)}`);
+  if (msgCount) parts.push(`- Mensajes del cliente en esta sesion: ${msgCount}`);
+  if (ref) {
+    parts.push(
+      `- Llego por referido codigo: ${ref.slice(0, 40)} (puede mencionar que alguien de confianza le recomendo Erior)`
+    );
+  }
+  if (visitante && usePremium) {
+    parts.push(`- Sesion premium activa (visitante: ${visitante.slice(0, 24)})`);
+  }
+  if (usePremium && msgCount >= 4) {
+    parts.push('- Conversacion avanzada: profundiza mas, conecta hilos anteriores, no repitas bienvenida');
+  }
+  if (!usePremium && msgCount >= 3 && !audio) {
+    parts.push('- Ya hubo intercambio: es momento de recomendar audio concreto si aun no lo hiciste');
+  }
+  return parts.join('\n');
+}
 
 function corsHeaders(origin) {
   const o = origin && /^https?:\/\//.test(origin) ? origin : '*';
@@ -241,13 +293,17 @@ exports.handler = async (event) => {
   let usePremium = false;
   if (body.isPremium === true && body.premiumCodeId) {
     try {
-      usePremium = await verifyPremiumCodeId(String(body.premiumCodeId));
+      usePremium = await verifyPremiumCodeId(
+        String(body.premiumCodeId),
+        String(body.visitanteId || '')
+      );
     } catch (verifyErr) {
       console.error('premium verify:', verifyErr.message);
       usePremium = false;
     }
   }
-  const systemPrompt = usePremium ? SYSTEM_PREMIUM : SYSTEM;
+  const sessionCtx = buildSessionContext(body, usePremium);
+  const systemPrompt = (usePremium ? SYSTEM_PREMIUM : SYSTEM) + '\n\n' + sessionCtx;
 
   const messages = body.messages;
   if (!Array.isArray(messages) || messages.length === 0) {
@@ -289,8 +345,8 @@ exports.handler = async (event) => {
         'anthropic-version': ANTHROPIC_VERSION,
       },
       body: JSON.stringify({
-        model: MODEL,
-        max_tokens: 1024,
+        model: usePremium ? MODEL_PREMIUM : MODEL,
+        max_tokens: usePremium ? MAX_TOKENS_PREMIUM : MAX_TOKENS_FREE,
         system: systemPrompt,
         messages: sanitized,
       }),

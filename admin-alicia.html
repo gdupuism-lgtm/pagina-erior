@@ -95,6 +95,40 @@ a.btn{text-decoration:none}
       <p class="msg err" id="listMsg"></p>
     </div>
 
+    <div class="card">
+      <h2 style="font-size:.85rem;margin-bottom:.75rem;color:#f5e6c8">Sistema de referidos</h2>
+      <p class="sub" style="margin-bottom:.75rem">Cada código Premium genera un link de referido automático. Compártelo con clientes VIP para que traigan personas.</p>
+      <div class="grid">
+        <div><label>Referidor</label><input id="rName" placeholder="María García"></div>
+        <div><label>Contacto</label><input id="rContact" placeholder="+52... o email"></div>
+      </div>
+      <label>Código personalizado (opcional)</label>
+      <input id="rCode" placeholder="Auto: MARIA-A3K9 o REF-XXXX-XXXX">
+      <button type="button" class="btn btn-gold" id="btnCreateRef">Crear link de referido 🔗</button>
+      <p class="msg" id="createRefMsg"></p>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin:1rem 0 .5rem">
+        <h3 style="font-size:.78rem;color:#f5e6c8">Referidos activos</h3>
+        <button type="button" class="btn btn-ghost btn-sm" id="btnRefreshRef">Actualizar</button>
+      </div>
+      <div style="overflow-x:auto">
+        <table>
+          <thead>
+            <tr>
+              <th>Código</th>
+              <th>Dueño</th>
+              <th>Visitas</th>
+              <th>Leads</th>
+              <th>Conv.</th>
+              <th>Link</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="refsBody"></tbody>
+        </table>
+      </div>
+      <p class="msg err" id="listRefMsg"></p>
+    </div>
+
     <button type="button" class="btn btn-ghost btn-sm" id="btnLogout">Cerrar sesión</button>
   </div>
 </div>
@@ -135,6 +169,11 @@ a.btn{text-decoration:none}
     params.set('nombre',String(clientName||'Cliente').trim()||'Cliente');
     params.set('codigo',String(code||'').trim());
     return 'tarjeta-vip.html?'+params.toString();
+  }
+
+  function referralLink(refCode){
+    var base=window.location.origin+window.location.pathname.replace(/[^/]*$/,'');
+    return base+'?ref='+encodeURIComponent(String(refCode||'').trim().toUpperCase())+'#alicia';
   }
 
   async function loadCodes(){
@@ -192,6 +231,7 @@ a.btn{text-decoration:none}
       if(!r.ok){clearKey();msg.textContent=(d&&d.error)||'Error';return;}
       showPanel(true);
       loadCodes();
+      loadReferrals();
     }catch(e){
       clearKey();
       msg.textContent='No hay conexión. ¿Está desplegado en Netlify?';
@@ -218,11 +258,13 @@ a.btn{text-decoration:none}
       var r=await fetch(ADMIN_FN,{method:'POST',headers:headers(),body:JSON.stringify(body)});
       var d=await r.json();
       if(!r.ok||!d.ok){msg.textContent=(d&&d.error)||'Error';msg.className='msg err';return;}
-      msg.textContent='✓ Código creado: '+d.code.code+' — cópialo y envíaselo al cliente';
+      msg.textContent='✓ Código creado: '+d.code.code+(d.referral?' | Referido: '+d.referral.ref_code:'');
       msg.className='msg ok';
       copyText(d.code.code);
+      if(d.referral)copyText(referralLink(d.referral.ref_code));
       document.getElementById('fCode').value='';
       loadCodes();
+      loadReferrals();
     }catch(e){
       msg.textContent='Error de conexión';
       msg.className='msg err';
@@ -231,9 +273,81 @@ a.btn{text-decoration:none}
 
   document.getElementById('adminKey').onkeydown=function(e){if(e.key==='Enter')document.getElementById('btnLogin').click();};
 
+  async function loadReferrals(){
+    var msg=document.getElementById('listRefMsg');
+    if(!msg)return;
+    msg.textContent='';
+    msg.className='msg';
+    try{
+      var r=await fetch(ADMIN_FN+'?referrals=1',{headers:{'X-Admin-Key':getKey()}});
+      var d=await r.json();
+      if(!r.ok||!d.ok){msg.textContent=(d&&d.error)||'Error al cargar referidos';msg.className='msg err';return;}
+      var tbody=document.getElementById('refsBody');
+      if(!tbody)return;
+      tbody.innerHTML='';
+      (d.referrals||[]).forEach(function(ref){
+        var tr=document.createElement('tr');
+        var active=ref.active!==false;
+        var link=referralLink(ref.ref_code);
+        tr.innerHTML=
+          '<td><code class="copy" title="Copiar código">'+ref.ref_code+'</code></td>'+
+          '<td>'+(ref.owner_name||'—')+'</td>'+
+          '<td>'+(ref.hit_count||0)+'</td>'+
+          '<td>'+(ref.lead_count||0)+'</td>'+
+          '<td>'+(ref.conversion_count||0)+'</td>'+
+          '<td><button type="button" class="btn btn-ghost btn-sm" data-reflink="'+escAttr(link)+'">Copiar link</button></td>'+
+          '<td><button type="button" class="btn btn-danger btn-sm" data-toggleref="'+ref.id+'" data-active="'+(active?'0':'1')+'">'+(active?'Off':'On')+'</button></td>';
+        tbody.appendChild(tr);
+      });
+      tbody.querySelectorAll('[data-reflink]').forEach(function(btn){
+        btn.onclick=function(){copyText(btn.getAttribute('data-reflink'));btn.textContent='✓';setTimeout(function(){btn.textContent='Copiar link';},1200);};
+      });
+      tbody.querySelectorAll('[data-toggleref]').forEach(function(btn){
+        btn.onclick=function(){toggleReferral(btn.getAttribute('data-toggleref'),btn.getAttribute('data-active')==='1');};
+      });
+    }catch(e){
+      msg.textContent='Sin conexión al servidor';
+      msg.className='msg err';
+    }
+  }
+
+  async function toggleReferral(id,active){
+    await fetch(ADMIN_FN,{method:'POST',headers:headers(),body:JSON.stringify({action:'toggle_referral',id:id,active:active})});
+    loadReferrals();
+  }
+
+  document.getElementById('btnRefreshRef').onclick=loadReferrals;
+
+  document.getElementById('btnCreateRef').onclick=async function(){
+    var msg=document.getElementById('createRefMsg');
+    msg.textContent='Generando...';
+    msg.className='msg';
+    var body={
+      action:'create_referral',
+      owner_name:document.getElementById('rName').value.trim(),
+      owner_contact:document.getElementById('rContact').value.trim()
+    };
+    var custom=document.getElementById('rCode').value.trim();
+    if(custom)body.ref_code=custom;
+    try{
+      var r=await fetch(ADMIN_FN,{method:'POST',headers:headers(),body:JSON.stringify(body)});
+      var d=await r.json();
+      if(!r.ok||!d.ok){msg.textContent=(d&&d.error)||'Error';msg.className='msg err';return;}
+      var link=referralLink(d.referral.ref_code);
+      msg.textContent='✓ Referido: '+d.referral.ref_code+' — link copiado';
+      msg.className='msg ok';
+      copyText(link);
+      document.getElementById('rCode').value='';
+      loadReferrals();
+    }catch(e){
+      msg.textContent='Error de conexión';
+      msg.className='msg err';
+    }
+  };
+
   if(getKey()){
     fetch(ADMIN_FN,{headers:{'X-Admin-Key':getKey()}}).then(function(r){
-      if(r.ok){showPanel(true);loadCodes();}
+      if(r.ok){showPanel(true);loadCodes();loadReferrals();}
       else clearKey();
     }).catch(function(){clearKey();});
   }

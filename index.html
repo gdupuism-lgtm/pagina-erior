@@ -3191,6 +3191,59 @@ function getVisitanteId(){
   return id;
 }
 
+var REFERRAL_KEY='erior_ref';
+var REFERRAL_TRACK_FN='/.netlify/functions/referral-track';
+function getReferralCode(){
+  try{return localStorage.getItem(REFERRAL_KEY)||'';}catch(e){return '';}
+}
+function eriorSiteBase(){
+  try{return window.location.origin+window.location.pathname.replace(/[^/]*$/,'');}catch(e){return 'https://eriorcenter.netlify.app/';}
+}
+function buildReferralLink(refCode){
+  var base=eriorSiteBase();
+  return base+'?ref='+encodeURIComponent(String(refCode||'').trim().toUpperCase())+'#alicia';
+}
+function trackReferralEvent(eventType,detalle){
+  var ref=getReferralCode();
+  if(!ref)return;
+  try{
+    if(eventType==='llegada'){
+      if(sessionStorage.getItem('erior_ref_tracked_'+ref))return;
+      sessionStorage.setItem('erior_ref_tracked_'+ref,'1');
+    }
+    if(eventType==='alicia_chat'){
+      if(sessionStorage.getItem('erior_ref_alicia_'+ref))return;
+      sessionStorage.setItem('erior_ref_alicia_'+ref,'1');
+    }
+  }catch(e){}
+  fetch(REFERRAL_TRACK_FN,{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({ref_code:ref,visitante_id:getVisitanteId(),event_type:eventType,detalle:(detalle||'').slice(0,300)})
+  }).catch(function(){});
+}
+function initReferralCapture(){
+  try{
+    var ref='';
+    var params=new URLSearchParams(window.location.search||'');
+    ref=(params.get('ref')||'').trim();
+    if(!ref&&window.location.hash){
+      var hash=window.location.hash.replace(/^#/,'');
+      if(hash.indexOf('ref=')>=0){
+        var hp=new URLSearchParams(hash.indexOf('?')>=0?hash.split('?')[1]:hash);
+        ref=(hp.get('ref')||'').trim();
+      }
+    }
+    ref=ref.toUpperCase().replace(/\s+/g,'');
+    if(ref){
+      localStorage.setItem(REFERRAL_KEY,ref);
+      trackReferralEvent('llegada','url');
+      registrarEvento('referido_llegada',ref);
+    }
+  }catch(e){}
+}
+initReferralCapture();
+
 async function registrarEvento(tipo,detalle){
   if(!supabaseClient)return;
   try{
@@ -3360,6 +3413,7 @@ function goTo(id){
   if(idx>=0) curPage=idx;
   if(id==='alicia'){
     registrarEvento('abrio_alicia','visita');
+    if(getReferralCode())trackReferralEvent('alicia_chat','apertura');
     if(!sessionStorage.getItem('alicia_visit_sent')){
       sessionStorage.setItem('alicia_visit_sent','1');
       var visitMsg='👁️ VISITA ERIOR: Alguien abrió el chat de Alicia';
@@ -3950,9 +4004,13 @@ function hasAliciaModeChosen(){
 }
 function getAliciaWelcomeMessage(){
   if(isAliciaPremiumActive()){
-    return 'Bienvenid@ a Alicia Premium ✨ Has entrado a un espacio exclusivo solo para ti: aquí no vamos de prisa. Te escucho con profundidad, trabajamos tu subconsciente, tus creencias y tu manifestación con calma, verdad y presencia. Este es tu rincón sagrado de transformación — y yo camino contigo. Cuéntame qué estás list@ para sanar, reprogramar o crear en tu vida. 🌙';
+    return 'Bienvenid@ a Alicia Premium ✨ Has entrado a un espacio que no es para todos. Aqui no vendemos — aqui vemos. Tu subconsciente ya sabe por que llegaste. Lo que vas a decir a continuacion no es casualidad: es tu sistema pidiendo salir de un loop. Cuéntame que sientes de verdad, sin filtro. Voy a escucharte desde un lugar que la mayoria no alcanza a ver. 🌙';
   }
-  return 'Hola! Soy Alicia ✨ Antes de empezar, ¿me compartes tu nombre y tu WhatsApp o email para enviarte información exclusiva y acompañarte en tu proceso? 🌟';
+  var ref=getReferralCode();
+  if(ref){
+    return 'Bienvenid@ a ERIOR CENTER ✨ Soy Alicia. Alguien de confianza te trajo hasta aqui — y eso ya dice algo de ti. Estoy para escucharte de verdad y guiarte al audio que tu alma necesita en este momento exacto. Hay cosas que el subconsciente ya sabe antes de que las digas en voz alta... Cuéntame, que te trae por aqui hoy?';
+  }
+  return 'Bienvenid@ a ERIOR CENTER ✨ Soy Alicia, tu asistente personal. Estoy aqui para escucharte de verdad y guiarte al audio perfecto segun lo que estes viviendo. A veces lo que sentimos por dentro ya tiene una respuesta — solo falta escucharla. Cuentame, que te trae por aqui hoy?';
 }
 function showAliciaPremiumWelcomeInChat(){
   var welcome=getAliciaWelcomeMessage();
@@ -3995,6 +4053,7 @@ async function activateAliciaPremiumCode(){
         localStorage.removeItem(ALICIA_MODE_KEY);
       }catch(st){}
       registrarEvento('alicia_premium_activado',code.slice(0,20));
+      trackReferralEvent('premium_activado',code.slice(0,20));
       if(fb){fb.textContent='¡Acceso activado! Entrando a Premium...';fb.className='alicia-premium-code-feedback success';}
       setTimeout(function(){
         var win=document.getElementById('chatWin');
@@ -4225,7 +4284,10 @@ function syncAliciaDatosSupabase(prevNombre,prevContacto){
   if(nombre)datos.nombre=nombre;
   if(contacto)datos.contacto=contacto;
   if(aliciaClient.ultimoAudio)datos.audio_interes=aliciaClient.ultimoAudio;
+  var refCode=getReferralCode();
+  if(refCode)datos.referrer_code=refCode;
   guardarProspecto(datos);
+  if(refCode)trackReferralEvent('dio_datos',(nombre||'')+' / '+(contacto||''));
 }
 function updateAliciaClientFromMessage(txt){
   var prevNombre=aliciaClient.nombre||'';
@@ -4765,7 +4827,7 @@ async function sendMsg(){
   var txt=inp.value.trim();if(!txt)return;
   inp.value='';addMsg('u',txt);hist.push({role:'user',content:txt});
   processAliciaCallMeBotAlerts(txt);
-  if(isPurchaseIntent(txt)){var qp2=document.getElementById('aliciaQuieroPagar');if(qp2)qp2.style.display='flex';}
+  if(isPurchaseIntent(txt)){var qp2=document.getElementById('aliciaQuieroPagar');if(qp2)qp2.style.display='flex';trackReferralEvent('compra_intento',aliciaClient.ultimoAudio||txt.slice(0,80));}
   if(isPaymentCelebration(txt))launchAliciaConfetti();
   var sendBtn=document.querySelector('.chat-send');
   sendBtn.disabled=true;showDots();
@@ -4773,7 +4835,16 @@ async function sendMsg(){
     var r=await fetch(ALICIA_FN,{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({messages:hist,isPremium:isAliciaPremiumActive(),premiumCodeId:getAliciaPremiumCodeId()})
+      body:JSON.stringify({
+        messages:hist,
+        isPremium:isAliciaPremiumActive(),
+        premiumCodeId:getAliciaPremiumCodeId(),
+        visitanteId:getVisitanteId(),
+        clientName:aliciaClient.nombre||'',
+        lastAudio:aliciaClient.ultimoAudio||'',
+        referrerCode:getReferralCode(),
+        messageCount:hist.filter(function(m){return m.role==='user';}).length
+      })
     });
     var data={};
     try{data=await r.json();}catch(parseErr){data={};}
