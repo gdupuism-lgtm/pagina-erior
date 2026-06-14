@@ -1506,18 +1506,19 @@ button.alicia-mode-premium-cta{font:inherit;width:100%;cursor:pointer}
 .fsm-socials a{font-family:'Jost',sans-serif;font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.2);text-decoration:none;transition:color .25s;}
 .fsm-socials a:hover{color:rgba(255,255,255,.65);}
 
-/* ── TARJETA VIP LEGACY FLOTANTE (inicio + menú) ── */
+/* ── TARJETA VIP LEGACY FLOTANTE (solo inicio, fija — solo inclina como tarjeta-vip) ── */
 .cover-vip-widget{
   position:fixed;z-index:998;
-  right:clamp(.55rem,2.5vw,1rem);
-  bottom:clamp(1rem,3vh,1.75rem);
-  width:min(268px,74vw);
-  display:flex;flex-direction:column;align-items:center;gap:.45rem;
+  top:clamp(4.6rem,11vh,5.4rem);
+  right:clamp(.55rem,2vw,1rem);
+  bottom:auto;left:auto;
+  width:min(248px,22vw);
+  max-width:268px;
+  display:flex;flex-direction:column;align-items:stretch;gap:.4rem;
   pointer-events:none;
 }
 .cover-vip-widget > *{pointer-events:auto}
 .cover-vip-widget.is-hidden{display:none!important}
-.cover-vip-widget.is-dragging{z-index:1002}
 .fsm-erior-vip-btn{
   width:100%;max-width:100%;
   appearance:none;cursor:pointer;border:none;
@@ -1542,20 +1543,10 @@ button.alicia-mode-premium-cta{font:inherit;width:100%;cursor:pointer}
 .fsm-erior-vip-btn:active{transform:scale(.97)}
 
 .fsm-vip-float{
-  position:relative;z-index:1;
-  width:100%;
+  position:relative;z-index:1;width:100%;
   touch-action:none;user-select:none;
-  filter:drop-shadow(0 18px 40px rgba(0,0,0,.45));
+  filter:drop-shadow(0 14px 32px rgba(0,0,0,.42));
 }
-.fsm-vip-float.is-dragging{transition:none;cursor:grabbing}
-.fsm-vip-drag-bar{
-  display:flex;align-items:center;justify-content:center;
-  height:22px;margin-bottom:4px;border-radius:8px;
-  font-size:.72rem;letter-spacing:.2em;color:rgba(255,255,255,.28);
-  cursor:grab;touch-action:none;
-  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
-}
-.fsm-vip-drag-bar:active{cursor:grabbing}
 .fsm-vip-scene{perspective:1200px;width:100%}
 .fsm-vip-card-wrap{
   position:relative;width:100%;aspect-ratio:600/380;
@@ -1646,18 +1637,37 @@ button.alicia-mode-premium-cta{font:inherit;width:100%;cursor:pointer}
 .fsm-vip-foot{display:flex;align-items:flex-end;justify-content:space-between;margin-top:.25rem;flex-shrink:0}
 .fsm-vip-valid{font-size:clamp(.5rem,1.8vw,.6rem);color:rgba(255,255,255,.45);letter-spacing:.04em}
 .fsm-vip-hint{
-  text-align:center;font-size:.52rem;color:rgba(255,255,255,.22);
-  letter-spacing:.06em;margin-top:.35rem;pointer-events:none;
+  text-align:center;font-size:.5rem;color:rgba(255,255,255,.28);
+  letter-spacing:.04em;margin-top:.2rem;pointer-events:none;
 }
-@media(max-width:600px){
+@media(max-width:900px){
+  .cover-vip-widget{
+    top:auto;
+    bottom:calc(4.75rem + env(safe-area-inset-bottom,0px));
+    right:.4rem;
+    width:min(148px,38vw);
+    max-width:158px;
+  }
   .fsm-vip-card-wrap{aspect-ratio:600/430}
-  .fsm-vip-hero{flex:0 0 auto;max-height:58px;align-items:flex-end}
-  .fsm-vip-figure{max-height:54px;max-width:48%}
-  .cover-vip-widget{width:min(210px,68vw);bottom:clamp(.65rem,2vh,1rem);right:.45rem}
-  .fsm-erior-vip-btn{font-size:.52rem;padding:.5rem 1rem;letter-spacing:.22em}
+  .fsm-vip-content{padding:.55rem .6rem}
+  .fsm-vip-logo{height:36px;min-height:36px;max-width:52%}
+  .fsm-vip-member{font-size:.42rem;letter-spacing:.22em}
+  .fsm-vip-hero{flex:0 0 auto;max-height:46px;margin:0;align-items:flex-end}
+  .fsm-vip-figure{max-height:42px;max-width:46%}
+  .fsm-vip-title{font-size:.78rem;margin-bottom:.18rem}
+  .fsm-vip-name{font-size:.5rem;letter-spacing:.14em;margin-bottom:.28rem}
+  .fsm-vip-code{font-size:.48rem;letter-spacing:.08em;line-height:1.25}
+  .fsm-vip-valid{font-size:.42rem}
+  .fsm-vip-foot{margin-top:.12rem}
+  .fsm-erior-vip-btn{font-size:.48rem;padding:.45rem .65rem;letter-spacing:.18em}
+  .fsm-vip-hint{font-size:.44rem}
 }
-@media(max-height:700px){
-  .cover-vip-widget{bottom:.5rem;transform:scale(.92);transform-origin:bottom right}
+@media(min-width:901px){
+  .cover-vip-widget{width:min(248px,22vw)}
+  .fsm-vip-hint{display:none}
+}
+@media(max-height:740px) and (min-width:901px){
+  .cover-vip-widget{transform:scale(.94);transform-origin:top right}
 }
 @media(prefers-reduced-motion:reduce){
   .fsm-vip-holo{animation:none}
@@ -1665,21 +1675,55 @@ button.alicia-mode-premium-cta{font:inherit;width:100%;cursor:pointer}
 }
 
 #vipLegacyModal{z-index:5150}
-.vip-legacy-modal-box{max-width:560px;border-radius:14px}
-.vip-legacy-head{padding:1.5rem 1.75rem .75rem;border-bottom:1px solid rgba(255,255,255,.06)}
-.vip-legacy-kicker{font-size:.52rem;letter-spacing:.26em;text-transform:uppercase;color:rgba(201,160,96,.75);margin-bottom:.4rem}
-.vip-legacy-title{font-family:'Syne',sans-serif;font-size:1.25rem;font-weight:700;color:#fff;letter-spacing:.06em;margin-bottom:.35rem}
-.vip-legacy-sub{font-size:.78rem;color:rgba(200,196,214,.55);line-height:1.55}
-.vip-legacy-benefits{padding:1rem 1.75rem 0}
+.vip-legacy-modal-box{
+  max-width:560px;border-radius:14px;
+  max-height:min(92vh,780px);
+  display:flex;flex-direction:column;overflow:hidden;
+  padding:0;
+}
+.vip-legacy-modal-box > .modal-close{top:.65rem;right:.65rem;z-index:3}
+.vip-legacy-scroll{
+  overflow-y:auto;overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
+  flex:1 1 auto;min-height:0;
+}
+.vip-legacy-head{padding:1.35rem 1.5rem .65rem;border-bottom:1px solid rgba(255,255,255,.06)}
+.vip-legacy-kicker{font-size:.52rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(201,160,96,.85);margin-bottom:.35rem;line-height:1.4}
+.vip-legacy-title{font-family:'Syne',sans-serif;font-size:1.15rem;font-weight:700;color:#fff;letter-spacing:.04em;margin-bottom:.25rem;line-height:1.25}
+.vip-legacy-sub{font-size:.76rem;color:rgba(200,196,214,.58);line-height:1.5}
+.vip-legacy-section{padding:.85rem 1.5rem 0}
+.vip-legacy-section h3{
+  font-family:'Syne',sans-serif;font-size:.72rem;font-weight:600;
+  letter-spacing:.12em;text-transform:uppercase;color:rgba(201,160,96,.9);
+  margin:0 0 .55rem;
+}
+.vip-legacy-benefits{padding:0 1.5rem}
 .vip-legacy-benefits ul{list-style:none;margin:0;padding:0}
 .vip-legacy-benefits li{
-  position:relative;padding:.45rem 0 .45rem 1.35rem;
-  font-size:.8rem;color:rgba(220,216,232,.78);line-height:1.45;
+  position:relative;padding:.4rem 0 .4rem 1.2rem;
+  font-size:.78rem;color:rgba(220,216,232,.82);line-height:1.45;
   border-bottom:1px solid rgba(255,255,255,.04);
 }
 .vip-legacy-benefits li:last-child{border-bottom:none}
-.vip-legacy-benefits li::before{content:'✦';position:absolute;left:0;color:var(--gold);font-size:.65rem;top:.55rem}
-.vip-legacy-actions{padding:1rem 1.75rem;display:flex;flex-direction:column;gap:.55rem}
+.vip-legacy-benefits li::before{content:'';position:absolute;left:0;top:.62rem}
+.vip-legacy-benefits li[data-ico]::before{content:attr(data-ico);top:.48rem;font-size:.82rem;line-height:1}
+.vip-legacy-referral{
+  margin:.75rem 1.5rem 0;padding:.75rem .85rem;border-radius:10px;
+  background:rgba(201,160,96,.06);border:1px solid rgba(201,160,96,.16);
+}
+.vip-legacy-referral p{font-size:.74rem;color:rgba(220,216,232,.78);line-height:1.45;margin:0 0 .4rem}
+.vip-legacy-referral p:last-child{margin-bottom:0}
+.vip-legacy-soon{
+  margin:.65rem 1.5rem 0;font-size:.74rem;color:rgba(200,196,214,.55);line-height:1.45;
+}
+.vip-legacy-cta-line{
+  margin:.75rem 1.5rem 0;font-size:.78rem;color:rgba(245,230,200,.88);line-height:1.45;
+}
+.vip-legacy-actions{
+  padding:1rem 1.5rem;display:flex;flex-direction:column;gap:.5rem;
+  flex-shrink:0;border-top:1px solid rgba(255,255,255,.06);
+  background:linear-gradient(180deg,rgba(18,19,26,0) 0%,rgba(18,19,26,.98) 18%);
+}
 .vip-legacy-toggle{
   width:100%;padding:.85rem 1rem;border-radius:12px;cursor:pointer;
   font-family:'Jost',sans-serif;font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
@@ -1688,8 +1732,8 @@ button.alicia-mode-premium-cta{font:inherit;width:100%;cursor:pointer}
 }
 .vip-legacy-toggle:hover{background:rgba(201,160,96,.18)}
 .vip-legacy-pay{
-  display:none;padding:0 1.75rem 1rem;border-top:1px solid rgba(255,255,255,.06);
-  margin-top:.25rem;padding-top:1rem;
+  display:none;padding:1rem 0 0;margin:.65rem 1.5rem 0;
+  border-top:1px solid rgba(255,255,255,.06);
 }
 .vip-legacy-pay.open{display:block}
 .vip-legacy-pay .pay-methods{margin-bottom:.75rem}
@@ -1701,7 +1745,19 @@ button.alicia-mode-premium-cta{font:inherit;width:100%;cursor:pointer}
   transition:all .25s;
 }
 .vip-legacy-wa:hover{background:rgba(37,211,102,.16)}
-.vip-legacy-note{padding:0 1.75rem 1.25rem;font-size:.68rem;color:rgba(200,196,214,.45);line-height:1.5}
+.vip-legacy-note{padding:0 1.5rem 1rem;font-size:.66rem;color:rgba(200,196,214,.42);line-height:1.45}
+@media(max-width:600px){
+  #vipLegacyModal.modal-bg.open{padding:.65rem .5rem;align-items:flex-end}
+  .vip-legacy-modal-box{max-height:min(94vh,720px);border-radius:14px 14px 12px 12px}
+  .vip-legacy-head{padding:1.1rem 1.1rem .55rem}
+  .vip-legacy-section{padding:.75rem 1.1rem 0}
+  .vip-legacy-benefits{padding:0 1.1rem}
+  .vip-legacy-referral{margin:.65rem 1.1rem 0}
+  .vip-legacy-soon,.vip-legacy-cta-line{margin-left:1.1rem;margin-right:1.1rem}
+  .vip-legacy-pay{margin-left:1.1rem;margin-right:1.1rem}
+  .vip-legacy-note{padding-left:1.1rem;padding-right:1.1rem}
+  .vip-legacy-actions{padding:.85rem 1.1rem}
+}
 
 /* ── CRYSTAL MENU BUTTON ── */
 #menuBtn{position:fixed;top:1.5rem;left:1.2rem;z-index:1001;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:.65rem 1.15rem .6rem;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);border-radius:14px;cursor:pointer;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 4px 16px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.2);transition:all .3s;overflow:hidden;}
@@ -2774,7 +2830,6 @@ body::before{
 <div class="cover-vip-widget" id="coverVipWidget" aria-label="Tarjeta VIP demo LEGACY">
   <button type="button" class="fsm-erior-vip-btn" onclick="openVipLegacyModal()">ERIOR VIP</button>
   <div class="fsm-vip-float" id="fsmVipFloat">
-    <div class="fsm-vip-drag-bar" id="fsmVipDragBar" title="Arrastra para mover">⠿</div>
     <div class="fsm-vip-scene">
       <div class="fsm-vip-card-wrap" id="fsmVipCardWrap">
         <div class="fsm-vip-card" id="fsmVipCard">
@@ -2802,7 +2857,7 @@ body::before{
         </div>
       </div>
     </div>
-    <p class="fsm-vip-hint">Gira · arrastra ⠿</p>
+    <p class="fsm-vip-hint">Gira la tarjeta con el dedo</p>
   </div>
 </div>
 
@@ -3314,36 +3369,54 @@ body::before{
 <div class="modal-bg" id="vipLegacyModal" aria-hidden="true">
   <div class="modal-box pay-modal-box vip-legacy-modal-box">
     <button type="button" class="modal-close" onclick="closeVipLegacyModal()" aria-label="Cerrar">✕</button>
-    <div class="vip-legacy-head">
-      <div class="vip-legacy-kicker">👑 Membresía exclusiva</div>
-      <div class="vip-legacy-title">Tarjeta ERIOR VIP</div>
-      <p class="vip-legacy-sub">Alicia Premium — tu espacio de consciencia elevada, guía profunda y reprogramación sin prisa. La tarjeta LEGACY es una muestra; tu acceso real incluye código personal activo.</p>
-    </div>
-    <div class="vip-legacy-benefits">
-      <ul>
-        <li>30 días de Alicia Premium: coach de consciencia, no vendedora</li>
-        <li>Guía profunda en subconsciente, creencias y manifestación</li>
-        <li>Filosofía simulation / sistema nervioso / neutralidad</li>
-        <li>Tarjeta VIP holográfica personalizada con tu nombre</li>
-        <li>Ideal después de tu proceso con audios Erior Center</li>
-      </ul>
+    <div class="vip-legacy-scroll">
+      <div class="vip-legacy-head">
+        <div class="vip-legacy-kicker">👑 ALICIA PREMIUM — Membresía VIP Erior Center</div>
+        <div class="vip-legacy-title">Tarjeta ERIOR VIP</div>
+        <p class="vip-legacy-sub">La tarjeta LEGACY es una muestra visual. Tu acceso real incluye nombre y código único activo al confirmar tu membresía.</p>
+      </div>
+      <div class="vip-legacy-section">
+        <h3>¿Cómo se obtiene?</h3>
+        <p class="vip-legacy-sub" style="padding:0;margin:0 0 .25rem">Compra 3 o más audios de Erior Center durante el mes 🎧✨</p>
+      </div>
+      <div class="vip-legacy-section">
+        <h3>¿Qué incluye tu membresía VIP?</h3>
+      </div>
+      <div class="vip-legacy-benefits">
+        <ul>
+          <li data-ico="🔮">Acceso a Alicia Premium — tu coach personal de IA para subconsciente, manifestación y guía de vida 24/7</li>
+          <li data-ico="🎴">Tu Tarjeta VIP digital personalizada, con tu nombre y código único</li>
+          <li data-ico="💸">20% de descuento en TODAS tus próximas compras Erior</li>
+          <li data-ico="⚡">Acceso anticipado a nuevos audios antes que el público general</li>
+          <li data-ico="📖">Acceso al Ebook Erior</li>
+          <li data-ico="📲">Acceso al canal exclusivo de Telegram VIP</li>
+          <li data-ico="⏳">Acceso válido por 60 días</li>
+        </ul>
+      </div>
+      <div class="vip-legacy-referral">
+        <p><strong style="color:rgba(201,160,96,.95)">🎁 PROGRAMA DE REFERIDOS</strong></p>
+        <p>· Refiere 3 amigos que compren 3+ audios c/u → TÚ y tus 3 referidos reciben 1 mes EXTRA de Premium gratis 🙌</p>
+        <p>· Por cada 3 audios que generen tus referidos, te regalamos 1 audio Erior GRATIS 🎧🎁</p>
+      </div>
+      <p class="vip-legacy-soon">🚀 Próximamente: más beneficios exclusivos para miembros VIP — ¡esto apenas comienza!</p>
+      <p class="vip-legacy-cta-line">¿Ya tienes tus 3 audios este mes? Escríbenos y te damos tu acceso 👇</p>
+      <div class="vip-legacy-pay" id="vipLegacyPaySection">
+        <div class="pay-modal-label" style="padding:0 0 .5rem">Elige cómo pagar</div>
+        <div class="pay-modal-product" id="vipLegacyProduct">Membresía VIP — Alicia Premium</div>
+        <div class="pay-modal-price" style="margin-bottom:.85rem">3+ audios Erior Center en el mes · consulta detalles con el equipo</div>
+        <div class="pay-methods" id="vipPayMethods"></div>
+        <div class="pay-panel" id="vipPayPanel"></div>
+        <div class="pay-footer-note" style="margin-top:.85rem;padding-top:.85rem;border-top:1px solid rgba(255,255,255,.06)">
+          <strong>Después de pagar</strong>
+          <span>Envía tu comprobante a eriorcenter@gmail.com con el asunto Tarjeta VIP y tu Instagram. Te activamos tu código personal y tu Alicia Premium.</span>
+        </div>
+      </div>
+      <p class="vip-legacy-note">La tarjeta LEGACY del inicio es demostración. Tu código real se entrega al confirmar tu compra.</p>
     </div>
     <div class="vip-legacy-actions">
       <button type="button" class="vip-legacy-toggle" id="vipLegacyPayToggle" onclick="toggleVipLegacyPay()">Ver métodos de pago 💳</button>
       <a class="vip-legacy-wa" id="vipLegacyWa" href="#" target="_blank" rel="noopener noreferrer">💬 Escribir por WhatsApp</a>
     </div>
-    <div class="vip-legacy-pay" id="vipLegacyPaySection">
-      <div class="pay-modal-label" style="padding:0 0 .5rem">Elige cómo pagar</div>
-      <div class="pay-modal-product" id="vipLegacyProduct">Tarjeta VIP ERIOR — Alicia Premium</div>
-      <div class="pay-modal-price" style="margin-bottom:.85rem">Consulta precio con el equipo · audios desde $1,170 MXN</div>
-      <div class="pay-methods" id="vipPayMethods"></div>
-      <div class="pay-panel" id="vipPayPanel"></div>
-      <div class="pay-footer-note" style="margin-top:.85rem;padding-top:.85rem;border-top:1px solid rgba(255,255,255,.06)">
-        <strong>Después de pagar</strong>
-        <span>Envía tu comprobante a eriorcenter@gmail.com con el asunto Tarjeta VIP y tu Instagram. Te activamos tu código personal y tu Alicia Premium.</span>
-      </div>
-    </div>
-    <p class="vip-legacy-note">La tarjeta LEGACY del menú es demostración. Tu código real se entrega al confirmar tu compra.</p>
   </div>
 </div>
 
@@ -3680,8 +3753,8 @@ function updateCoverVipVisibility(){
   if(!w)return;
   var active=document.querySelector('.page.active');
   var pageId=active?active.id:'';
-  var hide=pageId==='page-alicia';
-  w.classList.toggle('is-hidden',hide);
+  var show=pageId==='page-cover';
+  w.classList.toggle('is-hidden',!show);
 }
 
 function goTo(id){
@@ -3783,7 +3856,7 @@ function closeMenu(){
   document.body.style.overflow='';
 }
 
-var VIP_LEGACY_WA_MSG='hola! le acabo de dar click a la tarjeta VIP LEGACY de eriorcenter, me interesa obtenerla, que audios me recomiendan?';
+var VIP_LEGACY_WA_MSG='Hola 👑 Vi la membresía VIP Alicia Premium en eriorcenter. Ya tengo mis 3 audios este mes y quiero mi acceso VIP. ¿Me ayudan?';
 var vipCurrentMethod='oxxo';
 
 function buildVipPayMethods(){
@@ -3856,10 +3929,16 @@ function initMenuVipCard(){
   var holo=document.getElementById('fsmVipHolo');
   var shine=document.getElementById('fsmVipShine');
   var glare=document.getElementById('fsmVipGlare');
-  var floatEl=document.getElementById('fsmVipFloat');
-  var dragBar=document.getElementById('fsmVipDragBar');
+  var widget=document.getElementById('coverVipWidget');
   if(!wrap||!holo||wrap.dataset.vipInit==='1')return;
   wrap.dataset.vipInit='1';
+
+  if(widget){
+    widget.style.left='';
+    widget.style.top='';
+    widget.style.right='';
+    widget.style.bottom='';
+  }
 
   var tiltX=0,tiltY=0,targetX=0,targetY=0;
   var shineX=50,shineY=50,targetShineX=50,targetShineY=50;
@@ -3927,46 +4006,6 @@ function initMenuVipCard(){
       }else if('ontouchstart' in window){enableGyro();}
     }
     applyFrame();
-  }
-
-  if(floatEl&&dragBar){
-    var widget=document.getElementById('coverVipWidget');
-    var dragTarget=widget||floatEl;
-    var dragging=false,dx=0,dy=0;
-    function onDragStart(clientX,clientY){
-      dragging=true;
-      dragTarget.classList.add('is-dragging');
-      if(floatEl)floatEl.classList.add('is-dragging');
-      var rect=dragTarget.getBoundingClientRect();
-      dx=clientX-rect.left;dy=clientY-rect.top;
-      dragTarget.style.right='auto';
-      dragTarget.style.left=rect.left+'px';
-      dragTarget.style.top=rect.top+'px';
-      dragTarget.style.bottom='auto';
-    }
-    function onDragMove(clientX,clientY){
-      if(!dragging)return;
-      dragTarget.style.left=Math.max(8,Math.min(window.innerWidth-dragTarget.offsetWidth-8,clientX-dx))+'px';
-      dragTarget.style.top=Math.max(56,Math.min(window.innerHeight-dragTarget.offsetHeight-8,clientY-dy))+'px';
-    }
-    function onDragEnd(){
-      dragging=false;
-      dragTarget.classList.remove('is-dragging');
-      if(floatEl)floatEl.classList.remove('is-dragging');
-    }
-    dragBar.addEventListener('mousedown',function(e){e.preventDefault();e.stopPropagation();onDragStart(e.clientX,e.clientY);});
-    window.addEventListener('mousemove',function(e){if(dragging)onDragMove(e.clientX,e.clientY);});
-    window.addEventListener('mouseup',onDragEnd);
-    dragBar.addEventListener('touchstart',function(e){
-      if(!e.touches[0])return;
-      e.stopPropagation();
-      onDragStart(e.touches[0].clientX,e.touches[0].clientY);
-    },{passive:true});
-    window.addEventListener('touchmove',function(e){
-      if(!dragging||!e.touches[0])return;
-      onDragMove(e.touches[0].clientX,e.touches[0].clientY);
-    },{passive:true});
-    window.addEventListener('touchend',onDragEnd);
   }
 }
 
