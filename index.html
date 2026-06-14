@@ -1506,12 +1506,20 @@ button.alicia-mode-premium-cta{font:inherit;width:100%;cursor:pointer}
 .fsm-socials a{font-family:'Jost',sans-serif;font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.2);text-decoration:none;transition:color .25s;}
 .fsm-socials a:hover{color:rgba(255,255,255,.65);}
 
-/* ── MENÚ: TARJETA VIP LEGACY FLOTANTE ── */
-.fsm-vip-top{
-  position:relative;z-index:2;width:100%;max-width:420px;
-  display:flex;justify-content:center;margin-bottom:.65rem;flex-shrink:0;
+/* ── TARJETA VIP LEGACY FLOTANTE (inicio + menú) ── */
+.cover-vip-widget{
+  position:fixed;z-index:998;
+  right:clamp(.55rem,2.5vw,1rem);
+  bottom:clamp(1rem,3vh,1.75rem);
+  width:min(268px,74vw);
+  display:flex;flex-direction:column;align-items:center;gap:.45rem;
+  pointer-events:none;
 }
+.cover-vip-widget > *{pointer-events:auto}
+.cover-vip-widget.is-hidden{display:none!important}
+.cover-vip-widget.is-dragging{z-index:1002}
 .fsm-erior-vip-btn{
+  width:100%;max-width:100%;
   appearance:none;cursor:pointer;border:none;
   font-family:'Syne',sans-serif;font-size:clamp(.58rem,2.4vw,.68rem);font-weight:700;
   letter-spacing:.28em;text-transform:uppercase;
@@ -1534,16 +1542,11 @@ button.alicia-mode-premium-cta{font:inherit;width:100%;cursor:pointer}
 .fsm-erior-vip-btn:active{transform:scale(.97)}
 
 .fsm-vip-float{
-  position:fixed;z-index:992;
-  width:min(268px,74vw);
-  right:clamp(.65rem,3vw,1.1rem);
-  top:clamp(4.85rem,12vh,5.75rem);
+  position:relative;z-index:1;
+  width:100%;
   touch-action:none;user-select:none;
   filter:drop-shadow(0 18px 40px rgba(0,0,0,.45));
-  transition:opacity .35s ease,visibility .35s ease,box-shadow .25s ease;
-  opacity:0;visibility:hidden;pointer-events:none;
 }
-#fsMenu.open .fsm-vip-float{opacity:1;visibility:visible;pointer-events:auto}
 .fsm-vip-float.is-dragging{transition:none;cursor:grabbing}
 .fsm-vip-drag-bar{
   display:flex;align-items:center;justify-content:center;
@@ -1650,7 +1653,11 @@ button.alicia-mode-premium-cta{font:inherit;width:100%;cursor:pointer}
   .fsm-vip-card-wrap{aspect-ratio:600/430}
   .fsm-vip-hero{flex:0 0 auto;max-height:58px;align-items:flex-end}
   .fsm-vip-figure{max-height:54px;max-width:48%}
-  .fsm-vip-float{width:min(220px,72vw)}
+  .cover-vip-widget{width:min(210px,68vw);bottom:clamp(.65rem,2vh,1rem);right:.45rem}
+  .fsm-erior-vip-btn{font-size:.52rem;padding:.5rem 1rem;letter-spacing:.22em}
+}
+@media(max-height:700px){
+  .cover-vip-widget{bottom:.5rem;transform:scale(.92);transform-origin:bottom right}
 }
 @media(prefers-reduced-motion:reduce){
   .fsm-vip-holo{animation:none}
@@ -2742,10 +2749,31 @@ body::before{
 </button>
 
 <div id="fsMenu">
-  <div class="fsm-vip-top">
-    <button type="button" class="fsm-erior-vip-btn" onclick="openVipLegacyModal()">ERIOR VIP</button>
+  <ul class="fsm-list">
+    <li><a onclick="goTo('cover')">Inicio</a></li>
+    <li><a onclick="goTo('guia')">Guía Audios</a></li>
+    <li><a onclick="goTo('catalogo')">Catálogo</a></li>
+    <li><a onclick="goTo('alicia')">Alicia IA</a></li>
+    <li><a onclick="goTo('testimonios')">Testimonios</a></li>
+    <li><a onclick="goTo('faq')">FAQ</a></li>
+    <li><a onclick="goTo('tarot')">Tarot Alienígena</a></li>
+    <li><a onclick="goTo('ebook')">Ebook Erior</a></li>
+    <li><a onclick="goTo('soporte')">Soporte</a></li>
+    <li><a href="https://eriorrabbithole.netlify.app" target="_blank" onclick="closeMenu()">Rabbit Hole</a></li>
+  </ul>
+  <div class="fsm-line"></div>
+  <div class="fsm-socials">
+    <a href="https://instagram.com/eriorcenter" target="_blank">Instagram</a>
+    <a href="https://instagram.com/sheismagique" target="_blank">SheIsMagique</a>
+    <a href="https://youtube.com/@sheismagique" target="_blank">YouTube</a>
+    <a href="https://open.spotify.com/show/1tI7Avbjxvxu1jlQyvV3OY" target="_blank">Podcast</a>
   </div>
-  <div class="fsm-vip-float" id="fsmVipFloat" aria-label="Tarjeta VIP demo LEGACY">
+</div>
+
+<!-- Tarjeta VIP LEGACY flotante (visible en inicio) -->
+<div class="cover-vip-widget" id="coverVipWidget" aria-label="Tarjeta VIP demo LEGACY">
+  <button type="button" class="fsm-erior-vip-btn" onclick="openVipLegacyModal()">ERIOR VIP</button>
+  <div class="fsm-vip-float" id="fsmVipFloat">
     <div class="fsm-vip-drag-bar" id="fsmVipDragBar" title="Arrastra para mover">⠿</div>
     <div class="fsm-vip-scene">
       <div class="fsm-vip-card-wrap" id="fsmVipCardWrap">
@@ -2774,28 +2802,10 @@ body::before{
         </div>
       </div>
     </div>
-    <p class="fsm-vip-hint">Gira con el dedo · arrastra ⠿ para mover</p>
-  </div>
-  <ul class="fsm-list">
-    <li><a onclick="goTo('cover')">Inicio</a></li>
-    <li><a onclick="goTo('guia')">Guía Audios</a></li>
-    <li><a onclick="goTo('catalogo')">Catálogo</a></li>
-    <li><a onclick="goTo('alicia')">Alicia IA</a></li>
-    <li><a onclick="goTo('testimonios')">Testimonios</a></li>
-    <li><a onclick="goTo('faq')">FAQ</a></li>
-    <li><a onclick="goTo('tarot')">Tarot Alienígena</a></li>
-    <li><a onclick="goTo('ebook')">Ebook Erior</a></li>
-    <li><a onclick="goTo('soporte')">Soporte</a></li>
-    <li><a href="https://eriorrabbithole.netlify.app" target="_blank" onclick="closeMenu()">Rabbit Hole</a></li>
-  </ul>
-  <div class="fsm-line"></div>
-  <div class="fsm-socials">
-    <a href="https://instagram.com/eriorcenter" target="_blank">Instagram</a>
-    <a href="https://instagram.com/sheismagique" target="_blank">SheIsMagique</a>
-    <a href="https://youtube.com/@sheismagique" target="_blank">YouTube</a>
-    <a href="https://open.spotify.com/show/1tI7Avbjxvxu1jlQyvV3OY" target="_blank">Podcast</a>
+    <p class="fsm-vip-hint">Gira · arrastra ⠿</p>
   </div>
 </div>
+
 <!-- MAIN -->
 <div id="main">
 
@@ -3665,6 +3675,15 @@ var PAGES=['cover','guia','catalogo','alicia','testimonios','faq','tarot','respi
 var TITLES={cover:'Inicio',guia:'Guía Audios',catalogo:'Catálogo',alicia:'Alicia IA',testimonios:'Testimonios',faq:'FAQ',tarot:'Tarot',respiracion:'Respiración',ebook:'Ebook Erior',soporte:'Soporte'};
 var curPage=0;
 
+function updateCoverVipVisibility(){
+  var w=document.getElementById('coverVipWidget');
+  if(!w)return;
+  var active=document.querySelector('.page.active');
+  var pageId=active?active.id:'';
+  var hide=pageId==='page-alicia';
+  w.classList.toggle('is-hidden',hide);
+}
+
 function goTo(id){
   closeMenu();
   document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
@@ -3690,6 +3709,7 @@ function goTo(id){
   if(id==='tarot')initTarotPage();
   try{history.replaceState(null,'','#'+id);}catch(e){}
   window.scrollTo(0,0);
+  updateCoverVipVisibility();
 }
 
 function goToIconAuraAnimated(){
@@ -3892,7 +3912,7 @@ function initMenuVipCard(){
     if(window.DeviceOrientationEvent){
       var gyroBound=false;
       function onOrient(ev){
-        if(!gyroBound||!document.getElementById('fsMenu').classList.contains('open'))return;
+        if(!gyroBound)return;
         setFromNorm(Math.max(-1,Math.min(1,(ev.gamma||0)/45)),Math.max(-1,Math.min(1,(ev.beta||0)/45)));
       }
       function enableGyro(){
@@ -3910,22 +3930,30 @@ function initMenuVipCard(){
   }
 
   if(floatEl&&dragBar){
+    var widget=document.getElementById('coverVipWidget');
+    var dragTarget=widget||floatEl;
     var dragging=false,dx=0,dy=0;
     function onDragStart(clientX,clientY){
       dragging=true;
-      floatEl.classList.add('is-dragging');
-      var rect=floatEl.getBoundingClientRect();
+      dragTarget.classList.add('is-dragging');
+      if(floatEl)floatEl.classList.add('is-dragging');
+      var rect=dragTarget.getBoundingClientRect();
       dx=clientX-rect.left;dy=clientY-rect.top;
-      floatEl.style.right='auto';
-      floatEl.style.left=rect.left+'px';
-      floatEl.style.top=rect.top+'px';
+      dragTarget.style.right='auto';
+      dragTarget.style.left=rect.left+'px';
+      dragTarget.style.top=rect.top+'px';
+      dragTarget.style.bottom='auto';
     }
     function onDragMove(clientX,clientY){
       if(!dragging)return;
-      floatEl.style.left=Math.max(8,Math.min(window.innerWidth-floatEl.offsetWidth-8,clientX-dx))+'px';
-      floatEl.style.top=Math.max(56,Math.min(window.innerHeight-floatEl.offsetHeight-8,clientY-dy))+'px';
+      dragTarget.style.left=Math.max(8,Math.min(window.innerWidth-dragTarget.offsetWidth-8,clientX-dx))+'px';
+      dragTarget.style.top=Math.max(56,Math.min(window.innerHeight-dragTarget.offsetHeight-8,clientY-dy))+'px';
     }
-    function onDragEnd(){dragging=false;floatEl.classList.remove('is-dragging');}
+    function onDragEnd(){
+      dragging=false;
+      dragTarget.classList.remove('is-dragging');
+      if(floatEl)floatEl.classList.remove('is-dragging');
+    }
     dragBar.addEventListener('mousedown',function(e){e.preventDefault();e.stopPropagation();onDragStart(e.clientX,e.clientY);});
     window.addEventListener('mousemove',function(e){if(dragging)onDragMove(e.clientX,e.clientY);});
     window.addEventListener('mouseup',onDragEnd);
@@ -3954,6 +3982,7 @@ document.addEventListener('keydown',function(e){
   var vipModal=document.getElementById('vipLegacyModal');
   if(vipModal)vipModal.addEventListener('click',function(e){if(e.target===vipModal)closeVipLegacyModal();});
   initMenuVipCard();
+  updateCoverVipVisibility();
 })();
 
 var EBOOK_ACCESS_KEY='ERIOR2026';
