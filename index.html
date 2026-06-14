@@ -1521,6 +1521,7 @@ button.alicia-mode-premium-cta{font:inherit;width:100%;cursor:pointer}
 .cover-vip-widget.is-hidden{display:none!important}
 .fsm-erior-vip-btn{
   width:100%;max-width:100%;
+  position:relative;z-index:6;
   appearance:none;cursor:pointer;border:none;
   font-family:'Syne',sans-serif;font-size:clamp(.58rem,2.4vw,.68rem);font-weight:700;
   letter-spacing:.28em;text-transform:uppercase;
@@ -1534,6 +1535,7 @@ button.alicia-mode-premium-cta{font:inherit;width:100%;cursor:pointer}
   box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 8px 28px rgba(0,0,0,.35),0 0 32px rgba(201,160,96,.12);
   transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease;
   -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
 }
 .fsm-erior-vip-btn:hover{
   transform:translateY(-2px);
@@ -1745,6 +1747,42 @@ button.alicia-mode-premium-cta{font:inherit;width:100%;cursor:pointer}
     margin:clamp(.55rem,2.4vh,.85rem) 0 clamp(.65rem,2.6vh,1rem);
   }
   .cover-vip-widget.is-cover-inflow{width:min(100%,min(288px,92vw))}
+}
+
+/* Indicador scroll sutil — solo móvil inicio */
+.cover-scroll-cue{
+  position:fixed;left:50%;bottom:calc(.55rem + env(safe-area-inset-bottom,0px));
+  transform:translateX(-50%);
+  z-index:12;display:none;flex-direction:column;align-items:center;gap:.32rem;
+  pointer-events:none;opacity:0;
+  transition:opacity .7s ease;
+}
+.cover-scroll-cue.is-visible{display:flex;opacity:1}
+.cover-scroll-cue-chevs{display:flex;flex-direction:column;align-items:center;gap:.14rem;height:1.15rem}
+.cover-scroll-cue-chevs span{
+  display:block;width:7px;height:7px;
+  border-right:1px solid rgba(255,255,255,.32);
+  border-bottom:1px solid rgba(255,255,255,.32);
+  transform:rotate(45deg);
+  animation:coverScrollChev 2.6s ease-in-out infinite;
+}
+.cover-scroll-cue-chevs span:nth-child(2){animation-delay:.22s;opacity:.55}
+.cover-scroll-cue-txt{
+  font-family:'Jost',sans-serif;font-size:.42rem;font-weight:500;
+  letter-spacing:.32em;text-transform:uppercase;
+  color:rgba(255,255,255,.34);
+  text-shadow:0 1px 8px rgba(0,0,0,.35);
+}
+@keyframes coverScrollChev{
+  0%,100%{transform:rotate(45deg) translateY(-1px);opacity:.18}
+  45%{transform:rotate(45deg) translateY(4px);opacity:.52}
+  55%{transform:rotate(45deg) translateY(4px);opacity:.52}
+}
+@media(min-width:901px){
+  .cover-scroll-cue{display:none!important}
+}
+@media(prefers-reduced-motion:reduce){
+  .cover-scroll-cue-chevs span{animation:none;opacity:.35}
 }
 
 #vipLegacyModal{z-index:5150}
@@ -2905,7 +2943,7 @@ body::before{
 
 <!-- Tarjeta VIP LEGACY flotante (visible en inicio) -->
 <div class="cover-vip-widget" id="coverVipWidget" aria-label="Tarjeta VIP demo LEGACY">
-  <button type="button" class="fsm-erior-vip-btn" onclick="openVipLegacyModal()">ERIOR VIP</button>
+  <button type="button" class="fsm-erior-vip-btn" id="btnEriorVip" onclick="openVipLegacyModal(event)">ERIOR VIP</button>
   <div class="fsm-vip-float" id="fsmVipFloat">
     <div class="fsm-vip-scene">
       <div class="fsm-vip-card-wrap" id="fsmVipCardWrap">
@@ -2936,6 +2974,11 @@ body::before{
     </div>
     <p class="fsm-vip-hint">Gira la tarjeta con el dedo</p>
   </div>
+</div>
+
+<div id="coverScrollCue" class="cover-scroll-cue" aria-hidden="true">
+  <div class="cover-scroll-cue-chevs" aria-hidden="true"><span></span><span></span></div>
+  <span class="cover-scroll-cue-txt">desliza</span>
 </div>
 
 <!-- MAIN -->
@@ -3852,6 +3895,32 @@ function updateCoverVipVisibility(){
   }
 
   w.classList.toggle('is-hidden',!show);
+  if(typeof syncCoverScrollCue==='function')syncCoverScrollCue();
+}
+
+function syncCoverScrollCue(){
+  var cue=document.getElementById('coverScrollCue');
+  var cover=document.querySelector('#page-cover .cover');
+  if(!cue||!cover)return;
+  var mobile=window.matchMedia('(max-width:900px)').matches;
+  var onCover=document.getElementById('page-cover')&&document.getElementById('page-cover').classList.contains('active');
+  var scrollable=cover.scrollHeight>cover.clientHeight+20;
+  var atTop=cover.scrollTop<28;
+  var show=mobile&&onCover&&scrollable&&atTop;
+  cue.classList.toggle('is-visible',show);
+  cue.setAttribute('aria-hidden',show?'false':'true');
+}
+
+function initCoverScrollCue(){
+  var cover=document.querySelector('#page-cover .cover');
+  if(!cover)return;
+  cover.addEventListener('scroll',syncCoverScrollCue,{passive:true});
+  var mq=window.matchMedia('(max-width:900px)');
+  if(mq.addEventListener)mq.addEventListener('change',syncCoverScrollCue);
+  else if(mq.addListener)mq.addListener(syncCoverScrollCue);
+  window.addEventListener('resize',syncCoverScrollCue);
+  setTimeout(syncCoverScrollCue,400);
+  setTimeout(syncCoverScrollCue,1200);
 }
 
 (function(){
@@ -3954,9 +4023,11 @@ function toggleMenu(){
   document.body.style.overflow=m.classList.contains('open')?'hidden':'';
 }
 function closeMenu(){
-  document.getElementById('fsMenu').classList.remove('open');
-  document.getElementById('menuBtn').classList.remove('open');
-  document.body.style.overflow='';
+  var m=document.getElementById('fsMenu');
+  var b=document.getElementById('menuBtn');
+  if(m)m.classList.remove('open');
+  if(b)b.classList.remove('open');
+  if(!document.querySelector('.modal-bg.open,#mmModal.open,#futuraModal.open,#chatImgLightbox.open,#promoModal.open,#vipLegacyModal.open'))document.body.style.overflow='';
 }
 
 var VIP_LEGACY_WA_MSG='Hola 👑 Vi la membresía VIP Alicia Premium en eriorcenter. Ya tengo mis 3 audios este mes y quiero mi acceso VIP. ¿Me ayudan?';
@@ -3964,7 +4035,7 @@ var vipCurrentMethod='oxxo';
 
 function buildVipPayMethods(){
   var el=document.getElementById('vipPayMethods');
-  if(!el||el.dataset.built)return;
+  if(!el||el.dataset.built||typeof PAY_METHODS==='undefined'||!PAY_METHODS.length)return;
   el.dataset.built='1';
   el.innerHTML='';
   PAY_METHODS.forEach(function(m){
@@ -3987,20 +4058,26 @@ function selectVipPayMethod(id){
   bindPayCopyButtons(document.getElementById('vipLegacyPaySection'));
 }
 
-function openVipLegacyModal(){
-  closeMenu();
-  buildVipPayMethods();
-  selectVipPayMethod(vipCurrentMethod||'oxxo');
-  var wa=document.getElementById('vipLegacyWa');
-  if(wa)wa.href=payWaUrl(VIP_LEGACY_WA_MSG);
+function openVipLegacyModal(ev){
+  if(ev){ev.preventDefault();ev.stopPropagation();}
+  try{closeMenu();}catch(e){}
   var modal=document.getElementById('vipLegacyModal');
-  if(modal){
-    modal.classList.add('open');
-    modal.setAttribute('aria-hidden','false');
-    document.body.style.overflow='hidden';
-  }
-  registrarEvento('vip_legacy_modal','apertura');
+  if(!modal)return;
+  if(modal.parentElement!==document.body)document.body.appendChild(modal);
+  modal.classList.add('open');
+  modal.setAttribute('aria-hidden','false');
+  document.body.style.overflow='hidden';
+  try{
+    if(typeof PAY_METHODS!=='undefined'&&PAY_METHODS&&PAY_METHODS.length){
+      buildVipPayMethods();
+      selectVipPayMethod(vipCurrentMethod||'oxxo');
+    }
+    var wa=document.getElementById('vipLegacyWa');
+    if(wa&&typeof payWaUrl==='function')wa.href=payWaUrl(VIP_LEGACY_WA_MSG);
+  }catch(err){console.warn('VIP modal pay setup',err);}
+  if(typeof registrarEvento==='function')registrarEvento('vip_legacy_modal','apertura');
 }
+window.openVipLegacyModal=openVipLegacyModal;
 
 function closeVipLegacyModal(){
   var modal=document.getElementById('vipLegacyModal');
@@ -4123,8 +4200,13 @@ document.addEventListener('keydown',function(e){
 (function(){
   var vipModal=document.getElementById('vipLegacyModal');
   if(vipModal)vipModal.addEventListener('click',function(e){if(e.target===vipModal)closeVipLegacyModal();});
+  var vipBtn=document.getElementById('btnEriorVip');
+  if(vipBtn){
+    vipBtn.addEventListener('click',function(e){openVipLegacyModal(e);});
+  }
   initMenuVipCard();
   updateCoverVipVisibility();
+  initCoverScrollCue();
 })();
 
 var EBOOK_ACCESS_KEY='ERIOR2026';
