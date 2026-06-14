@@ -1641,26 +1641,9 @@ button.alicia-mode-premium-cta{font:inherit;width:100%;cursor:pointer}
   letter-spacing:.04em;margin-top:.2rem;pointer-events:none;
 }
 @media(max-width:900px){
-  .cover-vip-widget{
-    top:auto;
-    bottom:calc(4.75rem + env(safe-area-inset-bottom,0px));
-    right:.4rem;
-    width:min(148px,38vw);
-    max-width:158px;
+  .cover-vip-widget:not(.is-cover-inflow){
+    display:none!important;
   }
-  .fsm-vip-card-wrap{aspect-ratio:600/430}
-  .fsm-vip-content{padding:.55rem .6rem}
-  .fsm-vip-logo{height:36px;min-height:36px;max-width:52%}
-  .fsm-vip-member{font-size:.42rem;letter-spacing:.22em}
-  .fsm-vip-hero{flex:0 0 auto;max-height:46px;margin:0;align-items:flex-end}
-  .fsm-vip-figure{max-height:42px;max-width:46%}
-  .fsm-vip-title{font-size:.78rem;margin-bottom:.18rem}
-  .fsm-vip-name{font-size:.5rem;letter-spacing:.14em;margin-bottom:.28rem}
-  .fsm-vip-code{font-size:.48rem;letter-spacing:.08em;line-height:1.25}
-  .fsm-vip-valid{font-size:.42rem}
-  .fsm-vip-foot{margin-top:.12rem}
-  .fsm-erior-vip-btn{font-size:.48rem;padding:.45rem .65rem;letter-spacing:.18em}
-  .fsm-vip-hint{font-size:.44rem}
 }
 @media(min-width:901px){
   .cover-vip-widget{width:min(248px,22vw)}
@@ -1672,6 +1655,96 @@ button.alicia-mode-premium-cta{font:inherit;width:100%;cursor:pointer}
 @media(prefers-reduced-motion:reduce){
   .fsm-vip-holo{animation:none}
   .fsm-vip-card-wrap{transform:none!important}
+}
+
+/* Tarjeta VIP en flujo del inicio (móvil) — no tapa botones */
+.cover-vip-slot{
+  width:100%;
+  max-width:min(100%,96vw);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  padding:0 clamp(.35rem,2vw,.65rem);
+  margin:clamp(.45rem,1.8vh,.75rem) 0 clamp(.55rem,2.2vh,.95rem);
+  order:4;
+  flex-shrink:0;
+}
+.cover-vip-slot:not(.is-hidden){display:flex}
+.cover-vip-widget.is-cover-inflow{
+  position:relative;
+  top:auto;right:auto;bottom:auto;left:auto;
+  width:min(100%,300px);
+  max-width:300px;
+  z-index:1;
+  pointer-events:auto;
+  margin:0 auto;
+}
+.cover-vip-widget.is-cover-inflow .fsm-vip-card-wrap{aspect-ratio:600/430}
+.cover-vip-widget.is-cover-inflow .fsm-vip-content{
+  padding:.52rem .68rem .48rem;
+  justify-content:space-between;
+}
+.cover-vip-widget.is-cover-inflow .fsm-vip-toprow{align-items:center}
+.cover-vip-widget.is-cover-inflow .fsm-vip-logo{
+  height:clamp(26px,7.8vw,34px);
+  min-height:0;
+  max-width:46%;
+}
+.cover-vip-widget.is-cover-inflow .fsm-vip-member{
+  font-size:clamp(.32rem,1.6vw,.38rem);
+  letter-spacing:.14em;
+  padding-top:0;
+}
+.cover-vip-widget.is-cover-inflow .fsm-vip-hero{
+  flex:0 0 auto;
+  max-height:clamp(44px,13vw,56px);
+  margin:.06rem 0 .04rem;
+  align-items:center;
+}
+.cover-vip-widget.is-cover-inflow .fsm-vip-figure{
+  max-height:clamp(40px,12vw,52px);
+  max-width:40%;
+}
+.cover-vip-widget.is-cover-inflow .fsm-vip-body{margin-top:0}
+.cover-vip-widget.is-cover-inflow .fsm-vip-title{
+  font-size:clamp(.62rem,3.1vw,.74rem);
+  margin-bottom:.08rem;
+  line-height:1.05;
+  letter-spacing:.06em;
+}
+.cover-vip-widget.is-cover-inflow .fsm-vip-name{
+  font-size:clamp(.44rem,2.1vw,.52rem);
+  letter-spacing:.1em;
+  margin-bottom:.1rem;
+}
+.cover-vip-widget.is-cover-inflow .fsm-vip-code{
+  font-size:clamp(.38rem,1.9vw,.46rem);
+  letter-spacing:.04em;
+  line-height:1.2;
+}
+.cover-vip-widget.is-cover-inflow .fsm-vip-foot{margin-top:.06rem}
+.cover-vip-widget.is-cover-inflow .fsm-vip-valid{
+  font-size:clamp(.32rem,1.5vw,.38rem);
+  line-height:1.2;
+}
+.cover-vip-widget.is-cover-inflow .fsm-erior-vip-btn{
+  font-size:clamp(.5rem,2.5vw,.58rem);
+  padding:.48rem .85rem;
+  letter-spacing:.16em;
+}
+.cover-vip-widget.is-cover-inflow .fsm-vip-hint{
+  font-size:clamp(.4rem,1.9vw,.46rem);
+  margin-top:.28rem;
+}
+@media(max-width:767px){
+  .page#page-cover .cover{
+    min-height:100dvh;
+    max-height:none;
+  }
+  .cover-vip-slot{
+    margin:clamp(.55rem,2.4vh,.85rem) 0 clamp(.65rem,2.6vh,1rem);
+  }
+  .cover-vip-widget.is-cover-inflow{width:min(100%,min(288px,92vw))}
 }
 
 #vipLegacyModal{z-index:5150}
@@ -2232,7 +2305,7 @@ button.alicia-mode-premium-cta{font:inherit;width:100%;cursor:pointer}
 }
 @media(max-width:767px){
   .page#page-cover .cover{
-    min-height:100dvh;max-height:100dvh;
+    min-height:100dvh;max-height:none;
     overflow-x:hidden;overflow-y:auto;
     justify-content:flex-start;
     padding:3.25rem .65rem .85rem;
@@ -2344,15 +2417,18 @@ body::before{
 }
 .page#page-cover .cover-brand{order:1}
 .page#page-cover .cover-promo-jewel{order:2}
+.page#page-cover .cover-vip-slot{order:4}
 .page#page-cover .cover-hero-glass{order:3}
 .page#page-cover.active .cover-brand,
 .page#page-cover.active .cover-promo-jewel,
+.page#page-cover.active .cover-vip-slot,
 .page#page-cover.active .cover-hero-glass{
   animation:coverReveal .85s cubic-bezier(.16,1,.3,1) both;
 }
 .page#page-cover.active .cover-brand{animation-delay:.04s}
 .page#page-cover.active .cover-promo-jewel{animation-delay:.14s}
-.page#page-cover.active .cover-hero-glass{animation-delay:.22s}
+.page#page-cover.active .cover-vip-slot{animation-delay:.24s}
+.page#page-cover.active .cover-hero-glass{animation-delay:.18s}
 @keyframes coverReveal{
   from{opacity:0;transform:translateY(14px)}
   to{opacity:1;transform:translateY(0)}
@@ -2773,6 +2849,7 @@ body::before{
 @media(prefers-reduced-motion:reduce){
   .page#page-cover.active .cover-brand,
   .page#page-cover.active .cover-promo-jewel,
+  .page#page-cover.active .cover-vip-slot,
   .page#page-cover.active .cover-hero-glass{animation:none;opacity:1;transform:none}
   .cover-promo-jewel::before,.cover-hero-glass::before,.cover-gateway-aurora,
   .page#page-cover .btn-alicia-glow,
@@ -2929,6 +3006,8 @@ body::before{
           <div class="promo-countdown-unit"><strong class="promo-countdown-num" data-cd="secs">00</strong><span>seg</span></div>
         </div>
       </div>
+
+      <div id="coverVipSlot" class="cover-vip-slot is-hidden" aria-hidden="true"></div>
 
       <div id="coverHeroZone" class="cover-hero-glass">
         <div id="coverHeroRow">
@@ -3750,12 +3829,36 @@ var curPage=0;
 
 function updateCoverVipVisibility(){
   var w=document.getElementById('coverVipWidget');
+  var slot=document.getElementById('coverVipSlot');
   if(!w)return;
+  var mobile=window.matchMedia('(max-width:900px)').matches;
   var active=document.querySelector('.page.active');
   var pageId=active?active.id:'';
   var show=pageId==='page-cover';
+  var useSlot=show&&mobile&&slot;
+
+  if(useSlot){
+    if(w.parentElement!==slot)slot.appendChild(w);
+    w.classList.add('is-cover-inflow');
+    slot.classList.remove('is-hidden');
+    slot.setAttribute('aria-hidden','false');
+  }else{
+    w.classList.remove('is-cover-inflow');
+    if(w.parentElement!==document.body)document.body.appendChild(w);
+    if(slot){
+      slot.classList.add('is-hidden');
+      slot.setAttribute('aria-hidden','true');
+    }
+  }
+
   w.classList.toggle('is-hidden',!show);
 }
+
+(function(){
+  var vipMq=window.matchMedia('(max-width:900px)');
+  if(vipMq.addEventListener)vipMq.addEventListener('change',updateCoverVipVisibility);
+  else if(vipMq.addListener)vipMq.addListener(updateCoverVipVisibility);
+})();
 
 function goTo(id){
   closeMenu();
