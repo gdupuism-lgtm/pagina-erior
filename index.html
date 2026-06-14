@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <title>ERIOR CENTER — Audios Binaurales para Manifestación, Amor Propio y Abundancia | She Is Magique</title>
+<!-- build: vip-scroll-v2 -->
 <meta name="description" content="Audios binaurales personalizados para reprogramar tu subconsciente. Atrae dinero, amor, belleza y transforma tu vida. Más de 25 audios de manifestación disponibles. Envío digital a todo el mundo.">
 <meta name="keywords" content="audios binaurales, subliminal, manifestación, amor propio, abundancia, dinero, reprogramación subconsciente, audio personalizado, She Is Magique, Erior Center, México, Latinoamérica, despertar, consciencia, atraer pareja, mejorar finanzas">
 <meta name="author" content="She Is Magique · Erior Center">
@@ -1779,30 +1780,30 @@ button.alicia-mode-premium-cta{font:inherit;width:100%;cursor:pointer}
 .cover-scroll-cue{
   position:fixed;left:50%;bottom:calc(1.15rem + env(safe-area-inset-bottom,0px));
   transform:translateX(-50%);
-  z-index:960;
+  z-index:1002;
   visibility:hidden;opacity:0;
-  display:flex;flex-direction:column;align-items:center;gap:.32rem;
+  display:flex;flex-direction:column;align-items:center;gap:.42rem;
   pointer-events:none;
-  transition:opacity .7s ease,visibility .7s ease;
+  transition:opacity .55s ease,visibility .55s ease;
 }
-.cover-scroll-cue.is-visible{visibility:visible;opacity:.72}
+.cover-scroll-cue.is-visible{visibility:visible;opacity:.88}
 @media(max-width:767px){
-  .cover-scroll-cue{bottom:calc(4.25rem + env(safe-area-inset-bottom,0px))}
+  .cover-scroll-cue{bottom:calc(4.5rem + env(safe-area-inset-bottom,0px))}
 }
-.cover-scroll-cue-chevs{display:flex;flex-direction:column;align-items:center;gap:.14rem;height:1.15rem}
+.cover-scroll-cue-chevs{display:flex;flex-direction:column;align-items:center;gap:.18rem;height:1.45rem}
 .cover-scroll-cue-chevs span{
-  display:block;width:7px;height:7px;
-  border-right:1px solid rgba(255,255,255,.32);
-  border-bottom:1px solid rgba(255,255,255,.32);
+  display:block;width:9px;height:9px;
+  border-right:1.5px solid rgba(255,255,255,.55);
+  border-bottom:1.5px solid rgba(255,255,255,.55);
   transform:rotate(45deg);
   animation:coverScrollChev 2.6s ease-in-out infinite;
 }
-.cover-scroll-cue-chevs span:nth-child(2){animation-delay:.22s;opacity:.55}
+.cover-scroll-cue-chevs span:nth-child(2){animation-delay:.22s;opacity:.65}
 .cover-scroll-cue-txt{
-  font-family:'Jost',sans-serif;font-size:.42rem;font-weight:500;
-  letter-spacing:.32em;text-transform:uppercase;
-  color:rgba(255,255,255,.34);
-  text-shadow:0 1px 8px rgba(0,0,0,.35);
+  font-family:'Jost',sans-serif;font-size:clamp(.58rem,2.8vw,.68rem);font-weight:500;
+  letter-spacing:.28em;text-transform:uppercase;
+  color:rgba(255,255,255,.62);
+  text-shadow:0 2px 12px rgba(0,0,0,.45);
 }
 @keyframes coverScrollChev{
   0%,100%{transform:rotate(45deg) translateY(-1px);opacity:.18}
@@ -2974,8 +2975,11 @@ body::before{
 </div>
 
 <!-- Tarjeta VIP LEGACY flotante (visible en inicio) -->
+<div id="coverVipSlot" class="cover-vip-slot is-hidden" aria-hidden="true">
+  <button type="button" class="fsm-erior-vip-btn" id="btnEriorVip" data-action="open-vip-modal" onclick="openVipLegacyModal(event)">ERIOR VIP</button>
+</div>
+
 <div class="cover-vip-widget" id="coverVipWidget" aria-label="Tarjeta VIP demo LEGACY">
-  <button type="button" class="fsm-erior-vip-btn" id="btnEriorVip" data-action="open-vip-modal">ERIOR VIP</button>
   <div class="fsm-vip-float" id="fsmVipFloat">
     <div class="fsm-vip-scene">
       <div class="fsm-vip-card-wrap" id="fsmVipCardWrap">
@@ -3081,8 +3085,6 @@ body::before{
           <div class="promo-countdown-unit"><strong class="promo-countdown-num" data-cd="secs">00</strong><span>seg</span></div>
         </div>
       </div>
-
-      <div id="coverVipSlot" class="cover-vip-slot is-hidden" aria-hidden="true"></div>
 
       <div id="coverHeroZone" class="cover-hero-glass">
         <div id="coverHeroRow">
@@ -3916,7 +3918,11 @@ function updateCoverVipVisibility(){
     if(w.parentElement!==slot)slot.appendChild(w);
     w.classList.add('is-cover-inflow');
     var btn=document.getElementById('btnEriorVip');
-    if(btn&&btn.parentElement!==slot)slot.insertBefore(btn,w);
+    if(btn&&btn.parentElement!==slot){
+      slot.insertBefore(btn,slot.firstChild||w);
+    }else if(btn&&w.parentElement===slot&&btn.nextElementSibling!==w){
+      slot.insertBefore(btn,w);
+    }
     slot.classList.remove('is-hidden');
     slot.setAttribute('aria-hidden','false');
   }else{
@@ -3969,15 +3975,15 @@ function syncCoverScrollCue(){
     return;
   }
   var m=getCoverScrollMetrics();
-  var atTop=m.scrollTop<56;
+  var atTop=m.scrollTop<80;
   var forceHint=Date.now()<coverScrollHintUntil;
-  var show=(m.canScroll||forceHint)&&atTop;
+  var show=forceHint||(m.canScroll&&atTop);
   cue.classList.toggle('is-visible',show);
   cue.setAttribute('aria-hidden',show?'false':'true');
 }
 
 function initCoverScrollCue(){
-  coverScrollHintUntil=Date.now()+7000;
+  coverScrollHintUntil=Date.now()+9000;
   var cue=document.getElementById('coverScrollCue');
   if(cue&&cue.parentElement!==document.body)document.body.appendChild(cue);
   var onScroll=function(){syncCoverScrollCue();};
@@ -4305,18 +4311,14 @@ document.addEventListener('keydown',function(e){
   function onVipActivate(e){
     var btn=e.target&&e.target.closest('[data-action="open-vip-modal"],#btnEriorVip,.fsm-erior-vip-btn');
     if(!btn)return;
-    var w=document.getElementById('coverVipWidget');
-    if(w&&w.classList.contains('is-hidden'))return;
+    var pageCover=document.getElementById('page-cover');
+    if(!pageCover||!pageCover.classList.contains('active'))return;
     var now=Date.now();
     if(now-vipTapAt<280)return;
     vipTapAt=now;
-    if(e.type==='touchend'&&e.cancelable)e.preventDefault();
     if(typeof openVipLegacyModal==='function')openVipLegacyModal(e);
   }
-  ['click','touchend'].forEach(function(type){
-    var opts=type==='touchend'?{passive:false,capture:true}:{capture:true};
-    document.addEventListener(type,onVipActivate,opts);
-  });
+  document.addEventListener('click',onVipActivate,true);
   function bootCoverUi(){
     initMenuVipCard();
     updateCoverVipVisibility();
