@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <title>ERIOR CENTER — Audios Binaurales para Manifestación, Amor Propio y Abundancia | She Is Magique</title>
-<!-- build: vip-scroll-v2 -->
+<!-- build: vip-scroll-v3 -->
 <meta name="description" content="Audios binaurales personalizados para reprogramar tu subconsciente. Atrae dinero, amor, belleza y transforma tu vida. Más de 25 audios de manifestación disponibles. Envío digital a todo el mundo.">
 <meta name="keywords" content="audios binaurales, subliminal, manifestación, amor propio, abundancia, dinero, reprogramación subconsciente, audio personalizado, She Is Magique, Erior Center, México, Latinoamérica, despertar, consciencia, atraer pareja, mejorar finanzas">
 <meta name="author" content="She Is Magique · Erior Center">
@@ -1683,6 +1683,8 @@ button.alicia-mode-premium-cta{font:inherit;width:100%;cursor:pointer}
 }
 .cover-vip-slot:not(.is-hidden){
   display:flex;flex-direction:column;align-items:center;gap:.4rem;
+  position:relative;z-index:18;
+  pointer-events:auto;
 }
 .cover-vip-slot .fsm-erior-vip-btn{
   width:min(100%,300px);max-width:300px;
@@ -1786,7 +1788,14 @@ button.alicia-mode-premium-cta{font:inherit;width:100%;cursor:pointer}
   pointer-events:none;
   transition:opacity .55s ease,visibility .55s ease;
 }
-.cover-scroll-cue.is-visible{visibility:visible;opacity:.88}
+.cover-scroll-cue.is-visible{
+  visibility:visible!important;
+  opacity:.9!important;
+}
+@media(min-width:901px){
+  .cover-scroll-cue{bottom:calc(1.35rem + env(safe-area-inset-bottom,0px))}
+  .cover-scroll-cue-txt{font-size:.62rem;letter-spacing:.3em}
+}
 @media(max-width:767px){
   .cover-scroll-cue{bottom:calc(4.5rem + env(safe-area-inset-bottom,0px))}
 }
@@ -2975,10 +2984,6 @@ body::before{
 </div>
 
 <!-- Tarjeta VIP LEGACY flotante (visible en inicio) -->
-<div id="coverVipSlot" class="cover-vip-slot is-hidden" aria-hidden="true">
-  <button type="button" class="fsm-erior-vip-btn" id="btnEriorVip" data-action="open-vip-modal" onclick="openVipLegacyModal(event)">ERIOR VIP</button>
-</div>
-
 <div class="cover-vip-widget" id="coverVipWidget" aria-label="Tarjeta VIP demo LEGACY">
   <div class="fsm-vip-float" id="fsmVipFloat">
     <div class="fsm-vip-scene">
@@ -3084,6 +3089,10 @@ body::before{
           <div class="promo-countdown-unit"><strong class="promo-countdown-num" data-cd="mins">00</strong><span>min</span></div>
           <div class="promo-countdown-unit"><strong class="promo-countdown-num" data-cd="secs">00</strong><span>seg</span></div>
         </div>
+      </div>
+
+      <div id="coverVipSlot" class="cover-vip-slot is-hidden" aria-hidden="true">
+        <button type="button" class="fsm-erior-vip-btn" id="btnEriorVip" data-action="open-vip-modal">ERIOR VIP</button>
       </div>
 
       <div id="coverHeroZone" class="cover-hero-glass">
@@ -3974,18 +3983,24 @@ function syncCoverScrollCue(){
     cue.setAttribute('aria-hidden','true');
     return;
   }
-  var m=getCoverScrollMetrics();
-  var atTop=m.scrollTop<80;
   var forceHint=Date.now()<coverScrollHintUntil;
-  var show=forceHint||(m.canScroll&&atTop);
+  if(forceHint){
+    cue.classList.add('is-visible');
+    cue.setAttribute('aria-hidden','false');
+    return;
+  }
+  var m=getCoverScrollMetrics();
+  var show=m.canScroll&&m.scrollTop<120;
   cue.classList.toggle('is-visible',show);
   cue.setAttribute('aria-hidden',show?'false':'true');
 }
 
 function initCoverScrollCue(){
-  coverScrollHintUntil=Date.now()+9000;
+  coverScrollHintUntil=Date.now()+10000;
   var cue=document.getElementById('coverScrollCue');
   if(cue&&cue.parentElement!==document.body)document.body.appendChild(cue);
+  cue.classList.add('is-visible');
+  cue.setAttribute('aria-hidden','false');
   var onScroll=function(){syncCoverScrollCue();};
   var scrollTargets=[
     window,
@@ -4045,7 +4060,10 @@ function goTo(id){
   if(id==='tarot')initTarotPage();
   try{history.replaceState(null,'','#'+id);}catch(e){}
   window.scrollTo(0,0);
-  if(id==='cover')syncCoverScrollCue();
+  if(id==='cover'){
+    coverScrollHintUntil=Date.now()+10000;
+    syncCoverScrollCue();
+  }
   updateCoverVipVisibility();
 }
 
@@ -4152,14 +4170,15 @@ function selectVipPayMethod(id){
 
 function openVipLegacyModal(ev){
   if(ev&&ev.type==='click'&&ev.cancelable)ev.preventDefault();
-  if(ev&&ev.stopPropagation)ev.stopPropagation();
+  if(ev&&ev.stopImmediatePropagation)ev.stopImmediatePropagation();
+  else if(ev&&ev.stopPropagation)ev.stopPropagation();
   try{closeMenu();}catch(e){}
   var modal=document.getElementById('vipLegacyModal');
   if(!modal)return;
   if(modal.parentElement!==document.body)document.body.appendChild(modal);
   modal.classList.add('open');
   modal.setAttribute('aria-hidden','false');
-  modal.style.display='flex';
+  modal.style.cssText='display:flex!important;opacity:1!important;visibility:visible!important;';
   document.body.style.overflow='hidden';
   document.documentElement.style.overflow='hidden';
   var cover=document.querySelector('#page-cover .cover');
@@ -4184,7 +4203,7 @@ function closeVipLegacyModal(){
   if(modal){
     modal.classList.remove('open');
     modal.setAttribute('aria-hidden','true');
-    modal.style.display='';
+    modal.style.cssText='';
   }
   var cover=document.querySelector('#page-cover .cover');
   if(cover&&cover.dataset.vipScrollLock){
@@ -4304,23 +4323,29 @@ document.addEventListener('keydown',function(e){
     closeVipLegacyModal();
   }
 });
+function initCoverVipButton(){
+  var btn=document.getElementById('btnEriorVip');
+  if(!btn||btn.dataset.vipBound==='1')return;
+  btn.dataset.vipBound='1';
+  var vipTapAt=0;
+  function activate(e){
+    var now=Date.now();
+    if(now-vipTapAt<400)return;
+    vipTapAt=now;
+    if(e&&e.cancelable&&e.type!=='click')e.preventDefault();
+    if(e&&e.stopPropagation)e.stopPropagation();
+    openVipLegacyModal(e||{});
+  }
+  btn.addEventListener('click',activate);
+  btn.addEventListener('touchend',activate,{passive:false});
+}
+
 (function(){
   var vipModal=document.getElementById('vipLegacyModal');
   if(vipModal)vipModal.addEventListener('click',function(e){if(e.target===vipModal)closeVipLegacyModal();});
-  var vipTapAt=0;
-  function onVipActivate(e){
-    var btn=e.target&&e.target.closest('[data-action="open-vip-modal"],#btnEriorVip,.fsm-erior-vip-btn');
-    if(!btn)return;
-    var pageCover=document.getElementById('page-cover');
-    if(!pageCover||!pageCover.classList.contains('active'))return;
-    var now=Date.now();
-    if(now-vipTapAt<280)return;
-    vipTapAt=now;
-    if(typeof openVipLegacyModal==='function')openVipLegacyModal(e);
-  }
-  document.addEventListener('click',onVipActivate,true);
   function bootCoverUi(){
     initMenuVipCard();
+    initCoverVipButton();
     updateCoverVipVisibility();
     initCoverScrollCue();
   }
