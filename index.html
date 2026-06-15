@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <title>ERIOR CENTER — Audios Binaurales para Manifestación, Amor Propio y Abundancia | She Is Magique</title>
-<!-- build: vip-scroll-v6 -->
+<!-- build: vip-scroll-v7-inline -->
 <meta name="description" content="Audios binaurales personalizados para reprogramar tu subconsciente. Atrae dinero, amor, belleza y transforma tu vida. Más de 25 audios de manifestación disponibles. Envío digital a todo el mundo.">
 <meta name="keywords" content="audios binaurales, subliminal, manifestación, amor propio, abundancia, dinero, reprogramación subconsciente, audio personalizado, She Is Magique, Erior Center, México, Latinoamérica, despertar, consciencia, atraer pareja, mejorar finanzas">
 <meta name="author" content="She Is Magique · Erior Center">
@@ -1913,29 +1913,40 @@ button.alicia-mode-premium-cta{font:inherit;width:100%;cursor:pointer}
 .vip-legacy-wa:hover{background:rgba(37,211,102,.16)}
 .vip-legacy-note{padding:0 1.5rem 1rem;font-size:.66rem;color:rgba(200,196,214,.42);line-height:1.45}
 @media(max-width:900px){
-  #vipLegacyModal.modal-bg.open.vip-mobile-anchored{
-    padding:0!important;
-    align-items:stretch!important;justify-content:flex-start!important;
-    opacity:1!important;visibility:visible!important;display:flex!important;
-    flex-direction:column!important;
-    z-index:99999!important;pointer-events:auto!important;
-    position:fixed!important;
-    overflow:hidden!important;
-    box-sizing:border-box!important;
-    -webkit-transform:translateZ(0);transform:translateZ(0);
+  .vip-mobile-backdrop{
+    position:fixed;inset:0;z-index:99990;
+    background:rgba(0,0,0,.5);
+    opacity:0;visibility:hidden;pointer-events:none;
+    transition:opacity .28s ease,visibility .28s ease;
   }
-  #vipLegacyModal.modal-bg.open.vip-mobile-anchored .vip-legacy-modal-box{
+  .vip-mobile-backdrop.is-visible{
+    opacity:1;visibility:visible;pointer-events:auto;
+  }
+  #coverVipSlot #vipLegacyModal.vip-inline-mobile.open{
+    display:block!important;
     position:relative!important;
-    transform:none!important;
-    width:100%!important;
-    margin:0!important;
-    flex:0 1 auto!important;
-    min-height:0!important;
-    border-radius:16px;
-    animation:vipSheetIn .28s cubic-bezier(.22,1,.36,1) both;
+    z-index:99991!important;
+    opacity:1!important;visibility:visible!important;
+    background:transparent!important;
+    padding:0!important;margin:0 0 .45rem!important;
+    pointer-events:auto!important;
+    width:100%!important;max-width:300px;
   }
-  @keyframes vipSheetIn{
-    from{opacity:0;transform:translateY(10px)!important;}
+  #coverVipSlot #vipLegacyModal.vip-inline-mobile .vip-legacy-modal-box{
+    position:relative!important;
+    left:auto!important;right:auto!important;top:auto!important;bottom:auto!important;
+    width:100%!important;max-width:100%!important;
+    max-height:min(58vh,480px)!important;
+    margin:0 auto!important;
+    transform:none!important;
+    z-index:1!important;
+    display:flex!important;flex-direction:column!important;
+    border-radius:16px;
+    box-shadow:0 16px 44px rgba(0,0,0,.5)!important;
+    animation:vipPopIn .26s cubic-bezier(.22,1,.36,1) both;
+  }
+  @keyframes vipPopIn{
+    from{opacity:0;transform:translateY(8px)!important;}
     to{opacity:1;transform:translateY(0)!important;}
   }
 }
@@ -4208,91 +4219,52 @@ function selectVipPayMethod(id){
 }
 
 var vipSavedCoverScroll=0;
-var vipMobileLayoutSync=null;
+var vipMobileBackdrop=null;
 
 function isCoverMobile(){
   return window.matchMedia('(max-width:900px)').matches;
 }
 
-function layoutVipModalNearTap(modal){
-  if(!modal||!isCoverMobile())return;
+function ensureVipMobileBackdrop(){
+  if(vipMobileBackdrop)return vipMobileBackdrop;
+  vipMobileBackdrop=document.getElementById('vipMobileBackdrop');
+  if(!vipMobileBackdrop){
+    vipMobileBackdrop=document.createElement('div');
+    vipMobileBackdrop.id='vipMobileBackdrop';
+    vipMobileBackdrop.className='vip-mobile-backdrop';
+    vipMobileBackdrop.setAttribute('aria-hidden','true');
+    vipMobileBackdrop.addEventListener('click',closeVipLegacyModal);
+    document.body.appendChild(vipMobileBackdrop);
+  }
+  return vipMobileBackdrop;
+}
+
+function mountVipModalInline(modal){
+  var slot=document.getElementById('coverVipSlot');
   var btn=document.getElementById('btnEriorVip');
-  var cover=document.querySelector('#page-cover .cover');
-  if(!btn||!cover)return;
-  var btnRect=btn.getBoundingClientRect();
-  var coverRect=cover.getBoundingClientRect();
-  var pad=12;
-  var gap=10;
-  var safeBottom=0;
-  try{safeBottom=parseInt(getComputedStyle(document.documentElement).getPropertyValue('padding-bottom'))||0;}catch(e){}
-  var viewH=coverRect.height||window.innerHeight||600;
-  var offsetTop=Math.max(pad,Math.round(btnRect.bottom-coverRect.top+gap));
-  var maxBoxH=Math.max(200,Math.min(viewH-offsetTop-pad-safeBottom,viewH*0.78));
+  if(!slot||!btn||!modal)return;
+  if(modal.parentElement!==slot)slot.insertBefore(modal,btn);
+  modal.classList.add('vip-inline-mobile');
+  var backdrop=ensureVipMobileBackdrop();
+  backdrop.classList.add('is-visible');
+  backdrop.setAttribute('aria-hidden','false');
+  try{btn.scrollIntoView({block:'nearest',behavior:'smooth'});}catch(e){}
+}
 
-  modal.classList.add('vip-mobile-anchored');
-  modal.style.top=Math.round(coverRect.top)+'px';
-  modal.style.left=Math.round(coverRect.left)+'px';
-  modal.style.width=Math.round(coverRect.width)+'px';
-  modal.style.height=Math.round(coverRect.height)+'px';
-  modal.style.right='auto';
-  modal.style.bottom='auto';
-  modal.style.paddingTop=offsetTop+'px';
-  modal.style.paddingLeft=pad+'px';
-  modal.style.paddingRight=pad+'px';
-  modal.style.paddingBottom='calc('+pad+'px + env(safe-area-inset-bottom,0px))';
-  modal.style.display='flex';
-  modal.style.flexDirection='column';
-  modal.style.alignItems='stretch';
-  modal.style.justifyContent='flex-start';
-  modal.style.opacity='1';
-  modal.style.visibility='visible';
-  modal.style.zIndex='99999';
-  modal.style.pointerEvents='auto';
-  modal.style.position='fixed';
-  modal.style.overflow='hidden';
-  modal.style.boxSizing='border-box';
-  modal.style.background='rgba(0,0,0,.84)';
-
+function unmountVipModalInline(modal){
+  if(!modal)return;
+  modal.classList.remove('vip-inline-mobile');
+  if(modal.parentElement!==document.body)document.body.appendChild(modal);
+  if(vipMobileBackdrop){
+    vipMobileBackdrop.classList.remove('is-visible');
+    vipMobileBackdrop.setAttribute('aria-hidden','true');
+  }
   var box=modal.querySelector('.vip-legacy-modal-box');
   if(box){
-    box.style.position='relative';
-    box.style.top='auto';
-    box.style.left='auto';
-    box.style.width='100%';
-    box.style.maxHeight=maxBoxH+'px';
-    box.style.margin='0';
-    box.style.transform='none';
+    box.style.top='';
+    box.style.bottom='';
+    box.style.maxHeight='';
   }
-}
-
-function clearVipMobileLayout(modal){
-  if(!modal)return;
-  modal.classList.remove('vip-mobile-anchored');
-  var box=modal.querySelector('.vip-legacy-modal-box');
-  if(box)box.style.cssText='';
-}
-
-function bindVipMobileLayoutSync(modal){
-  unbindVipMobileLayoutSync();
-  if(!modal||!isCoverMobile())return;
-  vipMobileLayoutSync=function(){layoutVipModalNearTap(modal);};
-  window.addEventListener('resize',vipMobileLayoutSync,{passive:true});
-  window.addEventListener('orientationchange',vipMobileLayoutSync,{passive:true});
-  if(window.visualViewport){
-    window.visualViewport.addEventListener('resize',vipMobileLayoutSync);
-    window.visualViewport.addEventListener('scroll',vipMobileLayoutSync);
-  }
-}
-
-function unbindVipMobileLayoutSync(){
-  if(!vipMobileLayoutSync)return;
-  window.removeEventListener('resize',vipMobileLayoutSync);
-  window.removeEventListener('orientationchange',vipMobileLayoutSync);
-  if(window.visualViewport){
-    window.visualViewport.removeEventListener('resize',vipMobileLayoutSync);
-    window.visualViewport.removeEventListener('scroll',vipMobileLayoutSync);
-  }
-  vipMobileLayoutSync=null;
 }
 
 function openVipLegacyModal(ev){
@@ -4301,19 +4273,15 @@ function openVipLegacyModal(ev){
   try{closeMenu();}catch(e){}
   var modal=document.getElementById('vipLegacyModal');
   if(!modal)return;
-  if(modal.parentElement!==document.body)document.body.appendChild(modal);
   var mobile=isCoverMobile();
   var coverEl=document.querySelector('#page-cover .cover');
-  if(mobile&&coverEl){
-    vipSavedCoverScroll=coverEl.scrollTop||0;
-    coverEl.style.overflow='hidden';
-  }
+  if(coverEl)vipSavedCoverScroll=coverEl.scrollTop||0;
   modal.classList.add('open');
   modal.setAttribute('aria-hidden','false');
   if(mobile){
-    layoutVipModalNearTap(modal);
-    bindVipMobileLayoutSync(modal);
+    mountVipModalInline(modal);
   }else{
+    if(modal.parentElement!==document.body)document.body.appendChild(modal);
     modal.style.cssText='display:flex!important;opacity:1!important;visibility:visible!important;z-index:99999!important;pointer-events:auto!important;position:fixed!important;';
     document.body.style.overflow='hidden';
     document.documentElement.style.overflow='hidden';
@@ -4322,7 +4290,6 @@ function openVipLegacyModal(ev){
   var scrollEl=modal.querySelector('.vip-legacy-scroll');
   if(scrollEl)scrollEl.scrollTop=0;
   setTimeout(function(){
-    if(mobile)layoutVipModalNearTap(modal);
     try{
       if(typeof PAY_METHODS!=='undefined'&&PAY_METHODS&&PAY_METHODS.length){
         buildVipPayMethods();
@@ -4331,9 +4298,7 @@ function openVipLegacyModal(ev){
       var wa=document.getElementById('vipLegacyWa');
       if(wa&&typeof payWaUrl==='function')wa.href=payWaUrl(VIP_LEGACY_WA_MSG);
     }catch(err){console.warn('VIP modal pay setup',err);}
-    if(mobile)layoutVipModalNearTap(modal);
   },0);
-  setTimeout(function(){if(mobile)layoutVipModalNearTap(modal);},120);
   if(typeof registrarEvento==='function')registrarEvento('vip_legacy_modal','apertura');
 }
 window.openVipLegacyModal=openVipLegacyModal;
@@ -4341,16 +4306,14 @@ window.openVipLegacyModal=openVipLegacyModal;
 function closeVipLegacyModal(){
   var modal=document.getElementById('vipLegacyModal');
   if(modal){
-    unbindVipMobileLayoutSync();
-    clearVipMobileLayout(modal);
+    if(isCoverMobile())unmountVipModalInline(modal);
     modal.classList.remove('open');
     modal.setAttribute('aria-hidden','true');
     modal.style.cssText='';
   }
   var coverEl=document.querySelector('#page-cover .cover');
-  if(coverEl){
-    coverEl.style.overflow='';
-    if(isCoverMobile())coverEl.scrollTop=vipSavedCoverScroll||0;
+  if(coverEl&&isCoverMobile()){
+    coverEl.scrollTop=vipSavedCoverScroll||0;
   }
   if(!isCoverMobile()){
     document.documentElement.style.overflow='';
