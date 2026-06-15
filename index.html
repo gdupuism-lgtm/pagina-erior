@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <title>ERIOR CENTER — Audios Binaurales para Manifestación, Amor Propio y Abundancia | She Is Magique</title>
-<!-- build: vip-scroll-v3 -->
+<!-- build: vip-scroll-v4 -->
 <meta name="description" content="Audios binaurales personalizados para reprogramar tu subconsciente. Atrae dinero, amor, belleza y transforma tu vida. Más de 25 audios de manifestación disponibles. Envío digital a todo el mundo.">
 <meta name="keywords" content="audios binaurales, subliminal, manifestación, amor propio, abundancia, dinero, reprogramación subconsciente, audio personalizado, She Is Magique, Erior Center, México, Latinoamérica, despertar, consciencia, atraer pareja, mejorar finanzas">
 <meta name="author" content="She Is Magique · Erior Center">
@@ -1691,6 +1691,8 @@ button.alicia-mode-premium-cta{font:inherit;width:100%;cursor:pointer}
   pointer-events:auto!important;
   touch-action:manipulation;
   position:relative;z-index:20;
+  min-height:44px;
+  -webkit-user-select:none;user-select:none;
 }
 .cover-vip-widget.is-cover-inflow{
   position:relative;
@@ -1797,7 +1799,22 @@ button.alicia-mode-premium-cta{font:inherit;width:100%;cursor:pointer}
   .cover-scroll-cue-txt{font-size:.62rem;letter-spacing:.3em}
 }
 @media(max-width:767px){
-  .cover-scroll-cue{bottom:calc(4.5rem + env(safe-area-inset-bottom,0px))}
+  .cover-scroll-cue{
+    bottom:calc(5.25rem + env(safe-area-inset-bottom,0px));
+    flex-direction:column-reverse;
+    gap:.5rem;
+    max-width:calc(100vw - 2rem);
+  }
+  .cover-scroll-cue-txt{
+    display:block;
+    font-size:.78rem;
+    letter-spacing:.14em;
+    color:rgba(255,255,255,.82);
+    white-space:nowrap;
+    line-height:1.2;
+    padding:0 .35rem;
+  }
+  .cover-scroll-cue-chevs{height:1.25rem}
 }
 .cover-scroll-cue-chevs{display:flex;flex-direction:column;align-items:center;gap:.18rem;height:1.45rem}
 .cover-scroll-cue-chevs span{
@@ -1897,9 +1914,14 @@ button.alicia-mode-premium-cta{font:inherit;width:100%;cursor:pointer}
 .vip-legacy-note{padding:0 1.5rem 1rem;font-size:.66rem;color:rgba(200,196,214,.42);line-height:1.45}
 @media(max-width:600px){
   #vipLegacyModal.modal-bg.open{
-    padding:.65rem .5rem;align-items:flex-end;
+    padding:.65rem .5rem;align-items:center;justify-content:center;
     opacity:1!important;visibility:visible!important;display:flex!important;
-    z-index:9999!important;
+    z-index:99999!important;pointer-events:auto!important;
+    -webkit-transform:translateZ(0);transform:translateZ(0);
+  }
+  #vipLegacyModal.modal-bg.open .vip-legacy-modal-box{
+    transform:translateY(0)!important;
+    width:100%;
   }
   .vip-legacy-modal-box{max-height:min(94vh,720px);border-radius:14px 14px 12px 12px}
   .vip-legacy-head{padding:1.1rem 1.1rem .55rem}
@@ -3018,8 +3040,8 @@ body::before{
 </div>
 
 <div id="coverScrollCue" class="cover-scroll-cue" aria-hidden="true">
-  <div class="cover-scroll-cue-chevs" aria-hidden="true"><span></span><span></span></div>
   <span class="cover-scroll-cue-txt">desliza</span>
+  <div class="cover-scroll-cue-chevs" aria-hidden="true"><span></span><span></span></div>
 </div>
 
 <!-- MAIN -->
@@ -3092,7 +3114,7 @@ body::before{
       </div>
 
       <div id="coverVipSlot" class="cover-vip-slot is-hidden" aria-hidden="true">
-        <button type="button" class="fsm-erior-vip-btn" id="btnEriorVip" data-action="open-vip-modal">ERIOR VIP</button>
+        <button type="button" class="fsm-erior-vip-btn" id="btnEriorVip" data-action="open-vip-modal" onclick="window.openVipLegacyModal&&window.openVipLegacyModal(event)">ERIOR VIP</button>
       </div>
 
       <div id="coverHeroZone" class="cover-hero-glass">
@@ -3946,6 +3968,7 @@ function updateCoverVipVisibility(){
   }
 
   w.classList.toggle('is-hidden',!show);
+  if(typeof initCoverVipButton==='function')initCoverVipButton();
   if(typeof syncCoverScrollCue==='function')setTimeout(syncCoverScrollCue,120);
 }
 
@@ -4168,32 +4191,38 @@ function selectVipPayMethod(id){
   bindPayCopyButtons(document.getElementById('vipLegacyPaySection'));
 }
 
+var vipScrollLockY=0;
+
+function isCoverMobile(){
+  return window.matchMedia('(max-width:900px)').matches;
+}
+
 function openVipLegacyModal(ev){
   if(ev&&ev.type==='click'&&ev.cancelable)ev.preventDefault();
-  if(ev&&ev.stopImmediatePropagation)ev.stopImmediatePropagation();
-  else if(ev&&ev.stopPropagation)ev.stopPropagation();
+  if(ev&&ev.stopPropagation)ev.stopPropagation();
   try{closeMenu();}catch(e){}
   var modal=document.getElementById('vipLegacyModal');
   if(!modal)return;
   if(modal.parentElement!==document.body)document.body.appendChild(modal);
   modal.classList.add('open');
   modal.setAttribute('aria-hidden','false');
-  modal.style.cssText='display:flex!important;opacity:1!important;visibility:visible!important;';
-  document.body.style.overflow='hidden';
-  document.documentElement.style.overflow='hidden';
-  var cover=document.querySelector('#page-cover .cover');
-  if(cover){
-    cover.dataset.vipScrollLock='1';
-    cover.style.overflow='hidden';
+  modal.style.cssText='display:flex!important;opacity:1!important;visibility:visible!important;z-index:99999!important;pointer-events:auto!important;';
+  if(!isCoverMobile()){
+    document.body.style.overflow='hidden';
+    document.documentElement.style.overflow='hidden';
+    var coverEl=document.querySelector('#page-cover .cover');
+    if(coverEl)coverEl.style.overflow='hidden';
   }
-  try{
-    if(typeof PAY_METHODS!=='undefined'&&PAY_METHODS&&PAY_METHODS.length){
-      buildVipPayMethods();
-      selectVipPayMethod(vipCurrentMethod||'oxxo');
-    }
-    var wa=document.getElementById('vipLegacyWa');
-    if(wa&&typeof payWaUrl==='function')wa.href=payWaUrl(VIP_LEGACY_WA_MSG);
-  }catch(err){console.warn('VIP modal pay setup',err);}
+  setTimeout(function(){
+    try{
+      if(typeof PAY_METHODS!=='undefined'&&PAY_METHODS&&PAY_METHODS.length){
+        buildVipPayMethods();
+        selectVipPayMethod(vipCurrentMethod||'oxxo');
+      }
+      var wa=document.getElementById('vipLegacyWa');
+      if(wa&&typeof payWaUrl==='function')wa.href=payWaUrl(VIP_LEGACY_WA_MSG);
+    }catch(err){console.warn('VIP modal pay setup',err);}
+  },0);
   if(typeof registrarEvento==='function')registrarEvento('vip_legacy_modal','apertura');
 }
 window.openVipLegacyModal=openVipLegacyModal;
@@ -4205,17 +4234,24 @@ function closeVipLegacyModal(){
     modal.setAttribute('aria-hidden','true');
     modal.style.cssText='';
   }
-  var cover=document.querySelector('#page-cover .cover');
-  if(cover&&cover.dataset.vipScrollLock){
-    cover.style.overflow='';
-    delete cover.dataset.vipScrollLock;
+  if(document.body.classList.contains('vip-modal-open')){
+    document.body.classList.remove('vip-modal-open');
+    document.body.style.position='';
+    document.body.style.top='';
+    document.body.style.left='';
+    document.body.style.right='';
+    document.body.style.width='';
+    window.scrollTo(0,vipScrollLockY||0);
+  }else{
+    var coverEl=document.querySelector('#page-cover .cover');
+    if(coverEl)coverEl.style.overflow='';
+    document.documentElement.style.overflow='';
+    if(!document.querySelector('.modal-bg.open,#mmModal.open,#futuraModal.open,#chatImgLightbox.open,#promoModal.open'))document.body.style.overflow='';
   }
-  document.documentElement.style.overflow='';
   var paySec=document.getElementById('vipLegacyPaySection');
   if(paySec)paySec.classList.remove('open');
   var toggle=document.getElementById('vipLegacyPayToggle');
   if(toggle)toggle.textContent='Ver métodos de pago 💳';
-  if(!document.querySelector('.modal-bg.open,#mmModal.open,#futuraModal.open,#chatImgLightbox.open,#promoModal.open'))document.body.style.overflow='';
 }
 
 function toggleVipLegacyPay(){
@@ -4325,19 +4361,15 @@ document.addEventListener('keydown',function(e){
 });
 function initCoverVipButton(){
   var btn=document.getElementById('btnEriorVip');
-  if(!btn||btn.dataset.vipBound==='1')return;
-  btn.dataset.vipBound='1';
-  var vipTapAt=0;
-  function activate(e){
-    var now=Date.now();
-    if(now-vipTapAt<400)return;
-    vipTapAt=now;
-    if(e&&e.cancelable&&e.type!=='click')e.preventDefault();
-    if(e&&e.stopPropagation)e.stopPropagation();
-    openVipLegacyModal(e||{});
+  if(!btn)return;
+  if(btn.dataset.vipBound!=='1'){
+    btn.dataset.vipBound='1';
+    btn.addEventListener('click',function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      openVipLegacyModal(e);
+    });
   }
-  btn.addEventListener('click',activate);
-  btn.addEventListener('touchend',activate,{passive:false});
 }
 
 (function(){
