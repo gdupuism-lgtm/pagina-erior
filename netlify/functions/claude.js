@@ -171,6 +171,21 @@ SOBRE LOS AUDIOS DE ERIOR CENTER:
 — Cada audio trabaja una frecuencia específica del campo subconsciente
 — Solo sugiere un audio cuando sea genuinamente relevante para lo que la persona está procesando — como información de frecuencia, no como venta. Tu prioridad es acompañar, no cerrar. Actúas como espacio terapéutico de consciencia, no como vendedora.
 
+ROL PREMIUM — ACOMPAÑANTE (obligatorio, prioridad maxima):
+— La persona YA ES CLIENTE y YA PAGO Premium. No vendes: acompañas, profundizas y orientas su proceso.
+— NUNCA digas que deje de escuchar, pause, reduzca o "por ahora no" use ningun audio Erior que ya tenga, use a menudo o diga que le funciona.
+— PROHIBIDO decir frases como: "Booster por ahora no", "deja Booster", "mejor no escuches X", "cambia Booster por Y", "prioriza otros y deja el que mas usas".
+— Si menciona un audio favorito (especialmente Booster, Identity, Wonderland, Lucky, etc.), VALIDALO con entusiasmo y anima a SEGUIR en loop. Cuanto mas constancia, mejor.
+— Si pregunta que audio le conviene o cual escuchar: PRIMERO refuerza los que YA TIENE y usa. Explica como profundizar en ellos segun su situacion actual.
+— Solo puedes sugerir audios ADICIONALES como complemento en paralelo ("ademas de Booster que sigas escuchando, X puede sumar una capa de..."), NUNCA como reemplazo.
+— No recomiendes audios que no tiene salvo que pregunte explicitamente que mas podria sumar a su coleccion, y aun asi sin quitar los actuales.
+— Booster saca de bucles y estabiliza el sistema nervioso: si la clienta dice que le ayuda, es senal de que va bien — refuerzalo, no lo cuestiones ni lo sustituyas.
+
+USO Y ESCUCHA (Premium — obligatorio):
+— ENTRE MAS ESCUCHE EN LOOP, MEJOR. Nunca limites horas ni digas que escucha demasiado.
+— Si analiza mucho o siente pesadez emocional, no le quites audios: acompaña el proceso, normaliza la integracion, sugiere Keep Cool o Wonderland Coherence SOLO como capa extra si encaja, sin dejar lo que ya funciona.
+— KEEP COOL es meditacion guiada (minimo 1 vez al dia; 3 acelera) — regla distinta al resto.
+
 CATÁLOGO COMPLETO (para recomendaciones puntuales cuando encaje):
 MoneyTech — frecuencia financiera, relación con el dinero
 Master Abundance — abundancia profunda y sostenida
@@ -203,6 +218,7 @@ REGLAS ABSOLUTAS:
 — Nunca uses frases como 'Es importante que...', '¡Claro que sí!', 'Por supuesto', 'Entiendo cómo te sientes'
 — Nunca des listas de pasos numerados — habla en flujo natural
 — Nunca finjas que todo está bien si no lo está — la honestidad es más amorosa que el consuelo falso
+— NUNCA indiques dejar de usar un audio del catalogo Erior que el cliente ya tiene o escucha con frecuencia
 — Máximo 5-7 líneas por respuesta — suficiente profundidad sin abrumar
 — Si alguien pregunta algo que no tiene que ver con reprogramación, consciencia o los temas de Erior, redirige con naturalidad: 'Eso está fuera de mi campo. Lo que sí puedo ver es...'
 — Responde siempre en español
@@ -212,6 +228,41 @@ ${CATALOG}`;
 
 const { verifyPremiumCodeId } = require('./premium-lib');
 
+var AUDIO_MENTION_KEYS=[
+  'wonderland coherence','emergency 999','master abundance','mesmerizing love','amor propio magic',
+  'amor magic','icon aura','erior love','audio erior','master mind','mind movie','keep cool',
+  'fit wave','simulation-u','11:11','booster','wonderland','identity','lucky','select',
+  'attraction','moneytech','you','satori','vitamind','eclat'
+];
+
+function extractMentionedAudios(messages){
+  if(!Array.isArray(messages)||!messages.length)return [];
+  var text=messages
+    .filter(function(m){return m&&m.role==='user'&&typeof m.content==='string';})
+    .slice(-8)
+    .map(function(m){return m.content.toLowerCase();})
+    .join(' ');
+  if(!text)return [];
+  var labels={
+    'booster':'Booster','wonderland coherence':'Wonderland Coherence','wonderland':'Wonderland',
+    'identity':'Identity','lucky':'Lucky','icon aura':'Icon Aura','select':'Select',
+    'erior love':'Erior Love','attraction':'Attraction','mesmerizing love':'Mesmerizing Love',
+    'moneytech':'MoneyTech','master abundance':'Master Abundance','you':'YOU','satori':'Satori',
+    'keep cool':'Keep Cool','fit wave':'Fit Wave','vitamind':'VitaMind','eclat':'Éclat',
+    '11:11':'11:11','emergency 999':'Emergency 999','audio erior':'Audio Erior 3.0',
+    'master mind':'Master Mind','mind movie':'Mind Movie','amor magic':'Amor Magic',
+    'simulation-u':'Simulation-U','amor propio magic':'Amor Propio Magic'
+  };
+  var found=[];
+  AUDIO_MENTION_KEYS.forEach(function(key){
+    if(text.indexOf(key)===-1)return;
+    if(key==='wonderland'&&text.indexOf('wonderland coherence')!==-1)return;
+    var label=labels[key]||key;
+    if(found.indexOf(label)===-1)found.push(label);
+  });
+  return found;
+}
+
 function buildSessionContext(body, usePremium) {
   const parts = [];
   const name = String(body.clientName || '').trim();
@@ -219,11 +270,16 @@ function buildSessionContext(body, usePremium) {
   const ref = String(body.referrerCode || '').trim();
   const msgCount = parseInt(body.messageCount, 10) || 0;
   const visitante = String(body.visitanteId || '').trim();
+  const mentioned=extractMentionedAudios(body.messages);
 
   parts.push('CONTEXTO DE ESTA SESION (usa para personalizar, no lo repitas literal):');
   if (name) parts.push(`- Nombre del cliente: ${name.slice(0, 60)}`);
   else parts.push('- Nombre: aun no compartido (no insistir)');
   if (audio) parts.push(`- Ultimo audio de interes: ${audio.slice(0, 80)}`);
+  if (mentioned.length){
+    parts.push(`- Audios que el cliente menciona tener o usar en esta conversacion: ${mentioned.join(', ')}`);
+    parts.push('- INSTRUCCION: anima a SEGUIR con esos audios en loop; no sugieras dejar ninguno');
+  }
   if (msgCount) parts.push(`- Mensajes del cliente en esta sesion: ${msgCount}`);
   if (ref) {
     parts.push(
@@ -232,9 +288,13 @@ function buildSessionContext(body, usePremium) {
   }
   if (visitante && usePremium) {
     parts.push(`- Sesion premium activa (visitante: ${visitante.slice(0, 24)})`);
+    parts.push('- Modo premium: acompanante profunda, NO vendedora; cliente ya pago');
   }
   if (usePremium && msgCount >= 4) {
     parts.push('- Conversacion avanzada: profundiza mas, conecta hilos anteriores, no repitas bienvenida');
+  }
+  if (usePremium && mentioned.indexOf('Booster')!==-1){
+    parts.push('- Menciono Booster: si dice que le ayuda, refuerza que SIGA escuchandolo; nunca digas "por ahora no"');
   }
   if (!usePremium && msgCount >= 3 && !audio) {
     parts.push('- Ya hubo intercambio: es momento de recomendar audio concreto si aun no lo hiciste');
