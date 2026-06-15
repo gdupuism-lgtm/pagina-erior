@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <title>ERIOR CENTER — Audios Binaurales para Manifestación, Amor Propio y Abundancia | She Is Magique</title>
-<!-- build: vip-scroll-v4 -->
+<!-- build: vip-scroll-v5 -->
 <meta name="description" content="Audios binaurales personalizados para reprogramar tu subconsciente. Atrae dinero, amor, belleza y transforma tu vida. Más de 25 audios de manifestación disponibles. Envío digital a todo el mundo.">
 <meta name="keywords" content="audios binaurales, subliminal, manifestación, amor propio, abundancia, dinero, reprogramación subconsciente, audio personalizado, She Is Magique, Erior Center, México, Latinoamérica, despertar, consciencia, atraer pareja, mejorar finanzas">
 <meta name="author" content="She Is Magique · Erior Center">
@@ -1914,16 +1914,28 @@ button.alicia-mode-premium-cta{font:inherit;width:100%;cursor:pointer}
 .vip-legacy-note{padding:0 1.5rem 1rem;font-size:.66rem;color:rgba(200,196,214,.42);line-height:1.45}
 @media(max-width:600px){
   #vipLegacyModal.modal-bg.open{
-    padding:.65rem .5rem;align-items:center;justify-content:center;
+    padding:.5rem .5rem calc(.65rem + env(safe-area-inset-bottom,0px));
+    align-items:flex-end;justify-content:center;
     opacity:1!important;visibility:visible!important;display:flex!important;
     z-index:99999!important;pointer-events:auto!important;
+    position:fixed!important;top:0!important;left:0!important;
+    width:100%!important;height:100%!important;height:100dvh!important;
+    overflow:hidden!important;
     -webkit-transform:translateZ(0);transform:translateZ(0);
   }
   #vipLegacyModal.modal-bg.open .vip-legacy-modal-box{
     transform:translateY(0)!important;
     width:100%;
+    max-height:min(82dvh,680px);
+    margin:0;
+    border-radius:16px 16px 14px 14px;
+    animation:vipSheetIn .32s cubic-bezier(.22,1,.36,1) both;
   }
-  .vip-legacy-modal-box{max-height:min(94vh,720px);border-radius:14px 14px 12px 12px}
+  @keyframes vipSheetIn{
+    from{opacity:0;transform:translateY(18px)!important;}
+    to{opacity:1;transform:translateY(0)!important;}
+  }
+  .vip-legacy-modal-box{max-height:min(82dvh,680px);border-radius:16px 16px 14px 14px}
   .vip-legacy-head{padding:1.1rem 1.1rem .55rem}
   .vip-legacy-section{padding:.75rem 1.1rem 0}
   .vip-legacy-benefits{padding:0 1.1rem}
@@ -4192,9 +4204,50 @@ function selectVipPayMethod(id){
 }
 
 var vipScrollLockY=0;
+var vipSavedCoverScroll=0;
+var vipViewportSync=null;
 
 function isCoverMobile(){
   return window.matchMedia('(max-width:900px)').matches;
+}
+
+function pinVipModalToViewport(modal){
+  if(!modal||!isCoverMobile())return;
+  function sync(){
+    if(!modal.classList.contains('open'))return;
+    var vv=window.visualViewport;
+    if(vv){
+      modal.style.top=vv.offsetTop+'px';
+      modal.style.left=vv.offsetLeft+'px';
+      modal.style.width=vv.width+'px';
+      modal.style.height=vv.height+'px';
+    }else{
+      modal.style.top='0';
+      modal.style.left='0';
+      modal.style.width='100%';
+      modal.style.height='100%';
+    }
+  }
+  vipViewportSync=sync;
+  sync();
+  if(window.visualViewport){
+    window.visualViewport.addEventListener('resize',sync);
+    window.visualViewport.addEventListener('scroll',sync);
+  }
+}
+
+function unpinVipModalFromViewport(modal){
+  if(window.visualViewport&&vipViewportSync){
+    window.visualViewport.removeEventListener('resize',vipViewportSync);
+    window.visualViewport.removeEventListener('scroll',vipViewportSync);
+  }
+  vipViewportSync=null;
+  if(modal){
+    modal.style.top='';
+    modal.style.left='';
+    modal.style.width='';
+    modal.style.height='';
+  }
 }
 
 function openVipLegacyModal(ev){
@@ -4204,16 +4257,26 @@ function openVipLegacyModal(ev){
   var modal=document.getElementById('vipLegacyModal');
   if(!modal)return;
   if(modal.parentElement!==document.body)document.body.appendChild(modal);
+  var mobile=isCoverMobile();
+  var coverEl=document.querySelector('#page-cover .cover');
+  if(mobile&&coverEl){
+    vipSavedCoverScroll=coverEl.scrollTop||0;
+    coverEl.style.overflow='hidden';
+  }
   modal.classList.add('open');
   modal.setAttribute('aria-hidden','false');
-  modal.style.cssText='display:flex!important;opacity:1!important;visibility:visible!important;z-index:99999!important;pointer-events:auto!important;';
-  if(!isCoverMobile()){
+  modal.style.cssText='display:flex!important;opacity:1!important;visibility:visible!important;z-index:99999!important;pointer-events:auto!important;position:fixed!important;';
+  if(mobile){
+    pinVipModalToViewport(modal);
+  }else{
     document.body.style.overflow='hidden';
     document.documentElement.style.overflow='hidden';
-    var coverEl=document.querySelector('#page-cover .cover');
     if(coverEl)coverEl.style.overflow='hidden';
   }
+  var scrollEl=modal.querySelector('.vip-legacy-scroll');
+  if(scrollEl)scrollEl.scrollTop=0;
   setTimeout(function(){
+    pinVipModalToViewport(modal);
     try{
       if(typeof PAY_METHODS!=='undefined'&&PAY_METHODS&&PAY_METHODS.length){
         buildVipPayMethods();
@@ -4230,21 +4293,17 @@ window.openVipLegacyModal=openVipLegacyModal;
 function closeVipLegacyModal(){
   var modal=document.getElementById('vipLegacyModal');
   if(modal){
+    unpinVipModalFromViewport(modal);
     modal.classList.remove('open');
     modal.setAttribute('aria-hidden','true');
     modal.style.cssText='';
   }
-  if(document.body.classList.contains('vip-modal-open')){
-    document.body.classList.remove('vip-modal-open');
-    document.body.style.position='';
-    document.body.style.top='';
-    document.body.style.left='';
-    document.body.style.right='';
-    document.body.style.width='';
-    window.scrollTo(0,vipScrollLockY||0);
-  }else{
-    var coverEl=document.querySelector('#page-cover .cover');
-    if(coverEl)coverEl.style.overflow='';
+  var coverEl=document.querySelector('#page-cover .cover');
+  if(coverEl){
+    coverEl.style.overflow='';
+    if(isCoverMobile())coverEl.scrollTop=vipSavedCoverScroll||0;
+  }
+  if(!isCoverMobile()){
     document.documentElement.style.overflow='';
     if(!document.querySelector('.modal-bg.open,#mmModal.open,#futuraModal.open,#chatImgLightbox.open,#promoModal.open'))document.body.style.overflow='';
   }
