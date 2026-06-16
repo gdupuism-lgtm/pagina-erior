@@ -172,6 +172,8 @@ async function validateAndActivateCode(code, visitanteId) {
     }),
   });
 
+  await resetPremiumUsageForActivation(vid, row.id);
+
   return {
     ok: true,
     code_id: row.id,
@@ -331,8 +333,22 @@ async function fetchPremiumUsageRow(visitanteId) {
 
 function buildQuotaPayload(row, now) {
   const limit = getPremiumDailyLimit();
-  const dayKey = getMexicoDayKey(now);
-  const blockedUntil = row && row.blocked_until ? new Date(row.blocked_until) : null;
+  const dayKey = getMexicoDayKey(now || new Date());
+
+  if (!row) {
+    return {
+      allowed: true,
+      blocked: false,
+      blocked_until: null,
+      remaining: limit,
+      used_today: 0,
+      daily_limit: limit,
+      limit,
+    };
+  }
+
+  const isNewDay = row.day_key !== dayKey;
+  const blockedUntil = !isNewDay && row.blocked_until ? new Date(row.blocked_until) : null;
 
   if (blockedUntil && blockedUntil > now) {
     return {
@@ -340,14 +356,13 @@ function buildQuotaPayload(row, now) {
       blocked: true,
       blocked_until: blockedUntil.toISOString(),
       remaining: 0,
-      used_today: row && row.day_key === dayKey ? row.messages_today || 0 : 0,
+      used_today: Math.max(0, Number(row.messages_today) || 0),
       daily_limit: limit,
       limit,
     };
   }
 
-  const usedToday =
-    row && row.day_key === dayKey ? Math.max(0, row.messages_today || 0) : 0;
+  const usedToday = isNewDay ? 0 : Math.max(0, Number(row.messages_today) || 0);
   const remaining = Math.max(0, limit - usedToday);
 
   return {
@@ -363,7 +378,27 @@ function buildQuotaPayload(row, now) {
 
 async function getPremiumQuotaStatus(visitanteId) {
   const row = await fetchPremiumUsageRow(visitanteId);
-  return buildQuotaPayload(row, new Date());
+  const now = new Date();
+  const payload = buildQuotaPayload(row, now);
+  if (row && row.day_key !== getMexicoDayKey(now) && (row.messages_today || row.blocked_until)) {
+    await upsertPremiumUsage(visitanteId, {
+      day_key: getMexicoDayKey(now),
+      messages_today: 0,
+      blocked_until: null,
+    });
+  }
+  return payload;
+}
+
+async function resetPremiumUsageForActivation(visitanteId, codeId) {
+  const dayKey = getMexicoDayKey();
+  return upsertPremiumUsage(visitanteId, {
+    code_id: codeId ? String(codeId).trim() : null,
+    day_key: dayKey,
+    messages_today: 0,
+    blocked_until: null,
+    last_message_at: null,
+  });
 }
 
 async function upsertPremiumUsage(visitanteId, patch) {
@@ -420,10 +455,14 @@ async function consumePremiumMessage(visitanteId, codeId) {
   const status = buildQuotaPayload(row, now);
 
   if (!status.allowed) {
-    return Object.assign({ ok: false, error: 'Límite diario Premium alcanzado' }, status);
+    return Object.assign(
+      { ok: false, quota_error: 'limit_reached', error: 'Límite diario Premium alcanzado' },
+      status
+    );
   }
 
-  const prevUsed = row && row.day_key === dayKey ? row.messages_today || 0 : 0;
+  const prevUsed =
+    row && row.day_key === dayKey ? Math.max(0, Number(row.messages_today) || 0) : 0;
   const nextUsed = prevUsed + 1;
   const blockedUntil =
     nextUsed >= limit ? new Date(now.getTime() + PREMIUM_BLOCK_MS).toISOString() : null;
@@ -439,13 +478,15 @@ async function consumePremiumMessage(visitanteId, codeId) {
   if (!saved) {
     return {
       ok: false,
-      allowed: false,
+      allowed: true,
       blocked: false,
-      error: 'No se pudo registrar la cuota',
+      quota_error: 'register_failed',
+      error:
+        'No se pudo registrar la cuota Premium. ¿Ejecutaste supabase/alicia-premium-quota.sql en Supabase?',
       daily_limit: limit,
       limit,
-      remaining: Math.max(0, limit - nextUsed),
-      used_today: nextUsed,
+      remaining: Math.max(0, limit - prevUsed),
+      used_today: prevUsed,
     };
   }
 
@@ -475,6 +516,7 @@ module.exports = {
   checkPremiumStatus,
   getPremiumQuotaStatus,
   consumePremiumMessage,
+  resetPremiumUsageForActivation,
   getPremiumDailyLimit,
   fetchReferralByCode,
   createReferralForPremiumCode,

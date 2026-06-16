@@ -229,7 +229,7 @@ Esta persona ya eligio transformarse. Tu trabajo es estar presente, acompanar y 
 
 ESTILO: SOLO texto limpio. NUNCA asteriscos, negritas, markdown, # ni **.`;
 
-const { verifyPremiumCodeId, consumePremiumMessage } = require('./premium-lib');
+const { verifyPremiumCodeId, getPremiumQuotaStatus, consumePremiumMessage } = require('./premium-lib');
 
 var AUDIO_MENTION_KEYS=[
   'wonderland coherence','emergency 999','master abundance','mesmerizing love','amor propio magic',
@@ -370,12 +370,13 @@ exports.handler = async (event) => {
   }
 
   let usePremium = false;
+  let premiumVisitanteId = '';
+  let premiumCodeId = '';
   if (body.isPremium === true && body.premiumCodeId) {
+    premiumVisitanteId = String(body.visitanteId || '');
+    premiumCodeId = String(body.premiumCodeId || '');
     try {
-      usePremium = await verifyPremiumCodeId(
-        String(body.premiumCodeId),
-        String(body.visitanteId || '')
-      );
+      usePremium = await verifyPremiumCodeId(premiumCodeId, premiumVisitanteId);
     } catch (verifyErr) {
       console.error('premium verify:', verifyErr.message);
       usePremium = false;
@@ -384,25 +385,23 @@ exports.handler = async (event) => {
 
   if (usePremium) {
     try {
-      const quota = await consumePremiumMessage(
-        String(body.visitanteId || ''),
-        String(body.premiumCodeId || '')
-      );
-      if (!quota.ok) {
+      const quotaCheck = await getPremiumQuotaStatus(premiumVisitanteId);
+      if (!quotaCheck.allowed) {
         return {
           statusCode: 429,
           headers,
           body: JSON.stringify({
-            error: quota.blocked
+            error: quotaCheck.blocked
               ? 'Has alcanzado tu límite diario Premium. Vuelve cuando se reinicie tu acceso.'
               : 'Límite diario Premium alcanzado',
-            premiumQuota: quota,
+            premiumQuota: quotaCheck,
             premiumBlocked: true,
+            quotaError: 'limit_reached',
           }),
         };
       }
     } catch (quotaErr) {
-      console.error('premium quota:', quotaErr.message);
+      console.error('premium quota check:', quotaErr.message);
       return {
         statusCode: 503,
         headers,
@@ -498,6 +497,30 @@ exports.handler = async (event) => {
     }
 
     const clientClaimedPremium = body.isPremium === true && !!body.premiumCodeId;
+    let premiumQuota = null;
+    if (usePremium) {
+      try {
+        premiumQuota = await consumePremiumMessage(premiumVisitanteId, premiumCodeId);
+        if (!premiumQuota.ok) {
+          if (premiumQuota.quota_error === 'register_failed') {
+            console.error('premium quota register failed after reply');
+          } else {
+            return {
+              statusCode: 429,
+              headers,
+              body: JSON.stringify({
+                error: 'Límite diario Premium alcanzado',
+                premiumQuota,
+                premiumBlocked: true,
+                quotaError: premiumQuota.quota_error || 'limit_reached',
+              }),
+            };
+          }
+        }
+      } catch (consumeErr) {
+        console.error('premium quota consume:', consumeErr.message);
+      }
+    }
     return {
       statusCode: 200,
       headers,
@@ -505,6 +528,7 @@ exports.handler = async (event) => {
         reply: text,
         premiumActive: usePremium,
         premiumRevoked: clientClaimedPremium && !usePremium,
+        premiumQuota,
       }),
     };
   } catch (err) {

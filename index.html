@@ -5859,7 +5859,7 @@ function updatePremiumQuotaUI(){
       text.textContent='Premium: te quedan '+Math.max(0,q.remaining!=null?q.remaining:limit)+' de '+limit+' preguntas hoy.';
     }
   }
-  var locked=!!q.blocked;
+  var locked=!!q.blocked||(q.remaining!=null&&q.remaining<=0);
   if(inp){
     inp.disabled=locked;
     inp.placeholder=locked?'Límite diario alcanzado — vuelve más tarde':'¿Qué quieres transformar hoy?';
@@ -6025,7 +6025,7 @@ function startAliciaChatSession(){
   var win=document.getElementById('chatWin');
   if(win&&win.children.length)return;
   var begin=function(){
-    if(isAliciaPremiumActive()&&aliciaPremiumQuota&&aliciaPremiumQuota.blocked){
+    if(isAliciaPremiumActive()&&aliciaPremiumQuota&&(aliciaPremiumQuota.blocked||(aliciaPremiumQuota.remaining!=null&&aliciaPremiumQuota.remaining<=0))){
       addMsg('b',getPremiumLimitBlockMessage(aliciaPremiumQuota));
       updatePremiumQuotaUI();
       aliciaChatStarted=true;
@@ -6769,7 +6769,7 @@ async function sendMsg(){
   var txt=inp.value.trim();if(!txt)return;
   if(isAliciaPremiumActive()){
     var q=await fetchPremiumQuota();
-    if(q&&q.blocked){
+    if(q&&(q.blocked||(q.remaining!=null&&q.remaining<=0))){
       addMsg('b',getPremiumLimitBlockMessage(q));
       return;
     }
@@ -6810,12 +6810,17 @@ async function sendMsg(){
       clearAliciaPremiumLocal();
       addMsg('b','Tu acceso Premium fue desactivado. Puedes seguir en Alicia gratis o contactarnos por WhatsApp 💛');
     }
-    if(r.status===429||data.premiumBlocked){
+    if(data.premiumBlocked&&data.premiumQuota){
       applyPremiumQuotaFromServer(data);
       hist.pop();
       var win=document.getElementById('chatWin');
       if(win&&win.lastElementChild)win.removeChild(win.lastElementChild);
-      addMsg('b',getPremiumLimitBlockMessage(data.premiumQuota||aliciaPremiumQuota));
+      addMsg('b',getPremiumLimitBlockMessage(data.premiumQuota));
+      sendBtn.disabled=false;
+      return;
+    }
+    if(data.quotaError==='register_failed'||(data.premiumQuota&&data.premiumQuota.quota_error==='register_failed')){
+      addMsg('b','No se pudo registrar tu cuota Premium. Falta configurar la tabla en Supabase (alicia-premium-quota.sql). Escríbenos por WhatsApp si necesitas ayuda 💛');
       sendBtn.disabled=false;
       return;
     }
@@ -6827,7 +6832,10 @@ async function sendMsg(){
       reply=stripAliciaChatImages(normalizeAliciaPromoReply(reply,txt));
       addMsg('b',reply);hist.push({role:'assistant',content:reply});
       logAliciaCrmMessage('assistant',reply);
-      if(isAliciaPremiumActive())fetchPremiumQuota();
+      if(isAliciaPremiumActive()){
+        if(data.premiumQuota)applyPremiumQuotaFromServer(data);
+        else fetchPremiumQuota();
+      }
       if(isSalesCloseMoment(reply)){triggerSalesSparkle();var qp=document.getElementById('aliciaQuieroPagar');if(qp)qp.style.display='flex';}
     }
   }catch(e){
