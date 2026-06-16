@@ -306,7 +306,7 @@ const PREMIUM_BLOCK_MS = 24 * 60 * 60 * 1000;
 
 function getPremiumDailyLimit() {
   const n = parseInt(process.env.ALICIA_PREMIUM_DAILY_LIMIT, 10);
-  return Number.isFinite(n) && n > 0 ? n : 15;
+  return Number.isFinite(n) && n > 0 ? n : 5;
 }
 
 function getMexicoDayKey(date) {

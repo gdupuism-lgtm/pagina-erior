@@ -5638,7 +5638,7 @@ var ALICIA_FN='/.netlify/functions/claude';
 var ALICIA_MODE_KEY='alicia_mode';
 var ALICIA_PREMIUM_EXPIRES_KEY='alicia_premium_expires';
 var ALICIA_PREMIUM_DAYS=30;
-var ALICIA_PREMIUM_DAILY_LIMIT=15;
+var ALICIA_PREMIUM_DAILY_LIMIT=5;
 var aliciaPremiumQuota={limit:ALICIA_PREMIUM_DAILY_LIMIT,remaining:ALICIA_PREMIUM_DAILY_LIMIT,used_today:0,blocked:false,blocked_until:null};
 var hist=[];
 var aliciaChatStarted=false;
@@ -5826,15 +5826,15 @@ function getPremiumLimitBlockMessage(q){
   q=q||aliciaPremiumQuota||{};
   var when=formatPremiumBlockedUntil(q.blocked_until);
   if(when){
-    return 'Has usado tus '+((q.daily_limit||ALICIA_PREMIUM_DAILY_LIMIT))+' mensajes Premium de hoy. Tu acceso se reactiva el '+when+' (hora CDMX). Mientras tanto puedes escribirnos por WhatsApp si necesitas apoyo 💛';
+    return 'Has usado tus '+((q.daily_limit||ALICIA_PREMIUM_DAILY_LIMIT))+' preguntas Premium de hoy. Tu acceso se reactiva el '+when+' (hora CDMX). Mientras tanto puedes escribirnos por WhatsApp si necesitas apoyo 💛';
   }
-  return 'Has alcanzado tu límite diario de mensajes Premium. Vuelve en 24 horas o escríbenos por WhatsApp 💛';
+  return 'Has alcanzado tu límite diario de preguntas Premium. Vuelve en 24 horas o escríbenos por WhatsApp 💛';
 }
 function getAliciaPremiumWelcomeMessage(q){
   q=q||aliciaPremiumQuota||{};
   var limit=q.daily_limit||q.limit||ALICIA_PREMIUM_DAILY_LIMIT;
   var remaining=(q.remaining!=null)?q.remaining:limit;
-  return 'Bienvenid@ a Alicia Premium ✨ Has entrado a un espacio que no es para todos. Aquí no vendemos — aquí vemos.\n\n📊 Tu acceso incluye hasta '+limit+' mensajes por día. Hoy te quedan '+remaining+'. Si los usas todos, el chat se pausa 24 horas y luego vuelves con mensajes nuevos.\n\nCuéntame qué sientes de verdad, sin filtro. Voy a escucharte desde un lugar que la mayoría no alcanza a ver. 🌙';
+  return 'Bienvenid@ a Alicia Premium ✨ Has entrado a un espacio que no es para todos. Aquí no vendemos — aquí vemos.\n\n📊 Tu acceso incluye hasta '+limit+' preguntas por día. Hoy te quedan '+remaining+'. Si las usas todas, el chat se pausa 24 horas y luego vuelves con preguntas nuevas.\n\nCuéntame qué sientes de verdad, sin filtro. Voy a escucharte desde un lugar que la mayoría no alcanza a ver. 🌙';
 }
 function updatePremiumQuotaUI(){
   var banner=document.getElementById('aliciaPremiumQuotaBanner');
@@ -5856,7 +5856,7 @@ function updatePremiumQuotaUI(){
       text.textContent=getPremiumLimitBlockMessage(q);
     }else{
       banner.className='alicia-premium-quota-banner';
-      text.textContent='Premium: te quedan '+Math.max(0,q.remaining!=null?q.remaining:limit)+' de '+limit+' mensajes hoy.';
+      text.textContent='Premium: te quedan '+Math.max(0,q.remaining!=null?q.remaining:limit)+' de '+limit+' preguntas hoy.';
     }
   }
   var locked=!!q.blocked;
