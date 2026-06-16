@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <title>ERIOR CENTER — Audios Binaurales para Manifestación, Amor Propio y Abundancia | She Is Magique</title>
-<!-- build: ui-premium-v10-hero-sym-diamond-vip -->
+<!-- build: ui-premium-v11-glass3d-vip-tornasol -->
 <meta name="description" content="Audios binaurales personalizados para reprogramar tu subconsciente. Atrae dinero, amor, belleza y transforma tu vida. Más de 25 audios de manifestación disponibles. Envío digital a todo el mundo.">
 <meta name="keywords" content="audios binaurales, subliminal, manifestación, amor propio, abundancia, dinero, reprogramación subconsciente, audio personalizado, She Is Magique, Erior Center, México, Latinoamérica, despertar, consciencia, atraer pareja, mejorar finanzas">
 <meta name="author" content="She Is Magique · Erior Center">
@@ -2637,6 +2637,64 @@ button.alicia-mode-premium-cta{font:inherit;width:100%;cursor:pointer}
   50%{background-position:38% 62%,90% 54%,14% 76%,0 0;}
   75%{background-position:52% 48%,52% 74%,68% 14%,0 0;}
 }
+@keyframes btnVipTornasolShift{
+  0%,100%{background-position:42% 58%,10% 40%,0 0;}
+  25%{background-position:58% 42%,46% 16%,0 0;}
+  50%{background-position:38% 62%,90% 54%,0 0;}
+  75%{background-position:52% 48%,52% 74%,0 0;}
+}
+/* Mind Movie / Futura / Telegram — liquid glass 3D transparente */
+.cover-cta-stack .btn-metallic.btn-liquid{
+  background-color:rgba(255,255,255,.05)!important;
+  background-image:
+    linear-gradient(180deg,rgba(255,255,255,.28) 0%,rgba(255,255,255,.06) 20%,rgba(255,255,255,.02) 48%,rgba(255,255,255,.04) 72%,rgba(255,255,255,.2) 100%),
+    linear-gradient(145deg,rgba(255,255,255,.14) 0%,transparent 42%,rgba(255,255,255,.05) 100%)!important;
+  background-size:100% 100%,100% 100%!important;
+  background-blend-mode:normal!important;
+  background-repeat:no-repeat!important;
+  animation:none!important;
+  border:1px solid rgba(255,255,255,.5)!important;
+  border-radius:980px!important;
+  backdrop-filter:blur(28px) saturate(165%)!important;
+  -webkit-backdrop-filter:blur(28px) saturate(165%)!important;
+  box-shadow:
+    inset 0 2px 1px rgba(255,255,255,.78),
+    inset 0 -2px 1px rgba(255,255,255,.28),
+    inset 0 12px 22px rgba(255,255,255,.07),
+    inset 0 -10px 18px rgba(0,0,0,.07),
+    0 1px 0 rgba(255,255,255,.38),
+    0 10px 26px rgba(0,0,0,.24),
+    0 3px 8px rgba(0,0,0,.12)!important;
+  color:rgba(30,32,42,.88);
+  text-shadow:none;
+}
+.cover-cta-stack .btn-metallic.btn-liquid::after{
+  top:0;left:4%;right:4%;height:50%;
+  border-radius:980px 980px 42% 42%;
+  background:linear-gradient(to bottom,rgba(255,255,255,.58) 0%,rgba(255,255,255,.16) 42%,transparent 100%);
+  opacity:.92;
+}
+.cover-cta-stack .btn-metallic.btn-liquid::before{
+  background:linear-gradient(105deg,transparent 28%,rgba(255,255,255,.38) 50%,transparent 72%);
+  opacity:.55;
+}
+.cover-cta-stack .btn-metallic.btn-liquid:hover{
+  transform:translateY(-3px) scale(1.02)!important;
+  border-color:rgba(255,255,255,.62)!important;
+  box-shadow:
+    inset 0 2px 1px rgba(255,255,255,.88),
+    inset 0 -2px 1px rgba(255,255,255,.32),
+    inset 0 12px 24px rgba(255,255,255,.1),
+    0 16px 34px rgba(0,0,0,.28),
+    0 4px 10px rgba(0,0,0,.14)!important;
+}
+.cover-cta-stack .btn-metallic.btn-liquid:active{
+  transform:translateY(-1px) scale(.99)!important;
+  box-shadow:
+    inset 0 1px 1px rgba(255,255,255,.55),
+    inset 0 -1px 2px rgba(0,0,0,.12),
+    0 6px 16px rgba(0,0,0,.2)!important;
+}
 /* Icon Aura — cristal */
 .btn-icon-aura-glass{
   position:relative;z-index:12;cursor:pointer;pointer-events:auto;
@@ -2734,7 +2792,7 @@ button.alicia-mode-premium-cta{font:inherit;width:100%;cursor:pointer}
   #coverHeroRow .cover-cta-stack{order:2;}
   #coverHeroRow .cover-mj-col{order:1;}
   #mjFloatWrap{width:clamp(100px,14vw,170px);height:clamp(150px,21vw,255px);}
-  .cover-cta-stack{width:min(220px,38vw);gap:.62rem;}
+  .cover-cta-stack{width:min(220px,38vw);gap:clamp(.95rem,3.2vh,1.35rem);justify-content:space-evenly;min-height:clamp(210px,30vh,290px);}
   .btn-metallic{font-size:.64rem;padding:.62rem 1.05rem;border-radius:18px;}
   #coverHeroZone .soc-row{margin-top:1.5rem;}
   #coverHeroZone .soc-ball{width:46px;height:46px;}
@@ -2940,13 +2998,26 @@ body::before{
   min-height:68px;height:100%;
   padding:.62rem .75rem!important;
   border-radius:14px!important;
-  animation:btnLiquidIridescent 11s ease-in-out infinite;
+  background-color:transparent!important;
+  background-repeat:no-repeat!important;
+  background-blend-mode:overlay,soft-light,soft-light,normal!important;
+  background-image:
+    conic-gradient(from 210deg at 50% 50%,hsla(330,95%,78%,.48) 0deg,hsla(270,92%,76%,.44) 40deg,hsla(210,95%,74%,.46) 80deg,hsla(165,90%,72%,.42) 120deg,hsla(48,100%,72%,.48) 200deg,hsla(285,92%,76%,.45) 280deg,hsla(330,95%,78%,.48) 360deg),
+    linear-gradient(118deg,rgba(255,170,210,.42) 0%,rgba(186,130,255,.38) 25%,rgba(130,200,255,.4) 50%,rgba(245,210,140,.42) 75%,rgba(200,160,255,.4) 100%),
+    linear-gradient(145deg,rgba(255,255,255,.22) 0%,rgba(255,255,255,.06) 100%)!important;
+  background-size:220% 220%,220% 220%,100% 100%!important;
+  animation:btnVipTornasolShift 14s ease-in-out infinite!important;
+  border:1.5px solid rgba(255,255,255,.38)!important;
+  backdrop-filter:blur(32px) saturate(220%)!important;
+  -webkit-backdrop-filter:blur(32px) saturate(220%)!important;
   box-shadow:
-    inset 0 2px 5px rgba(255,255,255,.58),
-    inset 0 -4px 10px rgba(0,0,0,.2),
-    inset 0 0 0 1px rgba(255,255,255,.12),
-    0 10px 32px rgba(0,0,0,.32),
-    0 0 56px rgba(201,160,96,.18)!important;
+    inset 0 2px 5px rgba(255,255,255,.52),
+    inset 0 -4px 10px rgba(0,0,0,.22),
+    inset 0 0 0 1px rgba(255,255,255,.1),
+    0 2px 0 rgba(255,255,255,.08),
+    0 10px 32px rgba(0,0,0,.38),
+    0 0 48px rgba(201,160,96,.16),
+    0 0 72px rgba(186,130,255,.1)!important;
 }
 .btn-catalog-hero .btn-metallic-txt{
   font-size:clamp(.58rem,2.5vw,.68rem)!important;letter-spacing:.14em!important;
@@ -2974,6 +3045,15 @@ body::before{
   text-align:center;
 }
 .btn-catalog-hero:hover,.btn-alicia-hero:hover{transform:translateY(-3px) scale(1.02)!important}
+.btn-catalog-hero:hover{
+  border-color:rgba(255,255,255,.52)!important;
+  box-shadow:
+    inset 0 2px 6px rgba(255,255,255,.58),
+    inset 0 -4px 10px rgba(0,0,0,.18),
+    0 18px 44px rgba(0,0,0,.42),
+    0 0 64px rgba(201,160,96,.24),
+    0 0 88px rgba(186,130,255,.16)!important;
+}
 
 /* Premium button labels — logo ERIOR style, bordes dorados */
 .page#page-cover .btn-premium-label,
@@ -3010,6 +3090,43 @@ body::before{
   -webkit-text-stroke:.45px rgba(232,200,130,.95);
   filter:drop-shadow(0 0 .5px rgba(232,200,130,.9)) drop-shadow(0 1px 2px rgba(40,25,8,.85)) drop-shadow(0 0 14px rgba(201,160,96,.28));
 }
+
+.page#page-cover .btn-alicia-glow.btn-alicia-hero{
+  font-family:'Cormorant Garamond',serif;font-weight:700;letter-spacing:.1em;
+  text-transform:none;padding:.62rem .75rem!important;border-radius:14px!important;
+  background-color:transparent!important;
+  background-repeat:no-repeat!important;
+  background-blend-mode:overlay,soft-light,soft-light,normal!important;
+  background-image:
+    conic-gradient(from 210deg at 50% 50%,hsla(330,95%,78%,.48) 0deg,hsla(270,92%,76%,.44) 40deg,hsla(210,95%,74%,.46) 80deg,hsla(165,90%,72%,.42) 120deg,hsla(48,100%,72%,.48) 200deg,hsla(285,92%,76%,.45) 280deg,hsla(330,95%,78%,.48) 360deg),
+    linear-gradient(118deg,rgba(255,170,210,.42) 0%,rgba(186,130,255,.38) 25%,rgba(130,200,255,.4) 50%,rgba(245,210,140,.42) 75%,rgba(200,160,255,.4) 100%),
+    linear-gradient(145deg,rgba(255,255,255,.22) 0%,rgba(255,255,255,.06) 100%)!important;
+  background-size:220% 220%,220% 220%,100% 100%!important;
+  animation:btnVipTornasolShift 14s ease-in-out infinite!important;
+  border:1.5px solid rgba(255,255,255,.38)!important;
+  box-shadow:
+    inset 0 2px 5px rgba(255,255,255,.52),
+    inset 0 -4px 10px rgba(0,0,0,.22),
+    inset 0 0 0 1px rgba(255,255,255,.1),
+    0 2px 0 rgba(255,255,255,.08),
+    0 10px 32px rgba(0,0,0,.38),
+    0 0 48px rgba(201,160,96,.16),
+    0 0 72px rgba(186,130,255,.1)!important;
+  backdrop-filter:blur(32px) saturate(220%)!important;
+  -webkit-backdrop-filter:blur(32px) saturate(220%)!important;
+  transition:transform .42s cubic-bezier(.22,1,.36,1),box-shadow .42s ease;
+}
+.page#page-cover .btn-alicia-glow.btn-alicia-hero:hover{
+  transform:translateY(-3px) scale(1.02)!important;
+  border-color:rgba(255,255,255,.52)!important;
+  box-shadow:
+    inset 0 2px 6px rgba(255,255,255,.58),
+    inset 0 -4px 10px rgba(0,0,0,.18),
+    0 18px 44px rgba(0,0,0,.42),
+    0 0 64px rgba(201,160,96,.24),
+    0 0 88px rgba(186,130,255,.16)!important;
+}
+.page#page-cover .btn-alicia-glow.btn-alicia-hero:active{transform:translateY(-1px) scale(.98)!important}
 
 .page#page-cover .btn-alicia-glow{
   font-family:'Cormorant Garamond',serif;font-weight:700;letter-spacing:.1em;
@@ -3306,6 +3423,12 @@ body::before{
     background-position:42% 58%,0 0!important;
     backdrop-filter:none!important;
     -webkit-backdrop-filter:none!important;
+  }
+  .page#page-cover .cover-cta-stack .btn-metallic.btn-liquid,
+  .page#page-cover .btn-catalog-hero,
+  .page#page-cover .btn-alicia-glow.btn-alicia-hero{
+    backdrop-filter:blur(24px) saturate(165%)!important;
+    -webkit-backdrop-filter:blur(24px) saturate(165%)!important;
   }
   .page#page-cover .btn-eriorworld::before,
   .page#page-cover .btn-metallic::before{
