@@ -11,6 +11,7 @@ const {
   generateReferralCode,
   createReferralForPremiumCode,
   revokeActivationsForCode,
+  restoreLastDeviceForCode,
   sbFetch,
 } = require('./premium-lib');
 
@@ -264,8 +265,18 @@ exports.handler = async (event) => {
         } catch (revErr) {
           console.error('revoke activations:', revErr.message);
         }
+      } else {
+        try {
+          await restoreLastDeviceForCode(id);
+        } catch (restErr) {
+          console.error('restore activations:', restErr.message);
+        }
       }
-      return { statusCode: 200, headers, body: JSON.stringify({ ok: true, revoked: !active }) };
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({ ok: true, revoked: !active, restored: active }),
+      };
     }
 
     if (action === 'delete') {

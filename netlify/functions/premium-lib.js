@@ -85,7 +85,7 @@ function normalizeRefCode(code) {
 async function fetchCodeByValue(code) {
   const normalized = normalizeCode(code);
   const res = await sbFetch(
-    `alicia_premium_codes?code=eq.${encodeURIComponent(normalized)}&select=id,code,active,max_activations,activation_count,expires_at,client_name&limit=1`,
+    `alicia_premium_codes?code=eq.${encodeURIComponent(normalized)}&select=id,code,active,max_activations,activation_count,expires_at,client_name,last_visitante_id&limit=1`,
     { method: 'GET' }
   );
   if (!res.ok) return null;
@@ -127,7 +127,22 @@ async function validateAndActivateCode(code, visitanteId) {
     existing.data[0]
   ) {
     if (existing.data[0].revoked_at) {
-      return { ok: false, error: 'Acceso revocado. Contacta a Erior para reactivar' };
+      const lastVid = String(row.last_visitante_id || '').trim();
+      if (lastVid && vid !== lastVid) {
+        return { ok: false, error: 'Acceso revocado. Contacta a Erior para reactivar' };
+      }
+      const restored = await sbFetch(
+        `alicia_premium_activations?id=eq.${encodeURIComponent(existing.data[0].id)}`,
+        {
+          method: 'PATCH',
+          headers: { Prefer: 'return=minimal' },
+          body: JSON.stringify({ revoked_at: null }),
+        }
+      );
+      if (!restored.ok) {
+        return { ok: false, error: 'No se pudo reactivar tu acceso. Intenta de nuevo' };
+      }
+      existing.data[0].revoked_at = null;
     }
     let expiresAt = existing.data[0].expires_at;
     if (!expiresAt) {
@@ -216,6 +231,36 @@ async function revokeActivationsForCode(codeId) {
     }
   );
   return { ok: res.ok };
+}
+
+async function restoreActivationForVisitante(codeId, visitanteId) {
+  const cid = String(codeId || '').trim();
+  const vid = String(visitanteId || '').slice(0, 80);
+  if (!cid || !vid) return { ok: false, restored: false };
+  const res = await sbFetch(
+    `alicia_premium_activations?code_id=eq.${encodeURIComponent(cid)}&visitante_id=eq.${encodeURIComponent(vid)}`,
+    {
+      method: 'PATCH',
+      headers: { Prefer: 'return=minimal' },
+      body: JSON.stringify({ revoked_at: null }),
+    }
+  );
+  return { ok: res.ok, restored: res.ok };
+}
+
+async function restoreLastDeviceForCode(codeId) {
+  const cid = String(codeId || '').trim();
+  if (!cid) return { ok: false, restored: false };
+  const codeRes = await sbFetch(
+    `alicia_premium_codes?id=eq.${encodeURIComponent(cid)}&select=id,last_visitante_id&limit=1`,
+    { method: 'GET' }
+  );
+  if (!codeRes.ok || !Array.isArray(codeRes.data) || !codeRes.data[0]) {
+    return { ok: false, restored: false };
+  }
+  const vid = String(codeRes.data[0].last_visitante_id || '').trim();
+  if (!vid) return { ok: true, restored: false };
+  return restoreActivationForVisitante(cid, vid);
 }
 
 async function checkPremiumStatus(codeId, visitanteId) {
@@ -513,6 +558,8 @@ module.exports = {
   validateAndActivateCode,
   verifyPremiumCodeId,
   revokeActivationsForCode,
+  restoreActivationForVisitante,
+  restoreLastDeviceForCode,
   checkPremiumStatus,
   getPremiumQuotaStatus,
   consumePremiumMessage,
