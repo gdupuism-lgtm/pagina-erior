@@ -1,22 +1,30 @@
 /**
  * Netlify Function: proxy seguro hacia Anthropic Claude para el chat Alicia.
  * Configura ANTHROPIC_API_KEY en Netlify (Site settings -> Environment variables).
+ * Opcional: ANTHROPIC_MODEL (gratis, default Haiku), ANTHROPIC_MODEL_PREMIUM (default Sonnet).
+ * Usa catálogo compacto + prompt caching para reducir tokens por mensaje.
  * Prueba local: netlify dev
  */
 
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
 const ANTHROPIC_VERSION = '2023-06-01';
 const MODEL = process.env.ANTHROPIC_MODEL || 'claude-haiku-4-5-20251001';
-const MODEL_PREMIUM = process.env.ANTHROPIC_MODEL_PREMIUM || 'claude-opus-4-6';
+const MODEL_PREMIUM = process.env.ANTHROPIC_MODEL_PREMIUM || 'claude-sonnet-4-20250514';
 const MAX_TOKENS_FREE = 1024;
-const MAX_TOKENS_PREMIUM = 4096;
+const MAX_TOKENS_PREMIUM = 2048;
+const MAX_HISTORY_MESSAGES = 12;
+const MAX_MESSAGE_CHARS = 3000;
 let CATALOG = '';
 try {
-  CATALOG = require('./alicia-catalog');
+  CATALOG = require('./alicia-catalog-compact');
 } catch (catalogErr) {
-  console.error('alicia-catalog load failed:', catalogErr.message);
-  CATALOG =
-    'Catalogo Erior: audios de amor propio, pareja, dinero, salud, ninos y crisis. Recomienda segun la necesidad del cliente.';
+  try {
+    CATALOG = require('./alicia-catalog');
+  } catch (fallbackErr) {
+    console.error('alicia-catalog load failed:', catalogErr.message);
+    CATALOG =
+      'Catalogo Erior: audios de amor propio, pareja, dinero, salud, ninos y crisis. Recomienda segun la necesidad del cliente.';
+  }
 }
 
 const ALICIA_PERSONALITY = `PERSONALIDAD Y FORMA DE PENSAR:
@@ -292,6 +300,22 @@ function buildSessionContext(body, usePremium) {
   return parts.join('\n');
 }
 
+function buildSystemBlocks(usePremium, sessionCtx) {
+  const base = usePremium ? SYSTEM_PREMIUM : SYSTEM;
+  const blocks = [
+    {
+      type: 'text',
+      text: base + '\n\n' + CATALOG,
+      cache_control: { type: 'ephemeral' },
+    },
+  ];
+  const ctx = String(sessionCtx || '').trim();
+  if (ctx) {
+    blocks.push({ type: 'text', text: ctx });
+  }
+  return blocks;
+}
+
 function corsHeaders(origin) {
   const o = origin && /^https?:\/\//.test(origin) ? origin : '*';
   return {
@@ -353,7 +377,7 @@ exports.handler = async (event) => {
     }
   }
   const sessionCtx = buildSessionContext(body, usePremium);
-  const systemPrompt = (usePremium ? SYSTEM_PREMIUM : SYSTEM) + '\n\n' + sessionCtx;
+  const systemBlocks = buildSystemBlocks(usePremium, sessionCtx);
 
   const messages = body.messages;
   if (!Array.isArray(messages) || messages.length === 0) {
@@ -372,10 +396,10 @@ exports.handler = async (event) => {
         typeof m.content === 'string' &&
         m.content.trim()
     )
-    .slice(-24)
+    .slice(-MAX_HISTORY_MESSAGES)
     .map((m) => ({
       role: m.role,
-      content: [{ type: 'text', text: m.content.slice(0, 12000) }],
+      content: [{ type: 'text', text: m.content.slice(0, MAX_MESSAGE_CHARS) }],
     }));
 
   if (sanitized.length === 0) {
@@ -393,11 +417,12 @@ exports.handler = async (event) => {
         'Content-Type': 'application/json',
         'x-api-key': apiKey,
         'anthropic-version': ANTHROPIC_VERSION,
+        'anthropic-beta': 'prompt-caching-2024-07-31',
       },
       body: JSON.stringify({
         model: usePremium ? MODEL_PREMIUM : MODEL,
         max_tokens: usePremium ? MAX_TOKENS_PREMIUM : MAX_TOKENS_FREE,
-        system: systemPrompt,
+        system: systemBlocks,
         messages: sanitized,
       }),
     });
