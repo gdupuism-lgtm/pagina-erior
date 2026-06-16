@@ -430,10 +430,15 @@ exports.handler = async (event) => {
       };
     }
 
+    const clientClaimedPremium = body.isPremium === true && !!body.premiumCodeId;
     return {
       statusCode: 200,
       headers,
-      body: JSON.stringify({ reply: text }),
+      body: JSON.stringify({
+        reply: text,
+        premiumActive: usePremium,
+        premiumRevoked: clientClaimedPremium && !usePremium,
+      }),
     };
   } catch (err) {
     return {

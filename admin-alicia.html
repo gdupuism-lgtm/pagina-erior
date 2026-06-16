@@ -38,7 +38,9 @@ code{font-family:ui-monospace,monospace;color:#f5e6c8;background:rgba(201,160,96
 .hidden{display:none!important}
 .copy{cursor:pointer;opacity:.7}
 .copy:hover{opacity:1}
-a.btn{text-decoration:none}
+.badge-free{background:rgba(120,160,255,.12);color:#99bbff}
+.lead-msg-user{color:rgba(200,190,220,.85);margin:.35rem 0;padding:.4rem .55rem;border-left:2px solid rgba(201,160,96,.35)}
+.lead-msg-bot{color:rgba(180,220,180,.85);margin:.35rem 0;padding:.4rem .55rem;border-left:2px solid rgba(120,200,160,.35)}
 </style>
 </head>
 <body>
@@ -129,12 +131,42 @@ a.btn{text-decoration:none}
       <p class="msg err" id="listRefMsg"></p>
     </div>
 
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem">
+        <h2 style="font-size:.85rem;color:#f5e6c8">Clientes Alicia (Gratis + Premium)</h2>
+        <button type="button" class="btn btn-ghost btn-sm" id="btnRefreshLeads">Actualizar</button>
+      </div>
+      <p class="sub" style="margin-bottom:.75rem">Nombre, contacto, audios de interés y conversaciones con Alicia IA.</p>
+      <div style="overflow-x:auto">
+        <table>
+          <thead>
+            <tr>
+              <th>Cliente</th>
+              <th>Contacto</th>
+              <th>Audio</th>
+              <th>Modo</th>
+              <th>Msgs</th>
+              <th>Última actividad</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="leadsBody"></tbody>
+        </table>
+      </div>
+      <div id="leadConvPanel" class="hidden" style="margin-top:1rem;padding-top:1rem;border-top:1px solid rgba(255,255,255,.08)">
+        <h3 style="font-size:.78rem;color:#f5e6c8;margin-bottom:.5rem" id="leadConvTitle">Conversación</h3>
+        <div id="leadConvList" style="max-height:280px;overflow-y:auto;font-size:.72rem;line-height:1.5"></div>
+      </div>
+      <p class="msg err" id="listLeadsMsg"></p>
+    </div>
+
     <button type="button" class="btn btn-ghost btn-sm" id="btnLogout">Cerrar sesión</button>
   </div>
 </div>
 <script>
 (function(){
   var ADMIN_FN='/.netlify/functions/premium-admin';
+  var CRM_FN='/.netlify/functions/alicia-crm';
   var SESSION_KEY='erior_alicia_admin_key';
 
   function getKey(){return sessionStorage.getItem(SESSION_KEY)||'';}
@@ -214,6 +246,97 @@ a.btn{text-decoration:none}
     }
   }
 
+  async function loadLeads(){
+    var msg=document.getElementById('listLeadsMsg');
+    if(!msg)return;
+    msg.textContent='';
+    msg.className='msg';
+    try{
+      var r=await fetch(CRM_FN,{headers:{'X-Admin-Key':getKey()}});
+      var d=await r.json();
+      if(!r.ok||!d.ok){
+        msg.textContent=(d&&d.error)||'Error al cargar clientes. ¿Ejecutaste supabase/alicia-crm.sql?';
+        msg.className='msg err';
+        return;
+      }
+      var tbody=document.getElementById('leadsBody');
+      if(!tbody)return;
+      tbody.innerHTML='';
+      (d.leads||[]).forEach(function(lead){
+        var tr=document.createElement('tr');
+        var tier=lead.tier==='premium'?'premium':'free';
+        tr.innerHTML=
+          '<td>'+(lead.nombre||'—')+'<br><span style="opacity:.45;font-size:.58rem">'+String(lead.visitante_id||'').slice(0,18)+'</span></td>'+
+          '<td>'+(lead.telefono||lead.email||'—')+'</td>'+
+          '<td>'+(lead.audio_interes||'—')+'</td>'+
+          '<td><span class="badge '+(tier==='premium'?'badge-on':'badge-free')+'">'+(tier==='premium'?'Premium':'Gratis')+'</span></td>'+
+          '<td>'+(lead.mensajes_count||0)+'</td>'+
+          '<td>'+fmtDate(lead.ultima_conversacion_at||lead.updated_at)+'</td>'+
+          '<td><button type="button" class="btn btn-ghost btn-sm" data-leadvid="'+escAttr(lead.visitante_id||'')+'" data-leadname="'+escAttr(lead.nombre||'Cliente')+'">Ver chats</button></td>';
+        tbody.appendChild(tr);
+      });
+      tbody.querySelectorAll('[data-leadvid]').forEach(function(btn){
+        btn.onclick=function(){viewLeadConversations(btn.getAttribute('data-leadvid'),btn.getAttribute('data-leadname'));};
+      });
+    }catch(e){
+      msg.textContent='Sin conexión al CRM';
+      msg.className='msg err';
+    }
+  }
+
+  async function viewLeadConversations(visitanteId,name){
+    var panel=document.getElementById('leadConvPanel');
+    var title=document.getElementById('leadConvTitle');
+    var list=document.getElementById('leadConvList');
+    if(!panel||!list)return;
+    panel.classList.remove('hidden');
+    title.textContent='Conversaciones — '+(name||'Cliente');
+    list.innerHTML='<p style="opacity:.5">Cargando...</p>';
+    try{
+      var r=await fetch(CRM_FN+'?conversaciones=1&visitante_id='+encodeURIComponent(visitanteId),{headers:{'X-Admin-Key':getKey()}});
+      var d=await r.json();
+      if(!r.ok||!d.ok){list.innerHTML='<p class="msg err">Error al cargar</p>';return;}
+      if(!(d.conversaciones||[]).length){list.innerHTML='<p style="opacity:.5">Sin conversaciones aún</p>';return;}
+      list.innerHTML='';
+      for(var i=0;i<d.conversaciones.length;i++){
+        var c=d.conversaciones[i];
+        var block=document.createElement('div');
+        block.style.marginBottom='.75rem';
+        block.innerHTML='<p style="opacity:.55;font-size:.62rem;margin-bottom:.35rem">'+fmtDate(c.created_at)+' · '+(c.tier||'free')+(c.audio_mencionado?' · '+c.audio_mencionado:'')+' · '+(c.mensajes_count||0)+' msgs</p>';
+        var btn=document.createElement('button');
+        btn.type='button';
+        btn.className='btn btn-ghost btn-sm';
+        btn.textContent='Ver mensajes';
+        btn.setAttribute('data-convid',c.id);
+        block.appendChild(btn);
+        list.appendChild(block);
+        btn.onclick=(function(convId,wrap){
+          return async function(){
+            wrap.querySelectorAll('.conv-msgs').forEach(function(el){el.remove();});
+            var msgsWrap=document.createElement('div');
+            msgsWrap.className='conv-msgs';
+            wrap.appendChild(msgsWrap);
+            msgsWrap.innerHTML='<p style="opacity:.5">...</p>';
+            var mr=await fetch(CRM_FN+'?messages=1&conversacion_id='+encodeURIComponent(convId),{headers:{'X-Admin-Key':getKey()}});
+            var md=await mr.json();
+            if(!mr.ok||!md.ok){msgsWrap.innerHTML='<p class="msg err">Error</p>';return;}
+            msgsWrap.innerHTML='';
+            (md.messages||[]).forEach(function(m){
+              var p=document.createElement('div');
+              p.className=m.rol==='user'?'lead-msg-user':'lead-msg-bot';
+              p.textContent=(m.rol==='user'?'Cliente: ':'Alicia: ')+m.contenido;
+              msgsWrap.appendChild(p);
+            });
+          };
+        })(c.id,block);
+      }
+    }catch(e){
+      list.innerHTML='<p class="msg err">Sin conexión</p>';
+    }
+  }
+
+  document.getElementById('btnRefreshLeads').onclick=loadLeads;
+
   async function toggleCode(id,active){
     await fetch(ADMIN_FN,{method:'POST',headers:headers(),body:JSON.stringify({action:'toggle',id:id,active:active})});
     loadCodes();
@@ -232,6 +355,7 @@ a.btn{text-decoration:none}
       showPanel(true);
       loadCodes();
       loadReferrals();
+      loadLeads();
     }catch(e){
       clearKey();
       msg.textContent='No hay conexión. ¿Está desplegado en Netlify?';

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <title>ERIOR CENTER — Audios Binaurales para Manifestación, Amor Propio y Abundancia | She Is Magique</title>
-<!-- build: ui-premium-v12b-matrix-mobile -->
+<!-- build: ui-premium-v13-revoke-crm -->
 <meta name="description" content="Audios binaurales personalizados para reprogramar tu subconsciente. Atrae dinero, amor, belleza y transforma tu vida. Más de 25 audios de manifestación disponibles. Envío digital a todo el mundo.">
 <meta name="keywords" content="audios binaurales, subliminal, manifestación, amor propio, abundancia, dinero, reprogramación subconsciente, audio personalizado, She Is Magique, Erior Center, México, Latinoamérica, despertar, consciencia, atraer pareja, mejorar finanzas">
 <meta name="author" content="She Is Magique · Erior Center">
@@ -983,6 +983,38 @@ body::before{
 .alicia-chat-card.sales-pulse{
   border-color:rgba(212,175,95,.45);
   box-shadow:0 0 40px rgba(201,160,96,.22),0 24px 60px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.08);
+}
+.alicia-lead-form{
+  display:flex;flex-wrap:wrap;gap:.45rem;align-items:center;
+  padding:.55rem .65rem .35rem;border-bottom:1px solid rgba(255,255,255,.06);
+  background:rgba(4,3,12,.35);
+}
+.alicia-lead-form label{
+  width:100%;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;
+  color:rgba(201,160,96,.55);margin:0 0 .15rem;
+}
+.alicia-lead-input{
+  flex:1 1 120px;min-width:0;
+  background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.1);
+  border-radius:10px;color:var(--white);padding:.55rem .7rem;
+  font-family:'Jost',sans-serif;font-size:.78rem;outline:none;
+}
+.alicia-lead-input::placeholder{color:rgba(255,255,255,.22)}
+.alicia-lead-input:focus{border-color:rgba(201,160,96,.45)}
+.alicia-lead-save{
+  flex:0 0 auto;padding:.52rem .85rem;border-radius:999px;cursor:pointer;
+  border:1px solid rgba(201,160,96,.35);background:rgba(201,160,96,.12);
+  font-family:'Jost',sans-serif;font-size:.62rem;font-weight:600;
+  letter-spacing:.06em;text-transform:uppercase;color:var(--gold);
+}
+.alicia-lead-save:hover{background:rgba(201,160,96,.2)}
+.alicia-lead-hint{
+  width:100%;font-size:.58rem;color:rgba(255,255,255,.35);margin:0;line-height:1.35;
+}
+.alicia-premium-revoked-banner{
+  margin:.5rem .65rem 0;padding:.55rem .75rem;border-radius:10px;
+  font-size:.72rem;line-height:1.45;color:rgba(255,200,160,.95);
+  background:rgba(180,80,40,.15);border:1px solid rgba(255,140,80,.25);
 }
 .alicia-sales-sparkle{
   position:absolute;inset:0;width:100%;height:100%;
@@ -3827,6 +3859,16 @@ body::before{
           </div>
           <div class="alicia-chat-card" id="aliciaChatCard">
             <button type="button" class="alicia-tier-badge alicia-tier-badge--upgrade" id="aliciaTierBadge" onclick="showAliciaPremiumUpgrade()">👑 Upgrade a Premium</button>
+            <div class="alicia-lead-form" id="aliciaLeadForm">
+              <label for="aliciaLeadNombre">Para atención personalizada (opcional)</label>
+              <input type="text" class="alicia-lead-input" id="aliciaLeadNombre" placeholder="Tu nombre" maxlength="80" autocomplete="name">
+              <input type="tel" class="alicia-lead-input" id="aliciaLeadTelefono" placeholder="WhatsApp / celular" maxlength="24" autocomplete="tel">
+              <button type="button" class="alicia-lead-save" onclick="saveAliciaLeadFields()">Guardar</button>
+              <p class="alicia-lead-hint">Tus datos nos ayudan a darte mejor seguimiento si quieres un audio o hablar con Pauline.</p>
+            </div>
+            <div class="alicia-premium-revoked-banner" id="aliciaPremiumRevokedBanner" hidden>
+              Tu acceso Premium fue desactivado. Puedes seguir en Alicia gratis o contactarnos por WhatsApp.
+            </div>
             <canvas class="alicia-sales-sparkle" id="aliciaSalesSparkle" aria-hidden="true"></canvas>
             <div class="chat-window" id="chatWin"></div>
             <div class="chat-bar">
@@ -5577,6 +5619,8 @@ document.getElementById('audioModal').addEventListener('click',function(e){if(e.
 // ALICIA IA (respuestas vía Netlify Function → Anthropic; ver netlify/functions/claude.js)
 // ══════════════════════════════════
 const PREMIUM_VALIDATE_FN='/.netlify/functions/premium-validate';
+var ALICIA_CRM_FN='/.netlify/functions/alicia-crm';
+var ALICIA_CONV_KEY='alicia_conversacion_id';
 var ALICIA_FN='/.netlify/functions/claude';
 var ALICIA_MODE_KEY='alicia_mode';
 var ALICIA_PREMIUM_EXPIRES_KEY='alicia_premium_expires';
@@ -5585,6 +5629,136 @@ var hist=[];
 var aliciaChatStarted=false;
 var aliciaParticlesStarted=false;
 
+function clearAliciaPremiumLocal(){
+  try{
+    localStorage.removeItem('alicia_premium');
+    localStorage.removeItem('alicia_premium_code_id');
+    localStorage.removeItem(ALICIA_PREMIUM_EXPIRES_KEY);
+    localStorage.removeItem(ALICIA_MODE_KEY);
+  }catch(e){}
+  var banner=document.getElementById('aliciaPremiumRevokedBanner');
+  if(banner)banner.hidden=false;
+  updateAliciaTierBadge();
+  updateAliciaTagline();
+}
+async function verifyAliciaPremiumWithServer(){
+  if(!isAliciaPremiumActive())return false;
+  var codeId=getAliciaPremiumCodeId();
+  if(!codeId){clearAliciaPremiumLocal();return false;}
+  try{
+    var r=await fetch(PREMIUM_VALIDATE_FN,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({check:true,code_id:codeId,visitante_id:getVisitanteId()})
+    });
+    var data=await r.json().catch(function(){return{};});
+    if(r.ok&&data.ok&&data.active===true)return true;
+    clearAliciaPremiumLocal();
+    return false;
+  }catch(e){
+    return isAliciaPremiumActive();
+  }
+}
+function populateAliciaLeadForm(){
+  loadAliciaClientFromStorage();
+  var nom=document.getElementById('aliciaLeadNombre');
+  var tel=document.getElementById('aliciaLeadTelefono');
+  if(nom&&!nom.value)nom.value=aliciaClient.nombre||aliciaUserName||'';
+  if(tel&&!tel.value){
+    var c=aliciaClient.contacto||aliciaUserContact||'';
+    if(c&&!/@/.test(c))tel.value=c;
+  }
+}
+function syncAliciaLeadFieldsToClient(){
+  var nom=document.getElementById('aliciaLeadNombre');
+  var tel=document.getElementById('aliciaLeadTelefono');
+  if(nom&&nom.value.trim()){
+    aliciaClient.nombre=nom.value.trim();
+    aliciaUserName=aliciaClient.nombre;
+  }
+  if(tel&&tel.value.trim()){
+    aliciaClient.contacto=normalizeAliciaPhoneDigits(tel.value.trim())||tel.value.trim();
+    aliciaUserContact=aliciaClient.contacto;
+  }
+  try{
+    if(aliciaClient.nombre)sessionStorage.setItem('alicia_nombre',aliciaClient.nombre);
+    if(aliciaClient.contacto)sessionStorage.setItem('alicia_contacto',aliciaClient.contacto);
+  }catch(st){}
+}
+async function saveAliciaLeadFields(){
+  syncAliciaLeadFieldsToClient();
+  var prevN=aliciaClient.nombre||'';
+  var prevC=aliciaClient.contacto||'';
+  syncAliciaDatosSupabase(prevN,prevC);
+  try{
+    await fetch(ALICIA_CRM_FN,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        action:'upsert_lead',
+        visitante_id:getVisitanteId(),
+        nombre:aliciaClient.nombre||'',
+        telefono:aliciaClient.contacto&&!/@/.test(aliciaClient.contacto)?aliciaClient.contacto:'',
+        email:aliciaClient.contacto&&/@/.test(aliciaClient.contacto)?aliciaClient.contacto:'',
+        audio_interes:aliciaClient.ultimoAudio||'',
+        tier:isAliciaPremiumActive()?'premium':'free',
+        referrer_code:getReferralCode()
+      })
+    });
+  }catch(e){}
+  var btn=document.querySelector('.alicia-lead-save');
+  if(btn){var t=btn.textContent;btn.textContent='✓ Guardado';setTimeout(function(){btn.textContent=t;},1400);}
+}
+async function ensureAliciaConversation(){
+  try{
+    var existing=sessionStorage.getItem(ALICIA_CONV_KEY);
+    if(existing)return existing;
+  }catch(e){}
+  try{
+    var r=await fetch(ALICIA_CRM_FN,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        action:'start_conversation',
+        visitante_id:getVisitanteId(),
+        nombre:aliciaClient.nombre||aliciaUserName||'',
+        telefono:(aliciaClient.contacto&&!/@/.test(aliciaClient.contacto))?aliciaClient.contacto:'',
+        email:(aliciaClient.contacto&&/@/.test(aliciaClient.contacto))?aliciaClient.contacto:'',
+        audio_interes:aliciaClient.ultimoAudio||'',
+        tier:isAliciaPremiumActive()?'premium':'free',
+        referrer_code:getReferralCode()
+      })
+    });
+    var data=await r.json().catch(function(){return{};});
+    if(r.ok&&data.ok&&data.conversacion_id){
+      try{sessionStorage.setItem(ALICIA_CONV_KEY,data.conversacion_id);}catch(st){}
+      return data.conversacion_id;
+    }
+  }catch(e){}
+  return '';
+}
+function logAliciaCrmMessage(rol,contenido){
+  var convId='';
+  try{convId=sessionStorage.getItem(ALICIA_CONV_KEY)||'';}catch(e){}
+  if(!convId)return;
+  fetch(ALICIA_CRM_FN,{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      action:'log_message',
+      conversacion_id:convId,
+      visitante_id:getVisitanteId(),
+      rol:rol,
+      contenido:contenido,
+      nombre:aliciaClient.nombre||aliciaUserName||'',
+      telefono:(aliciaClient.contacto&&!/@/.test(aliciaClient.contacto))?aliciaClient.contacto:'',
+      email:(aliciaClient.contacto&&/@/.test(aliciaClient.contacto))?aliciaClient.contacto:'',
+      audio_interes:aliciaClient.ultimoAudio||'',
+      tier:isAliciaPremiumActive()?'premium':'free',
+      referrer_code:getReferralCode()
+    })
+  }).catch(function(){});
+}
 function addAliciaPremiumDays(days){
   return new Date(Date.now()+days*24*60*60*1000).toISOString();
 }
@@ -5678,6 +5852,7 @@ async function activateAliciaPremiumCode(){
       trackReferralEvent('premium_activado',code.slice(0,20));
       if(fb){fb.textContent='¡Acceso activado! Entrando a Premium...';fb.className='alicia-premium-code-feedback success';}
       setTimeout(function(){
+        try{sessionStorage.removeItem(ALICIA_CONV_KEY);}catch(st){}
         var win=document.getElementById('chatWin');
         if(win)win.innerHTML='';
         hist=[];
@@ -5707,6 +5882,9 @@ function enterAliciaChat(){
   if(sel)sel.hidden=true;
   if(chat)chat.hidden=false;
   if(inner)inner.classList.remove('alicia-inner--wide');
+  var banner=document.getElementById('aliciaPremiumRevokedBanner');
+  if(banner&&isAliciaPremiumActive())banner.hidden=true;
+  populateAliciaLeadForm();
   updateAliciaTierBadge();
   updateAliciaTagline();
 }
@@ -5735,13 +5913,19 @@ function updateAliciaTierBadge(){
 function startAliciaChatSession(){
   var win=document.getElementById('chatWin');
   if(win&&win.children.length)return;
-  var welcome=getAliciaWelcomeMessage();
-  addMsg('b',welcome);
-  if(!hist.length)hist.push({role:'assistant',content:welcome});
-  aliciaChatStarted=true;
+  ensureAliciaConversation().then(function(){
+    var welcome=getAliciaWelcomeMessage();
+    addMsg('b',welcome);
+    if(!hist.length)hist.push({role:'assistant',content:welcome});
+    logAliciaCrmMessage('assistant',welcome);
+    aliciaChatStarted=true;
+  });
 }
 function startAliciaFree(){
-  try{localStorage.setItem(ALICIA_MODE_KEY,'free');}catch(st){}
+  try{
+    localStorage.setItem(ALICIA_MODE_KEY,'free');
+    sessionStorage.removeItem(ALICIA_CONV_KEY);
+  }catch(st){}
   enterAliciaChat();
   startAliciaChatSession();
 }
@@ -5753,8 +5937,20 @@ function resolveAliciaEntry(){
   var inner=document.getElementById('aliciaInner');
   checkAndClearExpiredAliciaPremium();
   if(isAliciaPremiumActive()){
-    enterAliciaChat();
-    startAliciaChatSession();
+    verifyAliciaPremiumWithServer().then(function(stillActive){
+      if(stillActive){
+        enterAliciaChat();
+        startAliciaChatSession();
+        return;
+      }
+      if(getAliciaStoredMode()==='free'){
+        enterAliciaChat();
+        startAliciaChatSession();
+        return;
+      }
+      if(inner)inner.classList.add('alicia-inner--wide');
+      showAliciaModeSelect();
+    });
     return;
   }
   if(getAliciaStoredMode()==='free'){
@@ -6447,10 +6643,18 @@ function aliciaPaulineWA(){
 async function sendMsg(){
   var inp=document.getElementById('chatIn');
   var txt=inp.value.trim();if(!txt)return;
+  syncAliciaLeadFieldsToClient();
   inp.value='';addMsg('u',txt);hist.push({role:'user',content:txt});
+  logAliciaCrmMessage('user',txt);
   processAliciaCallMeBotAlerts(txt);
   if(isPurchaseIntent(txt)){var qp2=document.getElementById('aliciaQuieroPagar');if(qp2)qp2.style.display='flex';trackReferralEvent('compra_intento',aliciaClient.ultimoAudio||txt.slice(0,80));}
   if(isPaymentCelebration(txt))launchAliciaConfetti();
+  if(isAliciaPremiumActive()){
+    var stillPrem=await verifyAliciaPremiumWithServer();
+    if(!stillPrem&&getAliciaStoredMode()!=='free'){
+      addMsg('b','Tu acceso Premium ya no está activo. Seguimos en modo gratuito — o escríbenos por WhatsApp si necesitas ayuda 💛');
+    }
+  }
   var sendBtn=document.querySelector('.chat-send');
   sendBtn.disabled=true;showDots();
   try{
@@ -6471,6 +6675,10 @@ async function sendMsg(){
     var data={};
     try{data=await r.json();}catch(parseErr){data={};}
     var dm=document.getElementById('dotMsg');if(dm)dm.remove();
+    if(data.premiumRevoked){
+      clearAliciaPremiumLocal();
+      addMsg('b','Tu acceso Premium fue desactivado. Puedes seguir en Alicia gratis o contactarnos por WhatsApp 💛');
+    }
     if(!r.ok){
       var errTxt=(data&&data.error)?String(data.error):('Error '+r.status);
       addMsg('b','Alicia no pudo responder ahora: '+errTxt+'. Si estás en tu computadora, prueba con `netlify dev` o revisa que el sitio esté en Netlify con ANTHROPIC_API_KEY configurada 💜');
@@ -6478,6 +6686,7 @@ async function sendMsg(){
       var reply=(data&&data.reply)?String(data.reply):'Lo siento, hubo un error 💜';
       reply=stripAliciaChatImages(normalizeAliciaPromoReply(reply,txt));
       addMsg('b',reply);hist.push({role:'assistant',content:reply});
+      logAliciaCrmMessage('assistant',reply);
       if(isSalesCloseMoment(reply)){triggerSalesSparkle();var qp=document.getElementById('aliciaQuieroPagar');if(qp)qp.style.display='flex';}
     }
   }catch(e){

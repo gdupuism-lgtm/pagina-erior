@@ -2,7 +2,12 @@
  * Valida y activa un código Alicia Premium (público, sin listar códigos).
  */
 
-const { corsHeaders, getSupabaseConfig, validateAndActivateCode } = require('./premium-lib');
+const {
+  corsHeaders,
+  getSupabaseConfig,
+  validateAndActivateCode,
+  checkPremiumStatus,
+} = require('./premium-lib');
 
 exports.handler = async (event) => {
   const origin = event.headers.origin || event.headers.Origin || '';
@@ -35,6 +40,15 @@ exports.handler = async (event) => {
   }
 
   try {
+    if (body.check === true && body.code_id) {
+      const status = await checkPremiumStatus(body.code_id, body.visitante_id);
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify(status),
+      };
+    }
+
     const result = await validateAndActivateCode(body.code, body.visitante_id);
     return {
       statusCode: result.ok ? 200 : 400,

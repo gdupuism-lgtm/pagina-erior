@@ -10,6 +10,7 @@ const {
   generatePremiumCode,
   generateReferralCode,
   createReferralForPremiumCode,
+  revokeActivationsForCode,
   sbFetch,
 } = require('./premium-lib');
 
@@ -178,7 +179,14 @@ exports.handler = async (event) => {
       if (!res.ok) {
         return { statusCode: 400, headers, body: JSON.stringify({ ok: false, error: 'No se pudo actualizar' }) };
       }
-      return { statusCode: 200, headers, body: JSON.stringify({ ok: true }) };
+      if (!active) {
+        try {
+          await revokeActivationsForCode(id);
+        } catch (revErr) {
+          console.error('revoke activations:', revErr.message);
+        }
+      }
+      return { statusCode: 200, headers, body: JSON.stringify({ ok: true, revoked: !active }) };
     }
 
     return { statusCode: 400, headers, body: JSON.stringify({ ok: false, error: 'Acción desconocida' }) };

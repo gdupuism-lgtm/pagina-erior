@@ -118,7 +118,7 @@ async function validateAndActivateCode(code, visitanteId) {
   const vid = String(visitanteId || 'anon').slice(0, 80);
 
   const existing = await sbFetch(
-    `alicia_premium_activations?code_id=eq.${row.id}&visitante_id=eq.${encodeURIComponent(vid)}&select=id,expires_at,activated_at&limit=1`,
+    `alicia_premium_activations?code_id=eq.${row.id}&visitante_id=eq.${encodeURIComponent(vid)}&select=id,expires_at,activated_at,revoked_at&limit=1`,
     { method: 'GET' }
   );
   if (
@@ -126,6 +126,9 @@ async function validateAndActivateCode(code, visitanteId) {
     Array.isArray(existing.data) &&
     existing.data[0]
   ) {
+    if (existing.data[0].revoked_at) {
+      return { ok: false, error: 'Acceso revocado. Contacta a Erior para reactivar' };
+    }
     let expiresAt = existing.data[0].expires_at;
     if (!expiresAt) {
       expiresAt = addPremiumDays(PREMIUM_ACCESS_DAYS);
@@ -187,16 +190,35 @@ async function verifyPremiumCodeId(codeId, visitanteId) {
   if (row.activation_count < 1) return false;
 
   const vid = String(visitanteId || '').slice(0, 80);
-  if (!vid) return true;
+  if (!vid) return false;
 
   const act = await sbFetch(
-    `alicia_premium_activations?code_id=eq.${encodeURIComponent(codeId.trim())}&visitante_id=eq.${encodeURIComponent(vid)}&select=id,expires_at&limit=1`,
+    `alicia_premium_activations?code_id=eq.${encodeURIComponent(codeId.trim())}&visitante_id=eq.${encodeURIComponent(vid)}&select=id,expires_at,revoked_at&limit=1`,
     { method: 'GET' }
   );
   if (!act.ok || !Array.isArray(act.data) || !act.data[0]) return false;
+  if (act.data[0].revoked_at) return false;
   const expiresAt = act.data[0].expires_at;
   if (expiresAt && new Date(expiresAt) < new Date()) return false;
   return true;
+}
+
+async function revokeActivationsForCode(codeId) {
+  if (!codeId) return { ok: false };
+  const res = await sbFetch(
+    `alicia_premium_activations?code_id=eq.${encodeURIComponent(String(codeId).trim())}`,
+    {
+      method: 'PATCH',
+      headers: { Prefer: 'return=minimal' },
+      body: JSON.stringify({ revoked_at: new Date().toISOString() }),
+    }
+  );
+  return { ok: res.ok };
+}
+
+async function checkPremiumStatus(codeId, visitanteId) {
+  const active = await verifyPremiumCodeId(codeId, visitanteId);
+  return { ok: true, active, code_id: String(codeId || '').trim() || null };
 }
 
 async function fetchReferralByCode(refCode) {
@@ -288,6 +310,8 @@ module.exports = {
   generateReferralCode,
   validateAndActivateCode,
   verifyPremiumCodeId,
+  revokeActivationsForCode,
+  checkPremiumStatus,
   fetchReferralByCode,
   createReferralForPremiumCode,
   trackReferralHit,
