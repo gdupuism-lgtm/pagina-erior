@@ -104,6 +104,26 @@ code{font-family:ui-monospace,monospace;color:#f5e6c8;background:rgba(201,160,96
     </div>
 
     <div class="card">
+      <h2 style="font-size:.85rem;margin-bottom:.75rem;color:#f5e6c8">Conversaciones por código Premium</h2>
+      <p class="sub" style="margin-bottom:.75rem">Busca todos los chats registrados de quien activó un código.</p>
+      <div class="grid">
+        <div>
+          <label for="codeLookupInput">Código Premium</label>
+          <input id="codeLookupInput" placeholder="ERIOR-RGTM-BKCJ" autocomplete="off">
+        </div>
+        <div style="display:flex;align-items:flex-end">
+          <button type="button" class="btn btn-gold" id="btnCodeLookup" style="width:100%;margin-bottom:.75rem">Ver conversaciones</button>
+        </div>
+      </div>
+      <div id="codeLookupResult" class="hidden" style="margin-top:.75rem">
+        <h3 style="font-size:.78rem;color:#f5e6c8;margin-bottom:.35rem" id="codeLookupTitle"></h3>
+        <p class="sub" id="codeLookupMeta" style="margin-bottom:.75rem"></p>
+        <div id="codeLookupSessions" style="max-height:420px;overflow-y:auto;font-size:.72rem;line-height:1.55"></div>
+      </div>
+      <p class="msg" id="codeLookupMsg"></p>
+    </div>
+
+    <div class="card">
       <h2 style="font-size:.85rem;margin-bottom:.75rem;color:#f5e6c8">Sistema de referidos</h2>
       <p class="sub" style="margin-bottom:.75rem">Cada código Premium genera un link de referido automático. Compártelo con clientes VIP para que traigan personas.</p>
       <div class="grid">
@@ -347,6 +367,94 @@ code{font-family:ui-monospace,monospace;color:#f5e6c8;background:rgba(201,160,96
 
   document.getElementById('btnRefreshLeads').onclick=loadLeads;
 
+  function fmtDateTime(s){
+    if(!s)return '—';
+    try{return new Date(s).toLocaleString('es-MX',{day:'2-digit',month:'short',year:'2-digit',hour:'2-digit',minute:'2-digit'});}catch(e){return s;}
+  }
+
+  async function lookupCodeConversations(code){
+    var msg=document.getElementById('codeLookupMsg');
+    var panel=document.getElementById('codeLookupResult');
+    var title=document.getElementById('codeLookupTitle');
+    var meta=document.getElementById('codeLookupMeta');
+    var wrap=document.getElementById('codeLookupSessions');
+    if(!msg||!panel)return;
+    var normalized=String(code||'').trim().toUpperCase();
+    if(!normalized){msg.textContent='Ingresa un código';msg.className='msg err';return;}
+    msg.textContent='Buscando...';
+    msg.className='msg';
+    panel.classList.add('hidden');
+    try{
+      var r=await fetch(ADMIN_FN+'?conversations_by_code='+encodeURIComponent(normalized),{headers:{'X-Admin-Key':getKey()}});
+      var d=await r.json();
+      if(r.status===404||!d.ok){
+        msg.textContent=(d&&d.error)||'Código no encontrado';
+        msg.className='msg err';
+        return;
+      }
+      if(!r.ok){
+        msg.textContent=(d&&d.error)||'Error al buscar';
+        msg.className='msg err';
+        return;
+      }
+      msg.textContent='';
+      panel.classList.remove('hidden');
+      var c=d.code||{};
+      title.textContent='Código '+c.code+(c.client_name?' — '+c.client_name:'');
+      meta.textContent=
+        (d.visitantes&&d.visitantes.length?d.visitantes.length:0)+' dispositivo(s) · '+
+        (d.sessions?d.sessions.length:0)+' sesión(es) · '+
+        (d.message_count||0)+' mensajes guardados';
+      wrap.innerHTML='';
+      if(!(d.sessions&&d.sessions.length)){
+        wrap.innerHTML='<p style="opacity:.55">No hay conversaciones guardadas aún para este código. ¿Ejecutaste supabase/alicia-crm.sql?</p>';
+        return;
+      }
+      d.sessions.forEach(function(s){
+        var block=document.createElement('div');
+        block.style.marginBottom='1rem';
+        block.style.paddingBottom='1rem';
+        block.style.borderBottom='1px solid rgba(255,255,255,.06)';
+        var lead=s.lead||{};
+        var conv=s.conversation;
+        var head=document.createElement('p');
+        head.style.opacity='.65';
+        head.style.fontSize='.62rem';
+        head.style.marginBottom='.45rem';
+        head.textContent=
+          'Visitante: '+String(s.visitante_id||'').slice(0,28)+
+          (lead.nombre?' · '+lead.nombre:'')+
+          (lead.telefono||lead.email?' · '+(lead.telefono||lead.email):'')+
+          (conv?' · '+fmtDateTime(conv.created_at)+' ('+(conv.tier||'free')+', '+(conv.mensajes_count||0)+' msgs)':' · sin sesión CRM');
+        block.appendChild(head);
+        if(!s.messages||!s.messages.length){
+          var empty=document.createElement('p');
+          empty.style.opacity='.45';
+          empty.textContent='Sin mensajes en esta sesión.';
+          block.appendChild(empty);
+        }else{
+          s.messages.forEach(function(m){
+            var p=document.createElement('div');
+            p.className=m.rol==='user'?'lead-msg-user':'lead-msg-bot';
+            p.textContent=(m.rol==='user'?'Cliente: ':'Alicia: ')+m.contenido;
+            block.appendChild(p);
+          });
+        }
+        wrap.appendChild(block);
+      });
+    }catch(e){
+      msg.textContent='Sin conexión al servidor';
+      msg.className='msg err';
+    }
+  }
+
+  document.getElementById('btnCodeLookup').onclick=function(){
+    lookupCodeConversations(document.getElementById('codeLookupInput').value);
+  };
+  document.getElementById('codeLookupInput').onkeydown=function(e){
+    if(e.key==='Enter')document.getElementById('btnCodeLookup').click();
+  };
+
   async function toggleCode(id,active){
     await fetch(ADMIN_FN,{method:'POST',headers:headers(),body:JSON.stringify({action:'toggle',id:id,active:active})});
     loadCodes();
@@ -385,6 +493,15 @@ code{font-family:ui-monospace,monospace;color:#f5e6c8;background:rgba(201,160,96
       loadCodes();
       loadReferrals();
       loadLeads();
+      try{
+        var params=new URLSearchParams(window.location.search||'');
+        var autoCode=(params.get('code')||'').trim().toUpperCase();
+        if(autoCode){
+          var inp=document.getElementById('codeLookupInput');
+          if(inp)inp.value=autoCode;
+          lookupCodeConversations(autoCode);
+        }
+      }catch(e){}
     }catch(e){
       clearKey();
       msg.textContent='No hay conexión. ¿Está desplegado en Netlify?';
@@ -500,7 +617,21 @@ code{font-family:ui-monospace,monospace;color:#f5e6c8;background:rgba(201,160,96
 
   if(getKey()){
     fetch(ADMIN_FN,{headers:{'X-Admin-Key':getKey()}}).then(function(r){
-      if(r.ok){showPanel(true);loadCodes();loadReferrals();}
+      if(r.ok){
+        showPanel(true);
+        loadCodes();
+        loadReferrals();
+        loadLeads();
+        try{
+          var params=new URLSearchParams(window.location.search||'');
+          var autoCode=(params.get('code')||'').trim().toUpperCase();
+          if(autoCode){
+            var inp=document.getElementById('codeLookupInput');
+            if(inp)inp.value=autoCode;
+            lookupCodeConversations(autoCode);
+          }
+        }catch(e){}
+      }
       else clearKey();
     }).catch(function(){clearKey();});
   }

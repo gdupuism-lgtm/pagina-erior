@@ -36,7 +36,86 @@ exports.handler = async (event) => {
 
   if (event.httpMethod === 'GET') {
     try {
-      const listReferrals = (event.queryStringParameters || {}).referrals === '1';
+      const qs = event.queryStringParameters || {};
+      const lookupCode = (qs.conversations_by_code || qs.code_lookup || '').trim().toUpperCase();
+      if (lookupCode) {
+        const codeRes = await sbFetch(
+          `alicia_premium_codes?code=eq.${encodeURIComponent(lookupCode)}&select=id,code,client_name,client_email,client_whatsapp,notes,active,activation_count,max_activations,created_at,last_activated_at,last_visitante_id&limit=1`,
+          { method: 'GET' }
+        );
+        if (!codeRes.ok) {
+          return {
+            statusCode: 502,
+            headers,
+            body: JSON.stringify({ ok: false, error: 'Error al leer código Premium' }),
+          };
+        }
+        const code = Array.isArray(codeRes.data) && codeRes.data[0] ? codeRes.data[0] : null;
+        if (!code) {
+          return {
+            statusCode: 404,
+            headers,
+            body: JSON.stringify({ ok: false, error: 'Código no encontrado' }),
+          };
+        }
+
+        const actRes = await sbFetch(
+          `alicia_premium_activations?code_id=eq.${encodeURIComponent(code.id)}&select=id,visitante_id,activated_at,expires_at,revoked_at&order=activated_at.desc&limit=50`,
+          { method: 'GET' }
+        );
+        const activations = actRes.ok && Array.isArray(actRes.data) ? actRes.data : [];
+        const visitanteSet = new Set(activations.map((a) => a.visitante_id).filter(Boolean));
+        if (code.last_visitante_id) visitanteSet.add(code.last_visitante_id);
+
+        const sessions = [];
+        for (const vid of visitanteSet) {
+          let lead = null;
+          const leadRes = await sbFetch(
+            `alicia_leads?visitante_id=eq.${encodeURIComponent(vid)}&select=nombre,telefono,email,audio_interes,tier,mensajes_count,updated_at&limit=1`,
+            { method: 'GET' }
+          );
+          if (leadRes.ok && Array.isArray(leadRes.data) && leadRes.data[0]) lead = leadRes.data[0];
+
+          const convRes = await sbFetch(
+            `alicia_conversaciones?visitante_id=eq.${encodeURIComponent(vid)}&select=id,tier,audio_mencionado,mensajes_count,created_at,updated_at&order=created_at.desc&limit=50`,
+            { method: 'GET' }
+          );
+          const convs = convRes.ok && Array.isArray(convRes.data) ? convRes.data : [];
+
+          if (!convs.length) {
+            sessions.push({ visitante_id: vid, lead, conversation: null, messages: [] });
+            continue;
+          }
+
+          for (const conv of convs) {
+            const msgRes = await sbFetch(
+              `alicia_mensajes?conversacion_id=eq.${encodeURIComponent(conv.id)}&select=id,rol,contenido,created_at&order=created_at.asc&limit=500`,
+              { method: 'GET' }
+            );
+            sessions.push({
+              visitante_id: vid,
+              lead,
+              conversation: conv,
+              messages: msgRes.ok && Array.isArray(msgRes.data) ? msgRes.data : [],
+            });
+          }
+        }
+
+        return {
+          statusCode: 200,
+          headers,
+          body: JSON.stringify({
+            ok: true,
+            code,
+            activations,
+            visitantes: Array.from(visitanteSet),
+            sessions,
+            message_count: sessions.reduce((n, s) => n + (s.messages ? s.messages.length : 0), 0),
+          }),
+        };
+      }
+
+      const listReferrals = qs.referrals === '1';
       if (listReferrals) {
         const refRes = await sbFetch(
           'erior_referidos?select=id,ref_code,owner_name,owner_contact,hit_count,lead_count,conversion_count,active,created_at,premium_code_id,notes&order=created_at.desc&limit=200',
