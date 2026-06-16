@@ -224,7 +224,7 @@ Esta persona ya eligio transformarse. Tu trabajo es estar presente, acompanar y 
 
 ESTILO: SOLO texto limpio. NUNCA asteriscos, negritas, markdown, # ni **.`;
 
-const { verifyPremiumCodeId } = require('./premium-lib');
+const { verifyPremiumCodeId, consumePremiumMessage } = require('./premium-lib');
 
 var AUDIO_MENTION_KEYS=[
   'wonderland coherence','emergency 999','master abundance','mesmerizing love','amor propio magic',
@@ -376,6 +376,38 @@ exports.handler = async (event) => {
       usePremium = false;
     }
   }
+
+  if (usePremium) {
+    try {
+      const quota = await consumePremiumMessage(
+        String(body.visitanteId || ''),
+        String(body.premiumCodeId || '')
+      );
+      if (!quota.ok) {
+        return {
+          statusCode: 429,
+          headers,
+          body: JSON.stringify({
+            error: quota.blocked
+              ? 'Has alcanzado tu límite diario Premium. Vuelve cuando se reinicie tu acceso.'
+              : 'Límite diario Premium alcanzado',
+            premiumQuota: quota,
+            premiumBlocked: true,
+          }),
+        };
+      }
+    } catch (quotaErr) {
+      console.error('premium quota:', quotaErr.message);
+      return {
+        statusCode: 503,
+        headers,
+        body: JSON.stringify({
+          error: 'No se pudo verificar tu cuota Premium. Intenta en un momento.',
+        }),
+      };
+    }
+  }
+
   const sessionCtx = buildSessionContext(body, usePremium);
   const systemBlocks = buildSystemBlocks(usePremium, sessionCtx);
 

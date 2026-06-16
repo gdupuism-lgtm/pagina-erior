@@ -301,6 +301,167 @@ function checkAdminKey(event) {
   return got === expected;
 }
 
+const PREMIUM_QUOTA_TZ = 'America/Mexico_City';
+const PREMIUM_BLOCK_MS = 24 * 60 * 60 * 1000;
+
+function getPremiumDailyLimit() {
+  const n = parseInt(process.env.ALICIA_PREMIUM_DAILY_LIMIT, 10);
+  return Number.isFinite(n) && n > 0 ? n : 15;
+}
+
+function getMexicoDayKey(date) {
+  return new Intl.DateTimeFormat('en-CA', {
+    timeZone: PREMIUM_QUOTA_TZ,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(date || new Date());
+}
+
+async function fetchPremiumUsageRow(visitanteId) {
+  const vid = String(visitanteId || '').slice(0, 80);
+  if (!vid) return null;
+  const res = await sbFetch(
+    `alicia_premium_usage?visitante_id=eq.${encodeURIComponent(vid)}&select=visitante_id,code_id,day_key,messages_today,blocked_until,last_message_at&limit=1`,
+    { method: 'GET' }
+  );
+  if (!res.ok || !Array.isArray(res.data) || !res.data[0]) return null;
+  return res.data[0];
+}
+
+function buildQuotaPayload(row, now) {
+  const limit = getPremiumDailyLimit();
+  const dayKey = getMexicoDayKey(now);
+  const blockedUntil = row && row.blocked_until ? new Date(row.blocked_until) : null;
+
+  if (blockedUntil && blockedUntil > now) {
+    return {
+      allowed: false,
+      blocked: true,
+      blocked_until: blockedUntil.toISOString(),
+      remaining: 0,
+      used_today: row && row.day_key === dayKey ? row.messages_today || 0 : 0,
+      daily_limit: limit,
+      limit,
+    };
+  }
+
+  const usedToday =
+    row && row.day_key === dayKey ? Math.max(0, row.messages_today || 0) : 0;
+  const remaining = Math.max(0, limit - usedToday);
+
+  return {
+    allowed: remaining > 0,
+    blocked: false,
+    blocked_until: null,
+    remaining,
+    used_today: usedToday,
+    daily_limit: limit,
+    limit,
+  };
+}
+
+async function getPremiumQuotaStatus(visitanteId) {
+  const row = await fetchPremiumUsageRow(visitanteId);
+  return buildQuotaPayload(row, new Date());
+}
+
+async function upsertPremiumUsage(visitanteId, patch) {
+  const vid = String(visitanteId || '').slice(0, 80);
+  if (!vid) return false;
+  const now = new Date().toISOString();
+  const row = await fetchPremiumUsageRow(vid);
+  const payload = Object.assign({ updated_at: now }, patch || {});
+
+  if (row) {
+    const res = await sbFetch(`alicia_premium_usage?visitante_id=eq.${encodeURIComponent(vid)}`, {
+      method: 'PATCH',
+      headers: { Prefer: 'return=minimal' },
+      body: JSON.stringify(payload),
+    });
+    return res.ok;
+  }
+
+  const ins = await sbFetch('alicia_premium_usage', {
+    method: 'POST',
+    headers: { Prefer: 'return=minimal' },
+    body: JSON.stringify([
+      Object.assign(
+        {
+          visitante_id: vid,
+          day_key: getMexicoDayKey(),
+          messages_today: 0,
+        },
+        payload
+      ),
+    ]),
+  });
+  return ins.ok;
+}
+
+async function consumePremiumMessage(visitanteId, codeId) {
+  const vid = String(visitanteId || '').slice(0, 80);
+  if (!vid) {
+    return {
+      ok: false,
+      allowed: false,
+      blocked: true,
+      error: 'Sesión inválida',
+      daily_limit: getPremiumDailyLimit(),
+      limit: getPremiumDailyLimit(),
+      remaining: 0,
+    };
+  }
+
+  const now = new Date();
+  const dayKey = getMexicoDayKey(now);
+  const limit = getPremiumDailyLimit();
+  const row = await fetchPremiumUsageRow(vid);
+  const status = buildQuotaPayload(row, now);
+
+  if (!status.allowed) {
+    return Object.assign({ ok: false, error: 'Límite diario Premium alcanzado' }, status);
+  }
+
+  const prevUsed = row && row.day_key === dayKey ? row.messages_today || 0 : 0;
+  const nextUsed = prevUsed + 1;
+  const blockedUntil =
+    nextUsed >= limit ? new Date(now.getTime() + PREMIUM_BLOCK_MS).toISOString() : null;
+
+  const saved = await upsertPremiumUsage(vid, {
+    code_id: codeId ? String(codeId).trim() : row && row.code_id ? row.code_id : null,
+    day_key: dayKey,
+    messages_today: nextUsed,
+    blocked_until: blockedUntil,
+    last_message_at: now.toISOString(),
+  });
+
+  if (!saved) {
+    return {
+      ok: false,
+      allowed: false,
+      blocked: false,
+      error: 'No se pudo registrar la cuota',
+      daily_limit: limit,
+      limit,
+      remaining: Math.max(0, limit - nextUsed),
+      used_today: nextUsed,
+    };
+  }
+
+  return {
+    ok: true,
+    allowed: true,
+    blocked: !!blockedUntil,
+    blocked_until: blockedUntil,
+    daily_limit: limit,
+    limit,
+    used_today: nextUsed,
+    remaining: Math.max(0, limit - nextUsed),
+    limit_reached: !!blockedUntil,
+  };
+}
+
 module.exports = {
   corsHeaders,
   getSupabaseConfig,
@@ -312,6 +473,9 @@ module.exports = {
   verifyPremiumCodeId,
   revokeActivationsForCode,
   checkPremiumStatus,
+  getPremiumQuotaStatus,
+  consumePremiumMessage,
+  getPremiumDailyLimit,
   fetchReferralByCode,
   createReferralForPremiumCode,
   trackReferralHit,

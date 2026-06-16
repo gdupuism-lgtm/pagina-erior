@@ -7,6 +7,8 @@ const {
   getSupabaseConfig,
   validateAndActivateCode,
   checkPremiumStatus,
+  verifyPremiumCodeId,
+  getPremiumQuotaStatus,
 } = require('./premium-lib');
 
 exports.handler = async (event) => {
@@ -40,6 +42,28 @@ exports.handler = async (event) => {
   }
 
   try {
+    if (body.quota === true) {
+      const vid = String(body.visitante_id || '').slice(0, 80);
+      if (!vid) {
+        return {
+          statusCode: 400,
+          headers,
+          body: JSON.stringify({ ok: false, error: 'Falta visitante_id' }),
+        };
+      }
+      const codeId = String(body.code_id || '').trim();
+      let active = false;
+      if (codeId) {
+        active = await verifyPremiumCodeId(codeId, vid);
+      }
+      const quota = await getPremiumQuotaStatus(vid);
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify(Object.assign({ ok: true, active }, quota)),
+      };
+    }
+
     if (body.check === true && body.code_id) {
       const status = await checkPremiumStatus(body.code_id, body.visitante_id);
       return {

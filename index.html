@@ -1016,6 +1016,16 @@ body::before{
   font-size:.72rem;line-height:1.45;color:rgba(255,200,160,.95);
   background:rgba(180,80,40,.15);border:1px solid rgba(255,140,80,.25);
 }
+.alicia-premium-quota-banner{
+  margin:.45rem .65rem 0;padding:.55rem .75rem;border-radius:10px;
+  font-size:.68rem;line-height:1.45;color:rgba(201,220,255,.92);
+  background:rgba(60,100,180,.12);border:1px solid rgba(120,160,255,.22);
+}
+.alicia-premium-quota-banner.is-blocked{
+  color:rgba(255,200,160,.95);
+  background:rgba(180,80,40,.15);border-color:rgba(255,140,80,.25);
+}
+.chat-in:disabled,.chat-send:disabled{opacity:.45;cursor:not-allowed}
 .alicia-sales-sparkle{
   position:absolute;inset:0;width:100%;height:100%;
   pointer-events:none;z-index:4;opacity:0;
@@ -3866,6 +3876,9 @@ body::before{
               <button type="button" class="alicia-lead-save" onclick="saveAliciaLeadFields()">Guardar</button>
               <p class="alicia-lead-hint">Tus datos nos ayudan a darte mejor seguimiento si quieres un audio o hablar con Pauline.</p>
             </div>
+            <div class="alicia-premium-quota-banner" id="aliciaPremiumQuotaBanner" hidden>
+              <span id="aliciaPremiumQuotaText"></span>
+            </div>
             <div class="alicia-premium-revoked-banner" id="aliciaPremiumRevokedBanner" hidden>
               Tu acceso Premium fue desactivado. Puedes seguir en Alicia gratis o contactarnos por WhatsApp.
             </div>
@@ -5625,6 +5638,8 @@ var ALICIA_FN='/.netlify/functions/claude';
 var ALICIA_MODE_KEY='alicia_mode';
 var ALICIA_PREMIUM_EXPIRES_KEY='alicia_premium_expires';
 var ALICIA_PREMIUM_DAYS=30;
+var ALICIA_PREMIUM_DAILY_LIMIT=15;
+var aliciaPremiumQuota={limit:ALICIA_PREMIUM_DAILY_LIMIT,remaining:ALICIA_PREMIUM_DAILY_LIMIT,used_today:0,blocked:false,blocked_until:null};
 var hist=[];
 var aliciaChatStarted=false;
 var aliciaParticlesStarted=false;
@@ -5798,9 +5813,104 @@ function getAliciaStoredMode(){
 function hasAliciaModeChosen(){
   return isAliciaPremiumActive()||getAliciaStoredMode()==='free';
 }
+function formatPremiumBlockedUntil(iso){
+  if(!iso)return '';
+  try{
+    return new Date(iso).toLocaleString('es-MX',{
+      timeZone:'America/Mexico_City',
+      weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'
+    });
+  }catch(e){return '';}
+}
+function getPremiumLimitBlockMessage(q){
+  q=q||aliciaPremiumQuota||{};
+  var when=formatPremiumBlockedUntil(q.blocked_until);
+  if(when){
+    return 'Has usado tus '+((q.daily_limit||ALICIA_PREMIUM_DAILY_LIMIT))+' mensajes Premium de hoy. Tu acceso se reactiva el '+when+' (hora CDMX). Mientras tanto puedes escribirnos por WhatsApp si necesitas apoyo 💛';
+  }
+  return 'Has alcanzado tu límite diario de mensajes Premium. Vuelve en 24 horas o escríbenos por WhatsApp 💛';
+}
+function getAliciaPremiumWelcomeMessage(q){
+  q=q||aliciaPremiumQuota||{};
+  var limit=q.daily_limit||q.limit||ALICIA_PREMIUM_DAILY_LIMIT;
+  var remaining=(q.remaining!=null)?q.remaining:limit;
+  return 'Bienvenid@ a Alicia Premium ✨ Has entrado a un espacio que no es para todos. Aquí no vendemos — aquí vemos.\n\n📊 Tu acceso incluye hasta '+limit+' mensajes por día. Hoy te quedan '+remaining+'. Si los usas todos, el chat se pausa 24 horas y luego vuelves con mensajes nuevos.\n\nCuéntame qué sientes de verdad, sin filtro. Voy a escucharte desde un lugar que la mayoría no alcanza a ver. 🌙';
+}
+function updatePremiumQuotaUI(){
+  var banner=document.getElementById('aliciaPremiumQuotaBanner');
+  var text=document.getElementById('aliciaPremiumQuotaText');
+  var inp=document.getElementById('chatIn');
+  var sendBtn=document.querySelector('.chat-send');
+  if(!isAliciaPremiumActive()){
+    if(banner)banner.hidden=true;
+    if(inp)inp.disabled=false;
+    if(sendBtn)sendBtn.disabled=false;
+    return;
+  }
+  var q=aliciaPremiumQuota||{};
+  var limit=q.daily_limit||q.limit||ALICIA_PREMIUM_DAILY_LIMIT;
+  if(banner&&text){
+    banner.hidden=false;
+    if(q.blocked){
+      banner.className='alicia-premium-quota-banner is-blocked';
+      text.textContent=getPremiumLimitBlockMessage(q);
+    }else{
+      banner.className='alicia-premium-quota-banner';
+      text.textContent='Premium: te quedan '+Math.max(0,q.remaining!=null?q.remaining:limit)+' de '+limit+' mensajes hoy.';
+    }
+  }
+  var locked=!!q.blocked;
+  if(inp){
+    inp.disabled=locked;
+    inp.placeholder=locked?'Límite diario alcanzado — vuelve más tarde':'¿Qué quieres transformar hoy?';
+  }
+  if(sendBtn)sendBtn.disabled=locked;
+}
+async function fetchPremiumQuota(){
+  if(!isAliciaPremiumActive())return null;
+  try{
+    var r=await fetch(PREMIUM_VALIDATE_FN,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        quota:true,
+        visitante_id:getVisitanteId(),
+        code_id:getAliciaPremiumCodeId()
+      })
+    });
+    var data=await r.json().catch(function(){return{};});
+    if(r.ok&&data.ok){
+      aliciaPremiumQuota={
+        limit:data.daily_limit||data.limit||ALICIA_PREMIUM_DAILY_LIMIT,
+        daily_limit:data.daily_limit||data.limit||ALICIA_PREMIUM_DAILY_LIMIT,
+        remaining:data.remaining!=null?data.remaining:0,
+        used_today:data.used_today||0,
+        blocked:!!data.blocked,
+        blocked_until:data.blocked_until||null,
+        active:data.active!==false
+      };
+      updatePremiumQuotaUI();
+      return aliciaPremiumQuota;
+    }
+  }catch(e){}
+  return null;
+}
+function applyPremiumQuotaFromServer(data){
+  if(!data||!data.premiumQuota)return;
+  var q=data.premiumQuota;
+  aliciaPremiumQuota={
+    limit:q.daily_limit||q.limit||ALICIA_PREMIUM_DAILY_LIMIT,
+    daily_limit:q.daily_limit||q.limit||ALICIA_PREMIUM_DAILY_LIMIT,
+    remaining:q.remaining!=null?q.remaining:0,
+    used_today:q.used_today||0,
+    blocked:!!q.blocked,
+    blocked_until:q.blocked_until||null
+  };
+  updatePremiumQuotaUI();
+}
 function getAliciaWelcomeMessage(){
   if(isAliciaPremiumActive()){
-    return 'Bienvenid@ a Alicia Premium ✨ Has entrado a un espacio que no es para todos. Aqui no vendemos — aqui vemos. Tu subconsciente ya sabe por que llegaste. Lo que vas a decir a continuacion no es casualidad: es tu sistema pidiendo salir de un loop. Cuéntame que sientes de verdad, sin filtro. Voy a escucharte desde un lugar que la mayoria no alcanza a ver. 🌙';
+    return getAliciaPremiumWelcomeMessage(aliciaPremiumQuota);
   }
   var ref=getReferralCode();
   if(ref){
@@ -5885,6 +5995,7 @@ function enterAliciaChat(){
   var banner=document.getElementById('aliciaPremiumRevokedBanner');
   if(banner&&isAliciaPremiumActive())banner.hidden=true;
   populateAliciaLeadForm();
+  if(isAliciaPremiumActive())fetchPremiumQuota();
   updateAliciaTierBadge();
   updateAliciaTagline();
 }
@@ -5913,13 +6024,26 @@ function updateAliciaTierBadge(){
 function startAliciaChatSession(){
   var win=document.getElementById('chatWin');
   if(win&&win.children.length)return;
-  ensureAliciaConversation().then(function(){
+  var begin=function(){
+    if(isAliciaPremiumActive()&&aliciaPremiumQuota&&aliciaPremiumQuota.blocked){
+      addMsg('b',getPremiumLimitBlockMessage(aliciaPremiumQuota));
+      updatePremiumQuotaUI();
+      aliciaChatStarted=true;
+      return;
+    }
     var welcome=getAliciaWelcomeMessage();
     addMsg('b',welcome);
     if(!hist.length)hist.push({role:'assistant',content:welcome});
     logAliciaCrmMessage('assistant',welcome);
     aliciaChatStarted=true;
-  });
+    updatePremiumQuotaUI();
+  };
+  if(isAliciaPremiumActive()){
+    fetchPremiumQuota().then(begin);
+    ensureAliciaConversation().catch(function(){});
+    return;
+  }
+  ensureAliciaConversation().then(begin);
 }
 function startAliciaFree(){
   try{
@@ -6643,6 +6767,13 @@ function aliciaPaulineWA(){
 async function sendMsg(){
   var inp=document.getElementById('chatIn');
   var txt=inp.value.trim();if(!txt)return;
+  if(isAliciaPremiumActive()){
+    var q=await fetchPremiumQuota();
+    if(q&&q.blocked){
+      addMsg('b',getPremiumLimitBlockMessage(q));
+      return;
+    }
+  }
   syncAliciaLeadFieldsToClient();
   inp.value='';addMsg('u',txt);hist.push({role:'user',content:txt});
   logAliciaCrmMessage('user',txt);
@@ -6679,6 +6810,15 @@ async function sendMsg(){
       clearAliciaPremiumLocal();
       addMsg('b','Tu acceso Premium fue desactivado. Puedes seguir en Alicia gratis o contactarnos por WhatsApp 💛');
     }
+    if(r.status===429||data.premiumBlocked){
+      applyPremiumQuotaFromServer(data);
+      hist.pop();
+      var win=document.getElementById('chatWin');
+      if(win&&win.lastElementChild)win.removeChild(win.lastElementChild);
+      addMsg('b',getPremiumLimitBlockMessage(data.premiumQuota||aliciaPremiumQuota));
+      sendBtn.disabled=false;
+      return;
+    }
     if(!r.ok){
       var errTxt=(data&&data.error)?String(data.error):('Error '+r.status);
       addMsg('b','Alicia no pudo responder ahora: '+errTxt+'. Si estás en tu computadora, prueba con `netlify dev` o revisa que el sitio esté en Netlify con ANTHROPIC_API_KEY configurada 💜');
@@ -6687,6 +6827,7 @@ async function sendMsg(){
       reply=stripAliciaChatImages(normalizeAliciaPromoReply(reply,txt));
       addMsg('b',reply);hist.push({role:'assistant',content:reply});
       logAliciaCrmMessage('assistant',reply);
+      if(isAliciaPremiumActive())fetchPremiumQuota();
       if(isSalesCloseMoment(reply)){triggerSalesSparkle();var qp=document.getElementById('aliciaQuieroPagar');if(qp)qp.style.display='flex';}
     }
   }catch(e){
