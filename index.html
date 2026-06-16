@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <title>ERIOR CENTER — Audios Binaurales para Manifestación, Amor Propio y Abundancia | She Is Magique</title>
-<!-- build: ui-premium-v11-glass3d-vip-tornasol -->
+<!-- build: ui-premium-v12-nebula-matrix-bg -->
 <meta name="description" content="Audios binaurales personalizados para reprogramar tu subconsciente. Atrae dinero, amor, belleza y transforma tu vida. Más de 25 audios de manifestación disponibles. Envío digital a todo el mundo.">
 <meta name="keywords" content="audios binaurales, subliminal, manifestación, amor propio, abundancia, dinero, reprogramación subconsciente, audio personalizado, She Is Magique, Erior Center, México, Latinoamérica, despertar, consciencia, atraer pareja, mejorar finanzas">
 <meta name="author" content="She Is Magique · Erior Center">
@@ -148,6 +148,10 @@ body::before{
    COSMOS CANVAS (original stars)
 ══════════════════════════════════ */
 #cosmos{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
+#matrixRain{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  opacity:.55;mix-blend-mode:screen;
+}
 
 /* ══════════════════════════════════
    FULLSCREEN MENU
@@ -3243,7 +3247,7 @@ body::before{
 .cover-promo-jewel .promo-countdown-unit{min-width:2.75rem}
 
 .cover-hero-glass{
-  position:relative;isolation:isolate;
+  position:relative;isolation:isolate;overflow:hidden;
   width:100%;max-width:min(580px,96vw)!important;
   margin:0 auto;
   padding:clamp(1rem,3.2vw,1.35rem) clamp(.85rem,3vw,1.2rem) clamp(1.1rem,3vw,1.25rem);
@@ -3270,7 +3274,12 @@ body::before{
   content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:0;
   background:radial-gradient(ellipse 80% 55% at 50% 0%,rgba(255,255,255,.06) 0%,transparent 58%);
 }
-.cover-hero-glass > *{position:relative;z-index:1}
+.hero-nebula-canvas{
+  position:absolute;inset:0;width:100%;height:100%;
+  border-radius:inherit;pointer-events:none;z-index:0;
+  opacity:.92;
+}
+.cover-hero-glass > *:not(.hero-nebula-canvas){position:relative;z-index:1}
 
 .cover-hero-glass .btn-metallic.btn-liquid{
   border-radius:980px;
@@ -3400,7 +3409,7 @@ body::before{
     transform:none!important;
     will-change:auto!important;
   }
-  #cosmos,#opalLayer{display:none!important}
+  #cosmos,#opalLayer,#matrixRain{display:none!important}
   .page#page-cover .logo-wrap{animation:none!important}
   .page#page-cover .cover-title{
     animation:none!important;
@@ -3484,6 +3493,7 @@ body::before{
   .pay-promo-popup.visible{animation:none;opacity:1;transform:translateX(-50%) translateY(0) scale(1);}
   .pay-promo-kicker{animation:none;background-position:50% 50%;}
   .fsm-erior-vip-btn{animation:none!important;background-position:42% 58%,45% 45%,0 0!important}
+  #matrixRain,.hero-nebula-canvas{display:none!important}
 }
 
 </style>
@@ -3493,6 +3503,7 @@ body::before{
 </head>
 <body>
 <canvas id="cosmos"></canvas>
+<canvas id="matrixRain" aria-hidden="true"></canvas>
 <div id="opalLayer"></div>
 <!-- FULLSCREEN MENU -->
 <button id="menuBtn" onclick="toggleMenu()">
@@ -3637,6 +3648,7 @@ body::before{
       </div>
 
       <div id="coverHeroZone" class="cover-hero-glass">
+        <canvas class="hero-nebula-canvas" id="heroNebulaCanvas" aria-hidden="true"></canvas>
         <div id="coverHeroRow">
           <div class="cover-mj-col">
             <div id="mjHeroBlock" aria-hidden="true">
@@ -4445,6 +4457,148 @@ function closeChatPromoLightbox(){
   }
   resize();init();draw();
   window.addEventListener('resize',function(){resize();init();});
+})();
+
+// ══════════════════════════════════
+// MATRIX RAIN — fondo global muy sutil
+// ══════════════════════════════════
+(function(){
+  var c=document.getElementById('matrixRain');
+  if(!c)return;
+  var lite=window.matchMedia('(max-width:767px)').matches
+    ||window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  if(lite){c.style.display='none';return;}
+  var ctx=c.getContext('2d');
+  var chars='ERIORCENTER0123456789アイウエオカキクケコサシスセソタチツテト';
+  var fontSize=12;
+  var columns=0,drops=[],frame=0;
+
+  function resize(){
+    c.width=innerWidth;c.height=innerHeight;
+    columns=Math.ceil(c.width/fontSize);
+    drops.length=0;
+    for(var i=0;i<columns;i++)drops[i]=Math.random()*-120;
+  }
+
+  function draw(){
+    frame++;
+    if(document.hidden){
+      requestAnimationFrame(draw);
+      return;
+    }
+    ctx.fillStyle='rgba(12,11,18,0.07)';
+    ctx.fillRect(0,0,c.width,c.height);
+    ctx.font='500 '+fontSize+'px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace';
+    for(var i=0;i<columns;i++){
+      if(frame%3!==i%3)continue;
+      var ch=chars.charAt(Math.floor(Math.random()*chars.length));
+      var x=i*fontSize;
+      var y=drops[i]*fontSize;
+      var a=Math.random()*0.035+0.018;
+      ctx.shadowColor='rgba(255,255,255,0.12)';
+      ctx.shadowBlur=3;
+      ctx.fillStyle='rgba(255,255,255,'+a+')';
+      ctx.fillText(ch,x,y);
+      ctx.shadowBlur=0;
+      if(y>c.height&&Math.random()>0.985)drops[i]=Math.random()*-40;
+      drops[i]+=0.22+Math.random()*0.18;
+    }
+    requestAnimationFrame(draw);
+  }
+  resize();draw();
+  window.addEventListener('resize',resize);
+})();
+
+// ══════════════════════════════════
+// HERO GLASS — nebulosa / estrellas cayendo (solo recuadro)
+// ══════════════════════════════════
+(function(){
+  var wrap=document.getElementById('coverHeroZone');
+  var cv=document.getElementById('heroNebulaCanvas');
+  if(!wrap||!cv)return;
+  if(window.matchMedia('(prefers-reduced-motion:reduce)').matches){
+    cv.style.display='none';
+    return;
+  }
+  var ctx=cv.getContext('2d');
+  var particles=[];
+  var mobile=window.matchMedia('(max-width:767px)').matches;
+  var count=mobile?12:26;
+
+  function isCoverActive(){
+    var p=document.getElementById('page-cover');
+    return p&&p.classList.contains('active');
+  }
+
+  function size(){
+    var w=wrap.clientWidth,h=wrap.clientHeight;
+    if(w<2||h<2)return;
+    var dpr=Math.min(window.devicePixelRatio||1,2);
+    cv.width=Math.floor(w*dpr);
+    cv.height=Math.floor(h*dpr);
+    cv.style.width=w+'px';
+    cv.style.height=h+'px';
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+  }
+
+  function spawn(fullHeight){
+    return{
+      x:Math.random()*(wrap.clientWidth||300),
+      y:fullHeight?Math.random()*(wrap.clientHeight||200):-Math.random()*40-4,
+      r:Math.random()*1.6+0.35,
+      vy:Math.random()*0.28+0.1,
+      vx:(Math.random()-0.5)*0.1,
+      a:Math.random()*0.22+0.06,
+      hue:[265,285,210,195,320][Math.floor(Math.random()*5)],
+      tw:Math.random()*Math.PI*2,
+      ts:Math.random()*0.018+0.006,
+      glow:Math.random()<0.14
+    };
+  }
+
+  function init(){
+    particles=[];
+    for(var i=0;i<count;i++)particles.push(spawn(true));
+  }
+
+  function draw(){
+    if(document.hidden||!isCoverActive()){
+      requestAnimationFrame(draw);
+      return;
+    }
+    var w=wrap.clientWidth,h=wrap.clientHeight;
+    ctx.clearRect(0,0,w,h);
+    for(var i=0;i<particles.length;i++){
+      var p=particles[i];
+      p.y+=p.vy;p.x+=p.vx;p.tw+=p.ts;
+      var flick=0.55+Math.sin(p.tw)*0.45;
+      var alpha=p.a*flick;
+      if(p.glow){
+        var g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*5);
+        g.addColorStop(0,'hsla('+p.hue+',72%,82%,'+alpha*0.2+')');
+        g.addColorStop(0.45,'hsla('+p.hue+',65%,75%,'+alpha*0.06+')');
+        g.addColorStop(1,'hsla('+p.hue+',60%,70%,0)');
+        ctx.fillStyle=g;
+        ctx.beginPath();ctx.arc(p.x,p.y,p.r*5,0,Math.PI*2);ctx.fill();
+      }
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle='hsla('+p.hue+',48%,92%,'+alpha+')';
+      ctx.fill();
+      if(p.y>h+10||p.x<-8||p.x>w+8)particles[i]=spawn(false);
+    }
+    requestAnimationFrame(draw);
+  }
+
+  size();init();draw();
+  window.addEventListener('resize',function(){size();init();});
+  if(typeof ResizeObserver!=='undefined'){
+    new ResizeObserver(function(){size();}).observe(wrap);
+  }
+  var cover=document.getElementById('page-cover');
+  if(cover){
+    new MutationObserver(function(){if(isCoverActive())init();})
+      .observe(cover,{attributes:true,attributeFilter:['class']});
+  }
 })();
 
 // ══════════════════════════════════
