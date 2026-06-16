@@ -9,7 +9,7 @@
 const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
 const ANTHROPIC_VERSION = '2023-06-01';
 const MODEL = process.env.ANTHROPIC_MODEL || 'claude-haiku-4-5-20251001';
-const MODEL_PREMIUM = process.env.ANTHROPIC_MODEL_PREMIUM || 'claude-sonnet-4-20250514';
+const MODEL_PREMIUM = process.env.ANTHROPIC_MODEL_PREMIUM || 'claude-sonnet-4-6';
 const MAX_TOKENS_FREE = 640;
 const MAX_TOKENS_PREMIUM = 1024;
 const MAX_HISTORY_MESSAGES = 12;
