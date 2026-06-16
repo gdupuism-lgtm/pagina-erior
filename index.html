@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <title>ERIOR CENTER — Audios Binaurales para Manifestación, Amor Propio y Abundancia | She Is Magique</title>
-<!-- build: ui-premium-v9-vip-black-glass -->
+<!-- build: ui-premium-v10-hero-sym-diamond-vip -->
 <meta name="description" content="Audios binaurales personalizados para reprogramar tu subconsciente. Atrae dinero, amor, belleza y transforma tu vida. Más de 25 audios de manifestación disponibles. Envío digital a todo el mundo.">
 <meta name="keywords" content="audios binaurales, subliminal, manifestación, amor propio, abundancia, dinero, reprogramación subconsciente, audio personalizado, She Is Magique, Erior Center, México, Latinoamérica, despertar, consciencia, atraer pareja, mejorar finanzas">
 <meta name="author" content="She Is Magique · Erior Center">
@@ -1568,7 +1568,7 @@ button.alicia-mode-premium-cta{font:inherit;width:100%;cursor:pointer}
   bottom:auto;left:auto;
   width:min(248px,22vw);
   max-width:268px;
-  display:flex;flex-direction:column;align-items:stretch;gap:.4rem;
+  display:flex;flex-direction:column;align-items:center;gap:.45rem;
   pointer-events:none;
 }
 .cover-vip-widget.is-cover-inflow{
@@ -1580,14 +1580,18 @@ button.alicia-mode-premium-cta{font:inherit;width:100%;cursor:pointer}
 .cover-vip-widget > *{pointer-events:auto}
 .cover-vip-widget.is-hidden{display:none!important}
 .fsm-erior-vip-btn{
-  width:100%;max-width:100%;
+  --vip-diamond:polygon(50% 0%,100% 50%,50% 100%,0% 50%);
+  display:flex;align-items:center;justify-content:center;
+  width:min(172px,88%);max-width:200px;
   position:relative;z-index:6;
   appearance:none;cursor:pointer;border:none;
   overflow:hidden;isolation:isolate;
-  font-family:'Cormorant Garamond',serif;font-size:clamp(.58rem,2.4vw,.68rem);font-weight:700;
-  letter-spacing:.28em;text-transform:uppercase;
+  font-family:'Cormorant Garamond',serif;font-size:clamp(.54rem,2.2vw,.64rem);font-weight:700;
+  letter-spacing:.22em;text-transform:uppercase;
   color:rgba(255,252,255,.98);
-  padding:.68rem 1.35rem;border-radius:999px;
+  padding:.78rem 1.1rem;border-radius:0;
+  clip-path:var(--vip-diamond);
+  -webkit-clip-path:var(--vip-diamond);
   background-color:transparent;
   background-repeat:no-repeat;
   background-blend-mode:overlay,soft-light,soft-light,normal;
@@ -1619,11 +1623,13 @@ button.alicia-mode-premium-cta{font:inherit;width:100%;cursor:pointer}
   touch-action:manipulation;
 }
 .fsm-erior-vip-btn::before{
-  content:'';position:absolute;top:0;left:5%;right:5%;height:52%;pointer-events:none;z-index:1;border-radius:999px 999px 50% 50%;
+  content:'';position:absolute;top:0;left:0;right:0;height:52%;pointer-events:none;z-index:1;
+  clip-path:var(--vip-diamond);-webkit-clip-path:var(--vip-diamond);
   background:linear-gradient(to bottom,rgba(255,255,255,.34) 0%,rgba(255,255,255,.08) 55%,transparent 100%);
 }
 .fsm-erior-vip-btn::after{
-  content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:2;
+  content:'';position:absolute;inset:0;pointer-events:none;z-index:2;
+  clip-path:var(--vip-diamond);-webkit-clip-path:var(--vip-diamond);
   background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.22) 50%,transparent 65%);
   transform:translateX(-120%);transition:transform .9s cubic-bezier(.22,1,.36,1);
 }
@@ -1777,7 +1783,7 @@ button.alicia-mode-premium-cta{font:inherit;width:100%;cursor:pointer}
   pointer-events:auto;
 }
 .cover-vip-slot .fsm-erior-vip-btn{
-  width:min(100%,300px);max-width:300px;
+  width:min(172px,58vw);max-width:200px;
   pointer-events:auto!important;
   touch-action:manipulation;
   position:relative;z-index:20;
@@ -2911,9 +2917,15 @@ body::before{
 .cover-actions-hero{
   position:relative;z-index:1;
   display:grid;grid-template-columns:1fr 1fr;
-  gap:clamp(.5rem,2.2vw,.65rem);
+  align-items:stretch;
+  gap:clamp(.45rem,2vw,.6rem);
   width:100%;
 }
+.cover-actions-hero .cover-action-btn{
+  width:100%;min-width:0;
+  margin:0!important;
+}
+.cover-actions-hero .btn-liquid{border-radius:14px!important}
 .cover-actions-premium .cover-action-secondary{
   position:relative;z-index:1;
   width:min(280px,72vw);margin:0 auto!important;
@@ -2924,9 +2936,10 @@ body::before{
 .btn-catalog-hero{
   position:relative;overflow:hidden;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:.22rem;
-  min-height:58px;padding:.72rem 1.15rem!important;
-  border-radius:980px!important;
+  gap:.2rem;
+  min-height:68px;height:100%;
+  padding:.62rem .75rem!important;
+  border-radius:14px!important;
   animation:btnLiquidIridescent 11s ease-in-out infinite;
   box-shadow:
     inset 0 2px 5px rgba(255,255,255,.58),
@@ -2936,19 +2949,29 @@ body::before{
     0 0 56px rgba(201,160,96,.18)!important;
 }
 .btn-catalog-hero .btn-metallic-txt{
-  font-size:clamp(.62rem,2.8vw,.72rem)!important;letter-spacing:.16em!important;
+  font-size:clamp(.58rem,2.5vw,.68rem)!important;letter-spacing:.14em!important;
+  text-align:center;line-height:1.15;
 }
 .btn-hero-badge{
-  font-family:'Jost',sans-serif;font-size:clamp(.44rem,1.8vw,.5rem);
-  font-weight:600;letter-spacing:.14em;text-transform:uppercase;
-  padding:.12rem .45rem;border-radius:999px;
+  font-family:'Jost',sans-serif;font-size:clamp(.4rem,1.65vw,.46rem);
+  font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+  padding:.1rem .38rem;border-radius:6px;
   background:rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.28);
   color:#f5e6c8;
   text-shadow:0 1px 2px rgba(0,0,0,.65);
 }
 .btn-alicia-hero{
-  min-height:58px;padding:.72rem 1rem!important;
+  min-height:68px;height:100%;
+  padding:.62rem .75rem!important;
+  border-radius:14px!important;
   display:flex;align-items:center;justify-content:center;
+  text-align:center;
+}
+.cover-actions-hero .btn-alicia-hero .btn-premium-label{
+  font-size:clamp(.58rem,2.5vw,.68rem)!important;
+  letter-spacing:.1em!important;
+  line-height:1.2;
+  text-align:center;
 }
 .btn-catalog-hero:hover,.btn-alicia-hero:hover{transform:translateY(-3px) scale(1.02)!important}
 
@@ -2990,7 +3013,7 @@ body::before{
 
 .page#page-cover .btn-alicia-glow{
   font-family:'Cormorant Garamond',serif;font-weight:700;letter-spacing:.1em;
-  text-transform:none;padding:.72rem 1.45rem;border-radius:980px;
+  text-transform:none;padding:.72rem 1.45rem;border-radius:14px;
   background-color:transparent;
   background-image:
     linear-gradient(118deg,rgba(186,130,255,.48) 0%,rgba(130,200,255,.44) 30%,rgba(255,185,210,.46) 65%,rgba(200,160,255,.48) 100%),
@@ -3301,8 +3324,7 @@ body::before{
   }
   .page#page-cover .cover-promo-jewel{order:3}
   .page#page-cover .cover-hero-glass{order:2}
-  .cover-actions-hero{grid-template-columns:1fr;gap:.55rem}
-  .btn-catalog-hero{order:-1}
+  .cover-actions-hero{grid-template-columns:1fr 1fr;gap:clamp(.4rem,2vw,.5rem)}
   .cover-actions-premium{
     width:min(360px,92vw);
     padding:clamp(.75rem,3vw,.95rem) clamp(.65rem,2.5vw,.85rem);
