@@ -189,6 +189,25 @@ exports.handler = async (event) => {
       return { statusCode: 200, headers, body: JSON.stringify({ ok: true, revoked: !active }) };
     }
 
+    if (action === 'delete') {
+      const id = body.id;
+      if (!id) {
+        return { statusCode: 400, headers, body: JSON.stringify({ ok: false, error: 'Falta id' }) };
+      }
+      const res = await sbFetch(`alicia_premium_codes?id=eq.${encodeURIComponent(id)}`, {
+        method: 'DELETE',
+        headers: { Prefer: 'return=minimal' },
+      });
+      if (!res.ok) {
+        return {
+          statusCode: 400,
+          headers,
+          body: JSON.stringify({ ok: false, error: 'No se pudo borrar el código' }),
+        };
+      }
+      return { statusCode: 200, headers, body: JSON.stringify({ ok: true, deleted: true }) };
+    }
+
     return { statusCode: 400, headers, body: JSON.stringify({ ok: false, error: 'Acción desconocida' }) };
   } catch (err) {
     return { statusCode: 500, headers, body: JSON.stringify({ ok: false, error: err.message }) };

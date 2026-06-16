@@ -23,6 +23,12 @@ input:focus,textarea:focus{outline:none;border-color:rgba(201,160,96,.5)}
 .btn-ghost{color:rgba(255,255,255,.7);background:transparent;border:1px solid rgba(255,255,255,.15)}
 .btn-danger{color:#ffb4b4;border:1px solid rgba(255,100,100,.35);background:rgba(255,80,80,.08)}
 .btn-sm{padding:.4rem .75rem;font-size:.62rem}
+.btn-delete-x{
+  min-width:1.85rem;padding:.35rem .45rem;border-radius:8px;cursor:pointer;
+  color:#ff9999;border:1px solid rgba(255,100,100,.35);background:rgba(255,60,60,.1);
+  font:inherit;font-size:.85rem;line-height:1;font-weight:600;
+}
+.btn-delete-x:hover{background:rgba(255,60,60,.22);color:#ffb4b4}
 .row-actions{display:flex;gap:.4rem;flex-wrap:wrap}
 table{width:100%;border-collapse:collapse;font-size:.72rem;margin-top:.5rem}
 th,td{text-align:left;padding:.55rem .4rem;border-bottom:1px solid rgba(255,255,255,.06);vertical-align:top}
@@ -231,6 +237,7 @@ code{font-family:ui-monospace,monospace;color:#f5e6c8;background:rgba(201,160,96
             '<button type="button" class="btn btn-ghost btn-sm" data-copy="'+c.code+'">Copiar</button>'+
             '<a class="btn btn-ghost btn-sm" href="'+escAttr(vipCardUrl(c.code,c.client_name||'Cliente'))+'" target="_blank" rel="noopener noreferrer">🎴 Ver Tarjeta VIP</a>'+
             '<button type="button" class="btn btn-danger btn-sm" data-toggle="'+c.id+'" data-active="'+(active?'0':'1')+'">'+(active?'Desactivar':'Activar')+'</button>'+
+            '<button type="button" class="btn-delete-x" data-delete="'+c.id+'" data-code="'+escAttr(c.code)+'" title="Borrar código">×</button>'+
           '</div></td>';
         tbody.appendChild(tr);
       });
@@ -239,6 +246,9 @@ code{font-family:ui-monospace,monospace;color:#f5e6c8;background:rgba(201,160,96
       });
       tbody.querySelectorAll('[data-toggle]').forEach(function(btn){
         btn.onclick=function(){toggleCode(btn.getAttribute('data-toggle'),btn.getAttribute('data-active')==='1');};
+      });
+      tbody.querySelectorAll('[data-delete]').forEach(function(btn){
+        btn.onclick=function(){deleteCode(btn.getAttribute('data-delete'),btn.getAttribute('data-code'));};
       });
     }catch(e){
       msg.textContent='Sin conexión al servidor';
@@ -340,6 +350,25 @@ code{font-family:ui-monospace,monospace;color:#f5e6c8;background:rgba(201,160,96
   async function toggleCode(id,active){
     await fetch(ADMIN_FN,{method:'POST',headers:headers(),body:JSON.stringify({action:'toggle',id:id,active:active})});
     loadCodes();
+  }
+
+  async function deleteCode(id,code){
+    var label=String(code||'').trim()||'este código';
+    if(!window.confirm('¿Borrar '+label+' por completo?\n\nSe eliminará de la tabla y ya no podrá usarse. Esta acción no se puede deshacer.'))return;
+    var msg=document.getElementById('listMsg');
+    msg.textContent='Borrando...';
+    msg.className='msg';
+    try{
+      var r=await fetch(ADMIN_FN,{method:'POST',headers:headers(),body:JSON.stringify({action:'delete',id:id})});
+      var d=await r.json();
+      if(!r.ok||!d.ok){msg.textContent=(d&&d.error)||'Error al borrar';msg.className='msg err';return;}
+      msg.textContent='✓ Código borrado';
+      msg.className='msg ok';
+      loadCodes();
+    }catch(e){
+      msg.textContent='Sin conexión al servidor';
+      msg.className='msg err';
+    }
   }
 
   document.getElementById('btnLogin').onclick=async function(){
