@@ -700,8 +700,71 @@ body::before{
 .modal-desc{font-size:.84rem;color:rgba(200,196,212,.6);line-height:1.7;margin-bottom:1.5rem}
 .modal-buy{display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;padding:.85rem;background:rgba(201,160,96,.15);border:1px solid rgba(201,160,96,.45);color:var(--gold);font-family:'Jost',sans-serif;font-size:.75rem;letter-spacing:.16em;text-transform:uppercase;text-decoration:none;transition:all .25s;cursor:pointer}
 .modal-buy:hover{background:rgba(201,160,96,.25)}
-.modal-close{position:absolute;top:.85rem;right:.85rem;background:rgba(255,255,255,.07);border:1px solid var(--border);color:var(--text2);width:1.9rem;height:1.9rem;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.85rem;transition:all .2s}
+.modal-close{position:absolute;top:.85rem;right:.85rem;background:rgba(255,255,255,.07);border:1px solid var(--border);color:var(--text2);width:1.9rem;height:1.9rem;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.85rem;transition:all .2s;z-index:5;border-radius:50%}
 .modal-close:hover{color:var(--white);border-color:rgba(255,255,255,.2)}
+#audioModal[hidden]{display:none!important}
+
+@media(max-width:767px){
+  #audioModal.modal-bg{
+    padding:0;
+    align-items:stretch;
+    justify-content:stretch;
+    z-index:9000;
+  }
+  #audioModal .modal-box{
+    max-width:none;
+    width:100%;
+    max-height:none;
+    height:100%;
+    min-height:100dvh;
+    border-radius:0;
+    border:none;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+    transform:none!important;
+  }
+  #audioModal.open .modal-box{transform:none!important}
+  #audioModal #modalImg{flex-shrink:0;line-height:0}
+  #audioModal .modal-img{
+    width:100%;
+    max-height:min(42vh,320px);
+    aspect-ratio:auto;
+    object-fit:cover;
+  }
+  #audioModal .modal-emoji{max-height:min(36vh,260px);aspect-ratio:auto;font-size:4rem}
+  #audioModal .modal-body{
+    flex:1;
+    min-height:0;
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
+    overscroll-behavior:contain;
+    padding:1.25rem 1.15rem calc(1.25rem + env(safe-area-inset-bottom,0px));
+  }
+  #audioModal .modal-name{font-size:clamp(1.45rem,5.5vw,1.85rem)}
+  #audioModal .modal-desc{font-size:.88rem;line-height:1.75;margin-bottom:1.25rem}
+  #audioModal .modal-close{
+    top:max(.65rem,env(safe-area-inset-top,0px));
+    right:.65rem;
+    width:2.65rem;
+    height:2.65rem;
+    font-size:1.15rem;
+    background:rgba(8,8,16,.72);
+    border-color:rgba(255,255,255,.22);
+    color:#fff;
+    box-shadow:0 4px 18px rgba(0,0,0,.45);
+  }
+  #audioModal .modal-buy{
+    position:sticky;
+    bottom:0;
+    margin-top:.5rem;
+    padding:1rem;
+    font-size:.78rem;
+    z-index:2;
+    background:rgba(201,160,96,.22);
+    box-shadow:0 -8px 24px rgba(0,0,0,.35);
+  }
+}
 
 /* ── PAYMENT MODAL ── */
 #payModal{z-index:5100;}
@@ -3447,7 +3510,7 @@ body::before{
 .promo-float-btn{display:none!important}
 
 @media(max-width:767px){
-  html,body{-webkit-transform:translateZ(0)}
+  /* No transform en html/body: rompe position:fixed de modales al hacer scroll */
   body::before,body::after{
     animation:none!important;
     filter:none!important;
@@ -4128,9 +4191,9 @@ body::before{
 </div>
 
 <!-- AUDIO MODAL -->
-<div class="modal-bg" id="audioModal">
+<div class="modal-bg" id="audioModal" role="dialog" aria-modal="true" aria-labelledby="modalName" hidden>
   <div class="modal-box">
-    <button class="modal-close" onclick="closeModal()">✕</button>
+    <button type="button" class="modal-close" onclick="closeModal()" aria-label="Cerrar">✕</button>
     <div id="modalImg"></div>
     <div class="modal-body">
       <div class="modal-cat" id="modalCat"></div>
@@ -5380,6 +5443,33 @@ function buildCatalog(){
 }
 
 var currentModalAudio=null;
+var pageScrollLockY=0;
+var pageScrollLockCount=0;
+
+function lockPageScroll(){
+  if(pageScrollLockCount===0){
+    pageScrollLockY=window.scrollY||document.documentElement.scrollTop||0;
+    document.body.style.position='fixed';
+    document.body.style.top='-'+pageScrollLockY+'px';
+    document.body.style.left='0';
+    document.body.style.right='0';
+    document.body.style.width='100%';
+    document.body.style.overflow='hidden';
+  }
+  pageScrollLockCount+=1;
+}
+function unlockPageScroll(){
+  if(pageScrollLockCount<=0)return;
+  pageScrollLockCount-=1;
+  if(pageScrollLockCount>0)return;
+  document.body.style.position='';
+  document.body.style.top='';
+  document.body.style.left='';
+  document.body.style.right='';
+  document.body.style.width='';
+  document.body.style.overflow='';
+  window.scrollTo(0,pageScrollLockY);
+}
 var payCurrentMethod='oxxo';
 var payCurrentProduct='';
 var PAY_WHATSAPP='5214432311761';
@@ -5561,7 +5651,7 @@ function openPaymentModal(productName){
   if(promoBtn)promoBtn.href=promoWa;
   hidePayPromoPopup();
   document.getElementById('payModal').classList.add('open');
-  document.body.style.overflow='hidden';
+  if(!document.getElementById('audioModal').classList.contains('open')&&!document.getElementById('fsMenu').classList.contains('open'))lockPageScroll();
   schedulePayPromoPopup();
   (function(){
     var prod=payCurrentProduct||'Audio Erior';
@@ -5597,7 +5687,7 @@ function closePaymentModal(){
   hidePayPromoPopup();
   document.getElementById('payModal').classList.remove('open');
   if(!document.getElementById('audioModal').classList.contains('open')&&!document.getElementById('fsMenu').classList.contains('open')){
-    document.body.style.overflow='';
+    unlockPageScroll();
   }
 }
 
@@ -5617,13 +5707,21 @@ function openModal(a,cats){
   document.getElementById('modalImg').innerHTML=a.img
     ?'<img class="modal-img" src="'+a.img+'" alt="'+modalAlt+'">'
     :'<div class="modal-emoji" role="img" aria-label="'+modalAlt+'">'+a.emoji+'</div>';
-  document.getElementById('audioModal').classList.add('open');
-  document.body.style.overflow='hidden';
+  var modalEl=document.getElementById('audioModal');
+  var modalBox=modalEl.querySelector('.modal-box');
+  var modalBody=modalEl.querySelector('.modal-body');
+  if(modalBox)modalBox.scrollTop=0;
+  if(modalBody)modalBody.scrollTop=0;
+  modalEl.hidden=false;
+  modalEl.classList.add('open');
+  lockPageScroll();
 }
 function closeModal(){
-  document.getElementById('audioModal').classList.remove('open');
+  var modalEl=document.getElementById('audioModal');
+  modalEl.classList.remove('open');
+  modalEl.hidden=true;
   if(!document.getElementById('payModal').classList.contains('open')){
-    document.body.style.overflow='';
+    unlockPageScroll();
   }
 }
 document.getElementById('audioModal').addEventListener('click',function(e){if(e.target===this)closeModal();});
