@@ -56,7 +56,7 @@ exports.handler = async (event) => {
       if (codeId) {
         active = await verifyPremiumCodeId(codeId, vid);
       }
-      const quota = await getPremiumQuotaStatus(vid);
+      const quota = await getPremiumQuotaStatus(vid, codeId);
       return {
         statusCode: 200,
         headers,

@@ -224,8 +224,6 @@ async function validateAndActivateCode(code, visitanteId) {
     }),
   });
 
-  await resetPremiumUsageForActivation(vid, row.id);
-
   return {
     ok: true,
     code_id: row.id,
@@ -413,6 +411,29 @@ async function fetchPremiumUsageRow(visitanteId) {
   return res.data[0];
 }
 
+async function fetchPremiumUsageByCode(codeId) {
+  const cid = String(codeId || '').trim();
+  if (!cid) return null;
+  const res = await sbFetch(
+    `alicia_premium_usage?code_id=eq.${encodeURIComponent(cid)}&select=visitante_id,code_id,day_key,messages_today,blocked_until,last_message_at&order=messages_today.desc,updated_at.desc&limit=1`,
+    { method: 'GET' }
+  );
+  if (!res.ok || !Array.isArray(res.data) || !res.data[0]) return null;
+  return res.data[0];
+}
+
+async function resolvePremiumUsageRow(visitanteId, codeId) {
+  const cid = String(codeId || '').trim();
+  if (cid) {
+    const byCode = await fetchPremiumUsageByCode(cid);
+    if (byCode) return byCode;
+  }
+  const byVisitor = await fetchPremiumUsageRow(visitanteId);
+  if (!byVisitor) return null;
+  if (cid && byVisitor.code_id && byVisitor.code_id !== cid) return null;
+  return byVisitor;
+}
+
 function buildQuotaPayload(row, now) {
   const limit = getPremiumDailyLimit();
   const dayKey = getMexicoDayKey(now || new Date());
@@ -458,12 +479,13 @@ function buildQuotaPayload(row, now) {
   };
 }
 
-async function getPremiumQuotaStatus(visitanteId) {
-  const row = await fetchPremiumUsageRow(visitanteId);
+async function getPremiumQuotaStatus(visitanteId, codeId) {
+  const cid = String(codeId || '').trim();
+  const row = await resolvePremiumUsageRow(visitanteId, cid);
   const now = new Date();
   const payload = buildQuotaPayload(row, now);
   if (row && row.day_key !== getMexicoDayKey(now) && (row.messages_today || row.blocked_until)) {
-    await upsertPremiumUsage(visitanteId, {
+    await upsertPremiumUsage(visitanteId, cid || row.code_id, {
       day_key: getMexicoDayKey(now),
       messages_today: 0,
       blocked_until: null,
@@ -473,9 +495,12 @@ async function getPremiumQuotaStatus(visitanteId) {
 }
 
 async function resetPremiumUsageForActivation(visitanteId, codeId) {
+  const cid = String(codeId || '').trim();
+  if (!cid) return false;
+  const existing = await fetchPremiumUsageByCode(cid);
+  if (existing) return true;
   const dayKey = getMexicoDayKey();
-  return upsertPremiumUsage(visitanteId, {
-    code_id: codeId ? String(codeId).trim() : null,
+  return upsertPremiumUsage(visitanteId, cid, {
     day_key: dayKey,
     messages_today: 0,
     blocked_until: null,
@@ -483,20 +508,43 @@ async function resetPremiumUsageForActivation(visitanteId, codeId) {
   });
 }
 
-async function upsertPremiumUsage(visitanteId, patch) {
+async function upsertPremiumUsage(visitanteId, codeId, patch) {
   const vid = String(visitanteId || '').slice(0, 80);
+  const cid = String(codeId || '').trim();
   if (!vid) return false;
   const now = new Date().toISOString();
-  const row = await fetchPremiumUsageRow(vid);
+  const row = cid ? await resolvePremiumUsageRow(vid, cid) : await fetchPremiumUsageRow(vid);
   const payload = Object.assign({ updated_at: now }, patch || {});
+  if (cid) payload.code_id = cid;
 
   if (row) {
-    const res = await sbFetch(`alicia_premium_usage?visitante_id=eq.${encodeURIComponent(vid)}`, {
+    const filter = row.code_id
+      ? `code_id=eq.${encodeURIComponent(row.code_id)}`
+      : `visitante_id=eq.${encodeURIComponent(row.visitante_id)}`;
+    const res = await sbFetch(`alicia_premium_usage?${filter}`, {
       method: 'PATCH',
       headers: { Prefer: 'return=minimal' },
       body: JSON.stringify(payload),
     });
     return res.ok;
+  }
+
+  if (!cid) {
+    const ins = await sbFetch('alicia_premium_usage', {
+      method: 'POST',
+      headers: { Prefer: 'return=minimal' },
+      body: JSON.stringify([
+        Object.assign(
+          {
+            visitante_id: vid,
+            day_key: getMexicoDayKey(),
+            messages_today: 0,
+          },
+          payload
+        ),
+      ]),
+    });
+    return ins.ok;
   }
 
   const ins = await sbFetch('alicia_premium_usage', {
@@ -506,6 +554,7 @@ async function upsertPremiumUsage(visitanteId, patch) {
       Object.assign(
         {
           visitante_id: vid,
+          code_id: cid,
           day_key: getMexicoDayKey(),
           messages_today: 0,
         },
@@ -518,6 +567,7 @@ async function upsertPremiumUsage(visitanteId, patch) {
 
 async function consumePremiumMessage(visitanteId, codeId) {
   const vid = String(visitanteId || '').slice(0, 80);
+  const cid = String(codeId || '').trim();
   if (!vid) {
     return {
       ok: false,
@@ -529,11 +579,22 @@ async function consumePremiumMessage(visitanteId, codeId) {
       remaining: 0,
     };
   }
+  if (!cid) {
+    return {
+      ok: false,
+      allowed: false,
+      blocked: true,
+      error: 'Código Premium inválido',
+      daily_limit: getPremiumDailyLimit(),
+      limit: getPremiumDailyLimit(),
+      remaining: 0,
+    };
+  }
 
   const now = new Date();
   const dayKey = getMexicoDayKey(now);
   const limit = getPremiumDailyLimit();
-  const row = await fetchPremiumUsageRow(vid);
+  const row = await resolvePremiumUsageRow(vid, cid);
   const status = buildQuotaPayload(row, now);
 
   if (!status.allowed) {
@@ -549,8 +610,7 @@ async function consumePremiumMessage(visitanteId, codeId) {
   const blockedUntil =
     nextUsed >= limit ? new Date(now.getTime() + PREMIUM_BLOCK_MS).toISOString() : null;
 
-  const saved = await upsertPremiumUsage(vid, {
-    code_id: codeId ? String(codeId).trim() : row && row.code_id ? row.code_id : null,
+  const saved = await upsertPremiumUsage(vid, cid, {
     day_key: dayKey,
     messages_today: nextUsed,
     blocked_until: blockedUntil,

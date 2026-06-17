@@ -385,7 +385,7 @@ exports.handler = async (event) => {
 
   if (usePremium) {
     try {
-      const quotaCheck = await getPremiumQuotaStatus(premiumVisitanteId);
+      const quotaCheck = await getPremiumQuotaStatus(premiumVisitanteId, premiumCodeId);
       if (!quotaCheck.allowed) {
         return {
           statusCode: 429,
