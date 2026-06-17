@@ -764,10 +764,41 @@ body::before{
     background:rgba(201,160,96,.22);
     box-shadow:0 -8px 24px rgba(0,0,0,.35);
   }
+  #payModal.modal-bg{
+    padding:0;
+    align-items:stretch;
+    justify-content:stretch;
+    z-index:9200;
+  }
+  #payModal .pay-modal-box{
+    max-width:none;
+    width:100%;
+    max-height:none;
+    height:100%;
+    min-height:100dvh;
+    border-radius:0;
+    border:none;
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
+    overscroll-behavior:contain;
+    transform:none!important;
+  }
+  #payModal.open .pay-modal-box{transform:none!important}
+  #payModal .modal-close{
+    top:max(.65rem,env(safe-area-inset-top,0px));
+    right:.65rem;
+    width:2.65rem;
+    height:2.65rem;
+    font-size:1.15rem;
+    background:rgba(8,8,16,.72);
+    border-color:rgba(255,255,255,.22);
+    color:#fff;
+    box-shadow:0 4px 18px rgba(0,0,0,.45);
+  }
 }
 
 /* ── PAYMENT MODAL ── */
-#payModal{z-index:5100;}
+#payModal{z-index:9200;}
 .pay-modal-box{
   max-width:560px;border-radius:12px;
   background:linear-gradient(165deg,#1a1b24 0%,#12131a 55%,#181920 100%);
@@ -783,7 +814,7 @@ body::before{
 }
 .pay-promo-popup{
   position:fixed;left:50%;bottom:max(1.25rem,env(safe-area-inset-bottom));
-  width:min(420px,calc(100vw - 2rem));z-index:5200;
+  width:min(420px,calc(100vw - 2rem));z-index:9300;
   padding:1.15rem 1.2rem 1.2rem;border-radius:16px;text-align:center;
   background:linear-gradient(135deg,rgba(201,160,96,.22) 0%,rgba(155,109,255,.18) 50%,rgba(37,211,102,.12) 100%);
   border:1px solid rgba(201,160,96,.5);
@@ -5650,7 +5681,10 @@ function openPaymentModal(productName){
   var promoBtn=document.getElementById('payPromoWaBtn');
   if(promoBtn)promoBtn.href=promoWa;
   hidePayPromoPopup();
-  document.getElementById('payModal').classList.add('open');
+  var payEl=document.getElementById('payModal');
+  var payBox=payEl.querySelector('.pay-modal-box');
+  if(payBox)payBox.scrollTop=0;
+  payEl.classList.add('open');
   if(!document.getElementById('audioModal').classList.contains('open')&&!document.getElementById('fsMenu').classList.contains('open'))lockPageScroll();
   schedulePayPromoPopup();
   (function(){
