@@ -107,6 +107,21 @@ function addPremiumDays(days) {
 
 const PREMIUM_ACCESS_DAYS = 30;
 
+function isActivationLive(row) {
+  if (!row || row.revoked_at) return false;
+  if (row.expires_at && new Date(row.expires_at) < new Date()) return false;
+  return true;
+}
+
+async function getActiveActivationsForCode(codeId) {
+  const res = await sbFetch(
+    `alicia_premium_activations?code_id=eq.${encodeURIComponent(codeId)}&select=id,visitante_id,expires_at,revoked_at&order=activated_at.desc`,
+    { method: 'GET' }
+  );
+  if (!res.ok || !Array.isArray(res.data)) return [];
+  return res.data.filter(isActivationLive);
+}
+
 async function validateAndActivateCode(code, visitanteId) {
   const row = await fetchCodeByValue(code);
   if (!row) return { ok: false, error: 'Código inválido' };
@@ -127,10 +142,6 @@ async function validateAndActivateCode(code, visitanteId) {
     existing.data[0]
   ) {
     if (existing.data[0].revoked_at) {
-      const lastVid = String(row.last_visitante_id || '').trim();
-      if (lastVid && vid !== lastVid) {
-        return { ok: false, error: 'Acceso revocado. Contacta a Erior para reactivar' };
-      }
       const restored = await sbFetch(
         `alicia_premium_activations?id=eq.${encodeURIComponent(existing.data[0].id)}`,
         {
@@ -165,8 +176,30 @@ async function validateAndActivateCode(code, visitanteId) {
     };
   }
 
-  if (row.activation_count >= row.max_activations) {
-    return { ok: false, error: 'Código ya agotado' };
+  const activeActs = await getActiveActivationsForCode(row.id);
+  let transferDevice = false;
+
+  if (activeActs.length >= row.max_activations) {
+    if (row.max_activations === 1 && activeActs.length === 1 && activeActs[0].visitante_id !== vid) {
+      const revoked = await sbFetch(
+        `alicia_premium_activations?id=eq.${encodeURIComponent(activeActs[0].id)}`,
+        {
+          method: 'PATCH',
+          headers: { Prefer: 'return=minimal' },
+          body: JSON.stringify({ revoked_at: new Date().toISOString() }),
+        }
+      );
+      if (!revoked.ok) {
+        return { ok: false, error: 'No se pudo transferir tu acceso. Escríbenos por WhatsApp 💛' };
+      }
+      transferDevice = true;
+    } else {
+      return {
+        ok: false,
+        error: 'Código activo en otro dispositivo',
+        detail: 'Si cambiaste de celular o borraste datos del navegador, escríbenos por WhatsApp y te lo activamos al instante 💛',
+      };
+    }
   }
 
   const expiresAt = addPremiumDays(PREMIUM_ACCESS_DAYS);
@@ -177,11 +210,15 @@ async function validateAndActivateCode(code, visitanteId) {
   });
   if (!ins.ok) return { ok: false, error: 'No se pudo activar el código' };
 
+  const nextCount = transferDevice
+    ? Math.max(row.activation_count, 1)
+    : Math.max(row.activation_count, activeActs.length) + 1;
+
   await sbFetch(`alicia_premium_codes?id=eq.${row.id}`, {
     method: 'PATCH',
     headers: { Prefer: 'return=minimal' },
     body: JSON.stringify({
-      activation_count: row.activation_count + 1,
+      activation_count: nextCount,
       last_activated_at: new Date().toISOString(),
       last_visitante_id: vid,
     }),
@@ -195,6 +232,7 @@ async function validateAndActivateCode(code, visitanteId) {
     client_name: row.client_name || '',
     expires_at: expiresAt,
     reused: false,
+    transferred: transferDevice,
   };
 }
 
@@ -204,7 +242,6 @@ async function verifyPremiumCodeId(codeId, visitanteId) {
   const row = await fetchCodeById(codeId.trim());
   if (!row || !row.active) return false;
   if (row.expires_at && new Date(row.expires_at) < new Date()) return false;
-  if (row.activation_count < 1) return false;
 
   const vid = String(visitanteId || '').slice(0, 80);
   if (!vid) return false;

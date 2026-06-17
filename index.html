@@ -6103,7 +6103,10 @@ async function activateAliciaPremiumCode(){
         startAliciaChatSession();
       },500);
     }else{
-      if(fb){fb.textContent=(data&&data.error)?data.error+'. Escríbenos para obtener el tuyo 💛':'Código inválido. Escríbenos para obtener el tuyo 💛';fb.className='alicia-premium-code-feedback error';}
+      var errMsg=(data&&data.error)?data.error:'Código inválido';
+      if(data&&data.detail)errMsg+=' '+data.detail;
+      else if(errMsg.indexOf('otro dispositivo')===-1&&errMsg.indexOf('inválido')===-1)errMsg+='. Escríbenos para obtener el tuyo 💛';
+      if(fb){fb.textContent=errMsg;fb.className='alicia-premium-code-feedback error';}
     }
   }catch(e){
     if(fb){fb.textContent='No hay conexión. Intenta de nuevo en un momento 💛';fb.className='alicia-premium-code-feedback error';}
