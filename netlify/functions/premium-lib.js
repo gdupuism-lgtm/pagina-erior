@@ -115,11 +115,39 @@ function isActivationLive(row) {
 
 async function getActiveActivationsForCode(codeId) {
   const res = await sbFetch(
-    `alicia_premium_activations?code_id=eq.${encodeURIComponent(codeId)}&select=id,visitante_id,expires_at,revoked_at&order=activated_at.desc`,
+    `alicia_premium_activations?code_id=eq.${encodeURIComponent(codeId)}&select=id,visitante_id,expires_at,revoked_at,activated_at&order=activated_at.asc`,
     { method: 'GET' }
   );
   if (!res.ok || !Array.isArray(res.data)) return [];
   return res.data.filter(isActivationLive);
+}
+
+async function revokeActivationById(activationId) {
+  return sbFetch(
+    `alicia_premium_activations?id=eq.${encodeURIComponent(activationId)}`,
+    {
+      method: 'PATCH',
+      headers: { Prefer: 'return=minimal' },
+      body: JSON.stringify({ revoked_at: new Date().toISOString() }),
+    }
+  );
+}
+
+async function freeActivationSlotsForCode(codeId, maxActivations, excludeVisitanteId) {
+  let activeActs = await getActiveActivationsForCode(codeId);
+  const vid = String(excludeVisitanteId || '').slice(0, 80);
+  activeActs = activeActs.filter((a) => a.visitante_id !== vid);
+  const needToFree = activeActs.length - Math.max(1, maxActivations) + 1;
+  if (needToFree <= 0) return { freed: 0, ok: true };
+
+  const toRevoke = activeActs.slice(0, needToFree);
+  for (let i = 0; i < toRevoke.length; i += 1) {
+    const revoked = await revokeActivationById(toRevoke[i].id);
+    if (!revoked.ok) {
+      return { freed: i, ok: false };
+    }
+  }
+  return { freed: toRevoke.length, ok: true };
 }
 
 async function validateAndActivateCode(code, visitanteId) {
@@ -180,20 +208,12 @@ async function validateAndActivateCode(code, visitanteId) {
   let transferDevice = false;
 
   if (activeActs.length >= row.max_activations) {
-    if (row.max_activations === 1 && activeActs.length === 1 && activeActs[0].visitante_id !== vid) {
-      const revoked = await sbFetch(
-        `alicia_premium_activations?id=eq.${encodeURIComponent(activeActs[0].id)}`,
-        {
-          method: 'PATCH',
-          headers: { Prefer: 'return=minimal' },
-          body: JSON.stringify({ revoked_at: new Date().toISOString() }),
-        }
-      );
-      if (!revoked.ok) {
-        return { ok: false, error: 'No se pudo transferir tu acceso. Escríbenos por WhatsApp 💛' };
-      }
-      transferDevice = true;
-    } else {
+    const freed = await freeActivationSlotsForCode(row.id, row.max_activations, vid);
+    if (!freed.ok) {
+      return { ok: false, error: 'No se pudo transferir tu acceso. Escríbenos por WhatsApp 💛' };
+    }
+    if (freed.freed > 0) transferDevice = true;
+    else {
       return {
         ok: false,
         error: 'Código activo en otro dispositivo',
