@@ -3795,8 +3795,8 @@ body::before{
               <div id="mjFloatWrap">
                 <model-viewer
                   id="mjModel"
-                  data-src="michael_jackson_clean.glb"
-                  alt="Modelo 3D Icon Aura — presencia magnética y manifestación Erior Center"
+                  data-src="icon-aura-hero.glb"
+                  alt="Alien Icon Aura — presencia magnética Erior Center"
                   title="Icon Aura Erior Center"
                   autoplay
                   interaction-prompt="none"
@@ -3804,12 +3804,12 @@ body::before{
                   disable-pan
                   disable-tap
                   shadow-intensity="0"
-                  exposure="1.1"
-                  camera-orbit="0deg 68deg auto"
+                  exposure="1.15"
+                  camera-orbit="0deg 66deg auto"
                   min-camera-orbit="auto 55deg auto"
                   max-camera-orbit="auto 85deg auto"
-                  field-of-view="26deg"
-                  camera-target="0m 1.1m 0m"
+                  field-of-view="24deg"
+                  camera-target="0m 0.85m 0m"
                   style="width:100%;height:100%;background-color:transparent;"
                 ></model-viewer>
               </div>
@@ -3817,7 +3817,6 @@ body::before{
           </div>
           <div class="cover-cta-stack">
             <button type="button" class="btn-metallic btn-liquid btn-liquid-mind" data-shatter-action="mindmovie"><span class="btn-metallic-txt btn-premium-label">Mind Movie</span></button>
-            <button type="button" class="btn-metallic btn-liquid btn-liquid-futura" data-shatter-action="futura"><span class="btn-metallic-txt btn-premium-label">Futura</span></button>
             <button type="button" class="btn-metallic btn-liquid btn-liquid-tg" data-shatter-action="telegram"><span class="btn-metallic-txt btn-premium-label">Telegram</span></button>
           </div>
         </div>
@@ -7497,27 +7496,38 @@ initTestimonialVideo();
     });
   }
 
-  function pickDanceAnimation(){
+  function pickHeroAnimation(){
     var list=viewer.availableAnimations||[];
     if(!list.length)return null;
-    var dance=list.find(function(name){
-      return /danc|baile|dance|moonwalk|groove|move|choreo|hip|thriller/i.test(name);
+    var anim=list.find(function(name){
+      return /anim|danc|baile|dance|idle|walk|move|spin|groove|choreo|alien/i.test(name);
     });
-    return dance||list[0];
+    return anim||list[0];
   }
 
   function applyLayoutCamera(){
-    viewer.setAttribute('field-of-view','24deg');
-    viewer.setAttribute('camera-target','0m 1.15m 0m');
-    if(window.matchMedia('(max-width:767px)').matches){
-      viewer.setAttribute('camera-orbit','0deg 64deg 112%');
+    var isCharacter=/michael|mixamo|character|avatar|person|icon-aura-hero|alien/i.test(glbSrc||'');
+    if(isCharacter){
+      viewer.setAttribute('field-of-view','24deg');
+      viewer.setAttribute('camera-target','0m 0.85m 0m');
+      if(window.matchMedia('(max-width:767px)').matches){
+        viewer.setAttribute('camera-orbit','0deg 64deg 115%');
+      }else{
+        viewer.setAttribute('camera-orbit','0deg 66deg 110%');
+      }
     }else{
-      viewer.setAttribute('camera-orbit','0deg 66deg 108%');
+      viewer.setAttribute('field-of-view','32deg');
+      viewer.setAttribute('camera-target','0m 0.15m 0m');
+      if(window.matchMedia('(max-width:767px)').matches){
+        viewer.setAttribute('camera-orbit','0deg 75deg 130%');
+      }else{
+        viewer.setAttribute('camera-orbit','0deg 72deg 125%');
+      }
     }
   }
 
-  function playDance(){
-    var anim=pickDanceAnimation();
+  function playHeroAnimation(){
+    var anim=pickHeroAnimation();
     if(anim)viewer.animationName=anim;
     if(viewer.play)viewer.play({repetitions:Infinity});
   }
@@ -7528,7 +7538,7 @@ initTestimonialVideo();
     viewer.setAttribute('src',glbSrc);
     viewer.addEventListener('load',function(){
       applyLayoutCamera();
-      if(cover.classList.contains('active'))playDance();
+      if(cover.classList.contains('active'))playHeroAnimation();
     },{once:true});
     window.addEventListener('resize',applyLayoutCamera);
   }
@@ -7536,7 +7546,7 @@ initTestimonialVideo();
   function activate(){
     loadMjModelViewer(function(){
       attachModel();
-      if(modelReady)playDance();
+      if(modelReady)playHeroAnimation();
     });
   }
 
@@ -7551,7 +7561,7 @@ initTestimonialVideo();
       entries.forEach(function(e){
         if(e.isIntersecting){
           if(!modelReady)activate();
-          else if(cover.classList.contains('active'))playDance();
+          else if(cover.classList.contains('active'))playHeroAnimation();
         }else deactivate();
       });
     },{rootMargin:'80px',threshold:0.05});
@@ -7560,7 +7570,7 @@ initTestimonialVideo();
 
   new MutationObserver(function(){
     if(cover.classList.contains('active')){
-      if(modelReady)playDance();
+      if(modelReady)playHeroAnimation();
     }else{
       deactivate();
     }
