@@ -5667,11 +5667,20 @@ function dismissPayPromoPopup(){
   hidePayPromoPopup();
 }
 
+function getPayModalPrice(productName){
+  var n=String(productName||'').toLowerCase().replace(/🆘/g,'').trim();
+  if(/emergency\s*999|emergency999|emergency 999/.test(n)){
+    return '$3,333 MXN / $194 USD / €168 EUR';
+  }
+  return '$1,170 MXN / $68 USD / €59 EUR';
+}
+
 function openPaymentModal(productName){
   buildPayMethods();
   payCurrentProduct=productName||'';
   registrarEvento('abrio_pago',payCurrentProduct||'audio');
   document.getElementById('payProductName').textContent=payCurrentProduct;
+  document.getElementById('payModalPrice').textContent=getPayModalPrice(payCurrentProduct);
   document.getElementById('payModalLabel').textContent=payUi('title','Elige cómo pagar y empieza hoy','Choose how to pay');
   document.getElementById('payFooterText').textContent=lang==='en'?PAY_FOOTER_EN:PAY_FOOTER_ES;
   selectPayMethod(payCurrentMethod||'oxxo');
@@ -6596,7 +6605,7 @@ function isPaymentCelebration(txt){
   return /ya\s+(pagu[eé]|pague|mand[eé]|mande|envi[eé]|envie|transfer[ií]|transferi)|comprobante|ya\s+lo\s+compr[eé]|listo\s*,?\s*pagu[eé]|hice\s+el\s+pago|ya\s+est[aá]\s+pagado|mand[eé]\s+el\s+comprobante/i.test(String(txt));
 }
 function isSalesCloseMoment(txt){
-  return /\$[\d,.]+|1[,.]?888|1[,.]?777|1[,.]?170|\bMXN\b|\bUSD\b|\bEUR\b|adquirirlo|adquirirlo hoy|te gustar[ií]a adquirir|empezamos con este|precio del audio|inversi[oó]n de|por qu[eé] m[eé]todo prefieres pagar|m[eé]todo prefieres pagar/i.test(String(txt));
+  return /\$[\d,.]+|1[,.]?888|1[,.]?777|1[,.]?170|3[,.]?333|\bMXN\b|\bUSD\b|\bEUR\b|adquirirlo|adquirirlo hoy|te gustar[ií]a adquirir|empezamos con este|precio del audio|inversi[oó]n de|por qu[eé] m[eé]todo prefieres pagar|m[eé]todo prefieres pagar/i.test(String(txt));
 }
 function launchAliciaConfetti(){
   if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
@@ -6731,6 +6740,12 @@ function normalizePromoImageFile(filename){
 function stripAliciaChatImages(reply){
   return String(reply||'').replace(/\s*\[IMG:[^\]]+\]\s*/gi,'\n').replace(/\n{3,}/g,'\n\n').trim();
 }
+function isEmergency999Context(txt){
+  var s=String(txt||'').toLowerCase();
+  if(/emergency\s*999|emergency999|🆘/.test(s))return true;
+  if(typeof aliciaClient!=='undefined'&&aliciaClient.ultimoAudio&&/emergency/i.test(aliciaClient.ultimoAudio))return true;
+  return false;
+}
 function normalizeAliciaPromoReply(reply,userTxt){
   var r=String(reply||'');
   r=r.replace(/Hot Sale de los Pares/gi,'Father Upgrade Pack');
@@ -6741,6 +6756,12 @@ function normalizeAliciaPromoReply(reply,userTxt){
   r=r.replace(/€93\s*EUR/gi,'€99 EUR');
   r=r.replace(/\b(?:solo|solamente|nada mas que|nada más que)\s+(?:dos|2)\s*horas?\b/gi,'muchas horas en loop (entre más escucha, mejor)');
   r=r.replace(/\bcon\s+(?:dos|2)\s*horas?\s+(?:al\s+d[ií]a\s+)?(?:es\s+)?(?:suficiente|basta)\b/gi,'cuanto más horas en loop, más profundo el cambio');
+  if(isEmergency999Context(r)||isEmergency999Context(userTxt)){
+    r=r.replace(/\$1[,.]?(?:170|190)(?:\s*MXN)?/gi,'$3,333 MXN');
+    r=r.replace(/\$11(?:70|90)(?:\s*MXN)?/gi,'$3,333 MXN');
+    r=r.replace(/\$68\s*USD/gi,'$194 USD');
+    r=r.replace(/€59\s*EUR/gi,'€168 EUR');
+  }
   return stripAliciaChatImages(r);
 }
 function appendFormattedChatText(bub,text){

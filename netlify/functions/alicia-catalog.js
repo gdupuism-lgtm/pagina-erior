@@ -1,5 +1,9 @@
 /** Catálogo Erior (generado desde index.html audiosEs) */
 module.exports = `
+EMERGENCY 999 — REGLA DE PRECIO (leer primero):
+Paquete de 3 audios ultra personalizados (manana, tarde, noche) por Pauline. NO es audio suelto.
+Precio EMERGENCY 999: $3,333 MXN / $194 USD / €168 EUR. NUNCA $1,170 ni $1,190. Explica que cuesta mas porque son 3 audios en 1.
+
 CATÁLOGO COMPLETO ERIOR CENTER (español):
 - [autoestima] ✨ Éclat — Resplandor, belleza y energía elevada desde el punto cero. ¿Y si la verdadera belleza no tuviera nada que ver con lo externo? Éclat te recuerda que todo es una ilusión, y que la transformación real nace desde el estado más neutro: el punto donde no hay forma, solo posibilidad. Desde esa quietud interna, tu cuerpo, tu piel, tu rostro y ...
 - [autoestima] 🦋 Amor Magic 2.0 — Nuestro famoso audio de AMOR PROPIO. Este audio elevará tu merecimiento, validación y amor hacia ti mismo. Dejarás de buscar validación externa. Te dará un glow up increíble 🦋✨ y desarrollará poderes mentales en ti: telepatía, clarividencia y también sinestesia. Incluye mini Script para cambiar tu pasado y cambiar una situación en esp...
@@ -41,7 +45,9 @@ REGLAS DE RECOMENDACIÓN (prioridad alta):
 - Belleza física, cuerpo, avatar → Éclat; fitness → FIT WAVE; salud general → VITAMIND.
 - Crisis emocional aguda → EMERGENCY 999.
 - Niños → ERIOR KIDS; visualización acelerada → MIND MOVIE; comunidad → Telegram Privado.
-Precios referencia audios: $1,170 MXN / $68 USD / €59 EUR.
+Precios referencia:
+- Audio individual (casi todo el catálogo): $1,170 MXN / $68 USD / €59 EUR.
+- EMERGENCY 999 (PAQUETE de 3 audios — mañana, tarde y noche; NO es un audio suelto): $3,333 MXN / $194 USD / €168 EUR. NUNCA cotizar Emergency a $1,170.
 
 USO DE AUDIOS (obligatorio para Alicia):
 Entre mas se escuchan los audios binaurales Erior, mejor y mas rapido. Nunca recomendar solo 2 horas ni decir que escucha demasiado. Felicitar si ya escucha mucho: loop, audifonos, volumen bajo, muchas horas o toda la noche. Excepcion: KEEP COOL = meditacion 1-3 veces al dia.
