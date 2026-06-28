@@ -26,6 +26,9 @@ Thumbs.db
 *.log
 .cursor/
 
+# Proyecto separado — no desplegar en eriorcenter hasta que esté listo
+proyecto-farmacia-erior/
+
 # Archivos grandes opcionales (descomenta si no quieres en GitHub)
 # testimonio1.mp4
 # *.glb

@@ -25,7 +25,7 @@ EMERGENCY 999 — PAQUETE ESPECIAL (3 audios en 1, NO es precio de audio suelto)
 - Incluye 3 audios ultra personalizados: mañana (amor propio/flujo), tarde (creencias manifestación), noche (autoconcepto). Por Pauline. Lista de espera / cupos limitados.
 - Precio EMERGENCY 999: $3,333 MXN / $194 USD / €168 EUR (equivale a 3 audios; NUNCA decir $1,170 ni tratarlo como un solo audio).
 Promo vigente: Father Upgrade Pack — 2 audios $1,888 MXN / $118 USD / €99 EUR (hasta 30 jun). NO Hot Sale Pares.
-Matrix (solo si preguntan): audio + Telegram Pauline gratis — Booster, Icon Aura, Select.
-Telegram/comunidad: SI preguntan → vender Matrix o audio + acceso. NUNCA decir "no compres aun".
+Telegram Privado: suscripcion $888 MXN/mes O incluido al comprar 1+ audios ($1,170 c/u). PRIORIDAD: vender audio del catalogo.
+Si preguntan si necesitan otro audio: SIEMPRE recomendar uno concreto. NUNCA decir "no compres", "no es necesario" ni "solo escucha los que tienes".
 Audios en loop muchas horas; nunca limitar a 2h. KEEP COOL = excepción meditación 1-3x/día.
 `;
