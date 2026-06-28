@@ -5782,6 +5782,7 @@ var ALICIA_PREMIUM_DAILY_LIMIT=5;
 var aliciaPremiumQuota={limit:ALICIA_PREMIUM_DAILY_LIMIT,remaining:ALICIA_PREMIUM_DAILY_LIMIT,used_today:0,blocked:false,blocked_until:null};
 var hist=[];
 var aliciaChatStarted=false;
+var aliciaWelcomePending=false;
 var aliciaParticlesStarted=false;
 
 function clearAliciaPremiumLocal(){
@@ -5974,7 +5975,7 @@ function getAliciaPremiumWelcomeMessage(q){
   q=q||aliciaPremiumQuota||{};
   var limit=q.daily_limit||q.limit||ALICIA_PREMIUM_DAILY_LIMIT;
   var remaining=(q.remaining!=null)?q.remaining:limit;
-  return 'Bienvenid@ a Alicia Premium ✨ Has entrado a un espacio que no es para todos. Aquí no vendemos — aquí vemos.\n\n📊 Tu acceso incluye hasta '+limit+' preguntas por día. Hoy te quedan '+remaining+'. Si las usas todas, el chat se pausa 24 horas y luego vuelves con preguntas nuevas.\n\nCuéntame qué sientes de verdad, sin filtro. Voy a escucharte desde un lugar que la mayoría no alcanza a ver. 🌙';
+  return 'Bienvenid@ a Alicia Premium ✨ Has entrado a un espacio que no es para todos.\n\n📊 Tu acceso incluye hasta '+limit+' preguntas por día. Hoy te quedan '+remaining+'. Si las usas todas, el chat se pausa 24 horas y luego vuelves con preguntas nuevas.\n\nCuéntame qué sientes de verdad, sin filtro. Voy a escucharte desde un lugar que la mayoría no alcanza a ver. 🌙';
 }
 function updatePremiumQuotaUI(){
   var banner=document.getElementById('aliciaPremiumQuotaBanner');
@@ -6107,6 +6108,7 @@ async function activateAliciaPremiumCode(){
         if(win)win.innerHTML='';
         hist=[];
         aliciaChatStarted=false;
+        aliciaWelcomePending=false;
         enterAliciaChat();
         startAliciaChatSession();
       },500);
@@ -6166,8 +6168,12 @@ function updateAliciaTierBadge(){
 }
 function startAliciaChatSession(){
   var win=document.getElementById('chatWin');
-  if(win&&win.children.length)return;
+  if(win&&win.children.length){aliciaChatStarted=true;return;}
+  if(aliciaChatStarted||aliciaWelcomePending)return;
+  aliciaWelcomePending=true;
   var begin=function(){
+    aliciaWelcomePending=false;
+    if(win&&win.children.length){aliciaChatStarted=true;return;}
     if(isAliciaPremiumActive()&&aliciaPremiumQuota&&(aliciaPremiumQuota.blocked||(aliciaPremiumQuota.remaining!=null&&aliciaPremiumQuota.remaining<=0))){
       addMsg('b',getPremiumLimitBlockMessage(aliciaPremiumQuota));
       updatePremiumQuotaUI();
@@ -6193,6 +6199,8 @@ function startAliciaFree(){
     localStorage.setItem(ALICIA_MODE_KEY,'free');
     sessionStorage.removeItem(ALICIA_CONV_KEY);
   }catch(st){}
+  aliciaChatStarted=false;
+  aliciaWelcomePending=false;
   enterAliciaChat();
   startAliciaChatSession();
 }
