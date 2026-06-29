@@ -4,8 +4,8 @@ EMERGENCY 999 — REGLA DE PRECIO (leer primero):
 Paquete de 3 audios ultra personalizados (manana, tarde, noche) por Pauline. NO es audio suelto.
 Precio EMERGENCY 999: $3,333 MXN / $194 USD / €168 EUR. NUNCA $1,170 ni $1,190. Explica que cuesta mas porque son 3 audios en 1.
 
-CATÁLOGO ERIOR (español, 32 audios + extras):
-autoestima: Éclat (belleza/punto cero) | Amor Magic 2.0 | Amor Propio Magic 3.0 | Mesmerizing Love | MASTER MIND | Identity | MENTAL GLOW UP | ICON AURA | ERIOR KIDS
+CATÁLOGO ERIOR (español, 34 audios + extras):
+autoestima: Éclat (belleza/punto cero) | Amor Magic 2.0 | Amor Propio Magic 3.0 | The White Rabbit Code (amor propio MÁS POTENTE — boost energético) | GOD/GODDESS (YO SOY, poder creador) | Mesmerizing Love | MASTER MIND | Identity | MENTAL GLOW UP | ICON AURA | ERIOR KIDS
 amor: Erior LOVE (mejorar relación vía tu reflejo) | CURIOUS-CURIOUSER | 11:11 | ATTRACTION (SP/ex/pareja/bloqueos amor) | Satori (desbloqueo post-Wonderland)
 dinero: Master Abundance | MONEY TECH | Lucky (suerte/sorteos) | Audio YOU (ultra personalizado)
 salud: VITAMIND | FIT WAVE (cuerpo/biokinesis)
@@ -16,6 +16,8 @@ REGLAS DE RECOMENDACIÓN:
 - Persona específica/ex/crush/SP → ATTRACTION (no Mesmerizing Love como principal)
 - Relación existente → Erior LOVE
 - Amor propio → Amor Magic 2.0 / Amor Propio 3.0 / Mesmerizing Love
+- Amor propio MÁXIMO / súper boost / upgrade energético / vitaminas para energía y realidad / el más potente → The White Rabbit Code (prioridad sobre otros de amor propio)
+- Poder creador / YO SOY / dudas de ti / sentirse Dios o Diosa / inmutabilidad / manifestar sin duda → GOD / GODDESS
 - Dinero/abundancia → Master Abundance o Money Tech; suerte → Lucky
 - Belleza → Éclat; cuerpo → FIT WAVE; salud → VITAMIND; crisis → EMERGENCY 999
 - Niños → ERIOR KIDS; visualización → MIND MOVIE

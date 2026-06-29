@@ -257,7 +257,7 @@ var AUDIO_MENTION_KEYS=[
   'wonderland coherence','emergency 999','master abundance','mesmerizing love','amor propio magic',
   'amor magic','icon aura','erior love','audio erior','master mind','mind movie','keep cool',
   'fit wave','simulation-u','11:11','booster','wonderland','identity','lucky','select',
-  'attraction','moneytech','you','satori','vitamind','eclat'
+  'attraction','moneytech','you','satori','vitamind','eclat','white rabbit','god goddess','god/goddess'
 ];
 
 function extractMentionedAudios(messages){
@@ -276,7 +276,8 @@ function extractMentionedAudios(messages){
     'keep cool':'Keep Cool','fit wave':'Fit Wave','vitamind':'VitaMind','eclat':'Éclat',
     '11:11':'11:11','emergency 999':'Emergency 999','audio erior':'Audio Erior 3.0',
     'master mind':'Master Mind','mind movie':'Mind Movie','amor magic':'Amor Magic',
-    'simulation-u':'Simulation-U','amor propio magic':'Amor Propio Magic'
+    'simulation-u':'Simulation-U','amor propio magic':'Amor Propio Magic',
+    'white rabbit':'The White Rabbit Code','god goddess':'GOD / GODDESS','god/goddess':'GOD / GODDESS'
   };
   var found=[];
   AUDIO_MENTION_KEYS.forEach(function(key){
