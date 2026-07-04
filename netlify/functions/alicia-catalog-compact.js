@@ -26,8 +26,10 @@ Precio audio individual (1 audio): $1,190 MXN / $69 USD / €60 EUR
 EMERGENCY 999 — PAQUETE ESPECIAL (3 audios en 1, NO es precio de audio suelto):
 - Incluye 3 audios ultra personalizados: mañana (amor propio/flujo), tarde (creencias manifestación), noche (autoconcepto). Por Pauline. Lista de espera / cupos limitados.
 - Precio EMERGENCY 999: $3,333 MXN / $194 USD / €168 EUR (equivale a 3 audios; NUNCA decir $1,190 ni tratarlo como un solo audio).
-Promo vigente: ninguna promo de combo. Precio normal por audio $1,190 MXN / $69 USD / €60 EUR. NUNCA mencionar Father Upgrade Pack ni Hot Sale Pares (terminaron).
-Telegram Privado: suscripcion $888 MXN/mes ($52 USD / €45 EUR) O incluido al comprar 1+ audios ($1,190 c/u). Mind Movie: $1,190 MXN / $69 USD / €60 EUR. Alicia VIP disponible. PRIORIDAD: vender audio del catalogo.
-Si preguntan si necesitan otro audio: SIEMPRE recomendar uno concreto. NUNCA decir "no compres", "no es necesario" ni "solo escucha los que tienes".
+Promo vigente: ninguna promo de combo (Father Upgrade Pack, Hot Sale — terminaron). Precio normal por audio $1,190 MXN / $69 USD / €60 EUR.
+Alicia Premium Pack (solo si aplica): $2,888 MXN / $168 USD / €146 EUR — tarjeta VIP digital, Alicia Premium IA, ebook de regalo, audio extra de regalo, Telegram VIP, 20% descuento futuro, programa referidos (3 referidos con 3+ audios → 1 mes extra Premium; cada 3 audios referidos → 1 audio gratis). Membresia 60 dias. Sugerir solo si interes en 2 audios o experiencia VIP completa.
+Telegram Privado: suscripcion $888 MXN/mes ($52 USD / €45 EUR) O incluido al comprar 1+ audios ($1,190 c/u). Mind Movie: $1,190 MXN / $69 USD / €60 EUR.
+RECOMENDACION OBLIGATORIA: siempre sugerir 2 audios concretos del catalogo (salvo Emergency 999). Si solo quiere 1, ayudar a elegir entre esos 2. PRIORIDAD: vender audios del catalogo.
+Si preguntan si necesitan otro audio: SIEMPRE recomendar 2 concretos. NUNCA decir "no compres", "no es necesario" ni "solo escucha los que tienes".
 Audios en loop muchas horas; nunca limitar a 2h. KEEP COOL = excepción meditación 1-3x/día.
 `;
