@@ -2574,8 +2574,14 @@ button.alicia-mode-premium-cta{font:inherit;width:100%;cursor:pointer}
 }
 #mjHeroBlock{
   display:flex;flex-direction:column;align-items:center;
-  gap:.38rem;width:100%;
+  gap:clamp(.7rem,2.8vh,1.05rem);width:100%;
   visibility:hidden;pointer-events:none;
+}
+.mj-hero-btns{
+  display:flex;flex-direction:column;align-items:stretch;
+  gap:clamp(.58rem,2.4vh,.78rem);
+  width:100%;max-width:min(100%,13.25rem);
+  position:relative;z-index:14;
 }
 #mjHeroBlock .btn-cover-chip,#mjHeroBlock .btn-icon-aura-glass{pointer-events:auto;}
 #page-cover.active #mjHeroBlock{visibility:visible;}
@@ -2886,35 +2892,85 @@ button.alicia-mode-premium-cta{font:inherit;width:100%;cursor:pointer}
 /* Amor Propio Magic 4.0 — botón cristal premium */
 .btn-amor4-crystal{
   position:relative;z-index:13;cursor:pointer;pointer-events:auto;
-  width:100%;max-width:min(100%,12.5rem);
-  font-family:'Syne',sans-serif;font-size:clamp(.5rem,2.35vw,.6rem);font-weight:700;
-  letter-spacing:.1em;text-transform:uppercase;
-  padding:.55rem 1rem .5rem;border-radius:980px;
-  color:rgba(255,240,248,.98);
+  isolation:isolate;overflow:hidden;
+  width:100%;max-width:100%;
+  font-family:'Syne',sans-serif;font-size:clamp(.52rem,2.45vw,.64rem);font-weight:700;
+  letter-spacing:.11em;text-transform:uppercase;
+  padding:.68rem 1.2rem .62rem;border-radius:980px;
+  color:rgba(255,252,245,.99);
+  text-shadow:0 1px 2px rgba(40,20,30,.35),0 0 18px rgba(255,220,180,.35);
   background:
-    linear-gradient(118deg,rgba(255,140,200,.42) 0%,rgba(180,100,255,.38) 45%,rgba(255,200,220,.35) 100%),
-    linear-gradient(145deg,rgba(255,255,255,.2) 0%,rgba(255,255,255,.04) 100%);
-  background-size:220% 220%,100% 100%;
-  animation:btnAmor4Shine 8s ease-in-out infinite;
-  border:1.5px solid rgba(255,160,210,.55);
-  backdrop-filter:blur(24px) saturate(190%);
-  -webkit-backdrop-filter:blur(24px) saturate(190%);
-  box-shadow:inset 0 2px 5px rgba(255,255,255,.4),0 8px 28px rgba(255,100,180,.22),0 0 36px rgba(200,120,255,.18);
-  transition:transform .38s cubic-bezier(.22,1,.36,1),box-shadow .38s ease;
+    linear-gradient(125deg,rgba(255,215,160,.42) 0%,rgba(255,145,195,.38) 28%,rgba(210,150,255,.34) 55%,rgba(255,200,140,.38) 82%,rgba(255,180,220,.36) 100%),
+    linear-gradient(168deg,rgba(42,24,52,.82) 0%,rgba(16,10,24,.92) 55%,rgba(28,16,38,.86) 100%);
+  background-size:320% 320%,100% 100%;
+  animation:btnAmor4Iridescent 11s ease-in-out infinite,btnAmor4Aura 3.8s ease-in-out infinite;
+  border:1px solid rgba(255,210,170,.45);
+  backdrop-filter:blur(28px) saturate(210%);
+  -webkit-backdrop-filter:blur(28px) saturate(210%);
+  box-shadow:
+    inset 0 2px 10px rgba(255,255,255,.48),
+    inset 0 -3px 8px rgba(60,30,50,.28),
+    0 6px 22px rgba(0,0,0,.38),
+    0 0 36px rgba(255,160,200,.28),
+    0 0 72px rgba(201,160,96,.14);
+  transition:transform .4s cubic-bezier(.22,1,.36,1),box-shadow .4s ease,filter .35s ease;
   -webkit-tap-highlight-color:transparent;
-  display:flex;flex-direction:column;align-items:center;gap:.12rem;
+  display:flex;flex-direction:column;align-items:center;gap:.14rem;
 }
+.btn-amor4-crystal::before{
+  content:'';position:absolute;inset:-1px;border-radius:inherit;padding:1.5px;pointer-events:none;z-index:-1;
+  background:linear-gradient(118deg,#ffe4b8,#ff9ecf,#f0d080,#d4a8ff,#ffb8d8,#ffe4b8);
+  background-size:400% 400%;
+  animation:btnAmor4Border 7s ease-in-out infinite;
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;
+  opacity:.92;
+}
+.btn-amor4-crystal::after{
+  content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:1;
+  background:linear-gradient(108deg,transparent 30%,rgba(255,255,255,.62) 46%,rgba(255,240,255,.28) 52%,transparent 68%);
+  background-size:220% 100%;
+  background-position:-120% 0;
+  animation:btnAmor4Sheen 4.2s ease-in-out infinite;
+  opacity:.55;
+}
+.btn-amor4-crystal .btn-premium-label,.btn-amor4-crystal .btn-amor4-badge{position:relative;z-index:2;}
 .btn-amor4-badge{
-  font-size:.46rem;letter-spacing:.18em;opacity:.92;
-  color:rgba(255,255,255,.95);text-shadow:0 0 12px rgba(255,180,220,.5);
+  font-size:clamp(.44rem,2vw,.5rem);letter-spacing:.2em;opacity:.95;
+  color:rgba(255,248,235,.98);
+  text-shadow:0 0 14px rgba(255,200,160,.55);
 }
-@keyframes btnAmor4Shine{0%,100%{background-position:0% 50%,0 0}50%{background-position:100% 50%,0 0}}
+@keyframes btnAmor4Iridescent{0%,100%{background-position:0% 50%,0 0}50%{background-position:100% 50%,0 0}}
+@keyframes btnAmor4Border{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+@keyframes btnAmor4Sheen{0%,100%{background-position:-120% 0;opacity:.35}45%,55%{background-position:120% 0;opacity:.75}}
+@keyframes btnAmor4Aura{
+  0%,100%{box-shadow:inset 0 2px 10px rgba(255,255,255,.48),inset 0 -3px 8px rgba(60,30,50,.28),0 6px 22px rgba(0,0,0,.38),0 0 36px rgba(255,160,200,.26),0 0 72px rgba(201,160,96,.12);}
+  50%{box-shadow:inset 0 2px 12px rgba(255,255,255,.55),inset 0 -3px 8px rgba(60,30,50,.22),0 10px 32px rgba(0,0,0,.32),0 0 52px rgba(255,130,190,.38),0 0 96px rgba(232,200,120,.2);}
+}
 .btn-amor4-crystal:hover{
-  transform:translateY(-3px) scale(1.03);
-  box-shadow:inset 0 2px 6px rgba(255,255,255,.48),0 14px 40px rgba(255,120,190,.32),0 0 52px rgba(220,130,255,.28);
+  transform:translateY(-3px) scale(1.035);
+  filter:brightness(1.06);
+  box-shadow:inset 0 2px 12px rgba(255,255,255,.55),0 16px 44px rgba(255,120,190,.32),0 0 64px rgba(240,190,120,.28),0 0 100px rgba(200,140,255,.18);
 }
 #mjHeroBlock .btn-amor4-crystal,#mjHeroBlock .btn-cover-chip{pointer-events:auto;}
-.cover-mj-col .btn-amor4-crystal,.cover-mj-col .btn-cover-chip{width:100%;max-width:min(100%,12.5rem);}
+.mj-hero-btns .btn-cover-chip{
+  width:100%;max-width:100%;
+  opacity:.88;
+  transform:scale(.96);
+  transform-origin:center top;
+}
+.mj-hero-btns .btn-cover-chip.btn-cover-gold{
+  border-color:rgba(212,175,95,.32);
+  background:
+    linear-gradient(145deg,rgba(212,175,95,.12) 0%,rgba(255,255,255,.03) 40%),
+    linear-gradient(180deg,rgba(22,20,16,.78) 0%,rgba(10,10,14,.9) 100%);
+}
+.mj-hero-btns .btn-cover-chip.btn-cover-gold:hover{
+  opacity:1;transform:scale(.97) translateY(-1px);
+  border-color:rgba(232,200,130,.55);
+}
+.cover-mj-col .mj-hero-btns{max-width:min(100%,13.25rem);}
 .cover-promo-slides{position:relative;min-height:4.75rem;margin-bottom:.45rem;overflow:hidden}
 .cover-promo-slide{display:none;text-align:center;animation:promoSlideIn .55s cubic-bezier(.22,1,.36,1) both}
 .cover-promo-slide.active{display:block}
@@ -3077,17 +3133,16 @@ button.alicia-mode-premium-cta{font:inherit;width:100%;cursor:pointer}
     margin-top:0;position:relative;
     align-items:center;
   }
-  #mjHeroBlock{gap:0;width:100%;}
-  .btn-icon-aura-glass{
-    position:absolute;top:10%;left:50%;
-    transform:translateX(-50%);
-    margin:0;white-space:nowrap;
-    padding:.55rem 1.4rem;font-size:clamp(.56rem,3vw,.65rem);
+  #mjHeroBlock{gap:clamp(.85rem,3.5vh,1.2rem);width:100%;}
+  .mj-hero-btns{
+    width:min(94vw,420px);max-width:100%;
+    gap:clamp(.62rem,2.8vh,.82rem);
   }
+  .mj-hero-btns .btn-cover-chip{transform:scale(.97);}
   #mjFloatWrap{
     width:clamp(148px,44vw,228px);
     height:clamp(222px,66vw,342px);
-    margin-top:.25rem;
+    margin-top:0;
   }
   #coverHeroZone .soc-row{
     margin-top:clamp(1.1rem,4vh,1.6rem);
@@ -3103,11 +3158,14 @@ button.alicia-mode-premium-cta{font:inherit;width:100%;cursor:pointer}
   .page#page-cover .soc-ig .soc-lbl{font-size:clamp(.44rem,2.6vw,.52rem);}
 }
 @media(min-width:768px){
-  #mjHeroBlock{flex-direction:column-reverse;gap:.38rem;}
-  .cover-mj-col .btn-icon-aura-glass{
-    position:static;transform:none;
-    margin:0;
+  #mjHeroBlock{flex-direction:column;gap:clamp(.75rem,2.5vh,1rem);align-items:center;}
+  .mj-hero-btns{
+    width:100%;max-width:min(220px,38vw);
+    gap:clamp(.52rem,1.8vh,.68rem);
   }
+  .mj-hero-btns .btn-cover-chip{transform:scale(.94);}
+  .cover-mj-col{align-items:center;margin-top:-.15rem;}
+  #mjFloatWrap{margin-top:.1rem;}
   .btn-icon-aura-glass.aura-animating{animation:auraBurstDesk .75s cubic-bezier(.34,1.3,.64,1) forwards;}
 }
 @keyframes auraBurstDesk{
@@ -3533,15 +3591,12 @@ body::before{
 
 .page#page-cover .btn-amor4-crystal{
   border-radius:980px;
-  animation:btnAmor4Shine 8s ease-in-out infinite,btnLiquidIridescent 16s ease-in-out infinite;
 }
-.page#page-cover .btn-icon-aura-glass,
 .page#page-cover .cover-mj-col .btn-cover-chip{
-  border-radius:16px;
-  font-size:clamp(.48rem,2.2vw,.56rem);
-  padding:.34rem .75rem;
+  border-radius:14px;
+  font-size:clamp(.46rem,2vw,.54rem);
+  padding:.32rem .7rem;
   letter-spacing:.1em;
-  opacity:.92;
 }
 
 #coverHeroZone .soc-ball,
@@ -3712,6 +3767,7 @@ body::before{
   .cover-promo-jewel::before,.cover-hero-glass::before,.cover-gateway-aurora,
   .page#page-cover .btn-alicia-glow,
   .page#page-cover .btn-eriorworld,.page#page-cover .btn-icon-aura-glass,.btn-catalog-hero,
+  .page#page-cover .btn-amor4-crystal,
   .page#page-cover .btn-premium-label{
     animation:none!important;background-position:50% center!important;
     -webkit-text-stroke:.45px rgba(212,175,95,.92)!important;
@@ -3721,6 +3777,7 @@ body::before{
   .pay-promo-popup.visible{animation:none;opacity:1;transform:translateX(-50%) translateY(0) scale(1);}
   .pay-promo-kicker{animation:none;background-position:50% 50%;}
   .fsm-erior-vip-btn{animation:none!important;background-position:42% 58%,45% 45%,0 0!important}
+  .btn-amor4-crystal,.btn-amor4-crystal::before,.btn-amor4-crystal::after{animation:none!important}
   #matrixRain,.hero-nebula-canvas{display:none!important}
 }
 
@@ -3903,11 +3960,13 @@ body::before{
         <div id="coverHeroRow">
           <div class="cover-mj-col">
             <div id="mjHeroBlock" aria-hidden="true">
-              <button type="button" class="btn-amor4-crystal" id="btnAmor4" onclick="openAmor4Payment()">
-                <span class="btn-premium-label">✨ Amor Propio Magic 4.0</span>
-                <span class="btn-amor4-badge">NEW · $999</span>
-              </button>
-              <button type="button" class="btn-cover-chip btn-cover-gold" id="btnIconAura" onclick="goToIconAuraAnimated()"><span class="btn-premium-label">Icon Aura</span></button>
+              <div class="mj-hero-btns">
+                <button type="button" class="btn-amor4-crystal" id="btnAmor4" onclick="openAmor4Payment()">
+                  <span class="btn-premium-label">✨ Amor Propio Magic 4.0</span>
+                  <span class="btn-amor4-badge">NEW · $999</span>
+                </button>
+                <button type="button" class="btn-cover-chip btn-cover-gold" id="btnIconAura" onclick="goToIconAuraAnimated()"><span class="btn-premium-label">Icon Aura</span></button>
+              </div>
               <div id="mjFloatWrap">
                 <model-viewer
                   id="mjModel"
