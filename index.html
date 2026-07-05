@@ -1034,6 +1034,41 @@ body::before{
 .cbub .chat-msg-list li{margin-bottom:.4rem;line-height:1.5;padding-left:.15rem}
 .cbub .chat-msg-list li:last-child{margin-bottom:0}
 .cbub .chat-msg-br{display:block;height:.45rem}
+.chat-amor4-epic{
+  position:relative;z-index:0;
+  display:inline-block;
+  font-family:'Syne',sans-serif;
+  font-weight:800;
+  font-size:clamp(1.08rem,4.5vw,1.22rem);
+  letter-spacing:.07em;
+  line-height:1.35;
+  vertical-align:baseline;
+  margin:.15em .05em;
+  padding:.14em .42em .12em;
+  border-radius:10px;
+  text-transform:none;
+  background:linear-gradient(95deg,#fff0c8 0%,#ff9ecf 18%,#f5d080 36%,#c8a8ff 52%,#98e8ff 68%,#ffb8e8 84%,#fff0c8 100%);
+  background-size:340% 100%;
+  -webkit-background-clip:text;background-clip:text;
+  color:transparent;
+  animation:chatAmor4GlowShift 4.8s ease-in-out infinite;
+  filter:drop-shadow(0 0 8px rgba(255,150,200,.75)) drop-shadow(0 0 18px rgba(201,160,96,.55)) drop-shadow(0 0 28px rgba(160,120,255,.35));
+  box-decoration-break:clone;-webkit-box-decoration-break:clone;
+}
+.chat-amor4-epic::before{
+  content:'';position:absolute;inset:-3px -5px;border-radius:12px;z-index:-1;pointer-events:none;
+  background:linear-gradient(118deg,rgba(255,160,200,.22),rgba(201,160,96,.18),rgba(180,140,255,.2),rgba(255,200,160,.16));
+  background-size:280% 280%;
+  animation:chatAmor4GlowShift 4.8s ease-in-out infinite;
+  opacity:.85;
+  filter:blur(6px);
+}
+.chat-amor4-epic::after{
+  content:'';position:absolute;inset:0;border-radius:10px;z-index:-1;pointer-events:none;
+  border:1px solid rgba(255,200,160,.28);
+  box-shadow:inset 0 0 12px rgba(255,180,220,.15),0 0 20px rgba(201,160,96,.12);
+}
+@keyframes chatAmor4GlowShift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
 .cmsg.b:has(.chat-promo-img){max-width:min(400px,96%)}
 .chat-img-lightbox{
   position:fixed;inset:0;z-index:5600;
@@ -2583,7 +2618,7 @@ button.alicia-mode-premium-cta{font:inherit;width:100%;cursor:pointer}
   width:100%;max-width:min(100%,13.25rem);
   position:relative;z-index:14;
 }
-#mjHeroBlock .btn-cover-chip,#mjHeroBlock .btn-icon-aura-glass{pointer-events:auto;}
+#mjHeroBlock .btn-icon-aura-metal{pointer-events:auto;}
 #page-cover.active #mjHeroBlock{visibility:visible;}
 #mjFloatWrap{
   width:clamp(88px,22vw,170px);
@@ -2937,9 +2972,13 @@ button.alicia-mode-premium-cta{font:inherit;width:100%;cursor:pointer}
 }
 .btn-amor4-crystal .btn-premium-label,.btn-amor4-crystal .btn-amor4-badge{position:relative;z-index:2;}
 .btn-amor4-badge{
-  font-size:clamp(.44rem,2vw,.5rem);letter-spacing:.2em;opacity:.95;
-  color:rgba(255,248,235,.98);
+  font-size:clamp(.44rem,2vw,.5rem);letter-spacing:.18em;opacity:.98;
+  color:rgba(255,252,240,.98);
   text-shadow:0 0 14px rgba(255,200,160,.55);
+  padding:.12em .55em;margin-top:.06rem;
+  border-radius:999px;
+  border:1px solid rgba(255,220,180,.35);
+  background:rgba(255,255,255,.1);
 }
 @keyframes btnAmor4Iridescent{0%,100%{background-position:0% 50%,0 0}50%{background-position:100% 50%,0 0}}
 @keyframes btnAmor4Border{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
@@ -2953,23 +2992,68 @@ button.alicia-mode-premium-cta{font:inherit;width:100%;cursor:pointer}
   filter:brightness(1.06);
   box-shadow:inset 0 2px 12px rgba(255,255,255,.55),0 16px 44px rgba(255,120,190,.32),0 0 64px rgba(240,190,120,.28),0 0 100px rgba(200,140,255,.18);
 }
-#mjHeroBlock .btn-amor4-crystal,#mjHeroBlock .btn-cover-chip{pointer-events:auto;}
-.mj-hero-btns .btn-cover-chip{
+/* Icon Aura — metálico premium, mismo tamaño, jerarquía secundaria */
+.btn-icon-aura-metal{
+  position:relative;z-index:12;cursor:pointer;pointer-events:auto;
+  isolation:isolate;overflow:hidden;
   width:100%;max-width:100%;
-  opacity:.88;
-  transform:scale(.96);
-  transform-origin:center top;
-}
-.mj-hero-btns .btn-cover-chip.btn-cover-gold{
-  border-color:rgba(212,175,95,.32);
+  font-family:'Syne',sans-serif;font-size:clamp(.52rem,2.45vw,.64rem);font-weight:600;
+  letter-spacing:.11em;text-transform:uppercase;
+  padding:.68rem 1.2rem;border-radius:980px;
+  color:rgba(248,242,232,.97);
+  text-shadow:0 1px 0 rgba(255,255,255,.25),0 0 12px rgba(212,175,95,.2);
   background:
-    linear-gradient(145deg,rgba(212,175,95,.12) 0%,rgba(255,255,255,.03) 40%),
-    linear-gradient(180deg,rgba(22,20,16,.78) 0%,rgba(10,10,14,.9) 100%);
+    linear-gradient(118deg,rgba(255,255,255,.32) 0%,rgba(200,190,175,.14) 18%,rgba(255,255,255,.08) 38%,rgba(120,115,105,.12) 55%,rgba(255,248,235,.18) 72%,rgba(180,170,155,.1) 100%),
+    linear-gradient(168deg,rgba(58,54,48,.92) 0%,rgba(24,22,28,.96) 50%,rgba(14,12,18,.98) 100%);
+  background-size:240% 240%,100% 100%;
+  animation:btnIconAuraMetalShine 14s ease-in-out infinite;
+  border:1px solid rgba(210,195,170,.42);
+  backdrop-filter:blur(22px) saturate(180%);
+  -webkit-backdrop-filter:blur(22px) saturate(180%);
+  box-shadow:
+    inset 0 2px 9px rgba(255,255,255,.42),
+    inset 0 -4px 10px rgba(0,0,0,.42),
+    0 5px 18px rgba(0,0,0,.32),
+    0 0 28px rgba(180,160,120,.1);
+  transition:transform .38s cubic-bezier(.22,1,.36,1),box-shadow .38s ease,border-color .35s ease;
+  -webkit-tap-highlight-color:transparent;
+  display:flex;align-items:center;justify-content:center;
 }
-.mj-hero-btns .btn-cover-chip.btn-cover-gold:hover{
-  opacity:1;transform:scale(.97) translateY(-1px);
-  border-color:rgba(232,200,130,.55);
+.btn-icon-aura-metal::before{
+  content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:1;
+  background:linear-gradient(105deg,transparent 32%,rgba(255,255,255,.55) 47%,rgba(255,250,240,.2) 52%,transparent 66%);
+  background-size:200% 100%;
+  background-position:-130% 0;
+  animation:btnIconAuraSheen 5.5s ease-in-out infinite;
+  opacity:.45;
 }
+.btn-icon-aura-metal::after{
+  content:'';position:absolute;inset:-1px;border-radius:inherit;padding:1px;pointer-events:none;z-index:-1;
+  background:linear-gradient(135deg,rgba(232,210,160,.55),rgba(180,175,168,.35),rgba(220,200,150,.5),rgba(160,155,148,.3));
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;
+  opacity:.75;
+}
+.btn-icon-aura-metal .btn-premium-label{position:relative;z-index:2;}
+@keyframes btnIconAuraMetalShine{0%,100%{background-position:0% 50%,0 0}50%{background-position:100% 50%,0 0}}
+@keyframes btnIconAuraSheen{0%,100%{background-position:-130% 0;opacity:.3}48%,58%{background-position:130% 0;opacity:.6}}
+.btn-icon-aura-metal:hover{
+  transform:translateY(-2px);
+  border-color:rgba(232,210,170,.58);
+  box-shadow:inset 0 2px 10px rgba(255,255,255,.48),0 10px 28px rgba(0,0,0,.28),0 0 36px rgba(212,175,95,.16);
+}
+.btn-icon-aura-metal.aura-animating{
+  animation:auraBurstMetal .75s cubic-bezier(.34,1.3,.64,1) forwards;
+  pointer-events:none;
+}
+@keyframes auraBurstMetal{
+  0%{transform:scale(1);filter:brightness(1);}
+  35%{transform:scale(1.08);filter:brightness(1.3);box-shadow:0 0 44px rgba(212,175,95,.45),0 0 60px rgba(200,190,175,.22);}
+  100%{transform:scale(1);filter:brightness(1);}
+}
+#mjHeroBlock .btn-amor4-crystal,#mjHeroBlock .btn-icon-aura-metal{pointer-events:auto;}
+.mj-hero-btns .btn-amor4-crystal,.mj-hero-btns .btn-icon-aura-metal{width:100%;max-width:100%;}
 .cover-mj-col .mj-hero-btns{max-width:min(100%,13.25rem);}
 .cover-promo-slides{position:relative;min-height:4.75rem;margin-bottom:.45rem;overflow:hidden}
 .cover-promo-slide{display:none;text-align:center;animation:promoSlideIn .55s cubic-bezier(.22,1,.36,1) both}
@@ -3026,7 +3110,7 @@ button.alicia-mode-premium-cta{font:inherit;width:100%;cursor:pointer}
   animation:auraRing .7s ease-out forwards;
 }
 @keyframes auraRing{to{transform:translate(-50%,-50%) scale(2.2);opacity:0;}}
-.btn-metallic.shattering,.btn-cover-chip.shattering,.btn-liquid.shattering{pointer-events:none;transform:scale(.94);}
+.btn-metallic.shattering,.btn-cover-chip.shattering,.btn-icon-aura-metal.shattering,.btn-liquid.shattering{pointer-events:none;transform:scale(.94);}
 .btn-metallic.shattering .btn-metallic-txt{opacity:0;transition:opacity .1s;}
 .btn-cover-chip.shattering{color:transparent;transition:color .1s;}
 .btn-metallic .liquid-splash{
@@ -3138,7 +3222,6 @@ button.alicia-mode-premium-cta{font:inherit;width:100%;cursor:pointer}
     width:min(94vw,420px);max-width:100%;
     gap:clamp(.62rem,2.8vh,.82rem);
   }
-  .mj-hero-btns .btn-cover-chip{transform:scale(.97);}
   #mjFloatWrap{
     width:clamp(148px,44vw,228px);
     height:clamp(222px,66vw,342px);
@@ -3163,7 +3246,6 @@ button.alicia-mode-premium-cta{font:inherit;width:100%;cursor:pointer}
     width:100%;max-width:min(220px,38vw);
     gap:clamp(.52rem,1.8vh,.68rem);
   }
-  .mj-hero-btns .btn-cover-chip{transform:scale(.94);}
   .cover-mj-col{align-items:center;margin-top:-.15rem;}
   #mjFloatWrap{margin-top:.1rem;}
   .btn-icon-aura-glass.aura-animating{animation:auraBurstDesk .75s cubic-bezier(.34,1.3,.64,1) forwards;}
@@ -3592,11 +3674,8 @@ body::before{
 .page#page-cover .btn-amor4-crystal{
   border-radius:980px;
 }
-.page#page-cover .cover-mj-col .btn-cover-chip{
-  border-radius:14px;
-  font-size:clamp(.46rem,2vw,.54rem);
-  padding:.32rem .7rem;
-  letter-spacing:.1em;
+.page#page-cover .cover-mj-col .btn-icon-aura-metal{
+  border-radius:980px;
 }
 
 #coverHeroZone .soc-ball,
@@ -3768,6 +3847,7 @@ body::before{
   .page#page-cover .btn-alicia-glow,
   .page#page-cover .btn-eriorworld,.page#page-cover .btn-icon-aura-glass,.btn-catalog-hero,
   .page#page-cover .btn-amor4-crystal,
+  .page#page-cover .btn-icon-aura-metal,
   .page#page-cover .btn-premium-label{
     animation:none!important;background-position:50% center!important;
     -webkit-text-stroke:.45px rgba(212,175,95,.92)!important;
@@ -3777,7 +3857,9 @@ body::before{
   .pay-promo-popup.visible{animation:none;opacity:1;transform:translateX(-50%) translateY(0) scale(1);}
   .pay-promo-kicker{animation:none;background-position:50% 50%;}
   .fsm-erior-vip-btn{animation:none!important;background-position:42% 58%,45% 45%,0 0!important}
-  .btn-amor4-crystal,.btn-amor4-crystal::before,.btn-amor4-crystal::after{animation:none!important}
+  .btn-amor4-crystal,.btn-amor4-crystal::before,.btn-amor4-crystal::after,
+  .btn-icon-aura-metal,.btn-icon-aura-metal::before,
+  .chat-amor4-epic,.chat-amor4-epic::before{animation:none!important;background-position:50% 50%!important}
   #matrixRain,.hero-nebula-canvas{display:none!important}
 }
 
@@ -3963,9 +4045,9 @@ body::before{
               <div class="mj-hero-btns">
                 <button type="button" class="btn-amor4-crystal" id="btnAmor4" onclick="openAmor4Payment()">
                   <span class="btn-premium-label">✨ Amor Propio Magic 4.0</span>
-                  <span class="btn-amor4-badge">NEW · $999</span>
+                  <span class="btn-amor4-badge">NUEVO AUDIO · $999</span>
                 </button>
-                <button type="button" class="btn-cover-chip btn-cover-gold" id="btnIconAura" onclick="goToIconAuraAnimated()"><span class="btn-premium-label">Icon Aura</span></button>
+                <button type="button" class="btn-icon-aura-metal" id="btnIconAura" onclick="goToIconAuraAnimated()"><span class="btn-premium-label">Icon Aura</span></button>
               </div>
               <div id="mjFloatWrap">
                 <model-viewer
@@ -7098,6 +7180,22 @@ function normalizeAliciaPromoReply(reply,userTxt){
   }
   return stripAliciaChatImages(r);
 }
+var CHAT_AMOR4_PHRASE_RE=/amor\s+propio\s+magic\s+4(?:\.0)?/gi;
+function appendChatTextWithHighlights(el,text){
+  var s=String(text||'');
+  if(!s){return;}
+  var re=new RegExp(CHAT_AMOR4_PHRASE_RE.source,'gi');
+  var last=0,m;
+  while((m=re.exec(s))!==null){
+    if(m.index>last)el.appendChild(document.createTextNode(s.slice(last,m.index)));
+    var sp=document.createElement('span');
+    sp.className='chat-amor4-epic';
+    sp.textContent=m[0];
+    el.appendChild(sp);
+    last=m.index+m[0].length;
+  }
+  if(last<s.length)el.appendChild(document.createTextNode(s.slice(last)));
+}
 function appendFormattedChatText(bub,text){
   var s=String(text).replace(/\r\n/g,'\n').trim();
   if(!s)return;
@@ -7121,7 +7219,7 @@ function appendFormattedChatText(bub,text){
       ul.className='chat-msg-list';
       lines.forEach(function(ln){
         var li=document.createElement('li');
-        li.textContent=ln.replace(/^[-•*–]\s+/,'').replace(/^\d+[.)]\s+/,'');
+        appendChatTextWithHighlights(li,ln.replace(/^[-•*–]\s+/,'').replace(/^\d+[.)]\s+/,''));
         ul.appendChild(li);
       });
       bub.appendChild(ul);
@@ -7130,7 +7228,7 @@ function appendFormattedChatText(bub,text){
     if(lines.length===1){
       var p=document.createElement('p');
       p.className='chat-msg-p';
-      p.textContent=lines[0];
+      appendChatTextWithHighlights(p,lines[0]);
       bub.appendChild(p);
       return;
     }
@@ -7138,7 +7236,7 @@ function appendFormattedChatText(bub,text){
     pMulti.className='chat-msg-p';
     lines.forEach(function(ln,idx){
       if(idx>0)pMulti.appendChild(document.createElement('br'));
-      pMulti.appendChild(document.createTextNode(ln));
+      appendChatTextWithHighlights(pMulti,ln);
     });
     bub.appendChild(pMulti);
   });
