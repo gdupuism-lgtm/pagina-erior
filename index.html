@@ -6998,7 +6998,25 @@ function normalizePromoImageFile(filename){
   return String(filename||'').trim();
 }
 function stripAliciaChatImages(reply){
-  return String(reply||'').replace(/\s*\[IMG:[^\]]+\]\s*/gi,'\n').replace(/\n{3,}/g,'\n\n').trim();
+  return String(reply||'')
+    .replace(/\s*\[IMG:(?!img\/catalog\/amor-propio-magic-4-0\.jpg)[^\]]+\]\s*/gi,'\n')
+    .replace(/\n{3,}/g,'\n\n')
+    .trim();
+}
+var MAGIC4_IMG_TAG='[IMG:img/catalog/amor-propio-magic-4-0.jpg]';
+function replyMentionsMagic4(txt){
+  return /amor propio magic 4(?:\.0)?|magic 4\.0|magic 4\. 0|💖 amor propio magic 4/i.test(String(txt||''));
+}
+function ensureMagic4ImageInReply(reply){
+  var r=String(reply||'').trim();
+  if(!replyMentionsMagic4(r))return r;
+  if(/\[IMG:img\/catalog\/amor-propio-magic-4-0\.jpg\]/i.test(r))return r;
+  var blocks=r.split(/\n{2,}/);
+  if(blocks.length>1){
+    blocks.splice(1,0,MAGIC4_IMG_TAG);
+    return blocks.join('\n\n');
+  }
+  return r+'\n\n'+MAGIC4_IMG_TAG;
 }
 function isEmergency999Context(txt){
   var s=String(txt||'').toLowerCase();
@@ -7236,7 +7254,7 @@ async function sendMsg(){
       addMsg('b','Alicia no pudo responder ahora: '+errTxt+'. Si estás en tu computadora, prueba con `netlify dev` o revisa que el sitio esté en Netlify con ANTHROPIC_API_KEY configurada 💜');
     }else{
       var reply=(data&&data.reply)?String(data.reply):'Lo siento, hubo un error 💜';
-      reply=stripAliciaChatImages(normalizeAliciaPromoReply(reply,txt));
+      reply=ensureMagic4ImageInReply(stripAliciaChatImages(normalizeAliciaPromoReply(reply,txt)));
       addMsg('b',reply);hist.push({role:'assistant',content:reply});
       logAliciaCrmMessage('assistant',reply);
       if(isAliciaPremiumChat()){

@@ -32,7 +32,7 @@ PROMOS JULIO 2026 (vigentes hasta 31 julio — PRIORIDAD venta):
 3) Summer Wonderland Pack: Magic 4.0 + 2 audios a elección + Telegram privado + Telegram Liberar Emociones + 1 mes Alicia Premium + 1 mes Mind Movie = $2,888 MXN / $168 USD / €146 EUR (valor $4,444).
 Precio regular sin promo: audio $1,190 MXN / $69 USD / €60 EUR. NUNCA Father Upgrade Pack ni Hot Sale (terminaron).
 Telegram Privado suelto: $888 MXN/mes ($52 USD) O incluido al comprar audios en promo. Mind Movie suelto: $1,190 MXN / $69 USD / €60 EUR.
-RECOMENDACION OBLIGATORIA: siempre sugerir 2 audios — incluir Magic 4.0 si encaja. Mencionar Summer Wonderland si quiere 2+ audios o pack completo. PRIORIDAD: vender Magic 4.0 y promos julio.
+RECOMENDACION OBLIGATORIA: siempre sugerir 2 audios — incluir Magic 4.0 si encaja. Si recomiendas Magic 4.0: incluye [IMG:img/catalog/amor-propio-magic-4-0.jpg] en el chat y pitch de necesidad emocional. PRIORIDAD: vender Magic 4.0 y promos julio.
 Si preguntan si necesitan otro audio: SIEMPRE recomendar 2 concretos. NUNCA decir "no compres", "no es necesario" ni "solo escucha los que tienes".
 Audios en loop muchas horas; nunca limitar a 2h. KEEP COOL = excepción meditación 1-3x/día.
 `;
