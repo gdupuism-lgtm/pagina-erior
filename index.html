@@ -3996,12 +3996,12 @@ body::before{
       <div class="cover-promo-countdown cover-promo-jewel promo-countdown-block promo-summer-glow" id="coverPromoJewel" onclick="openPromoModal()" role="button" tabindex="0" aria-label="Ver promociones de julio">
         <div class="cover-promo-slides" id="coverPromoSlides">
           <div class="cover-promo-slide active" data-promo="magic4">
-            <div class="cover-promo-offer">
+        <div class="cover-promo-offer">
               <strong class="cover-promo-title">✨ Amor Propio Magic 4.0 — NEW</strong>
               <p class="cover-promo-line">Lanzamiento julio · Telegram Liberar Emociones 🎁</p>
               <p class="cover-promo-prices"><span class="promo-price-old">$1,199</span> $999 MXN · $58 USD</p>
-            </div>
-          </div>
+        </div>
+        </div>
           <div class="cover-promo-slide" data-promo="july888">
             <div class="cover-promo-offer">
               <strong class="cover-promo-title">🌊 Promo de Julio</strong>
@@ -4194,30 +4194,30 @@ body::before{
 
         <!-- Vista del chat (gratis o premium) -->
         <div class="alicia-chat-view" id="aliciaChatView" hidden>
-          <header class="alicia-header">
-            <p class="alicia-label">Asistente IA</p>
-            <h1 class="alicia-title">Alicia <em>Virtual</em></h1>
+        <header class="alicia-header">
+          <p class="alicia-label">Asistente IA</p>
+          <h1 class="alicia-title">Alicia <em>Virtual</em></h1>
             <p class="alicia-tagline" id="aliciaTagline">Cuéntame cómo te sientes y te guío al audio perfecto para ti.</p>
-          </header>
-          <div class="alicia-avatar-wrap">
-            <model-viewer
-              id="aliciaModel"
-              src="spheron.glb"
-              alt="Avatar 3D Alicia, asistente virtual de Erior Center para elegir audios binaurales de manifestación"
-              title="Alicia IA — Erior Center"
-              autoplay
-              interaction-prompt="none"
-              disable-zoom
-              disable-pan
-              disable-tap
-              shadow-intensity="0"
-              exposure="1.15"
-              camera-orbit="0deg 75deg auto"
-              field-of-view="28deg"
-              style="width:100%;height:100%;background-color:transparent;"
-            ></model-viewer>
-          </div>
-          <div class="alicia-chat-card" id="aliciaChatCard">
+        </header>
+        <div class="alicia-avatar-wrap">
+          <model-viewer
+            id="aliciaModel"
+            src="spheron.glb"
+            alt="Avatar 3D Alicia, asistente virtual de Erior Center para elegir audios binaurales de manifestación"
+            title="Alicia IA — Erior Center"
+            autoplay
+            interaction-prompt="none"
+            disable-zoom
+            disable-pan
+            disable-tap
+            shadow-intensity="0"
+            exposure="1.15"
+            camera-orbit="0deg 75deg auto"
+            field-of-view="28deg"
+            style="width:100%;height:100%;background-color:transparent;"
+          ></model-viewer>
+        </div>
+        <div class="alicia-chat-card" id="aliciaChatCard">
             <div class="alicia-tier-actions" id="aliciaTierActions">
               <button type="button" class="alicia-tier-switch" id="aliciaTierSwitch" hidden>✨ Versión gratis</button>
               <button type="button" class="alicia-tier-badge alicia-tier-badge--upgrade" id="aliciaTierBadge" onclick="showAliciaPremiumUpgrade()">👑 Upgrade a Premium</button>
@@ -4235,15 +4235,15 @@ body::before{
             <div class="alicia-premium-revoked-banner" id="aliciaPremiumRevokedBanner" hidden>
               Tu acceso Premium fue desactivado. Puedes seguir en Alicia gratis o contactarnos por WhatsApp.
             </div>
-            <canvas class="alicia-sales-sparkle" id="aliciaSalesSparkle" aria-hidden="true"></canvas>
-            <div class="chat-window" id="chatWin"></div>
-            <div class="chat-bar">
-              <input class="chat-in" id="chatIn" placeholder="¿Qué quieres transformar hoy?" onkeydown="if(event.key==='Enter')sendMsg()">
-              <button type="button" class="chat-send" onclick="sendMsg()">Enviar</button>
-            </div>
+          <canvas class="alicia-sales-sparkle" id="aliciaSalesSparkle" aria-hidden="true"></canvas>
+          <div class="chat-window" id="chatWin"></div>
+          <div class="chat-bar">
+            <input class="chat-in" id="chatIn" placeholder="¿Qué quieres transformar hoy?" onkeydown="if(event.key==='Enter')sendMsg()">
+            <button type="button" class="chat-send" onclick="sendMsg()">Enviar</button>
           </div>
-          <button type="button" id="aliciaQuieroPagar" onclick="openPaymentModal(typeof aliciaClient!=='undefined' && aliciaClient.ultimoAudio ? aliciaClient.ultimoAudio : 'Audio Erior')" style="display:none;align-items:center;justify-content:center;gap:.5rem;width:100%;max-width:420px;margin:1rem auto 0;padding:.95rem 1.5rem;border-radius:14px;cursor:pointer;border:1px solid rgba(201,160,96,.45);background:rgba(201,160,96,.12);font-family:'Jost',sans-serif;font-size:.75rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);transition:all .25s;">💳 Quiero pagar ahora</button>
-          <a id="btnPauline" href="#" onclick="aliciaPaulineWA();return false;" style="display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;max-width:420px;margin:.6rem auto 0;padding:.85rem 1.5rem;border-radius:14px;cursor:pointer;border:1px solid rgba(37,211,102,.35);background:rgba(37,211,102,.08);font-family:'Jost',sans-serif;font-size:.72rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:rgba(37,211,102,.9);text-decoration:none;transition:all .25s;">💬 Hablar con Pauline</a>
+        </div>
+        <button type="button" id="aliciaQuieroPagar" onclick="openPaymentModal(typeof aliciaClient!=='undefined' && aliciaClient.ultimoAudio ? aliciaClient.ultimoAudio : 'Audio Erior')" style="display:none;align-items:center;justify-content:center;gap:.5rem;width:100%;max-width:420px;margin:1rem auto 0;padding:.95rem 1.5rem;border-radius:14px;cursor:pointer;border:1px solid rgba(201,160,96,.45);background:rgba(201,160,96,.12);font-family:'Jost',sans-serif;font-size:.75rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);transition:all .25s;">💳 Quiero pagar ahora</button>
+        <a id="btnPauline" href="#" onclick="aliciaPaulineWA();return false;" style="display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;max-width:420px;margin:.6rem auto 0;padding:.85rem 1.5rem;border-radius:14px;cursor:pointer;border:1px solid rgba(37,211,102,.35);background:rgba(37,211,102,.08);font-family:'Jost',sans-serif;font-size:.72rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:rgba(37,211,102,.9);text-decoration:none;transition:all .25s;">💬 Hablar con Pauline</a>
         </div>
       </div>
     </div>
@@ -4612,8 +4612,8 @@ body::before{
         <div class="promo-cta-row">
           <button type="button" class="promo-cta-pay" onclick="openPromoPay('magic4')">💳 Quiero pagar ahora</button>
           <a class="promo-cta-wa" href="#" onclick="event.preventDefault();window.open(promoWaUrl('magic4'),'_blank','noopener');closePromoModal();">💬 WhatsApp: quiero Magic 4.0</a>
-        </div>
       </div>
+        </div>
       <div class="promo-panel" id="promoPanelJuly888" role="tabpanel">
         <p class="promo-dates">🌊✨ ¡PROMOCIÓN DE JULIO! ✨🌊</p>
         <p class="promo-desc">☀️ Este verano, regálate tu glow up. 🛸 Cualquier audio del catálogo por solo $888 MXN ($49 USD) en lugar de $1,199. 🎁 ¡Incluye Telegram privado! ✨ Momento perfecto para empezar tu transformación.</p>
@@ -4797,9 +4797,9 @@ function initCoverPromoRotate(){
         e.stopPropagation();
         var n=parseInt(dot.getAttribute('data-goto'),10);
         if(!isNaN(n))setCoverPromoSlide(n,false);
-      });
     });
-  }
+  });
+}
   if(window._coverPromoRotateIv)clearInterval(window._coverPromoRotateIv);
   window._coverPromoRotateIv=setInterval(rotateCoverPromoSlide,5500);
 }
@@ -7165,6 +7165,19 @@ function isEmergency999Context(txt){
   if(typeof aliciaClient!=='undefined'&&aliciaClient.ultimoAudio&&/emergency/i.test(aliciaClient.ultimoAudio))return true;
   return false;
 }
+function fixJulyDualAudioPricing(reply){
+  var r=String(reply||'');
+  var hasMagic4=/amor propio magic 4|magic 4\.0|magic 4\. 0/i.test(r);
+  var hasSecondAudio=/fit wave|vitamind|booster|wonderland|select|identity|erior love|attraction|master mind|lucky|money tech|eclat/i.test(r);
+  var has999=/999\s*mxn|\$999|\$58\s*usd|58\s*usd/i.test(r);
+  var has1887=/1[,.]?887|1887/i.test(r);
+  if(!hasMagic4||!hasSecondAudio||has999||has1887)return r;
+  if(!/\$?\s*888|888\s*mxn|\$49\s*usd/i.test(r))return r;
+  return r.replace(
+    /(\$888\s*MXN[^.\n]*?(?:\/\s*\$49\s*USD)?[^.\n]*?(?:\+?\s*Telegram[^.\n]*)?)(\.|$)/i,
+    'Amor Propio Magic 4.0: $999 MXN / $58 USD + Telegram Liberar Emociones. Segundo audio: $888 MXN / $49 USD + Telegram privado. Total julio: $1,887 MXN$2'
+  );
+}
 function normalizeAliciaPromoReply(reply,userTxt){
   var r=String(reply||'');
   r=r.replace(/\b(?:solo|solamente|nada mas que|nada más que)\s+(?:dos|2)\s*horas?\b/gi,'muchas horas en loop (entre más escucha, mejor)');
@@ -7178,6 +7191,7 @@ function normalizeAliciaPromoReply(reply,userTxt){
     r=r.replace(/\$6[89]\s*USD/gi,'$194 USD');
     r=r.replace(/€(?:59|60)\s*EUR/gi,'€168 EUR');
   }
+  r=fixJulyDualAudioPricing(r);
   return stripAliciaChatImages(r);
 }
 var CHAT_AMOR4_PHRASE_RE=/amor\s+propio\s+magic\s+4(?:\.0)?/gi;
@@ -7949,11 +7963,11 @@ initTestimonialVideo();
   function applyLayoutCamera(){
     var isCharacter=/michael|mixamo|character|avatar|person|icon-aura-hero|alien/i.test(glbSrc||'');
     if(isCharacter){
-      viewer.setAttribute('field-of-view','24deg');
+    viewer.setAttribute('field-of-view','24deg');
       viewer.setAttribute('camera-target','0m 0.85m 0m');
-      if(window.matchMedia('(max-width:767px)').matches){
+    if(window.matchMedia('(max-width:767px)').matches){
         viewer.setAttribute('camera-orbit','0deg 64deg 115%');
-      }else{
+    }else{
         viewer.setAttribute('camera-orbit','0deg 66deg 110%');
       }
     }else{

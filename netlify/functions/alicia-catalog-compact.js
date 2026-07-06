@@ -27,9 +27,10 @@ EMERGENCY 999 — PAQUETE ESPECIAL (3 audios en 1, NO es precio de audio suelto)
 - Incluye 3 audios ultra personalizados: mañana (amor propio/flujo), tarde (creencias manifestación), noche (autoconcepto). Por Pauline. Lista de espera / cupos limitados.
 - Precio EMERGENCY 999: $3,333 MXN / $194 USD / €168 EUR (equivale a 3 audios; NUNCA decir $1,190 ni tratarlo como un solo audio).
 PROMOS JULIO 2026 (vigentes hasta 31 julio — PRIORIDAD venta):
-1) Lanzamiento Amor Propio Magic 4.0: $999 MXN / $58 USD / €51 EUR (antes $1,199) + Telegram Liberar Emociones. RECOMENDAR PRIMERO si amor propio/trauma/merecimiento.
-2) Promo julio — cualquier audio: $888 MXN / $49 USD / €43 EUR (antes $1,199) + Telegram privado.
-3) Summer Wonderland Pack: Magic 4.0 + 2 audios a elección + Telegram privado + Telegram Liberar Emociones + 1 mes Alicia Premium + 1 mes Mind Movie = $2,888 MXN / $168 USD / €146 EUR (valor $4,444).
+1) Lanzamiento Amor Propio Magic 4.0 SUELTO: $999 MXN / $58 USD / €51 EUR (NO $888) + Telegram Liberar Emociones.
+2) Promo julio — cualquier OTRO audio SUELTO (no Magic 4.0): $888 MXN / $49 USD / €43 EUR + Telegram privado.
+3) Summer Wonderland PACK (Magic 4.0 + 2 audios mas = 3 total): $2,888 MXN / $168 USD — incluye Premium + Mind Movie + ambos Telegram.
+COTIZACION 2 audios (Magic 4.0 + otro): $999 + $888 = $1,887 MXN. NUNCA decir solo $888 para ambos.
 Precio regular sin promo: audio $1,190 MXN / $69 USD / €60 EUR. NUNCA Father Upgrade Pack ni Hot Sale (terminaron).
 Telegram Privado suelto: $888 MXN/mes ($52 USD) O incluido al comprar audios en promo. Mind Movie suelto: $1,190 MXN / $69 USD / €60 EUR.
 RECOMENDACION OBLIGATORIA: siempre sugerir 2 audios — incluir Magic 4.0 si encaja. Si recomiendas Magic 4.0: incluye [IMG:img/catalog/amor-propio-magic-4-0.jpg] en el chat y pitch de necesidad emocional. PRIORIDAD: vender Magic 4.0 y promos julio.
