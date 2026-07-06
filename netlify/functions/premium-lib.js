@@ -665,6 +665,169 @@ async function consumePremiumMessage(visitanteId, codeId) {
   };
 }
 
+function getFreeDailyLimit() {
+  const n = parseInt(process.env.ALICIA_FREE_DAILY_LIMIT, 10);
+  return Number.isFinite(n) && n > 0 ? n : 7;
+}
+
+async function fetchFreeUsageRow(visitanteId) {
+  const vid = String(visitanteId || '').slice(0, 80);
+  if (!vid) return null;
+  const res = await sbFetch(
+    `alicia_free_usage?visitante_id=eq.${encodeURIComponent(vid)}&select=visitante_id,day_key,messages_today,last_message_at&limit=1`,
+    { method: 'GET' }
+  );
+  if (!res.ok) return null;
+  const rows = await res.json().catch(() => []);
+  return rows && rows[0] ? rows[0] : null;
+}
+
+function buildFreeQuotaPayload(row, now) {
+  const limit = getFreeDailyLimit();
+  const dayKey = getMexicoDayKey(now || new Date());
+
+  if (!row) {
+    return {
+      allowed: true,
+      blocked: false,
+      remaining: limit,
+      used_today: 0,
+      daily_limit: limit,
+      limit,
+    };
+  }
+
+  const isNewDay = row.day_key !== dayKey;
+  const usedToday = isNewDay ? 0 : Math.max(0, Number(row.messages_today) || 0);
+  const remaining = Math.max(0, limit - usedToday);
+
+  return {
+    allowed: remaining > 0,
+    blocked: remaining <= 0,
+    remaining,
+    used_today: usedToday,
+    daily_limit: limit,
+    limit,
+  };
+}
+
+async function upsertFreeUsage(visitanteId, patch) {
+  const vid = String(visitanteId || '').slice(0, 80);
+  if (!vid) return false;
+  const now = new Date().toISOString();
+  const row = await fetchFreeUsageRow(vid);
+  const payload = Object.assign({ updated_at: now }, patch || {});
+
+  if (row) {
+    const res = await sbFetch(
+      `alicia_free_usage?visitante_id=eq.${encodeURIComponent(vid)}`,
+      {
+        method: 'PATCH',
+        headers: { Prefer: 'return=minimal' },
+        body: JSON.stringify(payload),
+      }
+    );
+    return res.ok;
+  }
+
+  const ins = await sbFetch('alicia_free_usage', {
+    method: 'POST',
+    headers: { Prefer: 'return=minimal' },
+    body: JSON.stringify([
+      Object.assign(
+        {
+          visitante_id: vid,
+          day_key: getMexicoDayKey(),
+          messages_today: 0,
+        },
+        payload
+      ),
+    ]),
+  });
+  return ins.ok;
+}
+
+async function getFreeQuotaStatus(visitanteId) {
+  const vid = String(visitanteId || '').slice(0, 80);
+  if (!vid) {
+    return buildFreeQuotaPayload(null, new Date());
+  }
+  const row = await fetchFreeUsageRow(vid);
+  const now = new Date();
+  const payload = buildFreeQuotaPayload(row, now);
+  if (row && row.day_key !== getMexicoDayKey(now) && row.messages_today) {
+    await upsertFreeUsage(vid, {
+      day_key: getMexicoDayKey(now),
+      messages_today: 0,
+    });
+  }
+  return payload;
+}
+
+async function consumeFreeMessage(visitanteId) {
+  const vid = String(visitanteId || '').slice(0, 80);
+  const limit = getFreeDailyLimit();
+  if (!vid) {
+    return {
+      ok: false,
+      allowed: false,
+      blocked: true,
+      error: 'Sesión inválida',
+      daily_limit: limit,
+      limit,
+      remaining: 0,
+    };
+  }
+
+  const now = new Date();
+  const dayKey = getMexicoDayKey(now);
+  const row = await fetchFreeUsageRow(vid);
+  const status = buildFreeQuotaPayload(row, now);
+
+  if (!status.allowed) {
+    return Object.assign(
+      { ok: false, quota_error: 'limit_reached', error: 'Límite diario gratuito alcanzado' },
+      status
+    );
+  }
+
+  const prevUsed =
+    row && row.day_key === dayKey ? Math.max(0, Number(row.messages_today) || 0) : 0;
+  const nextUsed = prevUsed + 1;
+
+  const saved = await upsertFreeUsage(vid, {
+    day_key: dayKey,
+    messages_today: nextUsed,
+    last_message_at: now.toISOString(),
+  });
+
+  if (!saved) {
+    return {
+      ok: false,
+      allowed: true,
+      blocked: false,
+      quota_error: 'register_failed',
+      error:
+        'No se pudo registrar la cuota gratuita. ¿Ejecutaste supabase/alicia-free-quota.sql en Supabase?',
+      daily_limit: limit,
+      limit,
+      remaining: Math.max(0, limit - prevUsed),
+      used_today: prevUsed,
+    };
+  }
+
+  return {
+    ok: true,
+    allowed: true,
+    blocked: nextUsed >= limit,
+    daily_limit: limit,
+    limit,
+    used_today: nextUsed,
+    remaining: Math.max(0, limit - nextUsed),
+    limit_reached: nextUsed >= limit,
+  };
+}
+
 module.exports = {
   corsHeaders,
   getSupabaseConfig,
@@ -682,6 +845,9 @@ module.exports = {
   consumePremiumMessage,
   resetPremiumUsageForActivation,
   getPremiumDailyLimit,
+  getFreeDailyLimit,
+  getFreeQuotaStatus,
+  consumeFreeMessage,
   fetchReferralByCode,
   createReferralForPremiumCode,
   trackReferralHit,

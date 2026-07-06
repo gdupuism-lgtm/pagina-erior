@@ -9,6 +9,7 @@ const {
   checkPremiumStatus,
   verifyPremiumCodeId,
   getPremiumQuotaStatus,
+  getFreeQuotaStatus,
 } = require('./premium-lib');
 
 exports.handler = async (event) => {
@@ -42,6 +43,23 @@ exports.handler = async (event) => {
   }
 
   try {
+    if (body.free_quota === true) {
+      const vid = String(body.visitante_id || '').slice(0, 80);
+      if (!vid) {
+        return {
+          statusCode: 400,
+          headers,
+          body: JSON.stringify({ ok: false, error: 'Falta visitante_id' }),
+        };
+      }
+      const quota = await getFreeQuotaStatus(vid);
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify(Object.assign({ ok: true, tier: 'free' }, quota)),
+      };
+    }
+
     if (body.quota === true) {
       const vid = String(body.visitante_id || '').slice(0, 80);
       if (!vid) {
@@ -60,7 +78,7 @@ exports.handler = async (event) => {
       return {
         statusCode: 200,
         headers,
-        body: JSON.stringify(Object.assign({ ok: true, active }, quota)),
+        body: JSON.stringify(Object.assign({ ok: true, active, tier: 'premium' }, quota)),
       };
     }
 

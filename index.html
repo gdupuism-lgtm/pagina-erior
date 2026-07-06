@@ -1154,6 +1154,15 @@ body::before{
   color:rgba(255,200,160,.95);
   background:rgba(180,80,40,.15);border-color:rgba(255,140,80,.25);
 }
+.alicia-free-quota-banner{
+  margin:.45rem .65rem 0;padding:.55rem .75rem;border-radius:10px;
+  font-size:.68rem;line-height:1.45;color:rgba(220,200,255,.92);
+  background:rgba(100,60,160,.12);border:1px solid rgba(160,120,255,.22);
+}
+.alicia-free-quota-banner.is-blocked{
+  color:rgba(255,200,160,.95);
+  background:rgba(180,80,40,.15);border-color:rgba(255,140,80,.25);
+}
 .chat-in:disabled,.chat-send:disabled{opacity:.45;cursor:not-allowed}
 .alicia-sales-sparkle{
   position:absolute;inset:0;width:100%;height:100%;
@@ -4232,6 +4241,9 @@ body::before{
             <div class="alicia-premium-quota-banner" id="aliciaPremiumQuotaBanner" hidden>
               <span id="aliciaPremiumQuotaText"></span>
             </div>
+            <div class="alicia-free-quota-banner" id="aliciaFreeQuotaBanner" hidden>
+              <span id="aliciaFreeQuotaText"></span>
+            </div>
             <div class="alicia-premium-revoked-banner" id="aliciaPremiumRevokedBanner" hidden>
               Tu acceso Premium fue desactivado. Puedes seguir en Alicia gratis o contactarnos por WhatsApp.
             </div>
@@ -6128,7 +6140,9 @@ var ALICIA_MODE_KEY='alicia_mode';
 var ALICIA_PREMIUM_EXPIRES_KEY='alicia_premium_expires';
 var ALICIA_PREMIUM_DAYS=30;
 var ALICIA_PREMIUM_DAILY_LIMIT=5;
+var ALICIA_FREE_DAILY_LIMIT=7;
 var aliciaPremiumQuota={limit:ALICIA_PREMIUM_DAILY_LIMIT,remaining:ALICIA_PREMIUM_DAILY_LIMIT,used_today:0,blocked:false,blocked_until:null};
+var aliciaFreeQuota={limit:ALICIA_FREE_DAILY_LIMIT,remaining:ALICIA_FREE_DAILY_LIMIT,used_today:0,blocked:false};
 var hist=[];
 var aliciaChatStarted=false;
 var aliciaWelcomePending=false;
@@ -6337,6 +6351,84 @@ function getAliciaPremiumWelcomeMessage(q){
   var remaining=(q.remaining!=null)?q.remaining:limit;
   return 'Bienvenid@ a Alicia Premium ✨ Has entrado a un espacio que no es para todos.\n\n📊 Tu acceso incluye hasta '+limit+' preguntas por día. Hoy te quedan '+remaining+'. Si las usas todas, el chat se pausa 24 horas y luego vuelves con preguntas nuevas.\n\nCuéntame qué sientes de verdad, sin filtro. Voy a escucharte desde un lugar que la mayoría no alcanza a ver. 🌙';
 }
+function getFreeLimitBlockMessage(q){
+  q=q||aliciaFreeQuota||{};
+  var limit=q.daily_limit||q.limit||ALICIA_FREE_DAILY_LIMIT;
+  return 'Has usado tus '+limit+' mensajes gratis de hoy ✨ Mañana (hora CDMX) tendrás preguntas nuevas. Mientras tanto puedes ver los audios del catálogo, escribirnos por WhatsApp o activar Alicia Premium para acompañamiento más profundo 💛';
+}
+function getAliciaFreeWelcomeNote(q){
+  q=q||aliciaFreeQuota||{};
+  var limit=q.daily_limit||q.limit||ALICIA_FREE_DAILY_LIMIT;
+  var remaining=(q.remaining!=null)?q.remaining:limit;
+  if(remaining<=0)return '';
+  return '\n\n📊 Alicia gratis incluye hasta '+limit+' mensajes por día. Hoy te quedan '+remaining+'.';
+}
+function updateFreeQuotaUI(){
+  var banner=document.getElementById('aliciaFreeQuotaBanner');
+  var text=document.getElementById('aliciaFreeQuotaText');
+  var inp=document.getElementById('chatIn');
+  var sendBtn=document.querySelector('.chat-send');
+  if(isAliciaPremiumChat()){
+    if(banner)banner.hidden=true;
+    return;
+  }
+  var q=aliciaFreeQuota||{};
+  var limit=q.daily_limit||q.limit||ALICIA_FREE_DAILY_LIMIT;
+  if(banner&&text){
+    banner.hidden=false;
+    if(q.blocked||(q.remaining!=null&&q.remaining<=0)){
+      banner.className='alicia-free-quota-banner is-blocked';
+      text.textContent=getFreeLimitBlockMessage(q);
+    }else{
+      banner.className='alicia-free-quota-banner';
+      text.textContent='Gratis: te quedan '+Math.max(0,q.remaining!=null?q.remaining:limit)+' de '+limit+' mensajes hoy.';
+    }
+  }
+  var locked=!!q.blocked||(q.remaining!=null&&q.remaining<=0);
+  if(inp){
+    inp.disabled=locked;
+    inp.placeholder=locked?'Límite diario alcanzado — vuelve mañana':'¿Qué quieres transformar hoy?';
+  }
+  if(sendBtn)sendBtn.disabled=locked;
+}
+async function fetchFreeQuota(){
+  if(isAliciaPremiumChat())return null;
+  try{
+    var r=await fetch(PREMIUM_VALIDATE_FN,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        free_quota:true,
+        visitante_id:getVisitanteId()
+      })
+    });
+    var data=await r.json().catch(function(){return{};});
+    if(r.ok&&data.ok){
+      aliciaFreeQuota={
+        limit:data.daily_limit||data.limit||ALICIA_FREE_DAILY_LIMIT,
+        daily_limit:data.daily_limit||data.limit||ALICIA_FREE_DAILY_LIMIT,
+        remaining:data.remaining!=null?data.remaining:0,
+        used_today:data.used_today||0,
+        blocked:!!data.blocked
+      };
+      updateFreeQuotaUI();
+      return aliciaFreeQuota;
+    }
+  }catch(e){}
+  return null;
+}
+function applyFreeQuotaFromServer(data){
+  if(!data||!data.freeQuota)return;
+  var q=data.freeQuota;
+  aliciaFreeQuota={
+    limit:q.daily_limit||q.limit||ALICIA_FREE_DAILY_LIMIT,
+    daily_limit:q.daily_limit||q.limit||ALICIA_FREE_DAILY_LIMIT,
+    remaining:q.remaining!=null?q.remaining:0,
+    used_today:q.used_today||0,
+    blocked:!!q.blocked||!!q.limit_reached
+  };
+  updateFreeQuotaUI();
+}
 function updatePremiumQuotaUI(){
   var banner=document.getElementById('aliciaPremiumQuotaBanner');
   var text=document.getElementById('aliciaPremiumQuotaText');
@@ -6344,10 +6436,11 @@ function updatePremiumQuotaUI(){
   var sendBtn=document.querySelector('.chat-send');
   if(!isAliciaPremiumChat()){
     if(banner)banner.hidden=true;
-    if(inp)inp.disabled=false;
-    if(sendBtn)sendBtn.disabled=false;
+    updateFreeQuotaUI();
     return;
   }
+  var freeBanner=document.getElementById('aliciaFreeQuotaBanner');
+  if(freeBanner)freeBanner.hidden=true;
   var q=aliciaPremiumQuota||{};
   var limit=q.daily_limit||q.limit||ALICIA_PREMIUM_DAILY_LIMIT;
   if(banner&&text){
@@ -6414,10 +6507,11 @@ function getAliciaWelcomeMessage(){
     return getAliciaPremiumWelcomeMessage(aliciaPremiumQuota);
   }
   var ref=getReferralCode();
+  var quotaNote=getAliciaFreeWelcomeNote(aliciaFreeQuota);
   if(ref){
-    return 'Bienvenid@ a ERIOR CENTER ✨ Soy Alicia. Alguien de confianza te trajo hasta aqui — y eso ya dice algo de ti. Estoy para escucharte de verdad y guiarte al audio que tu alma necesita en este momento exacto. Hay cosas que el subconsciente ya sabe antes de que las digas en voz alta... Cuéntame, que te trae por aqui hoy?';
+    return 'Bienvenid@ a ERIOR CENTER ✨ Soy Alicia. Alguien de confianza te trajo hasta aqui — y eso ya dice algo de ti. Estoy para escucharte de verdad y guiarte al audio que tu alma necesita en este momento exacto. Hay cosas que el subconsciente ya sabe antes de que las digas en voz alta... Cuéntame, que te trae por aqui hoy?'+quotaNote;
   }
-  return 'Bienvenid@ a ERIOR CENTER ✨ Soy Alicia, tu asistente personal. Estoy aqui para escucharte de verdad y guiarte al audio perfecto segun lo que estes viviendo. A veces lo que sentimos por dentro ya tiene una respuesta — solo falta escucharla. Cuentame, que te trae por aqui hoy?';
+  return 'Bienvenid@ a ERIOR CENTER ✨ Soy Alicia, tu asistente personal. Estoy aqui para escucharte de verdad y guiarte al audio perfecto segun lo que estes viviendo. A veces lo que sentimos por dentro ya tiene una respuesta — solo falta escucharla. Cuentame, que te trae por aqui hoy?'+quotaNote;
 }
 function showAliciaPremiumWelcomeInChat(){
   var welcome=getAliciaWelcomeMessage();
@@ -6501,6 +6595,7 @@ function enterAliciaChat(){
   if(banner&&isAliciaPremiumActive())banner.hidden=true;
   populateAliciaLeadForm();
   if(isAliciaPremiumChat())fetchPremiumQuota();
+  else fetchFreeQuota();
   updateAliciaTierUI();
   updateAliciaTagline();
 }
@@ -6573,19 +6668,27 @@ function startAliciaChatSession(){
       aliciaChatStarted=true;
       return;
     }
+    if(!isAliciaPremiumChat()&&aliciaFreeQuota&&(aliciaFreeQuota.blocked||(aliciaFreeQuota.remaining!=null&&aliciaFreeQuota.remaining<=0))){
+      addMsg('b',getFreeLimitBlockMessage(aliciaFreeQuota));
+      updateFreeQuotaUI();
+      aliciaChatStarted=true;
+      return;
+    }
     var welcome=getAliciaWelcomeMessage();
     addMsg('b',welcome);
     if(!hist.length)hist.push({role:'assistant',content:welcome});
     logAliciaCrmMessage('assistant',welcome);
     aliciaChatStarted=true;
     updatePremiumQuotaUI();
+    updateFreeQuotaUI();
   };
   if(isAliciaPremiumChat()){
     fetchPremiumQuota().then(begin);
     ensureAliciaConversation().catch(function(){});
     return;
   }
-  ensureAliciaConversation().then(begin);
+  fetchFreeQuota().then(begin);
+  ensureAliciaConversation().catch(function(){});
 }
 function startAliciaFree(){
   resetAliciaChatSession();
@@ -7369,6 +7472,12 @@ async function sendMsg(){
       addMsg('b',getPremiumLimitBlockMessage(q));
       return;
     }
+  }else{
+    var fq=await fetchFreeQuota();
+    if(fq&&(fq.blocked||(fq.remaining!=null&&fq.remaining<=0))){
+      addMsg('b',getFreeLimitBlockMessage(fq));
+      return;
+    }
   }
   syncAliciaLeadFieldsToClient();
   inp.value='';addMsg('u',txt);hist.push({role:'user',content:txt});
@@ -7415,6 +7524,24 @@ async function sendMsg(){
       sendBtn.disabled=false;
       return;
     }
+    if((data.freeBlocked||r.status===429)&&data.freeQuota){
+      applyFreeQuotaFromServer(data);
+      hist.pop();
+      var winFree=document.getElementById('chatWin');
+      if(winFree&&winFree.lastElementChild)winFree.removeChild(winFree.lastElementChild);
+      addMsg('b',getFreeLimitBlockMessage(data.freeQuota));
+      sendBtn.disabled=false;
+      return;
+    }
+    if(r.status===429&&!isAliciaPremiumChat()&&!data.freeQuota){
+      applyFreeQuotaFromServer({freeQuota:{blocked:true,remaining:0,daily_limit:ALICIA_FREE_DAILY_LIMIT,limit:ALICIA_FREE_DAILY_LIMIT}});
+      hist.pop();
+      var win429=document.getElementById('chatWin');
+      if(win429&&win429.lastElementChild)win429.removeChild(win429.lastElementChild);
+      addMsg('b',getFreeLimitBlockMessage(aliciaFreeQuota));
+      sendBtn.disabled=false;
+      return;
+    }
     if(data.quotaError==='register_failed'||(data.premiumQuota&&data.premiumQuota.quota_error==='register_failed')){
       addMsg('b','No se pudo registrar tu cuota Premium. Falta configurar la tabla en Supabase (alicia-premium-quota.sql). Escríbenos por WhatsApp si necesitas ayuda 💛');
       sendBtn.disabled=false;
@@ -7431,6 +7558,9 @@ async function sendMsg(){
       if(isAliciaPremiumChat()){
         if(data.premiumQuota)applyPremiumQuotaFromServer(data);
         else fetchPremiumQuota();
+      }else{
+        if(data.freeQuota)applyFreeQuotaFromServer(data);
+        else fetchFreeQuota();
       }
       if(isSalesCloseMoment(reply)){triggerSalesSparkle();var qp=document.getElementById('aliciaQuieroPagar');if(qp)qp.style.display='flex';}
     }

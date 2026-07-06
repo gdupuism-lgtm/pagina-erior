@@ -325,7 +325,13 @@ Si recomiendas Amor Propio Magic 4.0 como complemento ideal (amor propio, trauma
 
 ESTILO: SOLO texto limpio. NUNCA asteriscos, negritas, markdown, # ni **.`;
 
-const { verifyPremiumCodeId, getPremiumQuotaStatus, consumePremiumMessage } = require('./premium-lib');
+const {
+  verifyPremiumCodeId,
+  getPremiumQuotaStatus,
+  consumePremiumMessage,
+  getFreeQuotaStatus,
+  consumeFreeMessage,
+} = require('./premium-lib');
 
 var AUDIO_MENTION_KEYS=[
   'wonderland coherence','emergency 999','master abundance','mesmerizing love',
@@ -504,6 +510,8 @@ exports.handler = async (event) => {
     }
   }
 
+  const visitanteId = String(body.visitanteId || '').slice(0, 80);
+
   if (usePremium) {
     try {
       const quotaCheck = await getPremiumQuotaStatus(premiumVisitanteId, premiumCodeId);
@@ -530,6 +538,24 @@ exports.handler = async (event) => {
           error: 'No se pudo verificar tu cuota Premium. Intenta en un momento.',
         }),
       };
+    }
+  } else if (visitanteId) {
+    try {
+      const freeCheck = await getFreeQuotaStatus(visitanteId);
+      if (!freeCheck.allowed) {
+        return {
+          statusCode: 429,
+          headers,
+          body: JSON.stringify({
+            error: 'Has alcanzado tu límite diario de Alicia gratis. Vuelve mañana (hora CDMX).',
+            freeQuota: freeCheck,
+            freeBlocked: true,
+            quotaError: 'limit_reached',
+          }),
+        };
+      }
+    } catch (freeQuotaErr) {
+      console.error('free quota check:', freeQuotaErr.message);
     }
   }
 
@@ -619,6 +645,7 @@ exports.handler = async (event) => {
 
     const clientClaimedPremium = body.isPremium === true && !!body.premiumCodeId;
     let premiumQuota = null;
+    let freeQuota = null;
     if (usePremium) {
       try {
         premiumQuota = await consumePremiumMessage(premiumVisitanteId, premiumCodeId);
@@ -641,6 +668,15 @@ exports.handler = async (event) => {
       } catch (consumeErr) {
         console.error('premium quota consume:', consumeErr.message);
       }
+    } else if (visitanteId) {
+      try {
+        freeQuota = await consumeFreeMessage(visitanteId);
+        if (!freeQuota.ok && freeQuota.quota_error === 'register_failed') {
+          console.error('free quota register failed after reply');
+        }
+      } catch (consumeFreeErr) {
+        console.error('free quota consume:', consumeFreeErr.message);
+      }
     }
     return {
       statusCode: 200,
@@ -650,6 +686,7 @@ exports.handler = async (event) => {
         premiumActive: usePremium,
         premiumRevoked: clientClaimedPremium && !usePremium,
         premiumQuota,
+        freeQuota,
       }),
     };
   } catch (err) {
