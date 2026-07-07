@@ -6159,6 +6159,8 @@ var ALICIA_PREMIUM_DAILY_LIMIT=5;
 var ALICIA_FREE_DAILY_LIMIT=7;
 var aliciaPremiumQuota={limit:ALICIA_PREMIUM_DAILY_LIMIT,remaining:ALICIA_PREMIUM_DAILY_LIMIT,used_today:0,blocked:false,blocked_until:null};
 var aliciaFreeQuota={limit:ALICIA_FREE_DAILY_LIMIT,remaining:ALICIA_FREE_DAILY_LIMIT,used_today:0,blocked:false};
+var aliciaMagic4Showcased=false;
+var ALICIA_FREE_LOCAL_KEY='alicia_free_usage';
 var hist=[];
 var aliciaChatStarted=false;
 var aliciaWelcomePending=false;
@@ -6334,6 +6336,47 @@ function resetAliciaChatSession(){
   hist=[];
   aliciaChatStarted=false;
   aliciaWelcomePending=false;
+  aliciaMagic4Showcased=false;
+}
+function getMexicoDayKeyLocal(){
+  return new Intl.DateTimeFormat('en-CA',{timeZone:'America/Mexico_City',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+}
+function readLocalFreeUsage(){
+  try{
+    var raw=localStorage.getItem(ALICIA_FREE_LOCAL_KEY+'_'+getVisitanteId());
+    if(!raw)return {day_key:getMexicoDayKeyLocal(),used:0};
+    var p=JSON.parse(raw);
+    if(!p||p.day_key!==getMexicoDayKeyLocal())return {day_key:getMexicoDayKeyLocal(),used:0};
+    return {day_key:p.day_key,used:Math.max(0,parseInt(p.used,10)||0)};
+  }catch(e){return {day_key:getMexicoDayKeyLocal(),used:0};}
+}
+function writeLocalFreeUsage(used){
+  try{
+    localStorage.setItem(ALICIA_FREE_LOCAL_KEY+'_'+getVisitanteId(),JSON.stringify({day_key:getMexicoDayKeyLocal(),used:Math.max(0,used||0)}));
+  }catch(e){}
+}
+function buildFreeQuotaFromUsed(used){
+  var limit=ALICIA_FREE_DAILY_LIMIT;
+  used=Math.max(0,used||0);
+  var remaining=Math.max(0,limit-used);
+  return {limit:limit,daily_limit:limit,used_today:used,remaining:remaining,blocked:remaining<=0};
+}
+function mergeFreeQuotaPayload(serverQ){
+  var local=readLocalFreeUsage();
+  var serverUsed=(serverQ&&serverQ.used_today!=null)?Math.max(0,Number(serverQ.used_today)||0):0;
+  var used=Math.max(local.used,serverUsed);
+  writeLocalFreeUsage(used);
+  return buildFreeQuotaFromUsed(used);
+}
+function bumpLocalFreeUsage(){
+  var local=readLocalFreeUsage();
+  local.used=Math.min(ALICIA_FREE_DAILY_LIMIT,local.used+1);
+  writeLocalFreeUsage(local.used);
+  return buildFreeQuotaFromUsed(local.used);
+}
+function isFreeQuotaBlocked(q){
+  q=q||aliciaFreeQuota||{};
+  return !!(q.blocked||(q.remaining!=null&&q.remaining<=0));
 }
 function getAliciaPremiumCodeId(){
   try{return localStorage.getItem('alicia_premium_code_id')||'';}catch(e){return '';}
@@ -6448,7 +6491,7 @@ function getAliciaFreeWelcomeNote(q){
   var limit=q.daily_limit||q.limit||ALICIA_FREE_DAILY_LIMIT;
   var remaining=(q.remaining!=null)?q.remaining:limit;
   if(remaining<=0)return '';
-  return '\n\n📊 Tienes '+limit+' mensajes gratis hoy (te quedan '+remaining+'). Te recomiendo audios concretos y te ayudo a cerrar — si se acaban, continúas por WhatsApp con lo que ya vimos 💛';
+  return '\n\n📊 Tienes '+limit+' mensajes gratis hoy (te quedan '+remaining+'). Te recomiendo audios concretos y te ayudo con tu proceso — si se acaban, continúas por WhatsApp con lo que ya vimos 💛';
 }
 function updateFreeQuotaUI(){
   var banner=document.getElementById('aliciaFreeQuotaBanner');
@@ -6471,7 +6514,7 @@ function updateFreeQuotaUI(){
       text.textContent='⚡ Te quedan solo '+Math.max(0,q.remaining)+' mensajes gratis hoy. Alicia te ayudará a cerrar — o continúa ya por WhatsApp con tu recomendación.';
     }else{
       banner.className='alicia-free-quota-banner';
-      text.textContent='Gratis: te quedan '+Math.max(0,q.remaining!=null?q.remaining:limit)+' de '+limit+' mensajes hoy. Alicia te guía al audio perfecto y al cierre.';
+      text.textContent='Gratis: te quedan '+Math.max(0,q.remaining!=null?q.remaining:limit)+' de '+limit+' mensajes hoy. Alicia te guía al audio perfecto y con tu proceso.';
     }
   }
   var locked=!!q.blocked||(q.remaining!=null&&q.remaining<=0);
@@ -6494,29 +6537,21 @@ async function fetchFreeQuota(){
     });
     var data=await r.json().catch(function(){return{};});
     if(r.ok&&data.ok){
-      aliciaFreeQuota={
-        limit:data.daily_limit||data.limit||ALICIA_FREE_DAILY_LIMIT,
-        daily_limit:data.daily_limit||data.limit||ALICIA_FREE_DAILY_LIMIT,
-        remaining:data.remaining!=null?data.remaining:0,
-        used_today:data.used_today||0,
-        blocked:!!data.blocked
-      };
+      aliciaFreeQuota=mergeFreeQuotaPayload(data);
       updateFreeQuotaUI();
       return aliciaFreeQuota;
     }
   }catch(e){}
-  return null;
+  aliciaFreeQuota=mergeFreeQuotaPayload(null);
+  updateFreeQuotaUI();
+  return aliciaFreeQuota;
 }
 function applyFreeQuotaFromServer(data){
-  if(!data||!data.freeQuota)return;
-  var q=data.freeQuota;
-  aliciaFreeQuota={
-    limit:q.daily_limit||q.limit||ALICIA_FREE_DAILY_LIMIT,
-    daily_limit:q.daily_limit||q.limit||ALICIA_FREE_DAILY_LIMIT,
-    remaining:q.remaining!=null?q.remaining:0,
-    used_today:q.used_today||0,
-    blocked:!!q.blocked||!!q.limit_reached
-  };
+  if(data&&data.freeQuota){
+    aliciaFreeQuota=mergeFreeQuotaPayload(data.freeQuota);
+  }else{
+    aliciaFreeQuota=bumpLocalFreeUsage();
+  }
   updateFreeQuotaUI();
 }
 function updatePremiumQuotaUI(){
@@ -7348,9 +7383,13 @@ var MAGIC4_IMG_TAG='[IMG:img/catalog/amor-propio-magic-4-0.jpg]';
 function replyMentionsMagic4(txt){
   return /amor propio magic 4(?:\.0)?|magic 4\.0|magic 4\. 0|💖 amor propio magic 4/i.test(String(txt||''));
 }
-function ensureMagic4ImageInReply(reply){
+function stripMagic4ImageTags(reply){
+  return String(reply||'').replace(/\s*\[IMG:img\/catalog\/amor-propio-magic-4-0\.jpg\]\s*/gi,'\n').replace(/\n{3,}/g,'\n\n').trim();
+}
+function ensureMagic4ImageInReply(reply,allowImage){
   var r=String(reply||'').trim();
-  if(!replyMentionsMagic4(r))return r;
+  if(!replyMentionsMagic4(r))return stripMagic4ImageTags(r);
+  if(!allowImage)return stripMagic4ImageTags(r);
   if(/\[IMG:img\/catalog\/amor-propio-magic-4-0\.jpg\]/i.test(r))return r;
   var blocks=r.split(/\n{2,}/);
   if(blocks.length>1){
@@ -7358,6 +7397,13 @@ function ensureMagic4ImageInReply(reply){
     return blocks.join('\n\n');
   }
   return r+'\n\n'+MAGIC4_IMG_TAG;
+}
+function prepareAliciaReplyForChat(reply,userTxt){
+  var normalized=stripAliciaChatImages(normalizeAliciaPromoReply(String(reply||''),userTxt));
+  var showcase=replyMentionsMagic4(normalized)&&!aliciaMagic4Showcased;
+  var text=ensureMagic4ImageInReply(normalized,showcase);
+  if(showcase)aliciaMagic4Showcased=true;
+  return {text:text,showcaseMagic4:showcase};
 }
 function isEmergency999Context(txt){
   var s=String(txt||'').toLowerCase();
@@ -7395,9 +7441,13 @@ function normalizeAliciaPromoReply(reply,userTxt){
   return stripAliciaChatImages(r);
 }
 var CHAT_AMOR4_PHRASE_RE=/amor\s+propio\s+magic\s+4(?:\.0)?/gi;
-function appendChatTextWithHighlights(el,text){
+function appendChatTextWithHighlights(el,text,allowMagic4Highlight){
   var s=String(text||'');
   if(!s){return;}
+  if(allowMagic4Highlight===false){
+    el.appendChild(document.createTextNode(s));
+    return;
+  }
   var re=new RegExp(CHAT_AMOR4_PHRASE_RE.source,'gi');
   var last=0,m;
   while((m=re.exec(s))!==null){
@@ -7410,7 +7460,9 @@ function appendChatTextWithHighlights(el,text){
   }
   if(last<s.length)el.appendChild(document.createTextNode(s.slice(last)));
 }
-function appendFormattedChatText(bub,text){
+function appendFormattedChatText(bub,text,opts){
+  opts=opts||{};
+  var highlightMagic4=opts.highlightMagic4!==false;
   var s=String(text).replace(/\r\n/g,'\n').trim();
   if(!s)return;
   var blocks=s.split(/\n{2,}/);
@@ -7433,7 +7485,7 @@ function appendFormattedChatText(bub,text){
       ul.className='chat-msg-list';
       lines.forEach(function(ln){
         var li=document.createElement('li');
-        appendChatTextWithHighlights(li,ln.replace(/^[-•*–]\s+/,'').replace(/^\d+[.)]\s+/,''));
+        appendChatTextWithHighlights(li,ln.replace(/^[-•*–]\s+/,'').replace(/^\d+[.)]\s+/,''),highlightMagic4);
         ul.appendChild(li);
       });
       bub.appendChild(ul);
@@ -7442,7 +7494,7 @@ function appendFormattedChatText(bub,text){
     if(lines.length===1){
       var p=document.createElement('p');
       p.className='chat-msg-p';
-      appendChatTextWithHighlights(p,lines[0]);
+      appendChatTextWithHighlights(p,lines[0],highlightMagic4);
       bub.appendChild(p);
       return;
     }
@@ -7450,7 +7502,7 @@ function appendFormattedChatText(bub,text){
     pMulti.className='chat-msg-p';
     lines.forEach(function(ln,idx){
       if(idx>0)pMulti.appendChild(document.createElement('br'));
-      appendChatTextWithHighlights(pMulti,ln);
+      appendChatTextWithHighlights(pMulti,ln,highlightMagic4);
     });
     bub.appendChild(pMulti);
   });
@@ -7488,17 +7540,17 @@ function appendPromoImage(bub,filename){
   });
   bub.appendChild(wrap);
 }
-function appendChatBubbleContent(bub,t){
+function appendChatBubbleContent(bub,t,opts){
   var re=/\[IMG:([^\]]+)\]/gi;
   var last=0,m,s=String(t);
   while((m=re.exec(s))!==null){
-    if(m.index>last)appendFormattedChatText(bub,s.slice(last,m.index));
+    if(m.index>last)appendFormattedChatText(bub,s.slice(last,m.index),opts);
     appendPromoImage(bub,m[1]);
     last=m.index+m[0].length;
   }
-  if(last<s.length)appendFormattedChatText(bub,s.slice(last));
+  if(last<s.length)appendFormattedChatText(bub,s.slice(last),opts);
 }
-function addMsg(r,t){
+function addMsg(r,t,opts){
   var w=document.getElementById('chatWin');
   var d=document.createElement('div');
   d.className='cmsg '+(r==='u'?'u':'b');
@@ -7508,7 +7560,7 @@ function addMsg(r,t){
   var bub=document.createElement('div');
   bub.className='cbub';
   var txt=r==='b'?sanitizeAliciaText(t):String(t);
-  appendChatBubbleContent(bub,txt);
+  appendChatBubbleContent(bub,txt,opts||null);
   d.appendChild(who);d.appendChild(bub);
   w.appendChild(d);w.scrollTop=w.scrollHeight;
 }
@@ -7565,8 +7617,8 @@ async function sendMsg(){
     }
   }else{
     var fq=await fetchFreeQuota();
-    if(fq&&(fq.blocked||(fq.remaining!=null&&fq.remaining<=0))){
-      addFreeLimitHandoffMsg(fq);
+    if(isFreeQuotaBlocked(fq)){
+      addFreeLimitHandoffMsg(fq||aliciaFreeQuota);
       return;
     }
   }
@@ -7626,8 +7678,9 @@ async function sendMsg(){
       sendBtn.disabled=false;
       return;
     }
-    if(r.status===429&&!isAliciaPremiumChat()&&!data.freeQuota){
-      applyFreeQuotaFromServer({freeQuota:{blocked:true,remaining:0,daily_limit:ALICIA_FREE_DAILY_LIMIT,limit:ALICIA_FREE_DAILY_LIMIT}});
+    if(r.status===429&&!isAliciaPremiumChat()){
+      var blockedQ=data.freeQuota||{blocked:true,remaining:0,used_today:ALICIA_FREE_DAILY_LIMIT,daily_limit:ALICIA_FREE_DAILY_LIMIT,limit:ALICIA_FREE_DAILY_LIMIT};
+      applyFreeQuotaFromServer({freeQuota:blockedQ});
       hist.pop();
       var win429=document.getElementById('chatWin');
       if(win429&&win429.lastElementChild)win429.removeChild(win429.lastElementChild);
@@ -7645,18 +7698,18 @@ async function sendMsg(){
       addMsg('b','Alicia no pudo responder ahora: '+errTxt+'. Si estás en tu computadora, prueba con `netlify dev` o revisa que el sitio esté en Netlify con ANTHROPIC_API_KEY configurada 💜');
     }else{
       var reply=(data&&data.reply)?String(data.reply):'Lo siento, hubo un error 💜';
-      reply=ensureMagic4ImageInReply(stripAliciaChatImages(normalizeAliciaPromoReply(reply,txt)));
-      resolveAliciaAudio(reply);
-      addMsg('b',reply);hist.push({role:'assistant',content:reply});
-      logAliciaCrmMessage('assistant',reply);
+      var prepared=prepareAliciaReplyForChat(reply,txt);
+      resolveAliciaAudio(prepared.text);
+      addMsg('b',prepared.text,{highlightMagic4:prepared.showcaseMagic4});
+      hist.push({role:'assistant',content:prepared.text});
+      logAliciaCrmMessage('assistant',prepared.text);
       if(isAliciaPremiumChat()){
         if(data.premiumQuota)applyPremiumQuotaFromServer(data);
         else fetchPremiumQuota();
       }else{
-        if(data.freeQuota)applyFreeQuotaFromServer(data);
-        else fetchFreeQuota();
+        applyFreeQuotaFromServer(data);
       }
-      if(shouldShowAliciaPayButton(reply)){triggerSalesSparkle();var qp=document.getElementById('aliciaQuieroPagar');if(qp)qp.style.display='flex';}
+      if(shouldShowAliciaPayButton(prepared.text)){triggerSalesSparkle();var qp=document.getElementById('aliciaQuieroPagar');if(qp)qp.style.display='flex';}
     }
   }catch(e){
     var dm=document.getElementById('dotMsg');if(dm)dm.remove();

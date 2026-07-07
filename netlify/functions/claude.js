@@ -197,12 +197,13 @@ PRODUCTOS EXTRA A VENDER (despues del audio):
 - Telegram Privado: $888 MXN/mes ($52 USD / €45 EUR), o incluido con compra de audios. Orientacion continua con Pauline, comunidad, contenido exclusivo.
 - Mind Movie: $1,190 MXN / $69 USD / €60 EUR (mismo precio que un audio). Pelicula personalizada para reprogramar el inconsciente con imagenes.
 
-IMÁGENES EN EL CHAT (solo Amor Propio Magic 4.0):
-Cuando recomiendes Amor Propio Magic 4.0 (como uno de los 2 audios o como foco principal), DEBES incluir exactamente esta linea en una linea aparte, una sola vez por respuesta:
+IMÁGENES EN EL CHAT (solo Amor Propio Magic 4.0 — UNA SOLA VEZ por conversacion):
+La primera vez que recomiendes Amor Propio Magic 4.0 en la conversacion, incluye exactamente esta linea en una linea aparte:
 [IMG:img/catalog/amor-propio-magic-4-0.jpg]
-Colocala despues de validar su emocion y junto al pitch de Magic 4.0 — el cliente debe VER el audio mientras le explicas por que lo necesita.
+Si vuelves a mencionar Magic 4.0 mas adelante en la MISMA conversacion, NO repitas la linea [IMG:...] — solo escribe el nombre normal.
+Colocala despues de validar su emocion y junto al pitch de Magic 4.0 — el cliente debe VER el audio la primera vez que se lo sugieres.
 Escribe el nombre del audio exactamente asi en el texto (para resaltar en chat): Amor Propio Magic 4.0
-NUNCA envies otras lineas [IMG:...]. Solo esta imagen, solo cuando recomiendas Magic 4.0.
+NUNCA envies otras lineas [IMG:...]. Solo esta imagen, solo la primera vez que recomiendas Magic 4.0.
 
 AMOR PROPIO MAGIC 4.0 — CREAR NECESIDAD (obligatorio cuando lo recomiendes):
 No lo presentes como catalogo. Vendelo como la pieza que le falta a SU proceso:
@@ -583,23 +584,33 @@ exports.handler = async (event) => {
         }),
       };
     }
-  } else if (visitanteId) {
+  }
+
+  let freeQuota = null;
+  if (!usePremium && visitanteId) {
     try {
-      const freeCheck = await getFreeQuotaStatus(visitanteId);
-      if (!freeCheck.allowed) {
-        return {
-          statusCode: 429,
-          headers,
-          body: JSON.stringify({
-            error: 'Has alcanzado tu límite diario de Alicia gratis. Vuelve mañana (hora CDMX).',
-            freeQuota: freeCheck,
-            freeBlocked: true,
-            quotaError: 'limit_reached',
-          }),
-        };
+      freeQuota = await consumeFreeMessage(visitanteId);
+      if (!freeQuota.ok) {
+        if (freeQuota.quota_error === 'limit_reached' || freeQuota.allowed === false) {
+          return {
+            statusCode: 429,
+            headers,
+            body: JSON.stringify({
+              error: 'Has alcanzado tu límite diario de Alicia gratis. Vuelve mañana (hora CDMX).',
+              freeQuota,
+              freeBlocked: true,
+              quotaError: freeQuota.quota_error || 'limit_reached',
+            }),
+          };
+        }
+        if (freeQuota.quota_error === 'register_failed') {
+          console.error('free quota register failed before reply — client fallback');
+          freeQuota = null;
+        }
       }
     } catch (freeQuotaErr) {
-      console.error('free quota check:', freeQuotaErr.message);
+      console.error('free quota consume:', freeQuotaErr.message);
+      freeQuota = null;
     }
   }
 
@@ -689,7 +700,6 @@ exports.handler = async (event) => {
 
     const clientClaimedPremium = body.isPremium === true && !!body.premiumCodeId;
     let premiumQuota = null;
-    let freeQuota = null;
     if (usePremium) {
       try {
         premiumQuota = await consumePremiumMessage(premiumVisitanteId, premiumCodeId);
@@ -711,15 +721,6 @@ exports.handler = async (event) => {
         }
       } catch (consumeErr) {
         console.error('premium quota consume:', consumeErr.message);
-      }
-    } else if (visitanteId) {
-      try {
-        freeQuota = await consumeFreeMessage(visitanteId);
-        if (!freeQuota.ok && freeQuota.quota_error === 'register_failed') {
-          console.error('free quota register failed after reply');
-        }
-      } catch (consumeFreeErr) {
-        console.error('free quota consume:', consumeFreeErr.message);
       }
     }
     return {
