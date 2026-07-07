@@ -1163,6 +1163,22 @@ body::before{
   color:rgba(255,200,160,.95);
   background:rgba(180,80,40,.15);border-color:rgba(255,140,80,.25);
 }
+.alicia-free-quota-banner.is-urgent{
+  color:rgba(255,230,180,.98);
+  background:rgba(140,90,20,.18);border-color:rgba(255,200,100,.35);
+}
+.chat-wa-handoff{
+  margin-top:.65rem;display:flex;flex-direction:column;gap:.45rem;
+}
+.chat-wa-handoff-btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:.4rem;
+  padding:.55rem .85rem;border-radius:10px;cursor:pointer;text-decoration:none;
+  border:1px solid rgba(37,211,102,.4);background:rgba(37,211,102,.12);
+  font-family:'Jost',sans-serif;font-size:.68rem;font-weight:600;
+  letter-spacing:.06em;text-transform:uppercase;color:rgba(37,211,102,.95);
+  transition:all .2s;
+}
+.chat-wa-handoff-btn:hover{background:rgba(37,211,102,.2);border-color:rgba(37,211,102,.55);}
 .chat-in:disabled,.chat-send:disabled{opacity:.45;cursor:not-allowed}
 .alicia-sales-sparkle{
   position:absolute;inset:0;width:100%;height:100%;
@@ -6354,14 +6370,85 @@ function getAliciaPremiumWelcomeMessage(q){
 function getFreeLimitBlockMessage(q){
   q=q||aliciaFreeQuota||{};
   var limit=q.daily_limit||q.limit||ALICIA_FREE_DAILY_LIMIT;
-  return 'Has usado tus '+limit+' mensajes gratis de hoy ✨ Mañana (hora CDMX) tendrás preguntas nuevas. Mientras tanto puedes ver los audios del catálogo, escribirnos por WhatsApp o activar Alicia Premium para acompañamiento más profundo 💛';
+  var audios=collectAliciaRecommendedAudios(2);
+  var audioLine='';
+  if(audios.length===1){
+    audioLine=' Alicia te recomendó '+audios[0]+'.';
+  }else if(audios.length>=2){
+    audioLine=' Alicia te recomendó '+audios[0]+' y '+audios[1]+'.';
+  }
+  return 'Has usado tus '+limit+' mensajes gratis de hoy ✨'+audioLine+' Mañana (hora CDMX) tendrás mensajes nuevos. Para continuar HOY y cerrar tu compra con la promo de julio, escríbenos por WhatsApp — el botón verde abajo ya lleva tu recomendación 💛';
+}
+function collectAliciaRecommendedAudios(maxCount){
+  maxCount=maxCount||2;
+  var index=buildAliciaAudioIndex();
+  var found=[],seen={};
+  var h,m,entry,sc;
+  for(h=hist.length-1;h>=0&&found.length<maxCount;h--){
+    m=hist[h];
+    if(!m||m.role!=='assistant')continue;
+    for(var i=0;i<index.length;i++){
+      entry=index[i];
+      if(seen[entry.label])continue;
+      sc=matchAudioInText(m.content,entry.label,entry.keys);
+      if(sc>0){
+        seen[entry.label]=true;
+        found.push(entry.label);
+        if(found.length>=maxCount)break;
+      }
+    }
+  }
+  if(!found.length&&aliciaClient.ultimoAudio)found.push(aliciaClient.ultimoAudio);
+  return found;
+}
+function buildAliciaWhatsAppContinueMessage(){
+  var nombre=(aliciaClient&&aliciaClient.nombre)?aliciaClient.nombre:'';
+  var audios=collectAliciaRecommendedAudios(2);
+  var msg='Hola Pauline! Vengo de Alicia IA de Erior Center';
+  if(nombre)msg+=', me llamo '+nombre;
+  if(audios.length===1){
+    msg+='. Alicia me recomendó '+audios[0]+' y quiero continuar para comprarlo con la promo de julio';
+  }else if(audios.length>=2){
+    msg+='. Alicia me recomendó '+audios[0]+' y '+audios[1]+' y quiero continuar para cerrar mi compra con la promo de julio';
+  }else{
+    msg+='. Quiero continuar la conversación y cerrar mi compra con la promo de julio';
+  }
+  msg+=' 💛';
+  return msg;
+}
+function openAliciaWhatsAppContinue(){
+  window.open('https://wa.me/5214432311761?text='+encodeURIComponent(buildAliciaWhatsAppContinueMessage()),'_blank');
+}
+function addFreeLimitHandoffMsg(q){
+  var w=document.getElementById('chatWin');
+  if(!w)return;
+  var d=document.createElement('div');
+  d.className='cmsg b';
+  var who=document.createElement('div');
+  who.className='cwho';
+  who.textContent='✦ Alicia';
+  var bub=document.createElement('div');
+  bub.className='cbub';
+  appendFormattedChatText(bub,getFreeLimitBlockMessage(q));
+  var handoff=document.createElement('div');
+  handoff.className='chat-wa-handoff';
+  var waBtn=document.createElement('a');
+  waBtn.className='chat-wa-handoff-btn';
+  waBtn.href='https://wa.me/5214432311761?text='+encodeURIComponent(buildAliciaWhatsAppContinueMessage());
+  waBtn.target='_blank';
+  waBtn.rel='noopener';
+  waBtn.textContent='💬 Continuar por WhatsApp con Pauline';
+  handoff.appendChild(waBtn);
+  bub.appendChild(handoff);
+  d.appendChild(who);d.appendChild(bub);
+  w.appendChild(d);w.scrollTop=w.scrollHeight;
 }
 function getAliciaFreeWelcomeNote(q){
   q=q||aliciaFreeQuota||{};
   var limit=q.daily_limit||q.limit||ALICIA_FREE_DAILY_LIMIT;
   var remaining=(q.remaining!=null)?q.remaining:limit;
   if(remaining<=0)return '';
-  return '\n\n📊 Alicia gratis incluye hasta '+limit+' mensajes por día. Hoy te quedan '+remaining+'.';
+  return '\n\n📊 Tienes '+limit+' mensajes gratis hoy (te quedan '+remaining+'). Te recomiendo audios concretos y te ayudo a cerrar — si se acaban, continúas por WhatsApp con lo que ya vimos 💛';
 }
 function updateFreeQuotaUI(){
   var banner=document.getElementById('aliciaFreeQuotaBanner');
@@ -6379,9 +6466,12 @@ function updateFreeQuotaUI(){
     if(q.blocked||(q.remaining!=null&&q.remaining<=0)){
       banner.className='alicia-free-quota-banner is-blocked';
       text.textContent=getFreeLimitBlockMessage(q);
+    }else if(q.remaining!=null&&q.remaining<=2){
+      banner.className='alicia-free-quota-banner is-urgent';
+      text.textContent='⚡ Te quedan solo '+Math.max(0,q.remaining)+' mensajes gratis hoy. Alicia te ayudará a cerrar — o continúa ya por WhatsApp con tu recomendación.';
     }else{
       banner.className='alicia-free-quota-banner';
-      text.textContent='Gratis: te quedan '+Math.max(0,q.remaining!=null?q.remaining:limit)+' de '+limit+' mensajes hoy.';
+      text.textContent='Gratis: te quedan '+Math.max(0,q.remaining!=null?q.remaining:limit)+' de '+limit+' mensajes hoy. Alicia te guía al audio perfecto y al cierre.';
     }
   }
   var locked=!!q.blocked||(q.remaining!=null&&q.remaining<=0);
@@ -6669,7 +6759,7 @@ function startAliciaChatSession(){
       return;
     }
     if(!isAliciaPremiumChat()&&aliciaFreeQuota&&(aliciaFreeQuota.blocked||(aliciaFreeQuota.remaining!=null&&aliciaFreeQuota.remaining<=0))){
-      addMsg('b',getFreeLimitBlockMessage(aliciaFreeQuota));
+      addFreeLimitHandoffMsg(aliciaFreeQuota);
       updateFreeQuotaUI();
       aliciaChatStarted=true;
       return;
@@ -7112,7 +7202,14 @@ function isPaymentCelebration(txt){
   return /ya\s+(pagu[eé]|pague|mand[eé]|mande|envi[eé]|envie|transfer[ií]|transferi)|comprobante|ya\s+lo\s+compr[eé]|listo\s*,?\s*pagu[eé]|hice\s+el\s+pago|ya\s+est[aá]\s+pagado|mand[eé]\s+el\s+comprobante/i.test(String(txt));
 }
 function isSalesCloseMoment(txt){
-  return /\$[\d,.]+|1[,.]?777|1[,.]?170|1[,.]?190|3[,.]?333|\bMXN\b|\bUSD\b|\bEUR\b|adquirirlo|adquirirlo hoy|te gustar[ií]a adquirir|empezamos con este|precio del audio|inversi[oó]n de|por qu[eé] m[eé]todo prefieres pagar|m[eé]todo prefieres pagar/i.test(String(txt));
+  return /\$[\d,.]+|1[,.]?887|1[,.]?777|1[,.]?170|1[,.]?190|3[,.]?333|2[,.]?888|\b888\b|\b999\b|\bMXN\b|\bUSD\b|\bEUR\b|adquirirlo|adquirirlo hoy|te gustar[ií]a adquirir|empezamos con este|empezamos hoy|precio del audio|inversi[oó]n de|por qu[eé] m[eé]todo prefieres pagar|m[eé]todo prefieres pagar|quiero pagar|bot[oó]n quiero pagar|promo de julio|summer wonderland|magic 4|te lo aparto|te reservo|cerrar.*compra|whatsapp.*pauline/i.test(String(txt));
+}
+function shouldShowAliciaPayButton(reply){
+  if(isAliciaPremiumChat())return false;
+  if(isSalesCloseMoment(reply))return true;
+  var q=aliciaFreeQuota||{};
+  if(q.remaining!=null&&q.remaining<=3&&collectAliciaRecommendedAudios(1).length)return true;
+  return false;
 }
 function launchAliciaConfetti(){
   if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
@@ -7455,13 +7552,7 @@ function showDots(){
   w.appendChild(d);w.scrollTop=w.scrollHeight;
 }
 function aliciaPaulineWA(){
-  var nombre=(typeof aliciaClient!=='undefined'&&aliciaClient.nombre)?aliciaClient.nombre:'';
-  var audio=(typeof aliciaClient!=='undefined'&&aliciaClient.ultimoAudio)?aliciaClient.ultimoAudio:'';
-  var msg='Hola! Vengo de hablar con Alicia IA de Erior Center';
-  if(nombre)msg+=', mi nombre es '+nombre;
-  if(audio)msg+='. Estoy interesad@ en información sobre '+audio;
-  else msg+='. Estoy interesad@ en más información';
-  window.open('https://wa.me/5214432311761?text='+encodeURIComponent(msg),'_blank');
+  openAliciaWhatsAppContinue();
 }
 async function sendMsg(){
   var inp=document.getElementById('chatIn');
@@ -7475,7 +7566,7 @@ async function sendMsg(){
   }else{
     var fq=await fetchFreeQuota();
     if(fq&&(fq.blocked||(fq.remaining!=null&&fq.remaining<=0))){
-      addMsg('b',getFreeLimitBlockMessage(fq));
+      addFreeLimitHandoffMsg(fq);
       return;
     }
   }
@@ -7505,7 +7596,9 @@ async function sendMsg(){
         clientName:aliciaClient.nombre||'',
         lastAudio:aliciaClient.ultimoAudio||'',
         referrerCode:getReferralCode(),
-        messageCount:hist.filter(function(m){return m.role==='user';}).length
+        messageCount:hist.filter(function(m){return m.role==='user';}).length,
+        freeRemaining:(!isAliciaPremiumChat()&&aliciaFreeQuota&&aliciaFreeQuota.remaining!=null)?aliciaFreeQuota.remaining:null,
+        freeUsedToday:(!isAliciaPremiumChat()&&aliciaFreeQuota)?(aliciaFreeQuota.used_today||0):null
       })
     });
     var data={};
@@ -7529,7 +7622,7 @@ async function sendMsg(){
       hist.pop();
       var winFree=document.getElementById('chatWin');
       if(winFree&&winFree.lastElementChild)winFree.removeChild(winFree.lastElementChild);
-      addMsg('b',getFreeLimitBlockMessage(data.freeQuota));
+      addFreeLimitHandoffMsg(data.freeQuota);
       sendBtn.disabled=false;
       return;
     }
@@ -7538,7 +7631,7 @@ async function sendMsg(){
       hist.pop();
       var win429=document.getElementById('chatWin');
       if(win429&&win429.lastElementChild)win429.removeChild(win429.lastElementChild);
-      addMsg('b',getFreeLimitBlockMessage(aliciaFreeQuota));
+      addFreeLimitHandoffMsg(aliciaFreeQuota);
       sendBtn.disabled=false;
       return;
     }
@@ -7553,6 +7646,7 @@ async function sendMsg(){
     }else{
       var reply=(data&&data.reply)?String(data.reply):'Lo siento, hubo un error 💜';
       reply=ensureMagic4ImageInReply(stripAliciaChatImages(normalizeAliciaPromoReply(reply,txt)));
+      resolveAliciaAudio(reply);
       addMsg('b',reply);hist.push({role:'assistant',content:reply});
       logAliciaCrmMessage('assistant',reply);
       if(isAliciaPremiumChat()){
@@ -7562,7 +7656,7 @@ async function sendMsg(){
         if(data.freeQuota)applyFreeQuotaFromServer(data);
         else fetchFreeQuota();
       }
-      if(isSalesCloseMoment(reply)){triggerSalesSparkle();var qp=document.getElementById('aliciaQuieroPagar');if(qp)qp.style.display='flex';}
+      if(shouldShowAliciaPayButton(reply)){triggerSalesSparkle();var qp=document.getElementById('aliciaQuieroPagar');if(qp)qp.style.display='flex';}
     }
   }catch(e){
     var dm=document.getElementById('dotMsg');if(dm)dm.remove();
