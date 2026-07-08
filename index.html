@@ -167,7 +167,21 @@ body::before{
 .fsm-list a{display:block;font-family:'Cormorant Garamond',serif;font-size:clamp(1.85rem,5vw,3.4rem);font-weight:600;font-style:italic;text-decoration:none;line-height:1.12;padding:.1em 1.5rem;transition:transform .5s cubic-bezier(.16,1,.3,1),letter-spacing .3s,filter .3s;transform:translateY(110%);cursor:pointer;background:linear-gradient(160deg,rgba(255,255,255,.95) 0%,rgba(220,235,255,.9) 40%,rgba(255,255,255,1) 60%,rgba(200,220,255,.85) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 10px rgba(255,255,255,.35));}
 #fsMenu.open .fsm-list a{transform:translateY(0)}
 .fsm-list a:hover{letter-spacing:.08em;filter:drop-shadow(0 0 20px rgba(255,255,255,.8)) drop-shadow(0 0 40px rgba(180,210,255,.5));}
-.fsm-list li:nth-child(1) a{transition-delay:.04s}.fsm-list li:nth-child(2) a{transition-delay:.09s}.fsm-list li:nth-child(3) a{transition-delay:.13s}.fsm-list li:nth-child(4) a{transition-delay:.17s}.fsm-list li:nth-child(5) a{transition-delay:.21s}.fsm-list li:nth-child(6) a{transition-delay:.25s}.fsm-list li:nth-child(7) a{transition-delay:.29s}
+.fsm-list li:nth-child(1) a{transition-delay:.04s}.fsm-list li:nth-child(2) a{transition-delay:.09s}.fsm-list li:nth-child(3) a{transition-delay:.13s}.fsm-list li:nth-child(4) a{transition-delay:.17s}.fsm-list li:nth-child(5) a{transition-delay:.21s}.fsm-list li:nth-child(6) a{transition-delay:.25s}.fsm-list li:nth-child(7) a{transition-delay:.29s}.fsm-list li:nth-child(8) a{transition-delay:.33s}.fsm-list li:nth-child(9) a{transition-delay:.37s}.fsm-list li:nth-child(10) a{transition-delay:.41s}
+.fsm-item-game a{font-size:clamp(1.35rem,4vw,2.2rem)!important;font-style:normal!important;opacity:.72}
+.fsm-item-game a:hover{opacity:1}
+.fsm-list li:nth-child(1) a,.fsm-list li:nth-child(2) a{
+  font-size:clamp(2rem,5.5vw,3.6rem)!important;
+}
+.fsm-beta-tag{
+  display:inline-block;font-family:'Jost',sans-serif;font-size:.42em;font-style:normal;
+  letter-spacing:.18em;vertical-align:middle;
+  padding:.12em .45em;margin-left:.25em;border-radius:6px;
+  background:rgba(201,160,96,.18);border:1px solid rgba(201,160,96,.45);
+  -webkit-text-fill-color:rgba(245,230,200,.95)!important;color:rgba(245,230,200,.95)!important;
+  background-clip:border-box!important;-webkit-background-clip:border-box!important;
+  filter:none!important;
+}
 .fsm-socials{display:flex;gap:2rem;margin-top:1.5rem;margin-bottom:.5rem;opacity:0;transition:opacity .4s .35s;position:relative;z-index:1;flex-shrink:0;}
 #fsMenu.open .fsm-socials{opacity:1}
 .fsm-socials a{font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.6);text-decoration:none;transition:color .2s;}
@@ -2621,16 +2635,13 @@ button.alicia-mode-premium-cta{font:inherit;width:100%;cursor:pointer}
   flex-shrink:1;min-height:0;
 }
 #coverHeroRow{
-  display:flex;align-items:flex-end;justify-content:center;
-  gap:clamp(.65rem,3.5vw,1.5rem);
-  width:100%;
-  max-width:min(500px,100%);
-  margin:0 auto;
-  padding:0 .25rem;
+  display:flex;align-items:center;justify-content:center;
+  width:100%;max-width:min(420px,100%);
+  margin:0 auto;padding:0 .25rem;
 }
 .cover-mj-col{
   flex:0 0 auto;display:flex;flex-direction:column;align-items:center;
-  margin-top:clamp(-.4rem,-1.2vh,-.15rem);
+  width:100%;max-width:min(320px,88vw);
 }
 #mjHeroBlock{
   display:flex;flex-direction:column;align-items:center;
@@ -3135,7 +3146,7 @@ button.alicia-mode-premium-cta{font:inherit;width:100%;cursor:pointer}
   animation:auraRing .7s ease-out forwards;
 }
 @keyframes auraRing{to{transform:translate(-50%,-50%) scale(2.2);opacity:0;}}
-.btn-metallic.shattering,.btn-cover-chip.shattering,.btn-icon-aura-metal.shattering,.btn-liquid.shattering{pointer-events:none;transform:scale(.94);}
+.btn-metallic.shattering,.btn-cover-chip.shattering,.btn-icon-aura-metal.shattering,.btn-liquid.shattering,.cover-extra-btn.shattering{pointer-events:none;transform:scale(.94);}
 .btn-metallic.shattering .btn-metallic-txt{opacity:0;transition:opacity .1s;}
 .btn-cover-chip.shattering{color:transparent;transition:color .1s;}
 .btn-metallic .liquid-splash{
@@ -3193,17 +3204,14 @@ button.alicia-mode-premium-cta{font:inherit;width:100%;cursor:pointer}
 }
 @media(min-width:768px){
   #coverHeroZone{max-width:min(560px,90vw);}
-  #coverHeroRow{gap:1.55rem;flex-direction:row;align-items:flex-end;}
-  .cover-mj-col{order:1;margin-top:-.2rem;}
-  .cover-cta-stack{order:2;}
-  #coverHeroRow .cover-cta-stack{order:2;}
-  #coverHeroRow .cover-mj-col{order:1;}
+  #coverHeroRow{gap:0;flex-direction:column;align-items:center;}
+  .cover-mj-col{margin-top:0;max-width:min(300px,42vw);}
   #mjFloatWrap{width:clamp(100px,14vw,170px);height:clamp(150px,21vw,255px);}
-  .cover-cta-stack{width:min(220px,38vw);gap:clamp(.95rem,3.2vh,1.35rem);justify-content:space-evenly;min-height:clamp(210px,30vh,290px);}
+  .cover-extras-grid{gap:.65rem}
+  .cover-extras-bar{max-width:min(380px,88%)}
+  .cover-soc-grid{gap:.5rem .4rem}
+  .cover-soc-cell .soc-ball{width:42px;height:42px}
   .btn-metallic{font-size:.64rem;padding:.62rem 1.05rem;border-radius:18px;}
-  #coverHeroZone .soc-row{margin-top:1.5rem;}
-  #coverHeroZone .soc-ball{width:46px;height:46px;}
-  .page#page-cover .soc-ig .soc-lbl{font-size:.5rem;}
 }
 @media(max-width:767px){
   .page#page-cover .cover{
@@ -3224,46 +3232,14 @@ button.alicia-mode-premium-cta{font:inherit;width:100%;cursor:pointer}
   #eyeLetterWrap{width:0.58em;height:0.64em;top:0.03em;}
   #eyeModel{transform:translateY(-0.04em);}
   #coverHeroZone{max-width:min(100%,96vw);padding:0 .15rem;}
-  #coverHeroRow{
-    flex-direction:column;align-items:center;
-    gap:clamp(1rem,3.2vh,1.45rem);
-    max-width:100%;padding:0;
-  }
-  .cover-cta-stack{
-    order:1;width:min(94vw,420px);max-width:100%;
-    gap:clamp(.62rem,2.4vh,.78rem);
-  }
-  .cover-cta-stack .btn-liquid{
-    width:100%;padding:.72rem 1.1rem;font-size:clamp(.58rem,3.2vw,.68rem);
-    border-radius:980px;
-  }
-  .cover-mj-col{
-    order:2;width:100%;max-width:min(300px,88vw);
-    margin-top:0;position:relative;
-    align-items:center;
-  }
+  #coverHeroRow{flex-direction:column;align-items:center;gap:0;max-width:100%;padding:0;}
+  .cover-mj-col{width:100%;max-width:min(300px,88vw);margin-top:0;align-items:center;}
   #mjHeroBlock{gap:clamp(.85rem,3.5vh,1.2rem);width:100%;}
-  .mj-hero-btns{
-    width:min(94vw,420px);max-width:100%;
-    gap:clamp(.62rem,2.8vh,.82rem);
-  }
-  #mjFloatWrap{
-    width:clamp(148px,44vw,228px);
-    height:clamp(222px,66vw,342px);
-    margin-top:0;
-  }
-  #coverHeroZone .soc-row{
-    margin-top:clamp(1.1rem,4vh,1.6rem);
-    flex-wrap:wrap;justify-content:center;align-content:flex-start;
-    gap:clamp(.55rem,3vw,.85rem);
-    overflow-x:visible;padding:0 .1rem;
-  }
-  #coverHeroZone .soc-icon-slot{height:clamp(44px,12vw,52px);}
-  #coverHeroZone .soc-ball{
-    width:clamp(44px,12vw,52px);height:clamp(44px,12vw,52px);
-    border-radius:13px;
-  }
-  .page#page-cover .soc-ig .soc-lbl{font-size:clamp(.44rem,2.6vw,.52rem);}
+  .mj-hero-btns{width:min(94vw,420px);max-width:100%;gap:clamp(.62rem,2.8vh,.82rem);}
+  #mjFloatWrap{width:clamp(148px,44vw,228px);height:clamp(222px,66vw,342px);margin-top:0;}
+  .cover-extras-bar{max-width:min(340px,92vw);margin-top:.65rem;}
+  .cover-soc-nav{max-width:min(320px,92vw);}
+  .cover-soc-cell .soc-ball{width:clamp(38px,10vw,44px);height:clamp(38px,10vw,44px);}
 }
 @media(min-width:768px){
   #mjHeroBlock{flex-direction:column;gap:clamp(.75rem,2.5vh,1rem);align-items:center;}
@@ -3283,8 +3259,7 @@ button.alicia-mode-premium-cta{font:inherit;width:100%;cursor:pointer}
 @media(max-width:767px) and (max-height:700px){
   .page#page-cover .cover-title{font-size:clamp(2rem,10vw,2.65rem);}
   #mjFloatWrap{width:clamp(120px,38vw,180px);height:clamp(180px,57vw,270px);}
-  .cover-cta-stack .btn-liquid{padding:.58rem .9rem;font-size:.54rem;}
-  #coverHeroZone .soc-ball{width:40px;height:40px;}
+  .cover-extras-bar{margin-top:.55rem;padding-top:.45rem}
 }
 
 /* ══════════════════════════════════
@@ -3353,6 +3328,11 @@ body::before{
   width:min(520px,96vw);margin:.25rem auto 0;
   padding:clamp(.85rem,3vw,1.1rem) clamp(.75rem,2.8vw,1rem);
   border-radius:24px;
+  background:linear-gradient(168deg,rgba(12,10,20,.55) 0%,rgba(6,5,12,.72) 100%);
+  border:1px solid rgba(255,255,255,.08);
+  box-shadow:0 20px 50px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.08);
+  backdrop-filter:blur(20px) saturate(160%);
+  -webkit-backdrop-filter:blur(20px) saturate(160%);
 }
 .cover-gateway{
   position:absolute;inset:-8% -4% auto -4%;height:120%;pointer-events:none;z-index:0;
@@ -3386,17 +3366,21 @@ body::before{
   gap:clamp(.45rem,2vw,.6rem);
   width:100%;
 }
+@media(max-width:640px){
+  .cover-actions-hero{grid-template-columns:1fr;gap:.55rem}
+  .cover-actions-hero .cover-action-primary{min-height:72px}
+}
 .cover-actions-hero .cover-action-btn{
   width:100%;min-width:0;
   margin:0!important;
 }
 .cover-actions-hero .btn-liquid{border-radius:14px!important}
-.cover-actions-premium .cover-action-secondary{
-  position:relative;z-index:1;
-  width:min(280px,72vw);margin:0 auto!important;
-  padding:.58rem 1.15rem!important;font-size:clamp(.58rem,2.4vw,.66rem)!important;
-}
 .cover-actions-premium .cover-action-btn{margin:0!important}
+.btn-hero-badge--alicia{
+  color:rgba(220,255,240,.95);
+  border-color:rgba(120,220,180,.35);
+  background:rgba(0,0,0,.22);
+}
 
 .btn-catalog-hero{
   position:relative;overflow:hidden;
@@ -3631,9 +3615,10 @@ body::before{
   opacity:.72;
 }
 .cover-promo-jewel:hover{
-  transform:translateY(-2px);
-  box-shadow:0 20px 56px rgba(0,0,0,.48),0 0 40px rgba(201,160,96,.12),inset 0 1px 0 rgba(255,255,255,.14);
+  transform:translateY(-3px);
+  box-shadow:0 24px 64px rgba(0,0,0,.52),0 0 48px rgba(201,160,96,.14),inset 0 1px 0 rgba(255,255,255,.16);
 }
+.cover-promo-jewel:active{transform:translateY(-1px) scale(.995)}
 @keyframes premiumFrameIri{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
 .cover-promo-jewel .cover-promo-title{
   font-size:clamp(.62rem,2.6vw,.72rem);letter-spacing:.14em;
@@ -3696,6 +3681,94 @@ body::before{
   transform:translateY(-2px) scale(1.01);
 }
 
+/* ── Extras: Mind Movie + Telegram ── */
+.cover-extras-bar{
+  width:100%;max-width:min(400px,92vw);
+  margin:clamp(.85rem,2.8vh,1.1rem) auto 0;
+  padding-top:clamp(.65rem,2vh,.85rem);
+  border-top:1px solid rgba(255,255,255,.08);
+}
+.cover-extras-label{
+  font-family:'Jost',sans-serif;font-size:clamp(.46rem,2vw,.52rem);
+  letter-spacing:.32em;text-transform:uppercase;
+  color:rgba(180,175,200,.55);margin:0 0 .55rem;text-align:center;
+}
+.cover-extras-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:clamp(.5rem,2.2vw,.65rem);
+}
+.cover-extra-btn{
+  position:relative;cursor:pointer;overflow:hidden;
+  display:flex;align-items:center;gap:.55rem;
+  padding:.62rem .7rem .58rem;
+  border-radius:16px;text-align:left;
+  border:1px solid rgba(255,255,255,.22);
+  background:linear-gradient(165deg,rgba(255,255,255,.1) 0%,rgba(255,255,255,.03) 45%,rgba(8,8,14,.75) 100%);
+  backdrop-filter:blur(24px) saturate(170%);
+  -webkit-backdrop-filter:blur(24px) saturate(170%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 8px 22px rgba(0,0,0,.28);
+  transition:transform .35s cubic-bezier(.22,1,.36,1),box-shadow .35s ease,border-color .3s ease;
+  -webkit-tap-highlight-color:transparent;
+}
+.cover-extra-btn::before{
+  content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.22) 50%,transparent 65%);
+  opacity:0;transition:opacity .35s;
+}
+.cover-extra-btn:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.38);box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 14px 32px rgba(0,0,0,.35)}
+.cover-extra-btn:hover::before{opacity:1}
+.cover-extra-btn:active{transform:translateY(0) scale(.98)}
+.cover-extra-mind{border-color:rgba(120,220,170,.32);box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 8px 24px rgba(20,120,80,.12)}
+.cover-extra-tg{border-color:rgba(100,190,255,.32);box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 8px 24px rgba(30,120,200,.12)}
+.cover-extra-ico{
+  flex:0 0 auto;font-size:1.15rem;line-height:1;
+  filter:drop-shadow(0 2px 6px rgba(0,0,0,.35));
+}
+.cover-extra-text{display:flex;flex-direction:column;gap:.12rem;min-width:0}
+.cover-extra-name{
+  font-size:clamp(.5rem,2.2vw,.58rem)!important;
+  letter-spacing:.12em!important;line-height:1.15;
+}
+.cover-extra-sub{
+  font-family:'Jost',sans-serif;font-size:clamp(.42rem,1.8vw,.48rem);
+  letter-spacing:.04em;color:rgba(200,195,215,.72);line-height:1.2;
+}
+
+/* ── Redes sociales — grid organizado ── */
+.cover-soc-nav{
+  width:100%;max-width:min(360px,94vw);
+  margin:clamp(.9rem,3vh,1.25rem) auto 0;
+  padding-top:clamp(.55rem,1.8vh,.75rem);
+}
+.cover-soc-heading{
+  font-family:'Jost',sans-serif;font-size:clamp(.46rem,2vw,.52rem);
+  letter-spacing:.32em;text-transform:uppercase;
+  color:rgba(180,175,200,.52);margin:0 0 .6rem;text-align:center;
+}
+.cover-soc-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:.45rem .35rem;
+}
+.cover-soc-cell{
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
+  gap:.28rem;padding:.4rem .15rem .35rem;border-radius:14px;
+  text-decoration:none;transition:background .25s ease,transform .25s ease;
+}
+.cover-soc-cell:hover{background:rgba(255,255,255,.06);transform:translateY(-2px)}
+.cover-soc-cell .soc-ball{
+  width:clamp(36px,10vw,42px);height:clamp(36px,10vw,42px);
+  border-radius:11px;display:flex;align-items:center;justify-content:center;
+}
+.cover-soc-cell .soc-ball svg{width:52%;height:52%}
+.cover-soc-lbl{
+  font-family:'Jost',sans-serif;font-size:clamp(.38rem,1.65vw,.46rem);
+  letter-spacing:.06em;color:rgba(200,195,215,.68);
+  line-height:1.15;text-align:center;max-width:100%;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.cover-soc-cell.soc-ig-erior .cover-soc-lbl{color:rgba(220,200,170,.82)}
+.cover-soc-cell.soc-ig-magique .cover-soc-lbl{color:rgba(230,200,220,.78)}
+.cover-soc-wa .cover-soc-lbl{color:rgba(140,230,170,.85)}
+
 .page#page-cover .btn-amor4-crystal{
   border-radius:980px;
 }
@@ -3703,6 +3776,7 @@ body::before{
   border-radius:980px;
 }
 
+#coverHeroZone .cover-soc-nav .soc-ball,
 #coverHeroZone .soc-ball,
 #coverHeroZone .soc-ball.ig,
 #coverHeroZone .soc-ball.ig-erior,
@@ -3736,6 +3810,7 @@ body::before{
 #coverHeroZone .soc-ball.sp{background:linear-gradient(145deg,rgba(255,255,255,.12) 0%,rgba(29,185,84,.16) 45%,rgba(10,10,16,.52) 100%)!important}
 #coverHeroZone .soc-ball.tw{background:linear-gradient(145deg,rgba(255,255,255,.1) 0%,rgba(60,60,80,.2) 45%,rgba(10,10,16,.52) 100%)!important}
 #coverHeroZone .soc-ball.wa{background:linear-gradient(145deg,rgba(255,255,255,.12) 0%,rgba(37,211,102,.16) 45%,rgba(10,10,16,.52) 100%)!important}
+#coverHeroZone .cover-soc-cell:hover .soc-ball,
 #coverHeroZone .soc-icon:hover .soc-ball{
   transform:translateY(-6px) scale(1.1)!important;
   border-color:rgba(255,255,255,.44)!important;
@@ -3764,7 +3839,6 @@ body::before{
   -webkit-backdrop-filter:blur(20px);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 6px 24px rgba(0,0,0,.35);
   display:flex!important;
-}
   border-color:rgba(255,255,255,.2);
   box-shadow:0 6px 24px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.22),0 0 24px rgba(201,160,96,.06);
 }
@@ -3772,7 +3846,6 @@ body::before{
 @media(min-width:768px){
   .cover-actions-hero{max-width:min(480px,88vw)}
   .cover-actions-premium{padding:clamp(.95rem,2vw,1.15rem) clamp(.85rem,2.5vw,1.1rem)}
-  .cover-actions-premium .cover-action-secondary{width:min(240px,55%)}
   .cover-promo-jewel{
     display:grid;grid-template-columns:1fr auto;grid-template-rows:auto auto;
     align-items:center;column-gap:1rem;row-gap:.35rem;
@@ -3813,26 +3886,24 @@ body::before{
   .page#page-cover .btn-metallic.btn-liquid,
   .page#page-cover .btn-catalog-hero,
   .page#page-cover .btn-alicia-glow,
-  .page#page-cover .btn-eriorworld,
-  .page#page-cover .btn-icon-aura-glass{
+  .page#page-cover .btn-icon-aura-glass,
+  .cover-extra-btn{
     animation:none!important;
     background-position:42% 58%,0 0!important;
     backdrop-filter:none!important;
     -webkit-backdrop-filter:none!important;
   }
-  .page#page-cover .cover-cta-stack .btn-metallic.btn-liquid,
   .page#page-cover .btn-catalog-hero,
-  .page#page-cover .btn-alicia-glow.btn-alicia-hero{
+  .page#page-cover .btn-alicia-glow.btn-alicia-hero,
+  .cover-extra-btn{
     backdrop-filter:blur(24px) saturate(165%)!important;
     -webkit-backdrop-filter:blur(24px) saturate(165%)!important;
   }
-  .page#page-cover .btn-eriorworld::before,
   .page#page-cover .btn-metallic::before{
     animation:none!important;
     transform:translateX(-130%)!important;
     opacity:.35;
   }
-  .page#page-cover .btn-eriorworld::before{z-index:1}
   .cover-hero-glass,.cover-promo-jewel{
     backdrop-filter:none!important;
     -webkit-backdrop-filter:none!important;
@@ -3843,12 +3914,11 @@ body::before{
   }
   .page#page-cover .cover-promo-jewel{order:3}
   .page#page-cover .cover-hero-glass{order:2}
-  .cover-actions-hero{grid-template-columns:1fr 1fr;gap:clamp(.4rem,2vw,.5rem)}
+  .cover-actions-hero{grid-template-columns:1fr;gap:.5rem}
   .cover-actions-premium{
     width:min(360px,92vw);
     padding:clamp(.75rem,3vw,.95rem) clamp(.65rem,2.5vw,.85rem);
   }
-  .cover-actions-premium .cover-action-secondary{width:100%;max-width:220px}
   .cover-promo-jewel .cover-promo-offer{margin-bottom:.15rem}
   .cover-promo-jewel .cover-promo-bonus{
     display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden;
@@ -3870,7 +3940,7 @@ body::before{
   .page#page-cover.active .cover-hero-glass{animation:none;opacity:1;transform:none}
   .cover-promo-jewel::before,.cover-hero-glass::before,.cover-gateway-aurora,
   .page#page-cover .btn-alicia-glow,
-  .page#page-cover .btn-eriorworld,.page#page-cover .btn-icon-aura-glass,.btn-catalog-hero,
+  .page#page-cover .btn-icon-aura-glass,.btn-catalog-hero,
   .page#page-cover .btn-amor4-crystal,
   .page#page-cover .btn-icon-aura-metal,
   .page#page-cover .btn-premium-label{
@@ -3907,16 +3977,16 @@ body::before{
 
 <div id="fsMenu">
   <ul class="fsm-list">
-    <li><a onclick="goTo('cover')">Inicio</a></li>
-    <li><a onclick="goTo('guia')">Guía Audios</a></li>
     <li><a onclick="goTo('catalogo')">Catálogo</a></li>
     <li><a onclick="goTo('alicia')">Alicia IA</a></li>
+    <li><a onclick="goTo('guia')">Guía Audios</a></li>
     <li><a onclick="goTo('testimonios')">Testimonios</a></li>
     <li><a onclick="goTo('faq')">FAQ</a></li>
     <li><a onclick="goTo('tarot')">Tarot Alienígena</a></li>
     <li><a onclick="goTo('ebook')">Ebook Erior</a></li>
     <li><a onclick="goTo('soporte')">Soporte</a></li>
-    <li><a href="https://eriorrabbithole.netlify.app" target="_blank" onclick="closeMenu()">Rabbit Hole</a></li>
+    <li class="fsm-item-game"><a href="https://eriorworld.netlify.app" target="_blank" rel="noopener" onclick="closeMenu()">Erior World <span class="fsm-beta-tag">beta</span></a></li>
+    <li><a href="https://eriorrabbithole.netlify.app" target="_blank" rel="noopener" onclick="closeMenu()">Rabbit Hole</a></li>
   </ul>
   <div class="fsm-line"></div>
   <div class="fsm-socials">
@@ -4004,18 +4074,20 @@ body::before{
     style="width:100%;height:100%;background-color:transparent;"
   ></model-viewer>
 </span>R<em>CENTER</em><canvas id="titleDust" style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:700px;height:100%;pointer-events:none;z-index:10;overflow:visible;"></canvas></h1>
-      <div class="cover-tag">Guía interactiva para utilizar tus audios</div>
+      <div class="cover-tag">Audios binaurales · Alicia IA · Manifestación</div>
       <div class="cover-actions-premium">
         <div class="cover-gateway" aria-hidden="true"><span class="cover-gateway-aurora"></span></div>
         <p class="cover-gateway-tag">Tu portal de transformación</p>
         <div class="cover-actions-hero">
-          <button type="button" class="btn-metallic btn-liquid btn-catalog-hero cover-action-btn" data-shatter-action="catalog" id="btnCatalogHero">
+          <button type="button" class="btn-metallic btn-liquid btn-catalog-hero cover-action-btn cover-action-primary" data-shatter-action="catalog" id="btnCatalogHero">
             <span class="btn-metallic-txt btn-premium-label">Ver Catálogo</span>
-            <span class="btn-hero-badge">25+ audios</span>
+            <span class="btn-hero-badge">25+ audios personalizados</span>
           </button>
-          <button type="button" class="btn-alicia-glow cover-action-btn btn-alicia-hero" onclick="goTo('alicia')"><span class="btn-premium-label">✨ Habla con Alicia IA</span></button>
+          <button type="button" class="btn-alicia-glow cover-action-btn btn-alicia-hero cover-action-primary" onclick="goTo('alicia')">
+            <span class="btn-premium-label">✨ Habla con Alicia IA</span>
+            <span class="btn-hero-badge btn-hero-badge--alicia">Gratis · te guía al audio perfecto</span>
+          </button>
         </div>
-        <button type="button" class="btn-eriorworld cover-action-btn cover-action-secondary" onclick="window.open('https://eriorworld.netlify.app','_blank','noopener,noreferrer')"><span class="btn-premium-label">✦ eriorworld</span><span class="ew-beta">beta</span></button>
       </div>
 
       <div class="cover-promo-countdown cover-promo-jewel promo-countdown-block promo-summer-glow" id="coverPromoJewel" onclick="openPromoModal()" role="button" tabindex="0" aria-label="Ver promociones de julio">
@@ -4097,37 +4169,55 @@ body::before{
               </div>
             </div>
           </div>
-          <div class="cover-cta-stack">
-            <button type="button" class="btn-metallic btn-liquid btn-liquid-mind" data-shatter-action="mindmovie"><span class="btn-metallic-txt btn-premium-label">Mind Movie</span></button>
-            <button type="button" class="btn-metallic btn-liquid btn-liquid-tg" data-shatter-action="telegram"><span class="btn-metallic-txt btn-premium-label">Telegram</span></button>
+        </div>
+        <div class="cover-extras-bar" aria-label="Herramientas Erior">
+          <p class="cover-extras-label">También en Erior</p>
+          <div class="cover-extras-grid">
+            <button type="button" class="cover-extra-btn cover-extra-mind" data-shatter-action="mindmovie">
+              <span class="cover-extra-ico" aria-hidden="true">🎬</span>
+              <span class="cover-extra-text">
+                <span class="cover-extra-name btn-premium-label">Mind Movie</span>
+                <span class="cover-extra-sub">Visualiza tu realidad</span>
+              </span>
+            </button>
+            <button type="button" class="cover-extra-btn cover-extra-tg" data-shatter-action="telegram">
+              <span class="cover-extra-ico" aria-hidden="true">📲</span>
+              <span class="cover-extra-text">
+                <span class="cover-extra-name btn-premium-label">Telegram</span>
+                <span class="cover-extra-sub">Comunidad con Pauline</span>
+              </span>
+            </button>
           </div>
         </div>
-        <div class="soc-row">
-        <a href="https://www.instagram.com/eriorcenter" target="_blank" rel="noopener" class="soc-icon soc-ig soc-ig-erior">
-          <div class="soc-icon-slot"><div class="soc-ball ig ig-erior"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.2" fill="white" stroke="none"/></svg></div></div>
-          <span class="soc-lbl">@eriorcenter</span>
-        </a>
-        <a href="https://www.instagram.com/sheismagique" target="_blank" rel="noopener" class="soc-icon soc-ig soc-ig-magique">
-          <div class="soc-icon-slot"><div class="soc-ball ig ig-magique"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.2" fill="white" stroke="none"/></svg></div></div>
-          <span class="soc-lbl">@sheismagique</span>
-        </a>
-        <a href="https://www.youtube.com/@sheismagique" target="_blank" rel="noopener" class="soc-icon">
-          <div class="soc-icon-slot"><div class="soc-ball yt"><svg viewBox="0 0 24 24" fill="white"><path d="M22.5 6.5s-.3-2-1.2-2.8c-1.1-1.2-2.4-1.2-3-1.3C15.6 2.2 12 2.2 12 2.2s-3.6 0-6.3.2c-.6.1-1.9.1-3 1.3C1.8 4.5 1.5 6.5 1.5 6.5S1.2 8.8 1.2 11v2.1c0 2.2.3 4.4.3 4.4s.3 2 1.2 2.8c1.1 1.2 2.6 1.1 3.3 1.2C8.4 21.8 12 21.8 12 21.8s3.6 0 6.3-.3c.6-.1 1.9-.1 3-1.3.9-.8 1.2-2.8 1.2-2.8s.3-2.2.3-4.4V11c0-2.2-.3-4.5-.3-4.5zM9.7 15.5V8.4l6.6 3.6-6.6 3.5z"/></svg></div></div>
-          <span class="soc-lbl">YouTube</span>
-        </a>
-        <a href="https://open.spotify.com/show/1tI7Avbjxvxu1jlQyvV3OY" target="_blank" rel="noopener" class="soc-icon">
-          <div class="soc-icon-slot"><div class="soc-ball sp"><svg viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.65 14.39c-.19.31-.6.41-.91.21-2.49-1.52-5.63-1.86-9.33-1.02-.36.08-.71-.14-.79-.5-.08-.36.14-.71.5-.79 4.04-.92 7.51-.53 10.32 1.19.31.19.4.6.21.91zm1.24-2.76c-.24.38-.74.5-1.12.27-2.85-1.75-7.19-2.26-10.56-1.24-.44.13-.9-.12-1.03-.56-.13-.44.12-.9.56-1.03 3.85-1.17 8.63-.6 11.88 1.44.38.23.5.74.27 1.12zm.11-2.87c-3.41-2.03-9.04-2.21-12.3-1.23-.52.16-1.07-.14-1.23-.66-.16-.52.14-1.07.66-1.23 3.74-1.14 9.97-.92 13.91 1.42.47.28.62.89.34 1.36-.28.46-.89.62-1.38.34z"/></svg></div></div>
-          <span class="soc-lbl">Podcast</span>
-        </a>
-        <a href="https://x.com/sheismagique" target="_blank" rel="noopener" class="soc-icon">
-          <div class="soc-icon-slot"><div class="soc-ball tw"><svg viewBox="0 0 24 24" fill="white"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.26 5.632 5.904-5.632Zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></div></div>
-          <span class="soc-lbl">Twitter/X</span>
-        </a>
-        <a href="https://wa.me/5214432311761?text=Hola!%20Me%20interesa%20adquirir%20un%20audio%2C%20%C2%BFtienen%20alguna%20promoci%C3%B3n%20disponible%3F" target="_blank" rel="noopener" class="soc-icon soc-icon-wa" id="socWhatsApp">
-          <div class="soc-icon-slot"><div class="soc-ball wa"><svg viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></div></div>
-          <span class="soc-lbl">WhatsApp</span>
-        </a>
-        </div>
+        <nav class="cover-soc-nav" aria-label="Redes sociales Erior Center">
+          <p class="cover-soc-heading">Síguenos</p>
+          <div class="cover-soc-grid">
+            <a href="https://www.instagram.com/eriorcenter" target="_blank" rel="noopener" class="cover-soc-cell soc-ig-erior">
+              <div class="soc-ball ig ig-erior"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.2" fill="white" stroke="none"/></svg></div>
+              <span class="cover-soc-lbl">@eriorcenter</span>
+            </a>
+            <a href="https://www.instagram.com/sheismagique" target="_blank" rel="noopener" class="cover-soc-cell soc-ig-magique">
+              <div class="soc-ball ig ig-magique"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.2" fill="white" stroke="none"/></svg></div>
+              <span class="cover-soc-lbl">@sheismagique</span>
+            </a>
+            <a href="https://www.youtube.com/@sheismagique" target="_blank" rel="noopener" class="cover-soc-cell">
+              <div class="soc-ball yt"><svg viewBox="0 0 24 24" fill="white"><path d="M22.5 6.5s-.3-2-1.2-2.8c-1.1-1.2-2.4-1.2-3-1.3C15.6 2.2 12 2.2 12 2.2s-3.6 0-6.3.2c-.6.1-1.9.1-3 1.3C1.8 4.5 1.5 6.5 1.5 6.5S1.2 8.8 1.2 11v2.1c0 2.2.3 4.4.3 4.4s.3 2 1.2 2.8c1.1 1.2 2.6 1.1 3.3 1.2C8.4 21.8 12 21.8 12 21.8s3.6 0 6.3-.3c.6-.1 1.9-.1 3-1.3.9-.8 1.2-2.8 1.2-2.8s.3-2.2.3-4.4V11c0-2.2-.3-4.5-.3-4.5zM9.7 15.5V8.4l6.6 3.6-6.6 3.5z"/></svg></div>
+              <span class="cover-soc-lbl">YouTube</span>
+            </a>
+            <a href="https://open.spotify.com/show/1tI7Avbjxvxu1jlQyvV3OY" target="_blank" rel="noopener" class="cover-soc-cell">
+              <div class="soc-ball sp"><svg viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.65 14.39c-.19.31-.6.41-.91.21-2.49-1.52-5.63-1.86-9.33-1.02-.36.08-.71-.14-.79-.5-.08-.36.14-.71.5-.79 4.04-.92 7.51-.53 10.32 1.19.31.19.4.6.21.91zm1.24-2.76c-.24.38-.74.5-1.12.27-2.85-1.75-7.19-2.26-10.56-1.24-.44.13-.9-.12-1.03-.56-.13-.44.12-.9.56-1.03 3.85-1.17 8.63-.6 11.88 1.44.38.23.5.74.27 1.12zm.11-2.87c-3.41-2.03-9.04-2.21-12.3-1.23-.52.16-1.07-.14-1.23-.66-.16-.52.14-1.07.66-1.23 3.74-1.14 9.97-.92 13.91 1.42.47.28.62.89.34 1.36-.28.46-.89.62-1.38.34z"/></svg></div>
+              <span class="cover-soc-lbl">Podcast</span>
+            </a>
+            <a href="https://x.com/sheismagique" target="_blank" rel="noopener" class="cover-soc-cell">
+              <div class="soc-ball tw"><svg viewBox="0 0 24 24" fill="white"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.26 5.632 5.904-5.632Zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></div>
+              <span class="cover-soc-lbl">X</span>
+            </a>
+            <a href="https://wa.me/5214432311761?text=Hola!%20Me%20interesa%20adquirir%20un%20audio%2C%20%C2%BFtienen%20alguna%20promoci%C3%B3n%20disponible%3F" target="_blank" rel="noopener" class="cover-soc-cell cover-soc-wa" id="socWhatsApp">
+              <div class="soc-ball wa"><svg viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></div>
+              <span class="cover-soc-lbl">WhatsApp</span>
+            </a>
+          </div>
+        </nav>
       </div>
       
     </div>
