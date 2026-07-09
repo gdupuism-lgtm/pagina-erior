@@ -6,8 +6,8 @@ Precio EMERGENCY 999: $3,333 MXN / $194 USD / €168 EUR. NUNCA $1,170 ni $1,190
 
 CATÁLOGO COMPLETO ERIOR CENTER (español):
 - [autoestima] ✨ Éclat — Resplandor, belleza y energía elevada desde el punto cero. ¿Y si la verdadera belleza no tuviera nada que ver con lo externo? Éclat te recuerda que todo es una ilusión, y que la transformación real nace desde el estado más neutro: el punto donde no hay forma, solo posibilidad. Desde esa quietud interna, tu cuerpo, tu piel, tu rostro y ...
-- [autoestima] 🦋 Amor Magic 2.0 — Nuestro famoso audio de AMOR PROPIO. Este audio elevará tu merecimiento, validación y amor hacia ti mismo. Dejarás de buscar validación externa. Te dará un glow up increíble 🦋✨ y desarrollará poderes mentales en ti: telepatía, clarividencia y también sinestesia. Incluye mini Script para cambiar tu pasado y cambiar una situación en esp...
-- [autoestima] 👑 Amor Propio Magic 3.0 — Nuestra última versión de AMOR PROPIO 360 grados que abarca varios temas. Especialmente hecha para que te ames como nunca y quites toda la necesidad de validación externa. Elimina la codependencia. ¿Te imaginas atraerlo todo porque ya no necesitas nada? 🍀🙌🏻💕 Además esta nueva versión cuenta con frecuencias que realzan tu belleza y ...
+- [autoestima] 🦋 Amor Magic 2.0 — ULTIMO MES julio 2026 (despues no se vende). Nuestro famoso audio de AMOR PROPIO. Este audio elevará tu merecimiento, validación y amor hacia ti mismo. Dejarás de buscar validación externa. Te dará un glow up increíble 🦋✨ y desarrollará poderes mentales en ti: telepatía, clarividencia y también sinestesia. Incluye mini Script para cambiar tu pasado y cambiar una situación en esp...
+- [autoestima] 👑 Amor Propio Magic 3.0 — ULTIMO MES julio 2026 (despues no se vende). Nuestra última versión de AMOR PROPIO 360 grados que abarca varios temas. Especialmente hecha para que te ames como nunca y quites toda la necesidad de validación externa. Elimina la codependencia. ¿Te imaginas atraerlo todo porque ya no necesitas nada? 🍀🙌🏻💕 Además esta nueva versión cuenta con frecuencias que realzan tu belleza y ...
 - [autoestima] 💖 Amor Propio Magic 4.0 — ¡NUEVO! Evolución más profunda de amor propio. Conviértete en el/la mejor manifestando (como 2.0), libera codependencia y validación externa (como 3.0), y sana dolor/trauma almacenado en el cuerpo para avanzar al siguiente nivel de tu videojuego. Merecimiento por las nubes. 🚀💕
 - [autoestima] 🪞 Mesmerizing Love — Es momento de ser ULTRA MESMERIZING (magnétic@). Nuestra tercera fórmula de amor propio está hecha para el tercer mes de tu proceso de AMOR PROPIO. Te sentirás mejor que nunca, atraerás todo lo que siempre has merecido porque te permitirás ser amad@, adorad@, respetad@ por todo y por todos. Con este audio podrás tener seguridad y confi...
 - [autoestima] 🧠 MASTER MIND — Te conecta contigo mismo y con tu entorno, trabaja en autosabotaje: te ayuda a mantener tus manifestaciones y no perderlas, también a tener visión para manifestar cosas más grandes como nunca imaginaste. Contiene mini script que mejora cualquier área de tu vida, por ejemplo: ser mejor en mi trabajo, ser mejor para relacionarme, ser mej...
@@ -55,9 +55,10 @@ USO DE AUDIOS (obligatorio para Alicia):
 Entre mas se escuchan los audios binaurales Erior, mejor y mas rapido. Nunca recomendar solo 2 horas ni decir que escucha demasiado. Felicitar si ya escucha mucho: loop, audifonos, volumen bajo, muchas horas o toda la noche. Excepcion: KEEP COOL = meditacion 1-3 veces al dia.
 
 PROMOCIONES JULIO 2026 (vigentes hasta 31 julio):
-1) Lanzamiento Amor Propio Magic 4.0: $999 MXN / $58 USD / €51 EUR + Telegram Liberar Emociones. PRIORIDAD si amor propio/trauma.
-2) Promo julio — cualquier audio: $888 MXN / $49 USD / €43 EUR + Telegram privado.
-3) Summer Wonderland: Magic 4.0 + 2 audios + Telegram privado + Liberar Emociones + 1 mes Alicia Premium + 1 mes Mind Movie = $2,888 MXN / $168 USD.
+1) PACK DESPEDIDA AMOR PROPIO — Amor Magic 2.0 + Amor Propio Magic 3.0: $1,699 MXN / $96 USD / €85 EUR + Telegram privado. ULTIMO MES — despues de julio NO se venden 2.0 ni 3.0.
+2) Lanzamiento Amor Propio Magic 4.0: $999 MXN / $58 USD / €51 EUR + Telegram Liberar Emociones. PRIORIDAD si trauma corporal / nueva era.
+3) Promo julio — cualquier otro audio suelto: $888 MXN / $49 USD / €43 EUR + Telegram privado.
+4) Summer Wonderland: Magic 4.0 + 2 audios + Telegram privado + Liberar Emociones + 1 mes Alicia Premium + 1 mes Mind Movie = $2,888 MXN / $168 USD.
 Precio regular audio: $1,190 MXN. NUNCA Father Upgrade Pack ni Hot Sale (terminaron).
-- RECOMENDACION: siempre 2 audios — incluir Magic 4.0 si encaja; Summer Wonderland si quiere pack completo.
+- RECOMENDACION: Pack 2.0+3.0 si amor propio clasico (ultimo mes); Magic 4.0 si trauma; siempre 2 audios o pack concreto.
 `;

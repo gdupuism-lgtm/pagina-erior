@@ -167,7 +167,7 @@ body::before{
 .fsm-list a{display:block;font-family:'Cormorant Garamond',serif;font-size:clamp(1.85rem,5vw,3.4rem);font-weight:600;font-style:italic;text-decoration:none;line-height:1.12;padding:.1em 1.5rem;transition:transform .5s cubic-bezier(.16,1,.3,1),letter-spacing .3s,filter .3s;transform:translateY(110%);cursor:pointer;background:linear-gradient(160deg,rgba(255,255,255,.95) 0%,rgba(220,235,255,.9) 40%,rgba(255,255,255,1) 60%,rgba(200,220,255,.85) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 10px rgba(255,255,255,.35));}
 #fsMenu.open .fsm-list a{transform:translateY(0)}
 .fsm-list a:hover{letter-spacing:.08em;filter:drop-shadow(0 0 20px rgba(255,255,255,.8)) drop-shadow(0 0 40px rgba(180,210,255,.5));}
-.fsm-list li:nth-child(1) a{transition-delay:.04s}.fsm-list li:nth-child(2) a{transition-delay:.09s}.fsm-list li:nth-child(3) a{transition-delay:.13s}.fsm-list li:nth-child(4) a{transition-delay:.17s}.fsm-list li:nth-child(5) a{transition-delay:.21s}.fsm-list li:nth-child(6) a{transition-delay:.25s}.fsm-list li:nth-child(7) a{transition-delay:.29s}.fsm-list li:nth-child(8) a{transition-delay:.33s}.fsm-list li:nth-child(9) a{transition-delay:.37s}.fsm-list li:nth-child(10) a{transition-delay:.41s}
+.fsm-list li:nth-child(1) a{transition-delay:.04s}.fsm-list li:nth-child(2) a{transition-delay:.09s}.fsm-list li:nth-child(3) a{transition-delay:.13s}.fsm-list li:nth-child(4) a{transition-delay:.17s}.fsm-list li:nth-child(5) a{transition-delay:.21s}.fsm-list li:nth-child(6) a{transition-delay:.25s}.fsm-list li:nth-child(7) a{transition-delay:.29s}.fsm-list li:nth-child(8) a{transition-delay:.33s}.fsm-list li:nth-child(9) a{transition-delay:.37s}.fsm-list li:nth-child(10) a{transition-delay:.41s}.fsm-list li:nth-child(11) a{transition-delay:.45s}
 .fsm-item-game a{font-size:clamp(1.35rem,4vw,2.2rem)!important;font-style:normal!important;opacity:.72}
 .fsm-item-game a:hover{opacity:1}
 .fsm-list li:nth-child(1) a,.fsm-list li:nth-child(2) a{
@@ -3106,8 +3106,19 @@ button.alicia-mode-premium-cta{font:inherit;width:100%;cursor:pointer}
   background-size:300% 300%;animation:promoJewelShift 6s ease-in-out infinite;
 }
 @keyframes promoJewelShift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
-.promo-tabs-3{flex-wrap:wrap}
+.promo-tabs-3,.promo-tabs-4{flex-wrap:wrap}
 .promo-tabs-3 .promo-tab{flex:1 1 30%;min-width:0;font-size:clamp(.42rem,2.2vw,.52rem);padding:.45rem .25rem;line-height:1.25}
+.promo-tabs-4 .promo-tab{flex:1 1 22%;min-width:0;font-size:clamp(.38rem,2vw,.48rem);padding:.42rem .2rem;line-height:1.2}
+.cover-promo-slide[data-promo="amorpack"] .cover-promo-title{
+  background:linear-gradient(90deg,#ffb8d0,#ffd4a8,#c9a060);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+}
+.promo-badge-lastmonth{
+  display:inline-block;font-size:.52rem;letter-spacing:.12em;text-transform:uppercase;
+  padding:.22rem .5rem;border-radius:999px;margin-bottom:.35rem;
+  color:rgba(255,210,180,.95);border:1px solid rgba(255,140,100,.35);
+  background:rgba(255,80,60,.12);box-shadow:0 0 14px rgba(255,100,80,.15);
+}
 .promo-cta-row{display:flex;flex-direction:column;gap:.5rem;margin-top:.85rem}
 .promo-cta-pay{
   display:flex;align-items:center;justify-content:center;width:100%;
@@ -3977,6 +3988,7 @@ body::before{
 
 <div id="fsMenu">
   <ul class="fsm-list">
+    <li><a onclick="goTo('cover')">Inicio</a></li>
     <li><a onclick="goTo('catalogo')">Catálogo</a></li>
     <li><a onclick="goTo('alicia')">Alicia IA</a></li>
     <li><a onclick="goTo('guia')">Guía Audios</a></li>
@@ -4092,7 +4104,15 @@ body::before{
 
       <div class="cover-promo-countdown cover-promo-jewel promo-countdown-block promo-summer-glow" id="coverPromoJewel" onclick="openPromoModal()" role="button" tabindex="0" aria-label="Ver promociones de julio">
         <div class="cover-promo-slides" id="coverPromoSlides">
-          <div class="cover-promo-slide active" data-promo="magic4">
+          <div class="cover-promo-slide active" data-promo="amorpack">
+            <div class="cover-promo-offer">
+              <span class="promo-badge-lastmonth">⏳ Último mes</span>
+              <strong class="cover-promo-title">🦋👑 Pack Despedida Amor Propio</strong>
+              <p class="cover-promo-line">Amor Magic 2.0 + Amor Propio 3.0 · ruta clásica Erior</p>
+              <p class="cover-promo-prices"><span class="promo-price-old">$2,380</span> $1,699 MXN · $96 USD · €85 EUR</p>
+            </div>
+          </div>
+          <div class="cover-promo-slide" data-promo="magic4">
         <div class="cover-promo-offer">
               <strong class="cover-promo-title">✨ Amor Propio Magic 4.0 — NEW</strong>
               <p class="cover-promo-line">Lanzamiento julio · Telegram Liberar Emociones 🎁</p>
@@ -4115,9 +4135,10 @@ body::before{
           </div>
         </div>
         <div class="cover-promo-dots" id="coverPromoDots" aria-hidden="true">
-          <button type="button" class="cover-promo-dot active" data-goto="0" aria-label="Promo 1"></button>
-          <button type="button" class="cover-promo-dot" data-goto="1" aria-label="Promo 2"></button>
-          <button type="button" class="cover-promo-dot" data-goto="2" aria-label="Promo 3"></button>
+          <button type="button" class="cover-promo-dot active" data-goto="0" aria-label="Pack Despedida Amor"></button>
+          <button type="button" class="cover-promo-dot" data-goto="1" aria-label="Promo Magic 4.0"></button>
+          <button type="button" class="cover-promo-dot" data-goto="2" aria-label="Promo julio 888"></button>
+          <button type="button" class="cover-promo-dot" data-goto="3" aria-label="Summer Pack"></button>
         </div>
         <span class="promo-countdown-label">⏳ Promos de julio · termina en</span>
         <div class="promo-countdown-grid">
@@ -4126,7 +4147,7 @@ body::before{
           <div class="promo-countdown-unit"><span class="promo-countdown-num" data-cd="mins">00</span><span>min</span></div>
           <div class="promo-countdown-unit"><span class="promo-countdown-num" data-cd="secs">00</span><span>seg</span></div>
         </div>
-        <p class="cover-promo-bonus">Toca para ver las 3 promos · pago o WhatsApp ✨</p>
+        <p class="cover-promo-bonus">Toca para ver las 4 promos · pago o WhatsApp ✨</p>
       </div>
       </div>
 
@@ -4484,7 +4505,7 @@ body::before{
           <button type="button" class="faq-q" aria-expanded="false">¿Cómo sé cuál audio es para mí?<span class="faq-q-icon">+</span></button>
           <div class="faq-a"><div class="faq-a-inner">
             <p>Habla con Alicia IA en esta misma página: te hace preguntas y te recomienda el audio exacto según lo que vives hoy. También puedes explorar el catálogo por categoría: amor, dinero, autoestima, salud y más.</p>
-            <p>Si dudas entre dos audios, Alicia te recomienda siempre 2 opciones personalizadas. En julio hay 3 promos: Magic 4.0 a $999, cualquier audio a $888, o el Summer Wonderland Pack ($2,888). Pregúntale a Alicia cuál te conviene más.</p>
+            <p>Si dudas entre dos audios, Alicia te recomienda siempre 2 opciones personalizadas. En julio hay 4 promos: Pack Despedida Amor 2.0+3.0 ($1,699), Magic 4.0 a $999, cualquier audio a $888, o el Summer Wonderland Pack ($2,888). Pregúntale a Alicia cuál te conviene más.</p>
             <p>¿Quieres que Alicia te guíe ahora mismo?</p>
             <button type="button" class="faq-cta-btn" onclick="goTo('alicia')">Hablar con Alicia ✦</button>
           </div></div>
@@ -4715,12 +4736,28 @@ body::before{
           <div class="promo-countdown-unit"><span class="promo-countdown-num" data-cd="secs">00</span><span>seg</span></div>
         </div>
       </div>
-      <div class="promo-tabs promo-tabs-3" role="tablist">
-        <button type="button" class="promo-tab active" data-promo-tab="magic4" onclick="switchPromoTab('magic4')">✨ Magic 4.0</button>
+      <div class="promo-tabs promo-tabs-4" role="tablist">
+        <button type="button" class="promo-tab active" data-promo-tab="amorpack" onclick="switchPromoTab('amorpack')">🦋 Pack Amor</button>
+        <button type="button" class="promo-tab" data-promo-tab="magic4" onclick="switchPromoTab('magic4')">✨ Magic 4.0</button>
         <button type="button" class="promo-tab" data-promo-tab="july888" onclick="switchPromoTab('july888')">🌊 Julio $888</button>
         <button type="button" class="promo-tab" data-promo-tab="summer" onclick="switchPromoTab('summer')">☀️ Summer Pack</button>
       </div>
-      <div class="promo-panel active" id="promoPanelMagic4" role="tabpanel">
+      <div class="promo-panel active" id="promoPanelAmorpack" role="tabpanel">
+        <p class="promo-dates">⏳ ÚLTIMO MES — Pack Despedida Amor Propio 🦋👑</p>
+        <p class="promo-desc">Julio 2026 es el <strong>último mes</strong> para llevarte la ruta clásica de amor propio de Erior. Después de agosto, <strong>Amor Magic 2.0</strong> y <strong>Amor Propio Magic 3.0</strong> ya no se venden por separado.</p>
+        <ul class="promo-benefit-list">
+          <li>🦋 <strong>Amor Magic 2.0</strong> — glow up, merecimiento, telepatía/clarividencia + mini Script para cambiar tu pasado (se cumple muy rápido)</li>
+          <li>👑 <strong>Amor Propio Magic 3.0</strong> — amor propio 360°, cero codependencia, frecuencias belleza/juventud + abundancia</li>
+          <li>🎁 Incluye Telegram privado con tu compra</li>
+          <li>💰 Pack 2 audios: <span class="promo-price-old">$2,380 MXN</span> → <strong>$1,699 MXN</strong> / $96 USD / €85 EUR 🔥</li>
+        </ul>
+        <p class="promo-recos">Ideal si quieres la ruta mes 1 → mes 2 antes de que desaparezcan del catálogo.</p>
+        <div class="promo-cta-row">
+          <button type="button" class="promo-cta-pay" onclick="openPromoPay('amorpack')">💳 Quiero el pack $1,699</button>
+          <a class="promo-cta-wa" href="#" onclick="event.preventDefault();window.open(promoWaUrl('amorpack'),'_blank','noopener');closePromoModal();">💬 WhatsApp: Pack Despedida Amor</a>
+        </div>
+      </div>
+      <div class="promo-panel" id="promoPanelMagic4" role="tabpanel">
         <p class="promo-dates">✨ ¡NUEVO! Amor Propio Magic 4.0</p>
         <p class="promo-desc">💖 Conviértete en el/la mejor manifestando, como el 2.0. 🌸 Libera codependencia y validación, como el 3.0. 🫶 Sana dolor y trauma en el cuerpo para el siguiente nivel de tu videojuego. ⚠️ CUIDADO: merecimiento por las nubes 🚀</p>
         <ul class="promo-benefit-list">
@@ -4875,7 +4912,7 @@ async function guardarProspecto(datos){
 }
 
 var PROMO_COUNTDOWN_END=new Date('2026-07-31T23:59:59-06:00');
-var COVER_PROMO_IDS=['magic4','july888','summer'];
+var COVER_PROMO_IDS=['amorpack','magic4','july888','summer'];
 var _coverPromoSlide=0;
 
 function padCountdown(n){return String(Math.max(0,n)).padStart(2,'0');}
@@ -4944,7 +4981,7 @@ function switchPromoTab(id){
   document.querySelectorAll('.promo-tab').forEach(function(t){
     t.classList.toggle('active',t.getAttribute('data-promo-tab')===id);
   });
-  var map={magic4:'promoPanelMagic4',july888:'promoPanelJuly888',summer:'promoPanelSummer'};
+  var map={amorpack:'promoPanelAmorpack',magic4:'promoPanelMagic4',july888:'promoPanelJuly888',summer:'promoPanelSummer'};
   Object.keys(map).forEach(function(k){
     var el=document.getElementById(map[k]);
     if(el)el.classList.toggle('active',k===id);
@@ -4954,15 +4991,17 @@ function switchPromoTab(id){
 }
 function promoWaUrl(tab){
   var msgs={
+    amorpack:'Hola! Quiero el Pack Despedida Amor Propio 🦋👑 (Amor Magic 2.0 + Amor Propio 3.0 — $1,699 MXN — último mes)',
     magic4:'Hola! Quiero mi audio Amor Propio Magic 4.0 ✨ (promo lanzamiento $999 MXN)',
     july888:'Hola! Quiero la Promo de Julio 🌊 — un audio a $888 MXN',
     summer:'Hola! Quiero la Promo Summer Wonderland ☀️ (Magic 4.0 + 2 audios — $2,888 MXN)'
   };
-  return payWaUrl(msgs[tab]||msgs.magic4);
+  return payWaUrl(msgs[tab]||msgs.amorpack);
 }
 function openPromoPay(tab){
   closePromoModal();
   var map={
+    amorpack:'🦋👑 Pack Despedida Amor Propio — 2.0 + 3.0',
     magic4:'💖 Amor Propio Magic 4.0 — Lanzamiento julio',
     july888:'🌊 Promo Julio — Audio a tu elección',
     summer:'☀️ Summer Wonderland Pack'
@@ -6135,6 +6174,7 @@ function dismissPayPromoPopup(){
 function getPayModalPrice(productName){
   var n=String(productName||'').toLowerCase().replace(/🆘|💖|🌊|☀️/g,'').trim();
   if(/summer wonderland|wonderland pack|2888/.test(n))return '$2,888 MXN / $168 USD / €146 EUR';
+  if(/pack despedida|despedida amor|2\.0 \+ 3\.0|amor magic 2\.0 \+ amor propio|1699/.test(n))return '$1,699 MXN / $96 USD / €85 EUR';
   if(/magic 4|amor propio magic 4|4\.0.*lanzamiento|lanzamiento julio/.test(n))return '$999 MXN / $58 USD / €51 EUR';
   if(/promo julio|888|glow up/.test(n)&&!/2888|4444|999|magic 4|lanzamiento/.test(n))return '$888 MXN / $49 USD / €43 EUR';
   if(/emergency\s*999|emergency999|emergency 999/.test(n))return '$3,333 MXN / $194 USD / €168 EUR';
@@ -7514,6 +7554,14 @@ function fixJulyDualAudioPricing(reply){
     'Amor Propio Magic 4.0: $999 MXN / $58 USD + Telegram Liberar Emociones. Segundo audio: $888 MXN / $49 USD + Telegram privado. Total julio: $1,887 MXN$2'
   );
 }
+function fixAmorPackPricing(reply,userTxt){
+  var u=String(userTxt||'').toLowerCase();
+  var asks=/amor\s*(magic|propio)?\s*(2|3|2\.0|3\.0)|2\.0.*3\.0|3\.0.*2\.0|promo.*(amor propio|2 y 3)|pack.*amor|promo del amor|tienes promo.*(2|3)/.test(u);
+  if(!asks)return reply;
+  var r=String(reply||'');
+  if(/1[,.]?699|1699|pack despedida/i.test(r)&&!/1[,.]?190|1190|sin promo|no tienen promo|precio regular/i.test(r))return r;
+  return 'Si, tenemos promo exclusiva de julio para esos dos 💜\n\nPack Despedida Amor Propio: Amor Magic 2.0 + Amor Propio Magic 3.0 juntos a $1,699 MXN / $96 USD / €85 EUR (valor $2,380). Incluye Telegram privado.\n\nJulio 2026 es el ULTIMO MES — después de agosto ya no se venden por separado.\n\nAmor Magic 2.0: glow up, merecimiento, mini Script para cambiar tu pasado (se cumple muy rápido).\nAmor Propio Magic 3.0: amor propio 360°, cero codependencia, belleza/juventud y abundancia.\n\nSi solo quieres uno suelto en julio: $888 MXN / $49 USD + Telegram.\n\n¿Te aparto el pack hoy antes del 31? Usa el botón Quiero pagar abajo o WhatsApp con Pauline 💜';
+}
 function normalizeAliciaPromoReply(reply,userTxt){
   var r=String(reply||'');
   r=r.replace(/\b(?:solo|solamente|nada mas que|nada más que)\s+(?:dos|2)\s*horas?\b/gi,'muchas horas en loop (entre más escucha, mejor)');
@@ -7528,6 +7576,7 @@ function normalizeAliciaPromoReply(reply,userTxt){
     r=r.replace(/€(?:59|60)\s*EUR/gi,'€168 EUR');
   }
   r=fixJulyDualAudioPricing(r);
+  r=fixAmorPackPricing(r,userTxt);
   return stripAliciaChatImages(r);
 }
 var CHAT_AMOR4_PHRASE_RE=/amor\s+propio\s+magic\s+4(?:\.0)?/gi;
