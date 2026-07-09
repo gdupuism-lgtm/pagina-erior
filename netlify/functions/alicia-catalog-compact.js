@@ -20,7 +20,7 @@ amor: Erior LOVE | CURIOUS-CURIOUSER | 11:11 | ATTRACTION | Satori
 dinero: Master Abundance | MONEY TECH | Lucky | Audio YOU
 salud: VITAMIND | FIT WAVE
 manifestación: SIMULATION-U | KEEP COOL | Booster | Wonderland Coherence | SELECT | AUDIO ERIOR 3.0 | EMERGENCY 999
-extras: MIND MOVIE | Telegram Privado
+extras: MIND MOVIE | Telegram Liberar Emociones (incluido con Magic 4.0, no suelto) | Telegram Privado
 
 REGLAS DE RECOMENDACIÓN:
 - Persona específica/ex/crush/SP → ATTRACTION
