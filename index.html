@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <title>ERIOR CENTER — Audios Binaurales para Manifestación, Amor Propio y Abundancia | She Is Magique</title>
-<!-- build: ui-premium-v13-revoke-crm -->
+<!-- build: ui-premium-v14-referrals -->
 <meta name="description" content="Audios binaurales personalizados para reprogramar tu subconsciente. Atrae dinero, amor, belleza y transforma tu vida. Más de 25 audios de manifestación disponibles. Envío digital a todo el mundo.">
 <meta name="keywords" content="audios binaurales, subliminal, manifestación, amor propio, abundancia, dinero, reprogramación subconsciente, audio personalizado, She Is Magique, Erior Center, México, Latinoamérica, despertar, consciencia, atraer pareja, mejorar finanzas">
 <meta name="author" content="She Is Magique · Erior Center">
@@ -2475,6 +2475,162 @@ button.alicia-mode-premium-cta{font:inherit;width:100%;cursor:pointer}
   .vip-legacy-toggle,.vip-legacy-wa{font-size:.76rem;padding:.82rem 1rem}
 }
 
+/* ── REFERRAL SYSTEM ── */
+.referral-welcome-banner{
+  position:fixed;top:0;left:0;right:0;z-index:1002;
+  display:flex;align-items:center;justify-content:center;gap:.75rem;
+  padding:.65rem 3rem .65rem 1rem;
+  background:linear-gradient(90deg,rgba(20,18,28,.96),rgba(32,26,42,.96));
+  border-bottom:1px solid rgba(201,160,96,.28);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  font-size:.72rem;color:rgba(220,210,230,.92);text-align:center;
+  box-shadow:0 8px 28px rgba(0,0,0,.35);
+  animation:referralBannerIn .45s cubic-bezier(.22,1,.36,1) both;
+}
+.referral-welcome-banner[hidden]{display:none!important}
+.referral-welcome-banner strong{color:rgba(201,160,96,.95);font-weight:500}
+.referral-welcome-dismiss{
+  position:absolute;right:.75rem;top:50%;transform:translateY(-50%);
+  background:transparent;border:none;color:rgba(255,255,255,.45);
+  font-size:1rem;cursor:pointer;padding:.25rem .45rem;line-height:1;
+}
+.referral-welcome-dismiss:hover{color:rgba(255,255,255,.8)}
+@keyframes referralBannerIn{from{opacity:0;transform:translateY(-100%)}to{opacity:1;transform:translateY(0)}}
+body.has-referral-banner #menuBtn{top:3.4rem}
+body.has-referral-banner .cover-vip-widget:not(.is-cover-inflow){top:calc(1.2rem + 2.2rem)}
+
+.fsm-ref-tag{
+  display:inline-block;font-family:'Jost',sans-serif;font-size:.42em;font-style:normal;
+  letter-spacing:.14em;vertical-align:middle;
+  padding:.12em .45em;margin-left:.25em;border-radius:6px;
+  background:rgba(155,109,255,.2);border:1px solid rgba(155,109,255,.45);
+  -webkit-text-fill-color:rgba(220,200,255,.95)!important;color:rgba(220,200,255,.95)!important;
+  background-clip:border-box!important;-webkit-background-clip:border-box!important;
+  filter:none!important;
+}
+
+.referral-modal-box{
+  max-width:min(520px,94vw)!important;
+  background:linear-gradient(165deg,rgba(18,17,24,.98),rgba(12,11,18,.99))!important;
+  border:1px solid rgba(201,160,96,.22)!important;
+  padding:0!important;overflow:hidden;
+}
+.referral-modal-scroll{
+  max-height:min(78vh,640px);overflow-y:auto;-webkit-overflow-scrolling:touch;
+  padding:1.1rem 1.35rem 1.25rem;
+}
+.referral-tabs{
+  display:flex;gap:.35rem;padding:.85rem 1.35rem 0;border-bottom:1px solid rgba(255,255,255,.06);
+}
+.referral-tab{
+  flex:1;padding:.55rem .5rem;border:none;border-radius:10px 10px 0 0;
+  background:transparent;font-family:'Jost',sans-serif;font-size:.68rem;
+  letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.42);
+  cursor:pointer;transition:all .25s;
+}
+.referral-tab.active{
+  color:rgba(201,160,96,.95);background:rgba(201,160,96,.08);
+  box-shadow:inset 0 -2px 0 rgba(201,160,96,.55);
+}
+.referral-panel{display:none}
+.referral-panel.active{display:block;animation:referralPanelIn .35s ease both}
+@keyframes referralPanelIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.referral-kicker{
+  font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;
+  color:rgba(201,160,96,.75);margin-bottom:.35rem;
+}
+.referral-title{
+  font-family:'Cormorant Garamond',serif;font-size:1.55rem;
+  color:rgba(255,255,255,.95);margin-bottom:.45rem;line-height:1.15;
+}
+.referral-sub{font-size:.74rem;color:rgba(200,195,215,.72);line-height:1.55;margin-bottom:.85rem}
+.referral-benefits{list-style:none;margin:0 0 .9rem;padding:0;display:flex;flex-direction:column;gap:.45rem}
+.referral-benefits li{
+  font-size:.72rem;color:rgba(210,205,225,.82);line-height:1.45;
+  padding:.55rem .7rem;border-radius:10px;
+  background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);
+}
+.referral-benefits li strong{color:rgba(201,160,96,.9);font-weight:500}
+.referral-cta-row{display:flex;flex-direction:column;gap:.55rem;margin-top:.85rem}
+.referral-cta{
+  display:flex;align-items:center;justify-content:center;gap:.4rem;
+  width:100%;padding:.82rem 1rem;border-radius:12px;border:none;cursor:pointer;
+  font-family:'Jost',sans-serif;font-size:.72rem;font-weight:500;
+  letter-spacing:.1em;text-transform:uppercase;text-decoration:none;
+  transition:all .25s;
+}
+.referral-cta-gold{
+  background:linear-gradient(135deg,rgba(201,160,96,.28),rgba(155,109,255,.18));
+  border:1px solid rgba(201,160,96,.45);color:rgba(255,236,200,.95);
+}
+.referral-cta-gold:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(0,0,0,.35),0 0 24px rgba(201,160,96,.2)}
+.referral-cta-wa{
+  background:rgba(37,211,102,.1);border:1px solid rgba(37,211,102,.35);
+  color:rgba(120,230,160,.95);
+}
+.referral-cta-wa:hover{background:rgba(37,211,102,.18);transform:translateY(-1px)}
+.referral-cta-ghost{
+  background:transparent;border:1px solid rgba(255,255,255,.12);
+  color:rgba(255,255,255,.62);
+}
+.referral-cta-ghost:hover{border-color:rgba(255,255,255,.22);color:rgba(255,255,255,.85)}
+.referral-panel-locked{
+  text-align:center;padding:1.5rem .5rem 1rem;
+}
+.referral-panel-locked .referral-lock-ico{font-size:2rem;margin-bottom:.5rem;opacity:.85}
+.referral-code-box{
+  margin:.75rem 0;padding:.85rem 1rem;border-radius:12px;
+  background:rgba(0,0,0,.28);border:1px solid rgba(201,160,96,.25);
+}
+.referral-code-label{
+  font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;
+  color:rgba(201,160,96,.7);margin-bottom:.35rem;
+}
+.referral-code-value{
+  font-family:'Syne',sans-serif;font-size:1.05rem;letter-spacing:.12em;
+  color:rgba(255,255,255,.95);word-break:break-all;margin-bottom:.55rem;
+}
+.referral-link-preview{
+  font-size:.62rem;color:rgba(180,175,195,.65);word-break:break-all;
+  line-height:1.45;margin-bottom:.65rem;
+}
+.referral-stats-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin:.85rem 0;
+}
+.referral-stat{
+  text-align:center;padding:.65rem .35rem;border-radius:10px;
+  background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);
+}
+.referral-stat-num{
+  font-family:'Syne',sans-serif;font-size:1.15rem;font-weight:600;
+  color:rgba(201,160,96,.95);line-height:1.1;
+}
+.referral-stat-lbl{font-size:.55rem;letter-spacing:.08em;text-transform:uppercase;color:rgba(180,175,195,.6);margin-top:.2rem}
+.referral-progress{
+  margin:.75rem 0;padding:.75rem .85rem;border-radius:10px;
+  background:rgba(155,109,255,.08);border:1px solid rgba(155,109,255,.2);
+}
+.referral-progress p{font-size:.68rem;color:rgba(210,205,225,.8);margin:0 0 .45rem;line-height:1.45}
+.referral-progress-bar{
+  height:6px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden;
+}
+.referral-progress-fill{
+  height:100%;border-radius:999px;
+  background:linear-gradient(90deg,rgba(201,160,96,.8),rgba(155,109,255,.75));
+  transition:width .5s ease;
+}
+.referral-panel-feedback{
+  font-size:.68rem;text-align:center;min-height:1.2em;margin-top:.45rem;
+  color:rgba(180,175,195,.7);
+}
+.referral-panel-feedback.ok{color:rgba(120,220,160,.9)}
+.referral-panel-feedback.err{color:rgba(255,140,140,.85)}
+@media(max-width:600px){
+  .referral-welcome-banner{font-size:.66rem;padding:.6rem 2.5rem .6rem .75rem}
+  .referral-modal-scroll{padding:1rem 1rem 1.1rem}
+  .referral-tabs{padding:.75rem 1rem 0}
+}
+
 /* ── CRYSTAL MENU BUTTON ── */
 #menuBtn{position:fixed;top:1.5rem;left:1.2rem;z-index:1001;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:.65rem 1.15rem .6rem;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);border-radius:14px;cursor:pointer;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 4px 16px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.2);transition:all .3s;overflow:hidden;}
 #menuBtn::before{content:'';position:absolute;top:0;left:0;right:0;height:50%;background:linear-gradient(to bottom,rgba(255,255,255,.12),transparent);border-radius:14px 14px 0 0;pointer-events:none;}
@@ -3978,6 +4134,10 @@ body::before{
 <canvas id="cosmos"></canvas>
 <canvas id="matrixRain" aria-hidden="true"></canvas>
 <div id="opalLayer"></div>
+<div id="referralWelcomeBanner" class="referral-welcome-banner" hidden aria-live="polite">
+  <span id="referralWelcomeText"></span>
+  <button type="button" class="referral-welcome-dismiss" onclick="dismissReferralBanner()" aria-label="Cerrar">✕</button>
+</div>
 <!-- FULLSCREEN MENU -->
 <button id="menuBtn" onclick="toggleMenu()">
   <span class="mb-line"></span>
@@ -3991,6 +4151,7 @@ body::before{
     <li><a onclick="goTo('cover')">Inicio</a></li>
     <li><a onclick="goTo('catalogo')">Catálogo</a></li>
     <li><a onclick="goTo('alicia')">Alicia IA</a></li>
+    <li class="fsm-item-referral"><a onclick="openReferralModal()">🎁 Referidos <span class="fsm-ref-tag">VIP</span></a></li>
     <li><a onclick="goTo('guia')">Guía Audios</a></li>
     <li><a onclick="goTo('testimonios')">Testimonios</a></li>
     <li><a onclick="goTo('faq')">FAQ</a></li>
@@ -4665,6 +4826,7 @@ body::before{
         <p><strong>🎁 PROGRAMA DE REFERIDOS</strong></p>
         <p>· Refiere 3 amigos que compren 3+ audios c/u → TÚ y tus 3 referidos reciben 1 mes EXTRA de Premium gratis 🙌</p>
         <p>· Por cada 3 audios que generen tus referidos, te regalamos 1 audio Erior GRATIS 🎧🎁</p>
+        <p style="margin-top:.5rem"><a href="#" onclick="event.preventDefault();closeVipLegacyModal();openReferralModal('panel')" style="color:rgba(201,160,96,.9);text-decoration:none;font-size:.72rem;letter-spacing:.06em">→ Abrir mi panel de referidos</a></p>
       </div>
       <p class="vip-legacy-soon">🚀 Próximamente: más beneficios exclusivos para miembros VIP — ¡esto apenas comienza!</p>
       <p class="vip-legacy-cta-line">¿Ya tienes tus 3 audios este mes? Escríbenos y te damos tu acceso 👇</p>
@@ -4684,6 +4846,71 @@ body::before{
     <div class="vip-legacy-actions">
       <button type="button" class="vip-legacy-toggle" id="vipLegacyPayToggle" onclick="toggleVipLegacyPay()">Ver métodos de pago 💳</button>
       <a class="vip-legacy-wa" id="vipLegacyWa" href="#" target="_blank" rel="noopener noreferrer">💬 Escribir por WhatsApp</a>
+    </div>
+  </div>
+</div>
+
+<!-- REFERRAL MODAL -->
+<div class="modal-bg" id="referralModal" aria-hidden="true">
+  <div class="modal-box referral-modal-box">
+    <button type="button" class="modal-close" onclick="closeReferralModal()" aria-label="Cerrar" style="top:.85rem;right:.85rem">✕</button>
+    <div class="referral-tabs" role="tablist">
+      <button type="button" class="referral-tab active" data-referral-tab="programa" onclick="switchReferralTab('programa')">Programa</button>
+      <button type="button" class="referral-tab" data-referral-tab="panel" onclick="switchReferralTab('panel')">Mi enlace</button>
+    </div>
+    <div class="referral-modal-scroll">
+      <div class="referral-panel active" id="referralPanelPrograma" role="tabpanel">
+        <p class="referral-kicker">Programa de referidos Erior</p>
+        <h2 class="referral-title">Invita y gana ✨</h2>
+        <p class="referral-sub">Comparte Erior con personas que quieran transformar su vida. Si eres miembro VIP, obtienes tu enlace personal y recompensas exclusivas.</p>
+        <ul class="referral-benefits">
+          <li><strong>🎁 Meta 3 amigos:</strong> Refiere 3 personas que compren 3+ audios c/u → tú y tus 3 referidos reciben <strong>1 mes EXTRA</strong> de Alicia Premium gratis.</li>
+          <li><strong>🎧 Audio gratis:</strong> Por cada 3 audios que generen tus referidos, te regalamos <strong>1 audio Erior GRATIS</strong>.</li>
+          <li><strong>🔗 Tu enlace único:</strong> Rastreamos visitas, leads y conversiones automáticamente cuando compartes tu link.</li>
+        </ul>
+        <p class="referral-sub" style="margin-bottom:.5rem">¿Cómo participar? Compra <strong>3 o más audios</strong> en el mes y solicita tu membresía VIP. Al activar tu código Premium desbloqueas tu panel de referidos.</p>
+        <div class="referral-cta-row">
+          <button type="button" class="referral-cta referral-cta-gold" onclick="closeReferralModal();openVipLegacyModal()">Quiero ser VIP 👑</button>
+          <button type="button" class="referral-cta referral-cta-ghost" onclick="switchReferralTab('panel')">Ya soy VIP — ver mi enlace</button>
+          <a class="referral-cta referral-cta-wa" id="referralProgramaWa" href="#" target="_blank" rel="noopener noreferrer">💬 Preguntar por WhatsApp</a>
+        </div>
+      </div>
+      <div class="referral-panel" id="referralPanelMi" role="tabpanel">
+        <div id="referralPanelLocked" class="referral-panel-locked">
+          <div class="referral-lock-ico">🔒</div>
+          <p class="referral-kicker">Panel VIP</p>
+          <h2 class="referral-title">Desbloquea tu enlace</h2>
+          <p class="referral-sub">Activa tu código Alicia Premium para obtener tu link de referido, copiarlo y ver tus estadísticas en tiempo real.</p>
+          <div class="referral-cta-row">
+            <button type="button" class="referral-cta referral-cta-gold" onclick="closeReferralModal();goTo('alicia');showAliciaPremiumUpgrade()">Activar código Premium</button>
+            <button type="button" class="referral-cta referral-cta-ghost" onclick="closeReferralModal();openVipLegacyModal()">¿Cómo obtengo VIP?</button>
+          </div>
+        </div>
+        <div id="referralPanelActive" hidden>
+          <p class="referral-kicker">Tu panel de referidos</p>
+          <h2 class="referral-title" id="referralPanelGreeting">Hola, referidor ✨</h2>
+          <p class="referral-sub">Comparte tu enlace. Cada visita queda registrada y avanzas hacia tus recompensas.</p>
+          <div class="referral-code-box">
+            <p class="referral-code-label">Tu código</p>
+            <p class="referral-code-value" id="referralMyCode">—</p>
+            <p class="referral-link-preview" id="referralMyLink">—</p>
+            <div class="referral-cta-row" style="margin-top:0">
+              <button type="button" class="referral-cta referral-cta-gold" onclick="copyReferralLink()">📋 Copiar enlace</button>
+              <button type="button" class="referral-cta referral-cta-wa" onclick="shareReferralWhatsApp()">💬 Compartir por WhatsApp</button>
+            </div>
+          </div>
+          <div class="referral-stats-grid">
+            <div class="referral-stat"><div class="referral-stat-num" id="referralStatHits">0</div><div class="referral-stat-lbl">Visitas</div></div>
+            <div class="referral-stat"><div class="referral-stat-num" id="referralStatLeads">0</div><div class="referral-stat-lbl">Leads</div></div>
+            <div class="referral-stat"><div class="referral-stat-num" id="referralStatConv">0</div><div class="referral-stat-lbl">Conversiones</div></div>
+          </div>
+          <div class="referral-progress">
+            <p id="referralProgressText">Progreso hacia 1 mes extra Premium: 0/3 referidos con compra</p>
+            <div class="referral-progress-bar"><div class="referral-progress-fill" id="referralProgressFill" style="width:0%"></div></div>
+          </div>
+          <p class="referral-panel-feedback" id="referralPanelFeedback" aria-live="polite"></p>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -4833,7 +5060,10 @@ function getVisitanteId(){
 }
 
 var REFERRAL_KEY='erior_ref';
+var REFERRAL_OWNER_KEY='erior_ref_owner';
+var REFERRAL_MY_CODE_KEY='erior_my_ref_code';
 var REFERRAL_TRACK_FN='/.netlify/functions/referral-track';
+var REFERRAL_STATS_FN='/.netlify/functions/referral-stats';
 function getReferralCode(){
   try{return localStorage.getItem(REFERRAL_KEY)||'';}catch(e){return '';}
 }
@@ -4842,7 +5072,12 @@ function eriorSiteBase(){
 }
 function buildReferralLink(refCode){
   var base=eriorSiteBase();
-  return base+'?ref='+encodeURIComponent(String(refCode||'').trim().toUpperCase())+'#alicia';
+  return base+'?ref='+encodeURIComponent(String(refCode||'').trim().toUpperCase());
+}
+function appendRefToWaMsg(msg){
+  var ref=getReferralCode();
+  if(ref)msg+=' (referido: '+ref+')';
+  return msg;
 }
 function trackReferralEvent(eventType,detalle){
   var ref=getReferralCode();
@@ -4861,7 +5096,34 @@ function trackReferralEvent(eventType,detalle){
     method:'POST',
     headers:{'Content-Type':'application/json'},
     body:JSON.stringify({ref_code:ref,visitante_id:getVisitanteId(),event_type:eventType,detalle:(detalle||'').slice(0,300)})
+  }).then(function(r){return r.json();}).then(function(data){
+    if(data&&data.ok&&data.owner_name){
+      try{localStorage.setItem(REFERRAL_OWNER_KEY,data.owner_name);}catch(st){}
+      showReferralWelcomeBanner(data.owner_name);
+    }
   }).catch(function(){});
+}
+function showReferralWelcomeBanner(ownerName){
+  var ref=getReferralCode();
+  if(!ref)return;
+  try{if(sessionStorage.getItem('erior_ref_banner_dismissed'))return;}catch(e){}
+  var banner=document.getElementById('referralWelcomeBanner');
+  var text=document.getElementById('referralWelcomeText');
+  if(!banner||!text)return;
+  ownerName=ownerName||(function(){try{return localStorage.getItem(REFERRAL_OWNER_KEY)||'';}catch(e){return '';}})();
+  if(ownerName){
+    text.innerHTML='✨ <strong>'+ownerName+'</strong> te invitó a Erior Center — explora el catálogo y encuentra tu audio perfecto.';
+  }else{
+    text.textContent='✨ Llegaste por invitación especial a Erior Center. ¡Bienvenid@!';
+  }
+  banner.hidden=false;
+  document.body.classList.add('has-referral-banner');
+}
+function dismissReferralBanner(){
+  var banner=document.getElementById('referralWelcomeBanner');
+  if(banner)banner.hidden=true;
+  document.body.classList.remove('has-referral-banner');
+  try{sessionStorage.setItem('erior_ref_banner_dismissed','1');}catch(e){}
 }
 function initReferralCapture(){
   try{
@@ -4880,10 +5142,133 @@ function initReferralCapture(){
       localStorage.setItem(REFERRAL_KEY,ref);
       trackReferralEvent('llegada','url');
       registrarEvento('referido_llegada',ref);
+    }else if(getReferralCode()){
+      showReferralWelcomeBanner();
     }
   }catch(e){}
 }
 initReferralCapture();
+
+function switchReferralTab(tab){
+  document.querySelectorAll('.referral-tab').forEach(function(b){
+    b.classList.toggle('active',b.getAttribute('data-referral-tab')===tab);
+  });
+  document.querySelectorAll('.referral-panel').forEach(function(p){p.classList.remove('active');});
+  var panel=tab==='panel'?document.getElementById('referralPanelMi'):document.getElementById('referralPanelPrograma');
+  if(panel)panel.classList.add('active');
+  if(tab==='panel')loadReferralPanel();
+}
+function openReferralModal(tab){
+  closeMenu();
+  var modal=document.getElementById('referralModal');
+  if(!modal)return;
+  var wa=document.getElementById('referralProgramaWa');
+  if(wa&&typeof payWaUrl==='function'){
+    wa.href=payWaUrl('Hola! Me interesa el programa de referidos VIP de Erior Center 🎁');
+  }
+  modal.classList.add('open');
+  modal.setAttribute('aria-hidden','false');
+  lockPageScroll();
+  switchReferralTab(tab||(isAliciaPremiumActive()?'panel':'programa'));
+}
+function closeReferralModal(){
+  var modal=document.getElementById('referralModal');
+  if(!modal)return;
+  modal.classList.remove('open');
+  modal.setAttribute('aria-hidden','true');
+  if(!document.getElementById('audioModal').classList.contains('open')&&!document.getElementById('fsMenu').classList.contains('open')&&!document.getElementById('payModal').classList.contains('open')&&!document.getElementById('vipLegacyModal').classList.contains('open')){
+    unlockPageScroll();
+  }
+}
+window.openReferralModal=openReferralModal;
+window.closeReferralModal=closeReferralModal;
+(function(){
+  var rm=document.getElementById('referralModal');
+  if(rm)rm.addEventListener('click',function(e){if(e.target===rm)closeReferralModal();});
+})();
+
+function renderReferralPanel(data){
+  var locked=document.getElementById('referralPanelLocked');
+  var active=document.getElementById('referralPanelActive');
+  var fb=document.getElementById('referralPanelFeedback');
+  if(!data||!data.ok){
+    if(locked)locked.hidden=false;
+    if(active)active.hidden=true;
+    if(fb){fb.textContent=(data&&data.error)?data.error:'';fb.className='referral-panel-feedback err';}
+    return;
+  }
+  if(locked)locked.hidden=true;
+  if(active)active.hidden=false;
+  try{localStorage.setItem(REFERRAL_MY_CODE_KEY,data.ref_code);}catch(st){}
+  var greet=document.getElementById('referralPanelGreeting');
+  if(greet)greet.textContent=(data.owner_name?'Hola, '+data.owner_name:'Tu enlace de referido')+' ✨';
+  var codeEl=document.getElementById('referralMyCode');
+  var linkEl=document.getElementById('referralMyLink');
+  var link=buildReferralLink(data.ref_code);
+  if(codeEl)codeEl.textContent=data.ref_code||'—';
+  if(linkEl)linkEl.textContent=link;
+  var hits=document.getElementById('referralStatHits');
+  var leads=document.getElementById('referralStatLeads');
+  var conv=document.getElementById('referralStatConv');
+  if(hits)hits.textContent=String(data.hit_count||0);
+  if(leads)leads.textContent=String(data.lead_count||0);
+  if(conv)conv.textContent=String(data.conversion_count||0);
+  var prog=Math.min(data.progress_friends||0,data.goal_friends||3);
+  var goal=data.goal_friends||3;
+  var pct=Math.round((prog/goal)*100);
+  var progText=document.getElementById('referralProgressText');
+  var progFill=document.getElementById('referralProgressFill');
+  if(progText)progText.textContent='Progreso hacia 1 mes extra Premium: '+prog+'/'+goal+' referidos con compra';
+  if(progFill)progFill.style.width=pct+'%';
+  if(fb){fb.textContent='';fb.className='referral-panel-feedback';}
+}
+async function loadReferralPanel(){
+  var fb=document.getElementById('referralPanelFeedback');
+  if(!isAliciaPremiumActive()){
+    renderReferralPanel({ok:false});
+    return;
+  }
+  if(fb){fb.textContent='Cargando tu panel...';fb.className='referral-panel-feedback';}
+  try{
+    var codeId=localStorage.getItem('alicia_premium_code_id')||'';
+    var r=await fetch(REFERRAL_STATS_FN,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({code_id:codeId,visitante_id:getVisitanteId()})
+    });
+    var data=await r.json().catch(function(){return{ok:false,error:'Error de respuesta'};});
+    renderReferralPanel(data);
+  }catch(e){
+    renderReferralPanel({ok:false,error:'Sin conexión. Intenta de nuevo.'});
+  }
+}
+function copyReferralLink(){
+  var linkEl=document.getElementById('referralMyLink');
+  var fb=document.getElementById('referralPanelFeedback');
+  var link=linkEl?linkEl.textContent:'';
+  if(!link||link==='—'){
+    if(fb){fb.textContent='Aún no hay enlace disponible';fb.className='referral-panel-feedback err';}
+    return;
+  }
+  var ok=function(){
+    if(fb){fb.textContent='¡Enlace copiado! Compártelo con quien quieras ✨';fb.className='referral-panel-feedback ok';}
+    registrarEvento('referido_copia_link','');
+  };
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(link).then(ok).catch(function(){payCopyFallback(link,ok);});
+  }else payCopyFallback(link,ok);
+}
+function shareReferralWhatsApp(){
+  var linkEl=document.getElementById('referralMyLink');
+  var codeEl=document.getElementById('referralMyCode');
+  var link=linkEl?linkEl.textContent:'';
+  var code=codeEl?codeEl.textContent:'';
+  if(!link||link==='—')return;
+  var msg='Hola ✨ Te invito a Erior Center — audios binaurales para manifestar, amor propio y abundancia. Entra con mi enlace: '+link;
+  if(code&&code!=='—')msg+=' (código: '+code+')';
+  window.open(payWaUrlRaw(msg),'_blank','noopener');
+  registrarEvento('referido_compartir_wa',code||'');
+}
 
 async function registrarEvento(tipo,detalle){
   if(!supabaseClient)return;
@@ -4901,6 +5286,8 @@ async function guardarProspecto(datos){
       var v=datos[k];
       if(v!==undefined&&v!==null&&String(v).trim()!=='')patch[k]=v;
     });
+    var ref=getReferralCode();
+    if(ref)patch.referrer_code=ref;
     if(!Object.keys(patch).length)return;
     var res=await supabaseClient.from('prospectos').select('id').eq('visitante_id',vid).maybeSingle();
     if(res.data){
@@ -4908,6 +5295,7 @@ async function guardarProspecto(datos){
     }else{
       await supabaseClient.from('prospectos').insert([Object.assign({visitante_id:vid},patch)]);
     }
+    if(patch.nombre||patch.telefono||patch.email||patch.contacto)trackReferralEvent('dio_datos','prospecto');
   }catch(e){console.log('prospecto error',e);}
 }
 
@@ -6039,12 +6427,15 @@ function buildPayMethods(){
 }
 
 function payWaUrl(msg){
+  return 'https://wa.me/'+PAY_WHATSAPP+'?text='+encodeURIComponent(appendRefToWaMsg(msg));
+}
+function payWaUrlRaw(msg){
   return 'https://wa.me/'+PAY_WHATSAPP+'?text='+encodeURIComponent(msg);
 }
 
 function payPurchaseWaMsg(){
   var name=payCurrentProduct||(document.getElementById('payProductName')&&document.getElementById('payProductName').textContent)||'';
-  return 'Hola, estoy interesado en comprar el audio: '+name.trim();
+  return appendRefToWaMsg('Hola, estoy interesado en comprar el audio: '+name.trim());
 }
 
 var PAY_COPY_ALL_TRANSFER='Paulina López Gutiérrez\nBanco NVIO\nCLABE: 710969000048503916\n\nBanco Banregio\nCLABE: 058470000010260425\nCuenta: 996812170013\nTarjeta: 4741 7435 2658 3795';
@@ -6189,13 +6580,14 @@ function openPaymentModal(productName){
   buildPayMethods();
   payCurrentProduct=productName||'';
   registrarEvento('abrio_pago',payCurrentProduct||'audio');
+  trackReferralEvent('compra_intento',payCurrentProduct||'audio');
   document.getElementById('payProductName').textContent=payCurrentProduct;
   document.getElementById('payModalPrice').textContent=getPayModalPrice(payCurrentProduct);
   document.getElementById('payModalLabel').textContent=payUi('title','Elige cómo pagar y empieza hoy','Choose how to pay');
   document.getElementById('payFooterText').textContent=lang==='en'?PAY_FOOTER_EN:PAY_FOOTER_ES;
   selectPayMethod(payCurrentMethod||'oxxo');
   bindPayCopyButtons(document.getElementById('payModal'));
-  var promoWa='https://wa.me/5214432311761?text='+encodeURIComponent('Hola, me gustaría una recomendación personalizada para elegir el audio perfecto para mí');
+  var promoWa=payWaUrl('Hola, me gustaría una recomendación personalizada para elegir el audio perfecto para mí');
   var promoBtn=document.getElementById('payPromoWaBtn');
   if(promoBtn)promoBtn.href=promoWa;
   hidePayPromoPopup();
@@ -6238,7 +6630,7 @@ function openPaymentFromModal(){
 function closePaymentModal(){
   hidePayPromoPopup();
   document.getElementById('payModal').classList.remove('open');
-  if(!document.getElementById('audioModal').classList.contains('open')&&!document.getElementById('fsMenu').classList.contains('open')){
+  if(!document.getElementById('audioModal').classList.contains('open')&&!document.getElementById('fsMenu').classList.contains('open')&&!document.getElementById('referralModal').classList.contains('open')&&!document.getElementById('vipLegacyModal').classList.contains('open')){
     unlockPageScroll();
   }
 }
@@ -6810,6 +7202,7 @@ async function activateAliciaPremiumCode(){
         localStorage.setItem('alicia_premium_code_id',data.code_id);
         localStorage.setItem(ALICIA_PREMIUM_EXPIRES_KEY,expiresAt);
         localStorage.removeItem(ALICIA_MODE_KEY);
+        if(data.referral_code)localStorage.setItem(REFERRAL_MY_CODE_KEY,data.referral_code);
       }catch(st){}
       registrarEvento('alicia_premium_activado',code.slice(0,20));
       trackReferralEvent('premium_activado',code.slice(0,20));

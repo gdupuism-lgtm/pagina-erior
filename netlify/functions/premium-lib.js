@@ -195,13 +195,13 @@ async function validateAndActivateCode(code, visitanteId) {
     if (new Date(expiresAt) < new Date()) {
       return { ok: false, error: 'Tu acceso premium expiró' };
     }
-    return {
+    return enrichActivationWithReferral({
       ok: true,
       code_id: row.id,
       client_name: row.client_name || '',
       expires_at: expiresAt,
       reused: true,
-    };
+    }, row.id);
   }
 
   const activeActs = await getActiveActivationsForCode(row.id);
@@ -244,14 +244,14 @@ async function validateAndActivateCode(code, visitanteId) {
     }),
   });
 
-  return {
+  return enrichActivationWithReferral({
     ok: true,
     code_id: row.id,
     client_name: row.client_name || '',
     expires_at: expiresAt,
     reused: false,
     transferred: transferDevice,
-  };
+  }, row.id);
 }
 
 async function verifyPremiumCodeId(codeId, visitanteId) {
@@ -352,6 +352,72 @@ async function createReferralForPremiumCode(premiumRow) {
   });
   if (!res.ok) return null;
   return Array.isArray(res.data) ? res.data[0] : res.data;
+}
+
+async function fetchReferralByPremiumCodeId(premiumCodeId) {
+  const cid = String(premiumCodeId || '').trim();
+  if (!cid) return null;
+  const res = await sbFetch(
+    `erior_referidos?premium_code_id=eq.${encodeURIComponent(cid)}&select=id,ref_code,owner_name,active,hit_count,lead_count,conversion_count,premium_code_id&limit=1`,
+    { method: 'GET' }
+  );
+  if (!res.ok) return null;
+  return Array.isArray(res.data) && res.data[0] ? res.data[0] : null;
+}
+
+async function getOrCreateReferralForPremiumCode(premiumRow) {
+  if (!premiumRow || !premiumRow.id) return null;
+  let ref = await fetchReferralByPremiumCodeId(premiumRow.id);
+  if (!ref) ref = await createReferralForPremiumCode(premiumRow);
+  return ref;
+}
+
+async function enrichActivationWithReferral(result, codeId) {
+  if (!result || !result.ok || !codeId) return result;
+  try {
+    const codeRow = await fetchCodeById(codeId);
+    if (!codeRow) return result;
+    const ref = await getOrCreateReferralForPremiumCode(codeRow);
+    if (ref && ref.active) {
+      result.referral_code = ref.ref_code;
+      result.referral_owner = ref.owner_name || codeRow.client_name || '';
+      result.referral_hits = ref.hit_count || 0;
+      result.referral_leads = ref.lead_count || 0;
+      result.referral_conversions = ref.conversion_count || 0;
+    }
+  } catch (e) {
+    /* no bloquear activación */
+  }
+  return result;
+}
+
+async function getReferralPanelForUser(codeId, visitanteId) {
+  const cid = String(codeId || '').trim();
+  const vid = String(visitanteId || '').slice(0, 80);
+  if (!cid || !vid) return { ok: false, error: 'Faltan datos' };
+
+  const active = await verifyPremiumCodeId(cid, vid);
+  if (!active) return { ok: false, error: 'Acceso premium no activo en este dispositivo' };
+
+  const codeRow = await fetchCodeById(cid);
+  if (!codeRow || !codeRow.active) return { ok: false, error: 'Código no encontrado' };
+
+  const ref = await getOrCreateReferralForPremiumCode(codeRow);
+  if (!ref || !ref.active) return { ok: false, error: 'Tu enlace de referido no está disponible' };
+
+  const conversions = ref.conversion_count || 0;
+  return {
+    ok: true,
+    ref_code: ref.ref_code,
+    owner_name: ref.owner_name || codeRow.client_name || '',
+    hit_count: ref.hit_count || 0,
+    lead_count: ref.lead_count || 0,
+    conversion_count: conversions,
+    goal_friends: 3,
+    progress_friends: Math.min(conversions, 3),
+    free_audio_every: 3,
+    free_audio_progress: conversions % 3,
+  };
 }
 
 async function trackReferralHit(refCode, visitanteId, eventType, detalle) {
@@ -849,6 +915,10 @@ module.exports = {
   getFreeQuotaStatus,
   consumeFreeMessage,
   fetchReferralByCode,
+  fetchReferralByPremiumCodeId,
+  getOrCreateReferralForPremiumCode,
+  getReferralPanelForUser,
+  enrichActivationWithReferral,
   createReferralForPremiumCode,
   trackReferralHit,
   checkAdminKey,
