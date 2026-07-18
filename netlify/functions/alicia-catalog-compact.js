@@ -14,8 +14,8 @@ Uno suelto en julio (solo 2.0 o solo 3.0): $888 MXN / $49 USD / €43 EUR + Tele
 2.0: glow up, merecimiento, telepatia/clarividencia, mini Script cambiar pasado (rapido).
 3.0: amor propio 360, codependencia OFF, belleza/juventud, dinero y relaciones sanas.
 
-CATÁLOGO ERIOR (español, 35 audios + extras):
-autoestima: Éclat (belleza/punto cero) | Amor Magic 2.0 (ULTIMO MES) | Amor Propio Magic 3.0 (ULTIMO MES) | Amor Propio Magic 4.0 (NUEVO — trauma corporal) | The White Rabbit Code | GOD/GODDESS | Mesmerizing Love | MASTER MIND | Identity | MENTAL GLOW UP | ICON AURA | ERIOR KIDS
+CATÁLOGO ERIOR (español, 36 audios + extras):
+autoestima: Éclat (belleza/punto cero) | Amor Magic 2.0 (ULTIMO MES) | Amor Propio Magic 3.0 (ULTIMO MES) | Amor Propio Magic 4.0 (NUEVO — trauma corporal) | Amor Propio Magic Hombre (energía masculina, virilidad, abundancia) | The White Rabbit Code | GOD/GODDESS | Mesmerizing Love | MASTER MIND | Identity | MENTAL GLOW UP | ICON AURA | ERIOR KIDS
 amor: Erior LOVE | CURIOUS-CURIOUSER | 11:11 | ATTRACTION | Satori
 dinero: Master Abundance | MONEY TECH | Lucky | Audio YOU
 salud: VITAMIND | FIT WAVE
@@ -27,6 +27,7 @@ REGLAS DE RECOMENDACIÓN:
 - Relación existente → Erior LOVE
 - Preguntan 2.0, 3.0, promo amor propio 2 y 3, pack amor → PACK DESPEDIDA $1,699 (PRIORIDAD ABSOLUTA)
 - Amor propio clasico / glow up / codependencia → Pack Despedida $1,699 (ultimo mes) O Magic 4.0 $999 si trauma corporal
+- Hombre / energía masculina / virilidad / amor propio masculino → Amor Propio Magic Hombre
 - Amor propio MÁXIMO / boost energético → The White Rabbit Code
 - Poder creador / YO SOY → GOD / GODDESS
 - Dinero → Master Abundance o Money Tech; suerte → Lucky

@@ -226,6 +226,12 @@ SIEMPRE menciona: julio 2026 es el ULTIMO MES — despues de agosto ya no se ven
 Si ya tiene uno de los dos, recomienda completar con el otro ANTES de que se retiren (cotiza pack si le falta el par, o el suelto $888 si solo falta uno — pero advierte ultimo mes).
 Si encaja mejor la nueva era (trauma corporal): ofrece Magic 4.0 $999 como alternativa, pero no ocultes que 2.0+3.0 se van este mes.
 
+AMOR PROPIO MAGIC HOMBRE — CUANDO RECOMENDAR:
+Si el cliente es hombre, pregunta por energia masculina, virilidad, amor propio masculino, desapego como hombre, abundancia + masculinidad, o quiere una version de amor propio hecha para el: recomienda Amor Propio Magic Hombre (NO es nuevo — es parte del catalogo).
+Pitch: independizarte, abundancia material/economica, recuperar virilidad, sentirte bien contigo, conectar con sensualidad y poder, manifestar siendo un hombre desapegado. Personalizable al tema que elija.
+Precio: promo julio $888 MXN / $49 USD / €43 EUR + Telegram; regular $1,190 MXN / $69 USD / €60 EUR.
+Escribe el nombre exactamente asi: Amor Propio Magic Hombre (ES) o Amor Propio Magic for Men (EN).
+
 PRODUCTOS EXTRA A VENDER (despues del audio):
 - Telegram Privado: $888 MXN/mes ($52 USD / €45 EUR), o incluido con compra de audios. Orientacion continua con Pauline, comunidad, contenido exclusivo.
 - Mind Movie: $1,190 MXN / $69 USD / €60 EUR (mismo precio que un audio). Pelicula personalizada para reprogramar el inconsciente con imagenes.
@@ -379,7 +385,7 @@ const {
 
 var AUDIO_MENTION_KEYS=[
   'wonderland coherence','emergency 999','master abundance','mesmerizing love',
-  'amor propio magic 4','amor propio 4.0','amor propio magic',
+  'amor propio magic 4','amor propio 4.0','amor propio magic hombre','magic for men','amor propio magic',
   'amor magic','icon aura','erior love','audio erior','master mind','mind movie','keep cool',
   'fit wave','simulation-u','11:11','booster','wonderland','identity','lucky','select',
   'attraction','moneytech','you','satori','vitamind','eclat','white rabbit','god goddess','god/goddess'
@@ -403,6 +409,7 @@ function extractMentionedAudios(messages){
     'master mind':'Master Mind','mind movie':'Mind Movie','amor magic':'Amor Magic',
     'simulation-u':'Simulation-U','amor propio magic':'Amor Propio Magic',
     'amor propio magic 4':'Amor Propio Magic 4.0','amor propio 4.0':'Amor Propio Magic 4.0',
+    'amor propio magic hombre':'Amor Propio Magic Hombre','magic for men':'Amor Propio Magic for Men',
     'white rabbit':'The White Rabbit Code','god goddess':'GOD / GODDESS','god/goddess':'GOD / GODDESS'
   };
   var found=[];
