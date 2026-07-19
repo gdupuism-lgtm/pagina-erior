@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#030014">
+  <meta name="description" content="Diagnóstico Cuántico Erior — 5 preguntas y descubre qué audio desbloquear para tu transformación.">
+  <title>Diagnóstico Cuántico · Erior Center</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      min-height:100vh;min-height:100dvh;
+      font-family:'Space Grotesk',system-ui,sans-serif;
+      color:#f0f4ff;background:#030014;
+      overflow-x:hidden;-webkit-font-smoothing:antialiased;
+    }
+    #bgCanvas{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.7}
+    .aurora{
+      position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;
+      background:
+        radial-gradient(ellipse 80% 50% at 20% 20%, rgba(255,0,170,.18), transparent 50%),
+        radial-gradient(ellipse 60% 40% at 80% 10%, rgba(0,245,255,.15), transparent 45%),
+        radial-gradient(ellipse 70% 60% at 50% 100%, rgba(139,92,246,.2), transparent 55%),
+        radial-gradient(ellipse 40% 30% at 90% 70%, rgba(255,230,0,.08), transparent 40%);
+      animation:auroraShift 14s ease-in-out infinite alternate;
+    }
+    @keyframes auroraShift{
+      0%{filter:hue-rotate(0deg) saturate(1)}
+      100%{filter:hue-rotate(25deg) saturate(1.2)}
+    }
+    .grid-floor{
+      position:fixed;bottom:0;left:0;right:0;height:45vh;z-index:0;pointer-events:none;
+      background:
+        linear-gradient(to top, rgba(3,0,20,.95), transparent),
+        repeating-linear-gradient(90deg, rgba(0,245,255,.06) 0 1px, transparent 1px 48px),
+        repeating-linear-gradient(0deg, rgba(255,0,170,.05) 0 1px, transparent 1px 48px);
+      transform:perspective(500px) rotateX(62deg);
+      transform-origin:center bottom;
+      opacity:.45;
+      animation:gridPulse 6s ease-in-out infinite;
+    }
+    @keyframes gridPulse{0%,100%{opacity:.35}50%{opacity:.55}}
+    .orb{
+      position:fixed;border-radius:50%;filter:blur(60px);z-index:0;pointer-events:none;
+      animation:orbFloat 12s ease-in-out infinite;
+    }
+    .orb-1{width:280px;height:280px;background:#ff00aa;top:10%;left:-5%;animation-delay:0s}
+    .orb-2{width:220px;height:220px;background:#00f5ff;bottom:15%;right:-3%;animation-delay:-4s}
+    .orb-3{width:180px;height:180px;background:#8b5cf6;top:45%;left:55%;animation-delay:-8s}
+    @keyframes orbFloat{
+      0%,100%{transform:translate(0,0) scale(1)}
+      33%{transform:translate(30px,-20px) scale(1.08)}
+      66%{transform:translate(-20px,25px) scale(.95)}
+    }
+    .shell{position:relative;z-index:1;max-width:920px;margin:0 auto;padding:1.25rem 1rem 3rem}
+    .brand{
+      display:flex;align-items:center;justify-content:center;gap:.65rem;
+      padding:1rem 0 .5rem;font-family:'Orbitron',sans-serif;
+      font-size:.62rem;letter-spacing:.35em;text-transform:uppercase;
+      color:rgba(0,245,255,.75);
+    }
+    .brand-dot{width:8px;height:8px;border-radius:50%;background:#00f5ff;box-shadow:0 0 16px #00f5ff;animation:pulse 2s infinite}
+    @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}
+    .panel{
+      background:linear-gradient(145deg, rgba(255,255,255,.07), rgba(255,255,255,.02));
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:28px;padding:1.75rem 1.35rem;
+      backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+      box-shadow:0 24px 80px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.08);
+    }
+    [hidden]{display:none!important}
+    /* INTRO */
+    .intro-title{
+      font-family:'Orbitron',sans-serif;font-size:clamp(1.5rem,5vw,2.35rem);
+      font-weight:900;line-height:1.15;text-align:center;margin-bottom:.75rem;
+      background:linear-gradient(120deg,#00f5ff,#ff00aa 45%,#ffe600 80%);
+      -webkit-background-clip:text;background-clip:text;color:transparent;
+      animation:titleGlow 4s ease-in-out infinite alternate;
+    }
+    @keyframes titleGlow{filter:drop-shadow(0 0 20px rgba(0,245,255,.3))}
+    .intro-sub{text-align:center;color:rgba(220,225,255,.72);font-size:.95rem;line-height:1.65;max-width:34rem;margin:0 auto 1.5rem}
+    .intro-steps{
+      display:grid;grid-template-columns:repeat(3,1fr);gap:.65rem;margin-bottom:1.5rem;
+    }
+    @media(max-width:520px){.intro-steps{grid-template-columns:1fr}}
+    .intro-step{
+      text-align:center;padding:.85rem .5rem;border-radius:16px;
+      background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
+      font-size:.72rem;color:rgba(200,210,255,.8);line-height:1.4;
+    }
+    .intro-step strong{display:block;font-family:'Orbitron',sans-serif;font-size:.55rem;letter-spacing:.12em;color:#00f5ff;margin-bottom:.35rem}
+    .btn-primary{
+      display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;
+      padding:1rem 1.5rem;border:none;border-radius:16px;cursor:pointer;
+      font-family:'Orbitron',sans-serif;font-size:.72rem;font-weight:700;
+      letter-spacing:.14em;text-transform:uppercase;color:#030014;
+      background:linear-gradient(135deg,#00f5ff,#8b5cf6 50%,#ff00aa);
+      box-shadow:0 8px 32px rgba(0,245,255,.25),0 0 48px rgba(255,0,170,.15);
+      transition:transform .25s,box-shadow .25s;
+    }
+    .btn-primary:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,245,255,.35)}
+    /* QUIZ */
+    .progress-wrap{margin-bottom:1.25rem}
+    .progress-meta{display:flex;justify-content:space-between;font-size:.68rem;color:rgba(180,190,255,.65);margin-bottom:.45rem}
+    .progress-track{height:6px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden}
+    .progress-fill{
+      height:100%;width:0;border-radius:99px;
+      background:linear-gradient(90deg,#00f5ff,#ff00aa,#ffe600);
+      box-shadow:0 0 20px rgba(0,245,255,.6);
+      transition:width .45s cubic-bezier(.4,0,.2,1);
+    }
+    .q-title{font-family:'Orbitron',sans-serif;font-size:clamp(1rem,3.5vw,1.35rem);font-weight:700;margin-bottom:.4rem;line-height:1.3}
+    .q-sub{font-size:.82rem;color:rgba(190,200,255,.65);margin-bottom:1.25rem;line-height:1.5}
+    .opt-grid{display:grid;gap:.65rem}
+    .opt-card{
+      position:relative;display:flex;align-items:center;gap:.85rem;width:100%;
+      padding:.95rem 1rem;text-align:left;cursor:pointer;
+      border-radius:18px;border:1px solid rgba(255,255,255,.1);
+      background:rgba(255,255,255,.04);color:#eef1ff;
+      font-family:inherit;font-size:.88rem;transition:all .22s;
+    }
+    .opt-card:hover{border-color:rgba(0,245,255,.45);background:rgba(0,245,255,.06)}
+    .opt-card.is-selected{
+      border-color:#00f5ff;background:rgba(0,245,255,.12);
+      box-shadow:0 0 32px rgba(0,245,255,.2), inset 0 0 0 1px rgba(0,245,255,.3);
+    }
+    .opt-emoji{font-size:1.5rem;flex-shrink:0}
+    .opt-ring{
+      position:absolute;inset:-2px;border-radius:20px;opacity:0;pointer-events:none;
+      border:2px solid transparent;transition:opacity .2s;
+    }
+    .opt-card.is-selected .opt-ring{opacity:1;border-color:rgba(255,0,170,.5);animation:ringPulse 1.5s ease infinite}
+    @keyframes ringPulse{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.02);opacity:1}}
+    .text-wrap{margin-bottom:1rem}
+    .text-wrap textarea{
+      width:100%;min-height:140px;resize:vertical;padding:1rem 1.1rem;
+      border-radius:18px;border:1px solid rgba(255,255,255,.12);
+      background:rgba(0,0,0,.35);color:#f0f4ff;font-family:inherit;font-size:.9rem;line-height:1.55;
+    }
+    .text-wrap textarea:focus{outline:none;border-color:#00f5ff;box-shadow:0 0 0 3px rgba(0,245,255,.15)}
+    .quiz-nav{display:flex;gap:.65rem;margin-top:1.25rem}
+    .btn-ghost{
+      flex:0 0 auto;padding:.85rem 1.1rem;border-radius:14px;cursor:pointer;
+      border:1px solid rgba(255,255,255,.15);background:transparent;
+      color:rgba(220,225,255,.75);font-family:inherit;font-size:.78rem;
+    }
+    .btn-ghost:hover{background:rgba(255,255,255,.06)}
+    .btn-next{flex:1}
+    .btn-next:disabled{opacity:.4;cursor:not-allowed;transform:none!important}
+    /* SCAN */
+    .scan-panel{text-align:center;padding:2.5rem 1rem}
+    .scan-ring{
+      width:100px;height:100px;margin:0 auto 1.5rem;border-radius:50%;
+      border:3px solid rgba(0,245,255,.2);border-top-color:#00f5ff;
+      animation:spin 1s linear infinite;
+      box-shadow:0 0 40px rgba(0,245,255,.3), inset 0 0 30px rgba(255,0,170,.15);
+    }
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .scan-text{font-family:'Orbitron',sans-serif;font-size:.75rem;letter-spacing:.08em;color:#00f5ff;min-height:1.5em}
+    /* RESULTS */
+    .results-head{text-align:center;margin-bottom:1.5rem}
+    .results-badge{
+      display:inline-block;padding:.35rem .85rem;border-radius:99px;
+      font-family:'Orbitron',sans-serif;font-size:.55rem;letter-spacing:.2em;
+      color:#ffe600;border:1px solid rgba(255,230,0,.35);
+      background:rgba(255,230,0,.08);margin-bottom:.75rem;
+    }
+    .results-title{font-family:'Orbitron',sans-serif;font-size:clamp(1.1rem,4vw,1.6rem);font-weight:700;margin-bottom:.65rem}
+    .insight{
+      font-size:.85rem;line-height:1.65;color:rgba(200,210,255,.78);
+      max-width:36rem;margin:0 auto 1.5rem;
+    }
+    .catalog-grid{
+      display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem;
+      margin-bottom:1.5rem;
+    }
+    .audio-card{
+      position:relative;border-radius:20px;overflow:hidden;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.03);
+      transition:transform .25s,box-shadow .25s;
+    }
+    .audio-card.is-unlocked{border-color:rgba(0,245,255,.35)}
+    .audio-card.is-unlocked:hover{transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,245,255,.15)}
+    .audio-card.is-selected{
+      border-color:#ffe600;box-shadow:0 0 40px rgba(255,230,0,.25);
+    }
+    .audio-card.is-locked{opacity:.55;filter:saturate(.4) brightness(.7)}
+    .audio-card.is-locked:hover{transform:none}
+    .lock-overlay{
+      position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;
+      align-items:center;justify-content:center;gap:.35rem;
+      background:rgba(3,0,20,.72);backdrop-filter:blur(4px);
+      font-size:.7rem;color:rgba(200,200,255,.6);text-transform:uppercase;letter-spacing:.1em;
+    }
+    .lock-icon{font-size:1.5rem;filter:grayscale(.3)}
+    .unlock-badge{
+      position:absolute;top:.65rem;right:.65rem;z-index:4;
+      padding:.25rem .55rem;border-radius:8px;
+      font-family:'Orbitron',sans-serif;font-size:.45rem;letter-spacing:.12em;
+      color:#030014;background:linear-gradient(135deg,#00f5ff,#ffe600);
+      box-shadow:0 4px 16px rgba(0,245,255,.4);
+    }
+    .audio-thumb{
+      height:120px;background-size:cover;background-position:center;
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .audio-body{padding:.85rem 1rem 1rem}
+    .audio-cat{font-size:.6rem;text-transform:uppercase;letter-spacing:.14em;color:rgba(0,245,255,.7)}
+    .audio-name{font-size:.92rem;font-weight:600;margin:.25rem 0 .45rem;line-height:1.25}
+    .audio-pitch{font-size:.72rem;line-height:1.5;color:rgba(190,200,255,.65);margin-bottom:.65rem}
+    .btn-pick{
+      width:100%;padding:.55rem;border:none;border-radius:10px;cursor:pointer;
+      font-family:'Orbitron',sans-serif;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;
+      color:#030014;background:linear-gradient(135deg,#00f5ff,#8b5cf6);
+    }
+    .btn-pick:disabled{opacity:.7;cursor:default;background:linear-gradient(135deg,#ffe600,#ff9500);color:#030014}
+    .cta-block{text-align:center;padding-top:.5rem}
+    .selected-label{
+      font-size:.82rem;color:#ffe600;margin-bottom:.85rem;min-height:1.2em;
+    }
+    .btn-wa{
+      display:inline-flex;align-items:center;justify-content:center;gap:.5rem;
+      padding:1rem 2rem;border-radius:16px;text-decoration:none;
+      font-family:'Orbitron',sans-serif;font-size:.68rem;font-weight:700;
+      letter-spacing:.12em;text-transform:uppercase;color:#fff;
+      background:linear-gradient(135deg,#25d366,#128c7e);
+      box-shadow:0 8px 32px rgba(37,211,102,.3);
+      transition:transform .25s;
+    }
+    .btn-wa:hover{transform:translateY(-3px)}
+    .btn-wa.is-disabled{opacity:.45;pointer-events:none;filter:grayscale(.5)}
+    .promo-note{font-size:.68rem;color:rgba(180,190,255,.5);margin-top:.85rem}
+    .footer-note{text-align:center;margin-top:2rem;font-size:.65rem;color:rgba(150,160,200,.45)}
+    @media(prefers-reduced-motion:reduce){
+      *,*::before,*::after{animation:none!important;transition:none!important}
+    }
+  </style>
+</head>
+<body>
+  <canvas id="bgCanvas" aria-hidden="true"></canvas>
+  <div class="aurora" aria-hidden="true"></div>
+  <div class="grid-floor" aria-hidden="true"></div>
+  <div class="orb orb-1" aria-hidden="true"></div>
+  <div class="orb orb-2" aria-hidden="true"></div>
+  <div class="orb orb-3" aria-hidden="true"></div>
+
+  <div class="shell">
+    <header class="brand">
+      <span class="brand-dot"></span>
+      Erior Center · Diagnóstico Cuántico
+      <span class="brand-dot"></span>
+    </header>
+
+    <main id="stage">
+      <!-- INTRO -->
+      <section id="screenIntro" class="panel">
+        <h1 class="intro-title">Descubre tu audio<br>de transformación</h1>
+        <p class="intro-sub">5 preguntas. Un escaneo energético. Al final desbloqueamos <strong>2–3 audios</strong> del catálogo Erior hechos para tu situación — tú eliges cuál quieres y te conectamos con Pauline por WhatsApp.</p>
+        <div class="intro-steps">
+          <div class="intro-step"><strong>01</strong>Respondes 5 preguntas + tu historia</div>
+          <div class="intro-step"><strong>02</strong>El sistema escanea tu perfil cuántico</div>
+          <div class="intro-step"><strong>03</strong>Eliges tu audio y cierras por WhatsApp</div>
+        </div>
+        <button type="button" class="btn-primary" id="btnStart">Iniciar diagnóstico ✦</button>
+      </section>
+
+      <!-- QUIZ -->
+      <section id="screenQuiz" class="panel" hidden>
+        <div class="progress-wrap">
+          <div class="progress-meta">
+            <span id="progressLabel">Pregunta 1 de 5</span>
+            <span>~2 min</span>
+          </div>
+          <div class="progress-track"><div class="progress-fill" id="progressBar"></div></div>
+        </div>
+        <h2 class="q-title" id="qTitle"></h2>
+        <p class="q-sub" id="qSubtitle"></p>
+        <div class="opt-grid" id="qOptions"></div>
+        <div class="text-wrap" id="qTextWrap" hidden>
+          <textarea id="qText" placeholder="Ej: Quiero sanar codependencia con mi ex, sentirme digna de amor y atraer abundancia en mi trabajo…" maxlength="800"></textarea>
+        </div>
+        <div class="quiz-nav">
+          <button type="button" class="btn-ghost" id="btnBack">← Atrás</button>
+          <button type="button" class="btn-primary btn-next" id="btnNext" disabled>Continuar →</button>
+        </div>
+      </section>
+
+      <!-- SCAN -->
+      <section id="screenScan" class="panel scan-panel" hidden>
+        <div class="scan-ring" aria-hidden="true"></div>
+        <p class="scan-text" id="scanText">Escaneando tu campo energético…</p>
+      </section>
+
+      <!-- RESULTS -->
+      <section id="screenResults" class="panel" hidden>
+        <div class="results-head">
+          <div class="results-badge">DIAGNÓSTICO COMPLETO</div>
+          <h2 class="results-title">Tu catálogo personalizado</h2>
+          <p class="insight" id="insightText"></p>
+        </div>
+        <div class="catalog-grid" id="catalogGrid"></div>
+        <div class="cta-block">
+          <p class="selected-label" id="selectedLabel" hidden>Elige uno de tus audios desbloqueados ↑</p>
+          <a class="btn-wa is-disabled" id="btnWhatsApp" href="#" target="_blank" rel="noopener noreferrer" aria-disabled="true">
+            💬 Quiero mi audio — WhatsApp
+          </a>
+          <p class="promo-note">Promo julio: $888 MXN · Regular $1,190 · Pauline te cierra personalizado ✨</p>
+        </div>
+      </section>
+    </main>
+
+    <p class="footer-note">© Erior Center · Experiencia de diagnóstico — no sustituye orientación médica o psicológica profesional.</p>
+  </div>
+
+  <script src="js/catalog.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
