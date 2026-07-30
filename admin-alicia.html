@@ -40,6 +40,36 @@ code{font-family:ui-monospace,monospace;color:#f5e6c8;background:rgba(201,160,96
 .msg{font-size:.75rem;margin-top:.5rem;min-height:1.2em}
 .msg.err{color:#ff9999}
 .msg.ok{color:#7ddea0}
+.create-result{
+  margin-top:.85rem;padding:.9rem 1rem;border-radius:12px;
+  border:1px solid rgba(125,222,160,.25);background:rgba(80,200,120,.08);
+}
+.create-result-row{
+  display:flex;align-items:center;justify-content:space-between;gap:.65rem;
+  margin-bottom:.55rem;flex-wrap:wrap;
+}
+.create-result-row:last-of-type{margin-bottom:.75rem}
+.create-result-label{
+  font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;
+  color:rgba(255,255,255,.45);display:block;margin-bottom:.2rem;
+}
+.create-result-code{
+  font-family:ui-monospace,monospace;font-size:.95rem;font-weight:600;
+  color:#7ddea0;letter-spacing:.04em;word-break:break-all;
+}
+.create-result-actions{display:flex;gap:.45rem;flex-wrap:wrap}
+.btn-copy{
+  color:#1a1510;background:linear-gradient(135deg,#d4af5f,#c9a060);
+  border:none;border-radius:999px;padding:.5rem .9rem;cursor:pointer;
+  font:inherit;font-size:.68rem;font-weight:600;letter-spacing:.04em;
+}
+.btn-copy-ghost{
+  color:rgba(255,255,255,.8);background:transparent;
+  border:1px solid rgba(255,255,255,.2);border-radius:999px;
+  padding:.5rem .9rem;cursor:pointer;font:inherit;font-size:.68rem;font-weight:600;
+}
+.btn-copy:hover,.btn-copy-ghost:hover{filter:brightness(1.08)}
+.create-result-hint{font-size:.65rem;color:rgba(255,255,255,.4);margin-top:.55rem}
 #loginView{max-width:360px;margin:4rem auto 0}
 .hidden{display:none!important}
 .copy{cursor:pointer;opacity:.7}
@@ -78,6 +108,7 @@ code{font-family:ui-monospace,monospace;color:#f5e6c8;background:rgba(201,160,96
       <textarea id="fNotes" rows="2" placeholder="Compró pack premium, pago PayPal..."></textarea>
       <button type="button" class="btn btn-gold" id="btnCreate">Generar código ✨</button>
       <p class="msg" id="createMsg"></p>
+      <div class="create-result hidden" id="createResult"></div>
     </div>
 
     <div class="card">
@@ -214,8 +245,62 @@ code{font-family:ui-monospace,monospace;color:#f5e6c8;background:rgba(201,160,96
   }
 
   function copyText(t){
-    if(navigator.clipboard){navigator.clipboard.writeText(t);}
-    else{window.prompt('Copia el código:',t);}
+    var text=String(t||'');
+    if(!text)return Promise.resolve(false);
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      return navigator.clipboard.writeText(text).then(function(){return true;}).catch(function(){
+        window.prompt('Copia el texto:',text);
+        return false;
+      });
+    }
+    window.prompt('Copia el texto:',text);
+    return Promise.resolve(false);
+  }
+
+  function buildClientCodesMessage(aliciaCode,refCode){
+    var lines=['Código Alicia: '+aliciaCode];
+    if(refCode)lines.push('Código referido: '+refCode);
+    return lines.join('\n');
+  }
+
+  function renderCreateResult(aliciaCode,refCode){
+    var box=document.getElementById('createResult');
+    if(!box)return;
+    var clientMsg=buildClientCodesMessage(aliciaCode,refCode);
+    box.classList.remove('hidden');
+    box.innerHTML=
+      '<div class="create-result-row">'+
+        '<div><span class="create-result-label">Código Alicia</span>'+
+        '<div class="create-result-code">'+escAttr(aliciaCode)+'</div></div>'+
+      '</div>'+
+      (refCode
+        ? '<div class="create-result-row"><div><span class="create-result-label">Código referido</span>'+
+          '<div class="create-result-code">'+escAttr(refCode)+'</div></div></div>'
+        : '')+
+      '<div class="create-result-actions">'+
+        '<button type="button" class="btn-copy" id="btnCopyClientMsg">Copiar para cliente</button>'+
+        '<button type="button" class="btn-copy-ghost" id="btnCopyAliciaOnly">Copiar Alicia</button>'+
+        (refCode?'<button type="button" class="btn-copy-ghost" id="btnCopyRefOnly">Copiar referido</button>':'')+
+      '</div>'+
+      '<p class="create-result-hint">“Copiar para cliente” deja el texto listo para pegar en WhatsApp.</p>';
+
+    var hint=box.querySelector('.create-result-hint');
+    function flash(okText){
+      if(!hint)return;
+      hint.textContent=okText;
+      hint.style.color='#7ddea0';
+      setTimeout(function(){
+        hint.textContent='“Copiar para cliente” deja el texto listo para pegar en WhatsApp.';
+        hint.style.color='';
+      },1800);
+    }
+
+    var btnAll=document.getElementById('btnCopyClientMsg');
+    if(btnAll)btnAll.onclick=function(){copyText(clientMsg).then(function(){flash('✓ Copiado — pégalo al cliente');});};
+    var btnA=document.getElementById('btnCopyAliciaOnly');
+    if(btnA)btnA.onclick=function(){copyText(aliciaCode).then(function(){flash('✓ Código Alicia copiado');});};
+    var btnR=document.getElementById('btnCopyRefOnly');
+    if(btnR)btnR.onclick=function(){copyText(refCode).then(function(){flash('✓ Código referido copiado');});};
   }
 
   function escAttr(s){
@@ -513,8 +598,10 @@ code{font-family:ui-monospace,monospace;color:#f5e6c8;background:rgba(201,160,96
 
   document.getElementById('btnCreate').onclick=async function(){
     var msg=document.getElementById('createMsg');
+    var box=document.getElementById('createResult');
     msg.textContent='Generando...';
     msg.className='msg';
+    if(box){box.classList.add('hidden');box.innerHTML='';}
     var body={
       action:'create',
       client_name:document.getElementById('fName').value.trim(),
@@ -528,10 +615,12 @@ code{font-family:ui-monospace,monospace;color:#f5e6c8;background:rgba(201,160,96
       var r=await fetch(ADMIN_FN,{method:'POST',headers:headers(),body:JSON.stringify(body)});
       var d=await r.json();
       if(!r.ok||!d.ok){msg.textContent=(d&&d.error)||'Error';msg.className='msg err';return;}
-      msg.textContent='✓ Código creado: '+d.code.code+(d.referral?' | Referido: '+d.referral.ref_code:'');
+      var aliciaCode=d.code&&d.code.code?d.code.code:'';
+      var refCode=d.referral&&d.referral.ref_code?d.referral.ref_code:'';
+      msg.textContent='✓ Listo';
       msg.className='msg ok';
-      copyText(d.code.code);
-      if(d.referral)copyText(referralLink(d.referral.ref_code));
+      renderCreateResult(aliciaCode,refCode);
+      copyText(buildClientCodesMessage(aliciaCode,refCode));
       document.getElementById('fCode').value='';
       loadCodes();
       loadReferrals();

@@ -4,88 +4,144 @@
   var CATALOG = window.ERIOR_CATALOG || [];
   var WA = window.ERIOR_WHATSAPP || '5214432311761';
 
-  var QUESTIONS = [
+  /* Pregunta 2: se adapta al área elegida — aquí está la precisión */
+  var FOCUS_BY_AREA = {
+    amor: {
+      title: 'En amor, ¿qué describe mejor tu situación?',
+      subtitle: 'Esto define qué audio del catálogo te corresponde.',
+      options: [
+        { value: 'sp-volver', label: 'Quiero atraer o volver con alguien específico', ids: ['attraction', 'simulation-u', 'satori'], why: 'Bloqueos con persona específica' },
+        { value: 'sp-obsesion', label: 'Estoy obsesionad@ / no puedo soltar a alguien', ids: ['satori', 'amor-propio-3', 'attraction'], why: 'Desapego + base de amor propio' },
+        { value: 'pareja', label: 'Quiero mejorar mi relación actual', ids: ['erior-love', '11-11', 'curious'], why: 'Trabajo en el reflejo de pareja' },
+        { value: 'nuevo', label: 'Quiero atraer una relación nueva sana', ids: ['attraction', 'amor-magic-2', '11-11'], why: 'Apertura + magnetismo limpio' },
+        { value: 'corazon', label: 'Necesito sanar el corazón / miedo a amar', ids: ['curious', '11-11', 'amor-propio-3'], why: 'Sanación emocional profunda' },
+      ],
+    },
+    dinero: {
+      title: 'En abundancia, ¿qué necesitas más ahora?',
+      subtitle: 'Cada opción apunta a un audio distinto del catálogo.',
+      options: [
+        { value: 'flujo', label: 'Más dinero / abrir el flujo económico', ids: ['money-tech', 'master-abundance', 'lucky'], why: 'Activación financiera directa' },
+        { value: 'negocio', label: 'Negocio, clientes o crecimiento profesional', ids: ['master-abundance', 'money-tech', 'audio-you'], why: 'Estructura de negocio y abundancia' },
+        { value: 'merecimiento', label: 'Sé que el bloqueo es de merecimiento', ids: ['money-tech', 'amor-propio-3', 'master-abundance'], why: 'Merecimiento + opulencia' },
+        { value: 'suerte', label: 'Suerte, oportunidades o un golpe de fortuna', ids: ['lucky', 'money-tech', 'select'], why: 'Fortuna y apertura de puertas' },
+        { value: 'personalizado', label: 'Quiero algo 100% a mi historia personal', ids: ['audio-you', 'audio-erior-3', 'master-abundance'], why: 'Audio ultra personalizado' },
+      ],
+    },
+    autoestima: {
+      title: 'En amor propio, ¿dónde está el nudo?',
+      subtitle: 'Elegir bien aquí evita recomendaciones genéricas.',
+      options: [
+        { value: 'basico', label: 'Empezar a valorarme / glow up interno', ids: ['amor-magic-2', 'white-rabbit', 'mesmerizing'], why: 'Base de amor propio' },
+        { value: 'codependencia', label: 'Codependencia o validación externa', ids: ['amor-propio-3', 'amor-propio-4', 'mesmerizing'], why: 'Cortar dependencia emocional' },
+        { value: 'trauma', label: 'Trauma, dolor corporal o herida profunda', ids: ['amor-propio-4', 'vitamind', 'emergency-999'], why: 'Trabajo profundo de trauma' },
+        { value: 'hombre', label: 'Soy hombre / energía masculina', ids: ['amor-propio-hombre', 'god-goddess', 'master-abundance'], why: 'Diseñado para energía masculina' },
+        { value: 'presencia', label: 'Presencia, belleza o aura magnética', ids: ['eclat', 'icon-aura', 'mental-glow-up'], why: 'Imagen + presencia icónica' },
+        { value: 'identidad', label: 'Reprogramar quién soy / autosabotaje', ids: ['identity', 'master-mind', 'god-goddess'], why: 'Identidad y mente' },
+      ],
+    },
+    salud: {
+      title: 'En salud y cuerpo, ¿qué buscas?',
+      subtitle: 'Separar salud mental, física e imagen mejora el match.',
+      options: [
+        { value: 'fisica', label: 'Salud física, inmunidad o recuperación', ids: ['vitamind', 'fit-wave', 'keep-cool'], why: 'Salud física e inmunidad' },
+        { value: 'mental', label: 'Ansiedad, depresión o agotamiento mental', ids: ['vitamind', 'keep-cool', 'wonderland'], why: 'Sistema nervioso y salud mental' },
+        { value: 'cuerpo', label: 'Peso, forma física o biokinesis', ids: ['fit-wave', 'eclat', 'vitamind'], why: 'Cuerpo y rendimiento' },
+        { value: 'trauma-cuerpo', label: 'Trauma o rechazo hacia mi cuerpo', ids: ['amor-propio-4', 'fit-wave', 'eclat'], why: 'Trauma corporal + amor propio' },
+      ],
+    },
+    manifestacion: {
+      title: 'En manifestación, ¿qué necesitas?',
+      subtitle: 'No todos los audios de manifestación hacen lo mismo.',
+      options: [
+        { value: 'bloqueos', label: 'Estoy bloquead@ / necesito reiniciar', ids: ['booster', 'wonderland', 'satori'], why: 'Reinicio y neutralidad' },
+        { value: 'calma', label: 'Calma mental para poder manifestar', ids: ['keep-cool', 'wonderland', 'booster'], why: 'Calma y coherencia' },
+        { value: 'elegir', label: 'Elegir y sostener una realidad concreta', ids: ['select', 'simulation-u', 'audio-erior-3'], why: 'Elección consciente de realidad' },
+        { value: 'futuro', label: 'Ver / conectar con mi versión futura', ids: ['simulation-u', 'select', 'identity'], why: 'YO futuro y visualización' },
+        { value: 'script', label: 'Un script profundo personalizado', ids: ['audio-erior-3', 'audio-you', 'white-rabbit'], why: 'Personalización profunda' },
+        { value: 'crisis', label: 'Situación compleja o urgente', ids: ['emergency-999', 'booster', 'amor-propio-4'], why: 'Protocolo de emergencia' },
+      ],
+    },
+  };
+
+  var QUESTIONS_BASE = [
     {
       id: 'area',
-      title: '¿Qué área de tu vida pide más atención ahora?',
-      subtitle: 'El universo ya está escuchando tu respuesta…',
+      title: '¿Qué área de tu vida necesita atención ahora?',
+      subtitle: 'Elige una. El resto del diagnóstico se adapta a ella.',
       options: [
-        { value: 'amor', label: 'Amor y relaciones', emoji: '💖', boost: { amor: 4 } },
-        { value: 'dinero', label: 'Dinero y abundancia', emoji: '💰', boost: { dinero: 4 } },
-        { value: 'autoestima', label: 'Amor propio y autoestima', emoji: '✨', boost: { autoestima: 4 } },
-        { value: 'salud', label: 'Salud y bienestar', emoji: '🌿', boost: { salud: 4 } },
-        { value: 'manifestacion', label: 'Manifestación y propósito', emoji: '🌀', boost: { manifestacion: 4 } },
+        { value: 'amor', label: 'Amor y relaciones' },
+        { value: 'dinero', label: 'Dinero y abundancia' },
+        { value: 'autoestima', label: 'Amor propio y autoestima' },
+        { value: 'salud', label: 'Salud y bienestar' },
+        { value: 'manifestacion', label: 'Manifestación y propósito' },
+      ],
+    },
+    { id: 'focus', dynamic: true },
+    {
+      id: 'bloque',
+      title: '¿Qué te está frenando más?',
+      subtitle: 'Esto afina si necesitas base, desbloqueo o un salto.',
+      options: [
+        { value: 'mente', label: 'Mente ruidosa, ansiedad o sobrepensar', ids: ['keep-cool', 'wonderland', 'booster'], w: 5 },
+        { value: 'emocion', label: 'Emociones intensas o heridas abiertas', ids: ['amor-propio-4', 'satori', 'curious'], w: 5 },
+        { value: 'accion', label: 'Sé qué quiero pero no actúo / me saboteo', ids: ['master-mind', 'select', 'identity'], w: 5 },
+        { value: 'energia', label: 'Me siento sin energía o desconectado', ids: ['booster', 'vitamind', 'god-goddess'], w: 4 },
+        { value: 'externo', label: 'Circunstancias externas o crisis concreta', ids: ['emergency-999', 'attraction', 'money-tech'], w: 5 },
       ],
     },
     {
-      id: 'momento',
-      title: '¿Cómo describirías tu momento actual?',
-      subtitle: 'No hay respuesta incorrecta — solo tu frecuencia hoy.',
+      id: 'urgencia',
+      title: '¿Qué tan urgente es tu situación?',
+      subtitle: 'Define si te conviene un audio base o un protocolo intenso.',
       options: [
-        { value: 'inicio', label: 'Recién despertando / empezando', emoji: '🌱', ids: ['amor-magic-2', 'keep-cool', 'booster'] },
-        { value: 'atascado', label: 'Me siento atascad@ o con bloqueos', emoji: '😣', ids: ['booster', 'wonderland', 'satori', 'attraction'] },
-        { value: 'salto', label: 'Ya avanzo pero quiero un salto grande', emoji: '🔥', ids: ['select', 'god-goddess', 'white-rabbit', 'audio-erior-3'] },
-        { value: 'urgente', label: 'Situación urgente o muy intensa', emoji: '🆘', ids: ['emergency-999', 'amor-propio-4', 'vitamind'] },
-      ],
-    },
-    {
-      id: 'emocion',
-      title: '¿Qué emoción domina más tu día a día?',
-      subtitle: 'Tu campo energético deja huella en cada respuesta.',
-      options: [
-        { value: 'ansiedad', label: 'Ansiedad, miedo o urgencia', emoji: '😰', ids: ['keep-cool', 'wonderland', 'booster', 'vitamind'] },
-        { value: 'merecimiento', label: 'Falta de merecimiento o validación', emoji: '🪞', ids: ['amor-magic-2', 'amor-propio-3', 'amor-propio-4', 'mesmerizing'] },
-        { value: 'codependencia', label: 'Codependencia u obsesión con alguien', emoji: '💔', ids: ['amor-propio-3', 'amor-propio-4', 'attraction', 'erior-love'] },
-        { value: 'escasez', label: 'Escasez o estrés financiero', emoji: '📉', ids: ['money-tech', 'master-abundance', 'lucky', 'amor-propio-3'] },
-        { value: 'cuerpo', label: 'Cansancio, salud o imagen corporal', emoji: '🫠', ids: ['vitamind', 'fit-wave', 'eclat', 'amor-propio-4'] },
-      ],
-    },
-    {
-      id: 'enfoque',
-      title: '¿Hay algo específico que quieras atraer o sanar?',
-      subtitle: 'Elige lo que más resuene — puedes afinar después.',
-      options: [
-        { value: 'sp', label: 'Persona específica (SP / ex / crush)', emoji: '👤', ids: ['attraction', 'simulation-u', 'erior-love'] },
-        { value: 'relacion', label: 'Mejorar relación existente', emoji: '💑', ids: ['erior-love', '11-11', 'curious'] },
-        { value: 'hombre', label: 'Energía masculina / soy hombre', emoji: '🧑', ids: ['amor-propio-hombre', 'god-goddess', 'master-abundance'] },
-        { value: 'glow', label: 'Belleza, presencia o glow up', emoji: '💎', ids: ['eclat', 'icon-aura', 'mental-glow-up', 'amor-magic-2'] },
-        { value: 'identidad', label: 'Reprogramar mente o identidad', emoji: '🧠', ids: ['identity', 'master-mind', 'audio-erior-3', 'select'] },
+        { value: 'explorar', label: 'Quiero empezar con algo claro y estable', ids: ['amor-magic-2', 'keep-cool', 'booster'], w: 3 },
+        { value: 'avanzar', label: 'Ya trabajo en mí y quiero resultados más fuertes', ids: ['select', 'amor-propio-3', 'master-abundance'], w: 3 },
+        { value: 'urgente', label: 'Es urgente — necesito un cambio ya', ids: ['emergency-999', 'attraction', 'money-tech', 'amor-propio-4'], w: 7 },
       ],
     },
     {
       id: 'historia',
-      title: 'Cuéntanos con tus palabras',
-      subtitle: '¿Qué estás viviendo o qué quieres manifestar? (mínimo 15 caracteres)',
+      title: 'Describe tu situación con tus palabras',
+      subtitle: 'Mínimo 40 caracteres. Cuanto más específico seas, más preciso será el match.',
       type: 'text',
     },
   ];
 
   var KEYWORD_MAP = [
-    { re: /ex\b|crush|persona espec|sp\b|no me hace caso|ghost|ignor/i, ids: ['attraction', 'simulation-u', 'satori'], w: 5 },
-    { re: /pareja|relaci[oó]n|novi[oa]|espos[oa]|matrimonio/i, ids: ['erior-love', '11-11', 'attraction'], w: 4 },
-    { re: /dinero|deuda|bancarro|pobre|rico|abund|finanz|negocio|trabajo|empleo/i, ids: ['money-tech', 'master-abundance', 'lucky', 'audio-you'], w: 5 },
-    { re: /amor propio|merec|validaci|codepend|no me valoro|insegur/i, ids: ['amor-magic-2', 'amor-propio-3', 'amor-propio-4', 'white-rabbit'], w: 5 },
-    { re: /hombre|masculin|viril|var[oó]n/i, ids: ['amor-propio-hombre', 'god-goddess'], w: 6 },
-    { re: /trauma|dolor|herida|abus|depres|ansiedad|p[aá]nico/i, ids: ['amor-propio-4', 'vitamind', 'keep-cool', 'emergency-999'], w: 4 },
-    { re: /belleza|guap|físic|cuerpo|adelgaz|gord|piel|rejuven/i, ids: ['eclat', 'fit-wave', 'icon-aura'], w: 4 },
-    { re: /urgente|crisis|desesper|no aguanto|emergencia/i, ids: ['emergency-999', 'booster', 'amor-propio-4'], w: 6 },
-    { re: /manifest|visualiz|crear realidad|atrac/i, ids: ['select', 'simulation-u', 'audio-erior-3', 'booster'], w: 3 },
-    { re: /identidad|aut[eé]ntic|prop[oó]sito|quien soy/i, ids: ['identity', 'master-mind', 'god-goddess'], w: 4 },
-    { re: /salud|enferm|inmun|virus|c[aá]ncer|hospital/i, ids: ['vitamind', 'fit-wave', 'emergency-999'], w: 5 },
+    { re: /\bex\b|crush|persona espec|sp\b|no me hace caso|ghost|ignor|volver con/i, ids: ['attraction', 'simulation-u', 'satori'], w: 8 },
+    { re: /obsesi|no puedo soltar|lo pienso todo el d[ií]a|stalk/i, ids: ['satori', 'amor-propio-3', 'attraction'], w: 8 },
+    { re: /pareja|relaci[oó]n actual|novi[oa]|espos[oa]|matrimonio|mejorar (mi )?relaci/i, ids: ['erior-love', '11-11', 'curious'], w: 7 },
+    { re: /dinero|deuda|bancarro|pobre|rico|abund|finanz|cobrar|factura|sueldo/i, ids: ['money-tech', 'master-abundance', 'lucky'], w: 7 },
+    { re: /negocio|clientes|empresa|emprend|ventas|trabajo|empleo|ascenso/i, ids: ['master-abundance', 'money-tech', 'audio-you'], w: 7 },
+    { re: /amor propio|merec|validaci|no me valoro|insegur|autoestima/i, ids: ['amor-magic-2', 'amor-propio-3', 'amor-propio-4'], w: 6 },
+    { re: /codepend/i, ids: ['amor-propio-3', 'amor-propio-4', 'satori'], w: 9 },
+    { re: /\bhombre\b|masculin|viril|var[oó]n|soy hombre/i, ids: ['amor-propio-hombre', 'god-goddess'], w: 10 },
+    { re: /trauma|dolor corporal|herida profunda|abus/i, ids: ['amor-propio-4', 'vitamind', 'emergency-999'], w: 8 },
+    { re: /depres|ansiedad|p[aá]nico|ataque de/i, ids: ['vitamind', 'keep-cool', 'wonderland'], w: 7 },
+    { re: /belleza|guap|piel|rejuven|glow up|presencia|aura/i, ids: ['eclat', 'icon-aura', 'mental-glow-up'], w: 6 },
+    { re: /peso|adelgaz|gord|gimnasio|deporte|cuerpo/i, ids: ['fit-wave', 'eclat', 'vitamind'], w: 6 },
+    { re: /urgente|crisis|desesper|no aguanto|emergencia|ya no puedo/i, ids: ['emergency-999', 'booster', 'amor-propio-4'], w: 9 },
+    { re: /manifest|visualiz|crear realidad|elegir mi realidad/i, ids: ['select', 'simulation-u', 'audio-erior-3'], w: 5 },
+    { re: /identidad|aut[eé]ntic|prop[oó]sito|quien soy|autosabot/i, ids: ['identity', 'master-mind', 'god-goddess'], w: 6 },
+    { re: /salud|enferm|inmun|hospital|dolor f[ií]sic/i, ids: ['vitamind', 'fit-wave'], w: 7 },
+    { re: /suerte|loter[ií]a|sorteo|oportunidad/i, ids: ['lucky', 'select', 'money-tech'], w: 7 },
+    { re: /personalizad|a mi medida|mi historia/i, ids: ['audio-you', 'audio-erior-3', 'white-rabbit'], w: 6 },
   ];
 
   var state = {
     step: 0,
     answers: {},
     unlocked: [],
-    selected: null,
+    reasons: {},
+    primary: null,
+    selected: [],
     insight: '',
   };
 
   var el = {
     progress: document.getElementById('progressBar'),
     progressLabel: document.getElementById('progressLabel'),
-    stage: document.getElementById('stage'),
     screenIntro: document.getElementById('screenIntro'),
     screenQuiz: document.getElementById('screenQuiz'),
     screenScan: document.getElementById('screenScan'),
@@ -99,6 +155,7 @@
     btnBack: document.getElementById('btnBack'),
     scanText: document.getElementById('scanText'),
     insightText: document.getElementById('insightText'),
+    primaryCard: document.getElementById('primaryCard'),
     catalogGrid: document.getElementById('catalogGrid'),
     btnWhatsApp: document.getElementById('btnWhatsApp'),
     selectedLabel: document.getElementById('selectedLabel'),
@@ -108,84 +165,177 @@
     return CATALOG.find(function (a) { return a.id === id; });
   }
 
+  function getQuestion(step) {
+    var q = QUESTIONS_BASE[step];
+    if (!q) return null;
+    if (q.dynamic && q.id === 'focus') {
+      var area = state.answers.area || 'autoestima';
+      var pack = FOCUS_BY_AREA[area] || FOCUS_BY_AREA.autoestima;
+      return {
+        id: 'focus',
+        title: pack.title,
+        subtitle: pack.subtitle,
+        options: pack.options,
+      };
+    }
+    return q;
+  }
+
+  function addScore(scores, id, points, reasons, reason) {
+    if (scores[id] == null) return;
+    scores[id] += points;
+    if (reason && points >= 5) {
+      if (!reasons[id]) reasons[id] = [];
+      if (reasons[id].indexOf(reason) === -1) reasons[id].push(reason);
+    }
+  }
+
   function scoreRecommendations(answers) {
     var scores = {};
+    var reasons = {};
     CATALOG.forEach(function (a) { scores[a.id] = 0; });
 
-    QUESTIONS.forEach(function (q, idx) {
-      if (q.type === 'text') return;
-      var val = answers[q.id];
-      if (!val) return;
-      var opt = q.options.find(function (o) { return o.value === val; });
-      if (!opt) return;
-      if (opt.boost) {
-        Object.keys(opt.boost).forEach(function (cat) {
-          CATALOG.forEach(function (a) {
-            if (a.cat === cat) scores[a.id] += opt.boost[cat];
-          });
-        });
-      }
-      if (opt.ids) {
-        opt.ids.forEach(function (id, i) {
-          if (scores[id] != null) scores[id] += 6 - i;
-        });
-      }
-    });
-
-    var story = (answers.historia || '').toLowerCase();
-    KEYWORD_MAP.forEach(function (rule) {
-      if (rule.re.test(story)) {
-        rule.ids.forEach(function (id) {
-          if (scores[id] != null) scores[id] += rule.w;
-        });
-      }
-    });
-
-    if (/trauma|dolor corporal|herida/i.test(story)) scores['amor-propio-4'] = (scores['amor-propio-4'] || 0) + 4;
-    if (answers.enfoque === 'hombre') scores['amor-propio-hombre'] = (scores['amor-propio-hombre'] || 0) + 8;
-    if (answers.momento === 'urgente') scores['emergency-999'] = (scores['emergency-999'] || 0) + 6;
-
-    var ranked = CATALOG.map(function (a) {
-      return { id: a.id, score: scores[a.id] || 0 };
-    }).sort(function (x, y) { return y.score - x.score; });
-
-    var top = [];
-    ranked.forEach(function (r) {
-      if (top.length >= 3) return;
-      if (r.score <= 0 && top.length === 0) return;
-      top.push(r.id);
-    });
-
-    if (top.length < 3) {
-      var fallbacks = ['amor-magic-2', 'select', 'master-abundance', 'attraction', 'booster'];
-      fallbacks.forEach(function (id) {
-        if (top.length >= 3) return;
-        if (top.indexOf(id) === -1) top.push(id);
+    /* Área: boost moderado solo a esa categoría (no diluye tanto) */
+    if (answers.area) {
+      CATALOG.forEach(function (a) {
+        if (a.cat === answers.area) scores[a.id] += 3;
       });
     }
 
-    return { scores: scores, top: top.slice(0, 3) };
+    /* Focus específico: peso alto — es la pregunta más precisa */
+    var focusQ = getQuestion(1);
+    if (focusQ && answers.focus) {
+      var focusOpt = focusQ.options.find(function (o) { return o.value === answers.focus; });
+      if (focusOpt && focusOpt.ids) {
+        focusOpt.ids.forEach(function (id, i) {
+          addScore(scores, id, 12 - i * 2, reasons, focusOpt.why || focusOpt.label);
+        });
+      }
+    }
+
+    /* Bloqueo */
+    var bloqueQ = QUESTIONS_BASE[2];
+    if (answers.bloque) {
+      var bloqueOpt = bloqueQ.options.find(function (o) { return o.value === answers.bloque; });
+      if (bloqueOpt && bloqueOpt.ids) {
+        bloqueOpt.ids.forEach(function (id, i) {
+          addScore(scores, id, (bloqueOpt.w || 4) - i, reasons, bloqueOpt.label);
+        });
+      }
+    }
+
+    /* Urgencia */
+    var urgQ = QUESTIONS_BASE[3];
+    if (answers.urgencia) {
+      var urgOpt = urgQ.options.find(function (o) { return o.value === answers.urgencia; });
+      if (urgOpt && urgOpt.ids) {
+        urgOpt.ids.forEach(function (id, i) {
+          addScore(scores, id, (urgOpt.w || 3) - i, reasons, urgOpt.label);
+        });
+      }
+    }
+
+    /* Historia libre — peso alto si hay match claro */
+    var story = (answers.historia || '').toLowerCase();
+    KEYWORD_MAP.forEach(function (rule) {
+      if (rule.re.test(story)) {
+        rule.ids.forEach(function (id, i) {
+          addScore(scores, id, rule.w - i, reasons, 'Coincide con tu descripción');
+        });
+      }
+    });
+
+    /* Reglas duras (casi siempre correctas) */
+    if (answers.focus === 'hombre' || /\bhombre\b|soy hombre|masculin/i.test(story)) {
+      addScore(scores, 'amor-propio-hombre', 14, reasons, 'Diseñado para hombres');
+    }
+    if (answers.focus === 'sp-volver' || answers.focus === 'sp-obsesion') {
+      addScore(scores, 'attraction', 6, reasons, 'Persona específica');
+    }
+    if (answers.urgencia === 'urgente' || answers.focus === 'crisis') {
+      addScore(scores, 'emergency-999', 8, reasons, 'Situación urgente');
+    }
+    if (answers.focus === 'trauma' || answers.focus === 'trauma-cuerpo') {
+      addScore(scores, 'amor-propio-4', 8, reasons, 'Trauma / herida profunda');
+    }
+
+    var ranked = CATALOG.map(function (a) {
+      return { id: a.id, score: scores[a.id] || 0, cat: a.cat };
+    }).sort(function (x, y) { return y.score - x.score; });
+
+    /* Siempre 3: primero por score, luego relleno por área */
+    var top = [];
+    ranked.forEach(function (r) {
+      if (top.length >= 3) return;
+      if (r.score > 0) top.push(r.id);
+    });
+
+    var fallbacks = answers.area === 'amor' ? ['attraction', 'erior-love', 'amor-magic-2', 'satori']
+      : answers.area === 'dinero' ? ['money-tech', 'master-abundance', 'lucky', 'audio-you']
+      : answers.area === 'salud' ? ['vitamind', 'fit-wave', 'keep-cool', 'amor-propio-4']
+      : answers.area === 'manifestacion' ? ['select', 'booster', 'keep-cool', 'simulation-u']
+      : ['amor-magic-2', 'select', 'master-abundance', 'attraction'];
+
+    fallbacks.forEach(function (id) {
+      if (top.length >= 3) return;
+      if (top.indexOf(id) === -1 && byId(id)) top.push(id);
+    });
+
+    /* Último recurso: siguientes del ranking aunque score = 0 */
+    ranked.forEach(function (r) {
+      if (top.length >= 3) return;
+      if (top.indexOf(r.id) === -1) top.push(r.id);
+    });
+
+    return {
+      scores: scores,
+      reasons: reasons,
+      primary: top[0] || null,
+      top: top.slice(0, 3),
+    };
   }
 
-  function buildInsight(answers, topIds) {
-    var names = topIds.map(function (id) {
+  function buildInsight(answers, primaryId, altIds) {
+    var primary = byId(primaryId);
+    var areaLabels = {
+      amor: 'amor y relaciones',
+      dinero: 'abundancia',
+      autoestima: 'amor propio',
+      salud: 'salud y bienestar',
+      manifestacion: 'manifestación',
+    };
+    var area = areaLabels[answers.area] || 'tu proceso';
+    var alts = altIds.map(function (id) {
       var a = byId(id);
-      return a ? a.emoji + ' ' + a.name : id;
-    });
-    var areaLabels = { amor: 'el amor', dinero: 'la abundancia', autoestima: 'tu amor propio', salud: 'tu bienestar', manifestacion: 'tu poder de manifestar' };
-    var area = areaLabels[answers.area] || 'tu transformación';
-    return 'Tu diagnóstico cuántico detectó una alineación fuerte en ' + area + '. Desbloqueamos ' + topIds.length + ' frecuencias hechas para tu situación: ' + names.join(' · ') + '. El resto del catálogo Erior sigue disponible cuando estés list@ para expandir tu videojuego.';
+      return a ? a.name : id;
+    }).join(' y ');
+    return 'Selección exclusiva en ' + area + '. Mejor ajuste: ' +
+      (primary ? primary.name : 'tu recomendación') +
+      '. También desbloqueamos: ' + alts + '. El resto del catálogo sigue cerrado.';
+  }
+
+  function reasonText(id, reasons) {
+    var list = reasons[id] || [];
+    if (!list.length) return 'Coincide con el perfil de tus respuestas.';
+    return list.slice(0, 2).join(' · ');
   }
 
   function showScreen(name) {
     ['screenIntro', 'screenQuiz', 'screenScan', 'screenResults'].forEach(function (id) {
       var node = document.getElementById(id);
-      if (node) node.hidden = id !== name;
+      if (!node) return;
+      var active = id === name;
+      node.hidden = !active;
+      if (active) {
+        node.style.display = '';
+        node.style.opacity = '1';
+        node.style.visibility = 'visible';
+      }
     });
   }
 
   function updateProgress() {
-    var total = QUESTIONS.length;
+    var total = QUESTIONS_BASE.length;
     var current = Math.min(state.step + 1, total);
     var pct = Math.round((current / total) * 100);
     if (el.progress) el.progress.style.width = pct + '%';
@@ -193,7 +343,7 @@
   }
 
   function renderQuestion() {
-    var q = QUESTIONS[state.step];
+    var q = getQuestion(state.step);
     if (!q) return;
     updateProgress();
     if (el.qTitle) el.qTitle.textContent = q.title;
@@ -217,7 +367,6 @@
         var sel = state.answers[q.id] === opt.value ? ' is-selected' : '';
         return (
           '<button type="button" class="opt-card' + sel + '" data-value="' + opt.value + '">' +
-          '<span class="opt-emoji">' + opt.emoji + '</span>' +
           '<span class="opt-label">' + opt.label + '</span>' +
           '<span class="opt-ring"></span></button>'
         );
@@ -226,6 +375,8 @@
       el.qOptions.querySelectorAll('.opt-card').forEach(function (btn) {
         btn.addEventListener('click', function () {
           state.answers[q.id] = btn.getAttribute('data-value');
+          /* Si cambia el área, limpia focus anterior */
+          if (q.id === 'area') delete state.answers.focus;
           el.qOptions.querySelectorAll('.opt-card').forEach(function (b) { b.classList.remove('is-selected'); });
           btn.classList.add('is-selected');
           validateNext();
@@ -236,26 +387,26 @@
   }
 
   function validateNext() {
-    var q = QUESTIONS[state.step];
+    var q = getQuestion(state.step);
     var ok = false;
     if (q.type === 'text') {
-      ok = (state.answers.historia || '').trim().length >= 15;
+      ok = (state.answers.historia || '').trim().length >= 40;
     } else {
       ok = !!state.answers[q.id];
     }
     if (el.btnNext) {
       el.btnNext.disabled = !ok;
-      el.btnNext.textContent = state.step === QUESTIONS.length - 1 ? 'Ver mi diagnóstico ✦' : 'Continuar →';
+      el.btnNext.textContent = state.step === QUESTIONS_BASE.length - 1 ? 'Ver mi diagnóstico' : 'Continuar';
     }
   }
 
   function runScanAnimation(callback) {
     showScreen('screenScan');
     var lines = [
-      'Escaneando tu campo energético…',
-      'Cruzando respuestas con el catálogo Erior…',
-      'Calculando frecuencias compatibles…',
-      'Desbloqueando audios para tu situación…',
+      'Analizando tus respuestas…',
+      'Comparando con el catálogo…',
+      'Definiendo el mejor ajuste…',
+      'Preparando tu recomendación…',
     ];
     var i = 0;
     if (el.scanText) el.scanText.textContent = lines[0];
@@ -263,83 +414,184 @@
       i += 1;
       if (i >= lines.length) {
         clearInterval(timer);
-        setTimeout(callback, 600);
+        setTimeout(callback, 450);
         return;
       }
       if (el.scanText) el.scanText.textContent = lines[i];
-    }, 700);
+    }, 600);
+  }
+
+  function isSelected(id) {
+    return state.selected.indexOf(id) !== -1;
+  }
+
+  function resolveImg(src) {
+    if (!src) return '';
+    if (/^https?:\/\//i.test(src)) return src;
+    /* Rutas relativas al folder del diagnóstico (funciona en Netlify y local) */
+    if (src.indexOf('img/') === 0 || src.indexOf('./img/') === 0) {
+      try {
+        return new URL(src.replace(/^\.\//, ''), window.location.href).href;
+      } catch (e) {
+        return src;
+      }
+    }
+    if (src.charAt(0) === '/') return src;
+    if (src.indexOf('../img/') === 0) {
+      try {
+        return new URL(src, window.location.href).href;
+      } catch (e2) {
+        return src.replace(/^\.\.\//, '/');
+      }
+    }
+    return src;
+  }
+
+  function cardHtml(a, unlocked, selected, isPrimary, reason) {
+    var catLabel = (window.ERIOR_CAT_LABELS || {})[a.cat] || a.cat;
+    var badge = isPrimary ? 'MEJOR AJUSTE' : 'ALTERNATIVA';
+    var img = resolveImg(a.img);
+    return (
+      '<article class="audio-card' +
+      (unlocked ? ' is-unlocked' : ' is-locked') +
+      (selected ? ' is-selected' : '') +
+      (isPrimary ? ' is-primary' : '') +
+      '" data-id="' + a.id + '" tabindex="' + (unlocked ? '0' : '-1') + '">' +
+      (unlocked
+        ? '<div class="unlock-badge">' + badge + '</div>'
+        : '<div class="lock-overlay"><span>Bloqueado</span><span class="lock-sub">Disponible con diagnóstico</span></div>') +
+      '<div class="audio-thumb">' +
+      '<img src="' + img + '" alt="' + a.name.replace(/"/g, '') + '" loading="lazy" decoding="async" width="480" height="220">' +
+      '</div>' +
+      '<div class="audio-body">' +
+      '<span class="audio-cat">' + catLabel + '</span>' +
+      '<h3 class="audio-name">' + a.name + '</h3>' +
+      '<p class="audio-pitch">' + a.pitch + '</p>' +
+      (unlocked && reason ? '<p class="audio-why">' + reason + '</p>' : '') +
+      (unlocked
+        ? '<button type="button" class="btn-pick">' +
+          (selected ? 'Quitar selección' : 'Agregar a mi selección') + '</button>'
+        : '') +
+      '</div></article>'
+    );
   }
 
   function renderResults() {
     var result = scoreRecommendations(state.answers);
     state.unlocked = result.top;
-    state.insight = buildInsight(state.answers, state.unlocked);
+    state.reasons = result.reasons;
+    state.primary = result.primary;
+    state.selected = result.primary ? [result.primary] : [];
+    state.insight = buildInsight(
+      state.answers,
+      result.primary,
+      result.top.slice(1)
+    );
     if (el.insightText) el.insightText.textContent = state.insight;
 
+    var primary = byId(result.primary);
+    if (el.primaryCard && primary) {
+      el.primaryCard.innerHTML = cardHtml(
+        primary,
+        true,
+        isSelected(primary.id),
+        true,
+        reasonText(primary.id, result.reasons)
+      );
+      el.primaryCard.querySelectorAll('.audio-card').forEach(bindCardClick);
+    }
+
     if (!el.catalogGrid) return;
-    el.catalogGrid.innerHTML = CATALOG.map(function (a) {
+    var others = CATALOG.filter(function (a) { return a.id !== result.primary; });
+    el.catalogGrid.innerHTML = others.map(function (a) {
       var unlocked = state.unlocked.indexOf(a.id) !== -1;
-      var selected = state.selected === a.id;
-      var catLabel = (window.ERIOR_CAT_LABELS || {})[a.cat] || a.cat;
-      return (
-        '<article class="audio-card' + (unlocked ? ' is-unlocked' : ' is-locked') + (selected ? ' is-selected' : '') + '" data-id="' + a.id + '" tabindex="' + (unlocked ? '0' : '-1') + '">' +
-        (unlocked ? '<div class="unlock-badge">DESBLOQUEADO</div>' : '<div class="lock-overlay"><span class="lock-icon">🔒</span><span>Solo con diagnóstico</span></div>') +
-        '<div class="audio-thumb" style="background-image:url(\'' + a.img + '\')"></div>' +
-        '<div class="audio-body">' +
-        '<span class="audio-cat">' + catLabel + '</span>' +
-        '<h3 class="audio-name">' + a.emoji + ' ' + a.name + '</h3>' +
-        '<p class="audio-pitch">' + a.pitch + '</p>' +
-        (unlocked ? '<button type="button" class="btn-pick"' + (selected ? ' disabled' : '') + '>' + (selected ? '✓ Elegido' : 'Elegir este audio') + '</button>' : '') +
-        '</div></article>'
+      return cardHtml(
+        a,
+        unlocked,
+        isSelected(a.id),
+        false,
+        unlocked ? reasonText(a.id, result.reasons) : ''
       );
     }).join('');
 
-    el.catalogGrid.querySelectorAll('.audio-card.is-unlocked').forEach(function (card) {
-      card.addEventListener('click', function (e) {
-        if (e.target.closest('.btn-pick') || e.target === card) {
-          selectAudio(card.getAttribute('data-id'));
-        }
-      });
-    });
+    el.catalogGrid.querySelectorAll('.audio-card.is-unlocked').forEach(bindCardClick);
 
+    updateSelectedLabel();
     updateWhatsAppButton();
     showScreen('screenResults');
   }
 
+  function bindCardClick(card) {
+    card.addEventListener('click', function (e) {
+      if (e.target.closest('.btn-pick') || e.currentTarget === card) {
+        selectAudio(card.getAttribute('data-id'));
+      }
+    });
+  }
+
   function selectAudio(id) {
-    state.selected = id;
-    el.catalogGrid.querySelectorAll('.audio-card').forEach(function (card) {
-      var isSel = card.getAttribute('data-id') === id;
+    if (state.unlocked.indexOf(id) === -1) return;
+    var idx = state.selected.indexOf(id);
+    if (idx === -1) {
+      state.selected.push(id);
+    } else {
+      state.selected.splice(idx, 1);
+    }
+
+    document.querySelectorAll('.audio-card').forEach(function (card) {
+      var cardId = card.getAttribute('data-id');
+      var isSel = isSelected(cardId);
       card.classList.toggle('is-selected', isSel);
       var btn = card.querySelector('.btn-pick');
       if (btn) {
-        btn.textContent = isSel ? '✓ Elegido' : 'Elegir este audio';
-        btn.disabled = isSel;
+        btn.textContent = isSel ? 'Quitar selección' : 'Agregar a mi selección';
       }
     });
-    var a = byId(id);
-    if (el.selectedLabel && a) {
-      el.selectedLabel.textContent = 'Tu elección: ' + a.emoji + ' ' + a.name;
-      el.selectedLabel.hidden = false;
-    }
+
+    updateSelectedLabel();
     updateWhatsAppButton();
   }
 
+  function updateSelectedLabel() {
+    if (!el.selectedLabel) return;
+    if (!state.selected.length) {
+      el.selectedLabel.textContent = 'Selecciona uno o más audios desbloqueados.';
+      el.selectedLabel.hidden = false;
+      return;
+    }
+    var names = state.selected.map(function (id) {
+      var a = byId(id);
+      return a ? a.name : id;
+    });
+    el.selectedLabel.textContent = state.selected.length === 1
+      ? 'Selección: ' + names[0]
+      : 'Selección (' + names.length + '): ' + names.join(' · ');
+    el.selectedLabel.hidden = false;
+  }
+
   function buildWhatsAppMessage() {
-    var a = byId(state.selected);
-    if (!a) return '';
+    if (!state.selected.length) return '';
+    var names = state.selected.map(function (id) {
+      var a = byId(id);
+      return a ? a.name : id;
+    });
     var story = (state.answers.historia || '').trim().slice(0, 400);
+    var area = state.answers.area || '';
+    var audioLine = names.length === 1
+      ? 'Audio elegido: ' + names[0]
+      : 'Audios elegidos (' + names.length + '):\n- ' + names.join('\n- ');
     var msg =
-      'Hola Pauline! 💜 Hice el Diagnóstico Cuántico Erior y quiero cerrar mi audio.\n\n' +
-      '🎧 Audio elegido: ' + a.name + '\n' +
-      '📝 Lo que quiero manifestar/sanar:\n"' + story + '"\n\n' +
-      '¿Me ayudas con la promo disponible? ✨';
+      'Hola Pauline, hice el Diagnóstico Erior y quiero cerrar.\n\n' +
+      audioLine + '\n' +
+      'Área: ' + area + '\n' +
+      'Situación:\n"' + story + '"\n\n' +
+      '¿Me orientas con la promo disponible?';
     return encodeURIComponent(msg);
   }
 
   function updateWhatsAppButton() {
     if (!el.btnWhatsApp) return;
-    if (state.selected) {
+    if (state.selected.length) {
       el.btnWhatsApp.href = 'https://wa.me/' + WA + '?text=' + buildWhatsAppMessage();
       el.btnWhatsApp.classList.remove('is-disabled');
       el.btnWhatsApp.removeAttribute('aria-disabled');
@@ -351,11 +603,11 @@
   }
 
   function nextStep() {
-    var q = QUESTIONS[state.step];
+    var q = getQuestion(state.step);
     if (q.type === 'text') {
       state.answers.historia = (el.qText && el.qText.value || '').trim();
     }
-    if (state.step < QUESTIONS.length - 1) {
+    if (state.step < QUESTIONS_BASE.length - 1) {
       state.step += 1;
       renderQuestion();
       return;
@@ -376,72 +628,47 @@
   function startQuiz() {
     state.step = 0;
     state.answers = {};
-    state.selected = null;
+    state.selected = [];
     state.unlocked = [];
+    state.reasons = {};
+    state.primary = null;
     showScreen('screenQuiz');
     renderQuestion();
   }
+  window.__eriorStart = startQuiz;
 
-  function initParticles() {
-    var canvas = document.getElementById('bgCanvas');
-    if (!canvas) return;
-    var ctx = canvas.getContext('2d');
-    var particles = [];
-    var w, h;
-
-    function resize() {
-      w = canvas.width = window.innerWidth;
-      h = canvas.height = window.innerHeight;
-    }
-
-    function mkParticle() {
-      return {
-        x: Math.random() * w,
-        y: Math.random() * h,
-        r: Math.random() * 2.2 + 0.4,
-        vx: (Math.random() - 0.5) * 0.35,
-        vy: (Math.random() - 0.5) * 0.35,
-        hue: [180, 290, 320, 45][Math.floor(Math.random() * 4)],
-      };
-    }
-
-    resize();
-    for (var i = 0; i < 90; i += 1) particles.push(mkParticle());
-    window.addEventListener('resize', resize);
-
-    function frame() {
-      ctx.clearRect(0, 0, w, h);
-      particles.forEach(function (p) {
-        p.x += p.vx;
-        p.y += p.vy;
-        if (p.x < 0 || p.x > w) p.vx *= -1;
-        if (p.y < 0 || p.y > h) p.vy *= -1;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = 'hsla(' + p.hue + ',100%,65%,0.55)';
-        ctx.fill();
+  function bindUi() {
+    var startBtn = document.getElementById('btnStart');
+    if (startBtn) {
+      startBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        startQuiz();
       });
-      requestAnimationFrame(frame);
     }
-    frame();
+    if (el.btnNext) el.btnNext.addEventListener('click', nextStep);
+    if (el.btnBack) el.btnBack.addEventListener('click', prevStep);
+    if (el.qText) {
+      el.qText.addEventListener('input', function () {
+        state.answers.historia = el.qText.value.trim();
+        validateNext();
+      });
+    }
+    if (el.btnWhatsApp) {
+      el.btnWhatsApp.addEventListener('click', function (e) {
+        if (!state.selected.length) {
+          e.preventDefault();
+          if (el.selectedLabel) {
+            el.selectedLabel.textContent = 'Selecciona al menos un audio desbloqueado antes de continuar.';
+            el.selectedLabel.hidden = false;
+          }
+        }
+      });
+    }
   }
 
-  document.getElementById('btnStart') && document.getElementById('btnStart').addEventListener('click', startQuiz);
-  el.btnNext && el.btnNext.addEventListener('click', nextStep);
-  el.btnBack && el.btnBack.addEventListener('click', prevStep);
-  el.qText && el.qText.addEventListener('input', function () {
-    state.answers.historia = el.qText.value.trim();
-    validateNext();
-  });
-  el.btnWhatsApp && el.btnWhatsApp.addEventListener('click', function (e) {
-    if (!state.selected) {
-      e.preventDefault();
-      if (el.selectedLabel) {
-        el.selectedLabel.textContent = '⚠️ Elige uno de tus audios desbloqueados antes de continuar';
-        el.selectedLabel.hidden = false;
-      }
-    }
-  });
-
-  initParticles();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bindUi);
+  } else {
+    bindUi();
+  }
 })();
