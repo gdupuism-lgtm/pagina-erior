@@ -700,6 +700,12 @@ body::before{
 }
 .btn-buy:hover{background:rgba(201,160,96,.22);color:#e8c870}
 .ac-new{position:absolute;top:.6rem;right:.6rem;z-index:2;background:var(--gold);color:#111;font-size:.46rem;letter-spacing:.14em;text-transform:uppercase;padding:.2rem .5rem}
+.ac-badges{position:absolute;top:.6rem;right:.6rem;z-index:2;display:flex;flex-direction:column;align-items:flex-end;gap:.28rem;pointer-events:none}
+.ac-badges .ac-new{position:static}
+.ac-limited{background:linear-gradient(135deg,#c9a060,#f0d9a0);color:#1a1208;font-size:.42rem;letter-spacing:.12em;text-transform:uppercase;padding:.2rem .5rem;font-weight:700}
+.ac-soon{background:rgba(12,12,20,.82);color:rgba(240,230,210,.95);border:1px solid rgba(212,175,95,.45);font-size:.42rem;letter-spacing:.12em;text-transform:uppercase;padding:.2rem .5rem}
+.btn-buy.btn-buy-soon,.modal-buy.btn-buy-soon{opacity:.75;cursor:default;background:rgba(255,255,255,.06);border-color:rgba(212,175,95,.35);color:rgba(240,230,210,.85)}
+.modal-buy.btn-buy-soon{pointer-events:none}
 
 /* MODAL */
 .modal-bg{position:fixed;inset:0;z-index:5000;background:rgba(0,0,0,.8);backdrop-filter:blur(16px);display:flex;align-items:center;justify-content:center;padding:1.5rem;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}
@@ -711,7 +717,7 @@ body::before{
 .modal-body{padding:1.5rem 1.75rem 2rem}
 .modal-cat{font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text2);margin-bottom:.4rem}
 .modal-name{font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:300;color:var(--white);margin-bottom:.75rem}
-.modal-desc{font-size:.84rem;color:rgba(200,196,212,.6);line-height:1.7;margin-bottom:1.5rem}
+.modal-desc{font-size:.84rem;color:rgba(200,196,212,.6);line-height:1.7;margin-bottom:1.5rem;white-space:pre-line}
 .modal-buy{display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;padding:.85rem;background:rgba(201,160,96,.15);border:1px solid rgba(201,160,96,.45);color:var(--gold);font-family:'Jost',sans-serif;font-size:.75rem;letter-spacing:.16em;text-transform:uppercase;text-decoration:none;transition:all .25s;cursor:pointer}
 .modal-buy:hover{background:rgba(201,160,96,.25)}
 .modal-close{position:absolute;top:.85rem;right:.85rem;background:rgba(255,255,255,.07);border:1px solid var(--border);color:var(--text2);width:1.9rem;height:1.9rem;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.85rem;transition:all .2s;z-index:5;border-radius:50%}
@@ -3244,8 +3250,8 @@ body.has-referral-banner .cover-vip-widget:not(.is-cover-inflow){top:calc(1.2rem
   35%{transform:scale(1.08);filter:brightness(1.3);box-shadow:0 0 44px rgba(212,175,95,.45),0 0 60px rgba(200,190,175,.22);}
   100%{transform:scale(1);filter:brightness(1);}
 }
-#mjHeroBlock .btn-amor4-crystal,#mjHeroBlock .btn-icon-aura-metal{pointer-events:auto;}
-.mj-hero-btns .btn-amor4-crystal,.mj-hero-btns .btn-icon-aura-metal{width:100%;max-width:100%;}
+#mjHeroBlock .btn-amor4-crystal,#mjHeroBlock .btn-icon-aura-metal,#mjHeroBlock #btnImagine{pointer-events:auto;}
+.mj-hero-btns .btn-amor4-crystal,.mj-hero-btns .btn-icon-aura-metal,.mj-hero-btns #btnImagine{width:100%;max-width:100%;}
 .cover-mj-col .mj-hero-btns{max-width:min(100%,13.25rem);}
 .cover-promo-slides{position:relative;min-height:4.75rem;margin-bottom:.45rem;overflow:hidden}
 .cover-promo-slide{display:none;text-align:center;animation:promoSlideIn .55s cubic-bezier(.22,1,.36,1) both}
@@ -4263,53 +4269,6 @@ body::before{
         </div>
       </div>
 
-      <div class="cover-promo-countdown cover-promo-jewel promo-countdown-block promo-summer-glow" id="coverPromoJewel" onclick="openPromoModal()" role="button" tabindex="0" aria-label="Ver promociones de julio">
-        <div class="cover-promo-slides" id="coverPromoSlides">
-          <div class="cover-promo-slide active" data-promo="amorpack">
-            <div class="cover-promo-offer">
-              <span class="promo-badge-lastmonth">⏳ Último mes</span>
-              <strong class="cover-promo-title">🦋👑 Pack Despedida Amor Propio</strong>
-              <p class="cover-promo-line">Amor Magic 2.0 + Amor Propio 3.0 · ruta clásica Erior</p>
-              <p class="cover-promo-prices"><span class="promo-price-old">$2,380</span> $1,699 MXN · $96 USD · €85 EUR</p>
-            </div>
-          </div>
-          <div class="cover-promo-slide" data-promo="magic4">
-        <div class="cover-promo-offer">
-              <strong class="cover-promo-title">✨ Amor Propio Magic 4.0 — NEW</strong>
-              <p class="cover-promo-line">Lanzamiento julio · Telegram Liberar Emociones 🎁</p>
-              <p class="cover-promo-prices"><span class="promo-price-old">$1,199</span> $999 MXN · $58 USD</p>
-        </div>
-        </div>
-          <div class="cover-promo-slide" data-promo="july888">
-            <div class="cover-promo-offer">
-              <strong class="cover-promo-title">🌊 Promo de Julio</strong>
-              <p class="cover-promo-line">Tu glow up de verano · cualquier audio ☀️</p>
-              <p class="cover-promo-prices"><span class="promo-price-old">$1,199</span> $888 MXN · $49 USD</p>
-            </div>
-          </div>
-          <div class="cover-promo-slide" data-promo="summer">
-            <div class="cover-promo-offer">
-              <strong class="cover-promo-title">☀️ Summer Wonderland</strong>
-              <p class="cover-promo-line">Magic 4.0 + 2 audios + Premium + Mind Movie</p>
-              <p class="cover-promo-prices"><span class="promo-price-old">$4,444</span> $2,888 MXN 🔥</p>
-            </div>
-          </div>
-        </div>
-        <div class="cover-promo-dots" id="coverPromoDots" aria-hidden="true">
-          <button type="button" class="cover-promo-dot active" data-goto="0" aria-label="Pack Despedida Amor"></button>
-          <button type="button" class="cover-promo-dot" data-goto="1" aria-label="Promo Magic 4.0"></button>
-          <button type="button" class="cover-promo-dot" data-goto="2" aria-label="Promo julio 888"></button>
-          <button type="button" class="cover-promo-dot" data-goto="3" aria-label="Summer Pack"></button>
-        </div>
-        <span class="promo-countdown-label">⏳ Promos de julio · termina en</span>
-        <div class="promo-countdown-grid">
-          <div class="promo-countdown-unit"><span class="promo-countdown-num" data-cd="days">00</span><span>días</span></div>
-          <div class="promo-countdown-unit"><span class="promo-countdown-num" data-cd="hours">00</span><span>hrs</span></div>
-          <div class="promo-countdown-unit"><span class="promo-countdown-num" data-cd="mins">00</span><span>min</span></div>
-          <div class="promo-countdown-unit"><span class="promo-countdown-num" data-cd="secs">00</span><span>seg</span></div>
-        </div>
-        <p class="cover-promo-bonus">Toca para ver las 4 promos · pago o WhatsApp ✨</p>
-      </div>
       </div>
 
       <div id="coverVipSlot" class="cover-vip-slot is-hidden" aria-hidden="true">
@@ -4322,11 +4281,10 @@ body::before{
           <div class="cover-mj-col">
             <div id="mjHeroBlock" aria-hidden="true">
               <div class="mj-hero-btns">
-                <button type="button" class="btn-amor4-crystal" id="btnAmor4" onclick="openAmor4Payment()">
-                  <span class="btn-premium-label">✨ Amor Propio Magic 4.0</span>
-                  <span class="btn-amor4-badge">NUEVO AUDIO · $999</span>
+                <button type="button" class="btn-amor4-crystal" id="btnImagine" onclick="goToImagine()">
+                  <span class="btn-premium-label">IMAGINE</span>
+                  <span class="btn-amor4-badge">Edición limitada · Próximamente</span>
                 </button>
-                <button type="button" class="btn-icon-aura-metal" id="btnIconAura" onclick="goToIconAuraAnimated()"><span class="btn-premium-label">Icon Aura</span></button>
               </div>
               <div id="mjFloatWrap">
                 <model-viewer
@@ -5023,7 +4981,7 @@ body::before{
   </div>
 </div>
 
-<button type="button" class="promo-float-btn" id="promoFloatBtn" onclick="openPromoModal()" aria-label="Ver promociones de julio">🔥 Promos julio</button>
+<button type="button" class="promo-float-btn" id="promoFloatBtn" onclick="openPromoModal()" aria-label="Ver promociones" hidden style="display:none!important">Promos</button>
 
 <div class="chat-img-lightbox" id="chatImgLightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Vista de promoción">
   <button type="button" class="chat-img-lightbox-close" onclick="closeChatPromoLightbox()" aria-label="Cerrar">✕</button>
@@ -5811,6 +5769,21 @@ function goTo(id){
   updateCoverVipVisibility();
 }
 
+function goToImagine(){
+  goTo('catalogo');
+  curCat='todos';
+  buildCatalog();
+  setTimeout(function(){
+    var card=document.querySelector('.ac-card[data-audio-key="imagine"]');
+    if(card){
+      card.scrollIntoView({behavior:'smooth',block:'center'});
+      card.classList.add('ac-highlight');
+      setTimeout(function(){card.classList.remove('ac-highlight');},3200);
+      var aud=(lang==='en'?audiosEn:audiosEs).find(function(a){return /^IMAGINE$/i.test(a.nombre);});
+      if(aud)openModal(aud,lang==='en'?CATS_EN:CATS_ES);
+    }
+  },320);
+}
 function goToIconAuraAnimated(){
   var btn=document.getElementById('btnIconAura');
   if(!btn){goToIconAura();return;}
@@ -6234,6 +6207,7 @@ document.getElementById('mmModal').addEventListener('click',function(e){if(e.tar
 // CATALOG DATA
 // ══════════════════════════════════
 var audiosEs=[
+  {nombre:"IMAGINE",cat:"autoestima",emoji:"🌌",bg:"linear-gradient(135deg,rgba(120,90,255,.28),rgba(212,175,95,.18))",desc:"Tu imaginación no es un sueño. Es el plano original de tu realidad.\n\nTodo lo que existe en tu vida — tu dinero, tus relaciones, tu cuerpo, tu éxito — primero existió en tu mente. Primero fue imaginado.\n\nEl problema no es que no puedas tenerlo. El problema es que tu mente ha aprendido a imaginar desde el miedo, desde la carencia, desde el \"¿y si no funciona?\"\n\nIMAGINE es el nuevo audio de ERIOR CENTER diseñado para cambiar eso.\n\nMientras lo escuchas, tu subconsciente aprende a imaginar desde el resultado. Desde el ya lo tengo. Desde el ya soy esa persona.\n\nIncluye:\n• Mini script personalizado que grabas con tu propia voz — adaptado exactamente al área de tu vida que quieres expandir\n• Guía de visualización nocturna — para leer antes de dormir y que tu subconsciente trabaje toda la noche mientras descansas: tu mente crea, tu realidad obedece.",isNew:true,isLimited:true,comingSoon:true,btnTxt:"Próximamente",img:"img/catalog/imagine.jpg"},
   {nombre:"✨ Éclat",cat:"autoestima",emoji:"✨",bg:"linear-gradient(135deg,rgba(212,175,95,.18),rgba(155,109,255,.12))",desc:"Resplandor, belleza y energía elevada desde el punto cero. ¿Y si la verdadera belleza no tuviera nada que ver con lo externo? Éclat te recuerda que todo es una ilusión, y que la transformación real nace desde el estado más neutro: el punto donde no hay forma, solo posibilidad. Desde esa quietud interna, tu cuerpo, tu piel, tu rostro y tu energía comienzan a renderizarse según tus preferencias. Cada célula responde a tu decisión de ser tu versión más bella — no desde la lucha, sino desde la conciencia pura. Con este audio puedes realizar hasta cinco cambios físicos, elegidos desde tu propia conciencia. Tu cuerpo los asimila con naturalidad, como si siempre hubieran formado parte de ti. Escúchalo para activar tu avatar ideal, manifestar tu belleza más auténtica y pulir tu realidad física desde adentro hacia afuera. Con facilidad, ligereza y poder.",img:"img/catalog/eclat.jpg"},
   {nombre:"🦋 Amor Magic 2.0",cat:"autoestima",emoji:"🦋",bg:"linear-gradient(135deg,rgba(232,128,138,.18),rgba(155,109,255,.12))",desc:"Nuestro famoso audio de AMOR PROPIO. Este audio elevará tu merecimiento, validación y amor hacia ti mismo. Dejarás de buscar validación externa. Te dará un glow up increíble 🦋✨ y desarrollará poderes mentales en ti: telepatía, clarividencia y también sinestesia. Incluye mini Script para cambiar tu pasado y cambiar una situación en especial, para que al mismo tiempo de instalar tus creencias cambie tu pasado y puedas crear una realidad completamente diferente. Lo que pongas en el mini Script para cambiar el pasado se cumple muy rápido.",img:"img/catalog/amor-magic-2-0.jpg"},
   {nombre:"👑 Amor Propio Magic 3.0",cat:"autoestima",emoji:"👑",bg:"linear-gradient(135deg,rgba(232,128,138,.15),rgba(212,175,95,.12))",desc:"Nuestra última versión de AMOR PROPIO 360 grados que abarca varios temas. Especialmente hecha para que te ames como nunca y quites toda la necesidad de validación externa. Elimina la codependencia. ¿Te imaginas atraerlo todo porque ya no necesitas nada? 🍀🙌🏻💕 Además esta nueva versión cuenta con frecuencias que realzan tu belleza y juventud: mientras sanas tu interior puedes verte más joven y más guap@ que nunca. Hecho también para atraer todo el dinero que te mereces. Entre más amor propio: más dinero, más relaciones sanas, más experiencias maravillosas. ✨👑",img:"img/catalog/amor-propio-magic-3-0.jpg"},
@@ -6271,6 +6245,7 @@ var audiosEs=[
   {nombre:"✨ ICON AURA",cat:"autoestima",emoji:"✨",bg:"linear-gradient(135deg,rgba(212,175,95,.25),rgba(155,109,255,.22))",desc:"Audio especialmente diseñado y sintonizado en frecuencias elevadas que activan en ti una presencia impecable, una coherencia interna natural y un aura profundamente magnética. Cada capa sonora trabaja en perfecta armonía para alinear tu energía con tu versión más icónica: esa que entra en cualquier espacio y lo transforma sin esfuerzo, que no busca atención porque la atrae de forma automática. A medida que lo escuchas, tu campo energético se vuelve más claro, más estable y más poderoso. Tu identidad se ordena, tu señal se fortalece y tu aura comienza a irradiar seguridad, elegancia y magnetismo puro. Este audio no crea nada nuevo: revela lo que ya eres en esencia. Una presencia que impacta, una energía que se siente, una vibra que permanece. Tu mejor versión ya está aquí. Y ahora… simplemente se está expresando.",isNew:true,img:"img/catalog/icon-aura.jpg"}
 ];
 var audiosEn=[
+  {nombre:"IMAGINE",cat:"autoestima",emoji:"🌌",bg:"linear-gradient(135deg,rgba(120,90,255,.28),rgba(212,175,95,.18))",desc:"Your imagination is not a dream. It is the original blueprint of your reality.\n\nEverything in your life — your money, your relationships, your body, your success — first existed in your mind. First it was imagined.\n\nThe problem is not that you can't have it. The problem is that your mind has learned to imagine from fear, from lack, from \"what if it doesn't work?\"\n\nIMAGINE is the new ERIOR CENTER audio designed to change that.\n\nAs you listen, your subconscious learns to imagine from the result. From already having it. From already being that person.\n\nIncludes:\n• Personalized mini script you record with your own voice — adapted exactly to the area of your life you want to expand\n• Nighttime visualization guide — to read before sleep so your subconscious works all night while you rest: your mind creates, your reality obeys.",isNew:true,isLimited:true,comingSoon:true,btnTxt:"Coming soon",img:"img/catalog/imagine.jpg"},
   {nombre:"✨ Éclat",cat:"autoestima",emoji:"✨",bg:"linear-gradient(135deg,rgba(212,175,95,.18),rgba(155,109,255,.12))",desc:"Radiance, beauty and elevated energy from ground zero. What if true beauty had nothing to do with the external? Éclat reminds you that everything is an illusion, and that real transformation is born from the most neutral state: the point where there is no form, only possibility. From that inner stillness, your body, your skin, your face and your energy begin to render according to your preferences. Each cell responds to your decision to be your most beautiful version — not through struggle, but through pure awareness. With this audio you can make up to five physical changes, chosen from your own consciousness. Your body assimilates them naturally, as if they had always been part of you. Listen to it to activate your ideal avatar, manifest your most authentic beauty and polish your physical reality from the inside out. With ease, lightness and power.",img:"img/catalog/eclat-2.jpg"},
   {nombre:"🦋 Amor Magic 2.0",cat:"autoestima",emoji:"🦋",bg:"linear-gradient(135deg,rgba(232,128,138,.18),rgba(155,109,255,.12))",desc:"Our famous SELF-LOVE audio. This audio will elevate your worthiness, validation and love for yourself. You will stop seeking external validation. It gives you an incredible glow up 🦋✨ and develops mental powers in you: telepathy, clairvoyance and synesthesia. Includes a mini script to change your past and transform a specific situation, so that at the same time the beliefs are installed your past changes and you can create a completely different reality. What you put in the mini script for changing the past manifests very quickly.",img:"img/catalog/amor-magic-2-0-2.jpg"},
   {nombre:"👑 Amor Propio Magic 3.0",cat:"autoestima",emoji:"👑",bg:"linear-gradient(135deg,rgba(232,128,138,.15),rgba(212,175,95,.12))",desc:"Our latest 360° SELF-LOVE version covering multiple areas. Specially made so you love yourself like never before and remove all need for external validation. Eliminates codependency. Imagine attracting everything because you no longer need anything? 🍀🙌🏻💕 This new version also includes frequencies that enhance your beauty and youth: while you heal your inner world you can look younger and more beautiful than ever. Also designed to attract all the money you deserve. The more self-love: the more money, the healthier relationships, the more wonderful experiences. ✨👑",img:"img/catalog/amor-propio-magic-3-0-2.jpg"},
@@ -6348,21 +6323,32 @@ function buildCatalog(){
     d.className='ac-card';
     if(/ICON AURA/i.test(a.nombre))d.dataset.audioKey='icon-aura';
     if(/ATTRACTION/i.test(a.nombre))d.dataset.audioKey='attraction';
+    if(/^IMAGINE$/i.test(a.nombre))d.dataset.audioKey='imagine';
     d.addEventListener('click',function(e){if(!e.target.closest('a,.btn-buy'))openModal(a,cats);});
     var imgAlt=escapeHtmlAttr(audioSeoAlt(a,cats));
     var imgH=a.img
       ?'<img src="'+a.img+'" alt="'+imgAlt+'" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block">'
       :'<div class="ac-img-emoji" role="img" aria-label="'+imgAlt+'">'+a.emoji+'</div>';
-    d.innerHTML=(a.isNew?'<div class="ac-new">NEW</div>':'')+
+    var badges='';
+    if(a.isLimited)badges+='<div class="ac-limited">'+(lang==='es'?'Edición limitada':'Limited edition')+'</div>';
+    if(a.comingSoon)badges+='<div class="ac-soon">'+(lang==='es'?'Próximamente':'Coming soon')+'</div>';
+    else if(a.isNew)badges+='<div class="ac-new">NEW</div>';
+    d.innerHTML=(badges?'<div class="ac-badges">'+badges+'</div>':'')+
       '<div class="ac-img">'+imgH+'<div class="ac-img-overlay"></div><div class="ac-cat-badge">'+(cats[a.cat]||a.cat)+'</div></div>'+
       '<div class="ac-body"><div class="ac-name">'+a.nombre+'</div><div class="ac-desc">'+a.desc+'</div>'+
       '<div class="ac-footer"></div></div>';
     var footer=d.querySelector('.ac-footer');
     var buyBtn=document.createElement('button');
     buyBtn.type='button';
-    buyBtn.className='btn-buy';
-    buyBtn.textContent=(a.btnTxt||(lang==='es'?'Adquirir':'Get it'))+' →';
-    buyBtn.onclick=function(ev){ev.stopPropagation();openPaymentModal(a.nombre);};
+    buyBtn.className='btn-buy'+(a.comingSoon?' btn-buy-soon':'');
+    if(a.comingSoon){
+      buyBtn.textContent=a.btnTxt||(lang==='es'?'Próximamente':'Coming soon');
+      buyBtn.setAttribute('aria-disabled','true');
+      buyBtn.onclick=function(ev){ev.stopPropagation();openModal(a,cats);};
+    }else{
+      buyBtn.textContent=(a.btnTxt||(lang==='es'?'Adquirir':'Get it'))+' →';
+      buyBtn.onclick=function(ev){ev.stopPropagation();openPaymentModal(a.nombre);};
+    }
     footer.appendChild(buyBtn);
     grid.appendChild(d);
   });
@@ -6625,6 +6611,7 @@ function openPaymentModal(productName){
 }
 
 function openPaymentFromModal(){
+  if(currentModalAudio&&currentModalAudio.comingSoon)return;
   var name=document.getElementById('modalName').textContent;
   if(name)openPaymentModal(name);
 }
@@ -6647,7 +6634,16 @@ function openModal(a,cats){
   document.getElementById('modalCat').textContent=cats[a.cat]||a.cat;
   document.getElementById('modalName').textContent=a.nombre;
   document.getElementById('modalDesc').textContent=a.desc;
-  document.getElementById('modalBuy').textContent=(a.btnTxt||(lang==='es'?'Adquirir':'Get it'))+' →';
+  var buyEl=document.getElementById('modalBuy');
+  if(a.comingSoon){
+    buyEl.textContent=a.btnTxt||(lang==='es'?'Próximamente':'Coming soon');
+    buyEl.classList.add('btn-buy-soon');
+    buyEl.setAttribute('aria-disabled','true');
+  }else{
+    buyEl.textContent=(a.btnTxt||(lang==='es'?'Adquirir':'Get it'))+' →';
+    buyEl.classList.remove('btn-buy-soon');
+    buyEl.removeAttribute('aria-disabled');
+  }
   var catsModal=lang==='es'?CATS_ES:CATS_EN;
   var modalAlt=escapeHtmlAttr(audioSeoAlt(a,catsModal));
   document.getElementById('modalImg').innerHTML=a.img
