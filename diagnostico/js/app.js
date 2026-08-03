@@ -585,7 +585,7 @@
       audioLine + '\n' +
       'Área: ' + area + '\n' +
       'Situación:\n"' + story + '"\n\n' +
-      '¿Me orientas con la promo disponible?';
+      '¿Me orientas para elegir el audio ideal?';
     return encodeURIComponent(msg);
   }
 

@@ -41,4 +41,4 @@ window.ERIOR_CAT_LABELS = {
 };
 
 window.ERIOR_WHATSAPP = '5214432311761';
-window.ERIOR_PROMO_PRICE = '$888 MXN promo julio · $1,190 regular';
+window.ERIOR_PROMO_PRICE = '$1,190 MXN / $69 USD / €60 EUR';

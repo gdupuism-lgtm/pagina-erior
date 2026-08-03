@@ -4624,7 +4624,7 @@ body::before{
           <button type="button" class="faq-q" aria-expanded="false">¿Cómo sé cuál audio es para mí?<span class="faq-q-icon">+</span></button>
           <div class="faq-a"><div class="faq-a-inner">
             <p>Habla con Alicia IA en esta misma página: te hace preguntas y te recomienda el audio exacto según lo que vives hoy. También puedes explorar el catálogo por categoría: amor, dinero, autoestima, salud y más.</p>
-            <p>Si dudas entre dos audios, Alicia te recomienda siempre 2 opciones personalizadas. En julio hay 4 promos: Pack Despedida Amor 2.0+3.0 ($1,699), Magic 4.0 a $999, cualquier audio a $888, o el Summer Wonderland Pack ($2,888). Pregúntale a Alicia cuál te conviene más.</p>
+            <p>Si dudas entre dos audios, Alicia te recomienda siempre 2 opciones personalizadas a precio regular ($1,190 MXN / $69 USD / €60 EUR por audio). Pregúntale a Alicia cuál te conviene más.</p>
             <p>¿Quieres que Alicia te guíe ahora mismo?</p>
             <button type="button" class="faq-cta-btn" onclick="goTo('alicia')">Hablar con Alicia ✦</button>
           </div></div>
@@ -4895,86 +4895,35 @@ body::before{
   </div>
   <div class="pay-promo-popup" id="payPromoPopup" aria-hidden="true" role="dialog" aria-labelledby="payPromoTitle">
     <button type="button" class="pay-promo-close" id="payPromoClose" aria-label="Cerrar">✕</button>
-    <div class="pay-promo-kicker" id="payPromoKicker">🎉 ¡Aprovecha nuestra promoción especial!</div>
-    <div class="pay-promo-title" id="payPromoTitle">¿Quieres una recomendación personalizada? Escríbenos y te ayudamos a elegir el audio perfecto para ti ✨</div>
+    <div class="pay-promo-kicker" id="payPromoKicker">¿Necesitas ayuda para elegir?</div>
+    <div class="pay-promo-title" id="payPromoTitle">Escríbenos y te ayudamos a elegir el audio perfecto para ti ✨</div>
     <a href="#" class="pay-promo-wa" id="payPromoWaBtn" target="_blank" rel="noopener noreferrer">Escribir al equipo</a>
   </div>
 </div>
 
-<!-- PROMOS MODAL — Julio 2026 -->
+<!-- PRECIOS — sin promo activa -->
 <div class="modal-bg" id="promoModal" aria-hidden="true">
   <div class="modal-box promo-modal-box">
     <div class="promo-modal-inner">
       <div class="promo-modal-head">
         <div>
-          <div class="promo-modal-title">☀️ Promos de Julio ERIOR</div>
-          <p class="promo-modal-sub">Elige tu aventura · pago seguro o WhatsApp con Pauline</p>
+          <div class="promo-modal-title">Precios ERIOR</div>
+          <p class="promo-modal-sub">Precio regular · pago seguro o WhatsApp con Pauline</p>
         </div>
         <button type="button" class="modal-close" onclick="closePromoModal()" aria-label="Cerrar">✕</button>
       </div>
-      <div class="promo-countdown-block" id="modalPromoCountdown">
-        <span class="promo-countdown-label">⏳ Solo durante julio · termina en</span>
-        <div class="promo-countdown-grid">
-          <div class="promo-countdown-unit"><span class="promo-countdown-num" data-cd="days">00</span><span>días</span></div>
-          <div class="promo-countdown-unit"><span class="promo-countdown-num" data-cd="hours">00</span><span>hrs</span></div>
-          <div class="promo-countdown-unit"><span class="promo-countdown-num" data-cd="mins">00</span><span>min</span></div>
-          <div class="promo-countdown-unit"><span class="promo-countdown-num" data-cd="secs">00</span><span>seg</span></div>
-        </div>
-      </div>
-      <div class="promo-tabs promo-tabs-4" role="tablist">
-        <button type="button" class="promo-tab active" data-promo-tab="amorpack" onclick="switchPromoTab('amorpack')">🦋 Pack Amor</button>
-        <button type="button" class="promo-tab" data-promo-tab="magic4" onclick="switchPromoTab('magic4')">✨ Magic 4.0</button>
-        <button type="button" class="promo-tab" data-promo-tab="july888" onclick="switchPromoTab('july888')">🌊 Julio $888</button>
-        <button type="button" class="promo-tab" data-promo-tab="summer" onclick="switchPromoTab('summer')">☀️ Summer Pack</button>
-      </div>
-      <div class="promo-panel active" id="promoPanelAmorpack" role="tabpanel">
-        <p class="promo-dates">⏳ ÚLTIMO MES — Pack Despedida Amor Propio 🦋👑</p>
-        <p class="promo-desc">Julio 2026 es el <strong>último mes</strong> para llevarte la ruta clásica de amor propio de Erior. Después de agosto, <strong>Amor Magic 2.0</strong> y <strong>Amor Propio Magic 3.0</strong> ya no se venden por separado.</p>
+      <div class="promo-panel active" id="promoPanelRegular" role="tabpanel">
+        <p class="promo-dates">Precio regular vigente</p>
+        <p class="promo-desc">Ahora no hay promociones activas. Cada audio del catálogo tiene su precio regular. Incluye Telegram privado con tu compra.</p>
+        <div class="promo-prices"><span class="promo-price-new">$1,190 MXN · $69 USD · €60 EUR</span></div>
         <ul class="promo-benefit-list">
-          <li>🦋 <strong>Amor Magic 2.0</strong> — glow up, merecimiento, telepatía/clarividencia + mini Script para cambiar tu pasado (se cumple muy rápido)</li>
-          <li>👑 <strong>Amor Propio Magic 3.0</strong> — amor propio 360°, cero codependencia, frecuencias belleza/juventud + abundancia</li>
-          <li>🎁 Incluye Telegram privado con tu compra</li>
-          <li>💰 Pack 2 audios: <span class="promo-price-old">$2,380 MXN</span> → <strong>$1,699 MXN</strong> / $96 USD / €85 EUR 🔥</li>
-        </ul>
-        <p class="promo-recos">Ideal si quieres la ruta mes 1 → mes 2 antes de que desaparezcan del catálogo.</p>
-        <div class="promo-cta-row">
-          <button type="button" class="promo-cta-pay" onclick="openPromoPay('amorpack')">💳 Quiero el pack $1,699</button>
-          <a class="promo-cta-wa" href="#" onclick="event.preventDefault();window.open(promoWaUrl('amorpack'),'_blank','noopener');closePromoModal();">💬 WhatsApp: Pack Despedida Amor</a>
-        </div>
-      </div>
-      <div class="promo-panel" id="promoPanelMagic4" role="tabpanel">
-        <p class="promo-dates">✨ ¡NUEVO! Amor Propio Magic 4.0</p>
-        <p class="promo-desc">💖 Conviértete en el/la mejor manifestando, como el 2.0. 🌸 Libera codependencia y validación, como el 3.0. 🫶 Sana dolor y trauma en el cuerpo para el siguiente nivel de tu videojuego. ⚠️ CUIDADO: merecimiento por las nubes 🚀</p>
-        <ul class="promo-benefit-list">
-          <li>🎁 Incluye Telegram exclusivo Liberar Emociones</li>
-          <li>💰 Precio lanzamiento: <strong>$999 MXN</strong> / $58 USD <span class="promo-price-old">$1,199</span></li>
+          <li>🎧 Audio personalizado Erior</li>
+          <li>🎁 Telegram privado incluido</li>
+          <li>💜 Emergency 999 (paquete 3 audios): <strong>$3,333 MXN</strong></li>
         </ul>
         <div class="promo-cta-row">
-          <button type="button" class="promo-cta-pay" onclick="openPromoPay('magic4')">💳 Quiero pagar ahora</button>
-          <a class="promo-cta-wa" href="#" onclick="event.preventDefault();window.open(promoWaUrl('magic4'),'_blank','noopener');closePromoModal();">💬 WhatsApp: quiero Magic 4.0</a>
-      </div>
-        </div>
-      <div class="promo-panel" id="promoPanelJuly888" role="tabpanel">
-        <p class="promo-dates">🌊✨ ¡PROMOCIÓN DE JULIO! ✨🌊</p>
-        <p class="promo-desc">☀️ Este verano, regálate tu glow up. 🛸 Cualquier audio del catálogo por solo $888 MXN ($49 USD) en lugar de $1,199. 🎁 ¡Incluye Telegram privado! ✨ Momento perfecto para empezar tu transformación.</p>
-        <div class="promo-prices"><span class="promo-price-old">$1,199 MXN</span><span class="promo-price-new">$888 MXN · $49 USD</span></div>
-        <div class="promo-cta-row">
-          <button type="button" class="promo-cta-pay" onclick="openPromoPay('july888')">💳 Quiero pagar ahora</button>
-          <a class="promo-cta-wa" href="#" onclick="event.preventDefault();window.open(promoWaUrl('july888'),'_blank','noopener');closePromoModal();">💬 WhatsApp: promo julio $888</a>
-        </div>
-      </div>
-      <div class="promo-panel" id="promoPanelSummer" role="tabpanel">
-        <p class="promo-dates">☀️🌊 Promo Summer Wonderland 🌊☀️</p>
-        <p class="promo-desc">Amor Propio Magic 4.0 + 2 audios más de tu elección. El pack más completo del verano:</p>
-        <ul class="promo-benefit-list">
-          <li>🎁 Telegram privado + Telegram Liberar Emociones</li>
-          <li>👑 1 mes Alicia Premium (tu coach IA)</li>
-          <li>📱💻 1 mes Mind Movie celular y computadora</li>
-          <li>💰 Valor $4,444 MXN → <strong>$2,888 MXN</strong> / $168 USD 🔥</li>
-        </ul>
-        <div class="promo-cta-row">
-          <button type="button" class="promo-cta-pay" onclick="openPromoPay('summer')">💳 Quiero pagar ahora</button>
-          <a class="promo-cta-wa" href="#" onclick="event.preventDefault();window.open(promoWaUrl('summer'),'_blank','noopener');closePromoModal();">💬 WhatsApp: Summer Wonderland</a>
+          <button type="button" class="promo-cta-pay" onclick="closePromoModal();goTo('catalogo');">Ver catálogo</button>
+          <a class="promo-cta-wa" href="https://wa.me/5214432311761?text=Hola!%20Me%20interesa%20adquirir%20un%20audio%20Erior" target="_blank" rel="noopener" onclick="closePromoModal();">💬 WhatsApp con Pauline</a>
         </div>
       </div>
     </div>
@@ -5304,15 +5253,12 @@ function initCoverPromoRotate(){
   if(window._coverPromoRotateIv)clearInterval(window._coverPromoRotateIv);
   window._coverPromoRotateIv=setInterval(rotateCoverPromoSlide,5500);
 }
-function openPromoModal(tab){
+function openPromoModal(){
   var m=document.getElementById('promoModal');
   if(!m)return;
-  var id=tab||COVER_PROMO_IDS[_coverPromoSlide]||'magic4';
-  switchPromoTab(id);
   m.classList.add('open');
   m.setAttribute('aria-hidden','false');
   if(typeof lockPageScroll==='function')lockPageScroll();
-  updatePromoCountdowns();
 }
 function closePromoModal(){
   var m=document.getElementById('promoModal');
@@ -5323,39 +5269,16 @@ function closePromoModal(){
     if(typeof unlockPageScroll==='function')unlockPageScroll();
   }
 }
-function switchPromoTab(id){
-  document.querySelectorAll('.promo-tab').forEach(function(t){
-    t.classList.toggle('active',t.getAttribute('data-promo-tab')===id);
-  });
-  var map={amorpack:'promoPanelAmorpack',magic4:'promoPanelMagic4',july888:'promoPanelJuly888',summer:'promoPanelSummer'};
-  Object.keys(map).forEach(function(k){
-    var el=document.getElementById(map[k]);
-    if(el)el.classList.toggle('active',k===id);
-  });
-  var idx=COVER_PROMO_IDS.indexOf(id);
-  if(idx>=0&&idx!==_coverPromoSlide)setCoverPromoSlide(idx,false);
+function switchPromoTab(){/* precios regulares — sin tabs de promo */}
+function promoWaUrl(){
+  return payWaUrl('Hola! Me interesa adquirir un audio Erior a precio regular. ¿Me orientan?');
 }
-function promoWaUrl(tab){
-  var msgs={
-    amorpack:'Hola! Quiero el Pack Despedida Amor Propio 🦋👑 (Amor Magic 2.0 + Amor Propio 3.0 — $1,699 MXN — último mes)',
-    magic4:'Hola! Quiero mi audio Amor Propio Magic 4.0 ✨ (promo lanzamiento $999 MXN)',
-    july888:'Hola! Quiero la Promo de Julio 🌊 — un audio a $888 MXN',
-    summer:'Hola! Quiero la Promo Summer Wonderland ☀️ (Magic 4.0 + 2 audios — $2,888 MXN)'
-  };
-  return payWaUrl(msgs[tab]||msgs.amorpack);
-}
-function openPromoPay(tab){
+function openPromoPay(){
   closePromoModal();
-  var map={
-    amorpack:'🦋👑 Pack Despedida Amor Propio — 2.0 + 3.0',
-    magic4:'💖 Amor Propio Magic 4.0 — Lanzamiento julio',
-    july888:'🌊 Promo Julio — Audio a tu elección',
-    summer:'☀️ Summer Wonderland Pack'
-  };
-  openPaymentModal(map[tab]||map.magic4);
+  openPaymentModal('Audio Erior');
 }
 function openAmor4Payment(){
-  openPromoModal('magic4');
+  openPaymentModal('💖 Amor Propio Magic 4.0');
 }
 (function(){
   var pm=document.getElementById('promoModal');
@@ -6240,7 +6163,7 @@ var audiosEs=[
   {nombre:"👁️ MENTAL GLOW UP",cat:"autoestima",emoji:"👁️",bg:"linear-gradient(135deg,rgba(155,109,255,.28),rgba(212,175,95,.15))",desc:"Reprograma tu mente como si actualizaras tu sistema interno. Activa una nueva personalidad: más segur@, extrovertid@, enfocad@ y magnétic@. Convierte cualquier rasgo — TDA, autismo o tu forma única de ser — en tu mayor ventaja. Tu mente evoluciona, tu identidad se expande. Incluye mini script para optimizar tu autoimagen y proyectar tu versión más poderosa. No es mejora… es mutación. 🚀 Cambia de personaje.",isNew:true,img:"img/catalog/mental-glow-up.jpg"},
   {nombre:"🎠 ERIOR KIDS",cat:"autoestima",emoji:"🎠",bg:"linear-gradient(135deg,rgba(125,184,154,.22),rgba(232,128,138,.15))",desc:"Audio diseñado para niñ@s, creado para fortalecer su autoconcepto, amor propio, neutralidad y seguridad interna. A través de una energía suave, mágica y protectora, les permite desde pequeñ@s desarrollar una base sólida de confianza, bienestar emocional y conexión consigo mism@s. Este audio abre el espacio para que crezcan sintiéndose segur@s, libres y en armonía, cultivando de forma natural la abundancia, el desapego, la salud y el amor propio como su estado normal. 🎠✨",img:"img/catalog/erior-kids.jpg"},
   {nombre:"🎞️ MIND MOVIE",cat:"extras",emoji:"🎞️",bg:"linear-gradient(135deg,rgba(212,175,95,.22),rgba(155,109,255,.15))",desc:"Tu película personalizada para visualizar y reprogramar tu inconsciente. Una experiencia visual inmersiva creada con imágenes, afirmaciones y escenas diseñadas para ayudarte a entrar en la energía de la realidad que deseas manifestar. ¿Sabías que el inconsciente se programa muchísimo más rápido a través de imágenes? Tu mente absorbe constantemente todo lo que ve, y por eso visualizar de manera repetitiva puede ayudarte a normalizar, integrar y acercarte a la versión de vida que deseas experimentar. Si quieres manifestar algo más rápido, puedes complementar tus audios con un MIND MOVIE personalizado. Puedes usarlo desde tu teléfono o computadora mientras haces scroll, trabajas, descansas o simplemente lo dejas reproduciéndose en segundo plano. Puedes rentar la app y crear tu propia película visual o, si lo prefieres, nosotros la creamos completamente para ti.",link:"https://wa.me/5214432311761?text=Hola!%20Quiero%20acceso%20a%20Mind%20Movie%20%F0%9F%8E%AC",btnTxt:"Acceder",img:"img/catalog/mind-movie.jpg"},
-  {nombre:"💜 Telegram Liberar Emociones",cat:"extras",emoji:"💜",bg:"linear-gradient(135deg,rgba(155,109,255,.25),rgba(212,175,95,.2))",desc:"Telegram exclusivo de Liberar Emociones ✨ — donde aprenderás a avanzar más rápido en el juego a través de tu cuerpo. Técnicas somáticas, liberación emocional profunda y guía especial con Pauline para integrar el amor propio desde el cuerpo, no solo desde la mente. Incluido al adquirir Amor Propio Magic 4.0 — no se vende por separado. Con la promo de lanzamiento julio recibes el audio Magic 4.0 + acceso a este Telegram por $999 MXN / $58 USD / €51 EUR.",isNew:true,btnTxt:"Quiero Magic 4.0",img:"img/catalog/telegram-liberar-emociones.jpg"},
+  {nombre:"💜 Telegram Liberar Emociones",cat:"extras",emoji:"💜",bg:"linear-gradient(135deg,rgba(155,109,255,.25),rgba(212,175,95,.2))",desc:"Telegram exclusivo de Liberar Emociones ✨ — donde aprenderás a avanzar más rápido en el juego a través de tu cuerpo. Técnicas somáticas, liberación emocional profunda y guía especial con Pauline para integrar el amor propio desde el cuerpo, no solo desde la mente. Incluido al adquirir Amor Propio Magic 4.0 — no se vende por separado.",isNew:true,btnTxt:"Quiero Magic 4.0",img:"img/catalog/telegram-liberar-emociones.jpg"},
   {nombre:"📱 Telegram Privado",cat:"extras",emoji:"📱",bg:"linear-gradient(135deg,rgba(41,168,224,.15),rgba(155,109,255,.12))",desc:"¿Quieres más orientación en tu proceso de despertar y expansión? Te invitamos a unirte a nuestro Telegram privado, un espacio creado para seguir profundizando junto a Pauline She Is Magique. Allí compartimos consejos más profundos, reflexiones, guía energética, respuestas a dudas y contenido especial para acompañarte en tu proceso de transformación y manifestación. Es un espacio íntimo y expansivo donde puedes sentirte acompañada, hacer preguntas y conectar con personas que también están viviendo este camino. La suscripción es mensual: $888 MXN / $52 USD / €45 EUR. También incluido al comprar 1 o más audios Erior.",link:"https://wa.me/c/5214432311761",btnTxt:"Unirme",img:"img/catalog/telegram-privado.jpg"},
   {nombre:"✨ ICON AURA",cat:"autoestima",emoji:"✨",bg:"linear-gradient(135deg,rgba(212,175,95,.25),rgba(155,109,255,.22))",desc:"Audio especialmente diseñado y sintonizado en frecuencias elevadas que activan en ti una presencia impecable, una coherencia interna natural y un aura profundamente magnética. Cada capa sonora trabaja en perfecta armonía para alinear tu energía con tu versión más icónica: esa que entra en cualquier espacio y lo transforma sin esfuerzo, que no busca atención porque la atrae de forma automática. A medida que lo escuchas, tu campo energético se vuelve más claro, más estable y más poderoso. Tu identidad se ordena, tu señal se fortalece y tu aura comienza a irradiar seguridad, elegancia y magnetismo puro. Este audio no crea nada nuevo: revela lo que ya eres en esencia. Una presencia que impacta, una energía que se siente, una vibra que permanece. Tu mejor versión ya está aquí. Y ahora… simplemente se está expresando.",isNew:true,img:"img/catalog/icon-aura.jpg"}
 ];
@@ -6280,7 +6203,7 @@ var audiosEn=[
   {nombre:"🎞️ MIND MOVIE",cat:"extras",emoji:"🎞️",bg:"linear-gradient(135deg,rgba(212,175,95,.22),rgba(155,109,255,.15))",desc:"Tu película personalizada para visualizar y reprogramar tu inconsciente. Una experiencia visual inmersiva creada con imágenes, afirmaciones y escenas diseñadas para ayudarte a entrar en la energía de la realidad que deseas manifestar. ¿Sabías que el inconsciente se programa muchísimo más rápido a través de imágenes? Tu mente absorbe constantemente todo lo que ve, y por eso visualizar de manera repetitiva puede ayudarte a normalizar, integrar y acercarte a la versión de vida que deseas experimentar. Si quieres manifestar algo más rápido, puedes complementar tus audios con un MIND MOVIE personalizado. Puedes usarlo desde tu teléfono o computadora mientras haces scroll, trabajas, descansas o simplemente lo dejas reproduciéndose en segundo plano. Puedes rentar la app y crear tu propia película visual o, si lo prefieres, nosotros la creamos completamente para ti.",link:"https://wa.me/5214432311761?text=Hola!%20Quiero%20acceso%20a%20Mind%20Movie%20%F0%9F%8E%AC",btnTxt:"Acceder →",img:"img/catalog/mind-movie-2.jpg"},
   {nombre:"📱 Telegram Privado",cat:"extras",emoji:"📱",bg:"linear-gradient(135deg,rgba(41,168,224,.15),rgba(155,109,255,.12))",desc:"¿Quieres más orientación en tu proceso de despertar y expansión? Te invitamos a unirte a nuestro Telegram privado, un espacio creado para seguir profundizando junto a Pauline She Is Magique. Allí compartimos consejos más profundos, reflexiones, guía energética, respuestas a dudas y contenido especial para acompañarte en tu proceso de transformación y manifestación. Es un espacio íntimo y expansivo donde puedes sentirte acompañada, hacer preguntas y conectar con personas que también están viviendo este camino. La suscripción es mensual: $888 MXN / $52 USD / €45 EUR. También incluido al comprar 1 o más audios Erior.",link:"https://wa.me/c/5214432311761",btnTxt:"Unirme →",img:"img/catalog/telegram-privado-2.jpg"},
   {nombre:"🎞️ MIND MOVIE",cat:"extras",emoji:"🎞️",bg:"linear-gradient(135deg,rgba(212,175,95,.22),rgba(155,109,255,.15))",desc:"Your personalized movie to visualize and reprogram your subconscious. An immersive visual experience created with images, affirmations and scenes designed to help you step into the energy of the reality you wish to manifest. Your mind constantly absorbs everything it sees — repetitive visualization helps normalize, integrate and draw you closer to the version of life you desire. Complement your audios with a personalized MIND MOVIE. Use it from your phone or computer while scrolling, working, resting or simply leave it playing in the background.",link:"https://wa.me/5214432311761?text=Hola!%20Quiero%20acceso%20a%20Mind%20Movie%20%F0%9F%8E%AC",btnTxt:"Get access",img:"img/catalog/mind-movie-3.jpg"},
-  {nombre:"💜 Release Emotions Telegram",cat:"extras",emoji:"💜",bg:"linear-gradient(135deg,rgba(155,109,255,.25),rgba(212,175,95,.2))",desc:"Exclusive Release Emotions Telegram ✨ — where you'll learn to advance faster in your video game through your body. Somatic techniques, deep emotional release and special guidance with Pauline to integrate self-love from the body, not just the mind. Included when you purchase Amor Propio Magic 4.0 — not sold separately. With the July launch promo you get Magic 4.0 + access to this Telegram for $999 MXN / $58 USD / €51 EUR.",isNew:true,btnTxt:"Get Magic 4.0",img:"img/catalog/telegram-release-emotions.jpg"},
+  {nombre:"💜 Release Emotions Telegram",cat:"extras",emoji:"💜",bg:"linear-gradient(135deg,rgba(155,109,255,.25),rgba(212,175,95,.2))",desc:"Exclusive Release Emotions Telegram ✨ — where you'll learn to advance faster in your video game through your body. Somatic techniques, deep emotional release and special guidance with Pauline to integrate self-love from the body, not just the mind. Included when you purchase Amor Propio Magic 4.0 — not sold separately.",isNew:true,btnTxt:"Get Magic 4.0",img:"img/catalog/telegram-release-emotions.jpg"},
   {nombre:"📱 Private Telegram",cat:"extras",emoji:"📱",bg:"linear-gradient(135deg,rgba(41,168,224,.15),rgba(155,109,255,.12))",desc:"Want more guidance on your awakening and expansion journey? Join our private Telegram — a space created to deepen the process alongside Pauline She Is Magique. We share deeper insights, reflections, energetic guidance, answers to your questions and special content to support your transformation. An intimate, expansive space to feel accompanied and connect with others on the same path. Monthly subscription: $888 MXN / $52 USD / €45 EUR. Also included when you purchase one or more Erior audios.",link:"https://wa.me/c/5214432311761",btnTxt:"Join",img:"img/catalog/private-telegram.jpg"},
   {nombre:"✨ ICON AURA",cat:"autoestima",emoji:"✨",bg:"linear-gradient(135deg,rgba(212,175,95,.25),rgba(155,109,255,.22))",desc:"Audio specially designed and tuned to elevated frequencies that activate in you an impeccable presence, a natural inner coherence and a deeply magnetic aura. Each sound layer works in perfect harmony to align your energy with your most iconic version: the one who walks into any space and transforms it effortlessly, who doesn't seek attention because they attract it automatically. As you listen, your energy field becomes clearer, more stable and more powerful. Your identity organizes itself, your signal strengthens and your aura begins to radiate confidence, elegance and pure magnetism. This audio creates nothing new: it reveals what you already are in essence. A presence that impacts, an energy that is felt, a vibe that stays. Your best version is already here. And now… it's simply expressing itself.",isNew:true,img:"img/catalog/icon-aura-2.jpg"}
 ];
@@ -6385,7 +6308,7 @@ function unlockPageScroll(){
 var payCurrentMethod='oxxo';
 var payCurrentProduct='';
 var PAY_WHATSAPP='5214432311761';
-var WA_PROMO_MSG='Hola! Me interesa adquirir un audio, ¿tienen alguna promoción disponible?';
+var WA_PROMO_MSG='Hola! Me interesa adquirir un audio Erior. ¿Me orientan para elegir el ideal?';
 var PAY_FOOTER_ES='Realiza el pago, manda el comprobante a eriorcenter@gmail.com indicando en el asunto el programa elegido y tu Instagram. Te enviaremos una forma digital para personalizar tu audio binaural y lo recibirás por mail con PDF de instrucciones.';
 var PAY_FOOTER_EN='Complete your payment and send the receipt to eriorcenter@gmail.com with the program name and your Instagram in the subject line. We will send you a digital form to personalize your binaural audio and deliver it by email with a PDF guide.';
 var PAY_METHODS=[
@@ -6554,13 +6477,9 @@ function dismissPayPromoPopup(){
 
 function getPayModalPrice(productName){
   var n=String(productName||'').toLowerCase().replace(/🆘|💖|🌊|☀️/g,'').trim();
-  if(/summer wonderland|wonderland pack|2888/.test(n))return '$2,888 MXN / $168 USD / €146 EUR';
-  if(/pack despedida|despedida amor|2\.0 \+ 3\.0|amor magic 2\.0 \+ amor propio|1699/.test(n))return '$1,699 MXN / $96 USD / €85 EUR';
-  if(/liberar emociones|release emotions telegram/.test(n))return '$999 MXN / $58 USD / €51 EUR';
-  if(/magic 4|amor propio magic 4|4\.0.*lanzamiento|lanzamiento julio/.test(n))return '$999 MXN / $58 USD / €51 EUR';
-  if(/promo julio|888|glow up/.test(n)&&!/2888|4444|999|magic 4|lanzamiento/.test(n))return '$888 MXN / $49 USD / €43 EUR';
   if(/emergency\s*999|emergency999|emergency 999/.test(n))return '$3,333 MXN / $194 USD / €168 EUR';
-  if(/telegram|telegram privado|private telegram/.test(n))return '$888 MXN / $52 USD / €45 EUR';
+  if(/telegram|telegram privado|private telegram/.test(n)&&!/liberar emociones|release emotions/.test(n))return '$888 MXN / $52 USD / €45 EUR';
+  if(/liberar emociones|release emotions telegram/.test(n))return '$1,190 MXN / $69 USD / €60 EUR';
   return '$1,190 MXN / $69 USD / €60 EUR';
 }
 
@@ -7935,26 +7854,28 @@ function isEmergency999Context(txt){
   if(typeof aliciaClient!=='undefined'&&aliciaClient.ultimoAudio&&/emergency/i.test(aliciaClient.ultimoAudio))return true;
   return false;
 }
-function fixJulyDualAudioPricing(reply){
+function stripExpiredJulyPromoPrices(reply){
   var r=String(reply||'');
-  var hasMagic4=/amor propio magic 4|magic 4\.0|magic 4\. 0/i.test(r);
-  var hasSecondAudio=/fit wave|vitamind|booster|wonderland|select|identity|erior love|attraction|master mind|lucky|money tech|eclat/i.test(r);
-  var has999=/999\s*mxn|\$999|\$58\s*usd|58\s*usd/i.test(r);
-  var has1887=/1[,.]?887|1887/i.test(r);
-  if(!hasMagic4||!hasSecondAudio||has999||has1887)return r;
-  if(!/\$?\s*888|888\s*mxn|\$49\s*usd/i.test(r))return r;
-  return r.replace(
-    /(\$888\s*MXN[^.\n]*?(?:\/\s*\$49\s*USD)?[^.\n]*?(?:\+?\s*Telegram[^.\n]*)?)(\.|$)/i,
-    'Amor Propio Magic 4.0: $999 MXN / $58 USD + Telegram Liberar Emociones. Segundo audio: $888 MXN / $49 USD + Telegram privado. Total julio: $1,887 MXN$2'
-  );
+  // Corrige promos julio vencidas (NO tocar Telegram Privado $888 / $52 USD)
+  r=r.replace(/\$999\s*MXN(?:\s*\/\s*\$58\s*USD(?:\s*\/\s*€51\s*EUR)?)?/gi,'$1,190 MXN / $69 USD / €60 EUR');
+  r=r.replace(/\$888\s*MXN\s*\/\s*\$49\s*USD(?:\s*\/\s*€43\s*EUR)?/gi,'$1,190 MXN / $69 USD / €60 EUR');
+  r=r.replace(/\$1[,.]?699\s*MXN(?:\s*\/\s*\$96\s*USD(?:\s*\/\s*€85\s*EUR)?)?/gi,'$2,380 MXN / $138 USD / €120 EUR');
+  r=r.replace(/\$2[,.]?888\s*MXN(?:\s*\/\s*\$168\s*USD(?:\s*\/\s*€146\s*EUR)?)?/gi,'precio regular por audio ($1,190 MXN)');
+  r=r.replace(/total julio:\s*\$?1[,.]?887\s*MXN/gi,'Total: $2,380 MXN');
+  r=r.replace(/\$1[,.]?887\s*MXN/gi,'$2,380 MXN');
+  r=r.replace(/pack despedida amor propio/gi,'Amor Magic 2.0 + Amor Propio Magic 3.0');
+  r=r.replace(/summer wonderland(?:\s*pack)?/gi,'varios audios a precio regular');
+  r=r.replace(/\b(?:promo(?:ci[oó]n)?|oferta)\s+de\s+julio\b/gi,'precio regular');
+  r=r.replace(/\b[uú]ltimo mes\b(?=[^.]*?(?:2\.0|3\.0|amor magic|amor propio))/gi,'catálogo actual');
+  return r;
 }
 function fixAmorPackPricing(reply,userTxt){
   var u=String(userTxt||'').toLowerCase();
   var asks=/amor\s*(magic|propio)?\s*(2|3|2\.0|3\.0)|2\.0.*3\.0|3\.0.*2\.0|promo.*(amor propio|2 y 3)|pack.*amor|promo del amor|tienes promo.*(2|3)/.test(u);
   if(!asks)return reply;
   var r=String(reply||'');
-  if(/1[,.]?699|1699|pack despedida/i.test(r)&&!/1[,.]?190|1190|sin promo|no tienen promo|precio regular/i.test(r))return r;
-  return 'Si, tenemos promo exclusiva de julio para esos dos 💜\n\nPack Despedida Amor Propio: Amor Magic 2.0 + Amor Propio Magic 3.0 juntos a $1,699 MXN / $96 USD / €85 EUR (valor $2,380). Incluye Telegram privado.\n\nJulio 2026 es el ULTIMO MES — después de agosto ya no se venden por separado.\n\nAmor Magic 2.0: glow up, merecimiento, mini Script para cambiar tu pasado (se cumple muy rápido).\nAmor Propio Magic 3.0: amor propio 360°, cero codependencia, belleza/juventud y abundancia.\n\nSi solo quieres uno suelto en julio: $888 MXN / $49 USD + Telegram.\n\n¿Te aparto el pack hoy antes del 31? Usa el botón Quiero pagar abajo o WhatsApp con Pauline 💜';
+  if(/1[,.]?190|1190|precio regular|no hay promo|sin promo|no tienen promo/i.test(r)&&!/1[,.]?699|1699|\$888|\$999/i.test(r))return r;
+  return 'Claro 💜 Amor Magic 2.0 y Amor Propio Magic 3.0 están a precio regular.\n\nCada uno: $1,190 MXN / $69 USD / €60 EUR. Si quieres los dos: $2,380 MXN.\n\nAmor Magic 2.0: glow up, merecimiento, mini Script para cambiar tu pasado (se cumple muy rápido).\nAmor Propio Magic 3.0: amor propio 360°, cero codependencia, belleza/juventud y abundancia.\n\nAhora no hay promo activa. ¿Te aparto uno o los dos hoy? Usa el botón Quiero pagar abajo o WhatsApp con Pauline 💜';
 }
 function normalizeAliciaPromoReply(reply,userTxt){
   var r=String(reply||'');
@@ -7968,8 +7889,9 @@ function normalizeAliciaPromoReply(reply,userTxt){
     r=r.replace(/\$11(?:70|90)(?:\s*MXN)?/gi,'$3,333 MXN');
     r=r.replace(/\$6[89]\s*USD/gi,'$194 USD');
     r=r.replace(/€(?:59|60)\s*EUR/gi,'€168 EUR');
+  }else{
+    r=stripExpiredJulyPromoPrices(r);
   }
-  r=fixJulyDualAudioPricing(r);
   r=fixAmorPackPricing(r,userTxt);
   return stripAliciaChatImages(r);
 }
