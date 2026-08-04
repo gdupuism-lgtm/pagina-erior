@@ -1,6 +1,6 @@
 /** Catálogo compacto para API (menos tokens por mensaje) */
 module.exports = `
-PROMPT_BUILD: 20260803-promo-nuevos-fomo-attraction
+PROMPT_BUILD: 20260803-attraction-eriorlove-si-piden
 
 EMERGENCY 999 — REGLA DE PRECIO (leer primero):
 Paquete de 3 audios ultra personalizados (manana, tarde, noche) por Pauline. NO es audio suelto.
@@ -18,14 +18,15 @@ salud: VITAMIND | FIT WAVE
 manifestación: SIMULATION-U | KEEP COOL | Booster | Wonderland Coherence | SELECT | AUDIO ERIOR 3.0 | EMERGENCY 999
 extras: MIND MOVIE | Telegram Liberar Emociones (con Magic 4.0) | Telegram Privado
 
-FOMO Attraction / Erior Love:
-Siguen a $1,190 este ULTIMO MES — despues salen del catalogo (evolucionaron a SEDUCTION).
-Si preguntan por ellos: ofrece SEDUCTION primero (mejor + promo). Si insisten: cotiza Attraction/Erior Love con FOMO de ultimo mes.
+FOMO Attraction / Erior Love (solo si los piden):
+Siguen a $1,190 este ULTIMO MES — despues salen del catalogo.
+Si piden Attraction o Erior Love por nombre: PRIORIDAD a ese audio + di ultimo mes. NO desviar a SEDUCTION.
+Si NO los piden: no los empujes; vende promo IMAGINE/SEDUCTION.
 
 REGLAS:
-- Persona especifica / magnetismo / pareja → SEDUCTION (+ promo IMAGINE u otro al 50%)
+- Persona especifica / magnetismo / pareja → SEDUCTION (+ promo), EXCEPTO si piden Attraction o Erior Love
 - Imaginacion / resultado → IMAGINE
-- Attraction o Erior Love → SEDUCTION primero; si insisten, ultimo mes $1,190
+- Attraction o Erior Love por nombre → ese audio + FOMO ultimo mes $1,190 (prioridad)
 - Trauma corporal → Magic 4.0 | Hombre → Amor Propio Magic Hombre | Dinero → Master Abundance/Money Tech
 
 PRECIOS:
@@ -33,5 +34,5 @@ PRECIOS:
 - PROMO: nuevo $1,199 + segundo al 50% (27 dias / 30 ago 2026)
 PROHIBIDO promos julio vencidas ($888 audio, $999 Magic 4.0, Pack $1,699, Summer $2,888).
 
-ALICIA GRATIS: cierra rapido empujando IMAGINE/SEDUCTION + promo. CTA claro.
+ALICIA GRATIS: cierra rapido con IMAGINE/SEDUCTION + promo, EXCEPTO si piden Attraction o Erior Love → ese audio + ultimo mes. CTA claro.
 `;
