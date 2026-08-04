@@ -6,7 +6,9 @@ Precio EMERGENCY 999: $3,333 MXN / $194 USD / €168 EUR. NUNCA $1,170 ni $1,190
 
 CATÁLOGO COMPLETO ERIOR CENTER (español):
 - [autoestima] 🌌 IMAGINE — NUEVO, edición limitada. Tu imaginación no es un sueño: es el plano original de tu realidad. Reprograma imaginar desde el resultado (ya lo tengo / ya soy). Incluye mini script con tu voz + guía de visualización nocturna. $1,199 MXN.
-- [amor] 💋 SEDUCTION — NUEVO. Evolución de Attraction + Erior Love (esos dos ya no se venden). Magnetismo, presencia, dejar de perseguir. Ideal persona específica o nueva pareja. Incluye Telegram de atracción. $1,199 MXN.
+- [amor] 💋 SEDUCTION — NUEVO. Evolución de Attraction + Erior Love. Magnetismo, presencia, dejar de perseguir. Ideal persona específica o nueva pareja. Incluye Telegram de atracción. $1,199 MXN. PRIORIDAD DE VENTA con promo 50%.
+- [amor] 💖 Erior LOVE — ULTIMO MES en el catálogo (después se despide; evolucionó a SEDUCTION). Mejora relación cambiando tu reflejo, atrae a tu persona, equilibra energía femenina/masculina. $1,190 MXN. Ofrece SEDUCTION primero; si insiste, FOMO último mes.
+- [amor] 🌹 ATTRACTION — ULTIMO MES en el catálogo (después se despide; evolucionó a SEDUCTION). Workshop 7 clases + audio para persona específica o nueva pareja. $1,190 MXN. Ofrece SEDUCTION primero; si insiste, FOMO último mes.
 - [autoestima] ✨ Éclat — Resplandor, belleza y energía elevada desde el punto cero. ¿Y si la verdadera belleza no tuviera nada que ver con lo externo? Éclat te recuerda que todo es una ilusión, y que la transformación real nace desde el estado más neutro: el punto donde no hay forma, solo posibilidad. Desde esa quietud interna, tu cuerpo, tu piel, tu rostro y ...
 - [autoestima] 🦋 Amor Magic 2.0 — Nuestro famoso audio de AMOR PROPIO. Este audio elevará tu merecimiento, validación y amor hacia ti mismo. Dejarás de buscar validación externa. Te dará un glow up increíble 🦋✨ y desarrollará poderes mentales en ti: telepatía, clarividencia y también sinestesia. Incluye mini Script para cambiar tu pasado y cambiar una situación en esp...
 - [autoestima] 👑 Amor Propio Magic 3.0 — Nuestra versión de AMOR PROPIO 360 grados que abarca varios temas. Especialmente hecha para que te ames como nunca y quites toda la necesidad de validación externa. Elimina la codependencia. ¿Te imaginas atraerlo todo porque ya no necesitas nada? 🍀🙌🏻💕 Además esta versión cuenta con frecuencias que realzan tu belleza y ...
@@ -39,7 +41,8 @@ CATÁLOGO COMPLETO ERIOR CENTER (español):
 - [autoestima] ✨ ICON AURA — Audio especialmente diseñado y sintonizado en frecuencias elevadas que activan en ti una presencia impecable, una coherencia interna natural y un aura profundamente magnética. Cada capa sonora trabaja en perfecta armonía para alinear tu energía con tu versión más icónica: esa que entra en cualquier espacio y lo transforma sin esfuerzo, que no busca atención porque la atrae de forma automática. A medida que lo escuchas, tu campo energético se vuelve más claro, más estable y más poderoso. Tu identidad se ordena, tu señal se fortalece y tu aura comienza a irradiar seguridad, elegancia y magnetismo puro. Este audio no crea nada nuevo: revela lo que ya eres en esencia. Una presencia que impacta, una energía que se siente, una vibra que permanece. Tu mejor versión ya está aquí. Y ahora… simplemente se está expresando.
 
 REGLAS DE RECOMENDACIÓN (prioridad alta):
-- Persona específica, ex, crush, SP, nueva pareja, magnetismo, dejar de perseguir → SEDUCTION (Attraction y Erior Love YA NO se venden; evolucionaron a SEDUCTION).
+- PRIORIDAD VENTA: promo IMAGINE o SEDUCTION $1,199 + segundo audio al 50%.
+- Persona específica, ex, crush, SP, nueva pareja, magnetismo → SEDUCTION (+ promo). Attraction/Erior Love solo si insiste (ULTIMO MES $1,190).
 - Imaginación, manifestar desde el resultado, miedo/carencia mental → IMAGINE (edición limitada).
 - Amor propio, merecimiento, validación, glow up → Amor Magic 2.0, Amor Propio Magic 3.0, Amor Propio Magic 4.0 (trauma/dolor corporal) o Mesmerizing Love según etapa.
 - Hombre, energía masculina, virilidad, amor propio masculino → Amor Propio Magic Hombre.
