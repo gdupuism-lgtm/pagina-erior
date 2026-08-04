@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#050000">
+<meta name="description" content="SEDUCTION · Escaneo Matrix — descubre tu versión carente vs magnética. Audio Erior Center.">
+<meta property="og:title" content="SEDUCTION · ¿Pastilla roja?">
+<meta property="og:description" content="Hay dos versiones de ti en el amor. Toma la pastilla roja.">
+<title>SEDUCTION · Pastilla Roja · Erior Center</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Syne:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#050000;
+  --red:#ff1a1a;
+  --red-hot:#ff3333;
+  --red-dim:rgba(255,40,40,.55);
+  --red-glow:rgba(255,20,20,.35);
+  --ink:#e8e8e8;
+  --muted:rgba(220,220,220,.55);
+  --dim:rgba(180,180,180,.35);
+  --panel:rgba(8,0,0,.78);
+  --mono:'Share Tech Mono',ui-monospace,monospace;
+  --display:'Syne',sans-serif;
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  min-height:100vh;min-height:100dvh;
+  background:var(--bg);color:var(--ink);
+  font-family:var(--mono);
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+#rain{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  opacity:.55;
+}
+.vignette{
+  position:fixed;inset:0;z-index:1;pointer-events:none;
+  background:
+    radial-gradient(ellipse 80% 70% at 50% 40%, transparent 20%, rgba(0,0,0,.75) 100%),
+    linear-gradient(180deg, rgba(80,0,0,.25), transparent 40%, rgba(0,0,0,.5));
+}
+.scanlines{
+  position:fixed;inset:0;z-index:2;pointer-events:none;
+  background:repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,.12) 2px,
+    rgba(0,0,0,.12) 4px
+  );
+  opacity:.35;mix-blend-mode:multiply;
+}
+.app{
+  position:relative;z-index:3;
+  min-height:100vh;min-height:100dvh;
+  display:flex;align-items:center;justify-content:center;
+  padding:1.25rem clamp(1rem,4vw,2rem) 2rem;
+}
+.screen{display:none;width:min(520px,100%);animation:bootIn .7s var(--ease) both}
+.screen.active{display:block}
+@keyframes bootIn{
+  from{opacity:0;transform:translateY(18px) scale(.985);filter:blur(4px)}
+  to{opacity:1;transform:none;filter:none}
+}
+.brand{
+  font-family:var(--display);
+  font-weight:800;font-size:.7rem;letter-spacing:.42em;
+  text-transform:uppercase;color:var(--red);
+  margin-bottom:1.1rem;
+  text-shadow:0 0 24px var(--red-glow);
+}
+.tag{
+  display:inline-block;
+  font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--red-dim);border:1px solid rgba(255,40,40,.35);
+  padding:.35rem .7rem;margin-bottom:1.25rem;
+}
+h1{
+  font-family:var(--display);
+  font-weight:800;line-height:1.05;
+  font-size:clamp(2.1rem,8vw,3.35rem);
+  letter-spacing:-.02em;
+  margin-bottom:.9rem;
+}
+h1 em{font-style:normal;color:var(--red);text-shadow:0 0 40px var(--red-glow)}
+.lead{
+  font-size:clamp(.88rem,2.8vw,.98rem);
+  line-height:1.65;color:var(--muted);
+  margin-bottom:1.75rem;max-width:34ch;
+}
+.panel{
+  background:var(--panel);
+  border:1px solid rgba(255,40,40,.28);
+  box-shadow:0 0 0 1px rgba(255,0,0,.06), 0 20px 60px rgba(0,0,0,.55), inset 0 0 40px rgba(255,0,0,.04);
+  padding:clamp(1.25rem,4vw,1.75rem);
+  backdrop-filter:blur(10px);
+}
+.btn{
+  appearance:none;border:none;cursor:pointer;
+  font-family:var(--mono);font-size:.78rem;letter-spacing:.14em;
+  text-transform:uppercase;text-decoration:none;
+  display:inline-flex;align-items:center;justify-content:center;gap:.55rem;
+  width:100%;padding:1rem 1.25rem;
+  transition:transform .25s var(--ease), box-shadow .25s, background .25s, color .25s;
+}
+.btn:active{transform:scale(.985)}
+.btn-red{
+  background:var(--red);color:#0a0000;font-weight:700;
+  box-shadow:0 0 32px var(--red-glow), 0 0 0 1px rgba(255,80,80,.5);
+}
+.btn-red:hover{background:var(--red-hot);box-shadow:0 0 48px rgba(255,30,30,.55)}
+.btn-ghost{
+  margin-top:.65rem;
+  background:transparent;color:var(--muted);
+  border:1px solid rgba(255,255,255,.12);
+}
+.btn-ghost:hover{color:var(--ink);border-color:rgba(255,40,40,.4)}
+.pill-wrap{
+  display:flex;justify-content:center;margin:1.5rem 0 1.75rem;
+}
+.pill{
+  width:72px;height:72px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%, #ff6b6b, #c40000 55%, #4a0000);
+  box-shadow:
+    0 0 0 3px rgba(255,40,40,.35),
+    0 0 40px rgba(255,0,0,.55),
+    inset 0 -8px 16px rgba(0,0,0,.45);
+  animation:pillPulse 2.4s ease-in-out infinite;
+  position:relative;
+}
+.pill::after{
+  content:'';position:absolute;inset:18%;
+  border-radius:50%;
+  background:linear-gradient(135deg, rgba(255,255,255,.35), transparent 50%);
+}
+@keyframes pillPulse{
+  0%,100%{transform:scale(1);box-shadow:0 0 0 3px rgba(255,40,40,.35),0 0 40px rgba(255,0,0,.45),inset 0 -8px 16px rgba(0,0,0,.45)}
+  50%{transform:scale(1.06);box-shadow:0 0 0 6px rgba(255,40,40,.2),0 0 60px rgba(255,0,0,.7),inset 0 -8px 16px rgba(0,0,0,.45)}
+}
+.progress{
+  height:2px;background:rgba(255,255,255,.08);margin-bottom:1.25rem;overflow:hidden;
+}
+.progress>i{
+  display:block;height:100%;background:var(--red);
+  box-shadow:0 0 12px var(--red);
+  width:0;transition:width .4s var(--ease);
+}
+.q-num{font-size:.68rem;letter-spacing:.2em;color:var(--red-dim);margin-bottom:.65rem;text-transform:uppercase}
+.q-text{
+  font-family:var(--display);font-weight:700;
+  font-size:clamp(1.25rem,5vw,1.55rem);line-height:1.25;
+  margin-bottom:1.25rem;
+}
+.opts{display:grid;gap:.55rem}
+.opt{
+  text-align:left;width:100%;
+  background:rgba(20,0,0,.45);
+  border:1px solid rgba(255,255,255,.1);
+  color:var(--ink);font-family:var(--mono);font-size:.82rem;line-height:1.4;
+  padding:.9rem 1rem;cursor:pointer;
+  transition:border-color .2s, background .2s, transform .2s var(--ease);
+}
+.opt:hover,.opt:focus-visible{
+  border-color:rgba(255,40,40,.65);
+  background:rgba(255,20,20,.1);
+  outline:none;transform:translateX(3px);
+}
+.opt.selected{
+  border-color:var(--red);
+  background:rgba(255,20,20,.18);
+  box-shadow:0 0 20px rgba(255,0,0,.2);
+}
+.glitch-title{
+  font-family:var(--display);font-weight:800;
+  font-size:clamp(1.8rem,7vw,2.6rem);line-height:1.05;
+  color:var(--red);
+  text-shadow:2px 0 #0ff, -2px 0 #f0f;
+  animation:glitch 2.8s infinite;
+  margin-bottom:.85rem;
+}
+@keyframes glitch{
+  0%,90%,100%{transform:none;text-shadow:2px 0 #0ff,-2px 0 #f0f}
+  92%{transform:translate(-2px,1px);text-shadow:3px 0 #0ff,-3px 0 #f0f}
+  94%{transform:translate(2px,-1px);text-shadow:-3px 0 #0ff,3px 0 #f0f}
+  96%{transform:none}
+}
+.reveal-body{
+  font-size:.9rem;line-height:1.7;color:var(--muted);
+  margin-bottom:1.35rem;
+}
+.reveal-body strong{color:var(--ink);font-weight:400}
+.traits{display:grid;gap:.4rem;margin:1.1rem 0 1.5rem}
+.trait{
+  font-size:.75rem;letter-spacing:.04em;
+  padding:.55rem .75rem;
+  border-left:2px solid var(--red);
+  background:rgba(255,0,0,.06);color:var(--muted);
+}
+.trait.good{border-left-color:#fff;background:rgba(255,255,255,.04)}
+.scan-box{text-align:center;padding:2rem 0}
+.scan-bar{
+  height:3px;background:rgba(255,255,255,.08);margin:1.5rem auto;max-width:220px;overflow:hidden;
+}
+.scan-bar>i{
+  display:block;height:100%;width:0;background:var(--red);
+  animation:scanFill 2.4s var(--ease) forwards;
+  box-shadow:0 0 14px var(--red);
+}
+@keyframes scanFill{to{width:100%}}
+.scan-label{font-size:.72rem;letter-spacing:.28em;text-transform:uppercase;color:var(--red-dim);animation:blink 1s step-end infinite}
+@keyframes blink{50%{opacity:.35}}
+.offer-img{
+  width:100%;aspect-ratio:1;object-fit:cover;
+  border:1px solid rgba(255,40,40,.35);
+  margin:1rem 0 1.25rem;
+  filter:saturate(1.1) contrast(1.05);
+  box-shadow:0 0 40px rgba(255,0,0,.2);
+}
+.price-row{
+  display:flex;align-items:baseline;justify-content:space-between;gap:1rem;
+  margin:1rem 0 1.25rem;flex-wrap:wrap;
+}
+.price{
+  font-family:var(--display);font-weight:800;font-size:1.85rem;color:var(--ink);
+}
+.price small{display:block;font-family:var(--mono);font-size:.65rem;font-weight:400;letter-spacing:.12em;color:var(--muted);margin-top:.2rem}
+.promo-chip{
+  font-size:.68rem;line-height:1.45;color:var(--red-hot);
+  border:1px solid rgba(255,40,40,.4);
+  padding:.45rem .65rem;max-width:16rem;
+}
+.foot{
+  margin-top:1.25rem;font-size:.62rem;letter-spacing:.08em;color:var(--dim);text-align:center;line-height:1.5;
+}
+.foot a{color:var(--red-dim);text-decoration:none}
+.vs{
+  display:grid;grid-template-columns:1fr auto 1fr;gap:.5rem;align-items:center;
+  margin:1.25rem 0;font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;
+}
+.vs span{height:1px;background:rgba(255,255,255,.12)}
+.vs b{color:var(--red);font-weight:400}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+<canvas id="rain" aria-hidden="true"></canvas>
+<div class="vignette" aria-hidden="true"></div>
+<div class="scanlines" aria-hidden="true"></div>
+
+<main class="app">
+  <!-- BOOT / INTRO -->
+  <section class="screen active" id="screen-intro" aria-label="Inicio">
+    <div class="panel">
+      <p class="brand">Erior Center</p>
+      <span class="tag">Sistema · Escaneo amoroso</span>
+      <h1>Hay dos versiones<br>de ti en el amor.<br><em>¿Cuál estás siendo?</em></h1>
+      <p class="lead">Una persigue. La otra magnetiza. Toma la pastilla roja y descubre tu versión actual — y la que SEDUCTION instala.</p>
+      <div class="pill-wrap" aria-hidden="true"><div class="pill"></div></div>
+      <button type="button" class="btn btn-red" id="btnStart">Tomar la pastilla roja</button>
+      <p class="foot">Experiencia · 2 minutos · Erior Center</p>
+    </div>
+  </section>
+
+  <!-- QUIZ -->
+  <section class="screen" id="screen-quiz" aria-label="Escaneo">
+    <div class="panel">
+      <p class="brand">SEDUCTION · Scan</p>
+      <div class="progress" aria-hidden="true"><i id="progressFill"></i></div>
+      <p class="q-num" id="qNum">Pregunta 01 / 06</p>
+      <h2 class="q-text" id="qText"></h2>
+      <div class="opts" id="qOpts" role="listbox"></div>
+    </div>
+  </section>
+
+  <!-- SCANNING -->
+  <section class="screen" id="screen-scan" aria-label="Procesando">
+    <div class="panel scan-box">
+      <p class="brand">Decodificando</p>
+      <p class="glitch-title" style="font-size:1.4rem">Leyendo tu señal…</p>
+      <div class="scan-bar"><i></i></div>
+      <p class="scan-label">Accessing subconscious</p>
+    </div>
+  </section>
+
+  <!-- CARENTE -->
+  <section class="screen" id="screen-carente" aria-label="Versión carente">
+    <div class="panel">
+      <span class="tag">Versión detectada · 01</span>
+      <h2 class="glitch-title">Versión Carente</h2>
+      <p class="reveal-body" id="carenteText"></p>
+      <div class="traits" id="carenteTraits"></div>
+      <button type="button" class="btn btn-red" id="btnToMagnetic">Ver la otra versión →</button>
+    </div>
+  </section>
+
+  <!-- MAGNETICA -->
+  <section class="screen" id="screen-magnetic" aria-label="Versión magnética">
+    <div class="panel">
+      <span class="tag">Upgrade disponible · 02</span>
+      <h2 class="glitch-title" style="text-shadow:0 0 30px var(--red-glow);color:#fff">Versión Magnética</h2>
+      <p class="reveal-body" id="magneticText"></p>
+      <div class="traits" id="magneticTraits"></div>
+      <div class="vs"><span></span><b>SEDUCTION</b><span></span></div>
+      <p class="reveal-body">No es un audio de trucos ni frases de conquista. Es el código que te convierte — desde adentro — en alguien imposible de ignorar.</p>
+      <button type="button" class="btn btn-red" id="btnToOffer">Instalar SEDUCTION</button>
+    </div>
+  </section>
+
+  <!-- OFFER -->
+  <section class="screen" id="screen-offer" aria-label="Oferta">
+    <div class="panel">
+      <p class="brand">SEDUCTION</p>
+      <span class="tag" id="offerTag">Nuevo · Erior Center</span>
+      <h1 style="font-size:clamp(1.8rem,6vw,2.4rem)">Deja de perseguir.<br><em>Empieza a magnetizar.</em></h1>
+      <img class="offer-img" src="../img/catalog/seduction.jpg" alt="SEDUCTION — audio Erior Center" width="520" height="520" loading="lazy">
+      <p class="reveal-body" id="offerPitch"></p>
+      <div class="price-row">
+        <div class="price">$1,199 <small>MXN · $70 USD · €61</small></div>
+        <div class="promo-chip" id="promoChip">Promo lanzamiento: llévate un segundo audio al 50%</div>
+      </div>
+      <a class="btn btn-red" id="btnWa" href="#" target="_blank" rel="noopener noreferrer">Quiero SEDUCTION por WhatsApp</a>
+      <a class="btn btn-ghost" id="btnCatalog" href="https://eriorcenter.netlify.app/" target="_blank" rel="noopener">Ver catálogo completo</a>
+      <p class="foot">Incluye Telegram de atracción · Producción con prioridad si reservas hoy<br><a href="https://eriorcenter.netlify.app/">eriorcenter.netlify.app</a></p>
+    </div>
+  </section>
+</main>
+
+<script>
+(function(){
+  var WA = '5214432311761';
+  var PROMO_END = new Date('2026-08-30T23:59:59-06:00');
+  var promoLive = Date.now() < PROMO_END.getTime();
+
+  var QUESTIONS = [
+    {
+      q: 'Ahora mismo, en el amor… ¿qué describes mejor tu energía?',
+      opts: [
+        { id: 'chase', label: 'Persigo, escribo primero, reviso si me contestó', tags: ['chase','anxious'] },
+        { id: 'freeze', label: 'Me congelo: quiero, pero no me atrevo', tags: ['freeze','low'] },
+        { id: 'pushpull', label: 'Atraigo… y después saboteo o me alejo', tags: ['pushpull'] },
+        { id: 'ready', label: 'Estoy list@, pero algo sigue sin click', tags: ['ready'] }
+      ]
+    },
+    {
+      q: '¿Qué quieres magnetizar?',
+      opts: [
+        { id: 'sp', label: 'Una persona específica (ex, crush, SP)', tags: ['sp'] },
+        { id: 'new', label: 'Una pareja nueva / abrir el campo', tags: ['new'] },
+        { id: 'improve', label: 'Mejorar la relación que ya tengo', tags: ['improve'] },
+        { id: 'self', label: 'Volverme magnétic@ — punto', tags: ['self'] }
+      ]
+    },
+    {
+      q: 'Frente a esa persona (o al amor), ¿cómo te sientes por dentro?',
+      opts: [
+        { id: 'less', label: 'Como si yo fuera “poca cosa”', tags: ['less','anxious'] },
+        { id: 'perform', label: 'Como si tuviera que demostrar / ganar su atención', tags: ['perform','chase'] },
+        { id: 'wall', label: 'Blindad@ — no quiero necesitar a nadie', tags: ['wall'] },
+        { id: 'ok', label: 'Bien… pero mi presencia no se siente aún', tags: ['ready'] }
+      ]
+    },
+    {
+      q: 'Cuando no te responden o hay silencio…',
+      opts: [
+        { id: 'spiral', label: 'Me voy a la cabeza / ansiedad / más mensajes', tags: ['anxious','chase'] },
+        { id: 'collapse', label: 'Me hundo un poco en mi valor', tags: ['less','low'] },
+        { id: 'detach', label: 'Me desconecto y finjo que no me importa', tags: ['wall','pushpull'] },
+        { id: 'hold', label: 'Aguanto, pero me cuesta no apegarme al resultado', tags: ['ready'] }
+      ]
+    },
+    {
+      q: '¿Crees que el amor se…?',
+      opts: [
+        { id: 'earn', label: 'Se gana: hay que esforzarse, convencer, merecerlo', tags: ['earn','chase'] },
+        { id: 'luck', label: 'Es suerte / timing / “si me eligen”', tags: ['low','less'] },
+        { id: 'control', label: 'Se controla con estrategia y juego', tags: ['perform'] },
+        { id: 'radiate', label: 'Se irradia — cuando tú ya estás en tu lugar', tags: ['ready'] }
+      ]
+    },
+    {
+      q: 'Si mañana despertaras en tu versión magnética… ¿qué cambiaría primero?',
+      opts: [
+        { id: 'stopchase', label: 'Dejaría de perseguir y mi presencia haría el trabajo', tags: ['chase'] },
+        { id: 'chosen', label: 'Me sentiría elegible / deseable sin pedirlo', tags: ['less'] },
+        { id: 'calm', label: 'Calma total: ya no dependo de su respuesta', tags: ['anxious'] },
+        { id: 'field', label: 'El campo entero: cómo me miran, cómo me eligen', tags: ['self','new'] }
+      ]
+    }
+  ];
+
+  var answers = [];
+  var step = 0;
+
+  var screens = {
+    intro: document.getElementById('screen-intro'),
+    quiz: document.getElementById('screen-quiz'),
+    scan: document.getElementById('screen-scan'),
+    carente: document.getElementById('screen-carente'),
+    magnetic: document.getElementById('screen-magnetic'),
+    offer: document.getElementById('screen-offer')
+  };
+
+  function show(name){
+    Object.keys(screens).forEach(function(k){
+      screens[k].classList.toggle('active', k === name);
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function countTags(){
+    var c = {};
+    answers.forEach(function(a){
+      (a.tags || []).forEach(function(t){ c[t] = (c[t] || 0) + 1; });
+    });
+    return c;
+  }
+
+  function topTag(c){
+    var best = 'chase', n = -1;
+    Object.keys(c).forEach(function(k){
+      if(c[k] > n){ n = c[k]; best = k; }
+    });
+    return best;
+  }
+
+  function goalFromAnswers(){
+    var g = answers[1] && answers[1].id;
+    return {
+      sp: 'esa persona específica',
+      new: 'una pareja nueva',
+      improve: 'elevar la relación que ya vives',
+      self: 'tu propio magnetismo'
+    }[g] || 'el amor que quieres';
+  }
+
+  function buildProfile(){
+    var tags = countTags();
+    var core = topTag(tags);
+    var goal = goalFromAnswers();
+
+    var carenteMap = {
+      chase: 'Tu señal actual aplica al puesto de <strong>perseguidor oficial</strong>. Escribes primero, revisas el teléfono, y entregas energía antes de que el otro la merezca.',
+      anxious: 'Tu sistema está en <strong>modo vigilancia</strong>: el silencio te desordena y tu valor se mueve con su respuesta.',
+      less: 'Hay un programa corriendo: <strong>“no soy suficiente”</strong>. Desde ahí, el amor se siente como un examen que tienes que pasar.',
+      freeze: 'Quieres… pero tu cuerpo <strong>congela el deseo</strong>. La versión carente aquí no persigue — se esconde.',
+      pushpull: 'Atraes y después te retiras. Ese <strong>empuje-tira</strong> confunde tu campo y el de la otra persona.',
+      wall: 'Te blindaste para no necesitar. El muro te protege… y también <strong>bloquea el magnetismo</strong>.',
+      perform: 'Estás en modo performance: demostrar, quedar bien, ganar atención. Eso cansa — y se siente.',
+      earn: 'Crees que el amor se gana. Mientras eso corra, sigues <strong>negociando tu lugar</strong> en lugar de ocuparlo.',
+      low: 'Hay poca carga en tu señal. No es que no valgas — es que tu energía aún no lo transmite.',
+      ready: 'Estás cerca… pero todavía operas desde la versión que <strong>espera el click afuera</strong> en vez de instalarlo adentro.',
+      improve: 'Quieres mejorar lo que ya hay, pero desde la versión que aún pide en vez de irradiar.',
+      new: 'Quieres abrir el campo, pero tu antena aún busca validación antes de transmitir.',
+      sp: 'Tu foco está en alguien concreto — y eso está bien. El problema es hacerlo desde carencia.',
+      self: 'Quieres magnetismo puro… y aún hay un cable cruzado con cómo te posicionas.',
+      control: 'Intentas controlar el juego. El control es la máscara de la inseguridad.',
+      hold: 'Aguantas con dignidad… pero el apego al resultado todavía tira de tu campo.',
+      stopchase: 'Sabes que debes dejar de perseguir — tu versión carente aún no lo hace.',
+      chosen: 'Anhelas sentirte elegible sin pedirlo. Hoy todavía lo pides, aunque sea en silencio.',
+      calm: 'Quieres calma. Tu versión carente aún depende del externo.',
+      field: 'Quieres que cambie el campo entero. Primero cambia la señal que emites.'
+    };
+
+    var traitsC = [];
+    if(tags.chase || tags.anxious) traitsC.push('Energía de persecución / vigilancia');
+    if(tags.less || tags.low) traitsC.push('Autovalor condicionado al otro');
+    if(tags.perform || tags.earn) traitsC.push('Amor como examen o conquista');
+    if(tags.wall || tags.pushpull) traitsC.push('Blindaje o empuje-tira');
+    if(tags.freeze) traitsC.push('Deseo congelado');
+    if(!traitsC.length) traitsC.push('Señal mixta — aún no coherente');
+    traitsC = traitsC.slice(0, 3);
+
+    var carenteText = (carenteMap[core] || carenteMap.chase) +
+      ' Frente a <strong>' + goal + '</strong>, esta versión pide, espera o se esconde. No estás roto/a — estás en un código viejo.';
+
+    var magneticText = 'La versión magnética no persigue <strong>' + goal + '</strong>. ' +
+      'Ocupa su lugar. Su presencia hace el trabajo. Deja de aplicar al puesto… y se vuelve imposible de ignorar. ' +
+      '<strong>SEDUCTION</strong> es el audio que instala ese código: magnetismo, coherencia y seguridad desde adentro.';
+
+    var traitsM = [
+      'Presencia que se siente sin explicarse',
+      'Dejas de perseguir — el campo responde',
+      'Telegram de atracción incluido con SEDUCTION'
+    ];
+
+    var offerPitch = 'Según tu escaneo, tu puente es claro: salir de la versión carente y entrar en la magnética mientras escuchas <strong>SEDUCTION</strong> — la evolución de Attraction + Erior Love.';
+
+    return { carenteText: carenteText, traitsC: traitsC, magneticText: magneticText, traitsM: traitsM, offerPitch: offerPitch, core: core, goal: goal };
+  }
+
+  function renderTraits(el, list, good){
+    el.innerHTML = list.map(function(t){
+      return '<div class="trait' + (good ? ' good' : '') + '">' + t + '</div>';
+    }).join('');
+  }
+
+  function renderQuestion(){
+    var q = QUESTIONS[step];
+    document.getElementById('qNum').textContent = 'Pregunta 0' + (step + 1) + ' / 0' + QUESTIONS.length;
+    document.getElementById('progressFill').style.width = ((step) / QUESTIONS.length * 100) + '%';
+    document.getElementById('qText').textContent = q.q;
+    var box = document.getElementById('qOpts');
+    box.innerHTML = '';
+    q.opts.forEach(function(opt){
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'opt';
+      b.setAttribute('role', 'option');
+      b.textContent = opt.label;
+      b.addEventListener('click', function(){
+        Array.prototype.forEach.call(box.children, function(c){ c.classList.remove('selected'); });
+        b.classList.add('selected');
+        setTimeout(function(){ pick(opt); }, 180);
+      });
+      box.appendChild(b);
+    });
+  }
+
+  function pick(opt){
+    answers[step] = opt;
+    if(step < QUESTIONS.length - 1){
+      step += 1;
+      renderQuestion();
+      document.getElementById('progressFill').style.width = (step / QUESTIONS.length * 100) + '%';
+    } else {
+      document.getElementById('progressFill').style.width = '100%';
+      finishQuiz();
+    }
+  }
+
+  function finishQuiz(){
+    show('scan');
+    var profile = buildProfile();
+    setTimeout(function(){
+      document.getElementById('carenteText').innerHTML = profile.carenteText;
+      renderTraits(document.getElementById('carenteTraits'), profile.traitsC, false);
+      document.getElementById('magneticText').innerHTML = profile.magneticText;
+      renderTraits(document.getElementById('magneticTraits'), profile.traitsM, true);
+      document.getElementById('offerPitch').innerHTML = profile.offerPitch;
+
+      if(!promoLive){
+        var chip = document.getElementById('promoChip');
+        if(chip) chip.style.display = 'none';
+      }
+
+      var summary = [
+        'Hola! Vengo del escaneo SEDUCTION (pastilla roja).',
+        'Quiero SEDUCTION ($1,199 MXN).',
+        promoLive ? 'También me interesa el segundo audio al 50%.' : '',
+        'Mi perfil: ' + profile.core + ' → ' + profile.goal + '.',
+        'Versión carente detectada. Quiero instalar la magnética.'
+      ].filter(Boolean).join(' ');
+
+      document.getElementById('btnWa').href =
+        'https://wa.me/' + WA + '?text=' + encodeURIComponent(summary);
+
+      show('carente');
+    }, 2600);
+  }
+
+  document.getElementById('btnStart').addEventListener('click', function(){
+    step = 0; answers = [];
+    show('quiz');
+    renderQuestion();
+  });
+  document.getElementById('btnToMagnetic').addEventListener('click', function(){ show('magnetic'); });
+  document.getElementById('btnToOffer').addEventListener('click', function(){ show('offer'); });
+
+  if(!promoLive){
+    var chip = document.getElementById('promoChip');
+    if(chip) chip.style.display = 'none';
+  }
+
+  /* Matrix rain */
+  (function(){
+    var c = document.getElementById('rain');
+    if(!c || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var ctx = c.getContext('2d');
+    var cols, drops, font = 14;
+    function resize(){
+      c.width = window.innerWidth;
+      c.height = window.innerHeight;
+      cols = Math.floor(c.width / font);
+      drops = [];
+      for(var i = 0; i < cols; i++) drops[i] = Math.random() * -50;
+    }
+    var chars = 'ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワン'.split('');
+    function draw(){
+      ctx.fillStyle = 'rgba(5,0,0,0.08)';
+      ctx.fillRect(0, 0, c.width, c.height);
+      ctx.font = font + 'px "Share Tech Mono", monospace';
+      for(var i = 0; i < drops.length; i++){
+        var ch = chars[Math.floor(Math.random() * chars.length)];
+        var y = drops[i] * font;
+        var bright = Math.random() > 0.965;
+        ctx.fillStyle = bright ? '#ffaaaa' : (Math.random() > 0.3 ? '#cc1111' : '#660000');
+        ctx.fillText(ch, i * font, y);
+        if(y > c.height && Math.random() > 0.975) drops[i] = 0;
+        drops[i]++;
+      }
+      requestAnimationFrame(draw);
+    }
+    resize();
+    window.addEventListener('resize', resize);
+    draw();
+  })();
+})();
+</script>
+</body>
+</html>
