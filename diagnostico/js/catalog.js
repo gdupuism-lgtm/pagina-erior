@@ -41,4 +41,4 @@ window.ERIOR_CAT_LABELS = {
 };
 
 window.ERIOR_WHATSAPP = '5214432311761';
-window.ERIOR_PROMO_PRICE = '$1,190 MXN / $69 USD / €60 EUR';
+window.ERIOR_PROMO_PRICE = 'IMAGINE/SEDUCTION $1,199 · 2º al 50% · catálogo $1,190';
