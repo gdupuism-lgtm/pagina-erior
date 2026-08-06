@@ -4263,8 +4263,8 @@ body::before{
             <span class="btn-hero-badge">25+ audios personalizados</span>
           </button>
           <button type="button" class="btn-alicia-glow cover-action-btn btn-alicia-hero cover-action-primary" onclick="goTo('alicia')">
-            <span class="btn-premium-label">✨ Habla con Alicia IA</span>
-            <span class="btn-hero-badge btn-hero-badge--alicia">Gratis · te guía al audio perfecto</span>
+            <span class="btn-premium-label">✨ Alicia te arma tu combo</span>
+            <span class="btn-hero-badge btn-hero-badge--alicia">Gratis · promo IMAGINE/SEDUCTION activa</span>
           </button>
         </div>
       </div>
@@ -4424,19 +4424,19 @@ body::before{
         <div class="alicia-mode-select" id="aliciaModeSelect">
           <header class="alicia-mode-head">
             <p class="alicia-label">Asistente IA</p>
-            <h2 class="alicia-mode-headline">Elige tu experiencia con Alicia</h2>
-            <p class="alicia-mode-sub">Selecciona cómo quieres que te acompañe hoy</p>
+            <h2 class="alicia-mode-headline">Alicia te lleva a tu compra</h2>
+            <p class="alicia-mode-sub">Cuéntale qué vives — ella te arma el combo y te ayuda a cerrar hoy</p>
           </header>
           <div class="alicia-mode-cards">
             <article class="alicia-mode-card alicia-mode-free">
               <h3 class="alicia-mode-card-title">✨ Alicia IA</h3>
-              <p class="alicia-mode-card-sub">Tu guía para encontrar el audio perfecto</p>
+              <p class="alicia-mode-card-sub">Closer de ventas · promo de lanzamiento activa</p>
               <ul class="alicia-mode-card-list">
-                <li>🎵 Te recomienda el audio ideal para ti</li>
-                <li>💬 Responde tus dudas del catálogo</li>
-                <li>🛒 Te acompaña en tu proceso de compra</li>
+                <li>💋🌌 Prioriza IMAGINE / SEDUCTION + 2º al 50%</li>
+                <li>🎯 2 audios a tu medida con precio claro</li>
+                <li>⚡ Te empuja a pagar hoy o WhatsApp</li>
               </ul>
-              <button type="button" class="alicia-mode-free-btn" onclick="startAliciaFree()">COMENZAR GRATIS →</button>
+              <button type="button" class="alicia-mode-free-btn" onclick="startAliciaFree()">EMPEZAR A COMPRAR →</button>
             </article>
             <article class="alicia-mode-card alicia-mode-premium alicia-mode-premium-card" id="aliciaPremiumCard">
               <div class="alicia-mode-premium-badge">👑 PREMIUM</div>
@@ -4471,7 +4471,7 @@ body::before{
         <header class="alicia-header">
           <p class="alicia-label">Asistente IA</p>
           <h1 class="alicia-title">Alicia <em>Virtual</em></h1>
-            <p class="alicia-tagline" id="aliciaTagline">Cuéntame cómo te sientes y te guío al audio perfecto para ti.</p>
+            <p class="alicia-tagline" id="aliciaTagline">Dime qué quieres transformar — te armo tu combo y te ayudo a cerrar hoy.</p>
         </header>
         <div class="alicia-avatar-wrap">
           <model-viewer
@@ -6901,7 +6901,7 @@ function getFreeLimitBlockMessage(q){
   }else if(audios.length>=2){
     audioLine=' Alicia te recomendó '+audios[0]+' y '+audios[1]+'.';
   }
-  return 'Has usado tus '+limit+' mensajes gratis de hoy ✨'+audioLine+' Mañana (hora CDMX) tendrás mensajes nuevos. Para continuar HOY y cerrar tu compra con la promo de julio, escríbenos por WhatsApp — el botón verde abajo ya lleva tu recomendación 💛';
+  return 'Has usado tus '+limit+' mensajes gratis de hoy ✨'+audioLine+' Mañana (hora CDMX) tendrás mensajes nuevos. Para continuar HOY y cerrar tu compra con la promo de lanzamiento (IMAGINE/SEDUCTION + 2º al 50%), escríbenos por WhatsApp — el botón verde abajo ya lleva tu recomendación 💛';
 }
 function collectAliciaRecommendedAudios(maxCount){
   maxCount=maxCount||2;
@@ -6931,11 +6931,11 @@ function buildAliciaWhatsAppContinueMessage(){
   var msg='Hola Pauline! Vengo de Alicia IA de Erior Center';
   if(nombre)msg+=', me llamo '+nombre;
   if(audios.length===1){
-    msg+='. Alicia me recomendó '+audios[0]+' y quiero continuar para comprarlo con la promo de julio';
+    msg+='. Alicia me recomendó '+audios[0]+' y quiero comprarlo ahora (promo lanzamiento IMAGINE/SEDUCTION si aplica)';
   }else if(audios.length>=2){
-    msg+='. Alicia me recomendó '+audios[0]+' y '+audios[1]+' y quiero continuar para cerrar mi compra con la promo de julio';
+    msg+='. Alicia me recomendó '+audios[0]+' y '+audios[1]+' y quiero cerrar mi compra ahora con la promo de lanzamiento';
   }else{
-    msg+='. Quiero continuar la conversación y cerrar mi compra con la promo de julio';
+    msg+='. Quiero continuar y cerrar mi compra con la promo de lanzamiento (IMAGINE o SEDUCTION + 2º al 50%)';
   }
   msg+=' 💛';
   return msg;
@@ -6995,7 +6995,7 @@ function updateFreeQuotaUI(){
       text.textContent='⚡ Te quedan solo '+Math.max(0,q.remaining)+' mensajes gratis hoy. Alicia te ayudará a cerrar — o continúa ya por WhatsApp con tu recomendación.';
     }else{
       banner.className='alicia-free-quota-banner';
-      text.textContent='Gratis: te quedan '+Math.max(0,q.remaining!=null?q.remaining:limit)+' de '+limit+' mensajes hoy. Alicia te guía al audio perfecto y con tu proceso.';
+      text.textContent='Gratis: te quedan '+Math.max(0,q.remaining!=null?q.remaining:limit)+' de '+limit+' mensajes hoy. Alicia te arma el combo y te ayuda a cerrar la compra.';
     }
   }
   var locked=!!q.blocked||(q.remaining!=null&&q.remaining<=0);
@@ -7115,9 +7115,9 @@ function getAliciaWelcomeMessage(){
   var ref=getReferralCode();
   var quotaNote=getAliciaFreeWelcomeNote(aliciaFreeQuota);
   if(ref){
-    return 'Bienvenid@ a ERIOR CENTER ✨ Soy Alicia. Alguien de confianza te trajo hasta aqui — y eso ya dice algo de ti. Estoy para escucharte de verdad y guiarte al audio que tu alma necesita en este momento exacto. Hay cosas que el subconsciente ya sabe antes de que las digas en voz alta... Cuéntame, que te trae por aqui hoy?'+quotaNote;
+    return 'Bienvenid@ ✨ Soy Alicia. Alguien de confianza te trajo — eso ya dice mucho.\n\nHay promo de lanzamiento: IMAGINE o SEDUCTION a $1,199 y el segundo audio al 50%. Dime en una linea que quieres transformar (amor, dinero, cuerpo o mente) y te armo tu combo para cerrar hoy.'+quotaNote;
   }
-  return 'Bienvenid@ a ERIOR CENTER ✨ Soy Alicia, tu asistente personal. Estoy aqui para escucharte de verdad y guiarte al audio perfecto segun lo que estes viviendo. A veces lo que sentimos por dentro ya tiene una respuesta — solo falta escucharla. Cuentame, que te trae por aqui hoy?'+quotaNote;
+  return 'Bienvenid@ ✨ Soy Alicia, tu closer de Erior.\n\nPromo activa: IMAGINE o SEDUCTION $1,199 + segundo audio al 50%. Dime que estas viviendo (amor, dinero, cuerpo o mente) y te recomiendo 2 audios con precio — listos para pagar hoy.'+quotaNote;
 }
 function showAliciaPremiumWelcomeInChat(){
   var welcome=getAliciaWelcomeMessage();

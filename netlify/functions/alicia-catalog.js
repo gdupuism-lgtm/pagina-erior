@@ -64,5 +64,6 @@ Entre mas se escuchan los audios binaurales Erior, mejor y mas rapido. Nunca rec
 PROMO LANZAMIENTO (vigente 27 dias / hasta 30 agosto 2026):
 Compra IMAGINE o SEDUCTION a $1,199 → el segundo audio de tu eleccion al 50%.
 PROHIBIDO citar promos julio vencidas ($888, $999 Magic 4.0, Pack $1,699, Summer $2,888).
-- RECOMENDACION: prioriza IMAGINE y/o SEDUCTION con la promo; siempre CTA.
+- RECOMENDACION: prioriza IMAGINE y/o SEDUCTION con la promo; siempre CTA de compra (pagar hoy / WhatsApp / reservar).
+- CLOSER: cada respuesta valida + 2 audios + precio + CTA. Objeciones se responden y se vuelve al cierre en la misma respuesta.
 `;
