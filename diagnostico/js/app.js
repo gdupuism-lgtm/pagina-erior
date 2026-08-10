@@ -11,10 +11,10 @@
       subtitle: 'Esto define qué audio del catálogo te corresponde.',
       options: [
         { value: 'sp-volver', label: 'Quiero atraer o volver con alguien específico', ids: ['attraction', 'simulation-u', 'satori'], why: 'Bloqueos con persona específica' },
-        { value: 'sp-obsesion', label: 'Estoy obsesionad@ / no puedo soltar a alguien', ids: ['satori', 'amor-propio-3', 'attraction'], why: 'Desapego + base de amor propio' },
+        { value: 'sp-obsesion', label: 'Estoy obsesionad@ / no puedo soltar a alguien', ids: ['satori', 'amor-propio-4', 'attraction'], why: 'Desapego + base de amor propio' },
         { value: 'pareja', label: 'Quiero mejorar mi relación actual', ids: ['erior-love', '11-11', 'curious'], why: 'Trabajo en el reflejo de pareja' },
-        { value: 'nuevo', label: 'Quiero atraer una relación nueva sana', ids: ['attraction', 'amor-magic-2', '11-11'], why: 'Apertura + magnetismo limpio' },
-        { value: 'corazon', label: 'Necesito sanar el corazón / miedo a amar', ids: ['curious', '11-11', 'amor-propio-3'], why: 'Sanación emocional profunda' },
+        { value: 'nuevo', label: 'Quiero atraer una relación nueva sana', ids: ['attraction', 'amor-propio-4', '11-11'], why: 'Apertura + magnetismo limpio' },
+        { value: 'corazon', label: 'Necesito sanar el corazón / miedo a amar', ids: ['curious', '11-11', 'amor-propio-4'], why: 'Sanación emocional profunda' },
       ],
     },
     dinero: {
@@ -23,7 +23,7 @@
       options: [
         { value: 'flujo', label: 'Más dinero / abrir el flujo económico', ids: ['money-tech', 'master-abundance', 'lucky'], why: 'Activación financiera directa' },
         { value: 'negocio', label: 'Negocio, clientes o crecimiento profesional', ids: ['master-abundance', 'money-tech', 'audio-you'], why: 'Estructura de negocio y abundancia' },
-        { value: 'merecimiento', label: 'Sé que el bloqueo es de merecimiento', ids: ['money-tech', 'amor-propio-3', 'master-abundance'], why: 'Merecimiento + opulencia' },
+        { value: 'merecimiento', label: 'Sé que el bloqueo es de merecimiento', ids: ['money-tech', 'amor-propio-4', 'master-abundance'], why: 'Merecimiento + opulencia' },
         { value: 'suerte', label: 'Suerte, oportunidades o un golpe de fortuna', ids: ['lucky', 'money-tech', 'select'], why: 'Fortuna y apertura de puertas' },
         { value: 'personalizado', label: 'Quiero algo 100% a mi historia personal', ids: ['audio-you', 'audio-erior-3', 'master-abundance'], why: 'Audio ultra personalizado' },
       ],
@@ -32,8 +32,8 @@
       title: 'En amor propio, ¿dónde está el nudo?',
       subtitle: 'Elegir bien aquí evita recomendaciones genéricas.',
       options: [
-        { value: 'basico', label: 'Empezar a valorarme / glow up interno', ids: ['amor-magic-2', 'white-rabbit', 'mesmerizing'], why: 'Base de amor propio' },
-        { value: 'codependencia', label: 'Codependencia o validación externa', ids: ['amor-propio-3', 'amor-propio-4', 'mesmerizing'], why: 'Cortar dependencia emocional' },
+        { value: 'basico', label: 'Empezar a valorarme / glow up interno', ids: ['amor-propio-4', 'white-rabbit', 'mesmerizing'], why: 'Base de amor propio' },
+        { value: 'codependencia', label: 'Codependencia o validación externa', ids: ['amor-propio-4', 'amor-propio-4', 'mesmerizing'], why: 'Cortar dependencia emocional' },
         { value: 'trauma', label: 'Trauma, dolor corporal o herida profunda', ids: ['amor-propio-4', 'vitamind', 'emergency-999'], why: 'Trabajo profundo de trauma' },
         { value: 'hombre', label: 'Soy hombre / energía masculina', ids: ['amor-propio-hombre', 'god-goddess', 'master-abundance'], why: 'Diseñado para energía masculina' },
         { value: 'presencia', label: 'Presencia, belleza o aura magnética', ids: ['eclat', 'icon-aura', 'mental-glow-up'], why: 'Imagen + presencia icónica' },
@@ -95,8 +95,8 @@
       title: '¿Qué tan urgente es tu situación?',
       subtitle: 'Define si te conviene un audio base o un protocolo intenso.',
       options: [
-        { value: 'explorar', label: 'Quiero empezar con algo claro y estable', ids: ['amor-magic-2', 'keep-cool', 'booster'], w: 3 },
-        { value: 'avanzar', label: 'Ya trabajo en mí y quiero resultados más fuertes', ids: ['select', 'amor-propio-3', 'master-abundance'], w: 3 },
+        { value: 'explorar', label: 'Quiero empezar con algo claro y estable', ids: ['amor-propio-4', 'keep-cool', 'booster'], w: 3 },
+        { value: 'avanzar', label: 'Ya trabajo en mí y quiero resultados más fuertes', ids: ['select', 'amor-propio-4', 'master-abundance'], w: 3 },
         { value: 'urgente', label: 'Es urgente — necesito un cambio ya', ids: ['emergency-999', 'attraction', 'money-tech', 'amor-propio-4'], w: 7 },
       ],
     },
@@ -110,12 +110,12 @@
 
   var KEYWORD_MAP = [
     { re: /\bex\b|crush|persona espec|sp\b|no me hace caso|ghost|ignor|volver con/i, ids: ['attraction', 'simulation-u', 'satori'], w: 8 },
-    { re: /obsesi|no puedo soltar|lo pienso todo el d[ií]a|stalk/i, ids: ['satori', 'amor-propio-3', 'attraction'], w: 8 },
+    { re: /obsesi|no puedo soltar|lo pienso todo el d[ií]a|stalk/i, ids: ['satori', 'amor-propio-4', 'attraction'], w: 8 },
     { re: /pareja|relaci[oó]n actual|novi[oa]|espos[oa]|matrimonio|mejorar (mi )?relaci/i, ids: ['erior-love', '11-11', 'curious'], w: 7 },
     { re: /dinero|deuda|bancarro|pobre|rico|abund|finanz|cobrar|factura|sueldo/i, ids: ['money-tech', 'master-abundance', 'lucky'], w: 7 },
     { re: /negocio|clientes|empresa|emprend|ventas|trabajo|empleo|ascenso/i, ids: ['master-abundance', 'money-tech', 'audio-you'], w: 7 },
-    { re: /amor propio|merec|validaci|no me valoro|insegur|autoestima/i, ids: ['amor-magic-2', 'amor-propio-3', 'amor-propio-4'], w: 6 },
-    { re: /codepend/i, ids: ['amor-propio-3', 'amor-propio-4', 'satori'], w: 9 },
+    { re: /amor propio|merec|validaci|no me valoro|insegur|autoestima/i, ids: ['amor-propio-4', 'amor-propio-4', 'amor-propio-4'], w: 6 },
+    { re: /codepend/i, ids: ['amor-propio-4', 'amor-propio-4', 'satori'], w: 9 },
     { re: /\bhombre\b|masculin|viril|var[oó]n|soy hombre/i, ids: ['amor-propio-hombre', 'god-goddess'], w: 10 },
     { re: /trauma|dolor corporal|herida profunda|abus/i, ids: ['amor-propio-4', 'vitamind', 'emergency-999'], w: 8 },
     { re: /depres|ansiedad|p[aá]nico|ataque de/i, ids: ['vitamind', 'keep-cool', 'wonderland'], w: 7 },
@@ -270,11 +270,11 @@
       if (r.score > 0) top.push(r.id);
     });
 
-    var fallbacks = answers.area === 'amor' ? ['attraction', 'erior-love', 'amor-magic-2', 'satori']
+    var fallbacks = answers.area === 'amor' ? ['attraction', 'erior-love', 'amor-propio-4', 'satori']
       : answers.area === 'dinero' ? ['money-tech', 'master-abundance', 'lucky', 'audio-you']
       : answers.area === 'salud' ? ['vitamind', 'fit-wave', 'keep-cool', 'amor-propio-4']
       : answers.area === 'manifestacion' ? ['select', 'booster', 'keep-cool', 'simulation-u']
-      : ['amor-magic-2', 'select', 'master-abundance', 'attraction'];
+      : ['amor-propio-4', 'select', 'master-abundance', 'attraction'];
 
     fallbacks.forEach(function (id) {
       if (top.length >= 3) return;

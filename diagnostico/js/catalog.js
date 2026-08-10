@@ -1,8 +1,6 @@
 /* Catálogo Erior — Diagnóstico (audios vendibles) */
 window.ERIOR_CATALOG = [
   { id:'eclat', name:'Éclat', cat:'autoestima', pitch:'Belleza, avatar y resplandor desde el punto cero.', img:'img/catalog/eclat.jpg', tags:['belleza','avatar','rejuvenecer','piel','glow'] },
-  { id:'amor-magic-2', name:'Amor Magic 2.0', cat:'autoestima', pitch:'Amor propio clásico, glow up y mini script para cambiar tu pasado.', img:'img/catalog/amor-magic-2-0.jpg', tags:['amor-propio','merecimiento','glow','validacion','pasado'] },
-  { id:'amor-propio-3', name:'Amor Propio Magic 3.0', cat:'autoestima', pitch:'Amor propio 360°, codependencia OFF y frecuencias belleza/juventud.', img:'img/catalog/amor-propio-magic-3-0.jpg', tags:['amor-propio','codependencia','belleza','dinero'] },
   { id:'amor-propio-4', name:'Amor Propio Magic 4.0', cat:'autoestima', pitch:'Trauma corporal, merecimiento máximo y siguiente nivel del proceso.', img:'img/catalog/amor-propio-magic-4-0.jpg', tags:['trauma','cuerpo','dolor','merecimiento','amor-propio'] },
   { id:'amor-propio-hombre', name:'Amor Propio Magic Hombre', cat:'autoestima', pitch:'Energía masculina, virilidad, abundancia y desapego.', img:'img/catalog/amor-propio-magic-hombre.jpg', tags:['hombre','masculino','virilidad','amor-propio','abundancia'] },
   { id:'white-rabbit', name:'The White Rabbit Code', cat:'autoestima', pitch:'Boost personalizado de amor propio — tu vibra, tu tema.', img:'img/catalog/white-rabbit-code.jpg', tags:['boost','personalizado','amor-propio','rapido'] },
