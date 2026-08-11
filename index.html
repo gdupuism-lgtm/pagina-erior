@@ -1373,7 +1373,7 @@ body::before{
 @keyframes aliciaFomoPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.45;transform:scale(.85)}}
 .alicia-fomo-main{
   font-family:'Syne',sans-serif;font-size:clamp(.78rem,2.8vw,.88rem);font-weight:600;
-  color:rgba(255,248,235,.95);line-height:1.35;min-height:2.4em;
+  color:rgba(255,248,235,.95);line-height:1.35;min-height:0;
   transition:opacity .35s ease;
 }
 .alicia-fomo-main em{font-style:normal;color:rgba(255,220,140,.98)}
@@ -7226,7 +7226,7 @@ function getAliciaFomoStats(){
   return [
     {main:'Hoy Alicia ya ayudó a <em>'+helped+'</em> personas a elegir su audio',sub:'Varias están cerrando compra ahora mismo'},
     {main:'Hay <em>'+production+'</em> audios en lista de producción en este momento',sub:'Quienes reservan hoy entran con prioridad'},
-    {main:'Quedan <em>'+slots+'</em> lugares con prioridad de entrega hoy',sub:'Cuando se llenan, la fila se mueve a mañana'},
+    {main:'Quedan <em>'+slots+'</em> lugares con prioridad de entrega',sub:'Cuando se llenan, la fila se mueve a mañana'},
     {main:'<em>'+liveNow+'</em> personas están eligiendo audio con Alicia ahora',sub:'La señal está caliente — no te quedes fuera'},
     {main:'Hoy ya pidieron <em>'+seductionToday+'</em> SEDUCTION y <em>'+imagineToday+'</em> IMAGINE',sub:'Promo activa: nuevo $1,199 + segundo al 50%'}
   ];
@@ -7253,7 +7253,7 @@ function renderAliciaFomo(forceIdx){
     var plain=stats[cIdx].main.replace(/<\/?em>/g,'').replace(/Hoy Alicia ya ayudó a /,'');
     if(cIdx===0)cover.innerHTML='Hoy Alicia ya ayudó a <strong>'+(helpedMatch?helpedMatch[1]:'—')+'</strong> personas a elegir audio';
     else if(cIdx===1)cover.innerHTML='Hay <strong>'+String(stats[1].main).match(/<em>(\d+)<\/em>/)[1]+'</strong> audios en producción ahora · prioridad si reservas hoy';
-    else cover.innerHTML='Quedan <strong>'+String(stats[2].main).match(/<em>(\d+)<\/em>/)[1]+'</strong> lugares con prioridad de entrega hoy';
+    else cover.innerHTML='Quedan <strong>'+String(stats[2].main).match(/<em>(\d+)<\/em>/)[1]+'</strong> lugares con prioridad de entrega';
   }
 }
 var aliciaFomoTimer=null;
