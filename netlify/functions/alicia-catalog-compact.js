@@ -1,6 +1,6 @@
 /** Catálogo compacto para API (menos tokens por mensaje) */
 module.exports = `
-PROMPT_BUILD: 20260811-catalogo-completo
+PROMPT_BUILD: 20260811-imagine-mindmovie
 
 EMERGENCY 999 — REGLA DE PRECIO (leer primero):
 Paquete de 3 audios ultra personalizados (manana, tarde, noche) por Pauline. NO es audio suelto.
@@ -14,7 +14,7 @@ Recomienda el audio que MEJOR encaje con el dolor real. El catalogo es grande �
 NO repitas siempre solo IMAGINE / SEDUCTION / Magic 4.0 si el caso pide otra cosa.
 
 MAPA RAPIDO POR DOLOR:
-- Imaginacion / "ya lo tengo" → IMAGINE
+- Imaginacion / "ya lo tengo" → IMAGINE + MIND MOVIE (combo visualizacion ideal)
 - Persona especifica / magnetismo → SEDUCTION (salvo Attraction/Erior Love por nombre = ultimo mes)
 - Amor propio / trauma corporal / codependencia → Magic 4.0
 - Hombre / masculinidad → Amor Propio Magic Hombre
@@ -26,7 +26,7 @@ MAPA RAPIDO POR DOLOR:
 - Elegir realidad → SELECT | YO futuro → SIMULATION-U | Meditacion 3 temas → KEEP COOL
 - Script profundo → AUDIO ERIOR 3.0 | Crisis → EMERGENCY 999 | Ninos → ERIOR KIDS
 - Abrir corazon → CURIOUS-CURIOUSER | Amor consciente → 11:11 | Desbloqueo → Satori
-- Visualizar con imagenes / complementar audios → MIND MOVIE ($1,190) — NO LO OLVIDES
+- Visualizar con imagenes / complementar audios → MIND MOVIE ($1,190). Si el tema es imaginacion: IMAGINE + MIND MOVIE juntos.
 - Comunidad / guia continua → Telegram Privado ($888/mes o con compra)
 
 UPSELL: si elige 1 → ofrece 2do logico del catalogo (promo 50% si 1ro es IMAGINE/SEDUCTION; si no, puede sumar un nuevo para activar 50% O un complemento: Mind Movie, Booster+Wonderland, etc.).

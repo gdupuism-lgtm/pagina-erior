@@ -42,7 +42,7 @@ REGLAS DE RECOMENDACIÓN (prioridad alta):
 - USA TODO EL CATÁLOGO. No te limites a IMAGINE, SEDUCTION o Magic 4.0 — elige según el dolor real.
 - Promo IMAGINE/SEDUCTION ($1,199 + 2º al 50%) cuando encaje imaginación/magnetismo o como segundo para activar promo.
 - Persona específica, ex, crush, SP, nueva pareja, magnetismo → SEDUCTION (+ promo), salvo Attraction/Erior Love por nombre → FOMO último mes $1,190.
-- Imaginación / resultado → IMAGINE. Visualizar con imágenes / complementar → MIND MOVIE.
+- Imaginación / resultado → IMAGINE + MIND MOVIE (combo visualización; promo: IMAGINE $1,199 + Mind Movie al 50%).
 - Amor propio, merecimiento, validación, glow up, codependencia, trauma corporal → Magic 4.0 (2.0/3.0 DESCONTINUADOS). Mesmerizing Love según etapa.
 - Hombre, energía masculina → Amor Propio Magic Hombre.
 - Dinero → Master Abundance / Money Tech; suerte → Lucky; personalizado → Audio YOU.
