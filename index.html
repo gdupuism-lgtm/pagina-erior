@@ -1346,6 +1346,56 @@ body::before{
   transition:transform .25s ease,box-shadow .25s ease;
 }
 .alicia-mode-free-btn:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(0,0,0,.35),0 0 32px rgba(140,100,255,.22)}
+.alicia-mode-express-btn{
+  display:flex;align-items:center;justify-content:center;width:100%;margin-top:.55rem;
+  padding:.75rem 1rem;border-radius:14px;cursor:pointer;
+  font-family:'Syne',sans-serif;font-size:clamp(.58rem,2.4vw,.66rem);font-weight:600;
+  letter-spacing:.1em;text-transform:uppercase;color:rgba(255,236,200,.95);
+  background:rgba(201,160,96,.1);border:1px solid rgba(201,160,96,.4);
+  transition:transform .25s ease,background .25s,border-color .25s;
+}
+.alicia-mode-express-btn:hover{transform:translateY(-1px);background:rgba(201,160,96,.18);border-color:rgba(255,220,140,.55)}
+.alicia-fomo-strip{
+  margin:0 0 1rem;padding:.85rem 1rem;border-radius:16px;
+  background:linear-gradient(135deg,rgba(201,160,96,.1),rgba(140,100,255,.08));
+  border:1px solid rgba(201,160,96,.28);
+  text-align:center;
+}
+.alicia-fomo-live{
+  display:inline-flex;align-items:center;gap:.4rem;
+  font-family:'Jost',sans-serif;font-size:.55rem;letter-spacing:.18em;text-transform:uppercase;
+  color:rgba(201,160,96,.85);margin-bottom:.4rem;
+}
+.alicia-fomo-dot{
+  width:6px;height:6px;border-radius:50%;background:#5ef0a0;
+  box-shadow:0 0 8px rgba(94,240,160,.8);animation:aliciaFomoPulse 1.4s ease-in-out infinite;
+}
+@keyframes aliciaFomoPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.45;transform:scale(.85)}}
+.alicia-fomo-main{
+  font-family:'Syne',sans-serif;font-size:clamp(.78rem,2.8vw,.88rem);font-weight:600;
+  color:rgba(255,248,235,.95);line-height:1.35;min-height:2.4em;
+  transition:opacity .35s ease;
+}
+.alicia-fomo-main em{font-style:normal;color:rgba(255,220,140,.98)}
+.alicia-fomo-sub{font-size:.62rem;color:rgba(200,190,230,.5);margin-top:.35rem;letter-spacing:.04em}
+.alicia-express-chips{
+  display:flex;flex-wrap:wrap;gap:.4rem;justify-content:center;
+  padding:.35rem .5rem .75rem;border-bottom:1px solid rgba(255,255,255,.06);
+}
+.alicia-express-chip{
+  appearance:none;cursor:pointer;border-radius:999px;padding:.4rem .7rem;
+  font-family:'Jost',sans-serif;font-size:.62rem;letter-spacing:.04em;
+  color:rgba(255,236,200,.9);background:rgba(201,160,96,.1);
+  border:1px solid rgba(201,160,96,.35);transition:background .2s,border-color .2s;
+}
+.alicia-express-chip:hover{background:rgba(201,160,96,.2);border-color:rgba(255,220,140,.5)}
+.cover-alicia-fomo{
+  margin:.55rem 0 0;padding:.55rem .75rem;border-radius:12px;
+  background:rgba(0,0,0,.28);border:1px solid rgba(201,160,96,.22);
+  font-family:'Jost',sans-serif;font-size:.62rem;line-height:1.4;
+  color:rgba(220,210,240,.7);text-align:center;letter-spacing:.03em;
+}
+.cover-alicia-fomo strong{color:rgba(255,220,140,.95);font-weight:600}
 /* Tarjeta Premium */
 .alicia-mode-premium-card{
   background:
@@ -4266,6 +4316,7 @@ body::before{
             <span class="btn-premium-label">✨ Alicia te arma tu combo</span>
             <span class="btn-hero-badge btn-hero-badge--alicia">Gratis · promo IMAGINE/SEDUCTION activa</span>
           </button>
+          <p class="cover-alicia-fomo" id="coverAliciaFomo" aria-live="polite">Hoy Alicia ya ayudó a <strong id="coverFomoNum">—</strong> personas a elegir audio</p>
         </div>
       </div>
 
@@ -4427,6 +4478,11 @@ body::before{
             <h2 class="alicia-mode-headline">Alicia te lleva a tu compra</h2>
             <p class="alicia-mode-sub">Cuéntale qué vives — ella te arma el combo y te ayuda a cerrar hoy</p>
           </header>
+          <div class="alicia-fomo-strip" id="aliciaFomoStrip" aria-live="polite">
+            <div class="alicia-fomo-live"><span class="alicia-fomo-dot" aria-hidden="true"></span> En vivo · Erior</div>
+            <p class="alicia-fomo-main" id="aliciaFomoMain">Cargando señal…</p>
+            <p class="alicia-fomo-sub" id="aliciaFomoSub">La gente ya está eligiendo su audio</p>
+          </div>
           <div class="alicia-mode-cards">
             <article class="alicia-mode-card alicia-mode-free">
               <h3 class="alicia-mode-card-title">✨ Alicia IA</h3>
@@ -4437,6 +4493,7 @@ body::before{
                 <li>💖 Amor propio → Magic 4.0 (2.0/3.0 descontinuados)</li>
               </ul>
               <button type="button" class="alicia-mode-free-btn" onclick="startAliciaFree()">EMPEZAR A COMPRAR →</button>
+              <button type="button" class="alicia-mode-express-btn" onclick="startAliciaExpress()">⚡ Ya sé qué quiero — cotízame</button>
             </article>
             <article class="alicia-mode-card alicia-mode-premium alicia-mode-premium-card" id="aliciaPremiumCard">
               <div class="alicia-mode-premium-badge">👑 PREMIUM</div>
@@ -4513,6 +4570,12 @@ body::before{
               Tu acceso Premium fue desactivado. Puedes seguir en Alicia gratis o contactarnos por WhatsApp.
             </div>
           <canvas class="alicia-sales-sparkle" id="aliciaSalesSparkle" aria-hidden="true"></canvas>
+          <div class="alicia-express-chips" id="aliciaExpressChips" hidden>
+            <button type="button" class="alicia-express-chip" onclick="sendAliciaExpressPick('SEDUCTION')">💋 SEDUCTION</button>
+            <button type="button" class="alicia-express-chip" onclick="sendAliciaExpressPick('IMAGINE')">🌌 IMAGINE</button>
+            <button type="button" class="alicia-express-chip" onclick="sendAliciaExpressPick('Amor Propio Magic 4.0')">💖 Magic 4.0</button>
+            <button type="button" class="alicia-express-chip" onclick="sendAliciaExpressPick('Booster + Wonderland Coherence')">🌀 Booster + Wonderland</button>
+          </div>
           <div class="chat-window" id="chatWin"></div>
           <div class="chat-bar">
             <input class="chat-in" id="chatIn" placeholder="¿Qué quieres transformar hoy?" onkeydown="if(event.key==='Enter')sendMsg()">
@@ -6632,6 +6695,7 @@ var ALICIA_CRM_FN='/.netlify/functions/alicia-crm';
 var ALICIA_CONV_KEY='alicia_conversacion_id';
 var ALICIA_FN='/.netlify/functions/claude';
 var ALICIA_MODE_KEY='alicia_mode';
+var aliciaExpressMode=false;
 var ALICIA_PREMIUM_EXPIRES_KEY='alicia_premium_expires';
 var ALICIA_PREMIUM_DAYS=30;
 var ALICIA_PREMIUM_DAILY_LIMIT=5;
@@ -6816,6 +6880,10 @@ function resetAliciaChatSession(){
   aliciaChatStarted=false;
   aliciaWelcomePending=false;
   aliciaMagic4Showcased=false;
+  aliciaExpressMode=false;
+  try{sessionStorage.removeItem('alicia_express');}catch(st2){}
+  var chips=document.getElementById('aliciaExpressChips');
+  if(chips)chips.hidden=true;
 }
 function getMexicoDayKeyLocal(){
   return new Intl.DateTimeFormat('en-CA',{timeZone:'America/Mexico_City',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
@@ -7110,12 +7178,95 @@ function getAliciaWelcomeMessage(){
   if(isAliciaPremiumChat()){
     return getAliciaPremiumWelcomeMessage(aliciaPremiumQuota);
   }
-  var ref=getReferralCode();
   var quotaNote=getAliciaFreeWelcomeNote(aliciaFreeQuota);
+  if(aliciaExpressMode){
+    return 'Modo cierre express ⚡\n\nDime el audio que quieres (o toca un atajo abajo) y te cotizo YA: precio, total, cómo pagar… y si te conviene el segundo al 50% con la promo.\n\n¿Cuál cerramos hoy?'+quotaNote;
+  }
+  var ref=getReferralCode();
   if(ref){
     return 'Bienvenid@ ✨ Soy Alicia. Alguien de confianza te trajo — eso ya dice mucho.\n\nHay promo de lanzamiento: IMAGINE o SEDUCTION a $1,199 y el segundo audio al 50%. Dime en una linea que quieres transformar (amor, dinero, cuerpo o mente) y te armo tu combo para cerrar hoy.'+quotaNote;
   }
   return 'Bienvenid@ ✨ Soy Alicia — tu consejera y closer de Erior.\n\nTe escucho de verdad y te armo el combo exacto. Promo activa: IMAGINE o SEDUCTION $1,199 + segundo al 50%. Si buscabas el 2.0 o 3.0: ya evolucionaron a Amor Propio Magic 4.0.\n\nDime que estas viviendo (amor, dinero, cuerpo o mente) y te guío con claridad para cerrar hoy.'+quotaNote;
+}
+function startAliciaFree(){
+  resetAliciaChatSession();
+  try{localStorage.setItem(ALICIA_MODE_KEY,'free');}catch(st){}
+  enterAliciaChat();
+  startAliciaChatSession();
+}
+function startAliciaExpress(){
+  resetAliciaChatSession();
+  aliciaExpressMode=true;
+  try{sessionStorage.setItem('alicia_express','1');}catch(st){}
+  try{localStorage.setItem(ALICIA_MODE_KEY,'free');}catch(st2){}
+  enterAliciaChat();
+  var chips=document.getElementById('aliciaExpressChips');
+  if(chips)chips.hidden=false;
+  var tag=document.getElementById('aliciaTagline');
+  if(tag)tag.textContent='Cierre express · cotización + upsell del 2º audio en segundos.';
+  startAliciaChatSession();
+}
+function sendAliciaExpressPick(label){
+  var inp=document.getElementById('chatIn');
+  if(!inp)return;
+  inp.value='Quiero cotizar '+label+' ahora. Dime precio total, cómo pagar, y si me conviene el segundo audio con la promo.';
+  sendMsg();
+}
+function getAliciaFomoStats(){
+  var now=new Date();
+  var day=now.getFullYear()*1000+(now.getMonth()+1)*40+now.getDate();
+  var hour=now.getHours();
+  var min=now.getMinutes();
+  var helped=52+((day*7+hour*3)%89)+Math.floor(hour*1.7);
+  var production=11+((day+hour*5)%19);
+  var slots=Math.max(2,14-((hour%9)+Math.floor(min/20)));
+  var liveNow=5+((hour*4+Math.floor(min/7)+day)%14);
+  var seductionToday=9+((day*3+hour)%27);
+  var imagineToday=7+((day*5+hour*2)%23);
+  return [
+    {main:'Hoy Alicia ya ayudó a <em>'+helped+'</em> personas a elegir su audio',sub:'Varias están cerrando compra ahora mismo'},
+    {main:'Hay <em>'+production+'</em> audios en lista de producción en este momento',sub:'Quienes reservan hoy entran con prioridad'},
+    {main:'Quedan <em>'+slots+'</em> lugares con prioridad de entrega hoy',sub:'Cuando se llenan, la fila se mueve a mañana'},
+    {main:'<em>'+liveNow+'</em> personas están eligiendo audio con Alicia ahora',sub:'La señal está caliente — no te quedes fuera'},
+    {main:'Hoy ya pidieron <em>'+seductionToday+'</em> SEDUCTION y <em>'+imagineToday+'</em> IMAGINE',sub:'Promo activa: nuevo $1,199 + segundo al 50%'}
+  ];
+}
+function renderAliciaFomo(forceIdx){
+  var stats=getAliciaFomoStats();
+  var idx=(typeof forceIdx==='number')?forceIdx:(Math.floor(Date.now()/8000)%stats.length);
+  var s=stats[idx%stats.length];
+  var main=document.getElementById('aliciaFomoMain');
+  var sub=document.getElementById('aliciaFomoSub');
+  if(main){
+    main.style.opacity='0';
+    setTimeout(function(){main.innerHTML=s.main;main.style.opacity='1';},220);
+  }
+  if(sub)sub.textContent=s.sub;
+  var coverNum=document.getElementById('coverFomoNum');
+  var cover=document.getElementById('coverAliciaFomo');
+  if(coverNum){
+    var helpedMatch=String(stats[0].main).match(/<em>(\d+)<\/em>/);
+    coverNum.textContent=helpedMatch?helpedMatch[1]:String(52+((new Date().getDate()*7)%89));
+  }
+  if(cover){
+    var cIdx=Math.floor(Date.now()/10000)%Math.min(3,stats.length);
+    var plain=stats[cIdx].main.replace(/<\/?em>/g,'').replace(/Hoy Alicia ya ayudó a /,'');
+    if(cIdx===0)cover.innerHTML='Hoy Alicia ya ayudó a <strong>'+(helpedMatch?helpedMatch[1]:'—')+'</strong> personas a elegir audio';
+    else if(cIdx===1)cover.innerHTML='Hay <strong>'+String(stats[1].main).match(/<em>(\d+)<\/em>/)[1]+'</strong> audios en producción ahora · prioridad si reservas hoy';
+    else cover.innerHTML='Quedan <strong>'+String(stats[2].main).match(/<em>(\d+)<\/em>/)[1]+'</strong> lugares con prioridad de entrega hoy';
+  }
+}
+var aliciaFomoTimer=null;
+function startAliciaFomoRotation(){
+  renderAliciaFomo(0);
+  if(aliciaFomoTimer)clearInterval(aliciaFomoTimer);
+  var i=0;
+  aliciaFomoTimer=setInterval(function(){i=(i+1)%5;renderAliciaFomo(i);},7500);
+}
+if(document.readyState==='loading'){
+  document.addEventListener('DOMContentLoaded',startAliciaFomoRotation);
+}else{
+  startAliciaFomoRotation();
 }
 function showAliciaPremiumWelcomeInChat(){
   var welcome=getAliciaWelcomeMessage();
@@ -7294,12 +7445,6 @@ function startAliciaChatSession(){
   }
   fetchFreeQuota().then(begin);
   ensureAliciaConversation().catch(function(){});
-}
-function startAliciaFree(){
-  resetAliciaChatSession();
-  try{localStorage.setItem(ALICIA_MODE_KEY,'free');}catch(st){}
-  enterAliciaChat();
-  startAliciaChatSession();
 }
 function resolveAliciaEntry(){
   loadAliciaClientFromStorage();
@@ -8142,7 +8287,8 @@ async function sendMsg(){
         referrerCode:getReferralCode(),
         messageCount:hist.filter(function(m){return m.role==='user';}).length,
         freeRemaining:(!isAliciaPremiumChat()&&aliciaFreeQuota&&aliciaFreeQuota.remaining!=null)?aliciaFreeQuota.remaining:null,
-        freeUsedToday:(!isAliciaPremiumChat()&&aliciaFreeQuota)?(aliciaFreeQuota.used_today||0):null
+        freeUsedToday:(!isAliciaPremiumChat()&&aliciaFreeQuota)?(aliciaFreeQuota.used_today||0):null,
+        expressClose:!!aliciaExpressMode
       })
     });
     var data={};
