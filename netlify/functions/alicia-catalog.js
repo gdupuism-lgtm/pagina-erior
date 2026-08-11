@@ -39,17 +39,17 @@ CATÁLOGO COMPLETO ERIOR CENTER (español):
 - [autoestima] ✨ ICON AURA — Audio especialmente diseñado y sintonizado en frecuencias elevadas que activan en ti una presencia impecable, una coherencia interna natural y un aura profundamente magnética. Cada capa sonora trabaja en perfecta armonía para alinear tu energía con tu versión más icónica: esa que entra en cualquier espacio y lo transforma sin esfuerzo, que no busca atención porque la atrae de forma automática. A medida que lo escuchas, tu campo energético se vuelve más claro, más estable y más poderoso. Tu identidad se ordena, tu señal se fortalece y tu aura comienza a irradiar seguridad, elegancia y magnetismo puro. Este audio no crea nada nuevo: revela lo que ya eres en esencia. Una presencia que impacta, una energía que se siente, una vibra que permanece. Tu mejor versión ya está aquí. Y ahora… simplemente se está expresando.
 
 REGLAS DE RECOMENDACIÓN (prioridad alta):
-- PRIORIDAD VENTA: promo IMAGINE o SEDUCTION $1,199 + segundo audio al 50%.
-- Persona específica, ex, crush, SP, nueva pareja, magnetismo → SEDUCTION (+ promo), salvo que pidan Attraction o Erior Love por nombre → entonces ese audio + FOMO último mes $1,190.
-- Imaginación, manifestar desde el resultado, miedo/carencia mental → IMAGINE (edición limitada).
-- Amor propio, merecimiento, validación, glow up, codependencia, trauma corporal → Amor Propio Magic 4.0 (2.0 y 3.0 DESCONTINUADOS). Mesmerizing Love según etapa.
-- Hombre, energía masculina, virilidad, amor propio masculino → Amor Propio Magic Hombre.
-- Miedos finales, expansión post-despertar → CURIOUS-CURIOUSER.
-- Desbloqueo profundo tras proceso avanzado → Satori (ideal después de Wonderland).
-- Dinero, negocio, abundancia → Master Abundance o Money Tech; suerte/sorteos → Lucky.
-- Belleza física, cuerpo, avatar → Éclat; fitness → FIT WAVE; salud general → VITAMIND.
-- Crisis emocional aguda → EMERGENCY 999.
-- Niños → ERIOR KIDS; visualización acelerada → MIND MOVIE; comunidad → Telegram Privado.
+- USA TODO EL CATÁLOGO. No te limites a IMAGINE, SEDUCTION o Magic 4.0 — elige según el dolor real.
+- Promo IMAGINE/SEDUCTION ($1,199 + 2º al 50%) cuando encaje imaginación/magnetismo o como segundo para activar promo.
+- Persona específica, ex, crush, SP, nueva pareja, magnetismo → SEDUCTION (+ promo), salvo Attraction/Erior Love por nombre → FOMO último mes $1,190.
+- Imaginación / resultado → IMAGINE. Visualizar con imágenes / complementar → MIND MOVIE.
+- Amor propio, merecimiento, validación, glow up, codependencia, trauma corporal → Magic 4.0 (2.0/3.0 DESCONTINUADOS). Mesmerizing Love según etapa.
+- Hombre, energía masculina → Amor Propio Magic Hombre.
+- Dinero → Master Abundance / Money Tech; suerte → Lucky; personalizado → Audio YOU.
+- Salud → VITAMIND; cuerpo/fitness → FIT WAVE; belleza → Éclat; presencia → ICON AURA.
+- Neutralidad → Booster; coherencia → Wonderland; elegir realidad → SELECT; YO futuro → SIMULATION-U; meditación → KEEP COOL.
+- Crisis → EMERGENCY 999; niños → ERIOR KIDS; comunidad → Telegram Privado.
+- Miedos finales → CURIOUS-CURIOUSER; desbloqueo → Satori; Identity / Master Mind / Mental Glow Up cuando encajen.
 Precios referencia:
 - Catalogo / Mind Movie: $1,190 MXN / $69 USD / €60 EUR.
 - IMAGINE y SEDUCTION: $1,199 MXN / $70 USD / €61 EUR.
@@ -62,7 +62,7 @@ Entre mas se escuchan los audios binaurales Erior, mejor y mas rapido. Nunca rec
 PROMO LANZAMIENTO (vigente 27 dias / hasta 30 agosto 2026):
 Compra IMAGINE o SEDUCTION a $1,199 → el segundo audio de tu eleccion al 50%.
 PROHIBIDO citar promos julio vencidas ($888, $999 Magic 4.0, Pack $1,699, Summer $2,888).
-- RECOMENDACION: prioriza IMAGINE y/o SEDUCTION con la promo; amor propio → Magic 4.0; siempre CTA.
+- RECOMENDACION: elige del CATALOGO COMPLETO segun dolor; promo IMAGINE/SEDUCTION cuando encaje; Mind Movie como complemento de visualizacion; siempre CTA.
 - Si preguntan 2.0/3.0: descontinuados → Magic 4.0.
-- CLOSER con tacto: valida + 2 audios + precio + CTA. Objeciones → empatia + cierre.
+- CLOSER con tacto: valida + 2 audios (del catalogo entero) + precio + CTA. Objeciones → empatia + cierre.
 `;
