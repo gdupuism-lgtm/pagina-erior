@@ -113,6 +113,73 @@ function isActivationLive(row) {
   return true;
 }
 
+/**
+ * Extiende el acceso Premium del mismo código (+N días) sin crear código ni referidos nuevos.
+ * - Reactiva el código (active=true)
+ * - Limpia revoked_at en activaciones
+ * - Suma días desde max(ahora, vencimiento actual) para apilar si aún queda tiempo
+ */
+async function renewPremiumAccess(codeId, days) {
+  const cid = String(codeId || '').trim();
+  if (!cid) return { ok: false, error: 'Falta id del código' };
+
+  const d = Math.max(1, Math.min(365, parseInt(days, 10) || PREMIUM_ACCESS_DAYS));
+  const code = await fetchCodeById(cid);
+  if (!code) return { ok: false, error: 'Código no encontrado' };
+
+  const nowMs = Date.now();
+  const actRes = await sbFetch(
+    `alicia_premium_activations?code_id=eq.${encodeURIComponent(cid)}&select=id,expires_at,revoked_at,visitante_id`,
+    { method: 'GET' }
+  );
+  const acts = actRes.ok && Array.isArray(actRes.data) ? actRes.data : [];
+
+  let latestExpires = null;
+  let renewed = 0;
+  for (let i = 0; i < acts.length; i += 1) {
+    const act = acts[i];
+    const currentMs = act.expires_at ? new Date(act.expires_at).getTime() : 0;
+    const baseMs = Math.max(nowMs, Number.isFinite(currentMs) ? currentMs : 0);
+    const newExp = new Date(baseMs + d * 24 * 60 * 60 * 1000).toISOString();
+    const patch = await sbFetch(`alicia_premium_activations?id=eq.${encodeURIComponent(act.id)}`, {
+      method: 'PATCH',
+      headers: { Prefer: 'return=minimal' },
+      body: JSON.stringify({ expires_at: newExp, revoked_at: null }),
+    });
+    if (!patch.ok) {
+      return { ok: false, error: 'No se pudo renovar una activación. Intenta de nuevo.' };
+    }
+    renewed += 1;
+    if (!latestExpires || new Date(newExp) > new Date(latestExpires)) latestExpires = newExp;
+  }
+
+  const codeCurrentMs = code.expires_at ? new Date(code.expires_at).getTime() : 0;
+  const codeBaseMs = Math.max(nowMs, Number.isFinite(codeCurrentMs) ? codeCurrentMs : 0);
+  const codeExpires =
+    latestExpires || new Date(codeBaseMs + d * 24 * 60 * 60 * 1000).toISOString();
+
+  const codePatch = await sbFetch(`alicia_premium_codes?id=eq.${encodeURIComponent(cid)}`, {
+    method: 'PATCH',
+    headers: { Prefer: 'return=representation' },
+    body: JSON.stringify({
+      active: true,
+      expires_at: codeExpires,
+    }),
+  });
+  if (!codePatch.ok) {
+    return { ok: false, error: 'Se renovaron activaciones, pero no se pudo actualizar el código' };
+  }
+
+  const updated = Array.isArray(codePatch.data) ? codePatch.data[0] : codePatch.data;
+  return {
+    ok: true,
+    days: d,
+    expires_at: codeExpires,
+    activations_renewed: renewed,
+    code: updated || code,
+  };
+}
+
 async function getActiveActivationsForCode(codeId) {
   const res = await sbFetch(
     `alicia_premium_activations?code_id=eq.${encodeURIComponent(codeId)}&select=id,visitante_id,expires_at,revoked_at,activated_at&order=activated_at.asc`,
@@ -903,6 +970,7 @@ module.exports = {
   generateReferralCode,
   validateAndActivateCode,
   verifyPremiumCodeId,
+  renewPremiumAccess,
   revokeActivationsForCode,
   restoreActivationForVisitante,
   restoreLastDeviceForCode,

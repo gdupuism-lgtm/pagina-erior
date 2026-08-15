@@ -124,6 +124,7 @@ code{font-family:ui-monospace,monospace;color:#f5e6c8;background:rgba(201,160,96
               <th>Cliente</th>
               <th>Usos</th>
               <th>Estado</th>
+              <th>Vence</th>
               <th>Creado</th>
               <th></th>
             </tr>
@@ -333,15 +334,22 @@ code{font-family:ui-monospace,monospace;color:#f5e6c8;background:rgba(201,160,96
       (d.codes||[]).forEach(function(c){
         var tr=document.createElement('tr');
         var active=c.active!==false;
+        var expLabel=c.expires_at?fmtDate(c.expires_at):'—';
+        var expSoon=false;
+        if(c.expires_at){
+          try{expSoon=(new Date(c.expires_at).getTime()-Date.now())<7*24*60*60*1000;}catch(e){}
+        }
         tr.innerHTML=
           '<td><code class="copy" title="Copiar">'+c.code+'</code></td>'+
           '<td>'+(c.client_name||'—')+'<br><span style="opacity:.5;font-size:.65rem">'+(c.client_email||c.client_whatsapp||'')+'</span></td>'+
           '<td>'+(c.activation_count||0)+' / '+c.max_activations+'</td>'+
           '<td><span class="badge '+(active?'badge-on':'badge-off')+'">'+(active?'Activo':'Off')+'</span></td>'+
+          '<td style="'+(expSoon?'color:#ffb86c;font-weight:600':'')+'">'+expLabel+'</td>'+
           '<td>'+fmtDate(c.created_at)+'</td>'+
           '<td><div class="row-actions">'+
             '<button type="button" class="btn btn-ghost btn-sm" data-copy="'+c.code+'">Copiar</button>'+
             '<a class="btn btn-ghost btn-sm" href="'+escAttr(vipCardUrl(c.code,c.client_name||'Cliente'))+'" target="_blank" rel="noopener noreferrer">🎴 Ver Tarjeta VIP</a>'+
+            '<button type="button" class="btn btn-gold btn-sm" data-renew="'+c.id+'" data-name="'+escAttr(c.client_name||c.code)+'" title="Suma 30 días más al mismo código (no crea referidos nuevos)">🔄 +30 días</button>'+
             '<button type="button" class="btn btn-danger btn-sm" data-toggle="'+c.id+'" data-active="'+(active?'0':'1')+'">'+(active?'Desactivar':'Activar')+'</button>'+
             '<button type="button" class="btn-delete-x" data-delete="'+c.id+'" data-code="'+escAttr(c.code)+'" title="Borrar código">×</button>'+
           '</div></td>';
@@ -349,6 +357,9 @@ code{font-family:ui-monospace,monospace;color:#f5e6c8;background:rgba(201,160,96
       });
       tbody.querySelectorAll('[data-copy]').forEach(function(btn){
         btn.onclick=function(){copyText(btn.getAttribute('data-copy'));btn.textContent='✓';setTimeout(function(){btn.textContent='Copiar';},1200);};
+      });
+      tbody.querySelectorAll('[data-renew]').forEach(function(btn){
+        btn.onclick=function(){renewCode(btn.getAttribute('data-renew'),btn.getAttribute('data-name'));};
       });
       tbody.querySelectorAll('[data-toggle]').forEach(function(btn){
         btn.onclick=function(){toggleCode(btn.getAttribute('data-toggle'),btn.getAttribute('data-active')==='1');};
@@ -540,6 +551,28 @@ code{font-family:ui-monospace,monospace;color:#f5e6c8;background:rgba(201,160,96
   document.getElementById('codeLookupInput').onkeydown=function(e){
     if(e.key==='Enter')document.getElementById('btnCodeLookup').click();
   };
+
+  async function renewCode(id,name){
+    var label=String(name||'este cliente').trim();
+    if(!confirm('¿Renovar acceso de '+label+' por +30 días?\n\nMismo código y mismos referidos. No se crea nada nuevo.'))return;
+    var msg=document.getElementById('listMsg');
+    try{
+      var r=await fetch(ADMIN_FN,{method:'POST',headers:headers(),body:JSON.stringify({action:'renew',id:id,days:30})});
+      var d=await r.json();
+      if(!r.ok||!d.ok){
+        if(msg){msg.textContent=(d&&d.error)||'No se pudo renovar';msg.className='msg err';}
+        return;
+      }
+      var until=d.expires_at?fmtDate(d.expires_at):'—';
+      if(msg){
+        msg.textContent='✓ Renovado +'+(d.days||30)+' días · vence '+until+(d.activations_renewed!=null?' · '+d.activations_renewed+' dispositivo(s)':'');
+        msg.className='msg ok';
+      }
+      await loadCodes();
+    }catch(e){
+      if(msg){msg.textContent='Sin conexión al renovar';msg.className='msg err';}
+    }
+  }
 
   async function toggleCode(id,active){
     await fetch(ADMIN_FN,{method:'POST',headers:headers(),body:JSON.stringify({action:'toggle',id:id,active:active})});

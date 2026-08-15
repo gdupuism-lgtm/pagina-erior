@@ -12,6 +12,7 @@ const {
   createReferralForPremiumCode,
   revokeActivationsForCode,
   restoreLastDeviceForCode,
+  renewPremiumAccess,
   sbFetch,
 } = require('./premium-lib');
 
@@ -243,6 +244,19 @@ exports.handler = async (event) => {
         return { statusCode: 400, headers, body: JSON.stringify({ ok: false, error: 'No se pudo actualizar' }) };
       }
       return { statusCode: 200, headers, body: JSON.stringify({ ok: true }) };
+    }
+
+    if (action === 'renew') {
+      const id = body.id;
+      if (!id) {
+        return { statusCode: 400, headers, body: JSON.stringify({ ok: false, error: 'Falta id' }) };
+      }
+      const days = body.days != null ? body.days : 30;
+      const result = await renewPremiumAccess(id, days);
+      if (!result.ok) {
+        return { statusCode: 400, headers, body: JSON.stringify(result) };
+      }
+      return { statusCode: 200, headers, body: JSON.stringify(result) };
     }
 
     if (action === 'toggle') {
