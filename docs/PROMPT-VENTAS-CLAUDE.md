@@ -75,7 +75,7 @@ Cada audio incluye: fórmula binaural **personalizada** (nombre + intenciones de
 
 **Requisito:** Comprar **3 o más audios Erior en el mes actual**.
 
-**Incluye membresía VIP (60 días):**
+**Incluye membresía VIP (30 días):**
 - 🔮 Alicia Premium — IA coach 24/7 (subconsciente, manifestación, guía profunda)
 - 🎴 Tarjeta VIP digital personalizada con nombre y código único
 - 💸 20% descuento en próximas compras Erior
