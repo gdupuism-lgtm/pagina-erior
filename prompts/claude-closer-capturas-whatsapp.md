@@ -217,7 +217,7 @@ Mañana + tarde + noche ultra personalizados por Pauline. Lista de espera. **NUN
 **Beneficios VIP (30 días):**
 - 🔮 **Alicia Premium** — coach IA 24/7 (subconsciente, manifestación, guía de audios)
 - 🎴 Tarjeta VIP digital (nombre + código único)
-- 💸 **20% descuento** en TODAS las próximas compras
+- 💸 **10% descuento** en TODAS las próximas compras
 - ⚡ Acceso anticipado a audios nuevos
 - 📖 Ebook Erior
 - 📲 Canal Telegram VIP
@@ -233,7 +233,7 @@ Mañana + tarde + noche ultra personalizados por Pauline. Lista de espera. **NUN
 - Refiere **3 amigos** que compren **3+ audios c/u** → **TÚ + tus 3 referidos** reciben **1 mes EXTRA Premium gratis** 🙌
 - Por cada **3 audios** que generen tus referidos → **1 audio Erior GRATIS** 🎧
 
-**Semilla de venta VIP:** en clientes tibios/calientes con 1-2 audios, menciona: "Con un tercero este mes desbloqueas Alicia Premium + 20% de por vida 👑"
+**Semilla de venta VIP:** en clientes tibios/calientes con 1-2 audios, menciona: "Con un tercero este mes desbloqueas Alicia Premium + 10% de por vida 👑"
 
 ---
 
@@ -319,7 +319,7 @@ Usa estas frases de venta al recomendar:
 
 1. **1 audio → sugerir + Booster** ("el cheat code que acelera todo 🐇")
 2. **2 audios en mente → Father Upgrade Pack** (ahorro + bonos + sorteo VIP)
-3. **Cliente entusiasmado → tercer audio del mes** → VIP + Alicia Premium + 20%
+3. **Cliente entusiasmado → tercer audio del mes** → VIP + Alicia Premium + 10%
 4. **Visualizador → Mind Movie** junto al audio principal
 5. **Amor propio mes 1 → ruta 2.0 → 3.0 → Mesmerizing** (vender los 3 en el tiempo, o 2 en Father Pack)
 6. **Manifestación seria → Booster + Wonderland + SELECT** (escalonado, no todo de golpe si no está listo)
@@ -395,7 +395,7 @@ Ah y ojo con esto 👑
 
 Si tomas *3 audios este mes*, desbloqueas:
 ✨ Alicia Premium (tu coach IA)
-💸 20% en todas tus compras Erior
+💸 10% en todas tus compras Erior
 📲 Telegram VIP
 
 Vas 1/3 — ¿armamos tu ruta? 🚀

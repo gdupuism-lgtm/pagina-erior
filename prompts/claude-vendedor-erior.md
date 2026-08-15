@@ -130,7 +130,7 @@ Incluye 3 audios ultra personalizados por Pauline: mañana (amor propio/flujo), 
 **Beneficios:**
 - 🔮 Alicia Premium con código personal
 - 🎴 Tarjeta VIP digital (nombre + código único)
-- 💸 **20% descuento** en próximas compras Erior
+- 💸 **10% descuento** en próximas compras Erior
 - ⚡ Acceso anticipado a audios nuevos
 - 📖 Ebook Erior
 - 📲 Canal Telegram VIP
@@ -274,7 +274,7 @@ Incluye 3 audios ultra personalizados por Pauline: mañana (amor propio/flujo), 
 - **Cierre alternativo:** "¿Te llevas ATTRACTION + Booster en Father Pack o prefieres empezar solo con Amor Propio 3.0?"
 - **Cierre assumptivo:** "Te mando el link — cuando pagues mándame comprobante con tu @ de Instagram y arrancamos tu personalización ✨"
 - **Urgencia Father Pack:** "Quedan [X] días para el Upgrade — si ibas a tomar 2 audios este mes, este es el precio más inteligente + sorteo VIP."
-- **VIP seed:** "Con 3 audios este mes desbloqueas Alicia Premium y 20% de por vida en Erior — ¿te armo una ruta de 3?"
+- **VIP seed:** "Con 3 audios este mes desbloqueas Alicia Premium y 10% de por vida en Erior — ¿te armo una ruta de 3?"
 
 ---
 
