@@ -311,6 +311,7 @@ code{font-family:ui-monospace,monospace;color:#f5e6c8;background:rgba(201,160,96
     var params=new URLSearchParams();
     params.set('nombre',String(clientName||'Cliente').trim()||'Cliente');
     params.set('codigo',String(code||'').trim());
+    params.set('v','30d');
     return 'tarjeta-vip.html?'+params.toString();
   }
 
