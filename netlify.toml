@@ -7,6 +7,16 @@
   to = "/diagnostico/"
   status = 301
 
+[[redirects]]
+  from = "/oferta"
+  to = "/oferta/"
+  status = 301
+
+[[redirects]]
+  from = "/story"
+  to = "/oferta/"
+  status = 301
+
 [[headers]]
   for = "/img/*"
   [headers.values]

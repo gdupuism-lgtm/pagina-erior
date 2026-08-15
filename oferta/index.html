@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#05040a">
+<meta name="description" content="Tu manifestación no está tarde — está desfasada. Promo Erior: IMAGINE o SEDUCTION $1,199 + segundo audio al 50%.">
+<meta property="og:title" content="¿Se está tardando tu manifestación? · Erior">
+<meta property="og:description" content="Compra uno de los nuevos a $1,199 · el segundo audio al 50%.">
+<meta property="og:type" content="website">
+<title>Oferta Stories · Erior Center</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,400;1,9..144,600&family=Syne:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#05040a;
+  --ink:#f6f0e6;
+  --soft:rgba(246,240,230,.72);
+  --dim:rgba(246,240,230,.42);
+  --gold:#e4bf7a;
+  --gold-hot:#f0d4a0;
+  --gold-glow:rgba(228,191,122,.45);
+  --cyan:#6ec8c2;
+  --cyan-dim:rgba(110,200,194,.35);
+  --void:#0a0812;
+  --display:'Fraunces',Georgia,serif;
+  --brand:'Syne',sans-serif;
+  --ease:cubic-bezier(.22,1,.36,1);
+  --ease-out:cubic-bezier(.16,1,.3,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--bg);color:var(--ink)}
+body{
+  min-height:100vh;min-height:100dvh;
+  font-family:var(--brand);
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+  touch-action:manipulation;
+}
+#field{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 100% 70% at 50% -15%, rgba(228,191,122,.16), transparent 55%),
+    radial-gradient(ellipse 60% 45% at 85% 85%, rgba(110,200,194,.1), transparent 50%),
+    radial-gradient(ellipse 50% 40% at 5% 70%, rgba(228,191,122,.07), transparent 45%),
+    var(--bg);
+}
+#trail{position:fixed;inset:0;z-index:1;pointer-events:none}
+.ring{
+  position:fixed;z-index:1;pointer-events:none;
+  width:min(92vw,420px);height:min(92vw,420px);
+  left:50%;top:42%;transform:translate(-50%,-50%);
+  border-radius:50%;
+  border:1px solid rgba(228,191,122,.12);
+  box-shadow:inset 0 0 60px rgba(228,191,122,.04), 0 0 80px rgba(110,200,194,.05);
+  animation:spinRing 48s linear infinite;
+}
+.ring::before,.ring::after{
+  content:'';position:absolute;border-radius:50%;inset:12%;
+  border:1px dashed rgba(110,200,194,.14);
+  animation:spinRing 28s linear infinite reverse;
+}
+.ring::after{inset:28%;border-style:solid;border-color:rgba(228,191,122,.08);animation-duration:36s}
+@keyframes spinRing{to{transform:translate(-50%,-50%) rotate(360deg)}}
+.grain{
+  position:fixed;inset:0;z-index:2;pointer-events:none;opacity:.07;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode:overlay;
+}
+.vignette{
+  position:fixed;inset:0;z-index:2;pointer-events:none;
+  background:radial-gradient(ellipse 75% 65% at 50% 45%, transparent 30%, rgba(0,0,0,.72) 100%);
+}
+.app{
+  position:relative;z-index:5;
+  min-height:100vh;min-height:100dvh;
+  display:flex;align-items:center;justify-content:center;
+  padding:max(1.25rem, env(safe-area-inset-top)) 1.25rem max(1.75rem, env(safe-area-inset-bottom));
+}
+.screen{
+  display:none;width:min(440px,100%);
+  text-align:center;
+}
+.screen.active{
+  display:block;
+  animation:enter .9s var(--ease-out) both;
+}
+@keyframes enter{
+  from{opacity:0;transform:translateY(28px) scale(.97);filter:blur(8px)}
+  to{opacity:1;transform:none;filter:none}
+}
+.brand{
+  font-family:var(--brand);
+  font-weight:800;font-size:.72rem;letter-spacing:.46em;
+  text-transform:uppercase;color:var(--gold);
+  margin-bottom:1.35rem;
+  text-shadow:0 0 28px var(--gold-glow);
+}
+.kicker{
+  display:inline-block;
+  font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--cyan);margin-bottom:1.15rem;opacity:.9;
+}
+h1{
+  font-family:var(--display);font-weight:300;
+  font-size:clamp(2.15rem,8.2vw,3.15rem);
+  line-height:1.08;letter-spacing:-.02em;
+  margin-bottom:1.1rem;
+}
+h1 em{font-style:italic;color:var(--gold);font-weight:500}
+h1 .lag{
+  position:relative;display:inline-block;
+}
+h1 .lag::after{
+  content:attr(data-echo);
+  position:absolute;left:.12em;top:.06em;
+  color:var(--cyan);opacity:.28;z-index:-1;
+  animation:echoDrift 3.2s ease-in-out infinite alternate;
+  pointer-events:none;
+}
+@keyframes echoDrift{
+  from{transform:translate(0,0);opacity:.18}
+  to{transform:translate(.08em,.05em);opacity:.38}
+}
+.lead{
+  font-weight:500;font-size:.95rem;line-height:1.65;
+  color:var(--soft);max-width:32ch;margin:0 auto 1.85rem;
+}
+.btn{
+  appearance:none;border:none;cursor:pointer;
+  font-family:var(--brand);font-weight:700;
+  font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;
+  text-decoration:none;
+  display:inline-flex;align-items:center;justify-content:center;gap:.5rem;
+  width:100%;padding:1.05rem 1.25rem;border-radius:999px;
+  transition:transform .3s var(--ease), box-shadow .3s, background .3s, color .3s;
+  position:relative;overflow:hidden;
+}
+.btn:active{transform:scale(.98)}
+.btn-gold{
+  background:linear-gradient(135deg,var(--gold-hot),var(--gold) 45%,#c9a05a);
+  color:#1a1208;
+  box-shadow:0 0 0 1px rgba(255,230,180,.35), 0 12px 40px var(--gold-glow);
+}
+.btn-gold::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.45) 50%,transparent 60%);
+  transform:translateX(-120%);
+  animation:shine 3.8s var(--ease) infinite;
+}
+@keyframes shine{
+  0%,70%{transform:translateX(-120%)}
+  100%{transform:translateX(120%)}
+}
+.btn-gold:hover{box-shadow:0 0 0 1px rgba(255,240,200,.5), 0 16px 52px rgba(228,191,122,.55)}
+.btn-ghost{
+  margin-top:.7rem;
+  background:transparent;color:var(--dim);
+  border:1px solid rgba(246,240,230,.14);
+}
+.btn-ghost:hover{color:var(--ink);border-color:rgba(246,240,230,.3)}
+.pulse-hint{
+  margin-top:1.25rem;font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--dim);animation:hintPulse 2.2s ease-in-out infinite;
+}
+@keyframes hintPulse{0%,100%{opacity:.35}50%{opacity:.85}}
+
+/* Offer reveal */
+.percent-stage{
+  position:relative;height:7.5rem;margin:1.2rem 0 1.5rem;
+  display:flex;align-items:center;justify-content:center;
+}
+.percent{
+  font-family:var(--display);font-weight:700;font-style:italic;
+  font-size:clamp(5rem,22vw,6.5rem);line-height:1;
+  background:linear-gradient(180deg,var(--gold-hot),var(--gold) 55%,#a67c3a);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  text-shadow:none;
+  filter:drop-shadow(0 0 40px var(--gold-glow));
+  transform:scale(.4);opacity:0;
+}
+.percent.pop{
+  animation:percentPop 1.1s var(--ease-out) forwards;
+}
+@keyframes percentPop{
+  0%{transform:scale(.4) rotate(-8deg);opacity:0;filter:blur(12px) drop-shadow(0 0 20px var(--gold-glow))}
+  55%{transform:scale(1.08) rotate(2deg);opacity:1;filter:blur(0) drop-shadow(0 0 50px var(--gold-glow))}
+  100%{transform:scale(1) rotate(0);opacity:1;filter:drop-shadow(0 0 36px var(--gold-glow))}
+}
+.offer-line{
+  font-size:.92rem;line-height:1.55;color:var(--soft);
+  max-width:34ch;margin:0 auto 1.5rem;
+}
+.offer-line strong{color:var(--gold);font-weight:600}
+.price-row{
+  display:flex;align-items:baseline;justify-content:center;gap:.65rem;
+  margin-bottom:1.6rem;flex-wrap:wrap;
+}
+.price-now{
+  font-family:var(--display);font-size:1.85rem;font-weight:500;color:var(--ink);
+}
+.price-note{font-size:.72rem;color:var(--dim);letter-spacing:.06em}
+
+/* Picks — interaction containers, not decorative cards */
+.picks{display:grid;gap:.65rem;margin:1.25rem 0 1.5rem;text-align:left}
+.pick{
+  appearance:none;width:100%;cursor:pointer;text-align:left;
+  padding:1rem 1.1rem;border-radius:18px;
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(228,191,122,.18);
+  color:var(--ink);font-family:var(--brand);
+  transition:border-color .25s, background .25s, transform .25s var(--ease), box-shadow .25s;
+}
+.pick:hover{border-color:rgba(228,191,122,.4);background:rgba(228,191,122,.06)}
+.pick.on{
+  border-color:rgba(228,191,122,.7);
+  background:rgba(228,191,122,.1);
+  box-shadow:0 0 28px rgba(228,191,122,.15);
+  transform:translateY(-1px);
+}
+.pick-name{
+  display:block;font-weight:700;font-size:.88rem;letter-spacing:.08em;
+  text-transform:uppercase;margin-bottom:.25rem;color:var(--gold);
+}
+.pick-desc{display:block;font-size:.78rem;line-height:1.45;color:var(--soft);font-weight:500}
+
+.step-label{
+  font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--cyan);margin-bottom:.85rem;
+}
+.summary{
+  margin:0 auto 1.35rem;padding:1rem 1.1rem;border-radius:16px;
+  border:1px solid rgba(110,200,194,.2);
+  background:rgba(110,200,194,.06);
+  font-size:.82rem;line-height:1.55;color:var(--soft);text-align:left;
+}
+.summary em{font-style:normal;color:var(--gold);font-weight:600}
+.timer{
+  font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--dim);margin-bottom:1.1rem;
+}
+.timer span{color:var(--cyan)}
+
+.progress{
+  position:fixed;top:0;left:0;height:2px;z-index:20;
+  background:linear-gradient(90deg,var(--cyan),var(--gold));
+  width:0;transition:width .5s var(--ease);
+  box-shadow:0 0 12px var(--gold-glow);
+}
+.foot{
+  margin-top:1.5rem;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;
+  color:rgba(246,240,230,.28);
+}
+.foot a{color:rgba(228,191,122,.55);text-decoration:none}
+
+/* Burst particles on offer */
+.burst{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.spark{
+  position:absolute;left:50%;top:50%;width:4px;height:4px;border-radius:50%;
+  background:var(--gold);opacity:0;
+}
+@media (prefers-reduced-motion:reduce){
+  .ring,.btn-gold::before,h1 .lag::after,.pulse-hint{animation:none}
+  .percent.pop{animation:none;transform:none;opacity:1;filter:none}
+  .screen.active{animation:none}
+}
+</style>
+</head>
+<body>
+<div id="field" aria-hidden="true"></div>
+<canvas id="trail" aria-hidden="true"></canvas>
+<div class="ring" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+<div class="vignette" aria-hidden="true"></div>
+<div class="progress" id="progress" aria-hidden="true"></div>
+
+<main class="app">
+  <!-- 1 · Problema -->
+  <section class="screen active" id="s0" data-step="0">
+    <p class="brand">Erior</p>
+    <p class="kicker">Señal de historia</p>
+    <h1>
+      ¿Se está
+      <span class="lag" data-echo="tardando">tardando</span>
+      tu manifestación?
+    </h1>
+    <p class="lead">No es que el universo te ignore. Es que tu mente aún no entra en la escena que ya pediste.</p>
+    <button type="button" class="btn btn-gold" onclick="go(1)">Ver por qué</button>
+    <p class="pulse-hint">Toca · 20 segundos</p>
+  </section>
+
+  <!-- 2 · Insight -->
+  <section class="screen" id="s1" data-step="1">
+    <p class="brand">Erior</p>
+    <p class="kicker">El desfase</p>
+    <h1>No está <em>tarde</em>.<br>Está <span class="lag" data-echo="desfasada">desfasada</span>.</h1>
+    <p class="lead">Afirmas una cosa… y sientes otra. Visualizas un minuto… y vuelves al mismo loop. Ese gap es lo que frena todo.</p>
+    <button type="button" class="btn btn-gold" onclick="go(2)">Quiero sincronizarla</button>
+    <button type="button" class="btn btn-ghost" onclick="go(0)">Volver</button>
+  </section>
+
+  <!-- 3 · Oferta -->
+  <section class="screen" id="s2" data-step="2">
+    <p class="brand">Erior</p>
+    <p class="kicker">Oferta abierta desde Stories</p>
+    <div class="percent-stage">
+      <div class="burst" id="burst" aria-hidden="true"></div>
+      <div class="percent" id="percent">50%</div>
+    </div>
+    <p class="offer-line">Compra <strong>IMAGINE</strong> o <strong>SEDUCTION</strong> a $1,199 MXN y elige un <strong>segundo audio al 50%</strong>.</p>
+    <div class="price-row">
+      <span class="price-now">Nuevo + ½</span>
+      <span class="price-note">Ticket que se siente · resultado que se escucha</span>
+    </div>
+    <p class="timer">Prioridad de entrega · promo limitada · <span id="countdown">—</span></p>
+    <button type="button" class="btn btn-gold" onclick="go(3)">Armar mi combo</button>
+    <button type="button" class="btn btn-ghost" id="waDirect" target="_blank" rel="noopener">Comprar ya por WhatsApp</button>
+  </section>
+
+  <!-- 4 · Elegir -->
+  <section class="screen" id="s3" data-step="3">
+    <p class="brand">Erior</p>
+    <p class="step-label">Paso 1 · Elige tu audio nuevo</p>
+    <h1 style="font-size:clamp(1.7rem,6.5vw,2.2rem);margin-bottom:.5rem">¿Cuál abre tu escena?</h1>
+    <div class="picks" role="group" aria-label="Elegir audio nuevo">
+      <button type="button" class="pick" data-audio="IMAGINE" onclick="pickFirst(this)">
+        <span class="pick-name">IMAGINE</span>
+        <span class="pick-desc">Imaginación + “ya lo tengo”. Ideal si visualizas y quieres sentir la escena real.</span>
+      </button>
+      <button type="button" class="pick" data-audio="SEDUCTION" onclick="pickFirst(this)">
+        <span class="pick-name">SEDUCTION</span>
+        <span class="pick-desc">Magnetismo, atracción, persona específica. Ideal si el bloqueo está en el amor.</span>
+      </button>
+    </div>
+    <p class="step-label">Paso 2 · Segundo audio al 50%</p>
+    <div class="picks" role="group" aria-label="Elegir segundo audio">
+      <button type="button" class="pick" data-second="MIND MOVIE" onclick="pickSecond(this)">
+        <span class="pick-name">MIND MOVIE</span>
+        <span class="pick-desc">Complemento visual estrella — tu película para reprogramar más rápido.</span>
+      </button>
+      <button type="button" class="pick" data-second="Magic 4.0" onclick="pickSecond(this)">
+        <span class="pick-name">Magic 4.0</span>
+        <span class="pick-desc">Amor propio / liberar lo que frena. Base emocional potente.</span>
+      </button>
+      <button type="button" class="pick" data-second="el que Alicia me recomiende" onclick="pickSecond(this)">
+        <span class="pick-name">Que me recomienden</span>
+        <span class="pick-desc">Te armamos el segundo según tu caso al cerrar por WhatsApp.</span>
+      </button>
+    </div>
+    <div class="summary" id="summary">Elige tu combo para ver el resumen.</div>
+    <a class="btn btn-gold" id="waBuy" href="#" target="_blank" rel="noopener">Comprar este combo</a>
+    <button type="button" class="btn btn-ghost" onclick="go(2)">Ver oferta otra vez</button>
+    <p class="foot">Erior Center · <a href="https://eriorcenterguiaaudios.netlify.app/">catálogo completo</a></p>
+  </section>
+</main>
+
+<script>
+(function(){
+  var WA='5214432311761';
+  var PROMO_END=new Date('2026-08-30T23:59:59-06:00').getTime();
+  var firstAudio='';
+  var secondAudio='';
+  var step=0;
+
+  function waUrl(msg){
+    return 'https://wa.me/'+WA+'?text='+encodeURIComponent(msg);
+  }
+
+  function setProgress(n){
+    var p=document.getElementById('progress');
+    if(p)p.style.width=((n+1)/4*100)+'%';
+  }
+
+  window.go=function(n){
+    var screens=document.querySelectorAll('.screen');
+    screens.forEach(function(s){s.classList.remove('active');});
+    var el=document.getElementById('s'+n);
+    if(el)el.classList.add('active');
+    step=n;
+    setProgress(n);
+    if(n===2){
+      requestAnimationFrame(function(){
+        var pct=document.getElementById('percent');
+        if(pct){
+          pct.classList.remove('pop');
+          void pct.offsetWidth;
+          pct.classList.add('pop');
+        }
+        spawnBurst();
+      });
+    }
+    try{window.scrollTo({top:0,behavior:'smooth'});}catch(e){window.scrollTo(0,0);}
+  };
+
+  window.pickFirst=function(btn){
+    document.querySelectorAll('[data-audio]').forEach(function(b){b.classList.remove('on');});
+    btn.classList.add('on');
+    firstAudio=btn.getAttribute('data-audio');
+    updateSummary();
+  };
+
+  window.pickSecond=function(btn){
+    document.querySelectorAll('[data-second]').forEach(function(b){b.classList.remove('on');});
+    btn.classList.add('on');
+    secondAudio=btn.getAttribute('data-second');
+    updateSummary();
+  };
+
+  function updateSummary(){
+    var box=document.getElementById('summary');
+    var link=document.getElementById('waBuy');
+    if(!firstAudio){
+      box.innerHTML='Elige tu audio nuevo para activar el 50%.';
+      link.href='#';
+      return;
+    }
+    var second=secondAudio||'el segundo que me recomienden';
+    box.innerHTML='Tu combo: <em>'+firstAudio+'</em> a $1,199 + <em>'+second+'</em> al 50%. Prioridad de entrega al confirmar.';
+    var msg='Hola! Vengo de la oferta de Stories ✨\nQuiero la promo 50%:\n• Nuevo: '+firstAudio+' ($1,199)\n• Segundo al 50%: '+second+'\nQuiero cerrar ahora con prioridad de entrega.';
+    link.href=waUrl(msg);
+  }
+
+  var direct=document.getElementById('waDirect');
+  if(direct){
+    direct.addEventListener('click',function(){
+      window.open(waUrl('Hola! Vengo de la oferta de Stories ✨ Quiero la promo: IMAGINE o SEDUCTION a $1,199 + segundo audio al 50%. Ayúdame a armar mi combo y cerrar ahora.'),'_blank');
+    });
+  }
+
+  function tick(){
+    var el=document.getElementById('countdown');
+    if(!el)return;
+    var d=PROMO_END-Date.now();
+    if(d<=0){el.textContent='últimas horas';return;}
+    var days=Math.floor(d/86400000);
+    var hrs=Math.floor((d%86400000)/3600000);
+    var mins=Math.floor((d%3600000)/60000);
+    el.textContent=days+'d '+hrs+'h '+mins+'m';
+  }
+  tick();
+  setInterval(tick,30000);
+  setProgress(0);
+
+  function spawnBurst(){
+    var host=document.getElementById('burst');
+    if(!host)return;
+    host.innerHTML='';
+    for(var i=0;i<18;i++){
+      var s=document.createElement('span');
+      s.className='spark';
+      var ang=(Math.PI*2*i)/18;
+      var dist=40+Math.random()*70;
+      s.style.background=i%3===0?'#6ec8c2':'#e4bf7a';
+      host.appendChild(s);
+      s.animate([
+        {transform:'translate(-50%,-50%) scale(1)',opacity:1},
+        {transform:'translate(calc(-50% + '+Math.cos(ang)*dist+'px), calc(-50% + '+Math.sin(ang)*dist+'px)) scale(0)',opacity:0}
+      ],{duration:900+Math.random()*400,easing:'cubic-bezier(.22,1,.36,1)',fill:'forwards'});
+    }
+  }
+
+  /* Light trails canvas */
+  var c=document.getElementById('trail');
+  if(c){
+    var ctx=c.getContext('2d');
+    var w,h,parts=[];
+    function resize(){
+      w=c.width=window.innerWidth*devicePixelRatio;
+      h=c.height=window.innerHeight*devicePixelRatio;
+      c.style.width=window.innerWidth+'px';
+      c.style.height=window.innerHeight+'px';
+      ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+    }
+    function reset(){
+      parts=[];
+      var n=Math.min(42,Math.floor(window.innerWidth/18));
+      for(var i=0;i<n;i++){
+        parts.push({
+          x:Math.random()*window.innerWidth,
+          y:Math.random()*window.innerHeight,
+          l:20+Math.random()*50,
+          v:.15+Math.random()*.55,
+          a:.08+Math.random()*.22,
+          gold:Math.random()>.45
+        });
+      }
+    }
+    function frame(){
+      ctx.clearRect(0,0,window.innerWidth,window.innerHeight);
+      parts.forEach(function(p){
+        p.y-=p.v;
+        if(p.y<-p.l){p.y=window.innerHeight+p.l;p.x=Math.random()*window.innerWidth;}
+        var g=ctx.createLinearGradient(p.x,p.y,p.x,p.y+p.l);
+        if(p.gold){
+          g.addColorStop(0,'rgba(228,191,122,0)');
+          g.addColorStop(.5,'rgba(228,191,122,'+p.a+')');
+          g.addColorStop(1,'rgba(228,191,122,0)');
+        }else{
+          g.addColorStop(0,'rgba(110,200,194,0)');
+          g.addColorStop(.5,'rgba(110,200,194,'+p.a+')');
+          g.addColorStop(1,'rgba(110,200,194,0)');
+        }
+        ctx.strokeStyle=g;
+        ctx.lineWidth=1.2;
+        ctx.beginPath();
+        ctx.moveTo(p.x,p.y);
+        ctx.lineTo(p.x,p.y+p.l);
+        ctx.stroke();
+      });
+      requestAnimationFrame(frame);
+    }
+    resize();reset();frame();
+    window.addEventListener('resize',function(){resize();reset();});
+  }
+})();
+</script>
+</body>
+</html>
