@@ -8327,9 +8327,13 @@ async function sendMsg(){
       return;
     }
     if(data.quotaError==='register_failed'||(data.premiumQuota&&data.premiumQuota.quota_error==='register_failed')){
-      addMsg('b','No se pudo registrar tu cuota Premium. Falta configurar la tabla en Supabase (alicia-premium-quota.sql). Escríbenos por WhatsApp si necesitas ayuda 💛');
-      sendBtn.disabled=false;
-      return;
+      // No trabar el chat: si hay respuesta de Alicia, sí mostrarla.
+      // El fallo de cuota se registra en servidor; el cliente sigue pudiendo hablar.
+      if(!(data.reply)){
+        addMsg('b','Alicia está activa, pero hubo un problema técnico al contar tu cuota. Intenta de nuevo en unos segundos 💛');
+        sendBtn.disabled=false;
+        return;
+      }
     }
     if(!r.ok){
       var errTxt=(data&&data.error)?String(data.error):('Error '+r.status);

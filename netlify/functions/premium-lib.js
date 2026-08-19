@@ -666,11 +666,11 @@ async function upsertPremiumUsage(visitanteId, codeId, patch) {
   const cid = String(codeId || '').trim();
   if (!vid) return false;
   const now = new Date().toISOString();
-  const row = cid ? await resolvePremiumUsageRow(vid, cid) : await fetchPremiumUsageRow(vid);
   const payload = Object.assign({ updated_at: now }, patch || {});
   if (cid) payload.code_id = cid;
 
-  if (row) {
+  async function patchRow(row) {
+    if (!row) return false;
     const filter = row.code_id
       ? `code_id=eq.${encodeURIComponent(row.code_id)}`
       : `visitante_id=eq.${encodeURIComponent(row.visitante_id)}`;
@@ -682,40 +682,44 @@ async function upsertPremiumUsage(visitanteId, codeId, patch) {
     return res.ok;
   }
 
-  if (!cid) {
-    const ins = await sbFetch('alicia_premium_usage', {
-      method: 'POST',
-      headers: { Prefer: 'return=minimal' },
-      body: JSON.stringify([
-        Object.assign(
-          {
-            visitante_id: vid,
-            day_key: getMexicoDayKey(),
-            messages_today: 0,
-          },
-          payload
-        ),
-      ]),
-    });
-    return ins.ok;
+  const existing = cid ? await resolvePremiumUsageRow(vid, cid) : await fetchPremiumUsageRow(vid);
+  if (existing) {
+    const ok = await patchRow(existing);
+    if (ok) return true;
   }
+
+  const insertBody = Object.assign(
+    {
+      visitante_id: vid,
+      day_key: getMexicoDayKey(),
+      messages_today: 0,
+    },
+    payload
+  );
+  if (cid) insertBody.code_id = cid;
 
   const ins = await sbFetch('alicia_premium_usage', {
     method: 'POST',
     headers: { Prefer: 'return=minimal' },
-    body: JSON.stringify([
-      Object.assign(
-        {
-          visitante_id: vid,
-          code_id: cid,
-          day_key: getMexicoDayKey(),
-          messages_today: 0,
-        },
-        payload
-      ),
-    ]),
+    body: JSON.stringify([insertBody]),
   });
-  return ins.ok;
+  if (ins.ok) return true;
+
+  // Recuperación: choque de unique (mismo code_id u otro visitante) → patch a la fila existente
+  const byCode = cid ? await fetchPremiumUsageByCode(cid) : null;
+  const byVisitor = await fetchPremiumUsageRow(vid);
+  const recovered = byCode || byVisitor;
+  if (recovered) {
+    const ok = await patchRow(recovered);
+    if (ok) return true;
+  }
+
+  console.error(
+    'upsertPremiumUsage failed',
+    ins.status,
+    typeof ins.data === 'string' ? ins.data : JSON.stringify(ins.data || {})
+  );
+  return false;
 }
 
 async function consumePremiumMessage(visitanteId, codeId) {
