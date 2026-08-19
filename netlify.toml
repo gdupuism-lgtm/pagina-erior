@@ -17,6 +17,16 @@
   to = "/oferta/"
   status = 301
 
+[[redirects]]
+  from = "/galaxy"
+  to = "/galaxy/"
+  status = 301
+
+[[redirects]]
+  from = "/starwars"
+  to = "/galaxy/"
+  status = 301
+
 [[headers]]
   for = "/img/*"
   [headers.values]

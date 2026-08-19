@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#010108">
+<meta name="description" content="Erior Galaxy — elige tu frecuencia y cierra por WhatsApp. Audios personalizados Erior Center.">
+<meta property="og:title" content="Erior Galaxy · Elige tu audio">
+<meta property="og:description" content="Selecciona tu frecuencia. Promo: IMAGINE o SEDUCTION $1,199 + segundo al 50%.">
+<title>Erior Galaxy · Elige tu frecuencia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#010108;
+  --ink:#eaf2ff;
+  --dim:rgba(180,210,255,.55);
+  --gold:#e4bf7a;
+  --cyan:#4de6ff;
+  --red:#ff4d6d;
+  --panel:rgba(6,12,28,.72);
+  --display:'Orbitron',sans-serif;
+  --mono:'Share Tech Mono',ui-monospace,monospace;
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;background:var(--bg);color:var(--ink)}
+body{
+  font-family:var(--mono);
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+#stars{position:fixed;inset:0;z-index:0;display:block}
+.vignette{
+  position:fixed;inset:0;z-index:1;pointer-events:none;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 20%, rgba(77,230,255,.08), transparent 50%),
+    radial-gradient(ellipse 70% 50% at 80% 90%, rgba(228,191,122,.07), transparent 45%),
+    linear-gradient(180deg, rgba(0,0,0,.35), transparent 25%, rgba(0,0,0,.65));
+}
+.app{position:relative;z-index:3;min-height:100vh;min-height:100dvh}
+
+/* INTRO CRAWL */
+.intro{
+  min-height:100vh;min-height:100dvh;
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
+  padding:2rem 1.25rem 3rem;text-align:center;
+  perspective:420px;
+}
+.brand{
+  font-family:var(--display);font-weight:800;letter-spacing:.42em;
+  font-size:.72rem;color:var(--gold);margin-bottom:1.5rem;
+  text-shadow:0 0 24px rgba(228,191,122,.45);
+}
+.crawl-wrap{
+  width:min(520px,100%);height:42vh;overflow:hidden;
+  mask-image:linear-gradient(180deg,transparent,black 18%,black 78%,transparent);
+  -webkit-mask-image:linear-gradient(180deg,transparent,black 18%,black 78%,transparent);
+  margin-bottom:2rem;
+}
+.crawl{
+  transform-origin:50% 100%;
+  transform:rotateX(22deg) translateY(40%);
+  animation:crawlUp 28s linear forwards;
+  color:#4de6ff;text-align:center;
+  font-family:var(--display);font-weight:700;
+  text-shadow:0 0 18px rgba(77,230,255,.35);
+}
+.crawl h1{
+  font-size:clamp(1.4rem,5vw,2rem);letter-spacing:.08em;
+  margin-bottom:1rem;line-height:1.25;color:#7ef0ff;
+}
+.crawl p{
+  font-family:var(--mono);font-weight:400;font-size:.95rem;
+  line-height:1.7;color:rgba(180,230,255,.85);margin:0 auto 1rem;max-width:34ch;
+}
+@keyframes crawlUp{
+  0%{transform:rotateX(22deg) translateY(55%)}
+  100%{transform:rotateX(22deg) translateY(-120%)}
+}
+.btn{
+  appearance:none;border:none;cursor:pointer;text-decoration:none;
+  font-family:var(--display);font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  font-size:.72rem;display:inline-flex;align-items:center;justify-content:center;gap:.5rem;
+  padding:1rem 1.4rem;border-radius:4px;width:min(360px,100%);
+  transition:transform .25s var(--ease),box-shadow .25s,background .25s;
+}
+.btn:active{transform:scale(.98)}
+.btn-cyan{
+  background:linear-gradient(135deg,#7ef0ff,var(--cyan));
+  color:#021018;
+  box-shadow:0 0 0 1px rgba(126,240,255,.5),0 0 36px rgba(77,230,255,.35);
+}
+.btn-gold{
+  background:linear-gradient(135deg,#f0d4a0,var(--gold));
+  color:#1a1208;
+  box-shadow:0 0 0 1px rgba(255,230,180,.4),0 0 36px rgba(228,191,122,.35);
+}
+.btn-ghost{
+  background:transparent;color:var(--dim);
+  border:1px solid rgba(180,210,255,.22);margin-top:.55rem;
+}
+.skip{margin-top:1rem;font-size:.65rem;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);background:none;border:none;cursor:pointer}
+
+/* MAIN DECK */
+.deck{display:none;padding:1rem 1rem 7.5rem}
+.deck.on{display:block;animation:fadeIn .7s var(--ease)}
+@keyframes fadeIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.topbar{
+  position:sticky;top:0;z-index:10;
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  background:rgba(1,1,8,.72);
+  border-bottom:1px solid rgba(77,230,255,.15);
+  padding:.75rem 0 .85rem;margin:0 -1rem 1rem;padding-left:1rem;padding-right:1rem;
+}
+.topbar-row{display:flex;align-items:center;justify-content:space-between;gap:.75rem;margin-bottom:.75rem}
+.topbar .brand{margin:0;font-size:.62rem}
+.promo-chip{
+  font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--gold);border:1px solid rgba(228,191,122,.35);
+  padding:.35rem .55rem;border-radius:999px;
+  background:rgba(228,191,122,.08);
+}
+.filters{display:flex;gap:.4rem;overflow-x:auto;padding-bottom:.15rem;-webkit-overflow-scrolling:touch}
+.filters::-webkit-scrollbar{display:none}
+.filter{
+  flex:0 0 auto;appearance:none;cursor:pointer;
+  font-family:var(--mono);font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--dim);background:rgba(255,255,255,.03);
+  border:1px solid rgba(180,210,255,.16);border-radius:999px;
+  padding:.45rem .7rem;transition:all .2s;
+}
+.filter.on{color:#021018;background:var(--cyan);border-color:var(--cyan);box-shadow:0 0 18px rgba(77,230,255,.35)}
+
+.grid{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:.75rem;max-width:720px;margin:0 auto;
+}
+@media(min-width:700px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+
+.holo{
+  appearance:none;cursor:pointer;text-align:left;width:100%;
+  background:var(--panel);
+  border:1px solid rgba(77,230,255,.18);
+  border-radius:14px;overflow:hidden;
+  position:relative;
+  transition:transform .25s var(--ease),border-color .25s,box-shadow .25s;
+  color:inherit;font:inherit;
+}
+.holo:hover{transform:translateY(-3px);border-color:rgba(77,230,255,.45);box-shadow:0 12px 40px rgba(0,0,0,.45),0 0 24px rgba(77,230,255,.12)}
+.holo.on{
+  border-color:var(--gold);
+  box-shadow:0 0 0 1px rgba(228,191,122,.55),0 0 32px rgba(228,191,122,.25);
+}
+.holo-img{
+  aspect-ratio:1;width:100%;object-fit:cover;display:block;
+  background:#0a1020;
+  filter:saturate(1.05) contrast(1.05);
+}
+.holo-body{padding:.7rem .75rem .85rem}
+.holo-tag{
+  display:inline-block;font-size:.5rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--cyan);margin-bottom:.35rem;opacity:.85;
+}
+.holo-name{
+  font-family:var(--display);font-weight:700;font-size:.72rem;
+  letter-spacing:.04em;line-height:1.25;margin-bottom:.3rem;
+  color:#f2f7ff;
+}
+.holo-price{font-size:.62rem;color:var(--gold)}
+.holo-badge{
+  position:absolute;top:.45rem;left:.45rem;z-index:2;
+  font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;
+  padding:.28rem .45rem;border-radius:4px;font-family:var(--display);font-weight:700;
+}
+.badge-new{background:rgba(77,230,255,.9);color:#021018}
+.badge-hot{background:rgba(255,77,109,.9);color:#fff}
+.badge-pick{
+  position:absolute;top:.45rem;right:.45rem;z-index:2;
+  width:22px;height:22px;border-radius:50%;
+  border:1.5px solid rgba(255,255,255,.35);
+  background:rgba(0,0,0,.35);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.65rem;color:transparent;
+}
+.holo.on .badge-pick{background:var(--gold);border-color:var(--gold);color:#1a1208;font-weight:700}
+
+/* DOCK */
+.dock{
+  position:fixed;left:0;right:0;bottom:0;z-index:20;
+  padding:.85rem 1rem calc(.95rem + env(safe-area-inset-bottom));
+  background:linear-gradient(180deg,transparent,rgba(1,1,8,.92) 28%,rgba(1,1,8,.98));
+  border-top:1px solid rgba(77,230,255,.18);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+}
+.dock-inner{max-width:560px;margin:0 auto}
+.dock-sum{
+  font-size:.68rem;line-height:1.45;color:var(--dim);
+  margin-bottom:.65rem;min-height:2.1em;
+}
+.dock-sum strong{color:var(--gold);font-weight:700}
+.dock .btn{width:100%}
+.hint{text-align:center;margin-top:.55rem;font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(180,210,255,.35)}
+
+@media(prefers-reduced-motion:reduce){
+  .crawl{animation:none;transform:none}
+}
+</style>
+</head>
+<body>
+<canvas id="stars" aria-hidden="true"></canvas>
+<div class="vignette" aria-hidden="true"></div>
+
+<main class="app">
+  <section class="intro" id="intro">
+    <p class="brand">ERIOR</p>
+    <div class="crawl-wrap" aria-hidden="true">
+      <div class="crawl">
+        <h1>Hace mucho tiempo,<br>en una mente no muy lejana…</h1>
+        <p>Tu realidad ya tiene una frecuencia.</p>
+        <p>Los audios Erior no son tip: son códigos sonoros personalizados para reprogramar el subconsciente.</p>
+        <p>Promo activa: IMAGINE o SEDUCTION a $1,199 · el segundo audio al 50%.</p>
+        <p>Elige tu misión. Cierra por WhatsApp. Prioridad de entrega.</p>
+      </div>
+    </div>
+    <button type="button" class="btn btn-cyan" id="btnEnter">Entrar a la Galaxy</button>
+    <button type="button" class="skip" id="btnSkip">Saltar intro</button>
+  </section>
+
+  <section class="deck" id="deck">
+    <div class="topbar">
+      <div class="topbar-row">
+        <p class="brand">ERIOR GALAXY</p>
+        <span class="promo-chip">2º audio 50%</span>
+      </div>
+      <div class="filters" id="filters" role="tablist" aria-label="Categorías"></div>
+    </div>
+    <div class="grid" id="grid"></div>
+  </section>
+</main>
+
+<div class="dock" id="dock" hidden>
+  <div class="dock-inner">
+    <p class="dock-sum" id="dockSum">Selecciona 1 o 2 audios para armar tu combo.</p>
+    <a class="btn btn-gold" id="waBtn" href="#" target="_blank" rel="noopener">Comprar por WhatsApp</a>
+    <p class="hint">Se abre WhatsApp con tu pedido listo</p>
+  </div>
+</div>
+
+<script>
+(function(){
+  var WA='5214432311761';
+  var IMG='../img/catalog/';
+  var selected=[];
+  var cat='all';
+
+  var AUDIOS=[
+    {id:'imagine',name:'IMAGINE',cat:'autoestima',tag:'NUEVO',badge:'new',price:1199,promo:true,img:'imagine.jpg',blurb:'Imaginar desde el ya lo tengo'},
+    {id:'seduction',name:'SEDUCTION',cat:'amor',tag:'NUEVO',badge:'new',price:1199,promo:true,img:'seduction.jpg',blurb:'Magnetismo sin perseguir'},
+    {id:'magic4',name:'Magic 4.0',cat:'autoestima',tag:'NUEVO',badge:'new',price:1190,img:'amor-propio-magic-4-0.jpg',blurb:'Amor propio + liberar emociones'},
+    {id:'mindmovie',name:'MIND MOVIE',cat:'extras',tag:'VISUAL',badge:'',price:1190,img:'mind-movie.jpg',blurb:'Tu película para reprogramar'},
+    {id:'booster',name:'Booster',cat:'manifestacion',tag:'PORTAL',badge:'',price:1190,img:'booster.jpg',blurb:'Reinicio a la neutralidad'},
+    {id:'wonderland',name:'Wonderland Coherence',cat:'manifestacion',tag:'',badge:'',price:1190,img:'wonderland-coherence.jpg',blurb:'Menos ruido, más coherencia'},
+    {id:'select',name:'SELECT',cat:'manifestacion',tag:'',badge:'',price:1190,img:'select.jpg',blurb:'Elige tu realidad día a día'},
+    {id:'money',name:'MONEY TECH',cat:'dinero',tag:'',badge:'',price:1190,img:'money-tech.jpg',blurb:'Abundancia sin duda'},
+    {id:'abundance',name:'Master Abundance',cat:'dinero',tag:'',badge:'',price:1190,img:'master-abundance.jpg',blurb:'Finanzas y expansión'},
+    {id:'lucky',name:'Lucky',cat:'dinero',tag:'LIMITED',badge:'hot',price:1190,img:'lucky.jpg',blurb:'Suerte en modo ON'},
+    {id:'vitamind',name:'VITAMIND',cat:'salud',tag:'',badge:'',price:1190,img:'vitamind.jpg',blurb:'Salud mente-cuerpo'},
+    {id:'fitwave',name:'FIT WAVE',cat:'salud',tag:'',badge:'',price:1190,img:'fit-wave.jpg',blurb:'Cuerpo desde la mente'},
+    {id:'eclat',name:'Éclat',cat:'autoestima',tag:'',badge:'',price:1190,img:'eclat.jpg',blurb:'Belleza desde el punto cero'},
+    {id:'god',name:'GOD / GODDESS',cat:'autoestima',tag:'',badge:'',price:1190,img:'god-goddess.jpg',blurb:'Poder creador YO SOY'},
+    {id:'icon',name:'ICON AURA',cat:'autoestima',tag:'NUEVO',badge:'new',price:1190,img:'icon-aura.jpg',blurb:'Presencia magnética'},
+    {id:'attraction',name:'ATTRACTION',cat:'amor',tag:'ÚLTIMO MES',badge:'hot',price:1190,img:'attraction.jpg',blurb:'Bloqueos en el amor'},
+    {id:'eriorlove',name:'Erior LOVE',cat:'amor',tag:'ÚLTIMO MES',badge:'hot',price:1190,img:'erior-love.jpg',blurb:'Atraer a tu persona'},
+    {id:'white',name:'White Rabbit Code',cat:'autoestima',tag:'',badge:'',price:1190,img:'white-rabbit-code.jpg',blurb:'Boost de amor propio'},
+    {id:'emergency',name:'EMERGENCY 999',cat:'manifestacion',tag:'PACK',badge:'hot',price:3333,img:'emergency-999.jpg',blurb:'3 audios para crisis'}
+  ];
+
+  var CATS=[
+    {id:'all',label:'Todo'},
+    {id:'amor',label:'Amor'},
+    {id:'autoestima',label:'Yo'},
+    {id:'dinero',label:'Dinero'},
+    {id:'salud',label:'Salud'},
+    {id:'manifestacion',label:'Manifestar'},
+    {id:'extras',label:'Extras'}
+  ];
+
+  function money(n){return '$'+Number(n).toLocaleString('es-MX');}
+
+  function waUrl(msg){
+    return 'https://wa.me/'+WA+'?text='+encodeURIComponent(msg);
+  }
+
+  function enterDeck(){
+    document.getElementById('intro').style.display='none';
+    document.getElementById('deck').classList.add('on');
+    document.getElementById('dock').hidden=false;
+    renderFilters();
+    renderGrid();
+    updateDock();
+  }
+
+  document.getElementById('btnEnter').onclick=enterDeck;
+  document.getElementById('btnSkip').onclick=enterDeck;
+  setTimeout(function(){
+    var c=document.querySelector('.crawl');
+    if(c)c.style.animationDuration='18s';
+  },50);
+
+  function renderFilters(){
+    var host=document.getElementById('filters');
+    host.innerHTML='';
+    CATS.forEach(function(c){
+      var b=document.createElement('button');
+      b.type='button';
+      b.className='filter'+(cat===c.id?' on':'');
+      b.textContent=c.label;
+      b.onclick=function(){cat=c.id;renderFilters();renderGrid();};
+      host.appendChild(b);
+    });
+  }
+
+  function togglePick(id){
+    var i=selected.indexOf(id);
+    if(i>=0){selected.splice(i,1);}
+    else{
+      if(selected.length>=2){selected.shift();}
+      selected.push(id);
+    }
+    renderGrid();
+    updateDock();
+  }
+
+  function renderGrid(){
+    var host=document.getElementById('grid');
+    host.innerHTML='';
+    AUDIOS.filter(function(a){return cat==='all'||a.cat===cat;}).forEach(function(a){
+      var on=selected.indexOf(a.id)>=0;
+      var btn=document.createElement('button');
+      btn.type='button';
+      btn.className='holo'+(on?' on':'');
+      btn.setAttribute('aria-pressed',on?'true':'false');
+      var badge=a.badge==='new'?'<span class="holo-badge badge-new">Nuevo</span>':(a.badge==='hot'?'<span class="holo-badge badge-hot">'+esc(a.tag||'Hot')+'</span>':'');
+      btn.innerHTML=
+        badge+
+        '<span class="badge-pick">'+(on?(selected.indexOf(a.id)+1):'')+'</span>'+
+        '<img class="holo-img" src="'+IMG+esc(a.img)+'" alt="'+esc(a.name)+'" loading="lazy" onerror="this.style.opacity=.25">'+
+        '<div class="holo-body">'+
+          (a.tag&&a.badge!=='hot'?'<span class="holo-tag">'+esc(a.tag)+'</span>':'')+
+          '<div class="holo-name">'+esc(a.name)+'</div>'+
+          '<div class="holo-price">'+money(a.price)+(a.promo?' · promo':'')+'</div>'+
+        '</div>';
+      btn.onclick=function(){togglePick(a.id);};
+      host.appendChild(btn);
+    });
+  }
+
+  function esc(s){
+    return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
+  }
+
+  function updateDock(){
+    var sum=document.getElementById('dockSum');
+    var link=document.getElementById('waBtn');
+    if(!selected.length){
+      sum.innerHTML='Selecciona <strong>1 o 2 audios</strong> · promo: nuevo $1,199 + segundo al 50%.';
+      link.href=waUrl('Hola! Vengo de Erior Galaxy ✨ Quiero ayuda para elegir mis audios y cerrar compra.');
+      link.textContent='Hablar por WhatsApp';
+      return;
+    }
+    var picks=selected.map(function(id){
+      for(var i=0;i<AUDIOS.length;i++){if(AUDIOS[i].id===id)return AUDIOS[i];}
+      return null;
+    }).filter(Boolean);
+
+    var lines=picks.map(function(p,idx){
+      return (idx+1)+') '+p.name+' ('+money(p.price)+')';
+    });
+    var hasPromoStarter=picks.some(function(p){return p.promo;});
+    var note=hasPromoStarter&&picks.length===2
+      ? 'Quiero aplicar promo: uno a $1,199 y el segundo al 50%.'
+      : (hasPromoStarter?'Quiero la promo del segundo audio al 50%.':'Quiero cotizar y cerrar ahora.');
+
+    sum.innerHTML='Tu misión: <strong>'+picks.map(function(p){return p.name;}).join(' + ')+'</strong>';
+    var msg='Hola! Vengo de Erior Galaxy ✨\nQuiero comprar:\n'+lines.join('\n')+'\n'+note+'\nPrioridad de entrega por favor.';
+    link.href=waUrl(msg);
+    link.textContent=picks.length===1?'Comprar '+picks[0].name:'Comprar este combo';
+  }
+
+  /* Stars */
+  var c=document.getElementById('stars');
+  if(c){
+    var ctx=c.getContext('2d');
+    var w,h,stars=[];
+    function resize(){
+      w=c.width=window.innerWidth*devicePixelRatio;
+      h=c.height=window.innerHeight*devicePixelRatio;
+      c.style.width=window.innerWidth+'px';
+      c.style.height=window.innerHeight+'px';
+      ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+      stars=[];
+      var n=Math.min(160,Math.floor(window.innerWidth/6));
+      for(var i=0;i<n;i++){
+        stars.push({
+          x:Math.random()*window.innerWidth,
+          y:Math.random()*window.innerHeight,
+          z:.2+Math.random()*1.4,
+          a:.25+Math.random()*.75
+        });
+      }
+    }
+    function frame(){
+      ctx.clearRect(0,0,window.innerWidth,window.innerHeight);
+      stars.forEach(function(s){
+        s.y+=s.z*.35;
+        if(s.y>window.innerHeight){s.y=0;s.x=Math.random()*window.innerWidth;}
+        ctx.fillStyle='rgba(200,230,255,'+s.a+')';
+        ctx.fillRect(s.x,s.y,s.z,s.z);
+      });
+      requestAnimationFrame(frame);
+    }
+    resize();frame();
+    window.addEventListener('resize',resize);
+  }
+})();
+</script>
+</body>
+</html>
