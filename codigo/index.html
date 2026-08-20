@@ -3,253 +3,374 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#05040c">
-<meta name="description" content="Código Erior — escribe tu nombre, elige tu canal y descarga tu sello premium para Stories.">
-<meta property="og:title" content="Código Erior · Tu frecuencia con nombre">
-<meta property="og:description" content="Genera tu código personalizado. Compártelo. Actívalo en audio real.">
-<meta property="og:type" content="website">
-<title>Código Erior · Tu frecuencia</title>
+<meta name="theme-color" content="#040014">
+<meta name="description" content="Código Erior — forja tu sello dorado metálico y actívalo en audio.">
+<meta property="og:title" content="Código Erior · Sello metálico">
+<meta property="og:description" content="Tu nombre. Tu canal. Una tarjeta dorada 3D lista para Stories.">
+<title>Código Erior · Sello metálico</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@500;600;700;800&family=Sora:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#05040c;
-  --ink:#f6f1e8;
-  --soft:rgba(246,241,232,.72);
-  --dim:rgba(246,241,232,.4);
-  --gold:#e4bf7a;
-  --gold-hot:#f3d9a4;
-  --cyan:#5eead4;
-  --display:'Oxanium',sans-serif;
-  --body:'Sora',system-ui,sans-serif;
+  --ink:#f7f4ff;
+  --soft:rgba(247,244,255,.78);
+  --dim:rgba(247,244,255,.45);
+  --gold:#ffd56a;
+  --gold2:#c9972e;
+  --mag:#ff4fd8;
+  --cyan:#3ef0ff;
+  --blue:#5b7cff;
+  --display:'Audiowide',sans-serif;
+  --body:'Outfit',system-ui,sans-serif;
   --ease:cubic-bezier(.22,1,.36,1);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html,body{min-height:100%;background:var(--bg);color:var(--ink)}
+html,body{min-height:100%;background:#040014;color:var(--ink)}
 body{
   font-family:var(--body);
   overflow-x:hidden;
   -webkit-font-smoothing:antialiased;
   touch-action:manipulation;
 }
-#field{
-  position:fixed;inset:0;z-index:0;pointer-events:none;
-  background:
-    radial-gradient(ellipse 65% 45% at 50% -5%, rgba(228,191,122,.16), transparent 55%),
-    radial-gradient(ellipse 50% 40% at 90% 90%, rgba(94,234,212,.08), transparent 50%),
-    var(--bg);
+
+/* Living background — different from Nexo */
+.stage-bg{
+  position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;
+  background:#040014;
 }
+.blob{
+  position:absolute;border-radius:50%;filter:blur(60px);opacity:.7;
+  animation:drift 14s ease-in-out infinite;
+}
+.blob.a{width:55vw;height:55vw;left:-15%;top:-10%;background:radial-gradient(circle,#ff4fd8,#7b2fff00);animation-duration:16s}
+.blob.b{width:50vw;height:50vw;right:-20%;top:20%;background:radial-gradient(circle,#3ef0ff,#3ef0ff00);animation-duration:18s;animation-delay:-4s}
+.blob.c{width:45vw;height:45vw;left:20%;bottom:-15%;background:radial-gradient(circle,#ffd56a,#ffd56a00);animation-duration:20s;animation-delay:-8s}
+.blob.d{width:40vw;height:40vw;right:10%;bottom:10%;background:radial-gradient(circle,#5b7cff,#5b7cff00);animation-duration:15s;animation-delay:-2s}
+@keyframes drift{
+  0%,100%{transform:translate(0,0) scale(1)}
+  33%{transform:translate(4%,-6%) scale(1.08)}
+  66%{transform:translate(-5%,4%) scale(.94)}
+}
+.grid-fx{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(62,240,255,.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,79,216,.06) 1px, transparent 1px);
+  background-size:48px 48px;
+  mask-image:radial-gradient(ellipse 80% 70% at 50% 40%, #000 20%, transparent 75%);
+  -webkit-mask-image:radial-gradient(ellipse 80% 70% at 50% 40%, #000 20%, transparent 75%);
+  animation:gridPulse 8s ease-in-out infinite;
+}
+@keyframes gridPulse{0%,100%{opacity:.35}50%{opacity:.7}}
+#spark{position:absolute;inset:0;width:100%;height:100%}
+.scanline{
+  position:absolute;left:0;right:0;height:140px;
+  background:linear-gradient(180deg,transparent,rgba(255,213,106,.08),transparent);
+  animation:scan 5.5s linear infinite;
+  mix-blend-mode:screen;
+}
+@keyframes scan{0%{top:-20%}100%{top:110%}}
 .vignette{
   position:fixed;inset:0;z-index:1;pointer-events:none;
-  background:linear-gradient(180deg,rgba(0,0,0,.2),transparent 28%,rgba(0,0,0,.72));
+  background:radial-gradient(ellipse at center, transparent 40%, rgba(4,0,20,.75) 100%);
 }
+
 .app{
   position:relative;z-index:2;
   min-height:100vh;min-height:100dvh;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:1.4rem 1.15rem calc(1.4rem + env(safe-area-inset-bottom));
+  padding:1.35rem 1.1rem calc(1.35rem + env(safe-area-inset-bottom));
   text-align:center;
 }
-.screen{display:none;width:min(420px,100%);animation:rise .5s var(--ease)}
+.screen{display:none;width:min(430px,100%);animation:pop .55s var(--ease)}
 .screen.on{display:block}
-@keyframes rise{
-  from{opacity:0;transform:translateY(16px)}
+@keyframes pop{
+  from{opacity:0;transform:translateY(22px) scale(.96)}
   to{opacity:1;transform:none}
 }
+
 .brand{
-  font-family:var(--display);font-weight:800;letter-spacing:.36em;
-  font-size:.66rem;color:var(--gold);margin-bottom:.8rem;
-  text-shadow:0 0 24px rgba(228,191,122,.4);
+  font-family:var(--display);font-size:.72rem;letter-spacing:.28em;
+  background:linear-gradient(90deg,#3ef0ff,#ffd56a,#ff4fd8,#3ef0ff);
+  background-size:200% auto;
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:shine 4s linear infinite;
+  margin-bottom:.85rem;
 }
+@keyframes shine{to{background-position:200% center}}
 .kicker{
-  font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;
-  color:var(--cyan);margin-bottom:.7rem;font-weight:500;
+  display:inline-flex;align-items:center;gap:.4rem;
+  font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--cyan);margin-bottom:.75rem;font-weight:600;
+  padding:.35rem .7rem;border-radius:999px;
+  border:1px solid rgba(62,240,255,.35);
+  background:rgba(62,240,255,.08);
+  box-shadow:0 0 24px rgba(62,240,255,.15);
 }
 h1{
-  font-family:var(--display);font-weight:700;
-  font-size:clamp(1.5rem,6.2vw,2rem);
-  letter-spacing:.04em;line-height:1.15;margin-bottom:.8rem;
+  font-family:var(--display);
+  font-size:clamp(1.55rem,6.5vw,2.15rem);
+  line-height:1.18;letter-spacing:.02em;margin-bottom:.85rem;
+  text-shadow:0 0 40px rgba(255,79,216,.25);
 }
-h1 em{font-style:normal;color:var(--gold-hot)}
+h1 em{
+  font-style:normal;
+  background:linear-gradient(120deg,#ffd56a,#fff1c2,#ff9f43,#ffd56a);
+  background-size:200% auto;
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:shine 3.5s linear infinite;
+}
 .lead{
-  font-size:.86rem;line-height:1.55;color:var(--soft);
-  margin:0 auto 1.35rem;max-width:34ch;
+  font-size:.9rem;line-height:1.55;color:var(--soft);
+  margin:0 auto 1.4rem;max-width:34ch;font-weight:400;
 }
+
 .btn{
   appearance:none;border:none;cursor:pointer;text-decoration:none;
-  font-family:var(--display);font-weight:700;letter-spacing:.12em;text-transform:uppercase;
-  font-size:.68rem;display:inline-flex;align-items:center;justify-content:center;
-  padding:1.02rem 1.3rem;border-radius:6px;width:100%;
-  transition:transform .25s var(--ease),opacity .2s;
+  font-family:var(--display);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;
+  display:inline-flex;align-items:center;justify-content:center;
+  padding:1.05rem 1.25rem;border-radius:14px;width:100%;
+  position:relative;overflow:hidden;
+  transition:transform .25s var(--ease),filter .25s;
 }
 .btn:active{transform:scale(.98)}
-.btn:disabled{opacity:.35;cursor:not-allowed;transform:none}
-.btn-gold{
-  background:linear-gradient(135deg,#f0d4a0,var(--gold));
-  color:#1a1208;
-  box-shadow:0 0 0 1px rgba(255,230,180,.35),0 0 32px rgba(228,191,122,.28);
+.btn:disabled{opacity:.35;cursor:not-allowed;transform:none;filter:none}
+.btn-main{
+  color:#140820;
+  background:linear-gradient(135deg,#fff1c2,#ffd56a 35%,#ff9f43 70%,#ffd56a);
+  background-size:200% 200%;
+  box-shadow:0 0 0 1px rgba(255,213,106,.5),0 10px 40px rgba(255,159,67,.35),0 0 50px rgba(255,79,216,.2);
+  animation:btnGlow 3s ease-in-out infinite;
 }
-.btn-cyan{
-  background:linear-gradient(135deg,#9ff5e8,var(--cyan));
-  color:#04201c;
-  box-shadow:0 0 0 1px rgba(94,234,212,.35),0 0 28px rgba(94,234,212,.22);
-  margin-top:.55rem;
+@keyframes btnGlow{
+  0%,100%{background-position:0% 50%;filter:brightness(1)}
+  50%{background-position:100% 50%;filter:brightness(1.08)}
+}
+.btn-neon{
+  margin-top:.55rem;color:#041018;
+  background:linear-gradient(135deg,#9af7ff,#3ef0ff 40%,#5b7cff);
+  box-shadow:0 0 0 1px rgba(62,240,255,.45),0 8px 32px rgba(62,240,255,.3);
 }
 .btn-ghost{
-  margin-top:.5rem;background:transparent;color:var(--dim);
-  border:1px solid rgba(246,241,232,.16);font-size:.6rem;
+  margin-top:.5rem;background:rgba(255,255,255,.04);color:var(--dim);
+  border:1px solid rgba(255,255,255,.14);font-size:.6rem;border-radius:12px;
 }
 .hint{
-  margin-top:.95rem;font-size:.56rem;letter-spacing:.14em;text-transform:uppercase;
-  color:rgba(246,241,232,.3);
+  margin-top:1rem;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;
+  color:rgba(247,244,255,.32);
 }
+
 .label{
   display:block;text-align:left;font-size:.58rem;letter-spacing:.16em;
-  text-transform:uppercase;color:var(--dim);margin-bottom:.45rem;
+  text-transform:uppercase;color:var(--dim);margin-bottom:.45rem;font-weight:600;
 }
 .input{
-  width:100%;appearance:none;border-radius:12px;
-  border:1px solid rgba(228,191,122,.28);
-  background:rgba(255,255,255,.04);
-  color:var(--ink);font-family:var(--display);font-weight:600;
+  width:100%;appearance:none;border-radius:16px;
+  border:1px solid rgba(255,79,216,.35);
+  background:rgba(10,0,30,.55);
+  color:var(--ink);font-family:var(--display);
   font-size:1.05rem;letter-spacing:.06em;text-align:center;
-  padding:1rem 1rem;margin-bottom:1.1rem;
-  outline:none;transition:border-color .2s,box-shadow .2s;
+  padding:1.05rem 1rem;margin-bottom:1.1rem;outline:none;
+  box-shadow:0 0 30px rgba(255,79,216,.12), inset 0 0 20px rgba(62,240,255,.05);
+  transition:border-color .2s,box-shadow .2s;
 }
-.input::placeholder{color:rgba(246,241,232,.28);font-weight:500;letter-spacing:.04em}
+.input::placeholder{color:rgba(247,244,255,.28);font-family:var(--body);letter-spacing:.02em}
 .input:focus{
-  border-color:rgba(228,191,122,.65);
-  box-shadow:0 0 0 3px rgba(228,191,122,.12);
+  border-color:rgba(62,240,255,.65);
+  box-shadow:0 0 0 3px rgba(62,240,255,.15),0 0 40px rgba(255,79,216,.2);
 }
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin:1rem 0 1.15rem}
+
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:.65rem;margin:1rem 0 1.15rem}
 .freq{
   appearance:none;cursor:pointer;text-align:left;
-  padding:1rem .9rem;border-radius:14px;
-  background:rgba(255,255,255,.03);
-  border:1px solid rgba(94,234,212,.16);
+  padding:1.05rem .95rem;border-radius:18px;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.12);
   color:inherit;font:inherit;
-  transition:border-color .2s,background .2s,transform .2s;
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  transition:transform .25s var(--ease),border-color .25s,box-shadow .25s,background .25s;
 }
-.freq:hover{transform:translateY(-1px);border-color:rgba(228,191,122,.4)}
+.freq:hover{transform:translateY(-3px) scale(1.02)}
 .freq.on{
-  border-color:rgba(228,191,122,.7);
-  background:rgba(228,191,122,.1);
-  box-shadow:0 0 24px rgba(228,191,122,.12);
+  border-color:transparent;
+  background:linear-gradient(145deg,rgba(255,213,106,.2),rgba(255,79,216,.18),rgba(62,240,255,.15));
+  box-shadow:0 0 0 1px rgba(255,213,106,.5),0 12px 36px rgba(255,79,216,.25);
 }
 .freq-code{
-  display:block;font-family:var(--display);font-size:.48rem;letter-spacing:.18em;
-  text-transform:uppercase;color:var(--cyan);margin-bottom:.35rem;
+  display:block;font-family:var(--display);font-size:.5rem;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--cyan);margin-bottom:.4rem;
 }
 .freq-name{
-  display:block;font-family:var(--display);font-weight:700;
-  font-size:.9rem;letter-spacing:.05em;
+  display:block;font-family:var(--display);font-size:.92rem;letter-spacing:.04em;
 }
-.forge-wrap{
-  width:120px;height:120px;margin:1.4rem auto 1.1rem;position:relative;
-}
-.forge-ring{
+
+.forge-wrap{width:140px;height:140px;margin:1.5rem auto 1.2rem;position:relative}
+.forge-disc{
   position:absolute;inset:0;border-radius:50%;
-  border:1px solid rgba(228,191,122,.35);
-  animation:spin 2.8s linear infinite;
+  background:conic-gradient(from 0deg,#ff4fd8,#3ef0ff,#ffd56a,#5b7cff,#ff4fd8);
+  animation:spin 1.6s linear infinite;
+  filter:blur(1px);
 }
-.forge-ring::after{
-  content:'';position:absolute;top:-3px;left:50%;width:6px;height:6px;margin-left:-3px;
-  border-radius:50%;background:var(--gold);box-shadow:0 0 12px var(--gold);
+.forge-disc::after{
+  content:'';position:absolute;inset:10px;border-radius:50%;background:#0a0020;
 }
 .forge-core{
-  position:absolute;inset:26%;border-radius:50%;
-  background:radial-gradient(circle at 40% 35%,#fff8e8,var(--gold) 50%,transparent 72%);
-  box-shadow:0 0 36px rgba(228,191,122,.4);
-  animation:pulse 1.3s ease-in-out infinite;
+  position:absolute;inset:28%;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,#fff8e0,#ffd56a 40%,#c9972e 70%,#6b4a10);
+  box-shadow:0 0 40px rgba(255,213,106,.55),inset 0 -8px 16px rgba(0,0,0,.35),inset 0 8px 12px rgba(255,255,255,.45);
+  animation:metalPulse 1.2s ease-in-out infinite;
+  z-index:1;
 }
 @keyframes spin{to{transform:rotate(360deg)}}
-@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+@keyframes metalPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
 .forge-text{
-  font-family:var(--display);font-size:.68rem;letter-spacing:.16em;
-  text-transform:uppercase;color:var(--soft);
+  font-family:var(--display);font-size:.7rem;letter-spacing:.14em;
+  text-transform:uppercase;
+  background:linear-gradient(90deg,#3ef0ff,#ffd56a,#ff4fd8);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
 }
-.preview-wrap{
-  margin:0 auto 1rem;width:min(280px,78vw);
-  border-radius:18px;overflow:hidden;
-  border:1px solid rgba(228,191,122,.35);
-  box-shadow:0 20px 50px rgba(0,0,0,.5),0 0 40px rgba(228,191,122,.12);
-  background:#0a0812;
+
+/* 3D metallic card stage */
+.card-stage{
+  perspective:900px;
+  margin:0 auto 1.05rem;
+  width:min(270px,76vw);
+}
+.card-tilt{
+  position:relative;
+  transform-style:preserve-3d;
+  transition:transform .15s ease-out;
+  border-radius:22px;
+  animation:floatCard 4.5s ease-in-out infinite;
+}
+@keyframes floatCard{
+  0%,100%{transform:rotateX(6deg) rotateY(-8deg) translateY(0)}
+  50%{transform:rotateX(2deg) rotateY(8deg) translateY(-8px)}
+}
+.card-tilt.is-held{animation:none}
+.card-glow{
+  position:absolute;inset:-18%;z-index:0;border-radius:40%;
+  background:radial-gradient(circle,rgba(255,213,106,.45),rgba(255,79,216,.2),transparent 70%);
+  filter:blur(18px);
+  animation:glowPulse 2.8s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes glowPulse{0%,100%{opacity:.7;transform:scale(1)}50%{opacity:1;transform:scale(1.06)}}
+.preview-frame{
+  position:relative;z-index:1;
+  border-radius:20px;overflow:hidden;
+  box-shadow:
+    0 25px 50px rgba(0,0,0,.55),
+    0 0 0 1px rgba(255,230,160,.55),
+    0 0 40px rgba(255,213,106,.35),
+    inset 0 1px 0 rgba(255,255,255,.35);
+  background:#1a1208;
+  transform:translateZ(30px);
 }
 #preview{
   display:block;width:100%;height:auto;
-  aspect-ratio:9/16;background:#0a0812;
+  aspect-ratio:9/16;
+  background:#1a1208;
 }
+.shine-sweep{
+  position:absolute;inset:0;z-index:2;pointer-events:none;
+  background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.35) 48%,transparent 62%);
+  background-size:220% 100%;
+  animation:sweep 3.2s ease-in-out infinite;
+  mix-blend-mode:soft-light;
+}
+@keyframes sweep{0%{background-position:120% 0}100%{background-position:-40% 0}}
+
 .code-chip{
-  font-family:var(--display);font-weight:700;font-size:.78rem;
-  letter-spacing:.14em;color:var(--gold-hot);
-  margin:0 0 .85rem;word-break:break-all;
+  font-family:var(--display);font-size:.72rem;letter-spacing:.1em;
+  margin:0 0 .9rem;word-break:break-all;
+  padding:.55rem .75rem;border-radius:12px;display:inline-block;
+  color:#1a1208;
+  background:linear-gradient(135deg,#fff1c2,#ffd56a,#e0a84a);
+  box-shadow:0 8px 24px rgba(255,213,106,.35),inset 0 1px 0 rgba(255,255,255,.6);
 }
 .actions{display:grid;gap:.5rem}
-#cardCanvas{position:absolute;left:-9999px;top:0;width:1px;height:1px;opacity:0;pointer-events:none}
+#cardCanvas{position:absolute;left:-9999px;top:0;opacity:0;pointer-events:none}
+
 @media(prefers-reduced-motion:reduce){
-  .screen,.forge-ring,.forge-core{animation:none}
+  .blob,.grid-fx,.scanline,.brand,h1 em,.btn-main,.card-tilt,.card-glow,.shine-sweep,.forge-disc,.forge-core{animation:none!important}
+  .screen{animation:none}
 }
 </style>
 </head>
 <body>
-<div id="field" aria-hidden="true"></div>
+<div class="stage-bg" aria-hidden="true">
+  <div class="blob a"></div>
+  <div class="blob b"></div>
+  <div class="blob c"></div>
+  <div class="blob d"></div>
+  <div class="grid-fx"></div>
+  <canvas id="spark"></canvas>
+  <div class="scanline"></div>
+</div>
 <div class="vignette" aria-hidden="true"></div>
 <canvas id="cardCanvas" width="1080" height="1920" aria-hidden="true"></canvas>
 
 <main class="app">
   <section class="screen on" id="s0">
     <p class="brand">CÓDIGO ERIOR</p>
-    <p class="kicker">Tu frecuencia con nombre</p>
-    <h1>Tu nombre.<br>Tu <em>sello</em>.</h1>
-    <p class="lead">Genera una card premium con tu código. Súbela a Stories. Actívala en audio real.</p>
-    <button type="button" class="btn btn-gold" id="btnStart">Crear mi código</button>
-    <p class="hint">Gratis · 20 segundos · listo para Instagram</p>
+    <p class="kicker">✦ Sello metálico</p>
+    <h1>Forja tu<br><em>oro digital</em></h1>
+    <p class="lead">Tu nombre + tu canal = una tarjeta dorada 3D lista para Stories. Premium. Viva. Tuya.</p>
+    <button type="button" class="btn btn-main" id="btnStart">Forjar mi sello</button>
+    <p class="hint">Gratis · ~20 segundos · descarga 9:16</p>
   </section>
 
   <section class="screen" id="s1">
     <p class="brand">CÓDIGO ERIOR</p>
-    <p class="kicker">Paso 1</p>
-    <h1>¿Cómo te<br><em>llamas</em>?</h1>
-    <label class="label" for="nameInput">Tu nombre</label>
+    <p class="kicker">Paso 01</p>
+    <h1>Tu nombre<br><em>en el metal</em></h1>
+    <label class="label" for="nameInput">Nombre</label>
     <input class="input" id="nameInput" type="text" maxlength="24" autocomplete="given-name" placeholder="Ej. Sofía" enterkeyhint="done">
-    <button type="button" class="btn btn-gold" id="btnName" disabled>Continuar</button>
+    <button type="button" class="btn btn-main" id="btnName" disabled>Continuar</button>
     <button type="button" class="btn btn-ghost" id="btnBack0">Atrás</button>
   </section>
 
   <section class="screen" id="s2">
     <p class="brand">CÓDIGO ERIOR</p>
-    <p class="kicker">Paso 2</p>
-    <h1>Elige tu<br><em>canal</em></h1>
+    <p class="kicker">Paso 02</p>
+    <h1>Elige el<br><em>canal</em></h1>
     <div class="grid" id="freqGrid"></div>
-    <button type="button" class="btn btn-gold" id="btnForge" disabled>Forjar código</button>
+    <button type="button" class="btn btn-main" id="btnForge" disabled>Forjar oro</button>
     <button type="button" class="btn btn-ghost" id="btnBack1">Atrás</button>
   </section>
 
   <section class="screen" id="s3" aria-live="polite">
     <p class="brand">CÓDIGO ERIOR</p>
     <div class="forge-wrap" aria-hidden="true">
-      <div class="forge-ring"></div>
+      <div class="forge-disc"></div>
       <div class="forge-core"></div>
     </div>
-    <p class="forge-text" id="forgeText">Grabando sello…</p>
+    <p class="forge-text" id="forgeText">Fundiendo metal…</p>
   </section>
 
   <section class="screen" id="s4">
     <p class="brand">CÓDIGO ERIOR</p>
-    <p class="kicker">Tu sello está listo</p>
-    <h1>Código<br><em>activado</em></h1>
+    <p class="kicker">Sello listo</p>
+    <h1>Tu oro<br><em>está vivo</em></h1>
     <p class="code-chip" id="codeChip"></p>
-    <div class="preview-wrap">
-      <canvas id="preview" width="1080" height="1920" aria-label="Vista previa de tu código"></canvas>
+    <div class="card-stage">
+      <div class="card-tilt" id="cardTilt">
+        <div class="card-glow" aria-hidden="true"></div>
+        <div class="preview-frame">
+          <canvas id="preview" width="1080" height="1920" aria-label="Tarjeta dorada metálica"></canvas>
+          <div class="shine-sweep" aria-hidden="true"></div>
+        </div>
+      </div>
     </div>
     <div class="actions">
-      <button type="button" class="btn btn-gold" id="btnDownload">Descargar para Stories</button>
-      <a class="btn btn-cyan" id="waBtn" href="#" target="_blank" rel="noopener noreferrer">Activar en audio · WhatsApp</a>
-      <a class="btn btn-ghost" id="nexoBtn" href="/nexo/">Ver mi combo en Nexo</a>
+      <button type="button" class="btn btn-main" id="btnDownload">Descargar sello 3D</button>
+      <a class="btn btn-neon" id="waBtn" href="#" target="_blank" rel="noopener noreferrer">Activar en audio · WhatsApp</a>
+      <a class="btn btn-ghost" id="nexoBtn" href="/nexo/">Ver combo en Nexo</a>
       <button type="button" class="btn btn-ghost" id="btnAgain">Crear otro</button>
     </div>
-    <p class="hint">Sube la imagen · pega el link de Nexo en la Story</p>
+    <p class="hint">Mueve la tarjeta · súbela a Stories · pega el link</p>
   </section>
 </main>
 
@@ -257,19 +378,19 @@ h1 em{font-style:normal;color:var(--gold-hot)}
 (function(){
   var WA='5214432311761';
   var FREQS=[
-    {id:'amor',code:'AMOR',label:'Amor',line:'Vínculo y magnetismo'},
-    {id:'dinero',code:'DINERO',label:'Dinero',line:'Expansión y flujo'},
-    {id:'poder',code:'PODER',label:'Poder',line:'Presencia y mando'},
-    {id:'consciencia',code:'CONSCIENCIA',label:'Consciencia',line:'Despertar y claridad'}
+    {id:'amor',code:'AMOR',label:'Amor',line:'Vínculo y magnetismo',accent:'#ff4fd8'},
+    {id:'dinero',code:'DINERO',label:'Dinero',line:'Expansión y flujo',accent:'#ffd56a'},
+    {id:'poder',code:'PODER',label:'Poder',line:'Presencia y mando',accent:'#3ef0ff'},
+    {id:'consciencia',code:'CONSCIENCIA',label:'Consciencia',line:'Despertar y claridad',accent:'#5b7cff'}
   ];
 
-  var state={name:'',freq:null,code:'',blobUrl:null};
+  var state={name:'',freq:null,code:''};
   var forgeTimer=null;
-
   var big=document.getElementById('cardCanvas');
   var preview=document.getElementById('preview');
   var bigCtx=big.getContext('2d');
   var prevCtx=preview.getContext('2d');
+  var tilt=document.getElementById('cardTilt');
 
   function show(id){
     ['s0','s1','s2','s3','s4'].forEach(function(x){
@@ -281,149 +402,22 @@ h1 em{font-style:normal;color:var(--gold-hot)}
     return String(raw||'')
       .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
       .replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s'-]/g,'')
-      .trim()
-      .replace(/\s+/g,' ')
-      .slice(0,24);
+      .trim().replace(/\s+/g,' ').slice(0,24);
   }
   function slugName(n){
-    return cleanName(n)
-      .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
-      .toUpperCase()
-      .replace(/[^A-Z0-9]/g,'')
-      .slice(0,10) || 'ERIOR';
+    return cleanName(n).normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+      .toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,10)||'ERIOR';
   }
   function hash3(str){
     var h=2166136261;
-    for(var i=0;i<str.length;i++){
-      h^=str.charCodeAt(i);
-      h=Math.imul(h,16777619);
-    }
+    for(var i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619);}
     var chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-    var out='';
-    var x=h>>>0;
-    for(var j=0;j<3;j++){
-      out+=chars[x%chars.length];
-      x=Math.floor(x/chars.length)+97;
-    }
+    var out='',x=h>>>0;
+    for(var j=0;j<3;j++){out+=chars[x%chars.length];x=Math.floor(x/chars.length)+97;}
     return out;
   }
   function buildCode(name,freq){
     return 'ER-'+freq.code+'-'+slugName(name)+'-'+hash3(slugName(name)+'|'+freq.id+'|erior');
-  }
-
-  function drawSeal(ctx,W,H,payload){
-    var name=payload.name;
-    var freq=payload.freq;
-    var code=payload.code;
-
-    ctx.clearRect(0,0,W,H);
-
-    /* Background */
-    var g=ctx.createLinearGradient(0,0,W,H);
-    g.addColorStop(0,'#0a0814');
-    g.addColorStop(.45,'#120e1c');
-    g.addColorStop(1,'#07060e');
-    ctx.fillStyle=g;
-    ctx.fillRect(0,0,W,H);
-
-    /* Soft orbs */
-    var orb=ctx.createRadialGradient(W*.5,H*.22,20,W*.5,H*.22,W*.55);
-    orb.addColorStop(0,'rgba(228,191,122,.28)');
-    orb.addColorStop(1,'rgba(228,191,122,0)');
-    ctx.fillStyle=orb;
-    ctx.fillRect(0,0,W,H);
-
-    var orb2=ctx.createRadialGradient(W*.85,H*.78,10,W*.85,H*.78,W*.4);
-    orb2.addColorStop(0,'rgba(94,234,212,.14)');
-    orb2.addColorStop(1,'rgba(94,234,212,0)');
-    ctx.fillStyle=orb2;
-    ctx.fillRect(0,0,W,H);
-
-    /* Frame */
-    ctx.strokeStyle='rgba(228,191,122,.55)';
-    ctx.lineWidth=3;
-    roundRect(ctx,48,48,W-96,H-96,28);
-    ctx.stroke();
-    ctx.strokeStyle='rgba(94,234,212,.18)';
-    ctx.lineWidth=1.5;
-    roundRect(ctx,68,68,W-136,H-136,22);
-    ctx.stroke();
-
-    /* Brand */
-    ctx.fillStyle='#e4bf7a';
-    ctx.font='700 28px Oxanium, sans-serif';
-    ctx.textAlign='center';
-    ctx.letterSpacing='12px';
-    ctx.fillText('ERIOR',W/2,160);
-
-    ctx.fillStyle='rgba(94,234,212,.85)';
-    ctx.font='500 22px Oxanium, sans-serif';
-    ctx.fillText('CÓDIGO DE FRECUENCIA',W/2,210);
-
-    /* Center seal ring */
-    var cx=W/2, cy=H*.42, r=210;
-    ctx.beginPath();
-    ctx.arc(cx,cy,r,0,Math.PI*2);
-    ctx.strokeStyle='rgba(228,191,122,.35)';
-    ctx.lineWidth=2;
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.arc(cx,cy,r-28,0,Math.PI*2);
-    ctx.strokeStyle='rgba(94,234,212,.25)';
-    ctx.stroke();
-
-    var core=ctx.createRadialGradient(cx-30,cy-40,10,cx,cy,r-40);
-    core.addColorStop(0,'rgba(255,248,232,.95)');
-    core.addColorStop(.35,'rgba(228,191,122,.85)');
-    core.addColorStop(1,'rgba(228,191,122,0)');
-    ctx.fillStyle=core;
-    ctx.beginPath();
-    ctx.arc(cx,cy,r-50,0,Math.PI*2);
-    ctx.fill();
-
-    ctx.fillStyle='#0a0814';
-    ctx.font='800 42px Oxanium, sans-serif';
-    ctx.fillText(freq.code,cx,cy+14);
-
-    /* Name */
-    ctx.fillStyle='#f6f1e8';
-    ctx.font='700 64px Oxanium, sans-serif';
-    fitText(ctx,name.toUpperCase(),W-160,64);
-    ctx.fillText(name.toUpperCase(),W/2,H*.62);
-
-    ctx.fillStyle='rgba(246,241,232,.55)';
-    ctx.font='500 26px Sora, sans-serif';
-    ctx.fillText('Canal · '+freq.label,W/2,H*.62+52);
-
-    ctx.fillStyle='rgba(246,241,232,.4)';
-    ctx.font='400 24px Sora, sans-serif';
-    wrapText(ctx,freq.line,W/2,H*.62+98,W-200,34);
-
-    /* Code block */
-    var boxY=H*.76;
-    roundRect(ctx,120,boxY,W-240,150,18);
-    ctx.fillStyle='rgba(228,191,122,.08)';
-    ctx.fill();
-    ctx.strokeStyle='rgba(228,191,122,.4)';
-    ctx.lineWidth=1.5;
-    ctx.stroke();
-
-    ctx.fillStyle='rgba(94,234,212,.8)';
-    ctx.font='600 20px Oxanium, sans-serif';
-    ctx.fillText('TU CÓDIGO',W/2,boxY+48);
-
-    ctx.fillStyle='#f3d9a4';
-    ctx.font='700 34px Oxanium, sans-serif';
-    fitText(ctx,code,W-280,34);
-    ctx.fillText(code,W/2,boxY+100);
-
-    /* Footer */
-    ctx.fillStyle='rgba(246,241,232,.35)';
-    ctx.font='500 20px Oxanium, sans-serif';
-    ctx.fillText('Activa este código en audio Erior',W/2,H-110);
-    ctx.fillStyle='rgba(228,191,122,.55)';
-    ctx.font='600 18px Oxanium, sans-serif';
-    ctx.fillText('eriorcenterguiaaudios.netlify.app/nexo',W/2,H-72);
   }
 
   function roundRect(ctx,x,y,w,h,r){
@@ -436,32 +430,252 @@ h1 em{font-style:normal;color:var(--gold-hot)}
     ctx.arcTo(x,y,x+w,y,rr);
     ctx.closePath();
   }
-  function fitText(ctx,text,maxW,baseSize){
-    var size=baseSize;
-    ctx.font='700 '+size+'px Oxanium, sans-serif';
-    while(size>22 && ctx.measureText(text).width>maxW){
+  function fitText(ctx,text,maxW,base,weight){
+    var size=base;
+    weight=weight||'700';
+    ctx.font=weight+' '+size+'px Audiowide, sans-serif';
+    while(size>20 && ctx.measureText(text).width>maxW){
       size-=2;
-      ctx.font='700 '+size+'px Oxanium, sans-serif';
+      ctx.font=weight+' '+size+'px Audiowide, sans-serif';
     }
+    return size;
   }
-  function wrapText(ctx,text,x,y,maxW,lineH){
-    var words=String(text).split(' ');
-    var line='';
-    var yy=y;
-    for(var i=0;i<words.length;i++){
-      var test=line+words[i]+' ';
-      if(ctx.measureText(test).width>maxW && line){
-        ctx.fillText(line.trim(),x,yy);
-        line=words[i]+' ';
-        yy+=lineH;
-      }else line=test;
+
+  /* Metallic gold 3D seal card */
+  function drawMetalCard(ctx,W,H,payload){
+    var name=payload.name;
+    var freq=payload.freq;
+    var code=payload.code;
+    var accent=freq.accent||'#ffd56a';
+
+    ctx.clearRect(0,0,W,H);
+
+    /* Deep premium void behind metal plate */
+    var voidG=ctx.createLinearGradient(0,0,W,H);
+    voidG.addColorStop(0,'#1a0528');
+    voidG.addColorStop(.4,'#0c1028');
+    voidG.addColorStop(1,'#12061c');
+    ctx.fillStyle=voidG;
+    ctx.fillRect(0,0,W,H);
+
+    /* Color bleed */
+    var a1=ctx.createRadialGradient(W*.2,H*.15,0,W*.2,H*.15,W*.6);
+    a1.addColorStop(0,'rgba(255,79,216,.35)');a1.addColorStop(1,'transparent');
+    ctx.fillStyle=a1;ctx.fillRect(0,0,W,H);
+    var a2=ctx.createRadialGradient(W*.85,H*.7,0,W*.85,H*.7,W*.5);
+    a2.addColorStop(0,'rgba(62,240,255,.28)');a2.addColorStop(1,'transparent');
+    ctx.fillStyle=a2;ctx.fillRect(0,0,W,H);
+
+    /* Metal plate body */
+    var pad=56;
+    roundRect(ctx,pad,pad,W-pad*2,H-pad*2,42);
+    var metal=ctx.createLinearGradient(pad,pad,W-pad,H-pad);
+    metal.addColorStop(0,'#fff6d5');
+    metal.addColorStop(.12,'#ffe9a0');
+    metal.addColorStop(.28,'#d4a017');
+    metal.addColorStop(.45,'#f5d76e');
+    metal.addColorStop(.58,'#a67c1a');
+    metal.addColorStop(.72,'#ffe29a');
+    metal.addColorStop(.88,'#c9972e');
+    metal.addColorStop(1,'#8a6414');
+    ctx.fillStyle=metal;
+    ctx.fill();
+
+    /* Bevel / thickness edge */
+    ctx.save();
+    roundRect(ctx,pad,pad,W-pad*2,H-pad*2,42);
+    ctx.clip();
+    var bevel=ctx.createLinearGradient(pad,pad,pad+80,pad+120);
+    bevel.addColorStop(0,'rgba(255,255,255,.75)');
+    bevel.addColorStop(.4,'rgba(255,255,255,.15)');
+    bevel.addColorStop(1,'rgba(255,255,255,0)');
+    ctx.fillStyle=bevel;
+    ctx.fillRect(pad,pad,W-pad*2,220);
+
+    var shade=ctx.createLinearGradient(W-pad,H-pad,W-pad-140,H-pad-200);
+    shade.addColorStop(0,'rgba(40,20,0,.55)');
+    shade.addColorStop(1,'rgba(40,20,0,0)');
+    ctx.fillStyle=shade;
+    ctx.fillRect(pad,H*.55,W-pad*2,H*.4);
+
+    /* Diagonal brushed metal lines */
+    ctx.globalAlpha=.08;
+    ctx.strokeStyle='#fff';
+    ctx.lineWidth=2;
+    for(var i=-H;i<W+H;i+=14){
+      ctx.beginPath();
+      ctx.moveTo(i,pad);
+      ctx.lineTo(i+H*.35,H-pad);
+      ctx.stroke();
     }
-    if(line)ctx.fillText(line.trim(),x,yy);
+    ctx.globalAlpha=1;
+
+    /* Specular streak */
+    var spec=ctx.createLinearGradient(0,H*.2,W,H*.55);
+    spec.addColorStop(0,'rgba(255,255,255,0)');
+    spec.addColorStop(.45,'rgba(255,255,255,0)');
+    spec.addColorStop(.5,'rgba(255,255,255,.55)');
+    spec.addColorStop(.55,'rgba(255,255,255,0)');
+    spec.addColorStop(1,'rgba(255,255,255,0)');
+    ctx.fillStyle=spec;
+    ctx.fillRect(pad,pad,W-pad*2,H-pad*2);
+    ctx.restore();
+
+    /* Inner engraved frame */
+    ctx.strokeStyle='rgba(90,55,10,.55)';
+    ctx.lineWidth=3;
+    roundRect(ctx,pad+28,pad+28,W-(pad+28)*2,H-(pad+28)*2,30);
+    ctx.stroke();
+    ctx.strokeStyle='rgba(255,240,180,.65)';
+    ctx.lineWidth=1.5;
+    roundRect(ctx,pad+36,pad+36,W-(pad+36)*2,H-(pad+36)*2,26);
+    ctx.stroke();
+
+    /* Brand emboss */
+    ctx.textAlign='center';
+    ctx.fillStyle='rgba(60,35,5,.45)';
+    ctx.font='700 30px Audiowide, sans-serif';
+    ctx.fillText('ERIOR',W/2+2,152+2);
+    ctx.fillStyle='#fff8dc';
+    ctx.fillText('ERIOR',W/2,152);
+    ctx.fillStyle='rgba(80,45,10,.7)';
+    ctx.font='600 22px Outfit, sans-serif';
+    ctx.fillText('SELLO METÁLICO',W/2,198);
+
+    /* 3D coin / medallion */
+    var cx=W/2, cy=H*.4, r=228;
+    /* Coin shadow */
+    ctx.beginPath();
+    ctx.arc(cx+10,cy+18,r,0,Math.PI*2);
+    ctx.fillStyle='rgba(40,20,0,.35)';
+    ctx.fill();
+
+    /* Coin body metallic */
+    var coin=ctx.createRadialGradient(cx-70,cy-80,20,cx,cy,r);
+    coin.addColorStop(0,'#fff8e0');
+    coin.addColorStop(.25,'#ffe08a');
+    coin.addColorStop(.5,'#d4a017');
+    coin.addColorStop(.72,'#f0c85a');
+    coin.addColorStop(.88,'#8a6414');
+    coin.addColorStop(1,'#5c420e');
+    ctx.beginPath();
+    ctx.arc(cx,cy,r,0,Math.PI*2);
+    ctx.fillStyle=coin;
+    ctx.fill();
+
+    /* Coin rim */
+    ctx.lineWidth=10;
+    var rim=ctx.createLinearGradient(cx-r,cy-r,cx+r,cy+r);
+    rim.addColorStop(0,'#fff6d0');
+    rim.addColorStop(.35,'#c9972e');
+    rim.addColorStop(.65,'#fff1b0');
+    rim.addColorStop(1,'#7a5510');
+    ctx.strokeStyle=rim;
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(cx,cy,r-22,0,Math.PI*2);
+    ctx.strokeStyle='rgba(255,240,180,.4)';
+    ctx.lineWidth=2;
+    ctx.stroke();
+
+    /* Accent ring by channel */
+    ctx.beginPath();
+    ctx.arc(cx,cy,r-38,0,Math.PI*2);
+    ctx.strokeStyle=accent;
+    ctx.globalAlpha=.55;
+    ctx.lineWidth=4;
+    ctx.stroke();
+    ctx.globalAlpha=1;
+
+    /* Inner disc */
+    var inner=ctx.createRadialGradient(cx-40,cy-50,8,cx,cy,r-55);
+    inner.addColorStop(0,'#fff9e8');
+    inner.addColorStop(.4,'#f0c85a');
+    inner.addColorStop(1,'#a67c1a');
+    ctx.beginPath();
+    ctx.arc(cx,cy,r-52,0,Math.PI*2);
+    ctx.fillStyle=inner;
+    ctx.fill();
+
+    /* Channel code engraved */
+    ctx.fillStyle='rgba(50,28,5,.4)';
+    ctx.font='700 48px Audiowide, sans-serif';
+    ctx.fillText(freq.code,cx+2,cy+18);
+    ctx.fillStyle='#3a2208';
+    ctx.fillText(freq.code,cx,cy+16);
+    ctx.fillStyle='rgba(255,248,220,.55)';
+    ctx.font='700 48px Audiowide, sans-serif';
+    ctx.globalAlpha=.35;
+    ctx.fillText(freq.code,cx-1,cy+14);
+    ctx.globalAlpha=1;
+
+    /* Name plate */
+    ctx.fillStyle='rgba(40,22,5,.35)';
+    fitText(ctx,name.toUpperCase(),W-200,70);
+    ctx.fillText(name.toUpperCase(),W/2+2,H*.62+4);
+    ctx.fillStyle='#2a1806';
+    fitText(ctx,name.toUpperCase(),W-200,70);
+    ctx.fillText(name.toUpperCase(),W/2,H*.62);
+    /* Highlight edge on letters */
+    ctx.fillStyle='rgba(255,250,230,.35)';
+    fitText(ctx,name.toUpperCase(),W-200,70);
+    ctx.globalAlpha=.4;
+    ctx.fillText(name.toUpperCase(),W/2,H*.62-2);
+    ctx.globalAlpha=1;
+
+    ctx.fillStyle='rgba(60,35,8,.75)';
+    ctx.font='600 28px Outfit, sans-serif';
+    ctx.fillText('Canal · '+freq.label,W/2,H*.62+56);
+    ctx.font='500 24px Outfit, sans-serif';
+    ctx.fillStyle='rgba(70,40,10,.65)';
+    ctx.fillText(freq.line,W/2,H*.62+98);
+
+    /* Code metal bar */
+    var bx=110, by=H*.75, bw=W-220, bh=160;
+    roundRect(ctx,bx,by,bw,bh,22);
+    var bar=ctx.createLinearGradient(bx,by,bx+bw,by+bh);
+    bar.addColorStop(0,'#fff3c4');
+    bar.addColorStop(.3,'#e0b03a');
+    bar.addColorStop(.55,'#9a7018');
+    bar.addColorStop(.8,'#f0d078');
+    bar.addColorStop(1,'#b8861a');
+    ctx.fillStyle=bar;
+    ctx.fill();
+    ctx.strokeStyle='rgba(255,240,200,.7)';
+    ctx.lineWidth=2;
+    ctx.stroke();
+
+    /* Inset shadow for engraved code */
+    roundRect(ctx,bx+16,by+16,bw-32,bh-32,14);
+    ctx.fillStyle='rgba(50,28,5,.25)';
+    ctx.fill();
+
+    ctx.fillStyle='rgba(60,35,8,.7)';
+    ctx.font='700 22px Audiowide, sans-serif';
+    ctx.fillText('TU CÓDIGO',W/2,by+52);
+
+    ctx.fillStyle='#1e1205';
+    fitText(ctx,code,bw-50,36);
+    ctx.fillText(code,W/2,by+108);
+    ctx.fillStyle='rgba(255,248,220,.4)';
+    fitText(ctx,code,bw-50,36);
+    ctx.globalAlpha=.45;
+    ctx.fillText(code,W/2,by+105);
+    ctx.globalAlpha=1;
+
+    /* Footer */
+    ctx.fillStyle='rgba(50,28,5,.7)';
+    ctx.font='600 22px Outfit, sans-serif';
+    ctx.fillText('Activa este sello en audio Erior',W/2,H-118);
+    ctx.font='600 18px Audiowide, sans-serif';
+    ctx.fillStyle='rgba(70,40,10,.65)';
+    ctx.fillText('eriorcenterguiaaudios.netlify.app/nexo',W/2,H-78);
   }
 
   function renderCard(){
     var payload={name:state.name,freq:state.freq,code:state.code};
-    drawSeal(bigCtx,1080,1920,payload);
+    drawMetalCard(bigCtx,1080,1920,payload);
     prevCtx.clearRect(0,0,preview.width,preview.height);
     prevCtx.drawImage(big,0,0,preview.width,preview.height);
   }
@@ -486,18 +700,15 @@ h1 em{font-style:normal;color:var(--gold-hot)}
   function forge(){
     state.code=buildCode(state.name,state.freq);
     show('s3');
-    var lines=['Alineando nombre…','Grabando canal '+state.freq.code+'…','Sellando código…','Listo'];
+    var lines=['Fundiendo metal…','Grabando '+state.freq.code+'…','Puliendo oro…','Sello listo'];
     var i=0;
     var el=document.getElementById('forgeText');
     el.textContent=lines[0];
     clearInterval(forgeTimer);
     forgeTimer=setInterval(function(){
       i++;
-      if(i<lines.length){el.textContent=lines[i];}
-      else{
-        clearInterval(forgeTimer);
-        finish();
-      }
+      if(i<lines.length) el.textContent=lines[i];
+      else{clearInterval(forgeTimer);finish();}
     },650);
   }
 
@@ -510,52 +721,98 @@ h1 em{font-style:normal;color:var(--gold-hot)}
         'Mi código: '+state.code,
         'Nombre: '+state.name,
         'Canal: '+state.freq.label,
-        'Quiero activar este código con mi audio (combo Nexo si aplica).',
+        'Quiero activar este sello con mi audio.',
         'Prioridad de entrega por favor.'
       ].join('\n');
       document.getElementById('waBtn').href=waUrl(msg);
-      document.getElementById('nexoBtn').href='/nexo/';
       show('s4');
     }
-    if(document.fonts&&document.fonts.ready){
-      document.fonts.ready.then(paint).catch(paint);
-    }else paint();
+    if(document.fonts&&document.fonts.ready) document.fonts.ready.then(paint).catch(paint);
+    else paint();
   }
 
   function downloadCard(){
     renderCard();
     big.toBlob(function(blob){
-      if(!blob){
-        var a=document.createElement('a');
-        a.href=big.toDataURL('image/png');
-        a.download='codigo-erior-'+slugName(state.name).toLowerCase()+'.png';
-        a.click();
-        return;
-      }
-      var url=URL.createObjectURL(blob);
       var a=document.createElement('a');
-      a.href=url;
-      a.download='codigo-erior-'+slugName(state.name).toLowerCase()+'.png';
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      setTimeout(function(){URL.revokeObjectURL(url);},1500);
+      if(!blob){a.href=big.toDataURL('image/png');}
+      else{a.href=URL.createObjectURL(blob);}
+      a.download='sello-erior-'+slugName(state.name).toLowerCase()+'.png';
+      document.body.appendChild(a);a.click();a.remove();
     },'image/png');
+  }
+
+  /* Tilt interaction */
+  function setTilt(rx,ry){
+    tilt.style.transform='rotateX('+rx+'deg) rotateY('+ry+'deg)';
+  }
+  function onPointer(e){
+    var rect=tilt.getBoundingClientRect();
+    var cx=rect.left+rect.width/2;
+    var cy=rect.top+rect.height/2;
+    var x=('clientX' in e?e.clientX:(e.touches&&e.touches[0].clientX))||cx;
+    var y=('clientY' in e?e.clientY:(e.touches&&e.touches[0].clientY))||cy;
+    var dx=(x-cx)/(rect.width/2);
+    var dy=(y-cy)/(rect.height/2);
+    tilt.classList.add('is-held');
+    setTilt(Math.max(-14,Math.min(14,-dy*12)), Math.max(-18,Math.min(18,dx*16)));
+  }
+  function resetTilt(){
+    tilt.classList.remove('is-held');
+    tilt.style.transform='';
+  }
+  tilt.addEventListener('pointermove',onPointer);
+  tilt.addEventListener('pointerleave',resetTilt);
+  tilt.addEventListener('touchmove',function(e){onPointer(e);},{passive:true});
+  tilt.addEventListener('touchend',resetTilt);
+
+  /* Spark particles */
+  var spark=document.getElementById('spark');
+  if(spark){
+    var sctx=spark.getContext('2d');
+    var pts=[];
+    function resize(){
+      spark.width=window.innerWidth*devicePixelRatio;
+      spark.height=window.innerHeight*devicePixelRatio;
+      spark.style.width=window.innerWidth+'px';
+      spark.style.height=window.innerHeight+'px';
+      sctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+      pts=[];
+      for(var i=0;i<55;i++){
+        pts.push({
+          x:Math.random()*window.innerWidth,
+          y:Math.random()*window.innerHeight,
+          r:.6+Math.random()*2,
+          v:.2+Math.random()*0.7,
+          c:['rgba(62,240,255,.7)','rgba(255,79,216,.65)','rgba(255,213,106,.75)'][i%3]
+        });
+      }
+    }
+    function frame(){
+      sctx.clearRect(0,0,window.innerWidth,window.innerHeight);
+      pts.forEach(function(p){
+        p.y-=p.v;
+        if(p.y<-4){p.y=window.innerHeight+4;p.x=Math.random()*window.innerWidth;}
+        sctx.beginPath();
+        sctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+        sctx.fillStyle=p.c;
+        sctx.fill();
+      });
+      requestAnimationFrame(frame);
+    }
+    resize();frame();
+    window.addEventListener('resize',resize);
   }
 
   var nameInput=document.getElementById('nameInput');
   var btnName=document.getElementById('btnName');
-
   function syncName(){
     state.name=cleanName(nameInput.value);
     btnName.disabled=state.name.length<2;
   }
   nameInput.addEventListener('input',syncName);
   nameInput.addEventListener('keydown',function(e){
-    if(e.key==='Enter'&&!btnName.disabled){
-      e.preventDefault();
-      show('s2');
-    }
+    if(e.key==='Enter'&&!btnName.disabled){e.preventDefault();show('s2');}
   });
 
   document.getElementById('btnStart').onclick=function(){show('s1');setTimeout(function(){nameInput.focus();},200);};
@@ -566,12 +823,10 @@ h1 em{font-style:normal;color:var(--gold-hot)}
   document.getElementById('btnDownload').onclick=downloadCard;
   document.getElementById('btnAgain').onclick=function(){
     clearInterval(forgeTimer);
-    state={name:'',freq:null,code:'',blobUrl:null};
-    nameInput.value='';
-    syncName();
+    state={name:'',freq:null,code:''};
+    nameInput.value='';syncName();
     document.getElementById('btnForge').disabled=true;
-    renderFreqs();
-    show('s1');
+    renderFreqs();show('s1');
     setTimeout(function(){nameInput.focus();},150);
   };
 
