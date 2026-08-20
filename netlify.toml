@@ -32,6 +32,16 @@
   to = "/nexo/"
   status = 301
 
+[[redirects]]
+  from = "/codigo"
+  to = "/codigo/"
+  status = 301
+
+[[redirects]]
+  from = "/sello"
+  to = "/codigo/"
+  status = 301
+
 [[headers]]
   for = "/img/*"
   [headers.values]

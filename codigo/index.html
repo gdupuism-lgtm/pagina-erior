@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#05040c">
+<meta name="description" content="Código Erior — escribe tu nombre, elige tu canal y descarga tu sello premium para Stories.">
+<meta property="og:title" content="Código Erior · Tu frecuencia con nombre">
+<meta property="og:description" content="Genera tu código personalizado. Compártelo. Actívalo en audio real.">
+<meta property="og:type" content="website">
+<title>Código Erior · Tu frecuencia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@500;600;700;800&family=Sora:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#05040c;
+  --ink:#f6f1e8;
+  --soft:rgba(246,241,232,.72);
+  --dim:rgba(246,241,232,.4);
+  --gold:#e4bf7a;
+  --gold-hot:#f3d9a4;
+  --cyan:#5eead4;
+  --display:'Oxanium',sans-serif;
+  --body:'Sora',system-ui,sans-serif;
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;background:var(--bg);color:var(--ink)}
+body{
+  font-family:var(--body);
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+  touch-action:manipulation;
+}
+#field{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 65% 45% at 50% -5%, rgba(228,191,122,.16), transparent 55%),
+    radial-gradient(ellipse 50% 40% at 90% 90%, rgba(94,234,212,.08), transparent 50%),
+    var(--bg);
+}
+.vignette{
+  position:fixed;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(180deg,rgba(0,0,0,.2),transparent 28%,rgba(0,0,0,.72));
+}
+.app{
+  position:relative;z-index:2;
+  min-height:100vh;min-height:100dvh;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:1.4rem 1.15rem calc(1.4rem + env(safe-area-inset-bottom));
+  text-align:center;
+}
+.screen{display:none;width:min(420px,100%);animation:rise .5s var(--ease)}
+.screen.on{display:block}
+@keyframes rise{
+  from{opacity:0;transform:translateY(16px)}
+  to{opacity:1;transform:none}
+}
+.brand{
+  font-family:var(--display);font-weight:800;letter-spacing:.36em;
+  font-size:.66rem;color:var(--gold);margin-bottom:.8rem;
+  text-shadow:0 0 24px rgba(228,191,122,.4);
+}
+.kicker{
+  font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--cyan);margin-bottom:.7rem;font-weight:500;
+}
+h1{
+  font-family:var(--display);font-weight:700;
+  font-size:clamp(1.5rem,6.2vw,2rem);
+  letter-spacing:.04em;line-height:1.15;margin-bottom:.8rem;
+}
+h1 em{font-style:normal;color:var(--gold-hot)}
+.lead{
+  font-size:.86rem;line-height:1.55;color:var(--soft);
+  margin:0 auto 1.35rem;max-width:34ch;
+}
+.btn{
+  appearance:none;border:none;cursor:pointer;text-decoration:none;
+  font-family:var(--display);font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  font-size:.68rem;display:inline-flex;align-items:center;justify-content:center;
+  padding:1.02rem 1.3rem;border-radius:6px;width:100%;
+  transition:transform .25s var(--ease),opacity .2s;
+}
+.btn:active{transform:scale(.98)}
+.btn:disabled{opacity:.35;cursor:not-allowed;transform:none}
+.btn-gold{
+  background:linear-gradient(135deg,#f0d4a0,var(--gold));
+  color:#1a1208;
+  box-shadow:0 0 0 1px rgba(255,230,180,.35),0 0 32px rgba(228,191,122,.28);
+}
+.btn-cyan{
+  background:linear-gradient(135deg,#9ff5e8,var(--cyan));
+  color:#04201c;
+  box-shadow:0 0 0 1px rgba(94,234,212,.35),0 0 28px rgba(94,234,212,.22);
+  margin-top:.55rem;
+}
+.btn-ghost{
+  margin-top:.5rem;background:transparent;color:var(--dim);
+  border:1px solid rgba(246,241,232,.16);font-size:.6rem;
+}
+.hint{
+  margin-top:.95rem;font-size:.56rem;letter-spacing:.14em;text-transform:uppercase;
+  color:rgba(246,241,232,.3);
+}
+.label{
+  display:block;text-align:left;font-size:.58rem;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--dim);margin-bottom:.45rem;
+}
+.input{
+  width:100%;appearance:none;border-radius:12px;
+  border:1px solid rgba(228,191,122,.28);
+  background:rgba(255,255,255,.04);
+  color:var(--ink);font-family:var(--display);font-weight:600;
+  font-size:1.05rem;letter-spacing:.06em;text-align:center;
+  padding:1rem 1rem;margin-bottom:1.1rem;
+  outline:none;transition:border-color .2s,box-shadow .2s;
+}
+.input::placeholder{color:rgba(246,241,232,.28);font-weight:500;letter-spacing:.04em}
+.input:focus{
+  border-color:rgba(228,191,122,.65);
+  box-shadow:0 0 0 3px rgba(228,191,122,.12);
+}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin:1rem 0 1.15rem}
+.freq{
+  appearance:none;cursor:pointer;text-align:left;
+  padding:1rem .9rem;border-radius:14px;
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(94,234,212,.16);
+  color:inherit;font:inherit;
+  transition:border-color .2s,background .2s,transform .2s;
+}
+.freq:hover{transform:translateY(-1px);border-color:rgba(228,191,122,.4)}
+.freq.on{
+  border-color:rgba(228,191,122,.7);
+  background:rgba(228,191,122,.1);
+  box-shadow:0 0 24px rgba(228,191,122,.12);
+}
+.freq-code{
+  display:block;font-family:var(--display);font-size:.48rem;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--cyan);margin-bottom:.35rem;
+}
+.freq-name{
+  display:block;font-family:var(--display);font-weight:700;
+  font-size:.9rem;letter-spacing:.05em;
+}
+.forge-wrap{
+  width:120px;height:120px;margin:1.4rem auto 1.1rem;position:relative;
+}
+.forge-ring{
+  position:absolute;inset:0;border-radius:50%;
+  border:1px solid rgba(228,191,122,.35);
+  animation:spin 2.8s linear infinite;
+}
+.forge-ring::after{
+  content:'';position:absolute;top:-3px;left:50%;width:6px;height:6px;margin-left:-3px;
+  border-radius:50%;background:var(--gold);box-shadow:0 0 12px var(--gold);
+}
+.forge-core{
+  position:absolute;inset:26%;border-radius:50%;
+  background:radial-gradient(circle at 40% 35%,#fff8e8,var(--gold) 50%,transparent 72%);
+  box-shadow:0 0 36px rgba(228,191,122,.4);
+  animation:pulse 1.3s ease-in-out infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+.forge-text{
+  font-family:var(--display);font-size:.68rem;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--soft);
+}
+.preview-wrap{
+  margin:0 auto 1rem;width:min(280px,78vw);
+  border-radius:18px;overflow:hidden;
+  border:1px solid rgba(228,191,122,.35);
+  box-shadow:0 20px 50px rgba(0,0,0,.5),0 0 40px rgba(228,191,122,.12);
+  background:#0a0812;
+}
+#preview{
+  display:block;width:100%;height:auto;
+  aspect-ratio:9/16;background:#0a0812;
+}
+.code-chip{
+  font-family:var(--display);font-weight:700;font-size:.78rem;
+  letter-spacing:.14em;color:var(--gold-hot);
+  margin:0 0 .85rem;word-break:break-all;
+}
+.actions{display:grid;gap:.5rem}
+#cardCanvas{position:absolute;left:-9999px;top:0;width:1px;height:1px;opacity:0;pointer-events:none}
+@media(prefers-reduced-motion:reduce){
+  .screen,.forge-ring,.forge-core{animation:none}
+}
+</style>
+</head>
+<body>
+<div id="field" aria-hidden="true"></div>
+<div class="vignette" aria-hidden="true"></div>
+<canvas id="cardCanvas" width="1080" height="1920" aria-hidden="true"></canvas>
+
+<main class="app">
+  <section class="screen on" id="s0">
+    <p class="brand">CÓDIGO ERIOR</p>
+    <p class="kicker">Tu frecuencia con nombre</p>
+    <h1>Tu nombre.<br>Tu <em>sello</em>.</h1>
+    <p class="lead">Genera una card premium con tu código. Súbela a Stories. Actívala en audio real.</p>
+    <button type="button" class="btn btn-gold" id="btnStart">Crear mi código</button>
+    <p class="hint">Gratis · 20 segundos · listo para Instagram</p>
+  </section>
+
+  <section class="screen" id="s1">
+    <p class="brand">CÓDIGO ERIOR</p>
+    <p class="kicker">Paso 1</p>
+    <h1>¿Cómo te<br><em>llamas</em>?</h1>
+    <label class="label" for="nameInput">Tu nombre</label>
+    <input class="input" id="nameInput" type="text" maxlength="24" autocomplete="given-name" placeholder="Ej. Sofía" enterkeyhint="done">
+    <button type="button" class="btn btn-gold" id="btnName" disabled>Continuar</button>
+    <button type="button" class="btn btn-ghost" id="btnBack0">Atrás</button>
+  </section>
+
+  <section class="screen" id="s2">
+    <p class="brand">CÓDIGO ERIOR</p>
+    <p class="kicker">Paso 2</p>
+    <h1>Elige tu<br><em>canal</em></h1>
+    <div class="grid" id="freqGrid"></div>
+    <button type="button" class="btn btn-gold" id="btnForge" disabled>Forjar código</button>
+    <button type="button" class="btn btn-ghost" id="btnBack1">Atrás</button>
+  </section>
+
+  <section class="screen" id="s3" aria-live="polite">
+    <p class="brand">CÓDIGO ERIOR</p>
+    <div class="forge-wrap" aria-hidden="true">
+      <div class="forge-ring"></div>
+      <div class="forge-core"></div>
+    </div>
+    <p class="forge-text" id="forgeText">Grabando sello…</p>
+  </section>
+
+  <section class="screen" id="s4">
+    <p class="brand">CÓDIGO ERIOR</p>
+    <p class="kicker">Tu sello está listo</p>
+    <h1>Código<br><em>activado</em></h1>
+    <p class="code-chip" id="codeChip"></p>
+    <div class="preview-wrap">
+      <canvas id="preview" width="1080" height="1920" aria-label="Vista previa de tu código"></canvas>
+    </div>
+    <div class="actions">
+      <button type="button" class="btn btn-gold" id="btnDownload">Descargar para Stories</button>
+      <a class="btn btn-cyan" id="waBtn" href="#" target="_blank" rel="noopener noreferrer">Activar en audio · WhatsApp</a>
+      <a class="btn btn-ghost" id="nexoBtn" href="/nexo/">Ver mi combo en Nexo</a>
+      <button type="button" class="btn btn-ghost" id="btnAgain">Crear otro</button>
+    </div>
+    <p class="hint">Sube la imagen · pega el link de Nexo en la Story</p>
+  </section>
+</main>
+
+<script>
+(function(){
+  var WA='5214432311761';
+  var FREQS=[
+    {id:'amor',code:'AMOR',label:'Amor',line:'Vínculo y magnetismo'},
+    {id:'dinero',code:'DINERO',label:'Dinero',line:'Expansión y flujo'},
+    {id:'poder',code:'PODER',label:'Poder',line:'Presencia y mando'},
+    {id:'consciencia',code:'CONSCIENCIA',label:'Consciencia',line:'Despertar y claridad'}
+  ];
+
+  var state={name:'',freq:null,code:'',blobUrl:null};
+  var forgeTimer=null;
+
+  var big=document.getElementById('cardCanvas');
+  var preview=document.getElementById('preview');
+  var bigCtx=big.getContext('2d');
+  var prevCtx=preview.getContext('2d');
+
+  function show(id){
+    ['s0','s1','s2','s3','s4'].forEach(function(x){
+      document.getElementById(x).classList.toggle('on',x===id);
+    });
+  }
+  function waUrl(msg){return 'https://wa.me/'+WA+'?text='+encodeURIComponent(msg);}
+  function cleanName(raw){
+    return String(raw||'')
+      .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+      .replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s'-]/g,'')
+      .trim()
+      .replace(/\s+/g,' ')
+      .slice(0,24);
+  }
+  function slugName(n){
+    return cleanName(n)
+      .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+      .toUpperCase()
+      .replace(/[^A-Z0-9]/g,'')
+      .slice(0,10) || 'ERIOR';
+  }
+  function hash3(str){
+    var h=2166136261;
+    for(var i=0;i<str.length;i++){
+      h^=str.charCodeAt(i);
+      h=Math.imul(h,16777619);
+    }
+    var chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    var out='';
+    var x=h>>>0;
+    for(var j=0;j<3;j++){
+      out+=chars[x%chars.length];
+      x=Math.floor(x/chars.length)+97;
+    }
+    return out;
+  }
+  function buildCode(name,freq){
+    return 'ER-'+freq.code+'-'+slugName(name)+'-'+hash3(slugName(name)+'|'+freq.id+'|erior');
+  }
+
+  function drawSeal(ctx,W,H,payload){
+    var name=payload.name;
+    var freq=payload.freq;
+    var code=payload.code;
+
+    ctx.clearRect(0,0,W,H);
+
+    /* Background */
+    var g=ctx.createLinearGradient(0,0,W,H);
+    g.addColorStop(0,'#0a0814');
+    g.addColorStop(.45,'#120e1c');
+    g.addColorStop(1,'#07060e');
+    ctx.fillStyle=g;
+    ctx.fillRect(0,0,W,H);
+
+    /* Soft orbs */
+    var orb=ctx.createRadialGradient(W*.5,H*.22,20,W*.5,H*.22,W*.55);
+    orb.addColorStop(0,'rgba(228,191,122,.28)');
+    orb.addColorStop(1,'rgba(228,191,122,0)');
+    ctx.fillStyle=orb;
+    ctx.fillRect(0,0,W,H);
+
+    var orb2=ctx.createRadialGradient(W*.85,H*.78,10,W*.85,H*.78,W*.4);
+    orb2.addColorStop(0,'rgba(94,234,212,.14)');
+    orb2.addColorStop(1,'rgba(94,234,212,0)');
+    ctx.fillStyle=orb2;
+    ctx.fillRect(0,0,W,H);
+
+    /* Frame */
+    ctx.strokeStyle='rgba(228,191,122,.55)';
+    ctx.lineWidth=3;
+    roundRect(ctx,48,48,W-96,H-96,28);
+    ctx.stroke();
+    ctx.strokeStyle='rgba(94,234,212,.18)';
+    ctx.lineWidth=1.5;
+    roundRect(ctx,68,68,W-136,H-136,22);
+    ctx.stroke();
+
+    /* Brand */
+    ctx.fillStyle='#e4bf7a';
+    ctx.font='700 28px Oxanium, sans-serif';
+    ctx.textAlign='center';
+    ctx.letterSpacing='12px';
+    ctx.fillText('ERIOR',W/2,160);
+
+    ctx.fillStyle='rgba(94,234,212,.85)';
+    ctx.font='500 22px Oxanium, sans-serif';
+    ctx.fillText('CÓDIGO DE FRECUENCIA',W/2,210);
+
+    /* Center seal ring */
+    var cx=W/2, cy=H*.42, r=210;
+    ctx.beginPath();
+    ctx.arc(cx,cy,r,0,Math.PI*2);
+    ctx.strokeStyle='rgba(228,191,122,.35)';
+    ctx.lineWidth=2;
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(cx,cy,r-28,0,Math.PI*2);
+    ctx.strokeStyle='rgba(94,234,212,.25)';
+    ctx.stroke();
+
+    var core=ctx.createRadialGradient(cx-30,cy-40,10,cx,cy,r-40);
+    core.addColorStop(0,'rgba(255,248,232,.95)');
+    core.addColorStop(.35,'rgba(228,191,122,.85)');
+    core.addColorStop(1,'rgba(228,191,122,0)');
+    ctx.fillStyle=core;
+    ctx.beginPath();
+    ctx.arc(cx,cy,r-50,0,Math.PI*2);
+    ctx.fill();
+
+    ctx.fillStyle='#0a0814';
+    ctx.font='800 42px Oxanium, sans-serif';
+    ctx.fillText(freq.code,cx,cy+14);
+
+    /* Name */
+    ctx.fillStyle='#f6f1e8';
+    ctx.font='700 64px Oxanium, sans-serif';
+    fitText(ctx,name.toUpperCase(),W-160,64);
+    ctx.fillText(name.toUpperCase(),W/2,H*.62);
+
+    ctx.fillStyle='rgba(246,241,232,.55)';
+    ctx.font='500 26px Sora, sans-serif';
+    ctx.fillText('Canal · '+freq.label,W/2,H*.62+52);
+
+    ctx.fillStyle='rgba(246,241,232,.4)';
+    ctx.font='400 24px Sora, sans-serif';
+    wrapText(ctx,freq.line,W/2,H*.62+98,W-200,34);
+
+    /* Code block */
+    var boxY=H*.76;
+    roundRect(ctx,120,boxY,W-240,150,18);
+    ctx.fillStyle='rgba(228,191,122,.08)';
+    ctx.fill();
+    ctx.strokeStyle='rgba(228,191,122,.4)';
+    ctx.lineWidth=1.5;
+    ctx.stroke();
+
+    ctx.fillStyle='rgba(94,234,212,.8)';
+    ctx.font='600 20px Oxanium, sans-serif';
+    ctx.fillText('TU CÓDIGO',W/2,boxY+48);
+
+    ctx.fillStyle='#f3d9a4';
+    ctx.font='700 34px Oxanium, sans-serif';
+    fitText(ctx,code,W-280,34);
+    ctx.fillText(code,W/2,boxY+100);
+
+    /* Footer */
+    ctx.fillStyle='rgba(246,241,232,.35)';
+    ctx.font='500 20px Oxanium, sans-serif';
+    ctx.fillText('Activa este código en audio Erior',W/2,H-110);
+    ctx.fillStyle='rgba(228,191,122,.55)';
+    ctx.font='600 18px Oxanium, sans-serif';
+    ctx.fillText('eriorcenterguiaaudios.netlify.app/nexo',W/2,H-72);
+  }
+
+  function roundRect(ctx,x,y,w,h,r){
+    var rr=Math.min(r,w/2,h/2);
+    ctx.beginPath();
+    ctx.moveTo(x+rr,y);
+    ctx.arcTo(x+w,y,x+w,y+h,rr);
+    ctx.arcTo(x+w,y+h,x,y+h,rr);
+    ctx.arcTo(x,y+h,x,y,rr);
+    ctx.arcTo(x,y,x+w,y,rr);
+    ctx.closePath();
+  }
+  function fitText(ctx,text,maxW,baseSize){
+    var size=baseSize;
+    ctx.font='700 '+size+'px Oxanium, sans-serif';
+    while(size>22 && ctx.measureText(text).width>maxW){
+      size-=2;
+      ctx.font='700 '+size+'px Oxanium, sans-serif';
+    }
+  }
+  function wrapText(ctx,text,x,y,maxW,lineH){
+    var words=String(text).split(' ');
+    var line='';
+    var yy=y;
+    for(var i=0;i<words.length;i++){
+      var test=line+words[i]+' ';
+      if(ctx.measureText(test).width>maxW && line){
+        ctx.fillText(line.trim(),x,yy);
+        line=words[i]+' ';
+        yy+=lineH;
+      }else line=test;
+    }
+    if(line)ctx.fillText(line.trim(),x,yy);
+  }
+
+  function renderCard(){
+    var payload={name:state.name,freq:state.freq,code:state.code};
+    drawSeal(bigCtx,1080,1920,payload);
+    prevCtx.clearRect(0,0,preview.width,preview.height);
+    prevCtx.drawImage(big,0,0,preview.width,preview.height);
+  }
+
+  function renderFreqs(){
+    var host=document.getElementById('freqGrid');
+    host.innerHTML='';
+    FREQS.forEach(function(f){
+      var b=document.createElement('button');
+      b.type='button';
+      b.className='freq'+(state.freq&&state.freq.id===f.id?' on':'');
+      b.innerHTML='<span class="freq-code">'+f.code+'</span><span class="freq-name">'+f.label+'</span>';
+      b.onclick=function(){
+        state.freq=f;
+        renderFreqs();
+        document.getElementById('btnForge').disabled=false;
+      };
+      host.appendChild(b);
+    });
+  }
+
+  function forge(){
+    state.code=buildCode(state.name,state.freq);
+    show('s3');
+    var lines=['Alineando nombre…','Grabando canal '+state.freq.code+'…','Sellando código…','Listo'];
+    var i=0;
+    var el=document.getElementById('forgeText');
+    el.textContent=lines[0];
+    clearInterval(forgeTimer);
+    forgeTimer=setInterval(function(){
+      i++;
+      if(i<lines.length){el.textContent=lines[i];}
+      else{
+        clearInterval(forgeTimer);
+        finish();
+      }
+    },650);
+  }
+
+  function finish(){
+    function paint(){
+      renderCard();
+      document.getElementById('codeChip').textContent=state.code;
+      var msg=[
+        'Hola! Vengo de Código Erior ✨',
+        'Mi código: '+state.code,
+        'Nombre: '+state.name,
+        'Canal: '+state.freq.label,
+        'Quiero activar este código con mi audio (combo Nexo si aplica).',
+        'Prioridad de entrega por favor.'
+      ].join('\n');
+      document.getElementById('waBtn').href=waUrl(msg);
+      document.getElementById('nexoBtn').href='/nexo/';
+      show('s4');
+    }
+    if(document.fonts&&document.fonts.ready){
+      document.fonts.ready.then(paint).catch(paint);
+    }else paint();
+  }
+
+  function downloadCard(){
+    renderCard();
+    big.toBlob(function(blob){
+      if(!blob){
+        var a=document.createElement('a');
+        a.href=big.toDataURL('image/png');
+        a.download='codigo-erior-'+slugName(state.name).toLowerCase()+'.png';
+        a.click();
+        return;
+      }
+      var url=URL.createObjectURL(blob);
+      var a=document.createElement('a');
+      a.href=url;
+      a.download='codigo-erior-'+slugName(state.name).toLowerCase()+'.png';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(function(){URL.revokeObjectURL(url);},1500);
+    },'image/png');
+  }
+
+  var nameInput=document.getElementById('nameInput');
+  var btnName=document.getElementById('btnName');
+
+  function syncName(){
+    state.name=cleanName(nameInput.value);
+    btnName.disabled=state.name.length<2;
+  }
+  nameInput.addEventListener('input',syncName);
+  nameInput.addEventListener('keydown',function(e){
+    if(e.key==='Enter'&&!btnName.disabled){
+      e.preventDefault();
+      show('s2');
+    }
+  });
+
+  document.getElementById('btnStart').onclick=function(){show('s1');setTimeout(function(){nameInput.focus();},200);};
+  btnName.onclick=function(){if(!btnName.disabled)show('s2');};
+  document.getElementById('btnBack0').onclick=function(){show('s0');};
+  document.getElementById('btnBack1').onclick=function(){show('s1');};
+  document.getElementById('btnForge').onclick=function(){if(state.freq&&state.name)forge();};
+  document.getElementById('btnDownload').onclick=downloadCard;
+  document.getElementById('btnAgain').onclick=function(){
+    clearInterval(forgeTimer);
+    state={name:'',freq:null,code:'',blobUrl:null};
+    nameInput.value='';
+    syncName();
+    document.getElementById('btnForge').disabled=true;
+    renderFreqs();
+    show('s1');
+    setTimeout(function(){nameInput.focus();},150);
+  };
+
+  renderFreqs();
+})();
+</script>
+</body>
+</html>
