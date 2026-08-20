@@ -27,6 +27,11 @@
   to = "/galaxy/"
   status = 301
 
+[[redirects]]
+  from = "/nexo"
+  to = "/nexo/"
+  status = 301
+
 [[headers]]
   for = "/img/*"
   [headers.values]

@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#03020a">
+<meta name="description" content="Nexo Erior — toca tu frecuencia y recibe el audio que te corresponde. Cierra por WhatsApp.">
+<meta property="og:title" content="Nexo Erior · Tu frecuencia">
+<meta property="og:description" content="Amor · Dinero · Poder · Consciencia. Una señal. Un audio. WhatsApp.">
+<meta property="og:type" content="website">
+<title>Nexo Erior · Tu frecuencia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@500;600;700;800&family=Sora:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#03020a;
+  --ink:#f4f0e8;
+  --soft:rgba(244,240,232,.72);
+  --dim:rgba(244,240,232,.42);
+  --gold:#e4bf7a;
+  --gold-hot:#f0d4a0;
+  --cyan:#5eead4;
+  --cyan-dim:rgba(94,234,212,.35);
+  --void:#0a0814;
+  --display:'Oxanium',sans-serif;
+  --body:'Sora',system-ui,sans-serif;
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;background:var(--bg);color:var(--ink)}
+body{
+  font-family:var(--body);
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+  touch-action:manipulation;
+}
+#field{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 70% 50% at 50% 0%, rgba(94,234,212,.12), transparent 55%),
+    radial-gradient(ellipse 55% 40% at 85% 80%, rgba(228,191,122,.1), transparent 50%),
+    radial-gradient(ellipse 40% 35% at 10% 70%, rgba(94,234,212,.06), transparent 45%),
+    var(--bg);
+}
+#nodes{position:fixed;inset:0;z-index:1;display:block;pointer-events:none}
+.vignette{
+  position:fixed;inset:0;z-index:2;pointer-events:none;
+  background:linear-gradient(180deg,rgba(0,0,0,.25),transparent 30%,rgba(0,0,0,.7));
+}
+.app{
+  position:relative;z-index:3;
+  min-height:100vh;min-height:100dvh;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:1.5rem 1.2rem calc(1.5rem + env(safe-area-inset-bottom));
+  text-align:center;
+}
+.screen{display:none;width:min(420px,100%);animation:rise .55s var(--ease)}
+.screen.on{display:block}
+@keyframes rise{
+  from{opacity:0;transform:translateY(18px) scale(.98)}
+  to{opacity:1;transform:none}
+}
+.brand{
+  font-family:var(--display);font-weight:800;letter-spacing:.38em;
+  font-size:.68rem;color:var(--gold);margin-bottom:.85rem;
+  text-shadow:0 0 28px rgba(228,191,122,.4);
+}
+.kicker{
+  font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--cyan);margin-bottom:.75rem;font-weight:500;
+}
+h1{
+  font-family:var(--display);font-weight:700;
+  font-size:clamp(1.55rem,6.5vw,2.05rem);
+  letter-spacing:.04em;line-height:1.15;margin-bottom:.85rem;
+}
+h1 em{font-style:normal;color:var(--gold-hot)}
+.lead{
+  font-size:.88rem;line-height:1.55;color:var(--soft);
+  margin:0 auto 1.5rem;max-width:32ch;font-weight:400;
+}
+.btn{
+  appearance:none;border:none;cursor:pointer;text-decoration:none;
+  font-family:var(--display);font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  font-size:.7rem;display:inline-flex;align-items:center;justify-content:center;
+  padding:1.05rem 1.35rem;border-radius:6px;width:100%;
+  transition:transform .25s var(--ease),box-shadow .25s;
+}
+.btn:active{transform:scale(.98)}
+.btn-gold{
+  background:linear-gradient(135deg,#f0d4a0,var(--gold));
+  color:#1a1208;
+  box-shadow:0 0 0 1px rgba(255,230,180,.35),0 0 36px rgba(228,191,122,.3);
+}
+.btn-cyan{
+  background:linear-gradient(135deg,#9ff5e8,var(--cyan));
+  color:#04201c;
+  box-shadow:0 0 0 1px rgba(94,234,212,.4),0 0 36px rgba(94,234,212,.28);
+}
+.btn-ghost{
+  margin-top:.55rem;background:transparent;color:var(--dim);
+  border:1px solid rgba(244,240,232,.18);font-size:.62rem;
+}
+.hint{
+  margin-top:1rem;font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;
+  color:rgba(244,240,232,.32);
+}
+
+/* Emotion grid */
+.grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:.65rem;margin:1.1rem 0 0;
+}
+.freq{
+  appearance:none;cursor:pointer;text-align:left;
+  padding:1.05rem .95rem 1.1rem;border-radius:14px;
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(94,234,212,.16);
+  color:inherit;font:inherit;
+  transition:border-color .25s,background .25s,transform .25s var(--ease),box-shadow .25s;
+}
+.freq:hover,.freq:focus-visible{
+  border-color:rgba(228,191,122,.5);
+  background:rgba(228,191,122,.07);
+  transform:translateY(-2px);
+  outline:none;
+}
+.freq-code{
+  display:block;font-family:var(--display);font-size:.5rem;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--cyan);margin-bottom:.4rem;opacity:.8;
+}
+.freq-name{
+  display:block;font-family:var(--display);font-weight:700;
+  font-size:.92rem;letter-spacing:.06em;color:var(--ink);
+}
+.freq-sub{
+  display:block;font-size:.68rem;line-height:1.4;color:var(--dim);
+  margin-top:.35rem;
+}
+
+/* Sync */
+.sync-wrap{
+  position:relative;width:160px;height:160px;margin:1.5rem auto 1.25rem;
+}
+.sync-core{
+  position:absolute;inset:28%;border-radius:50%;
+  background:radial-gradient(circle at 40% 35%,#fff8e8,var(--gold) 45%,transparent 70%);
+  box-shadow:0 0 40px rgba(228,191,122,.45),0 0 80px rgba(94,234,212,.2);
+  animation:corePulse 1.4s ease-in-out infinite;
+}
+.sync-ring{
+  position:absolute;inset:0;border-radius:50%;
+  border:1px solid rgba(94,234,212,.35);
+  animation:spinRing 3.2s linear infinite;
+}
+.sync-ring::before{
+  content:'';position:absolute;top:-3px;left:50%;width:6px;height:6px;margin-left:-3px;
+  border-radius:50%;background:var(--cyan);box-shadow:0 0 12px var(--cyan);
+}
+.sync-ring.b{
+  inset:12%;border-color:rgba(228,191,122,.3);
+  animation-duration:2.2s;animation-direction:reverse;
+}
+.sync-ring.b::before{background:var(--gold);box-shadow:0 0 12px var(--gold)}
+@keyframes spinRing{to{transform:rotate(360deg)}}
+@keyframes corePulse{
+  0%,100%{transform:scale(1);opacity:.9}
+  50%{transform:scale(1.08);opacity:1}
+}
+.sync-text{
+  font-family:var(--display);font-size:.72rem;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--soft);min-height:1.4em;
+}
+
+/* Reveal */
+.reveal-card{
+  margin:1rem 0 1.25rem;border-radius:18px;overflow:hidden;
+  border:1px solid rgba(228,191,122,.28);
+  background:rgba(10,8,20,.75);
+  box-shadow:0 20px 50px rgba(0,0,0,.45),0 0 40px rgba(94,234,212,.08);
+  text-align:left;
+}
+.reveal-img{
+  aspect-ratio:16/10;width:100%;object-fit:cover;display:block;
+  background:#0a0814;
+}
+.reveal-body{padding:1rem 1.05rem 1.15rem}
+.reveal-tag{
+  font-family:var(--display);font-size:.52rem;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--cyan);margin-bottom:.35rem;
+}
+.reveal-name{
+  font-family:var(--display);font-weight:800;font-size:1.15rem;
+  letter-spacing:.04em;line-height:1.2;margin-bottom:.35rem;
+}
+.reveal-price{
+  font-size:.78rem;color:var(--gold);font-weight:600;margin-bottom:.65rem;
+}
+.reveal-why{
+  font-size:.78rem;line-height:1.5;color:var(--soft);
+  padding-top:.7rem;border-top:1px solid rgba(255,255,255,.08);
+}
+.upsell{
+  margin:0 0 1.15rem;padding:.9rem 1rem;border-radius:12px;
+  border:1px solid rgba(94,234,212,.22);
+  background:rgba(94,234,212,.06);
+  text-align:left;font-size:.74rem;line-height:1.5;color:var(--soft);
+}
+.upsell strong{color:var(--gold-hot);font-weight:600}
+.day-seal{
+  font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--dim);margin-bottom:.85rem;
+}
+.day-seal span{color:var(--cyan)}
+
+@media(prefers-reduced-motion:reduce){
+  .screen{animation:none}
+  .sync-core,.sync-ring,.sync-ring.b{animation:none}
+}
+</style>
+</head>
+<body>
+<div id="field" aria-hidden="true"></div>
+<canvas id="nodes" aria-hidden="true"></canvas>
+<div class="vignette" aria-hidden="true"></div>
+
+<main class="app">
+  <!-- Intro -->
+  <section class="screen on" id="s0" aria-label="Inicio">
+    <p class="brand">NEXO ERIOR</p>
+    <p class="kicker">Señal del día</p>
+    <h1>Toca tu<br><em>frecuencia</em></h1>
+    <p class="lead">Una emoción. Un audio. El nexo elige por ti — y cierras por WhatsApp en segundos.</p>
+    <button type="button" class="btn btn-gold" id="btnStart">Abrir nexo</button>
+    <p class="hint">~15 segundos</p>
+  </section>
+
+  <!-- Choose -->
+  <section class="screen" id="s1" aria-label="Elegir frecuencia">
+    <p class="brand">NEXO ERIOR</p>
+    <p class="kicker">¿Qué quieres activar?</p>
+    <h1>Elige tu<br><em>canal</em></h1>
+    <div class="grid" id="freqGrid" role="group" aria-label="Frecuencias"></div>
+  </section>
+
+  <!-- Sync -->
+  <section class="screen" id="s2" aria-label="Sintonizando" aria-live="polite">
+    <p class="brand">NEXO ERIOR</p>
+    <div class="sync-wrap" aria-hidden="true">
+      <div class="sync-ring"></div>
+      <div class="sync-ring b"></div>
+      <div class="sync-core"></div>
+    </div>
+    <p class="sync-text" id="syncText">Sintonizando…</p>
+  </section>
+
+  <!-- Reveal -->
+  <section class="screen" id="s3" aria-label="Tu audio">
+    <p class="brand">NEXO ERIOR</p>
+    <p class="day-seal">Señal de hoy · <span id="dayLabel"></span></p>
+    <p class="kicker" id="revealKicker">Tu frecuencia</p>
+    <h1 id="revealTitle">Tu audio</h1>
+    <article class="reveal-card">
+      <img class="reveal-img" id="revealImg" src="" alt="" width="840" height="525" loading="eager">
+      <div class="reveal-body">
+        <p class="reveal-tag" id="revealTag"></p>
+        <h2 class="reveal-name" id="revealName"></h2>
+        <p class="reveal-price" id="revealPrice"></p>
+        <p class="reveal-why" id="revealWhy"></p>
+      </div>
+    </article>
+    <div class="upsell" id="upsellBox" hidden></div>
+    <a class="btn btn-cyan" id="waBtn" href="#" target="_blank" rel="noopener noreferrer">Pedir por WhatsApp</a>
+    <button type="button" class="btn btn-ghost" id="btnAgain">Otra frecuencia</button>
+  </section>
+</main>
+
+<script>
+(function(){
+  var WA='5214432311761';
+  var IMG='/img/catalog/';
+
+  var CATALOG={
+    seduction:{id:'seduction',name:'SEDUCTION',price:1199,promo:true,img:'seduction.jpg',blurb:'Magnetismo sin perseguir'},
+    eriorlove:{id:'eriorlove',name:'Erior LOVE',price:1190,img:'erior-love.jpg',blurb:'Atraer a tu persona'},
+    attraction:{id:'attraction',name:'ATTRACTION',price:1190,img:'attraction.jpg',blurb:'Bloqueos en el amor'},
+    money:{id:'money',name:'MONEY TECH',price:1190,img:'money-tech.jpg',blurb:'Abundancia sin duda'},
+    abundance:{id:'abundance',name:'Master Abundance',price:1190,img:'master-abundance.jpg',blurb:'Finanzas y expansión'},
+    lucky:{id:'lucky',name:'Lucky',price:1190,img:'lucky.jpg',blurb:'Suerte en modo ON'},
+    god:{id:'god',name:'GOD / GODDESS',price:1190,img:'god-goddess.jpg',blurb:'Poder creador YO SOY'},
+    icon:{id:'icon',name:'ICON AURA',price:1190,img:'icon-aura.jpg',blurb:'Presencia magnética'},
+    mastermind:{id:'mastermind',name:'MASTER MIND',price:1190,img:'master-mind.jpg',blurb:'Visión y anti-autosabotaje'},
+    wonderland:{id:'wonderland',name:'Wonderland Coherence',price:1190,img:'wonderland-coherence.jpg',blurb:'Menos ruido, más coherencia'},
+    simulation:{id:'simulation',name:'SIMULATION-U',price:1190,img:'simulation-u.jpg',blurb:'Entrevista con tu yo futuro'},
+    imagine:{id:'imagine',name:'IMAGINE',price:1199,promo:true,img:'imagine.jpg',blurb:'Imaginar desde el ya lo tengo'},
+    select:{id:'select',name:'SELECT',price:1190,img:'select.jpg',blurb:'Elige tu realidad día a día'}
+  };
+
+  var FREQS=[
+    {
+      id:'amor',
+      code:'NX-01',
+      label:'Amor',
+      sub:'Vínculo y magnetismo',
+      pools:['seduction','eriorlove','attraction'],
+      why:{
+        seduction:'Tu nexo pide magnetismo limpio: atraer sin perseguir, desde el ya soy.',
+        eriorlove:'Hoy tu canal apunta a persona específica — frecuencia de atracción clara.',
+        attraction:'Hay un bloqueo suave en el amor. Este audio abre el flujo otra vez.'
+      },
+      upsell:'imagine'
+    },
+    {
+      id:'dinero',
+      code:'NX-02',
+      label:'Dinero',
+      sub:'Expansión y flujo',
+      pools:['money','abundance','lucky'],
+      why:{
+        money:'El nexo detecta duda en el dinero. MONEY TECH corta el ruido y enciende certeza.',
+        abundance:'Hoy toca expansión financiera — orden mental + recepción.',
+        lucky:'La señal pide suerte activa: oportunidades que se notan y se toman.'
+      },
+      upsell:'imagine'
+    },
+    {
+      id:'poder',
+      code:'NX-03',
+      label:'Poder',
+      sub:'Presencia y mando',
+      pools:['god','icon','mastermind'],
+      why:{
+        god:'Tu frecuencia pide identidad creadora: YO SOY sin negociar.',
+        icon:'Hoy el nexo marca presencia: aura que se siente al entrar.',
+        mastermind:'Anti-autosabotaje + visión. Poder que se sostiene en el día a día.'
+      },
+      upsell:'seduction'
+    },
+    {
+      id:'consciencia',
+      code:'NX-04',
+      label:'Consciencia',
+      sub:'Despertar y claridad',
+      pools:['wonderland','simulation','select'],
+      why:{
+        wonderland:'Menos ruido mental, más coherencia. Consciencia que se siente en el cuerpo.',
+        simulation:'Hablar con tu yo futuro — despertar a la versión que ya sabe.',
+        select:'Elegir realidad a conciencia, día a día. Claridad en acción.'
+      },
+      upsell:'imagine'
+    }
+  ];
+
+  var chosen=null;
+  var audio=null;
+  var syncTimer=null;
+
+  function money(n){return '$'+Number(n).toLocaleString('es-MX');}
+  function waUrl(msg){return 'https://wa.me/'+WA+'?text='+encodeURIComponent(msg);}
+  function daySeed(){
+    var d=new Date();
+    return d.getFullYear()*10000+(d.getMonth()+1)*100+d.getDate();
+  }
+  function pickFromPool(ids){
+    var seed=daySeed();
+    return ids[seed%ids.length];
+  }
+  function show(id){
+    ['s0','s1','s2','s3'].forEach(function(x){
+      document.getElementById(x).classList.toggle('on',x===id);
+    });
+  }
+  function todayLabel(){
+    try{
+      return new Date().toLocaleDateString('es-MX',{weekday:'short',day:'numeric',month:'short'});
+    }catch(e){return 'hoy';}
+  }
+
+  function renderFreqs(){
+    var host=document.getElementById('freqGrid');
+    host.innerHTML='';
+    FREQS.forEach(function(f){
+      var b=document.createElement('button');
+      b.type='button';
+      b.className='freq';
+      b.innerHTML=
+        '<span class="freq-code">'+f.code+'</span>'+
+        '<span class="freq-name">'+f.label+'</span>'+
+        '<span class="freq-sub">'+f.sub+'</span>';
+      b.onclick=function(){startSync(f);};
+      host.appendChild(b);
+    });
+  }
+
+  function startSync(freq){
+    chosen=freq;
+    var aid=pickFromPool(freq.pools);
+    audio=CATALOG[aid];
+    show('s2');
+    var lines=[
+      'Leyendo '+freq.label.toLowerCase()+'…',
+      'Cruzando catálogo…',
+      'Bloqueando señal…',
+      'Nexo listo'
+    ];
+    var i=0;
+    var el=document.getElementById('syncText');
+    el.textContent=lines[0];
+    clearInterval(syncTimer);
+    syncTimer=setInterval(function(){
+      i++;
+      if(i<lines.length){el.textContent=lines[i];}
+      else{
+        clearInterval(syncTimer);
+        reveal();
+      }
+    },700);
+  }
+
+  function reveal(){
+    var f=chosen;
+    var a=audio;
+    var why=(f.why&&f.why[a.id])||a.blurb;
+    var up=CATALOG[f.upsell];
+
+    document.getElementById('dayLabel').textContent=todayLabel();
+    document.getElementById('revealKicker').textContent='Canal · '+f.label;
+    document.getElementById('revealTitle').innerHTML='Tu señal<br><em>llegó</em>';
+    var img=document.getElementById('revealImg');
+    img.src=IMG+a.img;
+    img.alt=a.name;
+    document.getElementById('revealTag').textContent=a.promo?'PROMO ACTIVA':'SEÑAL DEL DÍA';
+    document.getElementById('revealName').textContent=a.name;
+    document.getElementById('revealPrice').textContent=money(a.price)+(a.promo?' · promo':'')+' · '+a.blurb;
+    document.getElementById('revealWhy').textContent=why;
+
+    var box=document.getElementById('upsellBox');
+    if(up&&up.id!==a.id){
+      box.hidden=false;
+      box.innerHTML='Combo nexo: lleva también <strong>'+up.name+'</strong> — promo segundo audio al <strong>50%</strong>.';
+    }else{box.hidden=true;}
+
+    var lines=['Hola! Vengo de Nexo Erior ✨','Canal: '+f.label,'Quiero: '+a.name+' ('+money(a.price)+')'];
+    if(up&&up.id!==a.id){
+      lines.push('Me interesa combo con '+up.name+' (2º al 50%).');
+    }
+    lines.push('Prioridad de entrega por favor.');
+    var link=document.getElementById('waBtn');
+    link.href=waUrl(lines.join('\n'));
+    link.textContent='Pedir '+a.name;
+
+    show('s3');
+  }
+
+  document.getElementById('btnStart').onclick=function(){show('s1');};
+  document.getElementById('btnAgain').onclick=function(){
+    clearInterval(syncTimer);
+    chosen=null;audio=null;
+    show('s1');
+  };
+
+  renderFreqs();
+
+  /* Floating nodes */
+  var c=document.getElementById('nodes');
+  if(c){
+    var ctx=c.getContext('2d');
+    var w,h,pts=[];
+    function resize(){
+      w=c.width=window.innerWidth*devicePixelRatio;
+      h=c.height=window.innerHeight*devicePixelRatio;
+      c.style.width=window.innerWidth+'px';
+      c.style.height=window.innerHeight+'px';
+      ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+      pts=[];
+      var n=Math.min(48,Math.floor(window.innerWidth/18));
+      for(var i=0;i<n;i++){
+        pts.push({
+          x:Math.random()*window.innerWidth,
+          y:Math.random()*window.innerHeight,
+          vx:(Math.random()-.5)*.25,
+          vy:(Math.random()-.5)*.25,
+          r:1+Math.random()*1.6
+        });
+      }
+    }
+    function frame(){
+      ctx.clearRect(0,0,window.innerWidth,window.innerHeight);
+      for(var i=0;i<pts.length;i++){
+        var p=pts[i];
+        p.x+=p.vx;p.y+=p.vy;
+        if(p.x<0||p.x>window.innerWidth)p.vx*=-1;
+        if(p.y<0||p.y>window.innerHeight)p.vy*=-1;
+        ctx.beginPath();
+        ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+        ctx.fillStyle='rgba(94,234,212,.45)';
+        ctx.fill();
+        for(var j=i+1;j<pts.length;j++){
+          var q=pts[j];
+          var dx=p.x-q.x,dy=p.y-q.y;
+          var d=Math.sqrt(dx*dx+dy*dy);
+          if(d<110){
+            ctx.strokeStyle='rgba(228,191,122,'+(0.12*(1-d/110))+')';
+            ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(q.x,q.y);ctx.stroke();
+          }
+        }
+      }
+      requestAnimationFrame(frame);
+    }
+    resize();frame();
+    window.addEventListener('resize',resize);
+  }
+})();
+</script>
+</body>
+</html>
