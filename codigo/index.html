@@ -191,7 +191,6 @@ h1 em{font-style:italic;color:var(--gold-hot)}
     <label class="label" for="expInput">Cuéntanos tu experiencia con tus audios</label>
     <textarea class="textarea" id="expInput" maxlength="160" placeholder="Ej. Desde que escucho mi audio duermo más tranquila y me siento más yo…"></textarea>
     <p class="char"><span id="expCount">0</span>/160</p>
-    <p class="note warn" id="expWarn" hidden>Reescribe tu experiencia para poder forjar el sello.</p>
     <button type="button" class="btn btn-gold" id="btnForge" disabled>Forjar sello</button>
     <button type="button" class="btn btn-ghost" id="btnBack1">Atrás</button>
   </section>
@@ -234,9 +233,6 @@ h1 em{font-style:italic;color:var(--gold-hot)}
   var state={name:'',exp:'',code:''};
   var timer=null;
 
-  var NEG=/(\bno\b.{0,20}(funciona|sirve|gusta|recomiendo)|estafa|fraude|robo|horrible|pésim|pesim|basura|mentira|engaño|pérdida|perdida de dinero|no cambió|no cambio|peor|odio|asco|falso|fake|decepción|decepcion|arrepent|nunca más|nunca mas|no lo compren|no compren)/i;
-  var POS=/(me (siento|ayuda|ayudó|ayudo|encanta|encantó|encanto|gusta|gustó|gusto)|mejor|tranquila|tranquilo|paz|amor|abundancia|cambio|cambió|cambio|recomiendo|gracias|funciona|increíble|increible|hermoso|hermosa|poderos|magnet|manifest|duermo|sueño|sueno|claridad|confianza|feliz|bienestar|transform|resultado|sí funciona|si funciona|vale la pena|lo amo|me encanta)/i;
-
   var big=document.getElementById('cardCanvas');
   var preview=document.getElementById('preview');
   var bctx=big.getContext('2d');
@@ -272,15 +268,6 @@ h1 em{font-style:italic;color:var(--gold-hot)}
   }
   function buildCode(name){
     return 'ER-MT-'+slug(name)+'-'+hash4(slug(name)+'|mental-tech|erior');
-  }
-
-  function isPositive(text){
-    var t=cleanExp(text);
-    if(t.length<12) return false;
-    if(NEG.test(t)) return false;
-    if(POS.test(t)) return true;
-    /* soft pass: no negatives + enough length + not pure complaint */
-    return t.length>=24 && !/(\bno\b|nunca|jamás|jamas)/i.test(t);
   }
 
   function roundRect(ctx,x,y,w,h,r){
@@ -494,14 +481,14 @@ h1 em{font-style:italic;color:var(--gold-hot)}
   function syncExpUI(){
     var t=cleanExp(document.getElementById('expInput').value);
     document.getElementById('expCount').textContent=t.length;
-    var ok=isPositive(t);
-    document.getElementById('expWarn').hidden=!(t.length>=12 && !ok);
+    var ok=t.length>=8;
     document.getElementById('btnForge').disabled=!ok;
     state.exp=ok?t:'';
   }
 
   function forge(){
-    if(!isPositive(state.exp)) return;
+    state.exp=cleanExp(document.getElementById('expInput').value);
+    if(state.exp.length<8) return;
     state.code=buildCode(state.name);
     show('s3');
     var lines=['Negro glossy…','Earpods Mental Tech…','Grabando experiencia…','Listo'];
