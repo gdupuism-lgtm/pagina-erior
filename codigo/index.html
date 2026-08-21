@@ -188,12 +188,10 @@ h1 em{font-style:italic;color:var(--gold-hot)}
     <p class="brand">ERIOR CENTER</p>
     <p class="kicker">Paso 2</p>
     <h1>Tu<br><em>experiencia</em></h1>
-    <p class="note">Solo experiencias positivas se imprimen en tu sello (para que se vea en Stories).</p>
     <label class="label" for="expInput">Cuéntanos tu experiencia con tus audios</label>
     <textarea class="textarea" id="expInput" maxlength="160" placeholder="Ej. Desde que escucho mi audio duermo más tranquila y me siento más yo…"></textarea>
     <p class="char"><span id="expCount">0</span>/160</p>
-    <p class="note warn" id="expWarn" hidden>Esa experiencia no suena positiva. Reescribe algo bueno que sí quieras mostrar en tu Story.</p>
-    <p class="note ok" id="expOk" hidden>Listo: se imprimirá en tu sello.</p>
+    <p class="note warn" id="expWarn" hidden>Reescribe tu experiencia para poder forjar el sello.</p>
     <button type="button" class="btn btn-gold" id="btnForge" disabled>Forjar sello</button>
     <button type="button" class="btn btn-ghost" id="btnBack1">Atrás</button>
   </section>
@@ -498,7 +496,6 @@ h1 em{font-style:italic;color:var(--gold-hot)}
     document.getElementById('expCount').textContent=t.length;
     var ok=isPositive(t);
     document.getElementById('expWarn').hidden=!(t.length>=12 && !ok);
-    document.getElementById('expOk').hidden=!ok;
     document.getElementById('btnForge').disabled=!ok;
     state.exp=ok?t:'';
   }
