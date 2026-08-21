@@ -154,6 +154,32 @@ h1 em{font-style:italic;color:var(--gold-hot)}
 .code-chip{font-size:.64rem;font-weight:700;letter-spacing:.1em;color:var(--gold-hot);margin:0 0 .8rem;word-break:break-all}
 .actions{display:grid;gap:.5rem}
 #cardCanvas{position:absolute;left:-9999px;top:0;opacity:0;pointer-events:none}
+.save-sheet{
+  position:fixed;inset:0;z-index:50;
+  background:rgba(0,0,0,.82);
+  display:flex;align-items:flex-end;justify-content:center;
+  padding:1rem 1rem calc(1rem + env(safe-area-inset-bottom));
+}
+.save-sheet[hidden]{display:none!important}
+.save-sheet-inner{
+  width:min(420px,100%);
+  background:#121214;
+  border:1px solid rgba(212,175,106,.35);
+  border-radius:20px 20px 12px 12px;
+  padding:1.1rem 1rem 1.15rem;
+  text-align:center;
+}
+.save-sheet-title{
+  font-family:var(--serif);font-size:1.35rem;color:var(--gold-hot);margin-bottom:.35rem;
+}
+.save-sheet-sub{font-size:.78rem;color:var(--soft);margin-bottom:.9rem;line-height:1.4}
+#saveImg{
+  width:min(220px,70%);aspect-ratio:9/16;object-fit:cover;
+  border-radius:14px;margin:0 auto 1rem;display:block;
+  border:1px solid rgba(212,175,106,.4);
+  -webkit-touch-callout:default;
+  user-select:auto;
+}
 @media(prefers-reduced-motion:reduce){
   .screen,.card-tilt,.shine,.forge-ring{animation:none!important}
 }
@@ -218,13 +244,22 @@ h1 em{font-style:italic;color:var(--gold-hot)}
       </div>
     </div>
     <div class="actions">
-      <button type="button" class="btn btn-gold" id="btnDownload">Descargar para Stories</button>
+      <button type="button" class="btn btn-gold" id="btnDownload">Guardar sello</button>
       <a class="btn btn-ghost" id="waBtn" href="#" target="_blank" rel="noopener noreferrer" style="border-color:rgba(212,175,106,.35);color:var(--gold-hot)">Activar mi audio · WhatsApp</a>
       <button type="button" class="btn btn-ghost" id="btnAgain">Crear otro</button>
     </div>
-    <p class="hint">Sube la imagen a Stories · pega el link</p>
+    <p class="hint" id="saveHint">En celular: Guarda o Comparte → Stories</p>
   </section>
 </main>
+
+<div id="saveSheet" class="save-sheet" hidden>
+  <div class="save-sheet-inner">
+    <p class="save-sheet-title">Mantén pulsada la imagen</p>
+    <p class="save-sheet-sub">Luego “Guardar imagen” y súbela a tu Story</p>
+    <img id="saveImg" alt="Tu sello Erior" />
+    <button type="button" class="btn btn-gold" id="btnCloseSave">Listo</button>
+  </div>
+</div>
 
 <script>
 (function(){
@@ -522,13 +557,57 @@ h1 em{font-style:italic;color:var(--gold-hot)}
     else paint();
   }
 
+  function isMobile(){
+    return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) ||
+      (navigator.maxTouchPoints>1 && /Mac/.test(navigator.platform));
+  }
+
+  function showSaveSheet(dataUrl){
+    var sheet=document.getElementById('saveSheet');
+    var img=document.getElementById('saveImg');
+    img.src=dataUrl;
+    sheet.hidden=false;
+  }
+
   function download(){
     render();
+    var fileName='sello-erior-'+slug(state.name).toLowerCase()+'.png';
     big.toBlob(function(blob){
+      if(!blob){
+        var data=big.toDataURL('image/png');
+        if(isMobile()) showSaveSheet(data);
+        else{
+          var a=document.createElement('a');
+          a.href=data;a.download=fileName;
+          document.body.appendChild(a);a.click();a.remove();
+        }
+        return;
+      }
+
+      var file=new File([blob],fileName,{type:'image/png'});
+
+      /* iOS / Android: native share sheet → Guardar imagen / Stories */
+      if(navigator.canShare && navigator.canShare({files:[file]})){
+        navigator.share({
+          files:[file],
+          title:'Sello Erior',
+          text:'Mi sello Erior Center · Mental Tech'
+        }).catch(function(){
+          showSaveSheet(URL.createObjectURL(blob));
+        });
+        return;
+      }
+
+      if(isMobile()){
+        showSaveSheet(URL.createObjectURL(blob));
+        return;
+      }
+
+      var url=URL.createObjectURL(blob);
       var a=document.createElement('a');
-      a.href=blob?URL.createObjectURL(blob):big.toDataURL('image/png');
-      a.download='sello-erior-'+slug(state.name).toLowerCase()+'.png';
+      a.href=url;a.download=fileName;
       document.body.appendChild(a);a.click();a.remove();
+      setTimeout(function(){URL.revokeObjectURL(url);},2000);
     },'image/png');
   }
 
@@ -567,6 +646,9 @@ h1 em{font-style:italic;color:var(--gold-hot)}
   document.getElementById('btnBack1').onclick=function(){show('s1');};
   document.getElementById('btnForge').onclick=forge;
   document.getElementById('btnDownload').onclick=download;
+  document.getElementById('btnCloseSave').onclick=function(){
+    document.getElementById('saveSheet').hidden=true;
+  };
   document.getElementById('btnAgain').onclick=function(){
     clearInterval(timer);
     state={name:'',exp:'',code:''};
