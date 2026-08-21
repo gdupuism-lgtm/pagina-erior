@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#07070a">
-<meta name="description" content="Sello Erior — Mental Tech. Crea tu sello premium, compártelo y activa tu audio.">
+<meta name="description" content="Sello Erior — vertical para Stories. Mental Tech. Comparte tu experiencia positiva.">
 <meta property="og:title" content="Sello Erior · Mental Tech">
-<meta property="og:description" content="Crea tu sello premium. Compártelo. Activa tu audio.">
+<meta property="og:description" content="Crea tu sello premium vertical. Compártelo en Stories.">
 <title>Sello Erior · Mental Tech</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -46,36 +46,27 @@ body{
   position:relative;z-index:2;
   min-height:100vh;min-height:100dvh;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:1.4rem 1.15rem calc(1.4rem + env(safe-area-inset-bottom));
+  padding:1.25rem 1.1rem calc(1.25rem + env(safe-area-inset-bottom));
   text-align:center;
 }
 .screen{display:none;width:min(420px,100%);animation:up .5s var(--ease)}
 .screen.on{display:block}
 @keyframes up{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
-.brand{
-  font-size:.62rem;font-weight:700;letter-spacing:.34em;
-  color:var(--gold);margin-bottom:.75rem;
-}
-.kicker{
-  font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;
-  color:var(--dim);margin-bottom:.7rem;font-weight:600;
-}
+.brand{font-size:.62rem;font-weight:700;letter-spacing:.34em;color:var(--gold);margin-bottom:.7rem}
+.kicker{font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin-bottom:.65rem;font-weight:600}
 h1{
   font-family:var(--serif);font-weight:600;
-  font-size:clamp(2rem,8vw,2.6rem);line-height:1.05;
-  letter-spacing:-.01em;margin-bottom:.85rem;
+  font-size:clamp(1.85rem,7.5vw,2.45rem);line-height:1.05;
+  letter-spacing:-.01em;margin-bottom:.8rem;
 }
 h1 em{font-style:italic;color:var(--gold-hot)}
-.lead{
-  font-size:.88rem;line-height:1.55;color:var(--soft);
-  margin:0 auto 1.4rem;max-width:32ch;font-weight:500;
-}
+.lead{font-size:.86rem;line-height:1.55;color:var(--soft);margin:0 auto 1.3rem;max-width:32ch;font-weight:500}
 .btn{
   appearance:none;border:none;cursor:pointer;text-decoration:none;
   font-family:var(--display);font-weight:700;letter-spacing:.12em;text-transform:uppercase;
-  font-size:.66rem;display:inline-flex;align-items:center;justify-content:center;
-  padding:1.05rem 1.25rem;border-radius:4px;width:100%;
-  transition:transform .2s var(--ease),filter .2s;
+  font-size:.64rem;display:inline-flex;align-items:center;justify-content:center;
+  padding:1.02rem 1.2rem;border-radius:4px;width:100%;
+  transition:transform .2s var(--ease),opacity .2s;
 }
 .btn:active{transform:scale(.98)}
 .btn:disabled{opacity:.35;cursor:not-allowed}
@@ -86,28 +77,43 @@ h1 em{font-style:italic;color:var(--gold-hot)}
 }
 .btn-ghost{
   margin-top:.5rem;background:transparent;color:var(--dim);
-  border:1px solid rgba(244,240,230,.16);font-size:.58rem;
+  border:1px solid rgba(244,240,230,.16);font-size:.56rem;
 }
-.hint{margin-top:1rem;font-size:.55rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(244,240,230,.3)}
+.hint{margin-top:.9rem;font-size:.54rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(244,240,230,.3)}
 .label{
-  display:block;text-align:left;font-size:.56rem;letter-spacing:.16em;
-  text-transform:uppercase;color:var(--dim);margin-bottom:.45rem;font-weight:600;
+  display:block;text-align:left;font-size:.54rem;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--dim);margin-bottom:.4rem;font-weight:600;
 }
-.input{
+.input,.textarea{
   width:100%;appearance:none;border-radius:4px;
   border:1px solid rgba(212,175,106,.35);
   background:rgba(255,255,255,.03);
-  color:var(--ink);font-family:var(--serif);font-weight:600;
-  font-size:1.35rem;letter-spacing:.04em;text-align:center;
-  padding:1rem;margin-bottom:1.1rem;outline:none;
+  color:var(--ink);outline:none;
+  padding:.95rem 1rem;margin-bottom:.85rem;
 }
-.input::placeholder{color:rgba(244,240,230,.25);font-size:1.1rem;font-weight:500}
-.input:focus{border-color:rgba(212,175,106,.7);box-shadow:0 0 0 3px rgba(212,175,106,.12)}
-.forge-wrap{width:72px;height:72px;margin:1.6rem auto 1.1rem;position:relative}
+.input{
+  font-family:var(--serif);font-weight:600;font-size:1.3rem;
+  letter-spacing:.04em;text-align:center;
+}
+.input::placeholder{color:rgba(244,240,230,.25);font-size:1.05rem;font-weight:500}
+.textarea{
+  font-family:var(--display);font-size:.88rem;line-height:1.5;font-weight:500;
+  min-height:120px;resize:vertical;text-align:left;
+}
+.textarea::placeholder{color:rgba(244,240,230,.28)}
+.input:focus,.textarea:focus{border-color:rgba(212,175,106,.7);box-shadow:0 0 0 3px rgba(212,175,106,.12)}
+.char{text-align:right;font-size:.55rem;color:var(--dim);margin:-.55rem 0 .85rem;letter-spacing:.06em}
+.note{
+  text-align:left;font-size:.72rem;line-height:1.45;color:var(--soft);
+  margin:0 0 1rem;padding:.75rem .85rem;border-radius:8px;
+  border:1px solid rgba(212,175,106,.2);background:rgba(212,175,106,.06);
+}
+.note.warn{border-color:rgba(255,120,100,.35);background:rgba(255,80,60,.08);color:rgba(255,210,200,.9)}
+.note.ok{border-color:rgba(120,220,160,.35);background:rgba(80,200,140,.08);color:rgba(200,255,220,.9)}
+.forge-wrap{width:72px;height:72px;margin:1.5rem auto 1rem;position:relative}
 .forge-ring{
   position:absolute;inset:0;border-radius:50%;
-  border:1px solid rgba(212,175,106,.4);
-  border-top-color:var(--gold-hot);
+  border:1px solid rgba(212,175,106,.4);border-top-color:var(--gold-hot);
   animation:spin 1s linear infinite;
 }
 .forge-core{
@@ -116,46 +122,37 @@ h1 em{font-style:italic;color:var(--gold-hot)}
   box-shadow:0 0 24px rgba(212,175,106,.4);
 }
 @keyframes spin{to{transform:rotate(360deg)}}
-.forge-text{
-  font-size:.65rem;letter-spacing:.16em;text-transform:uppercase;color:var(--soft);
-}
+.forge-text{font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--soft)}
 
-/* Amex-like preview */
-.card-stage{perspective:1000px;margin:0 auto 1.1rem;width:min(320px,88vw)}
+.card-stage{perspective:1000px;margin:0 auto 1rem;width:min(260px,72vw)}
 .card-tilt{
   transform-style:preserve-3d;
   transition:transform .12s ease-out;
   animation:float 5s ease-in-out infinite;
 }
 @keyframes float{
-  0%,100%{transform:rotateX(8deg) rotateY(-10deg)}
-  50%{transform:rotateX(4deg) rotateY(10deg)}
+  0%,100%{transform:rotateX(6deg) rotateY(-8deg)}
+  50%{transform:rotateX(3deg) rotateY(8deg)}
 }
 .card-tilt.is-held{animation:none}
 .preview-frame{
-  position:relative;border-radius:18px;overflow:hidden;
-  aspect-ratio:1.586/1;
-  box-shadow:
-    0 28px 60px rgba(0,0,0,.65),
-    0 0 0 1px rgba(212,175,106,.35),
-    0 0 40px rgba(212,175,106,.12);
+  position:relative;border-radius:22px;overflow:hidden;
+  aspect-ratio:9/16;
+  box-shadow:0 28px 60px rgba(0,0,0,.65),0 0 0 1px rgba(212,175,106,.35),0 0 40px rgba(212,175,106,.12);
   background:#0a0a0c;
   transform:translateZ(24px);
 }
-#preview{display:block;width:100%;height:100%}
+#preview{display:block;width:100%;height:auto}
 .shine{
   position:absolute;inset:0;pointer-events:none;
-  background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.22) 48%,transparent 58%);
+  background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.2) 48%,transparent 58%);
   background-size:220% 100%;
   animation:sweep 3.4s ease-in-out infinite;
   mix-blend-mode:soft-light;
 }
 @keyframes sweep{0%{background-position:130% 0}100%{background-position:-40% 0}}
-.code-chip{
-  font-size:.68rem;font-weight:700;letter-spacing:.12em;
-  color:var(--gold-hot);margin:0 0 .85rem;word-break:break-all;
-}
-.actions{display:grid;gap:.5rem;margin-top:.25rem}
+.code-chip{font-size:.64rem;font-weight:700;letter-spacing:.1em;color:var(--gold-hot);margin:0 0 .8rem;word-break:break-all}
+.actions{display:grid;gap:.5rem}
 #cardCanvas{position:absolute;left:-9999px;top:0;opacity:0;pointer-events:none}
 @media(prefers-reduced-motion:reduce){
   .screen,.card-tilt,.shine,.forge-ring{animation:none!important}
@@ -165,7 +162,7 @@ h1 em{font-style:italic;color:var(--gold-hot)}
 <body>
 <div class="bg" aria-hidden="true"></div>
 <div class="grain" aria-hidden="true"></div>
-<canvas id="cardCanvas" width="1586" height="1000" aria-hidden="true"></canvas>
+<canvas id="cardCanvas" width="1080" height="1920" aria-hidden="true"></canvas>
 
 <main class="app">
   <section class="screen on" id="s0">
@@ -174,20 +171,34 @@ h1 em{font-style:italic;color:var(--gold-hot)}
     <h1>Tu sello.<br><em>Sello Erior</em></h1>
     <p class="lead">Crea tu sello premium. Compártelo en Stories — y tú activas tu audio.</p>
     <button type="button" class="btn btn-gold" id="btnStart">Crear mi sello</button>
-    <p class="hint">Gratis · listo para Instagram</p>
+    <p class="hint">Vertical · listo para Instagram</p>
   </section>
 
   <section class="screen" id="s1">
     <p class="brand">ERIOR CENTER</p>
-    <p class="kicker">Tu nombre en el sello</p>
+    <p class="kicker">Paso 1</p>
     <h1>¿Cómo te<br><em>llamas?</em></h1>
     <label class="label" for="nameInput">Nombre</label>
-    <input class="input" id="nameInput" type="text" maxlength="22" autocomplete="given-name" placeholder="Sofía" enterkeyhint="done">
-    <button type="button" class="btn btn-gold" id="btnForge" disabled>Forjar sello</button>
-    <button type="button" class="btn btn-ghost" id="btnBack">Atrás</button>
+    <input class="input" id="nameInput" type="text" maxlength="22" autocomplete="given-name" placeholder="Sofía" enterkeyhint="next">
+    <button type="button" class="btn btn-gold" id="btnName" disabled>Continuar</button>
+    <button type="button" class="btn btn-ghost" id="btnBack0">Atrás</button>
   </section>
 
-  <section class="screen" id="s2" aria-live="polite">
+  <section class="screen" id="s2">
+    <p class="brand">ERIOR CENTER</p>
+    <p class="kicker">Paso 2</p>
+    <h1>Tu<br><em>experiencia</em></h1>
+    <p class="note">Solo experiencias positivas se imprimen en tu sello (para que se vea en Stories).</p>
+    <label class="label" for="expInput">Cuéntanos tu experiencia con tus audios</label>
+    <textarea class="textarea" id="expInput" maxlength="160" placeholder="Ej. Desde que escucho mi audio duermo más tranquila y me siento más yo…"></textarea>
+    <p class="char"><span id="expCount">0</span>/160</p>
+    <p class="note warn" id="expWarn" hidden>Esa experiencia no suena positiva. Reescribe algo bueno que sí quieras mostrar en tu Story.</p>
+    <p class="note ok" id="expOk" hidden>Listo: se imprimirá en tu sello.</p>
+    <button type="button" class="btn btn-gold" id="btnForge" disabled>Forjar sello</button>
+    <button type="button" class="btn btn-ghost" id="btnBack1">Atrás</button>
+  </section>
+
+  <section class="screen" id="s3" aria-live="polite">
     <p class="brand">ERIOR CENTER</p>
     <div class="forge-wrap" aria-hidden="true">
       <div class="forge-ring"></div>
@@ -196,15 +207,15 @@ h1 em{font-style:italic;color:var(--gold-hot)}
     <p class="forge-text" id="forgeText">Pulido glossy…</p>
   </section>
 
-  <section class="screen" id="s3">
+  <section class="screen" id="s4">
     <p class="brand">ERIOR CENTER</p>
-    <p class="kicker">Sello listo</p>
+    <p class="kicker">Sello listo · 9:16</p>
     <h1>Tu sello<br><em>Mental Tech</em></h1>
     <p class="code-chip" id="codeChip"></p>
     <div class="card-stage">
       <div class="card-tilt" id="cardTilt">
         <div class="preview-frame">
-          <canvas id="preview" width="1586" height="1000" aria-label="Sello Erior negro oro"></canvas>
+          <canvas id="preview" width="1080" height="1920" aria-label="Sello Erior vertical"></canvas>
           <div class="shine" aria-hidden="true"></div>
         </div>
       </div>
@@ -214,7 +225,7 @@ h1 em{font-style:italic;color:var(--gold-hot)}
       <a class="btn btn-ghost" id="waBtn" href="#" target="_blank" rel="noopener noreferrer" style="border-color:rgba(212,175,106,.35);color:var(--gold-hot)">Activar mi audio · WhatsApp</a>
       <button type="button" class="btn btn-ghost" id="btnAgain">Crear otro</button>
     </div>
-    <p class="hint">En tu Story: sube la imagen + pega este link</p>
+    <p class="hint">Sube la imagen a Stories · pega el link</p>
   </section>
 </main>
 
@@ -222,8 +233,11 @@ h1 em{font-style:italic;color:var(--gold-hot)}
 (function(){
   var WA='5214432311761';
   var LINK='eriorcenterguiaaudios.netlify.app/codigo';
-  var state={name:'',code:''};
+  var state={name:'',exp:'',code:''};
   var timer=null;
+
+  var NEG=/(\bno\b.{0,20}(funciona|sirve|gusta|recomiendo)|estafa|fraude|robo|horrible|pésim|pesim|basura|mentira|engaño|pérdida|perdida de dinero|no cambió|no cambio|peor|odio|asco|falso|fake|decepción|decepcion|arrepent|nunca más|nunca mas|no lo compren|no compren)/i;
+  var POS=/(me (siento|ayuda|ayudó|ayudo|encanta|encantó|encanto|gusta|gustó|gusto)|mejor|tranquila|tranquilo|paz|amor|abundancia|cambio|cambió|cambio|recomiendo|gracias|funciona|increíble|increible|hermoso|hermosa|poderos|magnet|manifest|duermo|sueño|sueno|claridad|confianza|feliz|bienestar|transform|resultado|sí funciona|si funciona|vale la pena|lo amo|me encanta)/i;
 
   var big=document.getElementById('cardCanvas');
   var preview=document.getElementById('preview');
@@ -232,7 +246,7 @@ h1 em{font-style:italic;color:var(--gold-hot)}
   var tilt=document.getElementById('cardTilt');
 
   function show(id){
-    ['s0','s1','s2','s3'].forEach(function(x){
+    ['s0','s1','s2','s3','s4'].forEach(function(x){
       document.getElementById(x).classList.toggle('on',x===id);
     });
   }
@@ -242,6 +256,9 @@ h1 em{font-style:italic;color:var(--gold-hot)}
       .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
       .replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s'-]/g,'')
       .trim().replace(/\s+/g,' ').slice(0,22);
+  }
+  function cleanExp(raw){
+    return String(raw||'').replace(/\s+/g,' ').trim().slice(0,160);
   }
   function slug(n){
     return cleanName(n).normalize('NFD').replace(/[\u0300-\u036f]/g,'')
@@ -259,6 +276,15 @@ h1 em{font-style:italic;color:var(--gold-hot)}
     return 'ER-MT-'+slug(name)+'-'+hash4(slug(name)+'|mental-tech|erior');
   }
 
+  function isPositive(text){
+    var t=cleanExp(text);
+    if(t.length<12) return false;
+    if(NEG.test(t)) return false;
+    if(POS.test(t)) return true;
+    /* soft pass: no negatives + enough length + not pure complaint */
+    return t.length>=24 && !/(\bno\b|nunca|jamás|jamas)/i.test(t);
+  }
+
   function roundRect(ctx,x,y,w,h,r){
     var rr=Math.min(r,w/2,h/2);
     ctx.beginPath();
@@ -272,147 +298,216 @@ h1 em{font-style:italic;color:var(--gold-hot)}
   function fit(ctx,text,maxW,base,font){
     var size=base;
     ctx.font=size+'px '+font;
-    while(size>18 && ctx.measureText(text).width>maxW){
+    while(size>16 && ctx.measureText(text).width>maxW){
       size-=2;ctx.font=size+'px '+font;
     }
     return size;
   }
+  function wrap(ctx,text,x,y,maxW,lineH,maxLines){
+    var words=String(text).split(' ');
+    var line='',lines=[],yy=y;
+    for(var i=0;i<words.length;i++){
+      var test=line+words[i]+' ';
+      if(ctx.measureText(test).width>maxW && line){
+        lines.push(line.trim());
+        line=words[i]+' ';
+      }else line=test;
+    }
+    if(line) lines.push(line.trim());
+    if(maxLines && lines.length>maxLines){
+      lines=lines.slice(0,maxLines);
+      var last=lines[maxLines-1];
+      if(last.length>3) lines[maxLines-1]=last.replace(/\s+\S*$/,'')+'…';
+    }
+    lines.forEach(function(ln,idx){ctx.fillText(ln,x,yy+idx*lineH);});
+    return lines.length*lineH;
+  }
 
-  /* Black glossy + gold — Amex-inspired Mental Tech card */
-  function drawCard(ctx,W,H,name,code){
+  function drawEarpods(ctx,cx,cy,scale){
+    scale=scale||1;
+    ctx.save();
+    ctx.translate(cx,cy);
+    ctx.scale(scale,scale);
+
+    function pod(ox,oy,flip){
+      ctx.save();
+      ctx.translate(ox,oy);
+      if(flip) ctx.scale(-1,1);
+
+      /* stem */
+      var stem=ctx.createLinearGradient(-8,-10,18,70);
+      stem.addColorStop(0,'#f5e6c0');
+      stem.addColorStop(.35,'#d4af6a');
+      stem.addColorStop(.7,'#8a6a28');
+      stem.addColorStop(1,'#e8c878');
+      roundRect(ctx,-10,8,20,78,10);
+      ctx.fillStyle=stem;
+      ctx.fill();
+      ctx.strokeStyle='rgba(255,240,200,.35)';
+      ctx.lineWidth=1.5;
+      ctx.stroke();
+
+      /* gloss on stem */
+      ctx.fillStyle='rgba(255,255,255,.22)';
+      roundRect(ctx,-6,14,7,55,6);
+      ctx.fill();
+
+      /* bud */
+      var bud=ctx.createRadialGradient(-6,-28,4,0,-18,36);
+      bud.addColorStop(0,'#fff8e8');
+      bud.addColorStop(.4,'#e0b84a');
+      bud.addColorStop(1,'#6a5218');
+      ctx.beginPath();
+      ctx.ellipse(0,-22,28,32,0,0,Math.PI*2);
+      ctx.fillStyle=bud;
+      ctx.fill();
+      ctx.strokeStyle='rgba(255,245,210,.4)';
+      ctx.stroke();
+
+      /* mesh */
+      ctx.beginPath();
+      ctx.ellipse(0,-22,14,16,0,0,Math.PI*2);
+      ctx.fillStyle='rgba(30,22,8,.35)';
+      ctx.fill();
+
+      ctx.restore();
+    }
+
+    /* soft glow behind */
+    var g=ctx.createRadialGradient(0,0,10,0,0,120);
+    g.addColorStop(0,'rgba(212,175,106,.28)');
+    g.addColorStop(1,'rgba(212,175,106,0)');
+    ctx.fillStyle=g;
+    ctx.beginPath();
+    ctx.arc(0,0,120,0,Math.PI*2);
+    ctx.fill();
+
+    pod(-48,-8,false);
+    pod(48,-8,true);
+
+    ctx.restore();
+  }
+
+  function drawCard(ctx,W,H,name,code,exp){
     ctx.clearRect(0,0,W,H);
 
-    /* Soft studio bg */
     var bg=ctx.createLinearGradient(0,0,W,H);
-    bg.addColorStop(0,'#121214');
+    bg.addColorStop(0,'#141416');
     bg.addColorStop(1,'#060608');
     ctx.fillStyle=bg;
     ctx.fillRect(0,0,W,H);
 
-    var pad=48;
-    roundRect(ctx,pad,pad,W-pad*2,H-pad*2,28);
+    var pad=56;
+    roundRect(ctx,pad,pad,W-pad*2,H-pad*2,36);
 
-    /* Glossy black body */
     var body=ctx.createLinearGradient(pad,pad,W-pad,H-pad);
-    body.addColorStop(0,'#2a2a2e');
-    body.addColorStop(.22,'#141416');
-    body.addColorStop(.45,'#0c0c0e');
-    body.addColorStop(.7,'#1a1a1e');
+    body.addColorStop(0,'#2c2c30');
+    body.addColorStop(.2,'#161618');
+    body.addColorStop(.5,'#0c0c0e');
+    body.addColorStop(.78,'#1a1a1e');
     body.addColorStop(1,'#09090b');
     ctx.fillStyle=body;
     ctx.fill();
 
     ctx.save();
-    roundRect(ctx,pad,pad,W-pad*2,H-pad*2,28);
+    roundRect(ctx,pad,pad,W-pad*2,H-pad*2,36);
     ctx.clip();
-
-    /* Specular gloss */
-    var gloss=ctx.createLinearGradient(pad,pad,W*0.7,H*0.55);
-    gloss.addColorStop(0,'rgba(255,255,255,.28)');
-    gloss.addColorStop(.28,'rgba(255,255,255,.06)');
-    gloss.addColorStop(.5,'rgba(255,255,255,0)');
+    var gloss=ctx.createLinearGradient(pad,pad,W*0.75,H*0.45);
+    gloss.addColorStop(0,'rgba(255,255,255,.26)');
+    gloss.addColorStop(.3,'rgba(255,255,255,.05)');
     gloss.addColorStop(1,'rgba(255,255,255,0)');
     ctx.fillStyle=gloss;
     ctx.fillRect(pad,pad,W-pad*2,H-pad*2);
-
-    /* Soft gold edge light */
-    var edge=ctx.createLinearGradient(pad,pad,pad+120,pad+80);
-    edge.addColorStop(0,'rgba(212,175,106,.35)');
-    edge.addColorStop(1,'rgba(212,175,106,0)');
-    ctx.fillStyle=edge;
-    ctx.fillRect(pad,pad,200,120);
-
     ctx.restore();
 
-    /* Gold frame hairline */
     ctx.strokeStyle='rgba(212,175,106,.55)';
-    ctx.lineWidth=2;
-    roundRect(ctx,pad+10,pad+10,W-(pad+10)*2,H-(pad+10)*2,22);
+    ctx.lineWidth=2.5;
+    roundRect(ctx,pad+12,pad+12,W-(pad+12)*2,H-(pad+12)*2,28);
     ctx.stroke();
-    ctx.strokeStyle='rgba(240,217,160,.2)';
+    ctx.strokeStyle='rgba(240,217,160,.18)';
     ctx.lineWidth=1;
-    roundRect(ctx,pad+18,pad+18,W-(pad+18)*2,H-(pad+18)*2,18);
+    roundRect(ctx,pad+22,pad+22,W-(pad+22)*2,H-(pad+22)*2,22);
     ctx.stroke();
 
-    ctx.textAlign='left';
-
-    /* Brand top */
+    ctx.textAlign='center';
     ctx.fillStyle='#d4af6a';
-    ctx.font='700 28px Syne, sans-serif';
-    ctx.fillText('ERIOR CENTER', pad+56, pad+78);
-
+    ctx.font='700 30px Syne, sans-serif';
+    ctx.fillText('ERIOR CENTER', W/2, pad+78);
     ctx.fillStyle='rgba(212,175,106,.7)';
-    ctx.font='600 18px Syne, sans-serif';
-    ctx.fillText('MENTAL TECH', pad+56, pad+112);
+    ctx.font='600 20px Syne, sans-serif';
+    ctx.fillText('MENTAL TECH', W/2, pad+112);
 
-    /* Chip-like gold square */
-    var chipX=pad+56, chipY=pad+160;
-    roundRect(ctx,chipX,chipY,86,66,8);
-    var chip=ctx.createLinearGradient(chipX,chipY,chipX+86,chipY+66);
-    chip.addColorStop(0,'#f0d9a0');
-    chip.addColorStop(.4,'#d4af6a');
-    chip.addColorStop(.7,'#9a7a38');
-    chip.addColorStop(1,'#e8c878');
-    ctx.fillStyle=chip;
-    ctx.fill();
-    ctx.strokeStyle='rgba(255,240,200,.4)';
-    ctx.lineWidth=1;
-    ctx.stroke();
-    /* chip lines */
-    ctx.strokeStyle='rgba(60,40,10,.35)';
-    for(var i=0;i<4;i++){
-      ctx.beginPath();
-      ctx.moveTo(chipX+12,chipY+16+i*12);
-      ctx.lineTo(chipX+74,chipY+16+i*12);
-      ctx.stroke();
-    }
-
-    /* Right gold mark */
-    ctx.textAlign='right';
-    ctx.fillStyle='rgba(212,175,106,.85)';
-    ctx.font='700 22px Syne, sans-serif';
-    ctx.fillText('MEMBER', W-pad-56, pad+86);
+    /* Earpods center */
+    drawEarpods(ctx, W/2, H*0.38, 1.55);
 
     /* Name */
-    ctx.textAlign='left';
-    ctx.fillStyle='rgba(244,240,230,.45)';
-    ctx.font='600 16px Syne, sans-serif';
-    ctx.fillText('TITULAR', pad+56, H-pad-168);
-
+    ctx.fillStyle='rgba(244,240,230,.4)';
+    ctx.font='600 18px Syne, sans-serif';
+    ctx.fillText('TITULAR', W/2, H*0.58);
     ctx.fillStyle='#f4f0e6';
-    fit(ctx, name.toUpperCase(), W-pad*2-120, 44, 'Syne, sans-serif');
-    ctx.font='700 '+fit(ctx,name.toUpperCase(),W-pad*2-120,44,'Syne, sans-serif')+'px Syne, sans-serif';
-    ctx.fillText(name.toUpperCase(), pad+56, H-pad-124);
+    var ns=fit(ctx,name.toUpperCase(),W-pad*2-80,52,'Syne, sans-serif');
+    ctx.font='700 '+ns+'px Syne, sans-serif';
+    ctx.fillText(name.toUpperCase(), W/2, H*0.58+52);
+
+    /* Experience block — only if positive (caller passes only when ok) */
+    if(exp){
+      var boxY=H*0.58+80;
+      var boxH=220;
+      roundRect(ctx, pad+48, boxY, W-(pad+48)*2, boxH, 18);
+      ctx.fillStyle='rgba(212,175,106,.08)';
+      ctx.fill();
+      ctx.strokeStyle='rgba(212,175,106,.35)';
+      ctx.lineWidth=1.5;
+      ctx.stroke();
+
+      ctx.fillStyle='rgba(212,175,106,.75)';
+      ctx.font='600 16px Syne, sans-serif';
+      ctx.fillText('MI EXPERIENCIA CON MIS AUDIOS', W/2, boxY+36);
+
+      ctx.fillStyle='rgba(244,240,230,.82)';
+      ctx.font='500 26px Cormorant Garamond, Georgia, serif';
+      wrap(ctx, '“'+exp+'”', W/2, boxY+78, W-(pad+48)*2-56, 34, 4);
+    }
 
     /* Code */
     ctx.fillStyle='rgba(212,175,106,.55)';
-    ctx.font='600 15px Syne, sans-serif';
-    ctx.fillText('CÓDIGO', pad+56, H-pad-78);
+    ctx.font='600 16px Syne, sans-serif';
+    ctx.fillText('CÓDIGO', W/2, H-pad-150);
     ctx.fillStyle='#d4af6a';
-    ctx.font='700 22px Syne, sans-serif';
-    fit(ctx, code, W-pad*2-120, 22, 'Syne, sans-serif');
-    ctx.fillText(code, pad+56, H-pad-48);
+    ctx.font='700 26px Syne, sans-serif';
+    fit(ctx,code,W-pad*2-60,26,'Syne, sans-serif');
+    ctx.fillText(code, W/2, H-pad-112);
 
-    /* Viewer CTA strip — for people seeing their Story */
-    ctx.textAlign='right';
+    /* Viewer CTA */
     ctx.fillStyle='rgba(244,240,230,.35)';
-    ctx.font='600 14px Syne, sans-serif';
-    ctx.fillText('Crea el tuyo', W-pad-56, H-pad-78);
+    ctx.font='600 16px Syne, sans-serif';
+    ctx.fillText('Crea el tuyo', W/2, H-pad-68);
     ctx.fillStyle='#f0d9a0';
-    ctx.font='700 16px Syne, sans-serif';
-    ctx.fillText(LINK, W-pad-56, H-pad-48);
+    ctx.font='700 18px Syne, sans-serif';
+    ctx.fillText(LINK, W/2, H-pad-36);
   }
 
   function render(){
-    drawCard(bctx,1586,1000,state.name,state.code);
+    drawCard(bctx,1080,1920,state.name,state.code,state.exp);
     pctx.clearRect(0,0,preview.width,preview.height);
     pctx.drawImage(big,0,0,preview.width,preview.height);
   }
 
+  function syncExpUI(){
+    var t=cleanExp(document.getElementById('expInput').value);
+    document.getElementById('expCount').textContent=t.length;
+    var ok=isPositive(t);
+    document.getElementById('expWarn').hidden=!(t.length>=12 && !ok);
+    document.getElementById('expOk').hidden=!ok;
+    document.getElementById('btnForge').disabled=!ok;
+    state.exp=ok?t:'';
+  }
+
   function forge(){
+    if(!isPositive(state.exp)) return;
     state.code=buildCode(state.name);
-    show('s2');
-    var lines=['Negro glossy…','Oro Mental Tech…','Grabando nombre…','Listo'];
+    show('s3');
+    var lines=['Negro glossy…','Earpods Mental Tech…','Grabando experiencia…','Listo'];
     var i=0;
     var el=document.getElementById('forgeText');
     el.textContent=lines[0];
@@ -432,11 +527,12 @@ h1 em{font-style:italic;color:var(--gold-hot)}
         'Hola! Vengo del Sello Erior ✨',
         'Mi código: '+state.code,
         'Nombre: '+state.name,
+        'Experiencia: '+state.exp,
         'Quiero activar mi audio / elegir mi regalo por compartir.',
         'Prioridad por favor.'
       ].join('\n');
       document.getElementById('waBtn').href=waUrl(msg);
-      show('s3');
+      show('s4');
     }
     if(document.fonts&&document.fonts.ready) document.fonts.ready.then(paint).catch(paint);
     else paint();
@@ -468,24 +564,30 @@ h1 em{font-style:italic;color:var(--gold-hot)}
   tilt.addEventListener('touchend',resetTilt);
 
   var nameInput=document.getElementById('nameInput');
-  var btnForge=document.getElementById('btnForge');
-  function sync(){
+  var expInput=document.getElementById('expInput');
+  var btnName=document.getElementById('btnName');
+
+  function syncName(){
     state.name=cleanName(nameInput.value);
-    btnForge.disabled=state.name.length<2;
+    btnName.disabled=state.name.length<2;
   }
-  nameInput.addEventListener('input',sync);
+  nameInput.addEventListener('input',syncName);
   nameInput.addEventListener('keydown',function(e){
-    if(e.key==='Enter'&&!btnForge.disabled){e.preventDefault();forge();}
+    if(e.key==='Enter'&&!btnName.disabled){e.preventDefault();show('s2');}
   });
+  expInput.addEventListener('input',syncExpUI);
 
   document.getElementById('btnStart').onclick=function(){show('s1');setTimeout(function(){nameInput.focus();},200);};
-  document.getElementById('btnBack').onclick=function(){show('s0');};
-  btnForge.onclick=function(){if(!btnForge.disabled)forge();};
+  document.getElementById('btnBack0').onclick=function(){show('s0');};
+  btnName.onclick=function(){if(!btnName.disabled){show('s2');setTimeout(function(){expInput.focus();},200);}};
+  document.getElementById('btnBack1').onclick=function(){show('s1');};
+  document.getElementById('btnForge').onclick=forge;
   document.getElementById('btnDownload').onclick=download;
   document.getElementById('btnAgain').onclick=function(){
     clearInterval(timer);
-    state={name:'',code:''};
-    nameInput.value='';sync();
+    state={name:'',exp:'',code:''};
+    nameInput.value='';expInput.value='';
+    syncName();syncExpUI();
     show('s1');
     setTimeout(function(){nameInput.focus();},150);
   };
