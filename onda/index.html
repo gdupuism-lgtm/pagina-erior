@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#06060a">
+<meta name="description" content="Onda Erior — arrastra la frecuencia de los audífonos a tu oreja. Elige tu audio del catálogo.">
+<meta property="og:title" content="Onda Erior · Sintoniza tu audio">
+<meta property="og:description" content="Juego rápido premium: pasa la frecuencia por el catálogo hasta tu oreja.">
+<title>Onda Erior · Mental Tech</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Syne:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#06060a;
+  --ink:#f4f0e6;
+  --soft:rgba(244,240,230,.72);
+  --dim:rgba(244,240,230,.4);
+  --gold:#d4af6a;
+  --gold-hot:#f0d9a0;
+  --cyan:#5eead4;
+  --display:'Syne',sans-serif;
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--bg);color:var(--ink);overflow:hidden}
+body{
+  font-family:var(--display);
+  -webkit-font-smoothing:antialiased;
+  touch-action:none;
+  user-select:none;-webkit-user-select:none;
+}
+.bg{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 60% 40% at 15% 50%, rgba(94,234,212,.1), transparent 55%),
+    radial-gradient(ellipse 50% 40% at 85% 50%, rgba(212,175,106,.12), transparent 55%),
+    radial-gradient(ellipse 70% 50% at 50% 100%, rgba(212,175,106,.06), transparent 50%),
+    #06060a;
+}
+#fx{position:fixed;inset:0;z-index:1;pointer-events:none;display:block}
+.app{position:relative;z-index:2;height:100%;height:100dvh;display:flex;flex-direction:column}
+
+/* INTRO */
+.intro,.result{
+  position:absolute;inset:0;z-index:20;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:1.5rem 1.25rem;text-align:center;
+  background:rgba(6,6,10,.82);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+}
+.intro[hidden],.result[hidden]{display:none!important}
+.brand{font-size:.62rem;font-weight:700;letter-spacing:.34em;color:var(--gold);margin-bottom:.75rem}
+.kicker{font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:var(--cyan);margin-bottom:.7rem;font-weight:600}
+h1{
+  font-family:var(--serif);font-weight:600;
+  font-size:clamp(2rem,8vw,2.7rem);line-height:1.05;margin-bottom:.85rem;
+}
+h1 em{font-style:italic;color:var(--gold-hot)}
+.lead{font-size:.9rem;line-height:1.55;color:var(--soft);max-width:30ch;margin:0 auto 1.5rem}
+.btn{
+  appearance:none;border:none;cursor:pointer;text-decoration:none;
+  font-family:var(--display);font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  font-size:.66rem;display:inline-flex;align-items:center;justify-content:center;
+  padding:1.05rem 1.4rem;border-radius:4px;min-width:min(280px,100%);
+  transition:transform .2s var(--ease);
+}
+.btn:active{transform:scale(.98)}
+.btn-gold{
+  color:#120e08;
+  background:linear-gradient(135deg,#f5e6c0,#d4af6a 45%,#b8923f);
+  box-shadow:0 12px 40px rgba(212,175,106,.3),inset 0 1px 0 rgba(255,255,255,.45);
+}
+.btn-ghost{
+  margin-top:.55rem;background:transparent;color:var(--dim);
+  border:1px solid rgba(244,240,230,.18);font-size:.58rem;
+}
+.hint{margin-top:1rem;font-size:.55rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(244,240,230,.3)}
+
+/* PLAYFIELD */
+.play{
+  flex:1;position:relative;overflow:hidden;
+  opacity:0;pointer-events:none;transition:opacity .5s var(--ease);
+}
+.play.on{opacity:1;pointer-events:auto}
+.hud{
+  position:absolute;top:0;left:0;right:0;z-index:10;
+  padding:.85rem 1rem;display:flex;justify-content:space-between;align-items:center;
+  pointer-events:none;
+}
+.hud-brand{font-size:.55rem;letter-spacing:.28em;font-weight:700;color:var(--gold)}
+.hud-tip{
+  font-size:.62rem;color:var(--soft);letter-spacing:.04em;
+  padding:.35rem .65rem;border-radius:999px;
+  border:1px solid rgba(94,234,212,.25);background:rgba(94,234,212,.08);
+}
+.hud-tip.ok{border-color:rgba(212,175,106,.4);background:rgba(212,175,106,.1);color:var(--gold-hot)}
+
+.node{
+  position:absolute;z-index:8;width:88px;height:88px;
+  display:flex;align-items:center;justify-content:center;
+  pointer-events:none;
+}
+.node-hp{left:4%;top:50%;transform:translateY(-50%)}
+.node-ear{right:4%;top:50%;transform:translateY(-50%)}
+.node svg{width:72px;height:72px;filter:drop-shadow(0 0 18px rgba(212,175,106,.35))}
+.node-label{
+  position:absolute;bottom:-1.4rem;left:50%;transform:translateX(-50%);
+  font-size:.5rem;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);white-space:nowrap;
+}
+.node.glow svg{filter:drop-shadow(0 0 28px rgba(94,234,212,.65))}
+
+.float{
+  position:absolute;z-index:5;width:72px;height:72px;border-radius:16px;overflow:hidden;
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow:0 10px 28px rgba(0,0,0,.45);
+  background:#121218;
+  transition:border-color .2s,box-shadow .2s,transform .2s;
+  will-change:transform;
+}
+.float img{width:100%;height:100%;object-fit:cover;display:block;opacity:.88}
+.float.hit{
+  border-color:rgba(94,234,212,.85);
+  box-shadow:0 0 0 2px rgba(94,234,212,.4),0 0 32px rgba(94,234,212,.35);
+  transform:scale(1.12)!important;
+}
+.float.chosen{
+  border-color:rgba(212,175,106,.9);
+  box-shadow:0 0 0 2px rgba(212,175,106,.5),0 0 36px rgba(212,175,106,.4);
+}
+
+#beam{position:absolute;inset:0;z-index:7;pointer-events:none}
+.orb{
+  position:absolute;z-index:9;width:28px;height:28px;margin:-14px 0 0 -14px;
+  border-radius:50%;pointer-events:none;
+  background:radial-gradient(circle at 35% 30%,#fff,#5eead4 40%,#d4af6a 75%,transparent 78%);
+  box-shadow:0 0 24px rgba(94,234,212,.7),0 0 48px rgba(212,175,106,.35);
+  opacity:0;transition:opacity .2s;
+}
+.orb.on{opacity:1}
+
+.result-card{
+  width:min(300px,88vw);margin:0 auto 1.25rem;border-radius:18px;overflow:hidden;
+  border:1px solid rgba(212,175,106,.35);
+  background:rgba(12,12,18,.9);
+  box-shadow:0 20px 50px rgba(0,0,0,.5);
+  text-align:left;
+}
+.result-card img{width:100%;aspect-ratio:1;object-fit:cover;display:block}
+.result-body{padding:1rem 1.05rem 1.1rem}
+.result-tag{font-size:.52rem;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan);margin-bottom:.3rem}
+.result-name{font-family:var(--serif);font-size:1.35rem;font-weight:600;margin-bottom:.25rem}
+.result-price{font-size:.78rem;color:var(--gold);font-weight:600}
+
+@media(min-width:700px){
+  .float{width:88px;height:88px}
+  .node{width:110px;height:110px}
+  .node svg{width:90px;height:90px}
+}
+@media(prefers-reduced-motion:reduce){
+  .float{animation:none!important}
+}
+</style>
+</head>
+<body>
+<div class="bg" aria-hidden="true"></div>
+<canvas id="fx" aria-hidden="true"></canvas>
+
+<main class="app">
+  <section class="intro" id="intro">
+    <p class="brand">ERIOR CENTER</p>
+    <p class="kicker">Mental Tech · ~15 seg</p>
+    <h1>Pasa la<br><em>frecuencia</em></h1>
+    <p class="lead">Arrastra la onda de los audífonos, atraviesa el catálogo y llévala a tu oreja.</p>
+    <button type="button" class="btn btn-gold" id="btnStart">Jugar ahora</button>
+    <p class="hint">Toca · arrastra · suelta en la oreja</p>
+  </section>
+
+  <section class="play" id="play" aria-label="Campo de sintonía">
+    <div class="hud">
+      <span class="hud-brand">ONDA ERIOR</span>
+      <span class="hud-tip" id="hudTip">Toca el audífono y arrastra</span>
+    </div>
+
+    <div class="node node-hp" id="nodeHp" aria-hidden="true">
+      <svg viewBox="0 0 80 80" fill="none">
+        <path d="M22 34c0-12 8-22 18-22s18 10 18 22" stroke="#d4af6a" stroke-width="3.5" stroke-linecap="round"/>
+        <rect x="14" y="32" width="14" height="28" rx="7" fill="url(#g1)" stroke="#f0d9a0" stroke-width="1"/>
+        <rect x="52" y="32" width="14" height="28" rx="7" fill="url(#g1)" stroke="#f0d9a0" stroke-width="1"/>
+        <defs>
+          <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+            <stop stop-color="#f5e6c0"/><stop offset="1" stop-color="#9a7a38"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <span class="node-label">Audífonos</span>
+    </div>
+
+    <div class="node node-ear" id="nodeEar" aria-hidden="true">
+      <svg viewBox="0 0 80 80" fill="none">
+        <path d="M48 16c12 4 18 16 16 28-2 14-12 22-24 24-8 1-14-2-18-8" stroke="#d4af6a" stroke-width="3.2" stroke-linecap="round"/>
+        <path d="M42 28c6 2 10 8 9 14-1 7-6 11-12 12" stroke="#f0d9a0" stroke-width="2.4" stroke-linecap="round" opacity=".85"/>
+        <circle cx="36" cy="44" r="5" fill="#d4af6a" opacity=".55"/>
+      </svg>
+      <span class="node-label">Oreja</span>
+    </div>
+
+    <div id="floats"></div>
+    <canvas id="beam"></canvas>
+    <div class="orb" id="orb"></div>
+  </section>
+
+  <section class="result" id="result" hidden>
+    <p class="brand">ERIOR CENTER</p>
+    <p class="kicker">Frecuencia sincronizada</p>
+    <h1>Tu audio<br><em>llegó</em></h1>
+    <article class="result-card" id="resultCard"></article>
+    <a class="btn btn-gold" id="waBtn" href="#" target="_blank" rel="noopener noreferrer">Pedir por WhatsApp</a>
+    <a class="btn btn-ghost" href="/nexo/">Ver combo en Nexo</a>
+    <button type="button" class="btn btn-ghost" id="btnReplay">Jugar otra vez</button>
+  </section>
+</main>
+
+<script>
+(function(){
+  var WA='5214432311761';
+  var IMG='/img/catalog/';
+
+  var AUDIOS=[
+    {id:'imagine',name:'IMAGINE',price:1199,img:'imagine.jpg'},
+    {id:'seduction',name:'SEDUCTION',price:1199,img:'seduction.jpg'},
+    {id:'eriorlove',name:'Erior LOVE',price:1190,img:'erior-love.jpg'},
+    {id:'attraction',name:'ATTRACTION',price:1190,img:'attraction.jpg'},
+    {id:'magic4',name:'Amor Propio Magic 4.0',price:1190,img:'amor-propio-magic-4-0.jpg'},
+    {id:'god',name:'GOD / GODDESS',price:1190,img:'god-goddess.jpg'},
+    {id:'icon',name:'ICON AURA',price:1190,img:'icon-aura.jpg'},
+    {id:'money',name:'MONEY TECH',price:1190,img:'money-tech.jpg'},
+    {id:'abundance',name:'Master Abundance',price:1190,img:'master-abundance.jpg'},
+    {id:'lucky',name:'Lucky',price:1190,img:'lucky.jpg'},
+    {id:'wonderland',name:'Wonderland Coherence',price:1190,img:'wonderland-coherence.jpg'},
+    {id:'simulation',name:'SIMULATION-U',price:1190,img:'simulation-u.jpg'},
+    {id:'white',name:'White Rabbit Code',price:1190,img:'white-rabbit-code.jpg'},
+    {id:'mentalglow',name:'MENTAL GLOW UP',price:1190,img:'mental-glow-up.jpg'},
+    {id:'satori',name:'Satori',price:1190,img:'satori.jpg'},
+    {id:'booster',name:'Booster',price:1190,img:'booster.jpg'}
+  ];
+
+  var play=document.getElementById('play');
+  var floatsHost=document.getElementById('floats');
+  var beam=document.getElementById('beam');
+  var bctx=beam.getContext('2d');
+  var orb=document.getElementById('orb');
+  var tip=document.getElementById('hudTip');
+  var nodeHp=document.getElementById('nodeHp');
+  var nodeEar=document.getElementById('nodeEar');
+
+  var floats=[];
+  var dragging=false;
+  var path=[];
+  var hitId=null;
+  var reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function money(n){return '$'+Number(n).toLocaleString('es-MX');}
+  function waUrl(m){return 'https://wa.me/'+WA+'?text='+encodeURIComponent(m);}
+  function shuffle(a){
+    var x=a.slice();
+    for(var i=x.length-1;i>0;i--){
+      var j=Math.floor(Math.random()*(i+1));
+      var t=x[i];x[i]=x[j];x[j]=t;
+    }
+    return x;
+  }
+  function centerOf(el){
+    var r=el.getBoundingClientRect();
+    var pr=play.getBoundingClientRect();
+    return {x:r.left-pr.left+r.width/2, y:r.top-pr.top+r.height/2};
+  }
+  function ptr(e){
+    var pr=play.getBoundingClientRect();
+    var t=e.touches&&e.touches[0] ? e.touches[0] : e;
+    return {x:t.clientX-pr.left, y:t.clientY-pr.top};
+  }
+
+  function sizeBeam(){
+    var r=play.getBoundingClientRect();
+    beam.width=r.width*devicePixelRatio;
+    beam.height=r.height*devicePixelRatio;
+    beam.style.width=r.width+'px';
+    beam.style.height=r.height+'px';
+    bctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+  }
+
+  function spawnFloats(){
+    floatsHost.innerHTML='';
+    floats=[];
+    var pick=shuffle(AUDIOS).slice(0,10);
+    var W=play.clientWidth, H=play.clientHeight;
+    var size=W<700?72:88;
+    pick.forEach(function(a,i){
+      var el=document.createElement('div');
+      el.className='float';
+      el.dataset.id=a.id;
+      var img=document.createElement('img');
+      img.src=IMG+a.img;
+      img.alt=a.name;
+      img.loading='eager';
+      img.draggable=false;
+      img.onerror=function(){this.style.opacity='.2';};
+      el.appendChild(img);
+
+      var x=W*0.22 + Math.random()*W*0.52;
+      var y=H*0.16 + Math.random()*H*0.62;
+      /* keep clear of headphones/ear zones */
+      if(x<W*0.2) x=W*0.22+Math.random()*W*0.15;
+      if(x>W*0.8) x=W*0.55+Math.random()*W*0.2;
+      el.style.left=(x-size/2)+'px';
+      el.style.top=(y-size/2)+'px';
+      el.style.width=size+'px';
+      el.style.height=size+'px';
+
+      var amp=10+Math.random()*16;
+      var speed=4+Math.random()*5;
+      var phase=Math.random()*Math.PI*2;
+      floats.push({el:el,audio:a,baseX:x-size/2,baseY:y-size/2,amp:amp,speed:speed,phase:phase,size:size});
+      floatsHost.appendChild(el);
+    });
+  }
+
+  var animT0=null;
+  function tickFloats(ts){
+    if(!animT0) animT0=ts;
+    var t=(ts-animT0)/1000;
+    if(!reduced){
+      floats.forEach(function(f){
+        var dx=Math.sin(t*f.speed+f.phase)*f.amp;
+        var dy=Math.cos(t*(f.speed*0.85)+f.phase)*f.amp*0.7;
+        f.el.style.transform='translate('+dx+'px,'+dy+'px)';
+      });
+    }
+    if(play.classList.contains('on')) requestAnimationFrame(tickFloats);
+  }
+
+  function drawBeam(){
+    var W=play.clientWidth, H=play.clientHeight;
+    bctx.clearRect(0,0,W,H);
+    if(path.length<2) return;
+
+    bctx.lineCap='round';
+    bctx.lineJoin='round';
+
+    /* soft glow */
+    bctx.beginPath();
+    bctx.moveTo(path[0].x,path[0].y);
+    for(var i=1;i<path.length;i++) bctx.lineTo(path[i].x,path[i].y);
+    bctx.strokeStyle='rgba(94,234,212,.25)';
+    bctx.lineWidth=14;
+    bctx.stroke();
+
+    bctx.beginPath();
+    bctx.moveTo(path[0].x,path[0].y);
+    for(var j=1;j<path.length;j++) bctx.lineTo(path[j].x,path[j].y);
+    var g=bctx.createLinearGradient(path[0].x,path[0].y,path[path.length-1].x,path[path.length-1].y);
+    g.addColorStop(0,'#5eead4');
+    g.addColorStop(.5,'#f0d9a0');
+    g.addColorStop(1,'#d4af6a');
+    bctx.strokeStyle=g;
+    bctx.lineWidth=3.5;
+    bctx.stroke();
+  }
+
+  function hitTest(p){
+    var pr=play.getBoundingClientRect();
+    var found=null;
+    floats.forEach(function(f){
+      var r=f.el.getBoundingClientRect();
+      var cx=r.left-pr.left+r.width/2;
+      var cy=r.top-pr.top+r.height/2;
+      var dx=p.x-cx, dy=p.y-cy;
+      var rad=r.width*0.55;
+      if(dx*dx+dy*dy < rad*rad){
+        found=f;
+      }
+    });
+    floats.forEach(function(f){
+      f.el.classList.toggle('hit', found && f.audio.id===found.audio.id);
+      if(hitId && f.audio.id===hitId) f.el.classList.add('chosen');
+    });
+    if(found){
+      hitId=found.audio.id;
+      tip.textContent='Frecuencia: '+found.audio.name;
+      tip.classList.add('ok');
+    }
+    return found;
+  }
+
+  function nearEar(p){
+    var c=centerOf(nodeEar);
+    var dx=p.x-c.x, dy=p.y-c.y;
+    return dx*dx+dy*dy < 70*70;
+  }
+  function nearHp(p){
+    var c=centerOf(nodeHp);
+    var dx=p.x-c.x, dy=p.y-c.y;
+    return dx*dx+dy*dy < 64*64;
+  }
+
+  function startDrag(e){
+    if(!play.classList.contains('on')) return;
+    var p=ptr(e);
+    if(!nearHp(p) && path.length===0){
+      /* allow start only from headphones */
+      tip.textContent='Empieza en los audífonos';
+      tip.classList.remove('ok');
+      return;
+    }
+    dragging=true;
+    path=[centerOf(nodeHp), p];
+    orb.classList.add('on');
+    orb.style.left=p.x+'px';
+    orb.style.top=p.y+'px';
+    nodeHp.classList.add('glow');
+    tip.textContent='Atraviesa un audio…';
+    tip.classList.remove('ok');
+    hitId=null;
+    floats.forEach(function(f){f.el.classList.remove('hit','chosen');});
+    drawBeam();
+    e.preventDefault();
+  }
+
+  function moveDrag(e){
+    if(!dragging) return;
+    var p=ptr(e);
+    var last=path[path.length-1];
+    if(Math.hypot(p.x-last.x,p.y-last.y)>6){
+      path.push(p);
+      if(path.length>80) path=path.slice(-80);
+    }
+    orb.style.left=p.x+'px';
+    orb.style.top=p.y+'px';
+    hitTest(p);
+    drawBeam();
+    if(nearEar(p) && hitId){
+      endDrag(true);
+    }
+    e.preventDefault();
+  }
+
+  function endDrag(success){
+    if(!dragging && !success) return;
+    dragging=false;
+    orb.classList.remove('on');
+    nodeHp.classList.remove('glow');
+
+    if(success || (hitId && path.length>3 && nearEar(path[path.length-1]))){
+      finish(hitId);
+      return;
+    }
+
+    /* failed */
+    path=[];
+    drawBeam();
+    tip.textContent=hitId ? 'Lleva la frecuencia a la oreja' : 'Toca el audífono y arrastra';
+    tip.classList.toggle('ok', !!hitId);
+    floats.forEach(function(f){
+      if(!(hitId && f.audio.id===hitId)) f.el.classList.remove('hit','chosen');
+      else f.el.classList.add('chosen');
+    });
+  }
+
+  function finish(id){
+    var audio=null;
+    for(var i=0;i<AUDIOS.length;i++) if(AUDIOS[i].id===id){audio=AUDIOS[i];break;}
+    if(!audio) return;
+
+    nodeEar.classList.add('glow');
+    play.classList.remove('on');
+    document.getElementById('intro').hidden=true;
+
+    var card=document.getElementById('resultCard');
+    card.innerHTML=
+      '<img src="'+IMG+audio.img+'" alt="'+audio.name+'" onerror="this.style.opacity=.3">'+
+      '<div class="result-body">'+
+        '<p class="result-tag">Tu frecuencia</p>'+
+        '<h2 class="result-name">'+audio.name+'</h2>'+
+        '<p class="result-price">'+money(audio.price)+'</p>'+
+      '</div>';
+
+    var msg=[
+      'Hola! Vengo de Onda Erior ✨',
+      'Sintonizé: '+audio.name+' ('+money(audio.price)+')',
+      'Quiero cotizar / cerrar compra.',
+      'Prioridad de entrega por favor.'
+    ].join('\n');
+    document.getElementById('waBtn').href=waUrl(msg);
+    document.getElementById('waBtn').textContent='Pedir '+audio.name;
+    document.getElementById('result').hidden=false;
+  }
+
+  function startGame(){
+    document.getElementById('intro').hidden=true;
+    document.getElementById('result').hidden=true;
+    path=[];hitId=null;dragging=false;animT0=null;
+    tip.textContent='Toca el audífono y arrastra';
+    tip.classList.remove('ok');
+    nodeEar.classList.remove('glow');
+    nodeHp.classList.remove('glow');
+    sizeBeam();
+    spawnFloats();
+    drawBeam();
+    play.classList.add('on');
+    requestAnimationFrame(tickFloats);
+  }
+
+  document.getElementById('btnStart').onclick=startGame;
+  document.getElementById('btnReplay').onclick=function(){
+    document.getElementById('result').hidden=true;
+    startGame();
+  };
+
+  play.addEventListener('pointerdown',startDrag);
+  window.addEventListener('pointermove',moveDrag);
+  window.addEventListener('pointerup',function(){endDrag(false);});
+  window.addEventListener('pointercancel',function(){endDrag(false);});
+  play.addEventListener('touchstart',startDrag,{passive:false});
+  window.addEventListener('touchmove',moveDrag,{passive:false});
+  window.addEventListener('touchend',function(){endDrag(false);});
+
+  window.addEventListener('resize',function(){
+    if(play.classList.contains('on')){sizeBeam();drawBeam();}
+  });
+
+  /* ambient particles */
+  var fx=document.getElementById('fx');
+  if(fx){
+    var fctx=fx.getContext('2d');
+    var pts=[];
+    function resizeFx(){
+      fx.width=window.innerWidth*devicePixelRatio;
+      fx.height=window.innerHeight*devicePixelRatio;
+      fx.style.width=window.innerWidth+'px';
+      fx.style.height=window.innerHeight+'px';
+      fctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+      pts=[];
+      for(var i=0;i<40;i++){
+        pts.push({
+          x:Math.random()*window.innerWidth,
+          y:Math.random()*window.innerHeight,
+          r:.5+Math.random()*1.8,
+          v:.15+Math.random()*.4,
+          c:i%2? 'rgba(94,234,212,.45)':'rgba(212,175,106,.4)'
+        });
+      }
+    }
+    function frame(){
+      fctx.clearRect(0,0,window.innerWidth,window.innerHeight);
+      pts.forEach(function(p){
+        p.y-=p.v;
+        if(p.y<-4){p.y=window.innerHeight+4;p.x=Math.random()*window.innerWidth;}
+        fctx.beginPath();fctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+        fctx.fillStyle=p.c;fctx.fill();
+      });
+      requestAnimationFrame(frame);
+    }
+    resizeFx();frame();
+    window.addEventListener('resize',resizeFx);
+  }
+})();
+</script>
+</body>
+</html>

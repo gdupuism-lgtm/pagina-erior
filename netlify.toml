@@ -42,6 +42,21 @@
   to = "/codigo/"
   status = 301
 
+[[redirects]]
+  from = "/onda"
+  to = "/onda/"
+  status = 301
+
+[[redirects]]
+  from = "/sintoniza"
+  to = "/onda/"
+  status = 301
+
+[[redirects]]
+  from = "/play"
+  to = "/onda/"
+  status = 301
+
 [[headers]]
   for = "/img/*"
   [headers.values]
