@@ -324,14 +324,14 @@ h1 .line2{
       Onda de
       <span class="line2">Frecuencia</span>
     </h1>
-    <p class="lead">Activa todos los audios del catálogo con tu onda — y llévala a la oreja para revelar tu frecuencia.</p>
+    <p class="lead">Activa el catálogo completo en oleadas — sin amontonar — y lleva la onda a la oreja.</p>
     <div class="mission-chip">
-      <span>1 · Toca audífonos</span>
-      <span>2 · Activa todos</span>
-      <span>3 · Llega a la oreja</span>
+      <span>1 · Audífonos</span>
+      <span>2 · Oleadas del catálogo</span>
+      <span>3 · Oreja</span>
     </div>
     <button type="button" class="btn btn-main" id="btnStart">Empezar juego</button>
-    <p class="hint">~20 segundos · premio: tu audio</p>
+    <p class="hint">Catálogo completo · oleadas de 8</p>
   </section>
 
   <section class="play" id="play" aria-label="Campo de juego">
@@ -344,8 +344,8 @@ h1 .line2{
         <div class="progress-fill" id="progressFill"></div>
       </div>
       <div class="progress-meta">
-        <span>Misión: activar catálogo</span>
-        <span><strong id="progNum">0</strong>/<span id="progTotal">8</span></span>
+        <span id="waveLabel">Oleada 1</span>
+        <span><strong id="progNum">0</strong>/<span id="progTotal">33</span> catálogo</span>
       </div>
     </div>
 
@@ -387,25 +387,42 @@ h1 .line2{
 (function(){
   var WA='5214432311761';
   var IMG='/img/catalog/';
-  var NEED=8;
+  var WAVE=8;
 
   var AUDIOS=[
     {id:'imagine',name:'IMAGINE',price:1199,img:'imagine.jpg'},
     {id:'seduction',name:'SEDUCTION',price:1199,img:'seduction.jpg'},
     {id:'eriorlove',name:'Erior LOVE',price:1190,img:'erior-love.jpg'},
     {id:'attraction',name:'ATTRACTION',price:1190,img:'attraction.jpg'},
+    {id:'eclat',name:'Éclat',price:1190,img:'eclat.jpg'},
     {id:'magic4',name:'Amor Propio Magic 4.0',price:1190,img:'amor-propio-magic-4-0.jpg'},
-    {id:'god',name:'GOD / GODDESS',price:1190,img:'god-goddess.jpg'},
-    {id:'icon',name:'ICON AURA',price:1190,img:'icon-aura.jpg'},
-    {id:'money',name:'MONEY TECH',price:1190,img:'money-tech.jpg'},
-    {id:'abundance',name:'Master Abundance',price:1190,img:'master-abundance.jpg'},
-    {id:'lucky',name:'Lucky',price:1190,img:'lucky.jpg'},
-    {id:'wonderland',name:'Wonderland Coherence',price:1190,img:'wonderland-coherence.jpg'},
-    {id:'simulation',name:'SIMULATION-U',price:1190,img:'simulation-u.jpg'},
+    {id:'magichombre',name:'Amor Propio Magic Hombre',price:1190,img:'amor-propio-magic-hombre.jpg'},
     {id:'white',name:'White Rabbit Code',price:1190,img:'white-rabbit-code.jpg'},
-    {id:'mentalglow',name:'MENTAL GLOW UP',price:1190,img:'mental-glow-up.jpg'},
+    {id:'god',name:'GOD / GODDESS',price:1190,img:'god-goddess.jpg'},
+    {id:'mesmerizing',name:'Mesmerizing Love',price:1190,img:'mesmerizing-love.jpg'},
+    {id:'mastermind',name:'MASTER MIND',price:1190,img:'master-mind.jpg'},
+    {id:'identity',name:'Identity',price:1190,img:'identity.jpg'},
+    {id:'curious',name:'CURIOUS-CURIOUSER',price:1190,img:'curious-curiouser.jpg'},
+    {id:'1111',name:'11:11',price:1190,img:'11-11.jpg'},
     {id:'satori',name:'Satori',price:1190,img:'satori.jpg'},
-    {id:'booster',name:'Booster',price:1190,img:'booster.jpg'}
+    {id:'abundance',name:'Master Abundance',price:1190,img:'master-abundance.jpg'},
+    {id:'money',name:'MONEY TECH',price:1190,img:'money-tech.jpg'},
+    {id:'lucky',name:'Lucky',price:1190,img:'lucky.jpg'},
+    {id:'audioyou',name:'Audio YOU',price:1190,img:'audio-you.jpg'},
+    {id:'vitamind',name:'VITAMIND',price:1190,img:'vitamind.jpg'},
+    {id:'fitwave',name:'FIT WAVE',price:1190,img:'fit-wave.jpg'},
+    {id:'simulation',name:'SIMULATION-U',price:1190,img:'simulation-u.jpg'},
+    {id:'keepcool',name:'KEEP COOL',price:1190,img:'keep-cool.jpg'},
+    {id:'booster',name:'Booster',price:1190,img:'booster.jpg'},
+    {id:'wonderland',name:'Wonderland Coherence',price:1190,img:'wonderland-coherence.jpg'},
+    {id:'select',name:'SELECT',price:1190,img:'select.jpg'},
+    {id:'audioerior',name:'AUDIO ERIOR 3.0',price:1190,img:'audio-erior-3-0.jpg'},
+    {id:'emergency',name:'EMERGENCY 999',price:3333,img:'emergency-999.jpg'},
+    {id:'mentalglow',name:'MENTAL GLOW UP',price:1190,img:'mental-glow-up.jpg'},
+    {id:'eriorkids',name:'ERIOR KIDS',price:1190,img:'erior-kids.jpg'},
+    {id:'icon',name:'ICON AURA',price:1190,img:'icon-aura.jpg'},
+    {id:'mindmovie',name:'MIND MOVIE',price:1190,img:'mind-movie.jpg'},
+    {id:'telegram',name:'Telegram Privado',price:888,img:'telegram-privado.jpg'}
   ];
 
   var play=document.getElementById('play');
@@ -420,13 +437,19 @@ h1 .line2{
   var progressFill=document.getElementById('progressFill');
   var progNum=document.getElementById('progNum');
   var progTotal=document.getElementById('progTotal');
+  var waveLabel=document.getElementById('waveLabel');
 
   var floats=[];
-  var charged={};
+  var queue=[];
+  var waveCharged={};
+  var totalDone=0;
+  var waveIndex=0;
+  var wavesTotal=1;
   var lastHit=null;
   var dragging=false;
   var path=[];
   var unlocked=false;
+  var waveTransit=false;
   var reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   function money(n){return '$'+Number(n).toLocaleString('es-MX');}
@@ -439,20 +462,20 @@ h1 .line2{
     }
     return x;
   }
-  function chargedCount(){return Object.keys(charged).length;}
-  function allCharged(){return chargedCount()>=floats.length && floats.length>0;}
+  function waveDone(){return floats.length>0 && Object.keys(waveCharged).length>=floats.length;}
+  function catalogDone(){return totalDone>=AUDIOS.length;}
 
   function updateProgress(){
-    var n=chargedCount();
-    var t=floats.length||NEED;
-    progNum.textContent=n;
-    progTotal.textContent=t;
-    progressFill.style.width=Math.min(100,(n/t)*100)+'%';
-    if(allCharged()){
+    progNum.textContent=totalDone;
+    progTotal.textContent=AUDIOS.length;
+    progressFill.style.width=Math.min(100,(totalDone/AUDIOS.length)*100)+'%';
+    waveLabel.textContent='Oleada '+waveIndex+'/'+wavesTotal;
+
+    if(catalogDone()){
       unlocked=true;
       nodeEar.classList.add('unlocked');
       earLabel.textContent='Lista';
-      tip.textContent='¡Oreja abierta! Lleva la onda';
+      tip.textContent='¡Catálogo completo! Lleva la onda a la oreja';
       tip.classList.add('ready');
     }else{
       unlocked=false;
@@ -482,31 +505,43 @@ h1 .line2{
     bctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
   }
 
-  function spawnFloats(){
+  function layoutForCount(n){
+    if(n<=4) return {cols:2,rows:2};
+    if(n<=6) return {cols:3,rows:2};
+    if(n<=9) return {cols:3,rows:3};
+    return {cols:4,rows:2};
+  }
+
+  function spawnWave(){
     floatsHost.innerHTML='';
     floats=[];
-    charged={};
-    lastHit=null;
-    var pick=shuffle(AUDIOS).slice(0,NEED);
-    var W=play.clientWidth,H=play.clientHeight;
-    var size=W<700?70:84;
+    waveCharged={};
+    waveTransit=false;
+    waveIndex++;
 
-    /* soft constellation grid so it feels like a pattern to complete */
-    var cols=4, rows=2;
-    var marginX=W*0.24, marginY=H*0.22;
-    var gapX=(W-marginX*2)/(cols-1);
-    var gapY=(H-marginY*2-40)/(rows-1);
+    var pick=queue.splice(0,WAVE);
+    if(!pick.length){updateProgress();return;}
+
+    var W=play.clientWidth,H=play.clientHeight;
+    var size=W<700?66:80;
+    var grid=layoutForCount(pick.length);
+    var cols=grid.cols, rows=grid.rows;
+    var marginX=W*0.24, marginY=H*0.24;
+    var gapX=cols>1?(W-marginX*2)/(cols-1):0;
+    var gapY=rows>1?(H-marginY*2-36)/(rows-1):0;
 
     pick.forEach(function(a,i){
       var col=i%cols;
       var row=Math.floor(i/cols);
-      var jitter=(Math.random()-.5)*18;
-      var x=marginX+col*gapX+jitter;
-      var y=marginY+50+row*gapY+(Math.random()-.5)*14;
+      var jitter=(Math.random()-.5)*14;
+      var x=marginX+(cols===1?0:col*gapX)+jitter;
+      var y=marginY+44+(rows===1?0:row*gapY)+(Math.random()-.5)*10;
 
       var el=document.createElement('div');
       el.className='float';
       el.dataset.id=a.id;
+      el.style.opacity='0';
+      el.style.transition='opacity .4s ease, transform .4s ease';
       var img=document.createElement('img');
       img.src=IMG+a.img;img.alt=a.name;img.draggable=false;img.loading='eager';
       img.onerror=function(){this.style.opacity='.25';};
@@ -520,12 +555,31 @@ h1 .line2{
 
       floats.push({
         el:el,audio:a,baseX:x-size/2,baseY:y-size/2,
-        amp:8+Math.random()*12,speed:3.5+Math.random()*4,
+        amp:7+Math.random()*10,speed:3.2+Math.random()*3.5,
         phase:Math.random()*Math.PI*2,size:size
       });
       floatsHost.appendChild(el);
+      requestAnimationFrame(function(){el.style.opacity='1';});
     });
+
+    path=[];
+    drawBeam();
     updateProgress();
+    tip.textContent=waveIndex===1?'Toca el audífono y activa esta oleada':'Oleada '+waveIndex+' · activa estos audios';
+  }
+
+  function advanceWave(){
+    if(waveTransit||catalogDone()) return;
+    waveTransit=true;
+    tip.textContent='Oleada completa · siguiente…';
+    floats.forEach(function(f){f.el.style.opacity='0';});
+    setTimeout(function(){
+      if(queue.length){
+        spawnWave();
+      }else{
+        updateProgress();
+      }
+    },550);
   }
 
   var animT0=null;
@@ -534,7 +588,7 @@ h1 .line2{
     var t=(ts-animT0)/1000;
     if(!reduced){
       floats.forEach(function(f){
-        if(charged[f.audio.id]) return;
+        if(waveCharged[f.audio.id]) return;
         var dx=Math.sin(t*f.speed+f.phase)*f.amp;
         var dy=Math.cos(t*(f.speed*.8)+f.phase)*f.amp*.65;
         f.el.style.transform='translate('+dx+'px,'+dy+'px)';
@@ -565,14 +619,24 @@ h1 .line2{
   }
 
   function charge(f){
-    if(charged[f.audio.id]) return;
-    charged[f.audio.id]=true;
+    if(waveCharged[f.audio.id]||waveTransit) return;
+    waveCharged[f.audio.id]=true;
+    totalDone++;
     lastHit=f.audio;
     f.el.classList.add('charged','burst');
     f.el.style.transform='translate(0,0)';
     tip.textContent='Activado: '+f.audio.name;
     updateProgress();
     setTimeout(function(){f.el.classList.remove('burst');},450);
+
+    if(waveDone()){
+      if(catalogDone()){
+        tip.textContent='¡Catálogo completo! Lleva la onda a la oreja';
+        tip.classList.add('ready');
+      }else{
+        advanceWave();
+      }
+    }
   }
 
   function hitTest(p){
@@ -584,7 +648,7 @@ h1 .line2{
       var dx=p.x-cx,dy=p.y-cy;
       var rad=r.width*0.58;
       var inside=dx*dx+dy*dy<rad*rad;
-      f.el.classList.toggle('hit', inside && !charged[f.audio.id]);
+      f.el.classList.toggle('hit', inside && !waveCharged[f.audio.id]);
       if(inside) charge(f);
     });
   }
@@ -601,7 +665,7 @@ h1 .line2{
   }
 
   function startDrag(e){
-    if(!play.classList.contains('on')) return;
+    if(!play.classList.contains('on')||waveTransit) return;
     var p=ptr(e);
     if(!nearHp(p)){
       tip.textContent='Empieza en el audífono';
@@ -611,7 +675,7 @@ h1 .line2{
     path=[centerOf(nodeHp),p];
     orb.classList.add('on');
     orb.style.left=p.x+'px';orb.style.top=p.y+'px';
-    tip.textContent=allCharged()?'Lleva la onda a la oreja':'Pasa por cada audio';
+    tip.textContent=catalogDone()?'Lleva la onda a la oreja':'Pasa por cada audio de la oleada';
     drawBeam();
     e.preventDefault();
   }
@@ -645,11 +709,12 @@ h1 .line2{
 
     path=[];
     drawBeam();
-    if(!allCharged()){
-      tip.textContent='Faltan '+(floats.length-chargedCount())+' audios';
-    }else{
-      tip.textContent='¡Oreja abierta! Lleva la onda';
+    if(catalogDone()){
+      tip.textContent='¡Catálogo completo! Lleva la onda a la oreja';
       tip.classList.add('ready');
+    }else if(!waveTransit){
+      var left=floats.length-Object.keys(waveCharged).length;
+      tip.textContent=left>0?('Faltan '+left+' en esta oleada'):'Siguiente oleada…';
     }
   }
 
@@ -662,11 +727,12 @@ h1 .line2{
       '<div class="result-body">'+
         '<p class="result-tag">Frecuencia ganadora</p>'+
         '<h2 class="result-name">'+audio.name+'</h2>'+
-        '<p class="result-price">'+money(audio.price)+' · catálogo completo activado</p>'+
+        '<p class="result-price">'+money(audio.price)+' · catálogo completo</p>'+
       '</div>';
     var msg=[
       'Hola! Completé el Juego Onda de Frecuencia Erior ✨',
-      'Activé el catálogo y mi frecuencia fue: '+audio.name+' ('+money(audio.price)+')',
+      'Activé el catálogo completo ('+AUDIOS.length+' audios).',
+      'Mi frecuencia fue: '+audio.name+' ('+money(audio.price)+')',
       'Quiero cotizar / cerrar compra.',
       'Prioridad de entrega por favor.'
     ].join('\n');
@@ -679,11 +745,14 @@ h1 .line2{
   function startGame(){
     document.getElementById('intro').hidden=true;
     document.getElementById('result').hidden=true;
-    path=[];dragging=false;animT0=null;unlocked=false;lastHit=null;charged={};
+    path=[];dragging=false;animT0=null;unlocked=false;lastHit=null;
+    waveCharged={};totalDone=0;waveIndex=0;waveTransit=false;
+    queue=shuffle(AUDIOS);
+    wavesTotal=Math.ceil(AUDIOS.length/WAVE);
     tip.textContent='Toca el audífono';
     tip.classList.remove('ready');
     sizeBeam();
-    spawnFloats();
+    spawnWave();
     drawBeam();
     play.classList.add('on');
     requestAnimationFrame(tickFloats);
