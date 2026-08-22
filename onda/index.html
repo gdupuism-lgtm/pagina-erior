@@ -3,208 +3,368 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
-<meta name="theme-color" content="#06060a">
-<meta name="description" content="Onda Erior — arrastra la frecuencia de los audífonos a tu oreja. Elige tu audio del catálogo.">
-<meta property="og:title" content="Onda Erior · Sintoniza tu audio">
-<meta property="og:description" content="Juego rápido premium: pasa la frecuencia por el catálogo hasta tu oreja.">
-<title>Onda Erior · Mental Tech</title>
+<meta name="theme-color" content="#08041a">
+<meta name="description" content="Juego Onda de Frecuencia Erior Center — activa todos los audios y lleva la onda a tu oreja.">
+<meta property="og:title" content="Juego Onda de Frecuencia · Erior Center">
+<meta property="og:description" content="Activa el catálogo con tu frecuencia. Rápido, premium, adictivo.">
+<title>Juego Onda de Frecuencia · Erior Center</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Syne:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Audiowide&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#06060a;
-  --ink:#f4f0e6;
-  --soft:rgba(244,240,230,.72);
-  --dim:rgba(244,240,230,.4);
-  --gold:#d4af6a;
-  --gold-hot:#f0d9a0;
-  --cyan:#5eead4;
-  --display:'Syne',sans-serif;
-  --serif:'Cormorant Garamond',Georgia,serif;
+  --bg:#08041a;
+  --ink:#f7f4ff;
+  --soft:rgba(247,244,255,.78);
+  --dim:rgba(247,244,255,.42);
+  --gold:#ffd56a;
+  --gold2:#e4a93a;
+  --cyan:#3ef0ff;
+  --mag:#ff4fd8;
+  --blue:#6b7cff;
+  --display:'Audiowide',sans-serif;
+  --body:'Outfit',system-ui,sans-serif;
   --ease:cubic-bezier(.22,1,.36,1);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;background:var(--bg);color:var(--ink);overflow:hidden}
 body{
-  font-family:var(--display);
+  font-family:var(--body);
   -webkit-font-smoothing:antialiased;
   touch-action:none;
   user-select:none;-webkit-user-select:none;
 }
-.bg{
-  position:fixed;inset:0;z-index:0;pointer-events:none;
-  background:
-    radial-gradient(ellipse 60% 40% at 15% 50%, rgba(94,234,212,.1), transparent 55%),
-    radial-gradient(ellipse 50% 40% at 85% 50%, rgba(212,175,106,.12), transparent 55%),
-    radial-gradient(ellipse 70% 50% at 50% 100%, rgba(212,175,106,.06), transparent 50%),
-    #06060a;
+.stage-bg{
+  position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;
+  background:#08041a;
+}
+.blob{
+  position:absolute;border-radius:50%;filter:blur(55px);opacity:.75;
+  animation:drift 12s ease-in-out infinite;
+}
+.blob.a{width:58vw;height:58vw;left:-18%;top:-12%;background:radial-gradient(circle,#ff4fd8,#ff4fd800);animation-duration:15s}
+.blob.b{width:52vw;height:52vw;right:-18%;top:18%;background:radial-gradient(circle,#3ef0ff,#3ef0ff00);animation-duration:17s;animation-delay:-3s}
+.blob.c{width:48vw;height:48vw;left:22%;bottom:-18%;background:radial-gradient(circle,#ffd56a,#ffd56a00);animation-duration:19s;animation-delay:-6s}
+.blob.d{width:40vw;height:40vw;right:8%;bottom:8%;background:radial-gradient(circle,#6b7cff,#6b7cff00);animation-duration:14s;animation-delay:-2s}
+@keyframes drift{
+  0%,100%{transform:translate(0,0) scale(1)}
+  33%{transform:translate(5%,-6%) scale(1.08)}
+  66%{transform:translate(-4%,5%) scale(.94)}
 }
 #fx{position:fixed;inset:0;z-index:1;pointer-events:none;display:block}
 .app{position:relative;z-index:2;height:100%;height:100dvh;display:flex;flex-direction:column}
 
-/* INTRO */
+/* INTRO — colorful cover */
 .intro,.result{
-  position:absolute;inset:0;z-index:20;
+  position:absolute;inset:0;z-index:30;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:1.5rem 1.25rem;text-align:center;
-  background:rgba(6,6,10,.82);
-  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  padding:1.25rem 1.15rem calc(1.25rem + env(safe-area-inset-bottom));
+  text-align:center;
+}
+.intro{
+  background:linear-gradient(180deg,rgba(8,4,26,.35),rgba(8,4,26,.88) 55%,rgba(8,4,26,.96));
+}
+.result{
+  background:rgba(8,4,26,.88);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
 }
 .intro[hidden],.result[hidden]{display:none!important}
-.brand{font-size:.62rem;font-weight:700;letter-spacing:.34em;color:var(--gold);margin-bottom:.75rem}
-.kicker{font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:var(--cyan);margin-bottom:.7rem;font-weight:600}
-h1{
-  font-family:var(--serif);font-weight:600;
-  font-size:clamp(2rem,8vw,2.7rem);line-height:1.05;margin-bottom:.85rem;
+
+.hp-hero{
+  width:min(240px,62vw);aspect-ratio:1;margin:0 auto 1.1rem;
+  position:relative;
+  animation:floatHp 4s ease-in-out infinite;
 }
-h1 em{font-style:italic;color:var(--gold-hot)}
-.lead{font-size:.9rem;line-height:1.55;color:var(--soft);max-width:30ch;margin:0 auto 1.5rem}
+@keyframes floatHp{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-10px)}
+}
+.hp-hero img{
+  width:100%;height:100%;object-fit:contain;display:block;
+  filter:drop-shadow(0 20px 40px rgba(255,79,216,.35)) drop-shadow(0 0 30px rgba(62,240,255,.25));
+}
+.hp-ring{
+  position:absolute;inset:-8%;border-radius:50%;
+  border:1px solid rgba(62,240,255,.25);
+  animation:spinSlow 10s linear infinite;
+  pointer-events:none;
+}
+.hp-ring::after{
+  content:'';position:absolute;top:-3px;left:50%;width:8px;height:8px;margin-left:-4px;
+  border-radius:50%;background:var(--gold);box-shadow:0 0 12px var(--gold);
+}
+@keyframes spinSlow{to{transform:rotate(360deg)}}
+
+.brand{
+  font-family:var(--display);font-size:.7rem;letter-spacing:.22em;
+  background:linear-gradient(90deg,#3ef0ff,#ffd56a,#ff4fd8,#3ef0ff);
+  background-size:200% auto;
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:shine 4s linear infinite;
+  margin-bottom:.55rem;
+}
+@keyframes shine{to{background-position:200% center}}
+.game-label{
+  display:inline-block;font-size:.58rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+  color:#041018;background:linear-gradient(135deg,#9af7ff,#3ef0ff,#6b7cff);
+  padding:.4rem .75rem;border-radius:999px;margin-bottom:.75rem;
+  box-shadow:0 0 24px rgba(62,240,255,.35);
+}
+h1{
+  font-family:var(--display);
+  font-size:clamp(1.35rem,5.8vw,1.85rem);
+  line-height:1.25;letter-spacing:.02em;margin-bottom:.7rem;
+  text-shadow:0 0 40px rgba(255,79,216,.25);
+}
+h1 .line2{
+  display:block;margin-top:.2rem;
+  background:linear-gradient(120deg,#ffd56a,#fff1c2,#ff9f43);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.lead{font-size:.88rem;line-height:1.5;color:var(--soft);max-width:32ch;margin:0 auto 1.25rem;font-weight:500}
+.mission-chip{
+  display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap;
+  margin:0 auto 1.25rem;max-width:34ch;
+}
+.mission-chip span{
+  font-size:.62rem;font-weight:600;letter-spacing:.04em;
+  padding:.4rem .65rem;border-radius:999px;
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(255,255,255,.05);
+  color:var(--soft);
+}
 .btn{
   appearance:none;border:none;cursor:pointer;text-decoration:none;
-  font-family:var(--display);font-weight:700;letter-spacing:.12em;text-transform:uppercase;
-  font-size:.66rem;display:inline-flex;align-items:center;justify-content:center;
-  padding:1.05rem 1.4rem;border-radius:4px;min-width:min(280px,100%);
-  transition:transform .2s var(--ease);
+  font-family:var(--display);font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;
+  display:inline-flex;align-items:center;justify-content:center;
+  padding:1.05rem 1.35rem;border-radius:14px;min-width:min(280px,100%);
+  transition:transform .2s var(--ease),filter .2s;
 }
 .btn:active{transform:scale(.98)}
-.btn-gold{
-  color:#120e08;
-  background:linear-gradient(135deg,#f5e6c0,#d4af6a 45%,#b8923f);
-  box-shadow:0 12px 40px rgba(212,175,106,.3),inset 0 1px 0 rgba(255,255,255,.45);
+.btn-main{
+  color:#140820;
+  background:linear-gradient(135deg,#fff1c2,#ffd56a 30%,#ff9f43 70%,#ff4fd8);
+  background-size:200% 200%;
+  box-shadow:0 0 0 1px rgba(255,213,106,.45),0 12px 40px rgba(255,79,216,.3);
+  animation:btnShift 3.5s ease-in-out infinite;
 }
+@keyframes btnShift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
 .btn-ghost{
-  margin-top:.55rem;background:transparent;color:var(--dim);
-  border:1px solid rgba(244,240,230,.18);font-size:.58rem;
+  margin-top:.5rem;background:rgba(255,255,255,.04);color:var(--dim);
+  border:1px solid rgba(255,255,255,.14);font-size:.56rem;border-radius:12px;
 }
-.hint{margin-top:1rem;font-size:.55rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(244,240,230,.3)}
+.hint{margin-top:.95rem;font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(247,244,255,.32)}
 
-/* PLAYFIELD */
+/* PLAY */
 .play{
   flex:1;position:relative;overflow:hidden;
-  opacity:0;pointer-events:none;transition:opacity .5s var(--ease);
+  opacity:0;pointer-events:none;transition:opacity .45s var(--ease);
 }
 .play.on{opacity:1;pointer-events:auto}
+
 .hud{
-  position:absolute;top:0;left:0;right:0;z-index:10;
-  padding:.85rem 1rem;display:flex;justify-content:space-between;align-items:center;
-  pointer-events:none;
+  position:absolute;top:0;left:0;right:0;z-index:12;
+  padding:.7rem .85rem;pointer-events:none;
+  display:grid;gap:.55rem;
 }
-.hud-brand{font-size:.55rem;letter-spacing:.28em;font-weight:700;color:var(--gold)}
+.hud-top{display:flex;justify-content:space-between;align-items:center;gap:.5rem}
+.hud-brand{font-family:var(--display);font-size:.5rem;letter-spacing:.18em;color:var(--gold)}
 .hud-tip{
-  font-size:.62rem;color:var(--soft);letter-spacing:.04em;
-  padding:.35rem .65rem;border-radius:999px;
-  border:1px solid rgba(94,234,212,.25);background:rgba(94,234,212,.08);
+  font-size:.6rem;font-weight:600;color:var(--soft);
+  padding:.3rem .6rem;border-radius:999px;
+  border:1px solid rgba(62,240,255,.3);background:rgba(62,240,255,.1);
+  max-width:58%;text-align:right;
 }
-.hud-tip.ok{border-color:rgba(212,175,106,.4);background:rgba(212,175,106,.1);color:var(--gold-hot)}
+.hud-tip.ready{
+  border-color:rgba(255,213,106,.5);background:rgba(255,213,106,.12);color:var(--gold);
+}
+.progress-wrap{
+  background:rgba(255,255,255,.06);border-radius:999px;height:10px;overflow:hidden;
+  border:1px solid rgba(255,255,255,.1);
+}
+.progress-fill{
+  height:100%;width:0%;
+  background:linear-gradient(90deg,#3ef0ff,#ffd56a,#ff4fd8);
+  background-size:200% 100%;
+  animation:shine 2s linear infinite;
+  border-radius:999px;
+  transition:width .35s var(--ease);
+  box-shadow:0 0 16px rgba(62,240,255,.45);
+}
+.progress-meta{
+  display:flex;justify-content:space-between;
+  font-size:.55rem;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);font-weight:600;
+}
+.progress-meta strong{color:var(--cyan);font-weight:700}
 
 .node{
-  position:absolute;z-index:8;width:88px;height:88px;
-  display:flex;align-items:center;justify-content:center;
+  position:absolute;z-index:9;width:86px;
+  display:flex;flex-direction:column;align-items:center;gap:.35rem;
   pointer-events:none;
 }
-.node-hp{left:4%;top:50%;transform:translateY(-50%)}
-.node-ear{right:4%;top:50%;transform:translateY(-50%)}
-.node svg{width:72px;height:72px;filter:drop-shadow(0 0 18px rgba(212,175,106,.35))}
-.node-label{
-  position:absolute;bottom:-1.4rem;left:50%;transform:translateX(-50%);
-  font-size:.5rem;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);white-space:nowrap;
+.node-hp{left:2%;top:50%;transform:translateY(-50%)}
+.node-ear{right:2%;top:50%;transform:translateY(-50%)}
+.node-icon{
+  width:72px;height:72px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(0,0,0,.35);
+  border:1px solid rgba(255,213,106,.35);
+  box-shadow:0 0 24px rgba(255,213,106,.2);
 }
-.node.glow svg{filter:drop-shadow(0 0 28px rgba(94,234,212,.65))}
+.node-hp .node-icon{
+  background:radial-gradient(circle at 40% 30%,rgba(255,213,106,.25),rgba(0,0,0,.4));
+}
+.node-ear .node-icon{
+  border-color:rgba(62,240,255,.3);
+  box-shadow:0 0 20px rgba(62,240,255,.15);
+  opacity:.45;filter:grayscale(.4);
+  transition:opacity .35s,filter .35s,box-shadow .35s,border-color .35s;
+}
+.node-ear.unlocked .node-icon{
+  opacity:1;filter:none;
+  border-color:rgba(255,213,106,.7);
+  box-shadow:0 0 36px rgba(255,213,106,.45),0 0 20px rgba(62,240,255,.3);
+  animation:earPulse 1.2s ease-in-out infinite;
+}
+@keyframes earPulse{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.06)}
+}
+.node-icon img{width:78%;height:78%;object-fit:contain}
+.node-icon svg{width:42px;height:42px}
+.node-label{
+  font-size:.48rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--dim);font-weight:700;
+}
+.node-ear.unlocked .node-label{color:var(--gold)}
 
 .float{
-  position:absolute;z-index:5;width:72px;height:72px;border-radius:16px;overflow:hidden;
-  border:1px solid rgba(255,255,255,.12);
+  position:absolute;z-index:5;width:70px;height:70px;border-radius:16px;overflow:hidden;
+  border:1px solid rgba(255,255,255,.14);
   box-shadow:0 10px 28px rgba(0,0,0,.45);
   background:#121218;
-  transition:border-color .2s,box-shadow .2s,transform .2s;
+  transition:border-color .2s,box-shadow .2s,transform .2s,filter .2s;
   will-change:transform;
 }
-.float img{width:100%;height:100%;object-fit:cover;display:block;opacity:.88}
-.float.hit{
-  border-color:rgba(94,234,212,.85);
-  box-shadow:0 0 0 2px rgba(94,234,212,.4),0 0 32px rgba(94,234,212,.35);
-  transform:scale(1.12)!important;
+.float img{width:100%;height:100%;object-fit:cover;display:block;opacity:.9}
+.float .check{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  background:rgba(8,4,26,.55);opacity:0;transition:opacity .25s;
+  font-size:1.4rem;color:#3ef0ff;font-weight:800;
+  text-shadow:0 0 12px rgba(62,240,255,.8);
 }
-.float.chosen{
-  border-color:rgba(212,175,106,.9);
-  box-shadow:0 0 0 2px rgba(212,175,106,.5),0 0 36px rgba(212,175,106,.4);
+.float.charged{
+  border-color:rgba(62,240,255,.9);
+  box-shadow:0 0 0 2px rgba(62,240,255,.35),0 0 28px rgba(62,240,255,.4);
+  filter:saturate(1.2) brightness(1.08);
+}
+.float.charged .check{opacity:1}
+.float.hit:not(.charged){
+  border-color:rgba(255,213,106,.85);
+  box-shadow:0 0 24px rgba(255,213,106,.4);
+  transform:scale(1.1)!important;
+}
+.float.burst{animation:burst .45s var(--ease)}
+@keyframes burst{
+  0%{transform:scale(1)}
+  40%{transform:scale(1.2)}
+  100%{transform:scale(1)}
 }
 
 #beam{position:absolute;inset:0;z-index:7;pointer-events:none}
 .orb{
-  position:absolute;z-index:9;width:28px;height:28px;margin:-14px 0 0 -14px;
-  border-radius:50%;pointer-events:none;
-  background:radial-gradient(circle at 35% 30%,#fff,#5eead4 40%,#d4af6a 75%,transparent 78%);
-  box-shadow:0 0 24px rgba(94,234,212,.7),0 0 48px rgba(212,175,106,.35);
-  opacity:0;transition:opacity .2s;
+  position:absolute;z-index:10;width:30px;height:30px;margin:-15px 0 0 -15px;
+  border-radius:50%;pointer-events:none;opacity:0;
+  background:radial-gradient(circle at 35% 30%,#fff,#3ef0ff 35%,#ffd56a 70%,transparent 78%);
+  box-shadow:0 0 28px rgba(62,240,255,.75),0 0 48px rgba(255,79,216,.35);
 }
 .orb.on{opacity:1}
 
 .result-card{
-  width:min(300px,88vw);margin:0 auto 1.25rem;border-radius:18px;overflow:hidden;
-  border:1px solid rgba(212,175,106,.35);
-  background:rgba(12,12,18,.9);
-  box-shadow:0 20px 50px rgba(0,0,0,.5);
+  width:min(300px,88vw);margin:0 auto 1.15rem;border-radius:18px;overflow:hidden;
+  border:1px solid rgba(255,213,106,.4);
+  background:rgba(12,8,28,.92);
+  box-shadow:0 20px 50px rgba(0,0,0,.5),0 0 40px rgba(255,79,216,.15);
   text-align:left;
 }
 .result-card img{width:100%;aspect-ratio:1;object-fit:cover;display:block}
 .result-body{padding:1rem 1.05rem 1.1rem}
-.result-tag{font-size:.52rem;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan);margin-bottom:.3rem}
-.result-name{font-family:var(--serif);font-size:1.35rem;font-weight:600;margin-bottom:.25rem}
-.result-price{font-size:.78rem;color:var(--gold);font-weight:600}
+.result-tag{font-size:.52rem;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan);margin-bottom:.3rem;font-weight:700}
+.result-name{font-family:var(--display);font-size:1.05rem;margin-bottom:.3rem}
+.result-price{font-size:.8rem;color:var(--gold);font-weight:700}
 
 @media(min-width:700px){
-  .float{width:88px;height:88px}
-  .node{width:110px;height:110px}
-  .node svg{width:90px;height:90px}
+  .float{width:84px;height:84px}
+  .node{width:100px}
+  .node-icon{width:86px;height:86px}
 }
 @media(prefers-reduced-motion:reduce){
-  .float{animation:none!important}
+  .blob,.hp-hero,.hp-ring,.brand,.btn-main,.progress-fill,.node-ear.unlocked .node-icon{animation:none!important}
 }
 </style>
 </head>
 <body>
-<div class="bg" aria-hidden="true"></div>
+<div class="stage-bg" aria-hidden="true">
+  <div class="blob a"></div>
+  <div class="blob b"></div>
+  <div class="blob c"></div>
+  <div class="blob d"></div>
+</div>
 <canvas id="fx" aria-hidden="true"></canvas>
 
 <main class="app">
   <section class="intro" id="intro">
+    <div class="hp-hero" aria-hidden="true">
+      <div class="hp-ring"></div>
+      <img src="assets/headphones.png" alt="" width="480" height="480">
+    </div>
     <p class="brand">ERIOR CENTER</p>
-    <p class="kicker">Mental Tech · ~15 seg</p>
-    <h1>Pasa la<br><em>frecuencia</em></h1>
-    <p class="lead">Arrastra la onda de los audífonos, atraviesa el catálogo y llévala a tu oreja.</p>
-    <button type="button" class="btn btn-gold" id="btnStart">Jugar ahora</button>
-    <p class="hint">Toca · arrastra · suelta en la oreja</p>
+    <p class="game-label">Juego · Mental Tech</p>
+    <h1>
+      Onda de
+      <span class="line2">Frecuencia</span>
+    </h1>
+    <p class="lead">Activa todos los audios del catálogo con tu onda — y llévala a la oreja para revelar tu frecuencia.</p>
+    <div class="mission-chip">
+      <span>1 · Toca audífonos</span>
+      <span>2 · Activa todos</span>
+      <span>3 · Llega a la oreja</span>
+    </div>
+    <button type="button" class="btn btn-main" id="btnStart">Empezar juego</button>
+    <p class="hint">~20 segundos · premio: tu audio</p>
   </section>
 
-  <section class="play" id="play" aria-label="Campo de sintonía">
+  <section class="play" id="play" aria-label="Campo de juego">
     <div class="hud">
-      <span class="hud-brand">ONDA ERIOR</span>
-      <span class="hud-tip" id="hudTip">Toca el audífono y arrastra</span>
+      <div class="hud-top">
+        <span class="hud-brand">ONDA ERIOR</span>
+        <span class="hud-tip" id="hudTip">Toca el audífono</span>
+      </div>
+      <div class="progress-wrap" aria-hidden="true">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <div class="progress-meta">
+        <span>Misión: activar catálogo</span>
+        <span><strong id="progNum">0</strong>/<span id="progTotal">8</span></span>
+      </div>
     </div>
 
-    <div class="node node-hp" id="nodeHp" aria-hidden="true">
-      <svg viewBox="0 0 80 80" fill="none">
-        <path d="M22 34c0-12 8-22 18-22s18 10 18 22" stroke="#d4af6a" stroke-width="3.5" stroke-linecap="round"/>
-        <rect x="14" y="32" width="14" height="28" rx="7" fill="url(#g1)" stroke="#f0d9a0" stroke-width="1"/>
-        <rect x="52" y="32" width="14" height="28" rx="7" fill="url(#g1)" stroke="#f0d9a0" stroke-width="1"/>
-        <defs>
-          <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
-            <stop stop-color="#f5e6c0"/><stop offset="1" stop-color="#9a7a38"/>
-          </linearGradient>
-        </defs>
-      </svg>
-      <span class="node-label">Audífonos</span>
+    <div class="node node-hp" id="nodeHp">
+      <div class="node-icon">
+        <img src="assets/headphones.png" alt="">
+      </div>
+      <span class="node-label">Inicio</span>
     </div>
 
-    <div class="node node-ear" id="nodeEar" aria-hidden="true">
-      <svg viewBox="0 0 80 80" fill="none">
-        <path d="M48 16c12 4 18 16 16 28-2 14-12 22-24 24-8 1-14-2-18-8" stroke="#d4af6a" stroke-width="3.2" stroke-linecap="round"/>
-        <path d="M42 28c6 2 10 8 9 14-1 7-6 11-12 12" stroke="#f0d9a0" stroke-width="2.4" stroke-linecap="round" opacity=".85"/>
-        <circle cx="36" cy="44" r="5" fill="#d4af6a" opacity=".55"/>
-      </svg>
-      <span class="node-label">Oreja</span>
+    <div class="node node-ear" id="nodeEar">
+      <div class="node-icon">
+        <svg viewBox="0 0 80 80" fill="none" aria-hidden="true">
+          <path d="M48 16c12 4 18 16 16 28-2 14-12 22-24 24-8 1-14-2-18-8" stroke="#ffd56a" stroke-width="3.2" stroke-linecap="round"/>
+          <path d="M42 28c6 2 10 8 9 14-1 7-6 11-12 12" stroke="#3ef0ff" stroke-width="2.4" stroke-linecap="round" opacity=".9"/>
+          <circle cx="36" cy="44" r="5" fill="#ffd56a" opacity=".6"/>
+        </svg>
+      </div>
+      <span class="node-label" id="earLabel">Bloqueada</span>
     </div>
 
     <div id="floats"></div>
@@ -214,10 +374,10 @@ h1 em{font-style:italic;color:var(--gold-hot)}
 
   <section class="result" id="result" hidden>
     <p class="brand">ERIOR CENTER</p>
-    <p class="kicker">Frecuencia sincronizada</p>
-    <h1>Tu audio<br><em>llegó</em></h1>
+    <p class="game-label">Misión completa</p>
+    <h1>Tu frecuencia<br><span class="line2">revelada</span></h1>
     <article class="result-card" id="resultCard"></article>
-    <a class="btn btn-gold" id="waBtn" href="#" target="_blank" rel="noopener noreferrer">Pedir por WhatsApp</a>
+    <a class="btn btn-main" id="waBtn" href="#" target="_blank" rel="noopener noreferrer">Pedir por WhatsApp</a>
     <a class="btn btn-ghost" href="/nexo/">Ver combo en Nexo</a>
     <button type="button" class="btn btn-ghost" id="btnReplay">Jugar otra vez</button>
   </section>
@@ -227,6 +387,7 @@ h1 em{font-style:italic;color:var(--gold-hot)}
 (function(){
   var WA='5214432311761';
   var IMG='/img/catalog/';
+  var NEED=8;
 
   var AUDIOS=[
     {id:'imagine',name:'IMAGINE',price:1199,img:'imagine.jpg'},
@@ -255,11 +416,17 @@ h1 em{font-style:italic;color:var(--gold-hot)}
   var tip=document.getElementById('hudTip');
   var nodeHp=document.getElementById('nodeHp');
   var nodeEar=document.getElementById('nodeEar');
+  var earLabel=document.getElementById('earLabel');
+  var progressFill=document.getElementById('progressFill');
+  var progNum=document.getElementById('progNum');
+  var progTotal=document.getElementById('progTotal');
 
   var floats=[];
+  var charged={};
+  var lastHit=null;
   var dragging=false;
   var path=[];
-  var hitId=null;
+  var unlocked=false;
   var reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   function money(n){return '$'+Number(n).toLocaleString('es-MX');}
@@ -272,6 +439,29 @@ h1 em{font-style:italic;color:var(--gold-hot)}
     }
     return x;
   }
+  function chargedCount(){return Object.keys(charged).length;}
+  function allCharged(){return chargedCount()>=floats.length && floats.length>0;}
+
+  function updateProgress(){
+    var n=chargedCount();
+    var t=floats.length||NEED;
+    progNum.textContent=n;
+    progTotal.textContent=t;
+    progressFill.style.width=Math.min(100,(n/t)*100)+'%';
+    if(allCharged()){
+      unlocked=true;
+      nodeEar.classList.add('unlocked');
+      earLabel.textContent='Lista';
+      tip.textContent='¡Oreja abierta! Lleva la onda';
+      tip.classList.add('ready');
+    }else{
+      unlocked=false;
+      nodeEar.classList.remove('unlocked');
+      earLabel.textContent='Bloqueada';
+      tip.classList.remove('ready');
+    }
+  }
+
   function centerOf(el){
     var r=el.getBoundingClientRect();
     var pr=play.getBoundingClientRect();
@@ -279,8 +469,8 @@ h1 em{font-style:italic;color:var(--gold-hot)}
   }
   function ptr(e){
     var pr=play.getBoundingClientRect();
-    var t=e.touches&&e.touches[0] ? e.touches[0] : e;
-    return {x:t.clientX-pr.left, y:t.clientY-pr.top};
+    var t=e.touches&&e.touches[0]?e.touches[0]:e;
+    return {x:t.clientX-pr.left,y:t.clientY-pr.top};
   }
 
   function sizeBeam(){
@@ -295,37 +485,47 @@ h1 em{font-style:italic;color:var(--gold-hot)}
   function spawnFloats(){
     floatsHost.innerHTML='';
     floats=[];
-    var pick=shuffle(AUDIOS).slice(0,10);
-    var W=play.clientWidth, H=play.clientHeight;
-    var size=W<700?72:88;
+    charged={};
+    lastHit=null;
+    var pick=shuffle(AUDIOS).slice(0,NEED);
+    var W=play.clientWidth,H=play.clientHeight;
+    var size=W<700?70:84;
+
+    /* soft constellation grid so it feels like a pattern to complete */
+    var cols=4, rows=2;
+    var marginX=W*0.24, marginY=H*0.22;
+    var gapX=(W-marginX*2)/(cols-1);
+    var gapY=(H-marginY*2-40)/(rows-1);
+
     pick.forEach(function(a,i){
+      var col=i%cols;
+      var row=Math.floor(i/cols);
+      var jitter=(Math.random()-.5)*18;
+      var x=marginX+col*gapX+jitter;
+      var y=marginY+50+row*gapY+(Math.random()-.5)*14;
+
       var el=document.createElement('div');
       el.className='float';
       el.dataset.id=a.id;
       var img=document.createElement('img');
-      img.src=IMG+a.img;
-      img.alt=a.name;
-      img.loading='eager';
-      img.draggable=false;
-      img.onerror=function(){this.style.opacity='.2';};
-      el.appendChild(img);
-
-      var x=W*0.22 + Math.random()*W*0.52;
-      var y=H*0.16 + Math.random()*H*0.62;
-      /* keep clear of headphones/ear zones */
-      if(x<W*0.2) x=W*0.22+Math.random()*W*0.15;
-      if(x>W*0.8) x=W*0.55+Math.random()*W*0.2;
+      img.src=IMG+a.img;img.alt=a.name;img.draggable=false;img.loading='eager';
+      img.onerror=function(){this.style.opacity='.25';};
+      var check=document.createElement('div');
+      check.className='check';check.textContent='✓';
+      el.appendChild(img);el.appendChild(check);
       el.style.left=(x-size/2)+'px';
       el.style.top=(y-size/2)+'px';
       el.style.width=size+'px';
       el.style.height=size+'px';
 
-      var amp=10+Math.random()*16;
-      var speed=4+Math.random()*5;
-      var phase=Math.random()*Math.PI*2;
-      floats.push({el:el,audio:a,baseX:x-size/2,baseY:y-size/2,amp:amp,speed:speed,phase:phase,size:size});
+      floats.push({
+        el:el,audio:a,baseX:x-size/2,baseY:y-size/2,
+        amp:8+Math.random()*12,speed:3.5+Math.random()*4,
+        phase:Math.random()*Math.PI*2,size:size
+      });
       floatsHost.appendChild(el);
     });
+    updateProgress();
   }
 
   var animT0=null;
@@ -334,8 +534,9 @@ h1 em{font-style:italic;color:var(--gold-hot)}
     var t=(ts-animT0)/1000;
     if(!reduced){
       floats.forEach(function(f){
+        if(charged[f.audio.id]) return;
         var dx=Math.sin(t*f.speed+f.phase)*f.amp;
-        var dy=Math.cos(t*(f.speed*0.85)+f.phase)*f.amp*0.7;
+        var dy=Math.cos(t*(f.speed*.8)+f.phase)*f.amp*.65;
         f.el.style.transform='translate('+dx+'px,'+dy+'px)';
       });
     }
@@ -343,88 +544,74 @@ h1 em{font-style:italic;color:var(--gold-hot)}
   }
 
   function drawBeam(){
-    var W=play.clientWidth, H=play.clientHeight;
+    var W=play.clientWidth,H=play.clientHeight;
     bctx.clearRect(0,0,W,H);
     if(path.length<2) return;
-
-    bctx.lineCap='round';
-    bctx.lineJoin='round';
-
-    /* soft glow */
+    bctx.lineCap='round';bctx.lineJoin='round';
     bctx.beginPath();
     bctx.moveTo(path[0].x,path[0].y);
     for(var i=1;i<path.length;i++) bctx.lineTo(path[i].x,path[i].y);
-    bctx.strokeStyle='rgba(94,234,212,.25)';
-    bctx.lineWidth=14;
-    bctx.stroke();
+    bctx.strokeStyle='rgba(255,79,216,.22)';
+    bctx.lineWidth=16;bctx.stroke();
 
     bctx.beginPath();
     bctx.moveTo(path[0].x,path[0].y);
     for(var j=1;j<path.length;j++) bctx.lineTo(path[j].x,path[j].y);
     var g=bctx.createLinearGradient(path[0].x,path[0].y,path[path.length-1].x,path[path.length-1].y);
-    g.addColorStop(0,'#5eead4');
-    g.addColorStop(.5,'#f0d9a0');
-    g.addColorStop(1,'#d4af6a');
-    bctx.strokeStyle=g;
-    bctx.lineWidth=3.5;
-    bctx.stroke();
+    g.addColorStop(0,'#3ef0ff');
+    g.addColorStop(.5,'#ffd56a');
+    g.addColorStop(1,'#ff4fd8');
+    bctx.strokeStyle=g;bctx.lineWidth=3.5;bctx.stroke();
+  }
+
+  function charge(f){
+    if(charged[f.audio.id]) return;
+    charged[f.audio.id]=true;
+    lastHit=f.audio;
+    f.el.classList.add('charged','burst');
+    f.el.style.transform='translate(0,0)';
+    tip.textContent='Activado: '+f.audio.name;
+    updateProgress();
+    setTimeout(function(){f.el.classList.remove('burst');},450);
   }
 
   function hitTest(p){
     var pr=play.getBoundingClientRect();
-    var found=null;
     floats.forEach(function(f){
       var r=f.el.getBoundingClientRect();
       var cx=r.left-pr.left+r.width/2;
       var cy=r.top-pr.top+r.height/2;
-      var dx=p.x-cx, dy=p.y-cy;
-      var rad=r.width*0.55;
-      if(dx*dx+dy*dy < rad*rad){
-        found=f;
-      }
+      var dx=p.x-cx,dy=p.y-cy;
+      var rad=r.width*0.58;
+      var inside=dx*dx+dy*dy<rad*rad;
+      f.el.classList.toggle('hit', inside && !charged[f.audio.id]);
+      if(inside) charge(f);
     });
-    floats.forEach(function(f){
-      f.el.classList.toggle('hit', found && f.audio.id===found.audio.id);
-      if(hitId && f.audio.id===hitId) f.el.classList.add('chosen');
-    });
-    if(found){
-      hitId=found.audio.id;
-      tip.textContent='Frecuencia: '+found.audio.name;
-      tip.classList.add('ok');
-    }
-    return found;
   }
 
   function nearEar(p){
     var c=centerOf(nodeEar);
-    var dx=p.x-c.x, dy=p.y-c.y;
-    return dx*dx+dy*dy < 70*70;
+    var dx=p.x-c.x,dy=p.y-c.y;
+    return dx*dx+dy*dy<72*72;
   }
   function nearHp(p){
     var c=centerOf(nodeHp);
-    var dx=p.x-c.x, dy=p.y-c.y;
-    return dx*dx+dy*dy < 64*64;
+    var dx=p.x-c.x,dy=p.y-c.y;
+    return dx*dx+dy*dy<68*68;
   }
 
   function startDrag(e){
     if(!play.classList.contains('on')) return;
     var p=ptr(e);
-    if(!nearHp(p) && path.length===0){
-      /* allow start only from headphones */
-      tip.textContent='Empieza en los audífonos';
-      tip.classList.remove('ok');
+    if(!nearHp(p)){
+      tip.textContent='Empieza en el audífono';
       return;
     }
     dragging=true;
-    path=[centerOf(nodeHp), p];
+    path=[centerOf(nodeHp),p];
     orb.classList.add('on');
-    orb.style.left=p.x+'px';
-    orb.style.top=p.y+'px';
-    nodeHp.classList.add('glow');
-    tip.textContent='Atraviesa un audio…';
-    tip.classList.remove('ok');
-    hitId=null;
-    floats.forEach(function(f){f.el.classList.remove('hit','chosen');});
+    orb.style.left=p.x+'px';orb.style.top=p.y+'px';
+    tip.textContent=allCharged()?'Lleva la onda a la oreja':'Pasa por cada audio';
     drawBeam();
     e.preventDefault();
   }
@@ -433,15 +620,14 @@ h1 em{font-style:italic;color:var(--gold-hot)}
     if(!dragging) return;
     var p=ptr(e);
     var last=path[path.length-1];
-    if(Math.hypot(p.x-last.x,p.y-last.y)>6){
+    if(Math.hypot(p.x-last.x,p.y-last.y)>5){
       path.push(p);
-      if(path.length>80) path=path.slice(-80);
+      if(path.length>100) path=path.slice(-100);
     }
-    orb.style.left=p.x+'px';
-    orb.style.top=p.y+'px';
+    orb.style.left=p.x+'px';orb.style.top=p.y+'px';
     hitTest(p);
     drawBeam();
-    if(nearEar(p) && hitId){
+    if(unlocked && nearEar(p) && lastHit){
       endDrag(true);
     }
     e.preventDefault();
@@ -451,61 +637,51 @@ h1 em{font-style:italic;color:var(--gold-hot)}
     if(!dragging && !success) return;
     dragging=false;
     orb.classList.remove('on');
-    nodeHp.classList.remove('glow');
 
-    if(success || (hitId && path.length>3 && nearEar(path[path.length-1]))){
-      finish(hitId);
+    if(success || (unlocked && lastHit && path.length>3 && nearEar(path[path.length-1]))){
+      finish(lastHit);
       return;
     }
 
-    /* failed */
     path=[];
     drawBeam();
-    tip.textContent=hitId ? 'Lleva la frecuencia a la oreja' : 'Toca el audífono y arrastra';
-    tip.classList.toggle('ok', !!hitId);
-    floats.forEach(function(f){
-      if(!(hitId && f.audio.id===hitId)) f.el.classList.remove('hit','chosen');
-      else f.el.classList.add('chosen');
-    });
+    if(!allCharged()){
+      tip.textContent='Faltan '+(floats.length-chargedCount())+' audios';
+    }else{
+      tip.textContent='¡Oreja abierta! Lleva la onda';
+      tip.classList.add('ready');
+    }
   }
 
-  function finish(id){
-    var audio=null;
-    for(var i=0;i<AUDIOS.length;i++) if(AUDIOS[i].id===id){audio=AUDIOS[i];break;}
-    if(!audio) return;
-
-    nodeEar.classList.add('glow');
+  function finish(audio){
     play.classList.remove('on');
     document.getElementById('intro').hidden=true;
-
     var card=document.getElementById('resultCard');
     card.innerHTML=
       '<img src="'+IMG+audio.img+'" alt="'+audio.name+'" onerror="this.style.opacity=.3">'+
       '<div class="result-body">'+
-        '<p class="result-tag">Tu frecuencia</p>'+
+        '<p class="result-tag">Frecuencia ganadora</p>'+
         '<h2 class="result-name">'+audio.name+'</h2>'+
-        '<p class="result-price">'+money(audio.price)+'</p>'+
+        '<p class="result-price">'+money(audio.price)+' · catálogo completo activado</p>'+
       '</div>';
-
     var msg=[
-      'Hola! Vengo de Onda Erior ✨',
-      'Sintonizé: '+audio.name+' ('+money(audio.price)+')',
+      'Hola! Completé el Juego Onda de Frecuencia Erior ✨',
+      'Activé el catálogo y mi frecuencia fue: '+audio.name+' ('+money(audio.price)+')',
       'Quiero cotizar / cerrar compra.',
       'Prioridad de entrega por favor.'
     ].join('\n');
-    document.getElementById('waBtn').href=waUrl(msg);
-    document.getElementById('waBtn').textContent='Pedir '+audio.name;
+    var link=document.getElementById('waBtn');
+    link.href=waUrl(msg);
+    link.textContent='Pedir '+audio.name;
     document.getElementById('result').hidden=false;
   }
 
   function startGame(){
     document.getElementById('intro').hidden=true;
     document.getElementById('result').hidden=true;
-    path=[];hitId=null;dragging=false;animT0=null;
-    tip.textContent='Toca el audífono y arrastra';
-    tip.classList.remove('ok');
-    nodeEar.classList.remove('glow');
-    nodeHp.classList.remove('glow');
+    path=[];dragging=false;animT0=null;unlocked=false;lastHit=null;charged={};
+    tip.textContent='Toca el audífono';
+    tip.classList.remove('ready');
     sizeBeam();
     spawnFloats();
     drawBeam();
@@ -522,16 +698,13 @@ h1 em{font-style:italic;color:var(--gold-hot)}
   play.addEventListener('pointerdown',startDrag);
   window.addEventListener('pointermove',moveDrag);
   window.addEventListener('pointerup',function(){endDrag(false);});
-  window.addEventListener('pointercancel',function(){endDrag(false);});
   play.addEventListener('touchstart',startDrag,{passive:false});
   window.addEventListener('touchmove',moveDrag,{passive:false});
   window.addEventListener('touchend',function(){endDrag(false);});
-
   window.addEventListener('resize',function(){
     if(play.classList.contains('on')){sizeBeam();drawBeam();}
   });
 
-  /* ambient particles */
   var fx=document.getElementById('fx');
   if(fx){
     var fctx=fx.getContext('2d');
@@ -543,13 +716,13 @@ h1 em{font-style:italic;color:var(--gold-hot)}
       fx.style.height=window.innerHeight+'px';
       fctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
       pts=[];
-      for(var i=0;i<40;i++){
+      for(var i=0;i<50;i++){
         pts.push({
           x:Math.random()*window.innerWidth,
           y:Math.random()*window.innerHeight,
-          r:.5+Math.random()*1.8,
-          v:.15+Math.random()*.4,
-          c:i%2? 'rgba(94,234,212,.45)':'rgba(212,175,106,.4)'
+          r:.5+Math.random()*2,
+          v:.2+Math.random()*.55,
+          c:['rgba(62,240,255,.55)','rgba(255,79,216,.5)','rgba(255,213,106,.55)'][i%3]
         });
       }
     }
