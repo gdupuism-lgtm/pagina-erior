@@ -33,7 +33,7 @@ UPSELL: si elige 1 → ofrece 2do logico del catalogo (promo 50% si 1ro es IMAGI
 
 CIERRE EXPRESS: cotiza YA el que pidio + upsell del catalogo completo + CTA.
 
-PROMO LANZAMIENTO (hasta 30 ago 2026): IMAGINE o SEDUCTION $1,199 → segundo al 50% (cualquier audio del catalogo).
+PROMO LANZAMIENTO (hasta 30 ago 2026): IMAGINE o SEDUCTION $1,199 → 50% por PARES (2º y 4º al 50%; 3º precio normal). Con 3 audios solo 1 al 50%.
 Usala cuando encaje — no fuerces promo si el dolor pide claramente otro audio primero.
 
 DESCONTINUADOS: Amor Magic 2.0 y Amor Propio Magic 3.0 → Magic 4.0 ($1,190 + Telegram Liberar Emociones).
