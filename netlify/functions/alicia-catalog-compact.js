@@ -1,6 +1,6 @@
 /** Catálogo compacto para API (menos tokens por mensaje) */
 module.exports = `
-PROMPT_BUILD: 20260811-imagine-mindmovie
+PROMPT_BUILD: 20260830-limitless
 
 EMERGENCY 999 — REGLA DE PRECIO (leer primero):
 Paquete de 3 audios ultra personalizados (manana, tarde, noche) por Pauline. NO es audio suelto.
@@ -15,6 +15,7 @@ NO repitas siempre solo IMAGINE / SEDUCTION / Magic 4.0 si el caso pide otra cos
 
 MAPA RAPIDO POR DOLOR:
 - Imaginacion / "ya lo tengo" → IMAGINE + MIND MOVIE (combo visualizacion ideal)
+- Patron invisible / no sabe que lo bloquea / foco / memoria / mente genio / metacognicion → LIMITLESS ($1,199) PRIORIDAD
 - Persona especifica / magnetismo → SEDUCTION (salvo Attraction/Erior Love por nombre = ultimo mes)
 - Amor propio / trauma corporal / codependencia → Magic 4.0
 - Hombre / masculinidad → Amor Propio Magic Hombre
@@ -38,6 +39,6 @@ Usala cuando encaje — no fuerces promo si el dolor pide claramente otro audio 
 
 DESCONTINUADOS: Amor Magic 2.0 y Amor Propio Magic 3.0 → Magic 4.0 ($1,190 + Telegram Liberar Emociones).
 
-PRECIOS: Catalogo/Mind Movie $1,190 | IMAGINE/SEDUCTION $1,199 | Emergency $3,333 | Telegram $888/mes
+PRECIOS: Catalogo/Mind Movie $1,190 | IMAGINE/SEDUCTION/LIMITLESS $1,199 | Emergency $3,333 | Telegram $888/mes
 PROHIBIDO promos julio vencidas y cotizar 2.0/3.0 como disponibles.
 `;

@@ -9,6 +9,7 @@ window.ERIOR_CATALOG = [
   { id:'master-mind', name:'MASTER MIND', cat:'autoestima', pitch:'Autosabotaje, visión y mantener tus manifestaciones.', img:'img/catalog/master-mind.jpg', tags:['autosabotaje','vision','habitos','trabajo'] },
   { id:'identity', name:'Identity', cat:'autoestima', pitch:'Rediseña tu película — vuélvete el personaje principal.', img:'img/catalog/identity.jpg', tags:['identidad','autenticidad','proposito'] },
   { id:'mental-glow-up', name:'MENTAL GLOW UP', cat:'autoestima', pitch:'Mutación de personalidad — nueva versión magnética.', img:'img/catalog/mental-glow-up.jpg', tags:['personalidad','tda','mutacion','confianza'] },
+  { id:'limitless', name:'LIMITLESS', cat:'autoestima', pitch:'Mente ilimitada — foco, memoria, metacognición; detecta el patrón que te frena.', img:'img/catalog/limitless.jpg', tags:['foco','memoria','inteligencia','patron','bloqueo','mente','genio','estudiar','claridad','metacognicion'] },
   { id:'icon-aura', name:'ICON AURA', cat:'autoestima', pitch:'Aura magnética, presencia icónica y coherencia.', img:'img/catalog/icon-aura.jpg', tags:['aura','presencia','magnetismo','elegancia'] },
   { id:'erior-love', name:'Erior LOVE', cat:'amor', pitch:'Mejora la relación cambiando tu reflejo en la otra persona.', img:'img/catalog/erior-love.jpg', tags:['relacion','pareja','reflejo','existe'] },
   { id:'curious', name:'CURIOUS-CURIOUSER', cat:'amor', pitch:'Expansión post-despertar — suelta miedos finales del corazón.', img:'img/catalog/curious-curiouser.jpg', tags:['expansion','miedo','corazon','despertar'] },
