@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Libro MENTAL TECH — Admin códigos</title>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Jost',sans-serif;background:#0a0a0c;color:#eee;min-height:100vh;padding:1.5rem}
+.wrap{max-width:920px;margin:0 auto}
+h1{font-size:1.35rem;font-weight:500;margin-bottom:.25rem;color:#f5e6c8}
+.sub{font-size:.78rem;color:rgba(255,255,255,.45);margin-bottom:1.5rem}
+.card{background:rgba(255,255,255,.03);border:1px solid rgba(201,160,96,.2);border-radius:14px;padding:1.25rem;margin-bottom:1rem}
+label{display:block;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:.35rem}
+input,textarea{width:100%;padding:.65rem .75rem;border-radius:8px;border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.35);color:#fff;font:inherit;margin-bottom:.75rem}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+@media(max-width:640px){.grid{grid-template-columns:1fr}}
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:.65rem 1.1rem;border-radius:999px;border:none;cursor:pointer;font:inherit;font-size:.72rem;font-weight:600;letter-spacing:.06em}
+.btn-gold{color:#1a1510;background:linear-gradient(135deg,#d4af5f,#c9a060)}
+.btn-ghost{color:rgba(255,255,255,.7);background:transparent;border:1px solid rgba(255,255,255,.15)}
+.btn-danger{color:#ffb4b4;border:1px solid rgba(255,100,100,.35);background:rgba(255,80,80,.08)}
+.btn-sm{padding:.4rem .75rem;font-size:.62rem}
+.msg{font-size:.75rem;margin-top:.5rem;min-height:1.2em}
+.msg.err{color:#ff9999}.msg.ok{color:#7ddea0}
+.hidden{display:none!important}
+table{width:100%;border-collapse:collapse;font-size:.72rem;margin-top:.5rem}
+th,td{text-align:left;padding:.55rem .4rem;border-bottom:1px solid rgba(255,255,255,.06);vertical-align:top}
+th{color:rgba(255,255,255,.4);font-weight:500;font-size:.62rem;text-transform:uppercase;letter-spacing:.06em}
+code{font-family:ui-monospace,monospace;color:#f5e6c8;background:rgba(201,160,96,.1);padding:.15rem .35rem;border-radius:4px}
+.badge{display:inline-block;padding:.15rem .4rem;border-radius:4px;font-size:.58rem;font-weight:600}
+.badge-on{background:rgba(80,200,120,.15);color:#7ddea0}
+.badge-off{background:rgba(255,100,100,.12);color:#ff9999}
+.create-result{margin-top:.85rem;padding:.9rem 1rem;border-radius:12px;border:1px solid rgba(125,222,160,.25);background:rgba(80,200,120,.08)}
+#loginView{max-width:360px;margin:4rem auto 0}
+.steps{font-size:.78rem;color:rgba(255,255,255,.55);line-height:1.55;margin-bottom:1rem}
+.steps strong{color:#f5e6c8}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div id="loginView" class="card">
+    <h1>📖 Libro Admin</h1>
+    <p class="sub">Misma clave que Alicia Premium Admin</p>
+    <label for="adminKey">Clave de administrador</label>
+    <input type="password" id="adminKey" placeholder="ALICIA_ADMIN_PASSWORD" autocomplete="current-password">
+    <button type="button" class="btn btn-gold" id="btnLogin" style="width:100%">Entrar</button>
+    <p class="msg err" id="loginMsg"></p>
+  </div>
+
+  <div id="panelView" class="hidden">
+    <h1>📖 Códigos del libro MENTAL TECH</h1>
+    <p class="sub">Genera un código por cliente · Link: /libro/</p>
+    <div class="card steps">
+      <strong>Setup una sola vez en Supabase:</strong><br>
+      1) SQL Editor → ejecuta <code>supabase/erior-libro.sql</code><br>
+      2) Storage → bucket <code>erior-libro</code> (private) → sube <code>mental-tech-es.pdf</code><br>
+      3) Aquí generas códigos y se los mandas por WhatsApp
+    </div>
+
+    <div class="card">
+      <h2 style="font-size:.85rem;margin-bottom:.75rem;color:#f5e6c8">Nuevo código</h2>
+      <div class="grid">
+        <div><label>Cliente</label><input id="fName" placeholder="Nombre"></div>
+        <div><label>WhatsApp / Instagram</label><input id="fContact" placeholder="@user o +52..."></div>
+      </div>
+      <div class="grid">
+        <div><label>Cantidad</label><input type="number" id="fCount" value="1" min="1" max="30"></div>
+        <div><label>Activaciones máx. (dispositivos)</label><input type="number" id="fMax" value="1" min="1" max="5" title="1 = un solo dispositivo"></div>
+      </div>
+      <label>Notes</label>
+      <textarea id="fNotes" rows="2" placeholder="Pack 2 septiembre, pago OXXO..."></textarea>
+      <button type="button" class="btn btn-gold" id="btnCreate">Generar código(s)</button>
+      <p class="msg" id="createMsg"></p>
+      <div class="create-result hidden" id="createResult"></div>
+    </div>
+
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem">
+        <h2 style="font-size:.85rem;color:#f5e6c8">Códigos</h2>
+        <button type="button" class="btn btn-ghost btn-sm" id="btnRefresh">Actualizar</button>
+      </div>
+      <div style="overflow-x:auto">
+        <table>
+          <thead><tr><th>Código</th><th>Cliente</th><th>Uso</th><th>Estado</th><th></th></tr></thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+      <p class="msg" id="listMsg"></p>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  var key='';
+  var API='/.netlify/functions/libro-admin';
+  function $(id){return document.getElementById(id);}
+  function headers(){return {'Content-Type':'application/json','X-Admin-Key':key};}
+
+  async function api(method, body){
+    var opts={method:method, headers:headers()};
+    if(body) opts.body=JSON.stringify(body);
+    var res=await fetch(API+(method==='GET'?'':'') , opts);
+    var data={}; try{data=await res.json();}catch(e){}
+    return {res:res, data:data};
+  }
+
+  function showCreated(codes){
+    var box=$('createResult');
+    box.classList.remove('hidden');
+    var lines=(codes||[]).map(function(c){
+      return '<div style="margin:.35rem 0"><code>'+c.code+'</code> '+
+        '<button type="button" class="btn btn-ghost btn-sm copy" data-c="'+c.code+'">Copiar</button> '+
+        '<button type="button" class="btn btn-ghost btn-sm wa" data-c="'+c.code+'">WhatsApp</button></div>';
+    }).join('');
+    box.innerHTML='<strong style="color:#7ddea0">Listo</strong><br>'+lines+
+      '<p style="font-size:.65rem;color:rgba(255,255,255,.4);margin-top:.5rem">Cliente: https://eriorcenterguiaaudios.netlify.app/libro/</p>';
+    box.querySelectorAll('.copy').forEach(function(b){
+      b.onclick=function(){navigator.clipboard.writeText(b.getAttribute('data-c')); b.textContent='Copiado';};
+    });
+    box.querySelectorAll('.wa').forEach(function(b){
+      b.onclick=function(){
+        var c=b.getAttribute('data-c');
+        var msg='Tu acceso al libro MENTAL TECH 📖\nCódigo: '+c+'\nÁbrelo aquí (no lo compartas): https://eriorcenterguiaaudios.netlify.app/libro/';
+        window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');
+      };
+    });
+  }
+
+  async function loadList(){
+    $('listMsg').textContent='Cargando…';
+    var out=await api('GET');
+    if(!out.res.ok||!out.data.ok){
+      $('listMsg').className='msg err';
+      $('listMsg').textContent=(out.data&&out.data.error)||'Error al listar';
+      return;
+    }
+    $('listMsg').textContent='';
+    var tb=$('tbody');
+    tb.innerHTML='';
+    (out.data.codes||[]).forEach(function(c){
+      var tr=document.createElement('tr');
+      tr.innerHTML='<td><code>'+c.code+'</code></td>'+
+        '<td>'+(c.client_name||'—')+'<br><span style="color:rgba(255,255,255,.35)">'+(c.client_contact||'')+'</span></td>'+
+        '<td>'+c.activation_count+'/'+c.max_activations+'</td>'+
+        '<td><span class="badge '+(c.active?'badge-on':'badge-off')+'">'+(c.active?'ACTIVO':'OFF')+'</span></td>'+
+        '<td></td>';
+      var cell=tr.lastChild;
+      var btn=document.createElement('button');
+      btn.type='button';
+      btn.className='btn btn-sm '+(c.active?'btn-danger':'btn-ghost');
+      btn.textContent=c.active?'Desactivar':'Activar';
+      btn.onclick=async function(){
+        await api('POST',{action:c.active?'deactivate':'activate', id:c.id});
+        loadList();
+      };
+      cell.appendChild(btn);
+      var reset=document.createElement('button');
+      reset.type='button';
+      reset.className='btn btn-ghost btn-sm';
+      reset.style.marginLeft='.35rem';
+      reset.textContent='Reset uso';
+      reset.title='Borra activaciones para que el código sirva de nuevo';
+      reset.onclick=async function(){
+        if(!confirm('¿Resetear uso de '+c.code+'?'))return;
+        await api('POST',{action:'reset', id:c.id});
+        loadList();
+      };
+      cell.appendChild(reset);
+      tb.appendChild(tr);
+    });
+  }
+
+  $('btnLogin').onclick=async function(){
+    key=$('adminKey').value.trim();
+    var out=await api('GET');
+    if(out.res.status===401){
+      $('loginMsg').textContent='Clave incorrecta';
+      return;
+    }
+    if(!out.res.ok){
+      $('loginMsg').textContent=(out.data&&out.data.error)||'Error de conexión / SQL pendiente';
+      return;
+    }
+    $('loginView').classList.add('hidden');
+    $('panelView').classList.remove('hidden');
+    loadList();
+  };
+  $('btnCreate').onclick=async function(){
+    $('createMsg').textContent='Creando…';
+    $('createMsg').className='msg';
+    var out=await api('POST',{
+      action:'create',
+      client_name:$('fName').value.trim(),
+      client_contact:$('fContact').value.trim(),
+      notes:$('fNotes').value.trim(),
+      count:parseInt($('fCount').value,10)||1,
+      max_activations:parseInt($('fMax').value,10)||1
+    });
+    if(!out.res.ok||!out.data.ok){
+      $('createMsg').className='msg err';
+      $('createMsg').textContent=(out.data&&out.data.error)||'Error';
+      return;
+    }
+    $('createMsg').className='msg ok';
+    $('createMsg').textContent='Generado';
+    showCreated(out.data.codes||[]);
+    loadList();
+  };
+  $('btnRefresh').onclick=loadList;
+})();
+</script>
+</body>
+</html>
