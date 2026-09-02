@@ -11,7 +11,7 @@ const {
 
 const BUCKET = process.env.ERIOR_LIBRO_BUCKET || 'erior-libro';
 const OBJECT_PATH = process.env.ERIOR_LIBRO_PATH || 'mental-tech-es.pdf';
-const SIGN_SECONDS = parseInt(process.env.ERIOR_LIBRO_SIGN_SECONDS || '7200', 10) || 7200;
+const SIGN_SECONDS = parseInt(process.env.ERIOR_LIBRO_SIGN_SECONDS || '1800', 10) || 1800;
 
 function randPart(n) {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';

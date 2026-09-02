@@ -19,6 +19,7 @@ body{
     radial-gradient(900px 420px at 12% -8%, rgba(62,199,255,.1), transparent 55%),
     radial-gradient(700px 380px at 90% 0%, rgba(212,175,95,.1), transparent 50%),
     var(--bg);
+  -webkit-user-select:none;user-select:none;
 }
 .wrap{max-width:980px;margin:0 auto;padding:28px 16px 48px}
 .brand{font-family:'Syne',sans-serif;font-weight:800;letter-spacing:-.02em;font-size:clamp(1.4rem,3vw,2rem)}
@@ -31,6 +32,7 @@ label{display:block;font-size:.68rem;letter-spacing:.1em;text-transform:uppercas
 input{
   width:100%;padding:.85rem 1rem;border-radius:10px;border:1px solid rgba(255,255,255,.12);
   background:rgba(0,0,0,.35);color:#fff;font:inherit;font-size:1.05rem;letter-spacing:.06em;
+  -webkit-user-select:text;user-select:text;
 }
 input:focus{outline:1px solid var(--gold)}
 .row{display:flex;gap:.6rem;margin-top:.85rem;flex-wrap:wrap}
@@ -50,13 +52,28 @@ input:focus{outline:1px solid var(--gold)}
   display:flex;justify-content:space-between;align-items:center;gap:.75rem;flex-wrap:wrap;
   margin-bottom:.65rem;font-size:.78rem;color:var(--muted);
 }
-iframe,embed,#pdfFrame{
-  width:100%;height:min(78vh,900px);border:1px solid rgba(255,255,255,.1);
-  background:#111;border-radius:8px;
+.nav{
+  display:flex;align-items:center;gap:.45rem;flex-wrap:wrap;
+}
+.nav .btn{padding:.45rem .85rem;font-size:.72rem}
+#pageLabel{min-width:5.5rem;text-align:center;font-variant-numeric:tabular-nums}
+#pdfStage{
+  position:relative;width:100%;min-height:min(78vh,900px);
+  border:1px solid rgba(255,255,255,.1);background:#111;border-radius:8px;
+  overflow:auto;touch-action:pan-y;
+}
+#pdfCanvas{display:block;margin:0 auto;max-width:100%;height:auto}
+.wm{
+  pointer-events:none;position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(1rem,3.2vw,1.6rem);
+  letter-spacing:.08em;color:rgba(212,175,95,.14);transform:rotate(-28deg);text-align:center;
+  white-space:pre-line;padding:1rem;
 }
 .pill{display:inline-block;padding:.2rem .55rem;border:1px solid var(--line);color:var(--gold2);font-size:.65rem;letter-spacing:.08em;text-transform:uppercase}
 a{color:var(--gold2)}
+.note-sec{margin-top:.7rem;font-size:.72rem;color:var(--muted);line-height:1.45}
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" crossorigin="anonymous"></script>
 </head>
 <body>
 <div class="wrap">
@@ -82,17 +99,33 @@ a{color:var(--gold2)}
   <div id="reader">
     <div class="reader-bar">
       <span id="readerMeta">Libro desbloqueado</span>
-      <button type="button" class="btn btn-ghost" id="btnClose" style="padding:.45rem .9rem;font-size:.72rem">Cerrar sesión</button>
+      <div class="nav">
+        <button type="button" class="btn btn-ghost" id="btnPrev">← Ant.</button>
+        <span id="pageLabel">1 / 1</span>
+        <button type="button" class="btn btn-ghost" id="btnNext">Sig. →</button>
+        <button type="button" class="btn btn-ghost" id="btnClose">Cerrar</button>
+      </div>
     </div>
-    <iframe id="pdfFrame" title="Libro MENTAL TECH Erior" allow="fullscreen"></iframe>
+    <div id="pdfStage">
+      <canvas id="pdfCanvas"></canvas>
+      <div class="wm" id="wm"></div>
+    </div>
+    <p class="note-sec">Vista protegida · sin descarga · uso personal con tu código. Capturas o reenvíos quedan marcados con tu código.</p>
   </div>
 </div>
 <script>
 (function(){
   var KEY_VID='erior_visitante_id';
   var KEY_CODE='erior_libro_code';
-  var KEY_URL='erior_libro_url';
-  var KEY_EXP='erior_libro_exp';
+  var pdfDoc=null;
+  var pageNum=1;
+  var rendering=false;
+  var pending=null;
+  var currentCode='';
+
+  if(window.pdfjsLib){
+    pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  }
 
   function getVid(){
     var id=localStorage.getItem(KEY_VID);
@@ -109,43 +142,114 @@ a{color:var(--gold2)}
     el.className='msg '+(ok?'ok':(text?'err':''));
   }
 
-  function showReader(url, meta){
+  function updateWm(code){
+    document.getElementById('wm').textContent='ERIOR · '+(code||'')+'\nUSO PERSONAL · NO COMPARTIR';
+  }
+
+  function renderPage(num){
+    if(!pdfDoc) return;
+    rendering=true;
+    pdfDoc.getPage(num).then(function(page){
+      var stage=document.getElementById('pdfStage');
+      var canvas=document.getElementById('pdfCanvas');
+      var ctx=canvas.getContext('2d');
+      var base=page.getViewport({scale:1});
+      var scale=Math.min((stage.clientWidth-8)/base.width, 1.55);
+      var viewport=page.getViewport({scale:scale});
+      canvas.width=viewport.width;
+      canvas.height=viewport.height;
+      return page.render({canvasContext:ctx, viewport:viewport}).promise.then(function(){
+        rendering=false;
+        pageNum=num;
+        document.getElementById('pageLabel').textContent=pageNum+' / '+pdfDoc.numPages;
+        if(pending!==null){
+          var p=pending; pending=null; renderPage(p);
+        }
+      });
+    }).catch(function(){
+      rendering=false;
+      setMsg('No se pudo mostrar la página');
+    });
+  }
+
+  function queuePage(num){
+    if(!pdfDoc) return;
+    num=Math.max(1, Math.min(pdfDoc.numPages, num));
+    if(rendering){ pending=num; return; }
+    renderPage(num);
+  }
+
+  async function loadPdfFromUrl(url, code){
+    if(!window.pdfjsLib) throw new Error('No cargó el lector');
+    var loading=pdfjsLib.getDocument({
+      url:url,
+      withCredentials:false,
+      disableAutoFetch:false,
+      disableStream:false
+    });
+    pdfDoc=await loading.promise;
+    currentCode=code||'';
+    updateWm(currentCode);
+    pageNum=1;
+    queuePage(1);
+  }
+
+  function showReader(meta){
     document.getElementById('gate').style.display='none';
-    var reader=document.getElementById('reader');
-    reader.classList.add('on');
-    document.getElementById('pdfFrame').src=url;
-    document.getElementById('readerMeta').textContent=meta||'Libro desbloqueado · enlace temporal';
+    document.getElementById('reader').classList.add('on');
+    document.getElementById('readerMeta').textContent=meta||'Libro desbloqueado';
   }
 
   function hideReader(){
     document.getElementById('reader').classList.remove('on');
     document.getElementById('gate').style.display='block';
-    document.getElementById('pdfFrame').src='about:blank';
+    pdfDoc=null;
+    var canvas=document.getElementById('pdfCanvas');
+    var ctx=canvas.getContext('2d');
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    canvas.width=0; canvas.height=0;
     localStorage.removeItem(KEY_CODE);
-    localStorage.removeItem(KEY_URL);
-    localStorage.removeItem(KEY_EXP);
+    currentCode='';
   }
 
   async function unlock(code){
     setMsg('Validando…', true);
+    var vid=getVid();
     var res=await fetch('/.netlify/functions/libro-validate',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({code:code, visitante_id:getVid()})
+      body:JSON.stringify({code:code, visitante_id:vid})
     });
     var data={};
     try{data=await res.json();}catch(e){}
-    if(!res.ok||!data.ok||!data.pdf_url){
+    if(!res.ok||!data.ok){
       setMsg(data.error||'No se pudo abrir el libro');
       return false;
     }
-    var exp=Date.now()+(Number(data.expires_in||7200)*1000);
-    localStorage.setItem(KEY_CODE, data.code||code);
-    localStorage.setItem(KEY_URL, data.pdf_url);
-    localStorage.setItem(KEY_EXP, String(exp));
-    setMsg('');
-    showReader(data.pdf_url, 'Código '+(data.code||code)+' · se renueva solo al recargar');
-    return true;
+    var used=data.code||code;
+    localStorage.setItem(KEY_CODE, used);
+    setMsg('Cargando libro…', true);
+    // Misma origen (sin URL de Supabase en el navegador ni toolbar Descargar)
+    var fileUrl='/.netlify/functions/libro-file?code='+encodeURIComponent(used)+'&vid='+encodeURIComponent(vid);
+    try{
+      await loadPdfFromUrl(fileUrl, used);
+      setMsg('');
+      showReader('Código '+used+' · solo lectura en pantalla');
+      return true;
+    }catch(err){
+      console.error(err);
+      // Fallback: URL firmada directa (puede mostrar límites de red/CORS)
+      if(data.pdf_url){
+        try{
+          await loadPdfFromUrl(data.pdf_url, used);
+          setMsg('');
+          showReader('Código '+used+' · solo lectura en pantalla');
+          return true;
+        }catch(e2){ console.error(e2); }
+      }
+      setMsg('No se pudo cargar el libro. Si pesa más de 6 MB, comprímelo o escribe a soporte.');
+      return false;
+    }
   }
 
   document.getElementById('btnOpen').addEventListener('click', function(){
@@ -157,17 +261,25 @@ a{color:var(--gold2)}
     if(e.key==='Enter') document.getElementById('btnOpen').click();
   });
   document.getElementById('btnClose').addEventListener('click', hideReader);
+  document.getElementById('btnPrev').addEventListener('click', function(){ queuePage(pageNum-1); });
+  document.getElementById('btnNext').addEventListener('click', function(){ queuePage(pageNum+1); });
 
-  // Auto reopen if same device + code still valid window
+  document.addEventListener('keydown', function(e){
+    if(!document.getElementById('reader').classList.contains('on')) return;
+    if(e.key==='ArrowLeft') queuePage(pageNum-1);
+    if(e.key==='ArrowRight') queuePage(pageNum+1);
+    if((e.ctrlKey||e.metaKey) && (e.key==='s'||e.key==='S'||e.key==='p'||e.key==='P')){
+      e.preventDefault();
+    }
+  });
+  document.getElementById('pdfStage').addEventListener('contextmenu', function(e){ e.preventDefault(); });
+
+  window.addEventListener('resize', function(){
+    if(pdfDoc) queuePage(pageNum);
+  });
+
   (async function boot(){
     var saved=localStorage.getItem(KEY_CODE);
-    var exp=parseInt(localStorage.getItem(KEY_EXP)||'0',10);
-    var url=localStorage.getItem(KEY_URL);
-    if(saved && url && exp > Date.now()+60000){
-      document.getElementById('codeIn').value=saved;
-      showReader(url, 'Sesión restaurada · código '+saved);
-      return;
-    }
     if(saved){
       document.getElementById('codeIn').value=saved;
       await unlock(saved);

@@ -72,8 +72,13 @@ En el admin puedes:
 ## Cómo funciona (simple)
 - El PDF **no** se publica suelto en la web
 - Vive en Storage privado de Supabase
-- Solo con código válido el servidor genera un **link temporal** (~2 horas)
-- Al recargar, el mismo dispositivo vuelve a pedir link (con el mismo código)
+- Se lee en pantalla con un **visor propio** (sin botón Descargar del navegador)
+- Marca de agua con el código del cliente
+- El enlace interno dura ~30 min y requiere código + dispositivo
+
+**Honestidad:** nadie puede bloquear al 100% capturas de pantalla o “guardar desde herramientas avanzadas”. Los códigos + marca de agua sirven para que **no se reenvíe fácil** y sepas de quién salió si alguien lo comparte.
+
+**Peso del PDF:** ideal bajo **5.5 MB**. Si supera ~6 MB, Netlify a veces no puede servirlo por el proxy; comprime el PDF y vuelve a subir `mental-tech-es.pdf`.
 
 ---
 
