@@ -79,7 +79,7 @@
       "offers": {
         "@type": "AggregateOffer",
         "priceCurrency": "MXN",
-        "lowPrice": "1190",
+        "lowPrice": "777",
         "highPrice": "3333",
         "offerCount": "25",
         "availability": "https://schema.org/OnlineOnly",
@@ -701,7 +701,8 @@ body::before{
 .btn-buy:hover{background:rgba(201,160,96,.22);color:#e8c870}
 .ac-new{position:absolute;top:.6rem;right:.6rem;z-index:2;background:var(--gold);color:#111;font-size:.46rem;letter-spacing:.14em;text-transform:uppercase;padding:.2rem .5rem}
 .ac-badges{position:absolute;top:.6rem;right:.6rem;z-index:2;display:flex;flex-direction:column;align-items:flex-end;gap:.28rem;pointer-events:none}
-.ac-badges .ac-new{position:static}
+.ac-badges .ac-new,.ac-badges .ac-upgrade{position:static}
+.ac-upgrade{background:linear-gradient(135deg,#3ec7ff,#7a5cff);color:#0a0e18;font-size:.42rem;letter-spacing:.12em;text-transform:uppercase;padding:.2rem .5rem;font-weight:700}
 .ac-limited{background:linear-gradient(135deg,#c9a060,#f0d9a0);color:#1a1208;font-size:.42rem;letter-spacing:.12em;text-transform:uppercase;padding:.2rem .5rem;font-weight:700}
 .ac-soon{background:rgba(12,12,20,.82);color:rgba(240,230,210,.95);border:1px solid rgba(212,175,95,.45);font-size:.42rem;letter-spacing:.12em;text-transform:uppercase;padding:.2rem .5rem}
 .btn-buy.btn-buy-soon,.modal-buy.btn-buy-soon{opacity:.75;cursor:default;background:rgba(255,255,255,.06);border-color:rgba(212,175,95,.35);color:rgba(240,230,210,.85)}
@@ -3300,8 +3301,8 @@ body.has-referral-banner .cover-vip-widget:not(.is-cover-inflow){top:calc(1.2rem
   35%{transform:scale(1.08);filter:brightness(1.3);box-shadow:0 0 44px rgba(212,175,95,.45),0 0 60px rgba(200,190,175,.22);}
   100%{transform:scale(1);filter:brightness(1);}
 }
-#mjHeroBlock .btn-amor4-crystal,#mjHeroBlock .btn-icon-aura-metal,#mjHeroBlock #btnImagine,#mjHeroBlock #btnSeduction{pointer-events:auto;}
-.mj-hero-btns .btn-amor4-crystal,.mj-hero-btns .btn-icon-aura-metal,.mj-hero-btns #btnImagine,.mj-hero-btns #btnSeduction{width:100%;max-width:100%;}
+#mjHeroBlock .btn-amor4-crystal,#mjHeroBlock .btn-icon-aura-metal,#mjHeroBlock #btnLimitless,#mjHeroBlock #btnBooster,#mjHeroBlock #btnMagicHombre{pointer-events:auto;}
+.mj-hero-btns .btn-amor4-crystal,.mj-hero-btns .btn-icon-aura-metal,.mj-hero-btns #btnLimitless,.mj-hero-btns #btnBooster,.mj-hero-btns #btnMagicHombre{width:100%;max-width:100%;}
 .cover-mj-col .mj-hero-btns{max-width:min(100%,13.25rem);}
 .cover-promo-slides{position:relative;min-height:4.75rem;margin-bottom:.45rem;overflow:hidden}
 .cover-promo-slide{display:none;text-align:center;animation:promoSlideIn .55s cubic-bezier(.22,1,.36,1) both}
@@ -4314,18 +4315,18 @@ body::before{
           </button>
           <button type="button" class="btn-alicia-glow cover-action-btn btn-alicia-hero cover-action-primary" onclick="goTo('alicia')">
             <span class="btn-premium-label">✨ Alicia te arma tu combo</span>
-            <span class="btn-hero-badge btn-hero-badge--alicia">Gratis · promo IMAGINE/SEDUCTION activa</span>
+            <span class="btn-hero-badge btn-hero-badge--alicia">Gratis · promo septiembre $777</span>
           </button>
           <p class="cover-alicia-fomo" id="coverAliciaFomo" aria-live="polite">Hoy Alicia ya ayudó a <strong id="coverFomoNum">—</strong> personas a elegir audio</p>
         </div>
       </div>
 
-      <div class="cover-promo-countdown cover-promo-jewel promo-countdown-block promo-summer-glow" id="coverPromoJewel" onclick="openPromoModal()" role="button" tabindex="0" aria-label="Ver promoción IMAGINE y SEDUCTION">
+      <div class="cover-promo-countdown cover-promo-jewel promo-countdown-block promo-summer-glow" id="coverPromoJewel" onclick="openPromoModal()" role="button" tabindex="0" aria-label="Ver promoción septiembre Erior">
         <div class="cover-promo-offer">
-          <span class="promo-badge-lastmonth">NUEVA PROMO · 27 días</span>
-          <strong class="cover-promo-title">IMAGINE + SEDUCTION</strong>
-          <p class="cover-promo-line">Compra uno de los nuevos a $1,199 · el segundo audio de tu elección al 50%</p>
-          <p class="cover-promo-prices"><span class="promo-price-old">2× precio regular</span> 1 nuevo + 1 al 50%</p>
+          <span class="promo-badge-lastmonth">PROMO SEPTIEMBRE</span>
+          <strong class="cover-promo-title">CUALQUIER AUDIO $777</strong>
+          <p class="cover-promo-line">1 audio $777 · 2 por $1,444 (+ libro) · 3 por $2,299 (+ Alicia Premium)</p>
+          <p class="cover-promo-prices"><span class="promo-price-old">antes desde $1,190</span> ahora desde $777 MXN</p>
         </div>
         <span class="promo-countdown-label">⏳ Termina en</span>
         <div class="promo-countdown-grid">
@@ -4348,12 +4349,17 @@ body::before{
           <div class="cover-mj-col">
             <div id="mjHeroBlock" aria-hidden="true">
               <div class="mj-hero-btns">
-                <button type="button" class="btn-amor4-crystal" id="btnImagine" onclick="goToImagine()">
-                  <span class="btn-premium-label">IMAGINE</span>
-                  <span class="btn-amor4-badge">Edición limitada · $1,199</span>
+                <button type="button" class="btn-amor4-crystal" id="btnLimitless" onclick="goToLimitless()">
+                  <span class="btn-premium-label">LIMITLESS</span>
+                  <span class="btn-amor4-badge">NUEVO · mente genio · $777</span>
                 </button>
-                <button type="button" class="btn-icon-aura-metal" id="btnSeduction" onclick="goToSeduction()">
-                  <span class="btn-premium-label">SEDUCTION</span>
+                <button type="button" class="btn-icon-aura-metal" id="btnBooster" onclick="goToBooster()">
+                  <span class="btn-premium-label">BOOSTER</span>
+                  <span class="btn-amor4-badge" style="position:relative;z-index:2;display:block;margin-top:.2rem;font-size:.55rem;letter-spacing:.08em;opacity:.85">UPGRADE · reinicio</span>
+                </button>
+                <button type="button" class="btn-icon-aura-metal" id="btnMagicHombre" onclick="goToMagicHombre()">
+                  <span class="btn-premium-label">MAGIC HOMBRE</span>
+                  <span class="btn-amor4-badge" style="position:relative;z-index:2;display:block;margin-top:.2rem;font-size:.55rem;letter-spacing:.08em;opacity:.85">UPGRADE · poder</span>
                 </button>
               </div>
               <div id="mjFloatWrap">
@@ -4489,8 +4495,8 @@ body::before{
               <p class="alicia-mode-card-sub">Consejera + closer · te entiende y te ayuda a comprar</p>
               <ul class="alicia-mode-card-list">
                 <li>💜 Te escucha con tacto y claridad</li>
-                <li>💋🌌 Promo IMAGINE / SEDUCTION + 2º al 50%</li>
-                <li>💖 Amor propio → Magic 4.0 (2.0/3.0 descontinuados)</li>
+                <li>⚡ Promo septiembre: cualquier audio $777</li>
+                <li>🛸 LIMITLESS · Booster UPGRADE · Magic Hombre</li>
               </ul>
               <button type="button" class="alicia-mode-free-btn" onclick="startAliciaFree()">EMPEZAR A COMPRAR →</button>
               <button type="button" class="alicia-mode-express-btn" onclick="startAliciaExpress()">⚡ Ya sé qué quiero — cotízame</button>
@@ -4572,10 +4578,10 @@ body::before{
           <canvas class="alicia-sales-sparkle" id="aliciaSalesSparkle" aria-hidden="true"></canvas>
           <div class="alicia-express-chips" id="aliciaExpressChips" hidden>
             <button type="button" class="alicia-express-chip" onclick="sendAliciaExpressPick('LIMITLESS')">🧠 LIMITLESS</button>
+            <button type="button" class="alicia-express-chip" onclick="sendAliciaExpressPick('Booster')">⚡ BOOSTER UPGRADE</button>
+            <button type="button" class="alicia-express-chip" onclick="sendAliciaExpressPick('Amor Propio Magic Hombre')">👽 MAGIC HOMBRE</button>
             <button type="button" class="alicia-express-chip" onclick="sendAliciaExpressPick('SEDUCTION')">💋 SEDUCTION</button>
             <button type="button" class="alicia-express-chip" onclick="sendAliciaExpressPick('IMAGINE')">🌌 IMAGINE</button>
-            <button type="button" class="alicia-express-chip" onclick="sendAliciaExpressPick('Amor Propio Magic 4.0')">💖 Magic 4.0</button>
-            <button type="button" class="alicia-express-chip" onclick="sendAliciaExpressPick('Booster + Wonderland Coherence')">🌀 Booster + Wonderland</button>
           </div>
           <div class="chat-window" id="chatWin"></div>
           <div class="chat-bar">
@@ -4706,8 +4712,8 @@ body::before{
         <div class="faq-item">
           <button type="button" class="faq-q" aria-expanded="false">¿Cómo sé cuál audio es para mí?<span class="faq-q-icon">+</span></button>
           <div class="faq-a"><div class="faq-a-inner">
-            <p>Habla con Alicia IA en esta misma página: te recomienda 2 audios (prioriza la promo IMAGINE/SEDUCTION), te da precios claros y te ayuda a cerrar hoy por pago o WhatsApp. También puedes explorar el catálogo por categoría.</p>
-            <p>Si dudas entre dos audios, Alicia te recomienda siempre 2 opciones personalizadas. Promo lanzamiento: compra IMAGINE o SEDUCTION a $1,199 y el segundo audio de tu elección al 50% (27 días). Resto del catálogo $1,190 MXN.</p>
+            <p>Habla con Alicia IA en esta misma página: te recomienda 2 audios según tu dolor real, te cotiza la promo de septiembre y te ayuda a cerrar hoy por pago o WhatsApp. También puedes explorar el catálogo por categoría.</p>
+            <p>Promo septiembre: cualquier audio $777 MXN · 2 por $1,444 (libro gratis) · 3 por $2,299 (Alicia Premium). Destacados: LIMITLESS, Booster UPGRADE y Amor Propio Magic Hombre.</p>
             <p>¿Quieres que Alicia te guíe ahora mismo?</p>
             <button type="button" class="faq-cta-btn" onclick="goTo('alicia')">Hablar con Alicia ✦</button>
           </div></div>
@@ -4963,7 +4969,7 @@ body::before{
     <div class="pay-modal-header">
       <div class="pay-modal-label" id="payModalLabel">Elige cómo pagar y empieza hoy</div>
       <div class="pay-modal-product" id="payProductName"></div>
-      <div class="pay-modal-price" id="payModalPrice">$1,190 MXN / $69 USD / €60 EUR</div>
+      <div class="pay-modal-price" id="payModalPrice">$777 MXN / ≈ $46 USD · promo septiembre</div>
     </div>
     <div class="pay-methods" id="payMethods"></div>
     <div class="pay-panel" id="payPanel"></div>
@@ -4978,20 +4984,20 @@ body::before{
   </div>
   <div class="pay-promo-popup" id="payPromoPopup" aria-hidden="true" role="dialog" aria-labelledby="payPromoTitle">
     <button type="button" class="pay-promo-close" id="payPromoClose" aria-label="Cerrar">✕</button>
-    <div class="pay-promo-kicker" id="payPromoKicker">Promo lanzamiento activa</div>
-    <div class="pay-promo-title" id="payPromoTitle">IMAGINE o SEDUCTION a $1,199 · el segundo audio al 50%. ¿Te ayudamos a armar tu combo? ✨</div>
+    <div class="pay-promo-kicker" id="payPromoKicker">Promo septiembre activa</div>
+    <div class="pay-promo-title" id="payPromoTitle">Cualquier audio $777 · 2 por $1,444 · 3 por $2,299 (+ Alicia Premium). ¿Armamos tu combo? ⚡</div>
     <a href="#" class="pay-promo-wa" id="payPromoWaBtn" target="_blank" rel="noopener noreferrer">Escribir al equipo</a>
   </div>
 </div>
 
-<!-- PROMO IMAGINE + SEDUCTION -->
+<!-- PROMO SEPTIEMBRE -->
 <div class="modal-bg" id="promoModal" aria-hidden="true">
   <div class="modal-box promo-modal-box">
     <div class="promo-modal-inner">
       <div class="promo-modal-head">
         <div>
-          <div class="promo-modal-title">Promo lanzamiento</div>
-          <p class="promo-modal-sub">IMAGINE · SEDUCTION · 27 días</p>
+          <div class="promo-modal-title">Promo septiembre</div>
+          <p class="promo-modal-sub">LIMITLESS · BOOSTER · MAGIC HOMBRE</p>
         </div>
         <button type="button" class="modal-close" onclick="closePromoModal()" aria-label="Cerrar">✕</button>
       </div>
@@ -5005,17 +5011,20 @@ body::before{
         </div>
       </div>
       <div class="promo-panel active" id="promoPanelLaunch" role="tabpanel">
-        <p class="promo-dates">🌌💋 IMAGINE + SEDUCTION</p>
-        <p class="promo-desc">Al comprar <strong>IMAGINE</strong> o <strong>SEDUCTION</strong> ($1,199 MXN), el <strong>segundo audio de tu elección</strong> sale al <strong>50%</strong> de su precio.</p>
+        <p class="promo-dates">🛸 PROMO SEPTIEMBRE · ERIOR</p>
+        <p class="promo-desc"><strong>Cualquier audio</strong> del catálogo a precio de mes. Telegram incluido con tu compra.</p>
         <ul class="promo-benefit-list">
-          <li>🌌 <strong>IMAGINE</strong> — edición limitada · imaginación desde el resultado</li>
-          <li>💋 <strong>SEDUCTION</strong> — evolución de Attraction + Erior Love · magnetismo</li>
-          <li>🎁 Segundo audio (cualquier del catálogo) al 50%</li>
-          <li>💰 Nuevo: <strong>$1,199 MXN</strong> / $70 USD · resto del catálogo $1,190</li>
+          <li>⚡ <strong>1 audio</strong> — $777 MXN / ≈ $46 USD · Telegram incluido</li>
+          <li>💿 <strong>2 audios</strong> — $1,444 MXN / ≈ $85 USD · libro gratis de cómo manifestar + Telegram</li>
+          <li>🚀 <strong>3 audios</strong> — $2,299 MXN / ≈ $135 USD · Alicia Premium + Telegram</li>
+          <li>🛸 <strong>LIMITLESS</strong> — NUEVO · mente genio · detectar el patrón</li>
+          <li>⚡ <strong>BOOSTER</strong> — UPGRADE · reinicio de campo</li>
+          <li>👽 <strong>Magic Hombre</strong> — UPGRADE · masculinidad y poder</li>
         </ul>
         <div class="promo-cta-row">
-          <button type="button" class="promo-cta-pay" onclick="openPromoPay('imagine')">💳 Quiero IMAGINE</button>
-          <button type="button" class="promo-cta-pay" onclick="openPromoPay('seduction')">💳 Quiero SEDUCTION</button>
+          <button type="button" class="promo-cta-pay" onclick="openPromoPay('limitless')">💳 Quiero LIMITLESS</button>
+          <button type="button" class="promo-cta-pay" onclick="openPromoPay('booster')">💳 Quiero BOOSTER</button>
+          <button type="button" class="promo-cta-pay" onclick="openPromoPay('hombre')">💳 Quiero Magic Hombre</button>
           <a class="promo-cta-wa" href="#" onclick="event.preventDefault();window.open(promoWaUrl('launch'),'_blank','noopener');closePromoModal();">💬 WhatsApp: quiero la promo</a>
         </div>
       </div>
@@ -5023,7 +5032,7 @@ body::before{
   </div>
 </div>
 
-<button type="button" class="promo-float-btn" id="promoFloatBtn" onclick="openPromoModal()" aria-label="Ver promoción IMAGINE y SEDUCTION">Promo lanzamiento</button>
+<button type="button" class="promo-float-btn" id="promoFloatBtn" onclick="openPromoModal()" aria-label="Ver promoción septiembre">Promo septiembre $777</button>
 
 <div class="chat-img-lightbox" id="chatImgLightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Vista de promoción">
   <button type="button" class="chat-img-lightbox-close" onclick="closeChatPromoLightbox()" aria-label="Cerrar">✕</button>
@@ -5299,7 +5308,7 @@ async function guardarProspecto(datos){
   }catch(e){console.log('prospecto error',e);}
 }
 
-var PROMO_COUNTDOWN_END=new Date('2026-08-30T23:59:59-06:00');
+var PROMO_COUNTDOWN_END=new Date('2026-09-30T23:59:59-06:00');
 var COVER_PROMO_IDS=['launch'];
 var _coverPromoSlide=0;
 
@@ -5366,18 +5375,20 @@ function closePromoModal(){
 function switchPromoTab(){/* promo única lanzamiento */}
 function promoWaUrl(tab){
   var msgs={
-    launch:'Hola! Quiero la promo de lanzamiento: IMAGINE o SEDUCTION a $1,199 y el segundo audio al 50%',
-    imagine:'Hola! Quiero IMAGINE (edición limitada $1,199) y aprovechar el segundo audio al 50%',
-    seduction:'Hola! Quiero SEDUCTION ($1,199) y aprovechar el segundo audio al 50%'
+    launch:'Hola! Quiero la promo de septiembre: cualquier audio a $777 MXN (2 por $1,444 / 3 por $2,299)',
+    limitless:'Hola! Quiero LIMITLESS con promo septiembre a $777 MXN',
+    booster:'Hola! Quiero el Booster UPGRADE con promo septiembre a $777 MXN',
+    hombre:'Hola! Quiero Amor Propio Magic Hombre UPGRADE con promo septiembre a $777 MXN'
   };
   return payWaUrl(msgs[tab]||msgs.launch);
 }
 function openPromoPay(tab){
   closePromoModal();
   var map={
-    launch:'🌌 IMAGINE o 💋 SEDUCTION — Promo lanzamiento',
-    imagine:'🌌 IMAGINE — Edición limitada',
-    seduction:'💋 SEDUCTION'
+    launch:'🛸 Promo septiembre — Audio $777',
+    limitless:'🧠 LIMITLESS — Promo septiembre',
+    booster:'⚡ Booster UPGRADE — Promo septiembre',
+    hombre:'👽 Amor Propio Magic Hombre — Promo septiembre'
   };
   openPaymentModal(map[tab]||map.launch);
 }
@@ -5813,6 +5824,9 @@ function goToCatalogAudio(key,nameRe){
 }
 function goToImagine(){goToCatalogAudio('imagine',/^IMAGINE$/i);}
 function goToSeduction(){goToCatalogAudio('seduction',/^SEDUCTION$/i);}
+function goToLimitless(){goToCatalogAudio('limitless',/^LIMITLESS$/i);}
+function goToBooster(){goToCatalogAudio('booster',/Booster/i);}
+function goToMagicHombre(){goToCatalogAudio('magic-hombre',/Amor Propio Magic Hombre|Magic for Men/i);}
 function goToIconAuraAnimated(){
   var btn=document.getElementById('btnIconAura');
   if(!btn){goToIconAura();return;}
@@ -6226,15 +6240,18 @@ document.getElementById('mmModal').addEventListener('click',function(e){if(e.tar
 // CATALOG DATA
 // ══════════════════════════════════
 var audiosEs=[
+  {nombre:"LIMITLESS",cat:"autoestima",emoji:"🧠",bg:"linear-gradient(135deg,rgba(80,180,255,.28),rgba(212,175,95,.2))",desc:"⚡ UPGRADE MENTAL · NUEVO. LIMITLESS es un audio de frecuencias diseñado para activar una mente extraordinariamente despierta, inteligente y expansiva. 🧠⚡\n\nSus frecuencias te conectan con tu versión genio: aprendes más rápido, comprendes conceptos complejos con facilidad, desarrollas una metacognición increíble y puedes observar tus propios pensamientos desde una perspectiva superior.\n\nTu mente empieza a ver más allá de lo evidente, reconocer patrones, conectar información y encontrar respuestas que otros no perciben.\n\nIdeal si sientes que algo te bloquea para manifestar… pero no logras ver qué es. LIMITLESS es el antídoto: te ayuda a detectar el patrón invisible que te frena, con foco laser, claridad y una mente que funciona como súper poder.\n\nExpande percepción, intuición, creatividad, memoria e inteligencia hasta hacerte sentir que tu mente no tiene techo.\n\nMás foco. Más entendimiento. Más memoria. Más genio.",isNew:true,isLimited:true,isUpgrade:true,priceMXN:777,img:"img/catalog/limitless.jpg"},
+  {nombre:"🐇 Booster",cat:"manifestacion",emoji:"🐇",bg:"linear-gradient(135deg,rgba(155,109,255,.25),rgba(12,11,20,.85))",desc:"⚡ UPGRADE · Booster mejorado. Reinicio de campo más limpio y potente. Este no es un audio cualquiera. Es un conjunto de comandos y frecuencias que te llevarán a la neutralidad. Un portal de reinicio total. Un código que borra lo ilusorio y reinstala tu verdad más pura. Cada palabra ha sido diseñada para llevarte al centro de ti mism@: al lugar donde no existe el pasado, ni el futuro, ni los bloqueos. Diseñado para: reinstalar tu identidad original sin distorsiones, disolver patrones y miedos desde su raíz, recalibrarte a tu línea de tiempo más elevada, activar tu energía de comando desde la conciencia y recordarte que eres el centro de tu creación. Recomiendo escucharlo junto con cualquier audio de Erior pues se potencializa el efecto. ☽✯🎧🥣🪽✩",isNew:true,isUpgrade:true,priceMXN:777,img:"img/catalog/booster.jpg"},
+  {nombre:"🧑🏻‍🦱 Amor Propio Magic Hombre",cat:"autoestima",emoji:"🧑🏻‍🦱",bg:"linear-gradient(135deg,rgba(212,175,95,.24),rgba(60,90,140,.2))",desc:"⚡ UPGRADE · versión mejorada para hombres. AMOR PROPIO MAGIC PARA HOMBRE 🧑🏻‍🦱🧙🏻‍♂️ ¿Te gustaría volverte tu mejor versión? ¿Conectar con tu energía masculina? Este audio es el indicado para independizarte, para atraer abundancia material y económica, para recuperar tu virilidad, sentirte bien contigo mismo y conectar con tu sensualidad y poder. 🧞 No solamente te llena de amor propio, también te ayuda a manifestar y a ser un hombre desapegado. Solo la mejor versión de ti puede atraer toda la ABUNDANCIA que deseas. 💰 Se puede intencionar y personalizar en mensajes y frecuencias al tema de tu elección. ☀️",isNew:true,isUpgrade:true,priceMXN:777,img:"img/catalog/amor-propio-magic-hombre.jpg"},
   {nombre:"IMAGINE",cat:"autoestima",emoji:"🌌",bg:"linear-gradient(135deg,rgba(120,90,255,.28),rgba(212,175,95,.18))",desc:"Tu imaginación no es un sueño. Es el plano original de tu realidad.\n\nTodo lo que existe en tu vida — tu dinero, tus relaciones, tu cuerpo, tu éxito — primero existió en tu mente. Primero fue imaginado.\n\nEl problema no es que no puedas tenerlo. El problema es que tu mente ha aprendido a imaginar desde el miedo, desde la carencia, desde el \"¿y si no funciona?\"\n\nIMAGINE es el nuevo audio de ERIOR CENTER diseñado para cambiar eso.\n\nMientras lo escuchas, tu subconsciente aprende a imaginar desde el resultado. Desde el ya lo tengo. Desde el ya soy esa persona.\n\nIncluye:\n• Mini script personalizado que grabas con tu propia voz — adaptado exactamente al área de tu vida que quieres expandir\n• Guía de visualización nocturna — para leer antes de dormir y que tu subconsciente trabaje toda la noche mientras descansas: tu mente crea, tu realidad obedece.",isNew:true,isLimited:true,priceMXN:1199,img:"img/catalog/imagine.jpg"},
   {nombre:"SEDUCTION",cat:"amor",emoji:"💋",bg:"linear-gradient(135deg,rgba(220,80,140,.28),rgba(120,60,200,.2))",desc:"¿Y si el problema nunca fue que \"no te pelaran\"… sino que tu energía seguía aplicando para el puesto de perseguidor oficial?\n\nSeduction es la evolución de Attraction y Erior Love.\n\nAttraction reprogramaba las creencias inconscientes que saboteaban tu vida amorosa. Erior Love elevaba tu autoconcepto para que te convirtieras en la persona más valiosa de tu propia vida.\n\nAhora ambos se fusionan en un solo audio, mucho más completo y potente.\n\nAttraction y Erior Love tienen su último mes en el catálogo; Seduction es la evolución que los reemplaza.\n\nNo es un audio para aprender trucos, manipulación ni frases de conquista. Es un audio para convertirte, desde adentro, en alguien tan coherente con el amor, el valor y la seguridad, que tu presencia empieza a hacer el trabajo por ti.\n\nAquí no se trata de perseguir. Se trata de convertirte en alguien imposible de ignorar.\n\nPorque las personas más seductoras no son las que más intentan gustar… Son las que ya saben quiénes son.\n\nEmpieza a proyectar una energía que invita, atrae, despierta curiosidad y hace que los demás quieran acercarse sin que tengas que convencer a nadie.\n\nHazte la persona más cotizada de la habitación.\n\nAdemás, Seduction integra algunas de las frecuencias sonoras más poderosas de toda la colección, diseñadas para potenciar tu magnetismo, reforzar tu autoconcepto y ayudarte a entrar en coherencia con el amor.\n\nIdeal si deseas atraer a una persona en específico, abrirte a una nueva relación o, simplemente, dejar de repetir las mismas historias una y otra vez.\n\nMenos persecución. Más magnetismo.\nMenos ansiedad. Más presencia.\nMenos \"¿por qué no me escribe?\" Más \"¿cómo le hago para responderle a todos?\"\n\nPorque la verdadera seducción… siempre empieza por dentro.\n\nIncluye Telegram para atraer a una persona en específico o una nueva pareja — aquí puedes preguntar tus dudas y te guiaremos paso a paso.",isNew:true,priceMXN:1199,img:"img/catalog/seduction.jpg"},
-  {nombre:"LIMITLESS",cat:"autoestima",emoji:"🧠",bg:"linear-gradient(135deg,rgba(80,180,255,.28),rgba(212,175,95,.2))",desc:"LIMITLESS es un audio de frecuencias diseñado para activar una mente extraordinariamente despierta, inteligente y expansiva. 🧠⚡\n\nSus frecuencias te conectan con tu versión genio: aprendes más rápido, comprendes conceptos complejos con facilidad, desarrollas una metacognición increíble y puedes observar tus propios pensamientos desde una perspectiva superior.\n\nTu mente empieza a ver más allá de lo evidente, reconocer patrones, conectar información y encontrar respuestas que otros no perciben.\n\nIdeal si sientes que algo te bloquea para manifestar… pero no logras ver qué es. LIMITLESS es el antídoto: te ayuda a detectar el patrón invisible que te frena, con foco laser, claridad y una mente que funciona como súper poder.\n\nExpande percepción, intuición, creatividad, memoria e inteligencia hasta hacerte sentir que tu mente no tiene techo.\n\nMás foco. Más entendimiento. Más memoria. Más genio.",isNew:true,isLimited:true,priceMXN:1199,img:"img/catalog/limitless.jpg"},
+  
   {nombre:"💖 Erior LOVE",cat:"amor",emoji:"💖",bg:"linear-gradient(135deg,rgba(232,128,138,.2),rgba(212,175,95,.1))",desc:"⏳ ÚLTIMO MES — después se despide del catálogo. Evolucionó hacia SEDUCTION, pero aún puedes llevarlo este mes. ¿Te gustaría mejorar la relación con alguien? Cambia a la otra persona a través de ti 💖. En este workshop aprenderás cómo hacerlo y en el audio te cambiarás a ti para atraer el reflejo que deseas en las otras personas, además de asumir lo mejor de esa persona. Un paquete completo para atraer a tu persona. Equilibra tu energía femenina y masculina. Además puedes personalizarlo a tu gusto.",isNew:false,isLastMonth:true,img:"img/catalog/erior-love.jpg"},
   {nombre:"🌹 ATTRACTION",cat:"amor",emoji:"🌹",bg:"linear-gradient(135deg,rgba(232,128,138,.25),rgba(155,109,255,.15))",desc:"⏳ ÚLTIMO MES — después se despide del catálogo. Evolucionó hacia SEDUCTION, pero aún puedes llevarlo este mes. ATTRACTION es un workshop de 7 clases en video. Está especialmente diseñado para que quites todos tus bloqueos en el amor; ya sea atrayendo a una nueva pareja, atrayendo a una persona en específico o mejorando tu relación actual. Incluye workbook de ejercicios y una fórmula binaural personalizada para quitar tus bloqueos más rápido, y así manifestar la vida en pareja que siempre has soñado o a tu persona en específico.",isNew:false,isLastMonth:true,img:"img/catalog/attraction.jpg"},
   {nombre:"✨ Éclat",cat:"autoestima",emoji:"✨",bg:"linear-gradient(135deg,rgba(212,175,95,.18),rgba(155,109,255,.12))",desc:"Resplandor, belleza y energía elevada desde el punto cero. ¿Y si la verdadera belleza no tuviera nada que ver con lo externo? Éclat te recuerda que todo es una ilusión, y que la transformación real nace desde el estado más neutro: el punto donde no hay forma, solo posibilidad. Desde esa quietud interna, tu cuerpo, tu piel, tu rostro y tu energía comienzan a renderizarse según tus preferencias. Cada célula responde a tu decisión de ser tu versión más bella — no desde la lucha, sino desde la conciencia pura. Con este audio puedes realizar hasta cinco cambios físicos, elegidos desde tu propia conciencia. Tu cuerpo los asimila con naturalidad, como si siempre hubieran formado parte de ti. Escúchalo para activar tu avatar ideal, manifestar tu belleza más auténtica y pulir tu realidad física desde adentro hacia afuera. Con facilidad, ligereza y poder.",img:"img/catalog/eclat.jpg"},
 
   {nombre:"💖 Amor Propio Magic 4.0",cat:"autoestima",emoji:"💖",bg:"linear-gradient(135deg,rgba(232,128,138,.22),rgba(155,109,255,.18))",desc:"✨ ¡NUEVO! Nuestra fórmula mejorada de AMOR PROPIO — la evolución que reemplaza al 2.0 y al 3.0. 💖 Manifiesta desde el merecimiento. 🌸 Libera codependencia y validación externa. 🫶 Sana el dolor y el trauma almacenado en tu cuerpo para avanzar al siguiente nivel. 🎮✨ Incluye Telegram Liberar Emociones. ⚠️ CUIDADO: tu merecimiento estará por las nubes. 🚀💕",isNew:true,img:"img/catalog/amor-propio-magic-4-0.jpg"},
-  {nombre:"🧑🏻‍🦱 Amor Propio Magic Hombre",cat:"autoestima",emoji:"🧑🏻‍🦱",bg:"linear-gradient(135deg,rgba(212,175,95,.24),rgba(60,90,140,.2))",desc:"AMOR PROPIO MAGIC PARA HOMBRE 🧑🏻‍🦱🧙🏻‍♂️ ¿Te gustaría volverte tu mejor versión? ¿Conectar con tu energía masculina? Este audio es el indicado para independizarte, para atraer abundancia material y económica, para recuperar tu virilidad, sentirte bien contigo mismo y conectar con tu sensualidad y poder. 🧞 No solamente te llena de amor propio, también te ayuda a manifestar y a ser un hombre desapegado. Solo la mejor versión de ti puede atraer toda la ABUNDANCIA que deseas. 💰 Se puede intencionar y personalizar en mensajes y frecuencias al tema de tu elección. ☀️",img:"img/catalog/amor-propio-magic-hombre.jpg"},
+  
   {nombre:"🐇 The White Rabbit Code ✨",cat:"autoestima",emoji:"🐇",bg:"linear-gradient(135deg,rgba(0,255,255,.12),rgba(255,0,255,.15))",desc:"Nuestro audio de amor propio más potente. ¿Quieres un súper boost en tu vida, como si fueran vitaminas para tu energía, tu mente y tu realidad? ✨ Entonces este audio es para ti. Un audio completamente personalizado a tu estilo, tu vibra y el tema que tú elijas. 🌷 Instala amor propio en todas las áreas de tu vida de una manera rápida, profunda y expansiva. Puedes pedirlo en el formato que más te guste: suave, mágico, poderoso, romántico, glam, futurista, affirmations, story mode y más. 💫 Un verdadero upgrade energético para sentirte más segur@, magnétic@, feliz y conectad@ contigo mism@. 🐇",isNew:true,img:"img/catalog/white-rabbit-code.jpg"},
   {nombre:"✨ GOD / GODDESS",cat:"autoestima",emoji:"✨",bg:"linear-gradient(135deg,rgba(212,175,95,.28),rgba(155,109,255,.22))",desc:"¿Quieres sentirte el Dios o Diosa de tu realidad? Este audio te ayudará a hacerlo: ya no dudes de tu poder creador. Logra verte desde el \"YO SOY\", para poder manifestar cualquier deseo. ¡Nunca más dudes de ti! Este audio te dará todos los atributos de un Dios/Diosa: poder, belleza, divinidad, sabiduría, magia, feminidad/masculinidad, y la más importante: inmutabilidad ante cualquier situación. Descubre tu versión más poderosa ✨.",isNew:true,img:"img/catalog/god-goddess.jpg"},
   {nombre:"🪞 Mesmerizing Love",cat:"autoestima",emoji:"🪞",bg:"linear-gradient(135deg,rgba(155,109,255,.22),rgba(232,128,138,.12))",desc:"Es momento de ser ULTRA MESMERIZING (magnétic@). Nuestra tercera fórmula de amor propio está hecha para el tercer mes de tu proceso de AMOR PROPIO. Te sentirás mejor que nunca, atraerás todo lo que siempre has merecido porque te permitirás ser amad@, adorad@, respetad@ por todo y por todos. Con este audio podrás tener seguridad y confianza en ti mism@, dejarás de identificarte con historias que no te convengan y empezarás a vivir experiencias increíbles en tu vida día a día. Ideal si estás con alguno de nuestros otros audios para incrementar tu autoestima y que el proceso sea más ligero y divertido. Este audio te convierte en el personaje que tú quieras rápidamente.",img:"img/catalog/mesmerizing-love.jpg"},
@@ -6251,7 +6268,7 @@ var audiosEs=[
   {nombre:"💪 FIT WAVE",cat:"salud",emoji:"💪",bg:"linear-gradient(135deg,rgba(125,184,154,.2),rgba(155,109,255,.1))",desc:"Nuestro audio para mejorar el aspecto de tu cuerpo: puedes adelgazar, subir de peso o mejorar tu rendimiento deportivo según lo elijas. Este audio está enfocado en la biokinesis (los cambios que se materializan en el cuerpo desde la mente). Excelentes resultados para que puedas decidir qué comer, cuánto ejercicio hacer y qué beneficios tener en tu cuerpo. Tu inconsciente y tus creencias también manifiestan tu cuerpo.",img:"img/catalog/fit-wave.jpg"},
   {nombre:"🛸 SIMULATION-U",cat:"manifestacion",emoji:"🛸",bg:"linear-gradient(135deg,rgba(155,109,255,.22),rgba(125,184,154,.1))",desc:"Audio especial para visualizar. Ideal para: cambiar tu profesión, tu personalidad, la manera en la que te ven los demás, incluso tu persona en específico, entre otras cosas. Es un audio-entrevista con tu 'YO' del futuro hablando de lo que siempre debiste ser. No lleva intenciones ni es script, es una conversación mental. Incluye tu audio entrevista (en audible y subliminal) y guía en PDF. Puedes trabajar 3 temas al mismo tiempo.",img:"img/catalog/simulation-u.jpg"},
   {nombre:"🧘 KEEP COOL",cat:"manifestacion",emoji:"🧘",bg:"linear-gradient(135deg,rgba(125,184,154,.2),rgba(155,109,255,.12))",desc:"Meditación totalmente personalizada para tres temas que tú elijas. Te ayudamos a que se cumpla mucho más rápido todo aquello que quieres manifestar. Se escucha una vez al día mínimo, pero si la haces tres veces al día funciona más rápido. ¿Te gustaría tener un método para relajarte y recordarte que eres el creador y que todo estará bien? Esta meditación personalizada es para ti: cada vez que la hagas podrás liberar malestares y te recordará que todo es posible. Estimula y relaja tu cerebro dejándote una completa sensación de bienestar. Úsala como complemento a tus audios para que funcionen más rápido.",img:"img/catalog/keep-cool.jpg"},
-  {nombre:"🐇 Booster",cat:"manifestacion",emoji:"🐇",bg:"linear-gradient(135deg,rgba(155,109,255,.25),rgba(12,11,20,.85))",desc:"Este no es un audio cualquiera. Es un conjunto de comandos y frecuencias que te llevarán a la neutralidad. Un portal de reinicio total. Un código que borra lo ilusorio y reinstala tu verdad más pura. Cada palabra ha sido diseñada para llevarte al centro de ti mism@: al lugar donde no existe el pasado, ni el futuro, ni los bloqueos. Diseñado para: reinstalar tu identidad original sin distorsiones, disolver patrones y miedos desde su raíz, recalibrarte a tu línea de tiempo más elevada, activar tu energía de comando desde la conciencia y recordarte que eres el centro de tu creación. Recomiendo escucharlo junto con cualquier audio de Erior pues se potencializa el efecto. ☽✯🎧🥣🪽✩",img:"img/catalog/booster.jpg"},
+  
   {nombre:"🌀 Wonderland Coherence",cat:"manifestacion",emoji:"🌀",bg:"linear-gradient(135deg,rgba(125,184,154,.22),rgba(155,109,255,.18))",desc:"Nuevo audio, el paso después de Booster. Después de estabilizar tu sistema nervioso con Booster, el siguiente paso es entrar más profundo en la neutralidad. Wonderland Coherence es un audio binaural diseñado para ayudarte a calmar el ruido mental y llevar tu energía a un estado de mayor estabilidad y coherencia. Cuando el sistema nervioso se regula, tus pensamientos, emociones y decisiones dejan de ir en direcciones distintas. Empiezan a alinearse naturalmente. A eso se le llama congruencia. Y cuando hay congruencia, tu energía se vuelve clara. Ya no está dividida entre miedo, urgencia o duda. Todo empieza a moverse desde el mismo centro. Menos ruido. Más neutralidad. Más congruencia. Como entrar en tu propio Wonderland interno. ✨",img:"img/catalog/wonderland-coherence.jpg"},
   {nombre:"👁️ SELECT",cat:"manifestacion",emoji:"👁️",bg:"linear-gradient(135deg,rgba(212,175,95,.2),rgba(155,109,255,.18))",desc:"Nuestro nuevo audio SELECT 👁️ llega para sustituir y superar al antiguo audio MANIFEST. Ya no se trata de ser simples creadores de nuestra realidad… Ahora somos los autores supremos de nuestra existencia. Con solo elegir en el momento presente, la realidad se ajusta y se entrega de inmediato. Este audio funciona como una consola cuántica: cada día seleccionas los comandos de tu nueva realidad y tu nuevo personaje. Amor, dinero, belleza, salud, poder, diversión, éxito ilimitado… todo se activa desde tu elección consciente. Puedes elegir hasta 5 comandos simultáneos, y ver cómo se materializan en tu día a día como si la vida obedeciera un código perfecto. El resultado: una experiencia diseñada por ti, sin esfuerzo, sin espera. SELECT no es solo un audio. Es la herramienta definitiva de autoría de tu realidad.",img:"img/catalog/select.jpg"},
   {nombre:"☽ AUDIO ERIOR 3.0",cat:"manifestacion",emoji:"☽",bg:"linear-gradient(135deg,rgba(155,109,255,.25),rgba(212,175,95,.15))",desc:"¿Alguna vez has pensado que quisieras que alguien se metiera a tu cabeza y te ayude? Recreamos una memoria en tu inconsciente de la versión que deseas de ti mismo para que se cumpla de 1 a 3 meses. Con el AUDIO ERIOR 3.0 te ayudamos a escribir el script perfecto con nuestro expertise, más la estimulación correcta de nuestros profesionales para que llegues rápido a esa versión de ti. Creamos la fórmula perfecta mental combinada con oscilaciones personalizadas para que llegue el mensaje correcto a tu inconsciente y todo se materialice como deseas. Es como si cambiaras de dimensión. ☽✯🎧🥣🪽✩",img:"img/catalog/audio-erior-3-0.jpg"},
@@ -6265,15 +6282,18 @@ var audiosEs=[
   {nombre:"✨ ICON AURA",cat:"autoestima",emoji:"✨",bg:"linear-gradient(135deg,rgba(212,175,95,.25),rgba(155,109,255,.22))",desc:"Audio especialmente diseñado y sintonizado en frecuencias elevadas que activan en ti una presencia impecable, una coherencia interna natural y un aura profundamente magnética. Cada capa sonora trabaja en perfecta armonía para alinear tu energía con tu versión más icónica: esa que entra en cualquier espacio y lo transforma sin esfuerzo, que no busca atención porque la atrae de forma automática. A medida que lo escuchas, tu campo energético se vuelve más claro, más estable y más poderoso. Tu identidad se ordena, tu señal se fortalece y tu aura comienza a irradiar seguridad, elegancia y magnetismo puro. Este audio no crea nada nuevo: revela lo que ya eres en esencia. Una presencia que impacta, una energía que se siente, una vibra que permanece. Tu mejor versión ya está aquí. Y ahora… simplemente se está expresando.",isNew:true,img:"img/catalog/icon-aura.jpg"}
 ];
 var audiosEn=[
+  {nombre:"LIMITLESS",cat:"autoestima",emoji:"🧠",bg:"linear-gradient(135deg,rgba(80,180,255,.28),rgba(212,175,95,.2))",desc:"⚡ MENTAL UPGRADE · NEW. LIMITLESS is a frequency audio designed to activate an extraordinarily awake, intelligent and expansive mind. 🧠⚡\n\nIts frequencies connect you with your genius version: you learn faster, grasp complex concepts with ease, develop incredible metacognition and can observe your own thoughts from a higher perspective.\n\nYour mind starts seeing beyond the obvious, recognizing patterns, connecting information and finding answers others miss.\n\nIdeal if something blocks your manifestations… but you can't see what it is. LIMITLESS is the antidote: it helps you detect the invisible pattern holding you back — with laser focus, clarity and a mind that feels like a superpower.\n\nIt expands perception, intuition, creativity, memory and intelligence until your mind feels ceiling-free.\n\nMore focus. More understanding. More memory. More genius.",isNew:true,isLimited:true,isUpgrade:true,priceMXN:777,img:"img/catalog/limitless.jpg"},
+  {nombre:"🐇 Booster",cat:"manifestacion",emoji:"🐇",bg:"linear-gradient(135deg,rgba(155,109,255,.25),rgba(12,11,20,.85))",desc:"⚡ UPGRADE · Improved Booster. Cleaner, stronger field reset. This is not just any audio. It is a set of commands and frequencies that will take you to neutrality. A total reset portal. A code that erases what is illusory and reinstalls your purest truth. Every word has been designed to bring you to your center — the place where the past doesn't exist, nor the future, nor the blocks. Designed to: reinstall your original identity without distortions, dissolve patterns and fears from their root, recalibrate you to your highest timeline, activate your command energy from consciousness, and remind you that you are the center of your creation. Recommended to listen alongside any ERIOR audio as it potentiates the effect. ☽✯🎧🥣🪽✩",isNew:true,isUpgrade:true,priceMXN:777,img:"img/catalog/booster-2.jpg"},
+  {nombre:"🧑🏻‍🦱 Amor Propio Magic for Men",cat:"autoestima",emoji:"🧑🏻‍🦱",bg:"linear-gradient(135deg,rgba(212,175,95,.24),rgba(60,90,140,.2))",desc:"⚡ UPGRADE · improved version for men. SELF-LOVE MAGIC FOR MEN 🧑🏻‍🦱🧙🏻‍♂️ Would you like to become your best version? Connect with your masculine energy? This audio helps you become independent, attract material and financial abundance, reclaim your virility, feel good about yourself, and connect with your sensuality and power. 🧞 It doesn't just fill you with self-love — it also helps you manifest and become a detached, grounded man. Only your best version can attract all the ABUNDANCE you desire. 💰 You can set intentions and personalize messages and frequencies to any topic you choose. ☀️",isNew:true,isUpgrade:true,priceMXN:777,img:"img/catalog/amor-propio-magic-hombre-2.jpg"},
   {nombre:"IMAGINE",cat:"autoestima",emoji:"🌌",bg:"linear-gradient(135deg,rgba(120,90,255,.28),rgba(212,175,95,.18))",desc:"Your imagination is not a dream. It is the original blueprint of your reality.\n\nEverything in your life — your money, your relationships, your body, your success — first existed in your mind. First it was imagined.\n\nThe problem is not that you can't have it. The problem is that your mind has learned to imagine from fear, from lack, from \"what if it doesn't work?\"\n\nIMAGINE is the new ERIOR CENTER audio designed to change that.\n\nAs you listen, your subconscious learns to imagine from the result. From already having it. From already being that person.\n\nIncludes:\n• Personalized mini script you record with your own voice — adapted exactly to the area of your life you want to expand\n• Nighttime visualization guide — to read before sleep so your subconscious works all night while you rest: your mind creates, your reality obeys.",isNew:true,isLimited:true,priceMXN:1199,img:"img/catalog/imagine.jpg"},
   {nombre:"SEDUCTION",cat:"amor",emoji:"💋",bg:"linear-gradient(135deg,rgba(220,80,140,.28),rgba(120,60,200,.2))",desc:"What if the problem was never that they \"weren't into you\"… but that your energy was still applying for the official pursuer role?\n\nSeduction is the evolution of Attraction and Erior Love.\n\nAttraction reprogrammed the unconscious beliefs that sabotaged your love life. Erior Love elevated your self-concept so you became the most valuable person in your own life.\n\nNow both fuse into one audio — more complete and powerful.\n\nAttraction and Erior Love have their last month in the catalog; Seduction is the evolution that replaces them.\n\nThis is not an audio for tricks, manipulation or pickup lines. It is an audio to become, from within, someone so coherent with love, worth and security that your presence starts doing the work for you.\n\nIt's not about chasing. It's about becoming impossible to ignore.\n\nBecause the most seductive people aren't the ones who try hardest to be liked… They're the ones who already know who they are.\n\nStart projecting an energy that invites, attracts, sparks curiosity and makes others want to come closer — without you having to convince anyone.\n\nBecome the most sought-after person in the room.\n\nSeduction also integrates some of the most powerful sound frequencies in the whole collection, designed to boost your magnetism, strengthen your self-concept and help you enter coherence with love.\n\nIdeal if you want to attract a specific person, open to a new relationship, or simply stop repeating the same stories again and again.\n\nLess chasing. More magnetism.\nLess anxiety. More presence.\nLess \"why don't they text me?\" More \"how do I reply to everyone?\"\n\nBecause true seduction… always begins within.\n\nIncludes Telegram to attract a specific person or a new partner — ask your questions and we'll guide you step by step.",isNew:true,priceMXN:1199,img:"img/catalog/seduction.jpg"},
-  {nombre:"LIMITLESS",cat:"autoestima",emoji:"🧠",bg:"linear-gradient(135deg,rgba(80,180,255,.28),rgba(212,175,95,.2))",desc:"LIMITLESS is a frequency audio designed to activate an extraordinarily awake, intelligent and expansive mind. 🧠⚡\n\nIts frequencies connect you with your genius version: you learn faster, grasp complex concepts with ease, develop incredible metacognition and can observe your own thoughts from a higher perspective.\n\nYour mind starts seeing beyond the obvious, recognizing patterns, connecting information and finding answers others miss.\n\nIdeal if something blocks your manifestations… but you can't see what it is. LIMITLESS is the antidote: it helps you detect the invisible pattern holding you back — with laser focus, clarity and a mind that feels like a superpower.\n\nIt expands perception, intuition, creativity, memory and intelligence until your mind feels ceiling-free.\n\nMore focus. More understanding. More memory. More genius.",isNew:true,isLimited:true,priceMXN:1199,img:"img/catalog/limitless.jpg"},
+  
   {nombre:"💖 Erior LOVE",cat:"amor",emoji:"💖",bg:"linear-gradient(135deg,rgba(232,128,138,.2),rgba(212,175,95,.1))",desc:"⏳ LAST MONTH — then it leaves the catalog. It evolved into SEDUCTION, but you can still get it this month. Would you like to improve your relationship with someone? Change the other person through yourself 💖. In this workshop you will learn how, and the audio will transform you to attract the reflection you desire in others, while also assuming the best of that person. A complete package to attract your person. Balances your feminine and masculine energy. You can also personalize it to your liking.",isNew:false,isLastMonth:true,img:"img/catalog/erior-love-2.jpg"},
   {nombre:"🌹 ATTRACTION",cat:"amor",emoji:"🌹",bg:"linear-gradient(135deg,rgba(232,128,138,.25),rgba(155,109,255,.15))",desc:"⏳ LAST MONTH — then it leaves the catalog. It evolved into SEDUCTION, but you can still get it this month. ATTRACTION is a 7-class video workshop. Specially designed to remove all your love blocks — whether attracting a new partner, attracting a specific person or improving your current relationship. Includes an exercise workbook and a personalized binaural formula to remove your blocks faster and manifest the romantic life you've always dreamed of, or your specific person.",isNew:false,isLastMonth:true,img:"img/catalog/attraction-2.jpg"},
   {nombre:"✨ Éclat",cat:"autoestima",emoji:"✨",bg:"linear-gradient(135deg,rgba(212,175,95,.18),rgba(155,109,255,.12))",desc:"Radiance, beauty and elevated energy from ground zero. What if true beauty had nothing to do with the external? Éclat reminds you that everything is an illusion, and that real transformation is born from the most neutral state: the point where there is no form, only possibility. From that inner stillness, your body, your skin, your face and your energy begin to render according to your preferences. Each cell responds to your decision to be your most beautiful version — not through struggle, but through pure awareness. With this audio you can make up to five physical changes, chosen from your own consciousness. Your body assimilates them naturally, as if they had always been part of you. Listen to it to activate your ideal avatar, manifest your most authentic beauty and polish your physical reality from the inside out. With ease, lightness and power.",img:"img/catalog/eclat-2.jpg"},
 
   {nombre:"💖 Amor Propio Magic 4.0",cat:"autoestima",emoji:"💖",bg:"linear-gradient(135deg,rgba(232,128,138,.22),rgba(155,109,255,.18))",desc:"✨ NEW! Our upgraded SELF-LOVE formula — the evolution that replaces 2.0 and 3.0. 💖 Manifest from worthiness. 🌸 Release codependency and external validation. 🫶 Heal pain and trauma stored in the body. 🎮✨ Includes Liberate Emotions Telegram. ⚠️ WARNING: your worthiness will go through the roof. 🚀💕",isNew:true,img:"img/catalog/amor-propio-magic-4-0-2.jpg"},
-  {nombre:"🧑🏻‍🦱 Amor Propio Magic for Men",cat:"autoestima",emoji:"🧑🏻‍🦱",bg:"linear-gradient(135deg,rgba(212,175,95,.24),rgba(60,90,140,.2))",desc:"SELF-LOVE MAGIC FOR MEN 🧑🏻‍🦱🧙🏻‍♂️ Would you like to become your best version? Connect with your masculine energy? This audio helps you become independent, attract material and financial abundance, reclaim your virility, feel good about yourself, and connect with your sensuality and power. 🧞 It doesn't just fill you with self-love — it also helps you manifest and become a detached, grounded man. Only your best version can attract all the ABUNDANCE you desire. 💰 You can set intentions and personalize messages and frequencies to any topic you choose. ☀️",img:"img/catalog/amor-propio-magic-hombre-2.jpg"},
+  
   {nombre:"🐇 The White Rabbit Code ✨",cat:"autoestima",emoji:"🐇",bg:"linear-gradient(135deg,rgba(0,255,255,.12),rgba(255,0,255,.15))",desc:"Our most powerful self-love audio. Do you want a super boost in your life — like vitamins for your energy, your mind and your reality? ✨ Then this audio is for you. A fully personalized audio tailored to your style, your vibe and the topic you choose. 🌷 It installs self-love in every area of your life in a fast, deep and expansive way. You can request it in whatever format you like best: soft, magical, powerful, romantic, glam, futuristic, affirmations, story mode and more. 💫 A true energetic upgrade to feel more secure, magnetic, happy and connected with yourself. 🐇",isNew:true,img:"img/catalog/white-rabbit-code-2.jpg"},
   {nombre:"✨ GOD / GODDESS",cat:"autoestima",emoji:"✨",bg:"linear-gradient(135deg,rgba(212,175,95,.28),rgba(155,109,255,.22))",desc:"Do you want to feel like the God or Goddess of your reality? This audio will help you do just that — stop doubting your creative power. See yourself from \"I AM\" so you can manifest any desire. Never doubt yourself again! This audio gives you all the attributes of a God/Goddess: power, beauty, divinity, wisdom, magic, femininity/masculinity, and most importantly: immutability in any situation. Discover your most powerful version ✨.",isNew:true,img:"img/catalog/god-goddess-2.jpg"},
   {nombre:"🪞 Mesmerizing Love",cat:"autoestima",emoji:"🪞",bg:"linear-gradient(135deg,rgba(155,109,255,.22),rgba(232,128,138,.12))",desc:"It's time to become ULTRA MESMERIZING (magnetic). Our third self-love formula is made for the third month of your SELF-LOVE journey. You will feel better than ever, attract everything you have always deserved because you will allow yourself to be loved, adored and respected by everything and everyone. With this audio you will have security and confidence in yourself, you will stop identifying with stories that don't serve you and start living incredible experiences every day. Ideal combined with any of our other audios to make the process lighter and more fun. This audio turns you into whatever character you want to be — fast.",img:"img/catalog/mesmerizing-love-2.jpg"},
@@ -6290,7 +6310,7 @@ var audiosEn=[
   {nombre:"💪 FIT WAVE",cat:"salud",emoji:"💪",bg:"linear-gradient(135deg,rgba(125,184,154,.2),rgba(155,109,255,.1))",desc:"Our audio to improve your body: you can lose weight, gain weight or improve your athletic performance — your choice. This audio is focused on biokinesis (the changes that materialize in the body through the mind). Excellent results to help you decide what to eat, how much to exercise and what physical benefits to receive. Your subconscious and your beliefs also manifest your body.",img:"img/catalog/fit-wave-2.jpg"},
   {nombre:"🛸 SIMULATION-U",cat:"manifestacion",emoji:"🛸",bg:"linear-gradient(135deg,rgba(155,109,255,.22),rgba(125,184,154,.1))",desc:"Special audio for visualization. Ideal for: changing your profession, your personality, the way others see you, even your specific person, among other things. It's an audio-interview with your future SELF talking about who you were always meant to be. It carries no intentions and is not a script — it's a mental conversation. Includes your interview audio (audible and subliminal) and a PDF guide. You can work on 3 topics at the same time.",img:"img/catalog/simulation-u-2.jpg"},
   {nombre:"🧘 KEEP COOL",cat:"manifestacion",emoji:"🧘",bg:"linear-gradient(135deg,rgba(125,184,154,.2),rgba(155,109,255,.12))",desc:"A fully personalized meditation for three topics of your choice. Helps everything you want to manifest happen much faster. Listen at least once a day — if you do it three times a day it works even faster. Would you like a method to relax and remind yourself that you are the creator and that everything will be okay? This personalized meditation is for you: every time you do it you can release discomfort and it will remind you that everything is possible. Stimulates and relaxes your brain, leaving you with a complete sense of wellbeing. Use it as a complement to your audios to make them work faster.",img:"img/catalog/keep-cool-2.jpg"},
-  {nombre:"🐇 Booster",cat:"manifestacion",emoji:"🐇",bg:"linear-gradient(135deg,rgba(155,109,255,.25),rgba(12,11,20,.85))",desc:"This is not just any audio. It is a set of commands and frequencies that will take you to neutrality. A total reset portal. A code that erases what is illusory and reinstalls your purest truth. Every word has been designed to bring you to your center — the place where the past doesn't exist, nor the future, nor the blocks. Designed to: reinstall your original identity without distortions, dissolve patterns and fears from their root, recalibrate you to your highest timeline, activate your command energy from consciousness, and remind you that you are the center of your creation. Recommended to listen alongside any ERIOR audio as it potentiates the effect. ☽✯🎧🥣🪽✩",img:"img/catalog/booster-2.jpg"},
+  
   {nombre:"🌀 Wonderland Coherence",cat:"manifestacion",emoji:"🌀",bg:"linear-gradient(135deg,rgba(125,184,154,.22),rgba(155,109,255,.18))",desc:"Our new audio — the step after Booster. After stabilizing your nervous system with Booster, the next step is going deeper into neutrality. Wonderland Coherence is a binaural audio designed to help you quiet mental noise and bring your energy to a state of greater stability and coherence. When the nervous system regulates, your thoughts, emotions and decisions stop going in different directions. They begin to align naturally. That is called congruence. And when there is congruence, your energy becomes clear — no longer divided between fear, urgency or doubt. Everything starts moving from the same center. Less noise. More neutrality. More congruence. Like entering your own inner Wonderland. ✨",img:"img/catalog/wonderland-coherence-2.jpg"},
   {nombre:"👁️ SELECT",cat:"manifestacion",emoji:"👁️",bg:"linear-gradient(135deg,rgba(212,175,95,.2),rgba(155,109,255,.18))",desc:"Our new SELECT audio 👁️ arrives to replace and surpass the old MANIFEST audio. This is no longer about being simple creators of our reality… Now we are the supreme authors of our existence. By simply choosing in the present moment, reality adjusts and delivers immediately. This audio works like a quantum console: every day you select the commands of your new reality and your new character. Love, money, beauty, health, power, fun, unlimited success… everything activates from your conscious choice. You can choose up to 5 simultaneous commands and watch them materialize in your day-to-day as if life were obeying a perfect code. The result: an experience designed by you, effortlessly and without waiting. SELECT is not just an audio. It is the ultimate tool for authoring your reality.",img:"img/catalog/select-2.jpg"},
   {nombre:"☽ AUDIO ERIOR 3.0",cat:"manifestacion",emoji:"☽",bg:"linear-gradient(135deg,rgba(155,109,255,.25),rgba(212,175,95,.15))",desc:"Have you ever thought you wish someone could get inside your head and help you? We recreate a memory in your subconscious of the version of yourself you desire so it manifests in 1 to 3 months. With AUDIO ERIOR 3.0 we help you write the perfect script with our expertise, plus the right stimulation from our professionals so you reach that version of yourself quickly. We create the perfect mental formula combined with personalized oscillations so the right message reaches your subconscious and everything materializes as you desire. It's like shifting dimensions. ☽✯🎧🥣🪽✩",img:"img/catalog/audio-erior-3-0-2.jpg"},
@@ -6346,6 +6366,9 @@ function buildCatalog(){
     if(/ATTRACTION/i.test(a.nombre))d.dataset.audioKey='attraction';
     if(/^IMAGINE$/i.test(a.nombre))d.dataset.audioKey='imagine';
     if(/^SEDUCTION$/i.test(a.nombre))d.dataset.audioKey='seduction';
+    if(/^LIMITLESS$/i.test(a.nombre))d.dataset.audioKey='limitless';
+    if(/Booster/i.test(a.nombre))d.dataset.audioKey='booster';
+    if(/Magic Hombre|Magic for Men/i.test(a.nombre))d.dataset.audioKey='magic-hombre';
     d.addEventListener('click',function(e){if(!e.target.closest('a,.btn-buy'))openModal(a,cats);});
     var imgAlt=escapeHtmlAttr(audioSeoAlt(a,cats));
     var imgH=a.img
@@ -6354,6 +6377,7 @@ function buildCatalog(){
     var badges='';
     if(a.isLimited)badges+='<div class="ac-limited">'+(lang==='es'?'Edición limitada':'Limited edition')+'</div>';
     if(a.isLastMonth)badges+='<div class="ac-soon">'+(lang==='es'?'Último mes':'Last month')+'</div>';
+    if(a.isUpgrade)badges+='<div class="ac-upgrade">UPGRADE</div>';
     if(a.comingSoon)badges+='<div class="ac-soon">'+(lang==='es'?'Próximamente':'Coming soon')+'</div>';
     else if(a.isNew)badges+='<div class="ac-new">NEW</div>';
     d.innerHTML=(badges?'<div class="ac-badges">'+badges+'</div>':'')+
@@ -6408,7 +6432,7 @@ function unlockPageScroll(){
 var payCurrentMethod='oxxo';
 var payCurrentProduct='';
 var PAY_WHATSAPP='5214432311761';
-var WA_PROMO_MSG='Hola! Quiero la promo de lanzamiento: IMAGINE o SEDUCTION a $1,199 y el segundo audio al 50%.';
+var WA_PROMO_MSG='Hola! Quiero la promo de septiembre: cualquier audio a $777 MXN (2 por $1,444 / 3 por $2,299).';
 var PAY_FOOTER_ES='Realiza el pago, manda el comprobante a eriorcenter@gmail.com indicando en el asunto el programa elegido y tu Instagram. Te enviaremos una forma digital para personalizar tu audio binaural y lo recibirás por mail con PDF de instrucciones.';
 var PAY_FOOTER_EN='Complete your payment and send the receipt to eriorcenter@gmail.com with the program name and your Instagram in the subject line. We will send you a digital form to personalize your binaural audio and deliver it by email with a PDF guide.';
 var PAY_METHODS=[
@@ -6576,14 +6600,14 @@ function dismissPayPromoPopup(){
 }
 
 function getPayModalPrice(productName){
-  var n=String(productName||'').toLowerCase().replace(/🆘|💖|🌊|☀️|🌌|💋/g,'').trim();
+  var n=String(productName||'').toLowerCase().replace(/🆘|💖|🌊|☀️|🌌|💋|🧠|⚡|👽|🛸/g,'').trim();
   if(/emergency\s*999|emergency999|emergency 999/.test(n))return '$3,333 MXN / $194 USD / €168 EUR';
   if(/telegram|telegram privado|private telegram/.test(n)&&!/liberar emociones|release emotions/.test(n))return '$888 MXN / $52 USD / €45 EUR';
-  if(/^imagine\b|imagine —|imagine edicion|imagine edición/.test(n)||/\bimagine\b/.test(n))return '$1,199 MXN / $70 USD / €61 EUR';
-  if(/seduction/.test(n))return '$1,199 MXN / $70 USD / €61 EUR';
-  if(/promo lanzamiento|segundo audio al 50/.test(n))return 'Nuevo $1,199 + 2º al 50%';
-  if(/liberar emociones|release emotions telegram/.test(n))return '$1,190 MXN / $69 USD / €60 EUR';
-  return '$1,190 MXN / $69 USD / €60 EUR';
+  if(/3 audios|pack 3|alicia premium|\$2,?299/.test(n))return '$2,299 MXN / ≈ $135 USD · 3 audios + Alicia Premium';
+  if(/2 audios|pack 2|\$1,?444/.test(n))return '$1,444 MXN / ≈ $85 USD · 2 audios + libro';
+  if(/promo septiembre|cualquier audio|\$777/.test(n))return '$777 MXN / ≈ $46 USD · promo septiembre';
+  if(/liberar emociones|release emotions telegram/.test(n))return 'Incluido con Magic 4.0 · audio desde $777 MXN';
+  return '$777 MXN / ≈ $46 USD · promo septiembre (Telegram incluido)';
 }
 
 function openPaymentModal(productName){
@@ -6597,7 +6621,7 @@ function openPaymentModal(productName){
   document.getElementById('payFooterText').textContent=lang==='en'?PAY_FOOTER_EN:PAY_FOOTER_ES;
   selectPayMethod(payCurrentMethod||'oxxo');
   bindPayCopyButtons(document.getElementById('payModal'));
-  var promoWa=payWaUrl('Hola! Quiero la promo: IMAGINE o SEDUCTION a $1,199 y el segundo audio al 50%');
+  var promoWa=payWaUrl('Hola! Quiero la promo de septiembre: cualquier audio a $777 MXN');
   var promoBtn=document.getElementById('payPromoWaBtn');
   if(promoBtn)promoBtn.href=promoWa;
   hidePayPromoPopup();
@@ -6970,7 +6994,7 @@ function getFreeLimitBlockMessage(q){
   }else if(audios.length>=2){
     audioLine=' Alicia te recomendó '+audios[0]+' y '+audios[1]+'.';
   }
-  return 'Has usado tus '+limit+' mensajes gratis de hoy ✨'+audioLine+' Mañana (hora CDMX) tendrás mensajes nuevos. Para continuar HOY y cerrar tu compra con la promo de lanzamiento (IMAGINE/SEDUCTION + 2º al 50%), escríbenos por WhatsApp — el botón verde abajo ya lleva tu recomendación 💛';
+  return 'Has usado tus '+limit+' mensajes gratis de hoy ⚡'+audioLine+' Mañana (hora CDMX) tendrás mensajes nuevos. Para continuar HOY y cerrar con la promo de septiembre ($777 / 2×$1,444 / 3×$2,299), escríbenos por WhatsApp — el botón verde abajo ya lleva tu recomendación ⚡';
 }
 function collectAliciaRecommendedAudios(maxCount){
   maxCount=maxCount||2;
@@ -7000,11 +7024,11 @@ function buildAliciaWhatsAppContinueMessage(){
   var msg='Hola Pauline! Vengo de Alicia IA de Erior Center';
   if(nombre)msg+=', me llamo '+nombre;
   if(audios.length===1){
-    msg+='. Alicia me recomendó '+audios[0]+' y quiero comprarlo ahora (promo lanzamiento IMAGINE/SEDUCTION si aplica)';
+    msg+='. Alicia me recomendó '+audios[0]+' y quiero comprarlo ahora con promo septiembre ($777)';
   }else if(audios.length>=2){
-    msg+='. Alicia me recomendó '+audios[0]+' y '+audios[1]+' y quiero cerrar mi compra ahora con la promo de lanzamiento';
+    msg+='. Alicia me recomendó '+audios[0]+' y '+audios[1]+' y quiero cerrar el pack 2 de septiembre ($1,444)';
   }else{
-    msg+='. Quiero continuar y cerrar mi compra con la promo de lanzamiento (IMAGINE o SEDUCTION + 2º al 50%)';
+    msg+='. Quiero continuar y cerrar con la promo de septiembre ($777 / 2×$1,444 / 3×$2,299)';
   }
   msg+=' 💛';
   return msg;
@@ -7183,13 +7207,13 @@ function getAliciaWelcomeMessage(){
   }
   var quotaNote=getAliciaFreeWelcomeNote(aliciaFreeQuota);
   if(aliciaExpressMode){
-    return 'Modo cierre express ⚡\n\nDime el audio que quieres (o toca un atajo abajo) y te cotizo YA: precio, total, cómo pagar… y si te conviene el segundo al 50% con la promo.\n\n¿Cuál cerramos hoy?'+quotaNote;
+    return 'Modo cierre express ⚡\n\nDime el audio que quieres (o toca un atajo abajo) y te cotizo YA con promo septiembre: $777 / 2×$1,444 / 3×$2,299.\n\n¿Cuál cerramos hoy?'+quotaNote;
   }
   var ref=getReferralCode();
   if(ref){
-    return 'Bienvenid@ ✨ Soy Alicia. Alguien de confianza te trajo — eso ya dice mucho.\n\nHay promo de lanzamiento: IMAGINE o SEDUCTION a $1,199 y el segundo audio al 50%. Dime en una linea que quieres transformar (amor, dinero, cuerpo o mente) y te armo tu combo para cerrar hoy.'+quotaNote;
+    return 'Bienvenid@ ⚡ Soy Alicia. Alguien de confianza te trajo — eso ya dice mucho.\n\nPromo septiembre: cualquier audio $777 · 2 por $1,444 (+libro) · 3 por $2,299 (+Alicia Premium). Heroes: LIMITLESS, Booster UPGRADE, Magic Hombre. Dime que quieres transformar (mente, dinero, amor o presencia) y te armo tu combo hoy.'+quotaNote;
   }
-  return 'Bienvenid@ ✨ Soy Alicia — tu consejera y closer de Erior.\n\nTe escucho de verdad y te armo el combo exacto. Promo activa: IMAGINE o SEDUCTION $1,199 + segundo al 50%. Si buscabas el 2.0 o 3.0: ya evolucionaron a Amor Propio Magic 4.0.\n\nDime que estas viviendo (amor, dinero, cuerpo o mente) y te guío con claridad para cerrar hoy.'+quotaNote;
+  return 'Bienvenid@ ⚡ Soy Alicia — tu consejera y closer de Erior.\n\nTe escucho de verdad y te armo el combo exacto. Promo septiembre: $777 / 2×$1,444 / 3×$2,299. Heroes: LIMITLESS, Booster UPGRADE, Magic Hombre. Si buscabas el 2.0 o 3.0: ya evolucionaron a Amor Propio Magic 4.0.\n\nDime que estas viviendo (mente, dinero, amor o presencia) y cerramos hoy.'+quotaNote;
 }
 function startAliciaFree(){
   resetAliciaChatSession();
@@ -7231,7 +7255,7 @@ function getAliciaFomoStats(){
     {main:'Hay <em>'+production+'</em> audios en lista de producción en este momento',sub:'Quienes reservan hoy entran con prioridad'},
     {main:'Quedan <em>'+slots+'</em> lugares con prioridad de entrega',sub:'Cuando se llenan, la fila se mueve a mañana'},
     {main:'<em>'+liveNow+'</em> personas están eligiendo audio con Alicia ahora',sub:'La señal está caliente — no te quedes fuera'},
-    {main:'Hoy ya pidieron <em>'+seductionToday+'</em> SEDUCTION y <em>'+imagineToday+'</em> IMAGINE',sub:'Promo activa: nuevo $1,199 + segundo al 50%'}
+    {main:'Hoy ya activaron <em>'+seductionToday+'</em> combos de magnetismo y <em>'+imagineToday+'</em> de imaginación',sub:'Promo septiembre: $777 · 2×$1,444 · 3×$2,299'}
   ];
 }
 function renderAliciaFomo(forceIdx){
@@ -8041,16 +8065,20 @@ function isEmergency999Context(txt){
 }
 function stripExpiredJulyPromoPrices(reply){
   var r=String(reply||'');
-  // Corrige promos julio vencidas (NO tocar Telegram Privado $888 / $52 USD)
-  r=r.replace(/\$999\s*MXN(?:\s*\/\s*\$58\s*USD(?:\s*\/\s*€51\s*EUR)?)?/gi,'$1,190 MXN / $69 USD / €60 EUR');
-  r=r.replace(/\$888\s*MXN\s*\/\s*\$49\s*USD(?:\s*\/\s*€43\s*EUR)?/gi,'$1,190 MXN / $69 USD / €60 EUR');
-  r=r.replace(/\$1[,.]?699\s*MXN(?:\s*\/\s*\$96\s*USD(?:\s*\/\s*€85\s*EUR)?)?/gi,'$2,380 MXN / $138 USD / €120 EUR');
-  r=r.replace(/\$2[,.]?888\s*MXN(?:\s*\/\s*\$168\s*USD(?:\s*\/\s*€146\s*EUR)?)?/gi,'precio regular por audio ($1,190 MXN)');
-  r=r.replace(/total julio:\s*\$?1[,.]?887\s*MXN/gi,'Total: $2,380 MXN');
-  r=r.replace(/\$1[,.]?887\s*MXN/gi,'$2,380 MXN');
+  // Corrige promos julio/agosto vencidas (NO tocar Telegram Privado $888 / $52 USD)
+  r=r.replace(/\$999\s*MXN(?:\s*\/\s*\$58\s*USD(?:\s*\/\s*€51\s*EUR)?)?/gi,'$777 MXN / ≈ $46 USD');
+  r=r.replace(/\$888\s*MXN\s*\/\s*\$49\s*USD(?:\s*\/\s*€43\s*EUR)?/gi,'$777 MXN / ≈ $46 USD');
+  r=r.replace(/\$1[,.]?699\s*MXN(?:\s*\/\s*\$96\s*USD(?:\s*\/\s*€85\s*EUR)?)?/gi,'$1,444 MXN / ≈ $85 USD (pack 2)');
+  r=r.replace(/\$2[,.]?888\s*MXN(?:\s*\/\s*\$168\s*USD(?:\s*\/\s*€146\s*EUR)?)?/gi,'promo septiembre: desde $777 MXN');
+  r=r.replace(/total julio:\s*\$?1[,.]?887\s*MXN/gi,'Total pack 2: $1,444 MXN');
+  r=r.replace(/\$1[,.]?887\s*MXN/gi,'$1,444 MXN');
   r=r.replace(/pack despedida amor propio/gi,'Amor Propio Magic 4.0');
-  r=r.replace(/summer wonderland(?:\s*pack)?/gi,'varios audios a precio regular');
-  r=r.replace(/\b(?:promo(?:ci[oó]n)?|oferta)\s+de\s+julio\b/gi,'precio regular');
+  r=r.replace(/summer wonderland(?:\s*pack)?/gi,'promo septiembre');
+  r=r.replace(/\b(?:promo(?:ci[oó]n)?|oferta)\s+de\s+julio\b/gi,'promo septiembre');
+  r=r.replace(/promo de lanzamiento|promo lanzamiento|segundo audio al 50%|2[ºo]\s*al\s*50%/gi,'promo septiembre');
+  r=r.replace(/\$1[,.]?199\s*MXN(?:\s*\/\s*\$70\s*USD(?:\s*\/\s*€61\s*EUR)?)?/gi,'$777 MXN / ≈ $46 USD');
+  r=r.replace(/\$1[,.]?190\s*MXN(?:\s*\/\s*\$69\s*USD(?:\s*\/\s*€60\s*EUR)?)?/gi,'$777 MXN / ≈ $46 USD');
+  r=r.replace(/\$2[,.]?380\s*MXN(?:\s*\/\s*\$138\s*USD(?:\s*\/\s*€120\s*EUR)?)?/gi,'$1,444 MXN / ≈ $85 USD');
   // No borrar FOMO legitimo de Attraction / Erior Love (ultimo mes real)
   r=r.replace(/\b[uú]ltimo mes\b(?=[^.!?]{0,60}(?:amor magic 2|amor propio magic 3|2\.0|3\.0|pack despedida))/gi,'descontinuado');
   return r;
@@ -8061,19 +8089,17 @@ function fixAmorPackPricing(reply,userTxt){
   if(!asks)return reply;
   var r=String(reply||'');
   if(/descontinu|ya no se vende|magic 4\.0|f[oó]rmula mejorada/i.test(r)&&!/1[,.]?699|1699|te aparto.*(2\.0|3\.0)|\$888\s*mxn\s*\/\s*\$49/i.test(r))return r;
-  return 'Te entiendo 💜 Amor Magic 2.0 y Amor Propio Magic 3.0 ya se descontinuaron porque sacamos la fórmula mejorada: Amor Propio Magic 4.0.\n\nUne lo mejor de ambos + sana el dolor en el cuerpo. Incluye Telegram Liberar Emociones. Precio: $1,190 MXN / $69 USD / €60 EUR.\n\n¿Te aparto Magic 4.0 hoy? Usa el botón Quiero pagar abajo o WhatsApp con Pauline 💜';
+  return 'Te entiendo ⚡ Amor Magic 2.0 y Amor Propio Magic 3.0 ya se descontinuaron porque sacamos la fórmula mejorada: Amor Propio Magic 4.0.\n\nUne lo mejor de ambos + sana el dolor en el cuerpo. Incluye Telegram Liberar Emociones. Promo septiembre: $777 MXN (o pack 2 $1,444 / pack 3 $2,299).\n\n¿Te aparto Magic 4.0 hoy? Usa el botón Quiero pagar abajo o WhatsApp con Pauline ⚡';
 }
 function normalizeAliciaPromoReply(reply,userTxt){
   var r=String(reply||'');
   r=r.replace(/\b(?:solo|solamente|nada mas que|nada más que)\s+(?:dos|2)\s*horas?\b/gi,'muchas horas en loop (entre más escucha, mejor)');
   r=r.replace(/\bcon\s+(?:dos|2)\s*horas?\s+(?:al\s+d[ií]a\s+)?(?:es\s+)?(?:suficiente|basta)\b/gi,'cuanto más horas en loop, más profundo el cambio');
-  r=r.replace(/\$1[,.]?170\s*MXN/gi,'$1,190 MXN');
-  r=r.replace(/\$68\s*USD/gi,'$69 USD');
-  r=r.replace(/€59\s*EUR/gi,'€60 EUR');
+  r=r.replace(/\$1[,.]?170\s*MXN/gi,'$777 MXN');
   if(isEmergency999Context(r)||isEmergency999Context(userTxt)){
-    r=r.replace(/\$1[,.]?(?:170|190)(?:\s*MXN)?/gi,'$3,333 MXN');
-    r=r.replace(/\$11(?:70|90)(?:\s*MXN)?/gi,'$3,333 MXN');
-    r=r.replace(/\$6[89]\s*USD/gi,'$194 USD');
+    r=r.replace(/\$1[,.]?(?:170|190|199|777)(?:\s*MXN)?/gi,'$3,333 MXN');
+    r=r.replace(/\$11(?:70|90|99)(?:\s*MXN)?/gi,'$3,333 MXN');
+    r=r.replace(/\$6[89]\s*USD|≈\s*\$46\s*USD/gi,'$194 USD');
     r=r.replace(/€(?:59|60)\s*EUR/gi,'€168 EUR');
   }else{
     r=stripExpiredJulyPromoPrices(r);

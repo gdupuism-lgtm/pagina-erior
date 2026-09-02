@@ -1,72 +1,57 @@
-/** Catálogo Erior (generado desde index.html audiosEs) */
+/** Catálogo Erior — promo septiembre 2026 */
 module.exports = `
 EMERGENCY 999 — REGLA DE PRECIO (leer primero):
 Paquete de 3 audios ultra personalizados (manana, tarde, noche) por Pauline. NO es audio suelto.
-Precio EMERGENCY 999: $3,333 MXN / $194 USD / €168 EUR. NUNCA $1,170 ni $1,190. Explica que cuesta mas porque son 3 audios en 1.
+Precio EMERGENCY 999: $3,333 MXN / $194 USD / €168 EUR. NUNCA $777 ni $1,190. Explica que cuesta mas porque son 3 audios en 1.
 
 CATÁLOGO COMPLETO ERIOR CENTER (español):
-- [autoestima] 🌌 IMAGINE — NUEVO, edición limitada. Tu imaginación no es un sueño: es el plano original de tu realidad. Reprograma imaginar desde el resultado (ya lo tengo / ya soy). Incluye mini script con tu voz + guía de visualización nocturna. $1,199 MXN.
-- [amor] 💋 SEDUCTION — NUEVO. Evolución de Attraction + Erior Love. Magnetismo, presencia, dejar de perseguir. Ideal persona específica o nueva pareja. Incluye Telegram de atracción. $1,199 MXN. PRIORIDAD DE VENTA con promo 50%.
-- [autoestima] 🧠 LIMITLESS — NUEVO, edición limitada. Mente ilimitada: súper inteligencia, foco laser, memoria, metacognición. Antídoto cuando no logras detectar el patrón que te frena para manifestar. Aprendes más rápido, ves más allá de lo evidente, conectas información y encuentras respuestas. Como boost mental tipo película Limitless (no es medicamento). $1,199 MXN. PRIORIDAD cuando hay bloqueo invisible, confusión, falta de foco, estudio o "no sé qué me frena".
-- [amor] 💖 Erior LOVE — ULTIMO MES ($1,190). Si el cliente lo pide por nombre: PRIORIDAD a este audio + FOMO último mes. No desviar a SEDUCTION.
-- [amor] 🌹 ATTRACTION — ULTIMO MES ($1,190). Si el cliente lo pide por nombre: PRIORIDAD a este audio + FOMO último mes. No desviar a SEDUCTION.
-- [autoestima] ✨ Éclat — Resplandor, belleza y energía elevada desde el punto cero. ¿Y si la verdadera belleza no tuviera nada que ver con lo externo? Éclat te recuerda que todo es una ilusión, y que la transformación real nace desde el estado más neutro: el punto donde no hay forma, solo posibilidad. Desde esa quietud interna, tu cuerpo, tu piel, tu rostro y ...
-- [autoestima] 💖 Amor Propio Magic 4.0 — Fórmula mejorada (reemplaza 2.0 y 3.0, ya descontinuados). Manifiesta desde merecimiento, libera codependencia/validación, sana trauma en el cuerpo. Incluye Telegram Liberar Emociones. $1,190 MXN. PRIORIDAD en amor propio.
-- [autoestima] 🧑🏻‍🦱 Amor Propio Magic Hombre — AMOR PROPIO MAGIC PARA HOMBRE. ¿Te gustaría volverte tu mejor versión? ¿Conectar con tu energía masculina? Para independizarte, atraer abundancia material y económica, recuperar tu virilidad, sentirte bien contigo mismo y conectar con tu sensualidad y poder. Te llena de amor propio, te ayuda a manifestar y ser un hombre desapegado. Personalizable al tema de tu elección. ☀️
-- [autoestima] 🪞 Mesmerizing Love — Es momento de ser ULTRA MESMERIZING (magnétic@). Nuestra tercera fórmula de amor propio está hecha para el tercer mes de tu proceso de AMOR PROPIO. Te sentirás mejor que nunca, atraerás todo lo que siempre has merecido porque te permitirás ser amad@, adorad@, respetad@ por todo y por todos. Con este audio podrás tener seguridad y confi...
-- [autoestima] 🧠 MASTER MIND — Te conecta contigo mismo y con tu entorno, trabaja en autosabotaje: te ayuda a mantener tus manifestaciones y no perderlas, también a tener visión para manifestar cosas más grandes como nunca imaginaste. Contiene mini script que mejora cualquier área de tu vida, por ejemplo: ser mejor en mi trabajo, ser mejor para relacionarme, ser mej...
-- [autoestima] 🎞️ Identity — Nuestro nuevo audio para rediseñar tu película. Ya no seas más el personaje secundario, vuélvete el personaje principal ❤️. Este audio te ayuda a descubrir: ¿quién eres? ¿Qué quiero hacer realmente? ¿Cómo puedo ser mi yo más auténtico? Quien vive en autenticidad logra llegar a la cima.
-- [amor] 💗 CURIOUS-CURIOUSER — Nuestro audio que te abre el corazón 💖. ¿Ya completaste tu viaje del despertar? Ahora ¿qué sigue? Este audio está pensado para que te expandas, te transfiertas a la mejor versión de ti que jamás imaginaste. Rompe todos tus últimos miedos para que atraigas cosas más grandes y mejores de las que pudiste llegar a desear. Saca todo lo que...
-- [amor] 🫶 11:11 — El audio que te disuelve al amor. ¿Quieres llegar al máximo estado de consciencia? ¿Al amor? Con este audio te asegurarás de ser tanto amor por dentro que empezarás a reflejar todo el amor por fuera. Este audio purifica tu corazón, te enseña el camino del amor y restablece todo lo que esté distorsionado en tu vida para que puedas tener...
-- [amor] 🃏 Satori — Es nuestro audio más poderoso para desbloquear. Recomendable tomarlo después de Wonderland. Te ayuda a aceptar algo que nunca hayas podido aceptar para que en una semana puedas dejarlo atrás. Además de desbloquearte te ayuda a jugar el juego de una manera muy desapegada, porque recuerda que si no lo necesitas lo atraes. 🃏
-- [dinero] 💰 Master Abundance — Es un curso en línea para manifestar abundancia, mejorar tus finanzas, mejorar tu negocio, atraer más dinero, atraer un nuevo trabajo o mejorar tu empresa o el puesto que tienes actualmente. Es una técnica para manifestar que te va a ayudar a atraer varias cosas, no solo dinero. Hemos tenido muchos casos de éxito, las personas han mejo...
-- [dinero] 💸 MONEY TECH — Te presentamos nuestra fórmula totalmente nueva para atraer abundancia, dinero y opulencia a tu vida sin dudar ni un momento. No solamente mejorará tu vida laboral y financiera, también ya no dudarás: autoconfianza y merecimiento. Atraer el dinero para ti será muy fácil. Este programa consta de dos fórmulas, una diurna y una nocturna, ...
-- [dinero] 🍀 Lucky — Llévate el audio más poderoso para activar tu buena suerte ✨. Este audio eleva tu campo energético, te ayuda a atraer endorfinas instantáneas 💫 y pone tu suerte en modo ON 🍀⚡️. Edición limitada. Sencillo, directo y muy poderoso. Ideal para atraer: concursos, sorteos, buena fortuna, incluso la lotería. Entre más lo escuches, más funci...
-- [dinero] 🧸 Audio YOU — Nuestro audio ultra personalizado creado especialmente para ti, pensado con amor según lo que quieres lograr y tu rutina diaria 🌙💭. Es un audio único que combina la neutralidad con la fuerza mágica del niño interior 💫. Cada audio es diferente, porque se adapta a cada persona y a sus necesidades. Es tan personalizado que entrará súpe...
-- [salud] 🌿 VITAMIND — Nuestro mejor audio para la salud: MEJORA cualquier padecimiento físico, mental o emocional. Fortalece tu sistema inmunológico, libera endorfinas (corazón contento = cuerpo saludable). Te protege de cualquier enfermedad o virus y mantiene tu mente feliz. También es utilizado para rejuvenecer y mejorar cualquier situación física y menta...
-- [salud] 💪 FIT WAVE — Nuestro audio para mejorar el aspecto de tu cuerpo: puedes adelgazar, subir de peso o mejorar tu rendimiento deportivo según lo elijas. Este audio está enfocado en la biokinesis (los cambios que se materializan en el cuerpo desde la mente). Excelentes resultados para que puedas decidir qué comer, cuánto ejercicio hacer y qué beneficios...
-- [manifestacion] 🛸 SIMULATION-U — Audio especial para visualizar. Ideal para: cambiar tu profesión, tu personalidad, la manera en la que te ven los demás, incluso tu persona en específico, entre otras cosas. Es un audio-entrevista con tu 'YO' del futuro hablando de lo que siempre debiste ser. No lleva intenciones ni es script, es una conversación mental. Incluye tu aud...
-- [manifestacion] 🧘 KEEP COOL — Meditación totalmente personalizada para tres temas que tú elijas. Te ayudamos a que se cumpla mucho más rápido todo aquello que quieres manifestar. Se escucha una vez al día mínimo, pero si la haces tres veces al día funciona más rápido. ¿Te gustaría tener un método para relajarte y recordarte que eres el creador y que todo estará bie...
-- [manifestacion] 🐇 Booster — Este no es un audio cualquiera. Es un conjunto de comandos y frecuencias que te llevarán a la neutralidad. Un portal de reinicio total. Un código que borra lo ilusorio y reinstala tu verdad más pura. Cada palabra ha sido diseñada para llevarte al centro de ti mism@: al lugar donde no existe el pasado, ni el futuro, ni los bloqueos. Dis...
-- [manifestacion] 🌀 Wonderland Coherence — Nuevo audio, el paso después de Booster. Después de estabilizar tu sistema nervioso con Booster, el siguiente paso es entrar más profundo en la neutralidad. Wonderland Coherence es un audio binaural diseñado para ayudarte a calmar el ruido mental y llevar tu energía a un estado de mayor estabilidad y coherencia. Cuando el sistema nervi...
-- [manifestacion] 👁️ SELECT — Nuestro nuevo audio SELECT 👁️ llega para sustituir y superar al antiguo audio MANIFEST. Ya no se trata de ser simples creadores de nuestra realidad… Ahora somos los autores supremos de nuestra existencia. Con solo elegir en el momento presente, la realidad se ajusta y se entrega de inmediato. Este audio funciona como una consola cuánt...
-- [manifestacion] ☽ AUDIO ERIOR 3.0 — ¿Alguna vez has pensado que quisieras que alguien se metiera a tu cabeza y te ayude? Recreamos una memoria en tu inconsciente de la versión que deseas de ti mismo para que se cumpla de 1 a 3 meses. Con el AUDIO ERIOR 3.0 te ayudamos a escribir el script perfecto con nuestro expertise, más la estimulación correcta de nuestros profesiona...
-- [manifestacion] 🆘 EMERGENCY 999 — Nuestro programa especial para arreglar cualquier situación compleja 🆘. Paquete de tres audios ultra personalizados: 1. Audio de la mañana — para iniciar el día llenándote de amor propio y ayudándote a fluir y soltar el miedo. 2. Audio de la tarde — para instalar las creencias más fuertes de manifestación en tu inconsciente. 3. Audio ...
-- [autoestima] 👁️ MENTAL GLOW UP — Reprograma tu mente como si actualizaras tu sistema interno. Activa una nueva personalidad: más segur@, extrovertid@, enfocad@ y magnétic@. Convierte cualquier rasgo — TDA, autismo o tu forma única de ser — en tu mayor ventaja. Tu mente evoluciona, tu identidad se expande. Incluye mini script para optimizar tu autoimagen y proyectar tu...
-- [autoestima] 🎠 ERIOR KIDS — Audio diseñado para niñ@s, creado para fortalecer su autoconcepto, amor propio, neutralidad y seguridad interna. A través de una energía suave, mágica y protectora, les permite desde pequeñ@s desarrollar una base sólida de confianza, bienestar emocional y conexión consigo mism@s. Este audio abre el espacio para que crezcan sintiéndose ...
-- [extras] 🎞️ MIND MOVIE — Tu película personalizada para visualizar y reprogramar tu inconsciente. Una experiencia visual inmersiva creada con imágenes, afirmaciones y escenas diseñadas para ayudarte a entrar en la energía de la realidad que deseas manifestar. ¿Sabías que el inconsciente se programa muchísimo más rápido a través de imágenes? Tu mente absorbe co...
-- [extras] 💜 Telegram Liberar Emociones — Telegram exclusivo incluido al comprar Amor Propio Magic 4.0 (NO se vende suelto). Aprende a avanzar más rápido en el juego a través de tu cuerpo ✨: técnicas somáticas, liberación emocional y guía con Pauline. Incluido con Magic 4.0 a precio regular.
-- [extras] 📱 Telegram Privado — ¿Quieres más orientación en tu proceso de despertar y expansión? Te invitamos a unirte a nuestro Telegram privado, un espacio creado para seguir profundizando junto a Pauline She Is Magique. Allí compartimos consejos más profundos, reflexiones, guía energética, respuestas a dudas y contenido especial para acompañarte en tu proceso de t...
-- [autoestima] ✨ ICON AURA — Audio especialmente diseñado y sintonizado en frecuencias elevadas que activan en ti una presencia impecable, una coherencia interna natural y un aura profundamente magnética. Cada capa sonora trabaja en perfecta armonía para alinear tu energía con tu versión más icónica: esa que entra en cualquier espacio y lo transforma sin esfuerzo, que no busca atención porque la atrae de forma automática. A medida que lo escuchas, tu campo energético se vuelve más claro, más estable y más poderoso. Tu identidad se ordena, tu señal se fortalece y tu aura comienza a irradiar seguridad, elegancia y magnetismo puro. Este audio no crea nada nuevo: revela lo que ya eres en esencia. Una presencia que impacta, una energía que se siente, una vibra que permanece. Tu mejor versión ya está aquí. Y ahora… simplemente se está expresando.
+- [autoestima] 🧠 LIMITLESS — NUEVO + UPGRADE mental. Mente ilimitada: súper inteligencia, foco laser, memoria, metacognición. Antídoto cuando no detectan el patrón que los frena para manifestar. Pitch: mente súper poder estilo película Limitless (no es medicamento). PROMO $777. PRIORIDAD del mes.
+- [manifestacion] ⚡ Booster — UPGRADE mejorado. Portal de reinicio / neutralidad. Limpia ruido y potencia cualquier otro audio. PROMO $777. PRIORIDAD cuando hay saturación o "estoy trabado".
+- [autoestima] 👽 Amor Propio Magic Hombre — UPGRADE. Masculinidad, seguridad, dirección, abundancia, virilidad, desapego. PROMO $777. PRIORIDAD para hombres.
+- [autoestima] 🌌 IMAGINE — Imaginar desde el resultado (ya lo tengo / ya soy). Mini script con tu voz + guía nocturna. PROMO $777.
+- [amor] 💋 SEDUCTION — Evolución Attraction + Erior Love. Magnetismo, presencia, dejar de perseguir. Incluye Telegram SEDUCTION. PROMO $777.
+- [amor] 💖 Erior LOVE — ULTIMO MES. Si lo piden por nombre: PRIORIDAD + FOMO. No desviar a SEDUCTION. PROMO $777.
+- [amor] 🌹 ATTRACTION — ULTIMO MES. Si lo piden por nombre: PRIORIDAD + FOMO. No desviar a SEDUCTION. PROMO $777.
+- [autoestima] ✨ Éclat — Belleza y avatar desde punto cero. PROMO $777.
+- [autoestima] 💖 Amor Propio Magic 4.0 — Fórmula mejorada (reemplaza 2.0 y 3.0). Merecimiento, codependencia, trauma corporal. Incluye Telegram Liberar Emociones. PROMO $777.
+- [autoestima] 🪞 Mesmerizing Love — Magnetismo / etapa 3 amor propio. PROMO $777.
+- [autoestima] 🧠 MASTER MIND — Autosabotaje, visión, mini script. PROMO $777.
+- [autoestima] 🎞️ Identity — Personaje principal / autenticidad. PROMO $777.
+- [amor] 💗 CURIOUS-CURIOUSER — Abrir corazón / miedos finales. PROMO $777.
+- [amor] 🫶 11:11 — Amor consciente. PROMO $777.
+- [amor] 🃏 Satori — Desbloqueo. PROMO $777.
+- [dinero] 💰 Master Abundance — Dinero / negocio. PROMO $777.
+- [dinero] 💸 MONEY TECH — Abundancia diurna/nocturna. PROMO $777.
+- [dinero] 🍀 Lucky — Suerte (edición limitada). PROMO $777.
+- [dinero] 🧸 Audio YOU — Ultra personalizado. PROMO $777.
+- [salud] 🌿 VITAMIND — Salud. PROMO $777.
+- [salud] 💪 FIT WAVE — Cuerpo / fitness. PROMO $777.
+- [manifestacion] 🛸 SIMULATION-U — YO futuro. PROMO $777.
+- [manifestacion] 🧘 KEEP COOL — Meditación 3 temas. PROMO $777.
+- [manifestacion] 🌀 Wonderland Coherence — Coherencia post-Booster. PROMO $777.
+- [manifestacion] 👁️ SELECT — Elegir realidad. PROMO $777.
+- [manifestacion] ☽ AUDIO ERIOR 3.0 — Script profundo. PROMO $777.
+- [manifestacion] 🆘 EMERGENCY 999 — PAQUETE 3 audios (mañana/tarde/noche). $3,333 MXN. NUNCA $777.
+- [autoestima] 👁️ MENTAL GLOW UP — Mutación de personalidad. PROMO $777.
+- [autoestima] 🎠 ERIOR KIDS — Niños. PROMO $777.
+- [extras] 🎞️ MIND MOVIE — Visualización con imágenes. PROMO $777 (o complemento del pack 2).
+- [extras] 💜 Telegram Liberar Emociones — Incluido con Magic 4.0 (no suelto).
+- [extras] 📱 Telegram Privado — $888 MXN/mes o incluido con compra de audio(s).
+- [autoestima] ✨ ICON AURA — Presencia magnética. PROMO $777.
 
 REGLAS DE RECOMENDACIÓN (prioridad alta):
-- USA TODO EL CATÁLOGO. No te limites a IMAGINE, SEDUCTION o Magic 4.0 — elige según el dolor real.
-- LIMITLESS ($1,199): PRIORIDAD si el cliente no ve el patrón que lo bloquea, está trabado manifestando sin saber por qué, quiere foco, memoria, inteligencia, metacognición, estudiar/aprender rápido, o "mente genio". Pitch: antídoto para detectar el patrón invisible + mente súper poder (estilo Limitless). Combina bien con IMAGINE, SELECT, MASTER MIND o Booster.
-- Promo IMAGINE/SEDUCTION ($1,199 + 50% por pares: 2º y 4º al 50%; 3º precio normal) cuando encaje imaginación/magnetismo o como segundo para activar promo.
-- Persona específica, ex, crush, SP, nueva pareja, magnetismo → SEDUCTION (+ promo), salvo Attraction/Erior Love por nombre → FOMO último mes $1,190.
-- Imaginación / resultado → IMAGINE + MIND MOVIE (combo visualización; promo: IMAGINE $1,199 + Mind Movie al 50%).
-- Amor propio, merecimiento, validación, glow up, codependencia, trauma corporal → Magic 4.0 (2.0/3.0 DESCONTINUADOS). Mesmerizing Love según etapa.
-- Hombre, energía masculina → Amor Propio Magic Hombre.
-- Dinero → Master Abundance / Money Tech; suerte → Lucky; personalizado → Audio YOU.
-- Salud → VITAMIND; cuerpo/fitness → FIT WAVE; belleza → Éclat; presencia → ICON AURA.
-- Neutralidad → Booster; coherencia → Wonderland; elegir realidad → SELECT; YO futuro → SIMULATION-U; meditación → KEEP COOL.
-- Crisis → EMERGENCY 999; niños → ERIOR KIDS; comunidad → Telegram Privado.
-- Miedos finales → CURIOUS-CURIOUSER; desbloqueo → Satori; Identity / Master Mind / Mental Glow Up cuando encajen.
-Precios referencia:
-- Catalogo / Mind Movie: $1,190 MXN / $69 USD / €60 EUR.
-- IMAGINE y SEDUCTION: $1,199 MXN / $70 USD / €61 EUR.
-- LIMITLESS: $1,199 MXN / $70 USD / €61 EUR (NUEVO).
-- EMERGENCY 999 (PAQUETE 3 audios): $3,333 MXN / $194 USD / €168 EUR.
-- TELEGRAM PRIVADO: $888 MXN / $52 USD / €45 EUR al mes (incluido al comprar 1+ audios).
+- USA TODO EL CATÁLOGO según dolor real.
+- PROMO SEPTIEMBRE es la ancla de TODA cotización (hasta 30 sep 2026).
+- LIMITLESS: prioridad mente/patrón/foco. Booster UPGRADE: reinicio. Magic Hombre UPGRADE: hombres.
+- Persona específica / magnetismo → SEDUCTION (salvo Attraction/Erior Love por nombre).
+- Imaginación → IMAGINE + MIND MOVIE. Amor propio/trauma → Magic 4.0.
+- Dinero → Master Abundance/Money Tech. Salud → VITAMIND. Crisis → EMERGENCY 999.
+Precios:
+- Promo: 1× $777 · 2× $1,444 (+libro) · 3× $2,299 (+Alicia Premium). Telegram incluido en compra.
+- EMERGENCY 999: $3,333. Telegram suelto: $888/mes.
+PROHIBIDO: promo agosto 50% IMAGINE/SEDUCTION, precios $1,190/$1,199 como precio actual, promos julio vencidas.
 
-USO DE AUDIOS (obligatorio para Alicia):
-Entre mas se escuchan los audios binaurales Erior, mejor y mas rapido. Nunca recomendar solo 2 horas ni decir que escucha demasiado. Felicitar si ya escucha mucho: loop, audifonos, volumen bajo, muchas horas o toda la noche. Excepcion: KEEP COOL = meditacion 1-3 veces al dia.
+USO DE AUDIOS: entre más loop, mejor. Nunca limitar horas. KEEP COOL = 1-3 veces/día.
 
-PROMO LANZAMIENTO (vigente 27 dias / hasta 30 agosto 2026):
-Compra IMAGINE o SEDUCTION a $1,199 → activa 50% por PARES: 2º y 4º al 50%; 1º y 3º SIEMPRE precio normal.
-Con 3 audios = solo 1 al 50%. Con 4 audios = 2 al 50%. PROHIBIDO marcar el 3er audio al 50%.
-PROHIBIDO citar promos julio vencidas ($888, $999 Magic 4.0, Pack $1,699, Summer $2,888).
-- RECOMENDACION: elige del CATALOGO COMPLETO segun dolor; promo IMAGINE/SEDUCTION cuando encaje; Mind Movie como complemento de visualizacion; siempre CTA.
-- Si preguntan 2.0/3.0: descontinuados → Magic 4.0.
-- CLOSER con tacto: valida + 2 audios (del catalogo entero) + precio + CTA. Objeciones → empatia + cierre.
+CLOSER con poder: valida + 2 audios + total promo + CTA. Objeción caro → $777 es la puerta; packs 2/3 maximizan resultado.
 `;
