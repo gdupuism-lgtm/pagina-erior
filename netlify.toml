@@ -1,4 +1,4 @@
-[build]
+﻿[build]
   publish = "."
   functions = "netlify/functions"
 
@@ -52,9 +52,20 @@
   to = "/onda/"
   status = 301
 
+
 [[redirects]]
   from = "/play"
   to = "/onda/"
+  status = 301
+
+[[redirects]]
+  from = "/libro"
+  to = "/libro/"
+  status = 301
+
+[[redirects]]
+  from = "/mental-tech"
+  to = "/libro/"
   status = 301
 
 [[headers]]
@@ -67,3 +78,9 @@
 
 [functions.claude]
   timeout = 26
+
+[functions.libro-validate]
+  timeout = 20
+
+[functions.libro-admin]
+  timeout = 20
