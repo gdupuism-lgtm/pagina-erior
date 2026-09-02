@@ -117,6 +117,11 @@ a{color:var(--gold2)}
 (function(){
   var KEY_VID='erior_visitante_id';
   var KEY_CODE='erior_libro_code';
+  // Limpia sesión vieja (iframe con botón Descargar)
+  try{
+    localStorage.removeItem('erior_libro_url');
+    localStorage.removeItem('erior_libro_exp');
+  }catch(e){}
   var pdfDoc=null;
   var pageNum=1;
   var rendering=false;
