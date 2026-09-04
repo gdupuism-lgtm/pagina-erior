@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <title>ERIOR CENTER — Audios Binaurales para Manifestación, Amor Propio y Abundancia | She Is Magique</title>
 <!-- build: ui-premium-v14-referrals -->
-<meta name="description" content="Audios binaurales personalizados para reprogramar tu subconsciente. Atrae dinero, amor, belleza y transforma tu vida. Más de 25 audios de manifestación disponibles. Envío digital a todo el mundo.">
+<meta name="description" content="Audios binaurales personalizados para reprogramar tu subconsciente. Atrae dinero, amor, belleza y transforma tu vida. Más de 33 audios de manifestación disponibles. Envío digital a todo el mundo.">
 <meta name="keywords" content="audios binaurales, subliminal, manifestación, amor propio, abundancia, dinero, reprogramación subconsciente, audio personalizado, She Is Magique, Erior Center, México, Latinoamérica, despertar, consciencia, atraer pareja, mejorar finanzas">
 <meta name="author" content="She Is Magique · Erior Center">
 <meta name="robots" content="index, follow">
@@ -15,7 +15,7 @@
 <meta property="og:locale" content="es_MX">
 <meta property="og:site_name" content="ERIOR CENTER">
 <meta property="og:title" content="ERIOR CENTER — Audios Binaurales para Manifestación, Amor Propio y Abundancia">
-<meta property="og:description" content="Audios binaurales personalizados para reprogramar tu subconsciente. Atrae dinero, amor, belleza y transforma tu vida. Más de 25 audios de manifestación disponibles. Envío digital a todo el mundo.">
+<meta property="og:description" content="Audios binaurales personalizados para reprogramar tu subconsciente. Atrae dinero, amor, belleza y transforma tu vida. Más de 33 audios de manifestación disponibles. Envío digital a todo el mundo.">
 <meta property="og:url" content="https://eriorcenter.netlify.app/">
 <meta property="og:image" content="https://eriorcenter.netlify.app/hot%20sale%20de%20los%20pares.jpeg">
 <meta property="og:image:alt" content="Hot Sale Erior Center — audios binaurales de manifestación y amor propio">
@@ -1395,8 +1395,9 @@ body::before{
   background:rgba(0,0,0,.28);border:1px solid rgba(201,160,96,.22);
   font-family:'Jost',sans-serif;font-size:.62rem;line-height:1.4;
   color:rgba(220,210,240,.7);text-align:center;letter-spacing:.03em;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 0 24px rgba(201,160,96,.08);
 }
-.cover-alicia-fomo strong{color:rgba(255,220,140,.95);font-weight:600}
+.cover-alicia-fomo strong{color:rgba(255,220,140,.95);font-weight:600;font-variant-numeric:tabular-nums}
 /* Tarjeta Premium */
 .alicia-mode-premium-card{
   background:
@@ -3648,16 +3649,37 @@ body::before{
 }
 .btn-alicia-hero{
   min-height:68px;height:100%;
-  padding:.62rem .75rem!important;
+  padding:.55rem .7rem!important;
   border-radius:14px!important;
-  display:flex;align-items:center;justify-content:center;
-  text-align:center;
+  display:flex;flex-direction:row;align-items:center;justify-content:center;
+  gap:.55rem;
+  text-align:left;
 }
+.btn-alicia-orb{
+  flex:0 0 auto;
+  width:34px;height:34px;
+  border-radius:50%;
+  position:relative;
+  filter:drop-shadow(0 0 10px rgba(255,255,255,.28)) drop-shadow(0 0 18px rgba(201,160,96,.22));
+  animation:aliciaOrbPulse 4.8s ease-in-out infinite;
+}
+.btn-alicia-orb img{
+  width:100%;height:100%;object-fit:contain;display:block;
+  border-radius:50%;
+}
+.btn-alicia-hero-copy{
+  display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:.18rem;min-width:0;
+}
+@keyframes aliciaOrbPulse{
+  0%,100%{filter:drop-shadow(0 0 8px rgba(255,255,255,.22)) drop-shadow(0 0 14px rgba(201,160,96,.18));transform:scale(1)}
+  50%{filter:drop-shadow(0 0 14px rgba(255,255,255,.38)) drop-shadow(0 0 22px rgba(180,220,255,.28));transform:scale(1.04)}
+}
+@media(prefers-reduced-motion:reduce){.btn-alicia-orb{animation:none}}
 .cover-actions-hero .btn-alicia-hero .btn-premium-label{
   font-size:clamp(.58rem,2.5vw,.68rem)!important;
   letter-spacing:.1em!important;
   line-height:1.2;
-  text-align:center;
+  text-align:left;
 }
 .btn-catalog-hero:hover,.btn-alicia-hero:hover{transform:translateY(-3px) scale(1.02)!important}
 .btn-catalog-hero:hover{
@@ -4311,13 +4333,16 @@ body::before{
         <div class="cover-actions-hero">
           <button type="button" class="btn-metallic btn-liquid btn-catalog-hero cover-action-btn cover-action-primary" data-shatter-action="catalog" id="btnCatalogHero">
             <span class="btn-metallic-txt btn-premium-label">Ver Catálogo</span>
-            <span class="btn-hero-badge">25+ audios personalizados</span>
+            <span class="btn-hero-badge">33 audios personalizados</span>
           </button>
           <button type="button" class="btn-alicia-glow cover-action-btn btn-alicia-hero cover-action-primary" onclick="goTo('alicia')">
-            <span class="btn-premium-label">✨ Alicia te arma tu combo</span>
-            <span class="btn-hero-badge btn-hero-badge--alicia">Gratis · promo septiembre $777</span>
+            <span class="btn-alicia-orb" aria-hidden="true"><img src="img/alicia-orb.png" alt="" width="36" height="36" decoding="async"></span>
+            <span class="btn-alicia-hero-copy">
+              <span class="btn-premium-label">Alicia IA</span>
+              <span class="btn-hero-badge btn-hero-badge--alicia">La IA más poderosa · gratis</span>
+            </span>
           </button>
-          <p class="cover-alicia-fomo" id="coverAliciaFomo" aria-live="polite">Hoy Alicia ya ayudó a <strong id="coverFomoNum">—</strong> personas a elegir audio</p>
+          <p class="cover-alicia-fomo" id="coverAliciaFomo" aria-live="polite">Hoy Alicia ya ayudó a <strong id="coverFomoNum">42</strong> personas a elegir audio</p>
         </div>
       </div>
 
@@ -7244,14 +7269,15 @@ function getAliciaFomoStats(){
   var day=now.getFullYear()*1000+(now.getMonth()+1)*40+now.getDate();
   var hour=now.getHours();
   var min=now.getMinutes();
-  var helped=52+((day*7+hour*3)%89)+Math.floor(hour*1.7);
+  // Cover social proof: always between 16 and 76
+  var helped=16+((day*11+hour*5+Math.floor(min/8)*3)%61);
   var production=11+((day+hour*5)%19);
   var slots=Math.max(2,14-((hour%9)+Math.floor(min/20)));
   var liveNow=5+((hour*4+Math.floor(min/7)+day)%14);
   var seductionToday=9+((day*3+hour)%27);
   var imagineToday=7+((day*5+hour*2)%23);
   return [
-    {main:'Hoy Alicia ya ayudó a <em>'+helped+'</em> personas a elegir su audio',sub:'Varias están cerrando compra ahora mismo'},
+    {main:'Hoy Alicia ya ayudó a <em>'+helped+'</em> personas a elegir su audio',sub:'Varias están cerrando compra ahora mismo',helped:helped},
     {main:'Hay <em>'+production+'</em> audios en lista de producción en este momento',sub:'Quienes reservan hoy entran con prioridad'},
     {main:'Quedan <em>'+slots+'</em> lugares con prioridad de entrega',sub:'Cuando se llenan, la fila se mueve a mañana'},
     {main:'<em>'+liveNow+'</em> personas están eligiendo audio con Alicia ahora',sub:'La señal está caliente — no te quedes fuera'},
@@ -7271,16 +7297,11 @@ function renderAliciaFomo(forceIdx){
   if(sub)sub.textContent=s.sub;
   var coverNum=document.getElementById('coverFomoNum');
   var cover=document.getElementById('coverAliciaFomo');
-  if(coverNum){
-    var helpedMatch=String(stats[0].main).match(/<em>(\d+)<\/em>/);
-    coverNum.textContent=helpedMatch?helpedMatch[1]:String(52+((new Date().getDate()*7)%89));
-  }
+  var helped=stats[0].helped;
+  if(coverNum)coverNum.textContent=String(helped);
   if(cover){
-    var cIdx=Math.floor(Date.now()/10000)%Math.min(3,stats.length);
-    var plain=stats[cIdx].main.replace(/<\/?em>/g,'').replace(/Hoy Alicia ya ayudó a /,'');
-    if(cIdx===0)cover.innerHTML='Hoy Alicia ya ayudó a <strong>'+(helpedMatch?helpedMatch[1]:'—')+'</strong> personas a elegir audio';
-    else if(cIdx===1)cover.innerHTML='Hay <strong>'+String(stats[1].main).match(/<em>(\d+)<\/em>/)[1]+'</strong> audios en producción ahora · prioridad si reservas hoy';
-    else cover.innerHTML='Quedan <strong>'+String(stats[2].main).match(/<em>(\d+)<\/em>/)[1]+'</strong> lugares con prioridad de entrega';
+    // Keep stable structure so #coverFomoNum never dies
+    cover.innerHTML='Hoy Alicia ya ayudó a <strong id="coverFomoNum">'+helped+'</strong> personas a elegir audio';
   }
 }
 var aliciaFomoTimer=null;
