@@ -5,8 +5,8 @@ Paquete de 3 audios ultra personalizados (manana, tarde, noche) por Pauline. NO 
 Precio EMERGENCY 999: $3,333 MXN / $194 USD / €168 EUR. NUNCA $777 ni $1,190. Explica que cuesta mas porque son 3 audios en 1.
 
 CATÁLOGO COMPLETO ERIOR CENTER (español):
-- [autoestima] 🧠 LIMITLESS — NUEVO. Mente ilimitada: foco, memoria, metacognición. Antídoto del patrón invisible. PROMO $777. Usar cuando el dolor sea mente/claridad — no por default.
-- [manifestacion] ⚡ Booster — UPGRADE. Reinicio / neutralidad. Potencia otros audios. PROMO $777. Cuando hay saturación.
+- [manifestacion] 🐇 Booster 2.0 — NUEVO UPGRADE. Aspiradora de creencias/loops → Punto Cero. Señal: PRESENCIA → ELECCIÓN → MATERIALIZACIÓN. PROMO $777. Cuando hay loops, ruido o saturación.
+- [autoestima] 🧠 LIMITLESS — Mente ilimitada: foco, memoria, metacognición. Antídoto del patrón invisible. PROMO $777. Usar cuando el dolor sea mente/claridad — no por default.
 - [autoestima] 👽 Amor Propio Magic Hombre — UPGRADE. Masculinidad, seguridad, dirección. PROMO $777. Para hombres / energía masculina.
 - [autoestima] 🌌 IMAGINE — Imaginar desde el resultado (ya lo tengo / ya soy). Mini script con tu voz + guía nocturna. PROMO $777.
 - [amor] 💋 SEDUCTION — Evolución Attraction + Erior Love. Magnetismo, presencia, dejar de perseguir. Incluye Telegram SEDUCTION. PROMO $777.
@@ -40,12 +40,12 @@ CATÁLOGO COMPLETO ERIOR CENTER (español):
 - [autoestima] ✨ ICON AURA — Presencia magnética. PROMO $777.
 
 REGLAS DE RECOMENDACIÓN (prioridad alta):
-- USA TODO EL CATÁLOGO según dolor real. TODOS los audios tienen el mismo peso. Novedades (LIMITLESS, Booster, Magic Hombre) = spotlight suave, NO monopolio.
+- USA TODO EL CATÁLOGO según dolor real. TODOS los audios tienen el mismo peso. Novedades (Booster 2.0, LIMITLESS, Magic Hombre) = spotlight suave, NO monopolio.
 - PROMO SEPTIEMBRE ancla cotizaciones (hasta 30 sep 2026).
 - Mind Movie: mismo valor; visualización / complementar audios. Combo IMAGINE + Mind Movie.
 - Telegrams: Privado (compra o $888), SEDUCTION (con SEDUCTION), Liberar Emociones (con Magic 4.0). Explica cuál conviene.
 - Libro pack 2: MAPA de manifestación; audios = tecnología de instalación. Explica si lo piden o ofreces pack 2.
-- LIMITLESS solo si dolor mente/patrón/foco. Booster si saturación. Magic Hombre si hombre/masculinidad.
+- LIMITLESS solo si dolor mente/patrón/foco. Booster 2.0 si loops/saturación/punto cero. Magic Hombre si hombre/masculinidad.
 - Persona específica / magnetismo → SEDUCTION (salvo Attraction/Erior Love por nombre).
 - Imaginación → IMAGINE + MIND MOVIE. Amor propio/trauma → Magic 4.0.
 - Dinero → Master Abundance/Money Tech. Salud → VITAMIND. Crisis → EMERGENCY 999.
