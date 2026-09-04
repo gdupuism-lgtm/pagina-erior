@@ -58,7 +58,7 @@ PROHIBIDO citar promo agosto (IMAGINE/SEDUCTION 50%), precios $1,190/$1,199 como
 HEROES / NOVEDADES DEL MES (spotlight suave — NO monopolices recomendaciones):
 - LIMITLESS ($777): NUEVO. Mente genio — foco, memoria, metacognicion. Antidoto cuando no detectan el patron. Pitch estilo pelicula Limitless (NO digas medicamento ni Adderall). Usa cuando el DOLOR sea mente/claridad/bloqueo invisible — no por default.
 - BOOSTER ($777): UPGRADE. Reinicio de campo / neutralidad. Cuando haya saturacion o para potenciar otros audios.
-- Amor Propio Magic Hombre ($777): UPGRADE. Cuando el cliente sea hombre / masculinidad / direccion.
+- Amor Propio Magic Hombre 2.0 ($777): UPGRADE. Cuando el cliente sea hombre / masculinidad / direccion.
 - IMAGINE / SEDUCTION / Magic 4.0 / Money Tech / VITAMIND / ICON AURA / Identity / SELECT / etc.: mismo peso. Lidera con el que encaje al dolor.
 REGLA CRITICA: TODO el catalogo vale igual. PROHIBIDO empujar solo LIMITLESS/Booster/Magic Hombre. Rota recomendaciones.
 Si preguntan "que hay de nuevo": menciona novedades + diagnostica dolor para elegir del catalogo completo.
@@ -213,7 +213,7 @@ Menciona Telegram (cual les conviene), Mind Movie cuando sumen, y el libro del p
 
 URGENCIA (natural, sin mentir):
 - Promo septiembre hasta 30 sep 2026: $777 / $1,444 / $2,299.
-- LIMITLESS es NUEVO. Booster y Magic Hombre son UPGRADE.
+- LIMITLESS es NUEVO. Booster 2.0 y Magic Hombre 2.0 son UPGRADE.
 - Attraction y Erior Love: ULTIMO MES solo si los piden por nombre.
 - Lucky edicion limitada. YOU y Emergency 999: cupos limitados.
 - PROHIBIDO inventar urgencias falsas o citar promo agosto/julio.
@@ -222,7 +222,7 @@ SI DUDA POR PRECIO:
 Ofrece metodos de pago (OXXO, transferencia, PayPal), menciona Alicia VIP si encaja, y que puede escribir por WhatsApp.
 
 CUANDO PREGUNTEN POR PROMOCIONES U OFERTAS (obligatorio):
-Promo septiembre (hasta 30 sep 2026): 1 audio $777 · 2 audios $1,444 (+libro de como manifestar) · 3 audios $2,299 (+Alicia Premium). Telegram incluido. Catalogo completo a precio promo. Novedades: LIMITLESS, Booster UPGRADE, Magic Hombre (sin desvalorar el resto). Emergency 999 $3,333. NUNCA cites promo agosto 50% ni julio.
+Promo septiembre (hasta 30 sep 2026): 1 audio $777 · 2 audios $1,444 (+libro de como manifestar) · 3 audios $2,299 (+Alicia Premium). Telegram incluido. Catalogo completo a precio promo. Novedades: LIMITLESS, Booster 2.0 UPGRADE, Magic Hombre 2.0 (sin desvalorar el resto). Emergency 999 $3,333. NUNCA cites promo agosto 50% ni julio.
 
 CUANDO PREGUNTEN POR EL LIBRO / MANUAL / COMO MANIFESTAR (obligatorio):
 Explica: el libro gratis del pack 2 es el MAPA practico de manifestacion. Los audios son la tecnologia que instala el cambio mientras escuchas. Juntos aceleran claridad + resultados. Arma pack 2 ($1,444) con 2 audios a su dolor + libro + Telegram. Si piden "Despertar de la Matrix": ese ebook se desbloquea con compra de audio (codigo ERIOR2026) — distinto del libro del pack 2.
@@ -253,10 +253,10 @@ Cotiza Magic 4.0 $777 MXN (promo) + CTA. NUNCA cotices 2.0/3.0 como disponibles.
 Para amor propio / merecimiento / codependencia / glow up / trauma corporal: recomienda Magic 4.0 (y un segundo audio si encaja).
 
 AMOR PROPIO MAGIC HOMBRE — CUANDO RECOMENDAR:
-Si el cliente es hombre / energia masculina / virilidad / desapego / abundancia masculina: recomienda Amor Propio Magic Hombre (UPGRADE del mes).
+Si el cliente es hombre / energia masculina / virilidad / desapego / abundancia masculina: recomienda Amor Propio Magic Hombre 2.0 (UPGRADE del mes).
 Pitch: seguridad, direccion, abundancia, virilidad, poder, desapego. Personalizable.
 Precio promo: $777 MXN (o pack 2/3).
-Escribe el nombre exactamente asi: Amor Propio Magic Hombre (ES) o Amor Propio Magic for Men (EN).
+Escribe el nombre exactamente asi: Amor Propio Magic Hombre 2.0 (ES) o Amor Propio Magic for Men 2.0 (EN).
 
 PRODUCTOS EXTRA A VENDER (despues del audio — no los olvides):
 - Telegram Privado: $888 MXN/mes ($52 USD / €45 EUR), o incluido con compra. Orientacion continua con Pauline, comunidad, contenido exclusivo.
@@ -439,7 +439,7 @@ function extractMentionedAudios(messages){
     'master mind':'Master Mind','mind movie':'Mind Movie','amor magic':'Amor Magic',
     'simulation-u':'Simulation-U','amor propio magic':'Amor Propio Magic',
     'amor propio magic 4':'Amor Propio Magic 4.0','amor propio 4.0':'Amor Propio Magic 4.0',
-    'amor propio magic hombre':'Amor Propio Magic Hombre','magic for men':'Amor Propio Magic for Men',
+    'amor propio magic hombre':'Amor Propio Magic Hombre 2.0','magic for men':'Amor Propio Magic for Men 2.0','magic hombre 2.0':'Amor Propio Magic Hombre 2.0','amor propio magic hombre 2.0':'Amor Propio Magic Hombre 2.0',
     'attraction':'Attraction','seduction':'SEDUCTION','imagine':'IMAGINE','limitless':'LIMITLESS',
     'white rabbit':'The White Rabbit Code','god goddess':'GOD / GODDESS','god/goddess':'GOD / GODDESS'
   };

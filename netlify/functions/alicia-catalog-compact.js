@@ -1,6 +1,6 @@
-/** Catálogo compacto para API (menos tokens por mensaje) */
+﻿/** Catálogo compacto para API (menos tokens por mensaje) */
 module.exports = `
-PROMPT_BUILD: 20260903-booster-2-0
+PROMPT_BUILD: 20260904-magic-hombre-2-0
 
 EMERGENCY 999 — REGLA DE PRECIO (leer primero):
 Paquete de 3 audios ultra personalizados (manana, tarde, noche) por Pauline. NO es audio suelto.
@@ -27,13 +27,13 @@ PROHIBIDO promo agosto 50% y precios viejos $1,190/$1,199 como precio actual (sa
 NOVEDADES DEL MES (mencionalas cuando encaje o si preguntan "que hay de nuevo" — no fuerces):
 - BOOSTER 2.0 ($777): aspiradora de creencias/loops → Punto Cero; PRESENCIA → ELECCIÓN → MATERIALIZACIÓN
 - LIMITLESS ($777): mente genio, foco, memoria, metacognicion; detectar el patron invisible. (NO digas medicamento/Adderall)
-- Amor Propio Magic Hombre UPGRADE ($777): masculinidad, seguridad, direccion, abundancia
+- Amor Propio Magic Hombre 2.0 ($777): sostener, masculinidad firme, seguridad, abundancia
 
 MAPA POR DOLOR (usa el que encaje — todo el catalogo cuenta):
 - Loops / ruido mental / punto cero / salir del bucle → Booster 2.0 (+ Wonderland)
 - Patron invisible / foco / mente genio → LIMITLESS
 - Saturado / reinicio → Booster 2.0 (+ Wonderland)
-- Hombre / masculinidad → Magic Hombre
+- Hombre / masculinidad → Magic Hombre 2.0
 - Imaginacion / "ya lo tengo" / visualizar → IMAGINE + MIND MOVIE (combo estrella)
 - Persona especifica / magnetismo → SEDUCTION (Attraction/Erior Love por nombre = ultimo mes)
 - Amor propio / trauma / codependencia → Magic 4.0

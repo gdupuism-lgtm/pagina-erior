@@ -2,7 +2,7 @@
 window.ERIOR_CATALOG = [
   { id:'eclat', name:'Éclat', cat:'autoestima', pitch:'Belleza, avatar y resplandor desde el punto cero.', img:'img/catalog/eclat.jpg', tags:['belleza','avatar','rejuvenecer','piel','glow'] },
   { id:'amor-propio-4', name:'Amor Propio Magic 4.0', cat:'autoestima', pitch:'Trauma corporal, merecimiento máximo y siguiente nivel del proceso.', img:'img/catalog/amor-propio-magic-4-0.jpg', tags:['trauma','cuerpo','dolor','merecimiento','amor-propio'] },
-  { id:'amor-propio-hombre', name:'Amor Propio Magic Hombre', cat:'autoestima', pitch:'Energía masculina, virilidad, abundancia y desapego.', img:'img/catalog/amor-propio-magic-hombre.jpg', tags:['hombre','masculino','virilidad','amor-propio','abundancia'] },
+  { id:'amor-propio-hombre', name:'Amor Propio Magic Hombre 2.0', cat:'autoestima', pitch:'Sostener: masculinidad firme, seguridad, virilidad, sensualidad, desapego y abundancia.', img:'img/catalog/amor-propio-magic-hombre-2-0.jpg', tags:['hombre','masculino','virilidad','amor-propio','abundancia','sostener','2.0'] },
   { id:'white-rabbit', name:'The White Rabbit Code', cat:'autoestima', pitch:'Boost personalizado de amor propio — tu vibra, tu tema.', img:'img/catalog/white-rabbit-code.jpg', tags:['boost','personalizado','amor-propio','rapido'] },
   { id:'god-goddess', name:'GOD / GODDESS', cat:'autoestima', pitch:'Poder creador, YO SOY e inmutabilidad ante cualquier situación.', img:'img/catalog/god-goddess.jpg', tags:['poder','yo-soy','creador','divinidad'] },
   { id:'mesmerizing', name:'Mesmerizing Love', cat:'autoestima', pitch:'Ultra magnético — tercer mes de amor propio.', img:'img/catalog/mesmerizing-love.jpg', tags:['magnetismo','amor-propio','mes-3'] },
