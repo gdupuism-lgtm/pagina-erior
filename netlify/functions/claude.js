@@ -601,7 +601,7 @@ function buildSessionContext(body, usePremium) {
   return parts.join('\n');
 }
 
-function buildSystemBlocks(usePremium, sessionCtx) {
+function buildSystemBlocks(usePremium, sessionCtx, lang) {
   const base = usePremium ? SYSTEM_PREMIUM : SYSTEM;
   const blocks = [
     {
@@ -610,7 +610,20 @@ function buildSystemBlocks(usePremium, sessionCtx) {
       cache_control: { type: 'ephemeral' },
     },
   ];
-  const ctx = String(sessionCtx || '').trim();
+  let ctx = String(sessionCtx || '').trim();
+  if (String(lang || '').toLowerCase() === 'en') {
+    const enOverride = [
+      'LANGUAGE OVERRIDE (US / ENGLISH SITE) — OBLIGATORIO:',
+      '- Responde SOLO en ingles. Nunca espanol salvo que el cliente escriba en espanol y pida espanol.',
+      '- Cotiza precios PRIMERO en USD: 1 audio $46 · 2 audios $85 (+ MENTAL TECH book) · 3 audios $135 (+ Alicia Premium).',
+      '- Puedes mencionar MXN solo como referencia breve si te lo piden.',
+      '- Metodos de pago US site: US Bank/ACH (Lead Bank — Paulina Lopez, routing 101019644, account 219021482598), PayPal, Crypto, Western Union.',
+      '- NUNCA menciones OXXO, Banregio, NVIO ni CLABE mexicanas en esta sesion.',
+      '- CTA boton: "Pay now". WhatsApp CTA en ingles.',
+      '- Promo septiembre en ingles: September promo.',
+    ].join('\n');
+    ctx = ctx ? enOverride + '\n' + ctx : enOverride;
+  }
   if (ctx) {
     blocks.push({ type: 'text', text: ctx });
   }
@@ -739,7 +752,7 @@ exports.handler = async (event) => {
   }
 
   const sessionCtx = buildSessionContext(body, usePremium);
-  const systemBlocks = buildSystemBlocks(usePremium, sessionCtx);
+  const systemBlocks = buildSystemBlocks(usePremium, sessionCtx, body.lang);
 
   const messages = body.messages;
   if (!Array.isArray(messages) || messages.length === 0) {
