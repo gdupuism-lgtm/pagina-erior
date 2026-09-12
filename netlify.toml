@@ -67,6 +67,16 @@
   to = "/libro/"
   status = 301
 
+[[redirects]]
+  from = "/en"
+  to = "/en/"
+  status = 301
+
+[[redirects]]
+  from = "/english"
+  to = "/en/"
+  status = 301
+
 [[headers]]
   for = "/img/*"
   [headers.values]
