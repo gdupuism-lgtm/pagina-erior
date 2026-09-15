@@ -4,7 +4,7 @@
   var LANG = (document.documentElement.lang || 'es').toLowerCase().indexOf('en') === 0 ? 'en' : 'es';
   var WA = '5214432311761';
   var STORAGE_KEY = 'erior_mapa_v3';
-  var GAME_VERSION = 3;
+  var GAME_VERSION = 4;
   var CREDIT_MXN = 444;
   var CREDIT_USD = 26;
   var UNLOCK_FN = '/.netlify/functions/mapa-unlock';
@@ -29,10 +29,13 @@
       payTitle: 'Paga y pide tu clave',
       payLead: 'Monto: $444 MXN. Pon tu código en el concepto / asunto. Envía comprobante. Pauline te manda la clave — sin clave no se abre el archivo.',
       paidCta: 'Ya pagué — avisar y pedir clave',
-      keyLabel: 'Clave de acceso (la envía Pauline)',
-      keyPlaceholder: 'XXXXXXXX',
+      keyLabel: 'Clave de 8 caracteres (la genera el admin, no se inventa)',
+      keyPlaceholder: 'AB12CD34',
       keyCta: 'Abrir archivo con clave',
-      keyWait: 'Después de pagar, Pauline verifica el comprobante y te envía una clave de 8 caracteres. Escríbela aquí. “Ya pagué” solo avisa al equipo — no desbloquea solo.',
+      keyWait: 'Pasos: 1) Copia tu código MAPA-… 2) Abre /mapa/admin.html 3) Pega el código + password mapa444 4) Genera la clave 5) Pégala aquí. Si inventas una clave, fallará.',
+      keyHint: 'La clave depende de TU código. Si en admin usaste otro MAPA-…, no abrirá.',
+      codeLabel: 'Tu código de pedido',
+      copyCode: 'Copiar código',
       waPay: 'Pagar / avisar por WhatsApp',
       fullTag: 'Archivo completo',
       creditNote: 'Crédito activo: $444 MXN. Si activas frecuencia(s) ahora, solo pagas la diferencia.',
@@ -50,7 +53,7 @@
         { kicker: 'Nivel 2 · Cifrado', title: 'Descifra la voz que hay que callar', lead: 'Arma la frase secreta moviendo las letras a los huecos.' },
         { kicker: 'Nivel 3 · Ensamble', title: 'Arma el objeto que tomas', lead: 'Arrastra (o toca + hueco) 2 piezas correctas sobre un solo objeto.' },
         { kicker: 'Nivel 4 · Algoritmo', title: 'Repite la secuencia del inconsciente', lead: 'Memoriza el patrón luminoso y repítelo tocando los nodos.' },
-        { kicker: 'Nivel 5 · Espejo', title: 'Arma el espejo y elige la escena que se repite', lead: 'Toca dos tiras para intercambiarlas hasta completar la imagen.' }
+        { kicker: 'Nivel 5 · Rompecabezas', title: 'Arma el portal pieza por pieza', lead: 'Toca una pieza del montón y luego un hueco del tablero. Completa las 6 piezas.' }
       ],
       methods: [
         { id: 'oxxo', label: 'OXXO' },
@@ -76,10 +79,13 @@
       payTitle: 'Pay, then get your key',
       payLead: 'Amount: $26 USD. Put your code in the memo/subject. Send the receipt. Pauline sends the key — no key, no file.',
       paidCta: 'I paid — notify & request key',
-      keyLabel: 'Access key (sent by Pauline)',
-      keyPlaceholder: 'XXXXXXXX',
+      keyLabel: '8-character key (from admin — not invented)',
+      keyPlaceholder: 'AB12CD34',
       keyCta: 'Open file with key',
-      keyWait: 'After you pay, Pauline verifies the receipt and sends an 8-character key. Enter it here. “I paid” only notifies the team — it does not unlock alone.',
+      keyWait: 'Steps: 1) Copy your MAPA-… code 2) Open /mapa/admin.html 3) Paste code + password mapa444 4) Generate key 5) Paste it here. Invented keys always fail.',
+      keyHint: 'The key is tied to YOUR code. If admin used a different MAPA-…, it won’t open.',
+      codeLabel: 'Your order code',
+      copyCode: 'Copy code',
       waPay: 'Pay / notify on WhatsApp',
       fullTag: 'Full file',
       creditNote: 'Active credit: $26 USD. If you activate frequenc(ies) now, you only pay the difference.',
@@ -97,7 +103,7 @@
         { kicker: 'Level 2 · Cipher', title: 'Decode the voice that must go quiet', lead: 'Build the secret phrase by moving letters into the slots.' },
         { kicker: 'Level 3 · Assemble', title: 'Build the object you take', lead: 'Drag (or tap + slot) 2 correct pieces onto one object.' },
         { kicker: 'Level 4 · Algorithm', title: 'Replay the unconscious sequence', lead: 'Memorize the light pattern, then repeat it on the nodes.' },
-        { kicker: 'Level 5 · Mirror', title: 'Assemble the mirror and pick the looping scene', lead: 'Tap two strips to swap until the image is complete.' }
+        { kicker: 'Level 5 · Jigsaw', title: 'Assemble the portal piece by piece', lead: 'Tap a piece from the pile, then a board slot. Fill all 6 pieces.' }
       ],
       methods: [
         { id: 'wire', label: 'ACH / Wire' },
@@ -998,63 +1004,64 @@
 
   function gameJigsaw() {
     var opts = OUTCOMES[4];
-    var order = shuffle([0, 1, 2]);
+    var ids = [0, 1, 2, 3, 4, 5];
     root.innerHTML = roomShell(
       '<p class="game-hint">' +
         (LANG === 'en'
-          ? 'Tap two energy strips to swap. When the portal aligns, pick the looping scene.'
-          : 'Toca dos tiras de energía para intercambiar. Cuando el portal se alinee, elige la escena que se repite.') +
+          ? 'Look at the small preview. Tap a piece, then tap its empty slot. Numbers help: 1 goes top-left.'
+          : 'Mira la vista previa. Toca una pieza y luego su hueco vacío. Los números ayudan: el 1 va arriba a la izquierda.') +
         '</p>' +
-        '<div class="jigsaw abstract" id="jig"></div>' +
+        '<div class="puzzle-preview" aria-hidden="true">' +
+        '<span class="puzzle-preview-label">' +
+        (LANG === 'en' ? 'Complete portal' : 'Portal completo') +
+        '</span><div class="puzzle-preview-art"></div></div>' +
+        '<div class="puzzle-board slots" id="puzzleBoard"></div>' +
+        '<p class="puzzle-tray-label">' +
+        (LANG === 'en' ? 'Pieces' : 'Piezas') +
+        '</p>' +
+        '<div class="puzzle-tray tray" id="puzzleTray"></div>' +
         '<div id="scenePick" style="display:none"></div>'
     );
-    var jig = document.getElementById('jig');
-    var selected = null;
-    function paint() {
-      jig.innerHTML = '';
-      order.forEach(function (pos, visualIndex) {
-        var tile = document.createElement('button');
-        tile.type = 'button';
-        tile.className = 'jig-tile';
-        tile.dataset.visual = String(visualIndex);
-        tile.dataset.pos = String(pos);
-        tile.style.opacity = String(0.55 + pos * 0.15);
-        tile.style.filter = 'hue-rotate(' + pos * 70 + 'deg)';
-        tile.onclick = function () {
-          if (selected == null) {
-            selected = visualIndex;
-            tile.classList.add('selected');
-            tone();
-            return;
-          }
-          if (selected === visualIndex) {
-            tile.classList.remove('selected');
-            selected = null;
-            return;
-          }
-          var tmp = order[selected];
-          order[selected] = order[visualIndex];
-          order[visualIndex] = tmp;
-          selected = null;
-          paint();
-          if (order[0] === 0 && order[1] === 1 && order[2] === 2) {
-            document.getElementById('gameStatus').textContent = LANG === 'en' ? 'Portal restored' : 'Portal restaurado';
-            showScenes();
-          }
-        };
-        jig.appendChild(tile);
-      });
-    }
+    var board = document.getElementById('puzzleBoard');
+    var tray = document.getElementById('puzzleTray');
+    var cols = 3;
+    ids.forEach(function (id) {
+      var slot = document.createElement('div');
+      slot.className = 'slot puzzle-slot';
+      slot.dataset.expect = String(id);
+      var col = id % cols;
+      var row = Math.floor(id / cols);
+      slot.innerHTML = '<span class="puzzle-ghost-num">' + (id + 1) + '</span>';
+      slot.style.setProperty('--gx', String(col));
+      slot.style.setProperty('--gy', String(row));
+      board.appendChild(slot);
+    });
+    shuffle(ids).forEach(function (id) {
+      var piece = document.createElement('button');
+      piece.type = 'button';
+      piece.className = 'piece puzzle-piece shape-' + id;
+      piece.dataset.id = String(id);
+      piece.setAttribute('aria-label', (LANG === 'en' ? 'Piece ' : 'Pieza ') + (id + 1));
+      var col = id % cols;
+      var row = Math.floor(id / cols);
+      piece.style.setProperty('--px', String(col));
+      piece.style.setProperty('--py', String(row));
+      piece.innerHTML =
+        '<span class="puzzle-face"></span><span class="puzzle-num">' + (id + 1) + '</span>';
+      tray.appendChild(piece);
+    });
     function showScenes() {
       var wrap = document.getElementById('scenePick');
       wrap.style.display = 'block';
-      wrap.innerHTML = '<div class="doors-row"></div>';
-      var row = wrap.firstChild;
-      opts.forEach(function (o, i) {
+      wrap.innerHTML =
+        '<p class="game-hint ok-pulse">' +
+        (LANG === 'en' ? 'Portal open. Which scene keeps looping?' : 'Portal abierto. ¿Qué escena se repite?') +
+        '</p><div class="doors-row"></div>';
+      var row = wrap.querySelector('.doors-row');
+      opts.forEach(function (o) {
         var b = document.createElement('button');
         b.type = 'button';
         b.className = 'door-drop openable';
-        b.dataset.v = String(i);
         b.innerHTML =
           '<span class="bg"></span><span class="lbl"><strong>' +
           (LANG === 'en' ? o.labelEn : o.labelEs) +
@@ -1065,7 +1072,36 @@
         row.appendChild(b);
       });
     }
-    paint();
+    var done = false;
+    bindPickPlace(tray, board, function () {
+      if (done) return;
+      var slots = board.querySelectorAll('.puzzle-slot');
+      var ok = true;
+      var filled = 0;
+      slots.forEach(function (slot) {
+        var piece = slot.querySelector('.puzzle-piece');
+        if (!piece) {
+          ok = false;
+          return;
+        }
+        filled += 1;
+        if (piece.dataset.id !== slot.dataset.expect) ok = false;
+      });
+      var status = document.getElementById('gameStatus');
+      if (ok && filled === 6) {
+        done = true;
+        status.textContent = LANG === 'en' ? 'Puzzle complete' : 'Rompecabezas completo';
+        board.classList.add('solved');
+        tray.querySelectorAll('.piece').forEach(function (p) {
+          p.classList.add('ghost');
+        });
+        showScenes();
+      } else if (filled === 6) {
+        status.textContent = LANG === 'en' ? 'Almost — check the numbers' : 'Casi — revisa los números';
+      } else {
+        status.textContent = '';
+      }
+    });
   }
 
   function renderStart() {
@@ -1232,7 +1268,7 @@
     root.innerHTML =
       '<section class="stage">' +
       '<p class="kicker">' +
-      state.code +
+      t.codeLabel +
       '</p>' +
       '<h2>' +
       t.payTitle +
@@ -1240,6 +1276,18 @@
       '<p class="lead">' +
       t.payLead +
       '</p>' +
+      '<div class="order-card">' +
+      '<span class="order-card-label">' +
+      t.codeLabel +
+      '</span>' +
+      '<strong class="order-card-code" id="orderCode">' +
+      state.code +
+      '</strong>' +
+      '<button type="button" class="btn btn-ghost copy-btn" id="btnCopyCode" data-c="' +
+      state.code +
+      '">' +
+      t.copyCode +
+      '</button></div>' +
       '<div class="pay-box"><div class="pay-tabs" id="payTabs"></div><div class="pay-panel" id="payPanel"></div></div>' +
       '<div class="cta-row" style="margin-top:1.1rem">' +
       '<button type="button" class="btn btn-solid" id="btnPaid">' +
@@ -1251,9 +1299,12 @@
       '<button type="button" class="btn btn-ghost" id="btnReplay">' +
       (LANG === 'en' ? '← Play the game first' : '← Primero jugar el mapa') +
       '</button></div>' +
-      '<div class="waiting" id="waitNote" style="display:none">' +
+      '<div class="waiting" id="waitNote">' +
       t.keyWait +
       '</div>' +
+      '<p class="hint">' +
+      t.keyHint +
+      '</p>' +
       '<div class="unlock-box">' +
       '<label for="keyIn">' +
       t.keyLabel +
@@ -1294,6 +1345,10 @@
     });
     paint(active);
 
+    document.getElementById('btnCopyCode').onclick = function () {
+      copyText(document.getElementById('btnCopyCode'), state.code);
+    };
+
     var a = archCopy(state.archetype);
     var waMsg =
       LANG === 'en'
@@ -1305,7 +1360,6 @@
       notifyTeam('paid');
       state.notified = true;
       saveState();
-      document.getElementById('waitNote').style.display = 'block';
       tone();
     };
 
@@ -1323,7 +1377,17 @@
           body: JSON.stringify({ action: 'verify', orderId: state.code, key: key })
         });
         var data = await res.json();
-        if (!data.ok) throw new Error(data.error || 'Clave incorrecta');
+        if (!data.ok) {
+          var msg =
+            LANG === 'en'
+              ? 'Wrong key for ' +
+                state.code +
+                '. Generate it in /mapa/admin.html with this exact code + password mapa444.'
+              : 'Clave incorrecta para ' +
+                state.code +
+                '. Genérala en /mapa/admin.html con este mismo código + password mapa444.';
+          throw new Error(msg);
+        }
         state.unlocked = true;
         state.keyVerified = true;
         state.step = 'full';

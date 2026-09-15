@@ -113,6 +113,99 @@ body.scene-hole #fxMatrix{opacity:.35}
 .jigsaw.abstract .jig-tile:nth-child(2){filter:hue-rotate(50deg) brightness(.92)}
 .jigsaw.abstract .jig-tile:nth-child(3){filter:hue-rotate(120deg)}
 
+.puzzle-preview{
+  width:min(180px,46vw);margin:0 auto 1rem;text-align:center;
+}
+.puzzle-preview-label{
+  display:block;font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--dim);margin-bottom:.35rem;
+}
+.puzzle-preview-art{
+  aspect-ratio:3/2;border-radius:10px;border:1px solid rgba(255,255,255,.25);
+  background:
+    radial-gradient(circle at 50% 45%, rgba(255,226,122,.55), transparent 28%),
+    radial-gradient(circle at 30% 60%, rgba(255,107,203,.5), transparent 42%),
+    radial-gradient(circle at 70% 55%, rgba(77,163,255,.55), transparent 40%),
+    linear-gradient(145deg, #1a0a28 0%, #2a1050 40%, #0a2840 100%);
+  box-shadow:inset 0 0 24px rgba(125,249,255,.15);
+}
+.puzzle-board{
+  display:grid!important;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,1fr);
+  gap:6px;width:min(100%,360px);margin:0 auto 1rem;aspect-ratio:3/2;
+  padding:8px;border-radius:16px;flex-wrap:nowrap;min-height:0;
+  background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.18);
+}
+.puzzle-board.solved{border-color:rgba(94,240,192,.55);box-shadow:0 0 28px rgba(94,240,192,.2)}
+.puzzle-slot{
+  position:relative;min-height:0;min-width:0!important;width:auto;height:auto;padding:0!important;
+  border-radius:10px;overflow:visible;
+  border:2px dashed rgba(255,255,255,.28)!important;
+  background:rgba(255,255,255,.04)!important;
+  display:grid!important;place-items:center;box-shadow:none!important;
+}
+.puzzle-slot.filled{
+  border-style:solid!important;border-color:rgba(125,249,255,.35)!important;
+  background:transparent!important;
+}
+.puzzle-ghost-num{
+  position:absolute;font-family:var(--serif);font-size:1.4rem;opacity:.22;pointer-events:none;
+  color:#fff;z-index:0;
+}
+.puzzle-slot.filled .puzzle-ghost-num{opacity:0}
+.puzzle-tray-label{
+  text-align:center;font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--dim);margin:.25rem 0 .5rem;
+}
+.puzzle-tray{
+  display:flex;flex-wrap:wrap;gap:.55rem;justify-content:center;
+  min-height:4.5rem;margin-bottom:.75rem;
+}
+.puzzle-piece.piece{
+  position:relative;width:4.6rem;height:4.6rem;min-width:0;padding:0;border:0;
+  background:transparent;animation:none;box-shadow:none;cursor:pointer;isolation:isolate;
+}
+.puzzle-piece .puzzle-face{
+  position:absolute;inset:8%;border-radius:8px;
+  background:
+    radial-gradient(circle at 50% 45%, rgba(255,226,122,.7), transparent 28%),
+    radial-gradient(circle at 30% 60%, rgba(255,107,203,.65), transparent 42%),
+    radial-gradient(circle at 70% 55%, rgba(77,163,255,.7), transparent 40%),
+    linear-gradient(145deg, #1a0a28 0%, #2a1050 40%, #0a2840 100%);
+  background-size:300% 200%;
+  background-position:calc(var(--px) * 50%) calc(var(--py) * 100%);
+  box-shadow:0 4px 14px rgba(0,0,0,.45), inset 0 0 12px rgba(125,249,255,.2);
+}
+.puzzle-piece .puzzle-num{
+  position:absolute;inset:0;display:grid;place-items:center;
+  font-family:var(--serif);font-size:1.15rem;font-weight:700;color:#fff;
+  text-shadow:0 1px 4px rgba(0,0,0,.8);z-index:2;pointer-events:none;
+}
+.puzzle-piece.shape-0 .puzzle-face{clip-path:polygon(0% 0%,100% 0%,100% 65%,88% 65%,88% 100%,65% 100%,65% 88%,0% 88%)}
+.puzzle-piece.shape-1 .puzzle-face{clip-path:polygon(12% 0%,88% 0%,88% 35%,100% 35%,100% 65%,88% 65%,88% 100%,12% 100%,12% 65%,0% 65%,0% 35%,12% 35%)}
+.puzzle-piece.shape-2 .puzzle-face{clip-path:polygon(0% 0%,100% 0%,100% 88%,35% 88%,35% 100%,12% 100%,12% 65%,0% 65%)}
+.puzzle-piece.shape-3 .puzzle-face{clip-path:polygon(0% 12%,35% 12%,35% 0%,65% 0%,65% 12%,100% 12%,100% 100%,0% 100%)}
+.puzzle-piece.shape-4 .puzzle-face{clip-path:polygon(12% 0%,88% 0%,88% 12%,100% 12%,100% 88%,88% 88%,88% 100%,12% 100%,12% 88%,0% 88%,0% 12%,12% 12%)}
+.puzzle-piece.shape-5 .puzzle-face{clip-path:polygon(0% 12%,65% 12%,65% 0%,88% 0%,88% 35%,100% 35%,100% 100%,0% 100%)}
+.puzzle-slot .puzzle-piece{width:92%;height:92%;max-width:none}
+.puzzle-piece.selected{
+  outline:2px solid #ffe27a;outline-offset:2px;border-radius:12px;
+  transform:scale(1.06);
+}
+.puzzle-piece.ghost{opacity:.35;pointer-events:none}
+.order-card{
+  display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:.65rem;
+  margin:1rem 0 1.25rem;padding:1rem 1.1rem;border-radius:16px;
+  background:rgba(125,249,255,.08);border:1px solid rgba(125,249,255,.3);
+}
+.order-card-label{
+  width:100%;text-align:center;font-size:.68rem;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--dim);
+}
+.order-card-code{
+  font-family:ui-monospace,monospace;font-size:1.15rem;letter-spacing:.08em;
+  color:#9ef7ff;
+}
+
 .flash{
   position:fixed;inset:0;z-index:40;pointer-events:none;
   background:var(--iris);opacity:0;mix-blend-mode:screen;

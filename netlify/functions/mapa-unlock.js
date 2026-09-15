@@ -111,7 +111,11 @@ exports.handler = async (event) => {
     return {
       statusCode: 403,
       headers,
-      body: JSON.stringify({ ok: false, error: 'Clave incorrecta. Espera la clave de Pauline tras verificar tu pago.' }),
+      body: JSON.stringify({
+        ok: false,
+        error:
+          'Clave incorrecta para este código. Debe generarse en /mapa/admin.html con el mismo MAPA-… (password mapa444). No inventes la clave.',
+      }),
     };
   }
   return {

@@ -35,12 +35,14 @@
     <div class="out" id="out">—</div>
     <div class="err" id="err"></div>
     <ol class="steps">
-      <li>Netlify → Site configuration → Environment variables</li>
-      <li>Add <code>MAPA_ADMIN_PASS</code> = tu password secreta</li>
-      <li>Add <code>MAPA_UNLOCK_SECRET</code> = frase larga random</li>
-      <li>Deploys → Trigger deploy (Clear cache and deploy site)</li>
-      <li>Usa ese password aquí (si no, usa <code>mapa444</code>)</li>
+      <li>Copia el código exacto del cliente (ej. <code>MAPA-AB12CD34</code>) — no inventes otro</li>
+      <li>Password: <code>mapa444</code> (o tu <code>MAPA_ADMIN_PASS</code>)</li>
+      <li>Genera la clave de 8 caracteres y envíasela al cliente</li>
+      <li>El cliente la pega en la pantalla de pago con el mismo código MAPA</li>
     </ol>
+    <p class="help" style="margin-top:1rem">
+      Netlify (opcional): Environment variables → <code>MAPA_ADMIN_PASS</code> + <code>MAPA_UNLOCK_SECRET</code> → Trigger deploy.
+    </p>
     <p style="margin-top:1rem"><a href="/mapa/">← Volver al mapa</a></p>
   </div>
   <script>
