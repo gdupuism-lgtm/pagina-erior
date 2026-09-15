@@ -3,9 +3,20 @@
 
   var LANG = (document.documentElement.lang || 'es').toLowerCase().indexOf('en') === 0 ? 'en' : 'es';
   var WA = '5214432311761';
-  var STORAGE_KEY = 'erior_mapa_v1';
+  var STORAGE_KEY = 'erior_mapa_v2';
   var CREDIT_MXN = 444;
   var CREDIT_USD = 26;
+  var UNLOCK_FN = '/.netlify/functions/mapa-unlock';
+
+  var SCENES = [
+    '/img/catalog/wonderland-coherence.jpg',
+    '/img/catalog/imagine.jpg',
+    '/img/catalog/god-goddess.jpg',
+    '/img/catalog/simulation-u.jpg',
+    '/img/catalog/white-rabbit-code.jpg',
+    '/img/catalog/limitless.jpg',
+    '/img/mental-tech-cover.png'
+  ];
 
   var I18N = {
     es: {
@@ -15,33 +26,37 @@
       homeHref: '/',
       kickerStart: 'Capa 0 · Umbral',
       titleStart: 'El mapa del inconsciente',
-      leadStart: 'No es un test. Es un puzzle de tu realidad. Cinco puertas. Una clave. Un patrón que ya está operando en ti — aunque digas que no lo ves.',
-      startCta: 'Cruzar el umbral',
+      leadStart: 'No es un formulario. Es una experiencia: puertas, objetos, voces y un archivo que solo se abre cuando el pago es real.',
+      startCta: 'Entrar al mapa',
       miniTag: 'Revelación parcial',
       miniTitle: 'Esto es solo el borde',
       unlockTitle: 'Archivo completo · $444 MXN',
-      unlockLead: 'El reporte completo nombra tu patrón, 4 bloqueos activos, el guión que repite tu mente y 2–3 frecuencias para reescribirlo. Si luego tomas audio(s), los $444 se descuentan.',
-      unlockCta: 'Desbloquear archivo ($444 MXN)',
-      payTitle: 'Paga y abre tu archivo',
-      payLead: 'Monto: $444 MXN. Envía comprobante a eriorcenter@gmail.com con asunto “Mapa Inconsciente” + tu Instagram. Luego toca “Ya pagué”.',
-      paidCta: 'Ya pagué — abrir reporte',
-      waPay: 'Prefiero pagar por WhatsApp',
+      unlockLead: 'Patrón completo, 4 bloqueos, guión inconsciente y 2–3 frecuencias. Los $444 se descuentan si luego activas audio(s).',
+      unlockCta: 'Continuar al pago ($444 MXN)',
+      payTitle: 'Paga y pide tu clave',
+      payLead: 'Monto: $444 MXN. Pon tu código en el concepto / asunto. Envía comprobante. Pauline te manda la clave — sin clave no se abre el archivo.',
+      paidCta: 'Ya pagué — avisar y pedir clave',
+      keyLabel: 'Clave de acceso (la envía Pauline)',
+      keyPlaceholder: 'XXXXXXXX',
+      keyCta: 'Abrir archivo con clave',
+      keyWait: 'Después de pagar, Pauline verifica el comprobante y te envía una clave de 8 caracteres. Escríbela aquí. “Ya pagué” solo avisa al equipo — no desbloquea solo.',
+      waPay: 'Pagar / avisar por WhatsApp',
       fullTag: 'Archivo completo',
       creditNote: 'Crédito activo: $444 MXN. Si activas frecuencia(s) ahora, solo pagas la diferencia.',
       upsellTitle: 'Activa la frecuencia',
-      upsellLead: 'Estas son las 3 señales que mejor cortan tu patrón. Elige 1, 2 o 3 — el diagnóstico ya está pagado.',
-      buy1: '1 audio · pagar diferencia',
-      buy2: '2 audios + libro · pagar diferencia',
-      buy3: '3 audios + Alicia Premium · pagar diferencia',
+      upsellLead: 'Estas 3 señales cortan tu patrón. Elige 1, 2 o 3 — el diagnóstico ya está pagado.',
+      buy1: '1 audio · diferencia',
+      buy2: '2 audios + libro · diferencia',
+      buy3: '3 audios + Alicia Premium · diferencia',
       waReport: 'Enviar mi mapa a Pauline',
       backHome: 'Volver al centro',
       copy: 'Copiar',
       copied: '¡Copiado!',
       rooms: [
-        { kicker: 'Capa 1 · Tres puertas', title: '¿Cuál se abre sola cuando cierras los ojos?', lead: 'No elijas la “correcta”. Elige la que ya conoces.' },
-        { kicker: 'Capa 2 · El ruido', title: '¿Qué voz hay que callar primero?', lead: 'Una sola. La que más te gobierna sin permiso.' },
-        { kicker: 'Capa 3 · Objeto', title: 'En la habitación hay un objeto. ¿Cuál tomas?', lead: 'El objeto no es metáfora bonita. Es tu estrategia.' },
-        { kicker: 'Capa 4 · Clave', title: 'Una frase abre la cerradura. ¿Cuál es tuya?', lead: 'La que te incomoda un poco es casi siempre la verdadera.' },
+        { kicker: 'Capa 1 · Tres puertas', title: '¿Cuál se abre sola cuando cierras los ojos?', lead: 'Toca la puerta. Siente cuál ya conoces.' },
+        { kicker: 'Capa 2 · El ruido', title: '¿Qué voz hay que callar primero?', lead: 'Elige la que más te gobierna sin permiso.' },
+        { kicker: 'Capa 3 · Objeto', title: 'En la habitación hay un objeto. ¿Cuál tomas?', lead: 'No es metáfora. Es tu estrategia.' },
+        { kicker: 'Capa 4 · Clave', title: 'Una frase abre la cerradura. ¿Cuál es tuya?', lead: 'La que incomoda casi siempre es la verdadera.' },
         { kicker: 'Capa 5 · Espejo', title: 'Si tu vida fuera una serie… ¿qué escena se repite?', lead: 'Última pieza. El inconsciente ama los bucles.' }
       ],
       methods: [
@@ -58,33 +73,37 @@
       homeHref: '/en/',
       kickerStart: 'Layer 0 · Threshold',
       titleStart: 'Map of the Unconscious',
-      leadStart: 'This is not a quiz. It’s a puzzle of your reality. Five doors. One key. A pattern already running you — even if you swear you can’t see it.',
-      startCta: 'Cross the threshold',
+      leadStart: 'Not a form. An experience: doors, objects, voices — and a file that only opens when payment is real.',
+      startCta: 'Enter the map',
       miniTag: 'Partial reveal',
       miniTitle: 'This is only the edge',
       unlockTitle: 'Full file · $26 USD',
-      unlockLead: 'The full report names your pattern, 4 active blocks, the script your mind repeats, and 2–3 frequencies to rewrite it. If you take audio(s) after, the $26 is credited.',
-      unlockCta: 'Unlock full file ($26 USD)',
-      payTitle: 'Pay & open your file',
-      payLead: 'Amount: $26 USD. Send receipt to eriorcenter@gmail.com with subject “Unconscious Map” + your Instagram. Then tap “I paid”.',
-      paidCta: 'I paid — open report',
-      waPay: 'I’d rather pay on WhatsApp',
+      unlockLead: 'Full pattern, 4 blocks, unconscious script and 2–3 frequencies. The $26 is credited if you activate audio(s) after.',
+      unlockCta: 'Continue to payment ($26 USD)',
+      payTitle: 'Pay, then get your key',
+      payLead: 'Amount: $26 USD. Put your code in the memo/subject. Send the receipt. Pauline sends the key — no key, no file.',
+      paidCta: 'I paid — notify & request key',
+      keyLabel: 'Access key (sent by Pauline)',
+      keyPlaceholder: 'XXXXXXXX',
+      keyCta: 'Open file with key',
+      keyWait: 'After you pay, Pauline verifies the receipt and sends an 8-character key. Enter it here. “I paid” only notifies the team — it does not unlock alone.',
+      waPay: 'Pay / notify on WhatsApp',
       fullTag: 'Full file',
       creditNote: 'Active credit: $26 USD. If you activate frequenc(ies) now, you only pay the difference.',
       upsellTitle: 'Activate the frequency',
-      upsellLead: 'These 3 signals cut your pattern best. Choose 1, 2 or 3 — the diagnosis is already paid.',
-      buy1: '1 audio · pay the difference',
-      buy2: '2 audios + book · pay the difference',
-      buy3: '3 audios + Alicia Premium · pay the difference',
+      upsellLead: 'These 3 signals cut your pattern. Choose 1, 2 or 3 — diagnosis already paid.',
+      buy1: '1 audio · difference',
+      buy2: '2 audios + book · difference',
+      buy3: '3 audios + Alicia Premium · difference',
       waReport: 'Send my map to Pauline',
       backHome: 'Back to center',
       copy: 'Copy',
       copied: 'Copied!',
       rooms: [
-        { kicker: 'Layer 1 · Three doors', title: 'Which one opens by itself when you close your eyes?', lead: 'Don’t pick the “right” one. Pick the one you already know.' },
-        { kicker: 'Layer 2 · The noise', title: 'Which voice must go quiet first?', lead: 'Only one. The one running you without permission.' },
-        { kicker: 'Layer 3 · Object', title: 'There’s an object in the room. Which do you take?', lead: 'It isn’t a cute metaphor. It’s your strategy.' },
-        { kicker: 'Layer 4 · Key', title: 'One sentence opens the lock. Which is yours?', lead: 'The one that stings a little is almost always true.' },
+        { kicker: 'Layer 1 · Three doors', title: 'Which one opens by itself when you close your eyes?', lead: 'Touch the door. Feel which one you already know.' },
+        { kicker: 'Layer 2 · The noise', title: 'Which voice must go quiet first?', lead: 'Pick the one running you without permission.' },
+        { kicker: 'Layer 3 · Object', title: 'There’s an object in the room. Which do you take?', lead: 'Not a cute metaphor. Your strategy.' },
+        { kicker: 'Layer 4 · Key', title: 'One sentence opens the lock. Which is yours?', lead: 'The one that stings is almost always true.' },
         { kicker: 'Layer 5 · Mirror', title: 'If your life were a series… which scene keeps looping?', lead: 'Last piece. The unconscious loves loops.' }
       ],
       methods: [
@@ -101,216 +120,216 @@
     loop: {
       es: {
         name: 'Loop de Control',
-        mini: 'Tu inconsciente no busca castigarte: busca previsibilidad. Repite el mismo circuito para no perder el mando.',
-        script: '“Si yo no controlo, alguien más decide por mí — y eso es peligroso.”',
+        mini: 'Tu inconsciente busca previsibilidad. Repite el circuito para no perder el mando.',
+        script: '“Si yo no controlo, alguien más decide — y eso es peligroso.”',
         blocks: [
           { t: 'Control como seguridad', d: 'Relajas solo cuando todo está “bajo control”.' },
-          { t: 'Miedo al caos', d: 'La incertidumbre se siente como amenaza, no como espacio.' },
-          { t: 'Sobrepensar', d: 'Piensas para no sentir; analizas para no soltar.' },
-          { t: 'Loop de posponer', d: 'Esperas el momento perfecto… y el momento nunca llega.' }
+          { t: 'Miedo al caos', d: 'La incertidumbre se siente como amenaza.' },
+          { t: 'Sobrepensar', d: 'Piensas para no sentir.' },
+          { t: 'Loop de posponer', d: 'Esperas el momento perfecto que nunca llega.' }
         ],
-        ritual: 'Durante 7 días, elige una micro-decisión al azar (café, ruta, mensaje) y no la optimices. Observa la ansiedad sin obedecerla.'
+        ritual: '7 días: una micro-decisión al azar sin optimizarla. Observa la ansiedad sin obedecerla.'
       },
       en: {
         name: 'Control Loop',
-        mini: 'Your unconscious isn’t punishing you — it wants predictability. It repeats the same circuit so you never lose the wheel.',
-        script: '“If I don’t control it, someone else decides for me — and that’s dangerous.”',
+        mini: 'Your unconscious wants predictability. It repeats the circuit so you never lose the wheel.',
+        script: '“If I don’t control it, someone else decides — and that’s dangerous.”',
         blocks: [
-          { t: 'Control as safety', d: 'You only relax when everything feels “handled”.' },
-          { t: 'Fear of chaos', d: 'Uncertainty feels like threat, not space.' },
-          { t: 'Overthinking', d: 'You think to avoid feeling; analyze to avoid releasing.' },
-          { t: 'Postpone loop', d: 'You wait for the perfect moment… that never arrives.' }
+          { t: 'Control as safety', d: 'You only relax when everything feels handled.' },
+          { t: 'Fear of chaos', d: 'Uncertainty feels like threat.' },
+          { t: 'Overthinking', d: 'You think to avoid feeling.' },
+          { t: 'Postpone loop', d: 'You wait for a perfect moment that never arrives.' }
         ],
-        ritual: 'For 7 days, make one micro-decision at random (coffee, route, text) and don’t optimize it. Watch the anxiety without obeying it.'
+        ritual: '7 days: one random micro-decision, no optimizing. Watch anxiety without obeying it.'
       },
       audios: [
-        { id: 'booster', name: 'Booster 2.0', whyEs: 'Rompe el loop y vuelve al punto cero.', whyEn: 'Breaks the loop and returns you to zero point.', img: '/img/catalog/booster-2-0.jpg' },
-        { id: 'limitless', name: 'LIMITLESS', whyEs: 'Detecta el patrón invisible que te frena.', whyEn: 'Detects the invisible pattern holding you.', img: '/img/catalog/limitless.jpg' },
-        { id: 'wonderland', name: 'Wonderland Coherence', whyEs: 'Coherencia cuando sueltas el control.', whyEn: 'Coherence when you release control.', img: '/img/catalog/wonderland-coherence.jpg' }
+        { name: 'Booster 2.0', whyEs: 'Rompe el loop y vuelve al punto cero.', whyEn: 'Breaks the loop; returns to zero point.', img: '/img/catalog/booster-2-0.jpg' },
+        { name: 'LIMITLESS', whyEs: 'Detecta el patrón invisible.', whyEn: 'Detects the invisible pattern.', img: '/img/catalog/limitless.jpg' },
+        { name: 'Wonderland Coherence', whyEs: 'Coherencia al soltar el control.', whyEn: 'Coherence when releasing control.', img: '/img/catalog/wonderland-coherence.jpg' }
       ]
     },
     espejo: {
       es: {
         name: 'Espejo Relacional',
-        mini: 'Tu realidad amorosa no es “mala suerte”: es un espejo. Atraes para confirmar una historia vieja de valor.',
+        mini: 'Tu vida amorosa es un espejo: atraes para confirmar una historia vieja de valor.',
         script: '“Si me eligen, valgo. Si me ignoran, desaparezco.”',
         blocks: [
           { t: 'Validación externa', d: 'Tu estado depende de cómo te miran.' },
-          { t: 'Perseguir / retirar', d: 'Oscilas entre acercarte demasiado y desaparecer.' },
+          { t: 'Perseguir / retirar', d: 'Te acercas demasiado o desapareces.' },
           { t: 'Miedo al abandono', d: 'Aceptas migajas para no quedarte sola/o.' },
-          { t: 'Identidad en el otro', d: 'Te defines por la relación, no por ti.' }
+          { t: 'Identidad en el otro', d: 'Te defines por la relación.' }
         ],
-        ritual: 'Escribe 10 veces: “Mi valor no negocia.” Luego no envíes el mensaje que suele salvar la escena.'
+        ritual: 'Escribe 10 veces: “Mi valor no negocia.” No envíes el mensaje que suele “salvar” la escena.'
       },
       en: {
         name: 'Relational Mirror',
-        mini: 'Your love life isn’t “bad luck” — it’s a mirror. You attract to confirm an old worth story.',
+        mini: 'Your love life is a mirror: you attract to confirm an old worth story.',
         script: '“If they choose me, I matter. If they ignore me, I vanish.”',
         blocks: [
           { t: 'External validation', d: 'Your state depends on how you’re seen.' },
-          { t: 'Chase / withdraw', d: 'You swing between getting too close and disappearing.' },
-          { t: 'Abandonment fear', d: 'You accept crumbs so you won’t be alone.' },
-          { t: 'Identity in the other', d: 'You define yourself by the relationship, not by you.' }
+          { t: 'Chase / withdraw', d: 'Too close, then gone.' },
+          { t: 'Abandonment fear', d: 'You accept crumbs to avoid being alone.' },
+          { t: 'Identity in the other', d: 'You define yourself by the relationship.' }
         ],
-        ritual: 'Write 10 times: “My worth doesn’t negotiate.” Then don’t send the message that usually saves the scene.'
+        ritual: 'Write 10×: “My worth doesn’t negotiate.” Don’t send the message that usually saves the scene.'
       },
       audios: [
-        { id: 'seduction', name: 'SEDUCTION', whyEs: 'Deja de perseguir; vuelve el magnetismo.', whyEn: 'Stop chasing; restore magnetism.', img: '/img/catalog/seduction.jpg' },
-        { id: 'amor', name: 'Amor Propio Magic 4.0', whyEs: 'Merecimiento sin codependencia.', whyEn: 'Worth without codependency.', img: '/img/catalog/amor-propio-magic-4-0.jpg' },
-        { id: 'mesmer', name: 'Mesmerizing Love', whyEs: 'Presencia que enamora sin forzar.', whyEn: 'Presence that magnetizes without forcing.', img: '/img/catalog/mesmerizing-love.jpg' }
+        { name: 'SEDUCTION', whyEs: 'Deja de perseguir; vuelve el magnetismo.', whyEn: 'Stop chasing; restore magnetism.', img: '/img/catalog/seduction.jpg' },
+        { name: 'Amor Propio Magic 4.0', whyEs: 'Merecimiento sin codependencia.', whyEn: 'Worth without codependency.', img: '/img/catalog/amor-propio-magic-4-0.jpg' },
+        { name: 'Mesmerizing Love', whyEs: 'Presencia que enamora sin forzar.', whyEn: 'Presence that magnetizes.', img: '/img/catalog/mesmerizing-love.jpg' }
       ]
     },
     vacio: {
       es: {
         name: 'Vacío de Identidad',
-        mini: 'No es que “no sepas qué quieres”. Es que el personaje actual ya no cabe — y el inconsciente aún no instaló el nuevo.',
+        mini: 'El personaje actual ya no cabe — y el nuevo aún no se instaló.',
         script: '“Si elijo mal quién soy, pierdo todo lo que construí.”',
         blocks: [
-          { t: 'Disociación suave', d: 'Vives en piloto automático.' },
-          { t: 'Miedo a definirte', d: 'Elegir una versión se siente como traición.' },
+          { t: 'Piloto automático', d: 'Vives disociada/o con suavidad.' },
+          { t: 'Miedo a definirte', d: 'Elegir una versión se siente traición.' },
           { t: 'Comparación', d: 'Mides tu vida con películas ajenas.' },
-          { t: 'Falta de guión', d: 'Sabes lo que no quieres; no el rol que sí.' }
+          { t: 'Sin guión', d: 'Sabes lo que no quieres; no el rol que sí.' }
         ],
-        ritual: 'Durante 3 mañanas escribe: “Hoy soy la persona que ___.” Completa en presente y actúa 1 gesto mínimo acorde.'
+        ritual: '3 mañanas: “Hoy soy la persona que ___.” Un gesto mínimo acorde.'
       },
       en: {
         name: 'Identity Void',
-        mini: 'It isn’t that you “don’t know what you want.” The current character no longer fits — and the unconscious hasn’t installed the new one.',
+        mini: 'The current character no longer fits — and the new one isn’t installed yet.',
         script: '“If I choose the wrong who-I-am, I lose everything I built.”',
         blocks: [
-          { t: 'Soft dissociation', d: 'You live on autopilot.' },
+          { t: 'Autopilot', d: 'Soft dissociation.' },
           { t: 'Fear of defining', d: 'Choosing a version feels like betrayal.' },
-          { t: 'Comparison', d: 'You measure your life against other people’s films.' },
+          { t: 'Comparison', d: 'You measure life against other films.' },
           { t: 'No script', d: 'You know what you don’t want — not the role you do.' }
         ],
-        ritual: 'For 3 mornings write: “Today I am the person who ___.” Fill it in present tense and do one tiny matching act.'
+        ritual: '3 mornings: “Today I am the person who ___.” One tiny matching act.'
       },
       audios: [
-        { id: 'identity', name: 'Identity', whyEs: 'Rediseña tu película y el rol principal.', whyEn: 'Redesign your film and lead role.', img: '/img/catalog/identity.jpg' },
-        { id: 'imagine', name: 'IMAGINE', whyEs: 'Imagina desde el resultado, no desde el miedo.', whyEn: 'Imagine from the result, not from fear.', img: '/img/catalog/imagine.jpg' },
-        { id: 'god', name: 'GOD / GODDESS', whyEs: 'Instala el “YO SOY” creador.', whyEn: 'Install the creative I AM.', img: '/img/catalog/god-goddess.jpg' }
+        { name: 'Identity', whyEs: 'Rediseña tu película y el rol principal.', whyEn: 'Redesign your film and lead role.', img: '/img/catalog/identity.jpg' },
+        { name: 'IMAGINE', whyEs: 'Imagina desde el resultado.', whyEn: 'Imagine from the result.', img: '/img/catalog/imagine.jpg' },
+        { name: 'GOD / GODDESS', whyEs: 'Instala el YO SOY creador.', whyEn: 'Install the creative I AM.', img: '/img/catalog/god-goddess.jpg' }
       ]
     },
     ruido: {
       es: {
         name: 'Ruido Mental',
-        mini: 'Tu mente no está “rota”: está saturada. Demasiadas pestañas abiertas. El inconsciente grita porque nadie baja el volumen.',
+        mini: 'Tu mente no está rota: está saturada. Demasiadas pestañas abiertas.',
         script: '“Si dejo de pensar, se me escapa algo importante.”',
         blocks: [
-          { t: 'Hiper Vigilancia', d: 'Escaneas amenazas aunque no haya incendio.' },
+          { t: 'Hipervigilancia', d: 'Escaneas amenazas sin incendio.' },
           { t: 'Multitarea emocional', d: 'Sientes 5 escenarios a la vez.' },
-          { t: 'Insomnio creativo', d: 'Las mejores ideas llegan… cuando deberías dormir.' },
+          { t: 'Insomnio creativo', d: 'Ideas cuando deberías dormir.' },
           { t: 'Duda crónica', d: 'Revisas cada decisión hasta vaciarla.' }
         ],
-        ritual: '10 minutos al día: auriculares, una sola pregunta, cero pantallas. Anota solo 1 insight. Nada más.'
+        ritual: '10 min/día: auriculares, una pregunta, cero pantallas. Un solo insight.'
       },
       en: {
         name: 'Mental Noise',
-        mini: 'Your mind isn’t “broken” — it’s saturated. Too many tabs open. The unconscious shouts because nobody turns the volume down.',
-        script: '“If I stop thinking, something important will slip away.”',
+        mini: 'Your mind isn’t broken — saturated. Too many tabs open.',
+        script: '“If I stop thinking, something important will slip.”',
         blocks: [
-          { t: 'Hypervigilance', d: 'You scan for threats even when there’s no fire.' },
-          { t: 'Emotional multitasking', d: 'You feel five scenarios at once.' },
-          { t: 'Creative insomnia', d: 'Best ideas arrive… when you should sleep.' },
-          { t: 'Chronic doubt', d: 'You revise every decision until it’s empty.' }
+          { t: 'Hypervigilance', d: 'Scanning threats with no fire.' },
+          { t: 'Emotional multitasking', d: 'Five scenarios at once.' },
+          { t: 'Creative insomnia', d: 'Ideas when you should sleep.' },
+          { t: 'Chronic doubt', d: 'Revising until the choice is empty.' }
         ],
-        ritual: '10 minutes a day: headphones, one question, zero screens. Write only 1 insight. Nothing else.'
+        ritual: '10 min/day: headphones, one question, zero screens. One insight only.'
       },
       audios: [
-        { id: 'limitless', name: 'LIMITLESS', whyEs: 'Claridad láser y metacognición.', whyEn: 'Laser clarity and metacognition.', img: '/img/catalog/limitless.jpg' },
-        { id: 'cool', name: 'Keep Cool', whyEs: 'Baja el ruido y regula el sistema.', whyEn: 'Lowers noise and regulates the system.', img: '/img/catalog/keep-cool.jpg' },
-        { id: 'master', name: 'MASTER MIND', whyEs: 'Orden mental para sostener visiones grandes.', whyEn: 'Mental order to hold big visions.', img: '/img/catalog/master-mind.jpg' }
+        { name: 'LIMITLESS', whyEs: 'Claridad láser.', whyEn: 'Laser clarity.', img: '/img/catalog/limitless.jpg' },
+        { name: 'Keep Cool', whyEs: 'Baja el ruido del sistema.', whyEn: 'Lowers system noise.', img: '/img/catalog/keep-cool.jpg' },
+        { name: 'MASTER MIND', whyEs: 'Orden para visiones grandes.', whyEn: 'Order for big visions.', img: '/img/catalog/master-mind.jpg' }
       ]
     },
     carencia: {
       es: {
         name: 'Código de Carencia',
-        mini: 'El dinero no es el problema: es el termómetro. Tu inconsciente aún corre el programa “nunca alcanza”.',
+        mini: 'El dinero es el termómetro. Aún corre el programa “nunca alcanza”.',
         script: '“Si me llega de más, algo malo viene después.”',
         blocks: [
-          { t: 'Culpa al recibir', d: 'Ganar se siente inseguro o inmerecido.' },
-          { t: 'Fugas invisibles', d: 'Entra y se va sin que sepas por qué.' },
-          { t: 'Techo de merecimiento', d: 'Saboteas justo cuando sube el nivel.' },
+          { t: 'Culpa al recibir', d: 'Ganar se siente inseguro.' },
+          { t: 'Fugas invisibles', d: 'Entra y se va sin explicación.' },
+          { t: 'Techo de merecimiento', d: 'Saboteas cuando sube el nivel.' },
           { t: 'Identidad pobre', d: '“La gente como yo no tiene eso.”' }
         ],
-        ritual: 'Cada vez que pagues algo hoy, di en voz baja: “Circula a través de mí.” Sin drama. Solo señal nueva.'
+        ritual: 'Al pagar algo hoy: “Circula a través de mí.” Nueva señal, sin drama.'
       },
       en: {
         name: 'Lack Code',
-        mini: 'Money isn’t the problem — it’s the thermometer. Your unconscious still runs “never enough.”',
-        script: '“If too much arrives, something bad comes after.”',
+        mini: 'Money is the thermometer. “Never enough” is still running.',
+        script: '“If too much arrives, something bad follows.”',
         blocks: [
-          { t: 'Guilt receiving', d: 'Earning feels unsafe or undeserved.' },
-          { t: 'Invisible leaks', d: 'It comes in and leaves without a clear why.' },
-          { t: 'Worth ceiling', d: 'You sabotage right as the level rises.' },
+          { t: 'Guilt receiving', d: 'Earning feels unsafe.' },
+          { t: 'Invisible leaks', d: 'It comes and goes without a clear why.' },
+          { t: 'Worth ceiling', d: 'Sabotage as the level rises.' },
           { t: 'Poor identity', d: '“People like me don’t get that.”' }
         ],
-        ritual: 'Every time you pay for something today, whisper: “It circulates through me.” No drama. Just a new signal.'
+        ritual: 'When you pay today: whisper “It circulates through me.”'
       },
       audios: [
-        { id: 'money', name: 'MONEY TECH', whyEs: 'Nueva fórmula diurna/nocturna de abundancia.', whyEn: 'Day/night abundance formula.', img: '/img/catalog/money-tech.jpg' },
-        { id: 'mastera', name: 'Master Abundance', whyEs: 'Curso + audio para sostener flujo.', whyEn: 'Course + audio to sustain flow.', img: '/img/catalog/master-abundance.jpg' },
-        { id: 'lucky', name: 'LUCKY', whyEs: 'Suerte como identidad, no como azar.', whyEn: 'Luck as identity, not chance.', img: '/img/catalog/lucky.jpg' }
+        { name: 'MONEY TECH', whyEs: 'Fórmula diurna/nocturna de abundancia.', whyEn: 'Day/night abundance formula.', img: '/img/catalog/money-tech.jpg' },
+        { name: 'Master Abundance', whyEs: 'Sostener el flujo.', whyEn: 'Sustain the flow.', img: '/img/catalog/master-abundance.jpg' },
+        { name: 'LUCKY', whyEs: 'Suerte como identidad.', whyEn: 'Luck as identity.', img: '/img/catalog/lucky.jpg' }
       ]
     },
     sueno: {
       es: {
         name: 'Soñador Atrapado',
-        mini: 'Imaginas mundos enormes… y te quedas en el vestíbulo. El inconsciente protege el sueño para que no se rompa al materializarse.',
+        mini: 'Mundos enormes… y te quedas en el vestíbulo. El sueño se protege para no romperse.',
         script: '“Mientras sea posible en mi mente, no puede fallar afuera.”',
         blocks: [
-          { t: 'Fantasía como refugio', d: 'Sueñas para no arriesgar.' },
-          { t: 'Perfeccionismo creativo', d: 'Nunca está “listo” para salir.' },
+          { t: 'Fantasía-refugio', d: 'Sueñas para no arriesgar.' },
+          { t: 'Perfeccionismo', d: 'Nunca está “listo”.' },
           { t: 'Miedo al juicio', d: 'Si lo muestro, me pueden reducir.' },
           { t: 'Procrastinación sagrada', d: 'Esperas inspiración en vez de ritual.' }
         ],
-        ritual: 'Publica o envía HOY una versión imperfecta (story, audio, borrador). El acto > la obra maestra.'
+        ritual: 'Hoy: publica o envía una versión imperfecta. El acto > la obra maestra.'
       },
       en: {
         name: 'Trapped Dreamer',
-        mini: 'You imagine huge worlds… and stay in the lobby. The unconscious protects the dream so it can’t break when it becomes real.',
+        mini: 'Huge worlds… stuck in the lobby. The dream protects itself from becoming real.',
         script: '“As long as it’s possible in my mind, it can’t fail outside.”',
         blocks: [
-          { t: 'Fantasy as shelter', d: 'You dream to avoid risk.' },
-          { t: 'Creative perfectionism', d: 'It’s never “ready” to leave.' },
-          { t: 'Fear of judgment', d: 'If I show it, they can shrink me.' },
-          { t: 'Sacred procrastination', d: 'You wait for inspiration instead of ritual.' }
+          { t: 'Fantasy shelter', d: 'Dreaming to avoid risk.' },
+          { t: 'Perfectionism', d: 'Never “ready”.' },
+          { t: 'Fear of judgment', d: 'Showing it might shrink you.' },
+          { t: 'Sacred delay', d: 'Waiting for inspiration instead of ritual.' }
         ],
-        ritual: 'Publish or send TODAY an imperfect version (story, audio, draft). The act > the masterpiece.'
+        ritual: 'Today: publish or send an imperfect version. Act > masterpiece.'
       },
       audios: [
-        { id: 'imagine', name: 'IMAGINE', whyEs: 'Materializa desde la imaginación entrenada.', whyEn: 'Materialize from trained imagination.', img: '/img/catalog/imagine.jpg' },
-        { id: 'rabbit', name: 'White Rabbit Code', whyEs: 'Boost personalizado para salir del vestíbulo.', whyEn: 'Personalized boost to leave the lobby.', img: '/img/catalog/white-rabbit-code.jpg' },
-        { id: 'sim', name: 'Simulation U', whyEs: 'Entiende el juego y juega en serio.', whyEn: 'Understand the game and play for real.', img: '/img/catalog/simulation-u.jpg' }
+        { name: 'IMAGINE', whyEs: 'Materializa desde imaginación entrenada.', whyEn: 'Materialize from trained imagination.', img: '/img/catalog/imagine.jpg' },
+        { name: 'White Rabbit Code', whyEs: 'Boost para salir del vestíbulo.', whyEn: 'Boost to leave the lobby.', img: '/img/catalog/white-rabbit-code.jpg' },
+        { name: 'Simulation U', whyEs: 'Entiende el juego y juega en serio.', whyEn: 'Understand the game; play for real.', img: '/img/catalog/simulation-u.jpg' }
       ]
     }
   };
 
   var CHOICES = [
     [
-      { labelEs: 'La puerta de metal', subEs: 'Fría, cerrada, con candado brillante', labelEn: 'The metal door', subEn: 'Cold, sealed, shiny lock', scores: { loop: 2, ruido: 1 } },
-      { labelEs: 'La puerta de espejo', subEs: 'Te ves… pero no del todo', labelEn: 'The mirror door', subEn: 'You see yourself… not fully', scores: { espejo: 2, vacio: 1 } },
-      { labelEs: 'La puerta de niebla', subEs: 'No sabes qué hay detrás y eso te llama', labelEn: 'The fog door', subEn: 'You don’t know what’s behind — and it calls you', scores: { sueno: 2, vacio: 1, carencia: 1 } }
+      { glyph: '🜔', labelEs: 'Puerta de metal', subEs: 'Fría, candado brillante', labelEn: 'Metal door', subEn: 'Cold, shiny lock', img: '/img/catalog/booster-2-0.jpg', scores: { loop: 2, ruido: 1 } },
+      { glyph: '🪞', labelEs: 'Puerta de espejo', subEs: 'Te ves… a medias', labelEn: 'Mirror door', subEn: 'You see yourself… halfway', img: '/img/catalog/mesmerizing-love.jpg', scores: { espejo: 2, vacio: 1 } },
+      { glyph: '🌫️', labelEs: 'Puerta de niebla', subEs: 'No sabes qué hay — y llama', labelEn: 'Fog door', subEn: 'Unknown — and it calls', img: '/img/catalog/imagine.jpg', scores: { sueno: 2, vacio: 1, carencia: 1 } }
     ],
     [
-      { labelEs: '“¿Y si salgo mal?”', subEs: 'La voz del control anticipado', labelEn: '“What if it goes wrong?”', subEn: 'The voice of preemptive control', scores: { loop: 2, ruido: 1 } },
-      { labelEs: '“No soy suficiente”', subEs: 'La voz del espejo roto', labelEn: '“I’m not enough”', subEn: 'The cracked-mirror voice', scores: { espejo: 2, carencia: 1 } },
-      { labelEs: '“Después lo hago”', subEs: 'La voz que pospone el salto', labelEn: '“I’ll do it later”', subEn: 'The voice that postpones the leap', scores: { sueno: 2, vacio: 1 } }
+      { glyph: '⚠️', labelEs: '“¿Y si salgo mal?”', subEs: 'Control anticipado', labelEn: '“What if it goes wrong?”', subEn: 'Preemptive control', img: '/img/catalog/keep-cool.jpg', scores: { loop: 2, ruido: 1 } },
+      { glyph: '💔', labelEs: '“No soy suficiente”', subEs: 'Espejo roto', labelEn: '“I’m not enough”', subEn: 'Cracked mirror', img: '/img/catalog/amor-propio-magic-4-0.jpg', scores: { espejo: 2, carencia: 1 } },
+      { glyph: '⏳', labelEs: '“Después lo hago”', subEs: 'Posponer el salto', labelEn: '“I’ll do it later”', subEn: 'Postpone the leap', img: '/img/catalog/white-rabbit-code.jpg', scores: { sueno: 2, vacio: 1 } }
     ],
     [
-      { labelEs: 'Una llave oxidada', subEs: 'Pesada, familiar, de otro tiempo', labelEn: 'A rusted key', subEn: 'Heavy, familiar, from another time', scores: { loop: 2, carencia: 1 } },
-      { labelEs: 'Un auricular solo', subEs: 'Escuchas una frecuencia lejana', labelEn: 'A single earbud', subEn: 'You hear a distant frequency', scores: { ruido: 2, sueno: 1 } },
-      { labelEs: 'Una carta sin abrir', subEs: 'Tu nombre está mal escrito a propósito', labelEn: 'An unopened letter', subEn: 'Your name is misspelled on purpose', scores: { vacio: 2, espejo: 1 } }
+      { glyph: '🗝️', labelEs: 'Llave oxidada', subEs: 'Pesada, de otro tiempo', labelEn: 'Rusted key', subEn: 'Heavy, from another time', img: '/img/catalog/identity.jpg', scores: { loop: 2, carencia: 1 } },
+      { glyph: '🎧', labelEs: 'Un auricular solo', subEs: 'Frecuencia lejana', labelEn: 'Single earbud', subEn: 'Distant frequency', img: '/img/catalog/limitless.jpg', scores: { ruido: 2, sueno: 1 } },
+      { glyph: '✉️', labelEs: 'Carta sin abrir', subEs: 'Tu nombre mal escrito', labelEn: 'Unopened letter', subEn: 'Your name misspelled', img: '/img/catalog/god-goddess.jpg', scores: { vacio: 2, espejo: 1 } }
     ],
     [
-      { labelEs: '“Esto ya lo viví”', subEs: 'Déjà vu con sabor a trampa', labelEn: '“I’ve lived this before”', subEn: 'Déjà vu that tastes like a trap', scores: { loop: 2, ruido: 1 } },
-      { labelEs: '“Me están mirando”', subEs: 'Aunque no haya nadie', labelEn: '“They’re watching me”', subEn: 'Even when no one is there', scores: { espejo: 2, ruido: 1 } },
-      { labelEs: '“Todavía no es mi momento”', subEs: 'La frase más cara del inconsciente', labelEn: '“It’s not my time yet”', subEn: 'The unconscious’s most expensive sentence', scores: { sueno: 2, carencia: 1, vacio: 1 } }
+      { glyph: '🔁', labelEs: '“Esto ya lo viví”', subEs: 'Déjà vu-trampa', labelEn: '“I’ve lived this”', subEn: 'Trap déjà vu', img: '/img/catalog/simulation-u.jpg', scores: { loop: 2, ruido: 1 } },
+      { glyph: '👁', labelEs: '“Me están mirando”', subEs: 'Aunque no haya nadie', labelEn: '“They’re watching”', subEn: 'Even when alone', img: '/img/catalog/seduction.jpg', scores: { espejo: 2, ruido: 1 } },
+      { glyph: '🌑', labelEs: '“Aún no es mi momento”', subEs: 'La frase más cara', labelEn: '“Not my time yet”', subEn: 'Most expensive sentence', img: '/img/catalog/money-tech.jpg', scores: { sueno: 2, carencia: 1, vacio: 1 } }
     ],
     [
-      { labelEs: 'Casi lo logras… y algo se cae', subEs: 'El cliffhanger eterno', labelEn: 'Almost there… then something drops', subEn: 'The eternal cliffhanger', scores: { carencia: 2, loop: 1 } },
-      { labelEs: 'Alguien elige a otra persona', subEs: 'Tú miras desde el pasillo', labelEn: 'Someone chooses another person', subEn: 'You watch from the hallway', scores: { espejo: 2, vacio: 1 } },
-      { labelEs: 'Tienes el mapa… y no das el paso', subEs: 'El vestíbulo infinito', labelEn: 'You have the map… and don’t step', subEn: 'The infinite lobby', scores: { sueno: 2, ruido: 1 } }
+      { glyph: '🎬', labelEs: 'Casi lo logras… y cae', subEs: 'Cliffhanger eterno', labelEn: 'Almost… then it drops', subEn: 'Eternal cliffhanger', img: '/img/catalog/master-abundance.jpg', scores: { carencia: 2, loop: 1 } },
+      { glyph: '🚪', labelEs: 'Eligen a otra persona', subEs: 'Tú en el pasillo', labelEn: 'They choose someone else', subEn: 'You in the hallway', img: '/img/catalog/erior-love.jpg', scores: { espejo: 2, vacio: 1 } },
+      { glyph: '🗺️', labelEs: 'Tienes el mapa… no das el paso', subEs: 'Vestíbulo infinito', labelEn: 'You have the map… no step', subEn: 'Infinite lobby', img: '/img/catalog/wonderland-coherence.jpg', scores: { sueno: 2, ruido: 1 } }
     ]
   ];
 
@@ -320,16 +339,24 @@
     scores: {},
     archetype: null,
     unlocked: false,
-    code: null
+    code: null,
+    notified: false
   };
+
+  // Force re-lock if someone had v1 free unlock
+  if (state.unlocked && !state.keyVerified) {
+    state.unlocked = false;
+    state.step = state.archetype ? 'pay' : state.step;
+  }
 
   var root = document.getElementById('app');
   var bar = document.getElementById('progressBar');
+  var worldImg = document.getElementById('worldImg');
+  var flash = document.getElementById('flash');
 
   function loadState() {
     try {
-      var raw = localStorage.getItem(STORAGE_KEY);
-      return raw ? JSON.parse(raw) : null;
+      return JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
     } catch (e) {
       return null;
     }
@@ -338,14 +365,11 @@
   function saveState() {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-      if (state.unlocked) {
-        localStorage.setItem('erior_mapa_credit', JSON.stringify({
-          mxn: CREDIT_MXN,
-          usd: CREDIT_USD,
-          archetype: state.archetype,
-          code: state.code,
-          at: Date.now()
-        }));
+      if (state.unlocked && state.keyVerified) {
+        localStorage.setItem(
+          'erior_mapa_credit',
+          JSON.stringify({ mxn: CREDIT_MXN, usd: CREDIT_USD, archetype: state.archetype, code: state.code, at: Date.now() })
+        );
       }
     } catch (e) {}
   }
@@ -374,6 +398,34 @@
 
   function waUrl(msg) {
     return 'https://wa.me/' + WA + '?text=' + encodeURIComponent(msg);
+  }
+
+  function pulseFlash() {
+    if (!flash) return;
+    flash.classList.add('on');
+    setTimeout(function () {
+      flash.classList.remove('on');
+    }, 180);
+  }
+
+  function setScene(idx) {
+    if (!worldImg) return;
+    var url = SCENES[idx % SCENES.length];
+    worldImg.classList.remove('is-zoom');
+    worldImg.style.backgroundImage = 'url("' + url + '")';
+    requestAnimationFrame(function () {
+      worldImg.classList.add('is-zoom');
+    });
+  }
+
+  function setMood(name) {
+    document.body.className = document.body.className
+      .split(/\s+/)
+      .filter(function (c) {
+        return c && c.indexOf('mood-') !== 0;
+      })
+      .join(' ');
+    document.body.classList.add('mood-' + name);
   }
 
   function copyText(btn, text) {
@@ -408,12 +460,8 @@
   }
 
   function priceDiff(pack) {
-    if (LANG === 'en') {
-      var base = { 1: 46, 2: 85, 3: 135 }[pack];
-      return Math.max(0, base - CREDIT_USD);
-    }
-    var baseMx = { 1: 777, 2: 1444, 3: 2299 }[pack];
-    return Math.max(0, baseMx - CREDIT_MXN);
+    if (LANG === 'en') return Math.max(0, { 1: 46, 2: 85, 3: 135 }[pack] - CREDIT_USD);
+    return Math.max(0, { 1: 777, 2: 1444, 3: 2299 }[pack] - CREDIT_MXN);
   }
 
   function formatDiff(pack) {
@@ -425,14 +473,57 @@
     return ARCH[id][LANG];
   }
 
+  function tone() {
+    try {
+      var Ctx = window.AudioContext || window.webkitAudioContext;
+      if (!Ctx) return;
+      if (!tone.ctx) tone.ctx = new Ctx();
+      var ctx = tone.ctx;
+      var o = ctx.createOscillator();
+      var g = ctx.createGain();
+      o.type = 'sine';
+      o.frequency.value = 220 + Math.random() * 280;
+      g.gain.value = 0.0001;
+      o.connect(g);
+      g.connect(ctx.destination);
+      o.start();
+      g.gain.exponentialRampToValueAtTime(0.03, ctx.currentTime + 0.03);
+      g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.45);
+      o.stop(ctx.currentTime + 0.5);
+    } catch (e) {}
+  }
+
+  function notifyTeam(kind) {
+    var a = state.archetype ? archCopy(state.archetype).name : '?';
+    var msg =
+      kind === 'paid'
+        ? '🔑 MAPA PAGO PENDIENTE VERIFICAR\nCódigo: ' +
+          state.code +
+          '\nPatrón: ' +
+          a +
+          '\nIdioma: ' +
+          LANG +
+          '\nCliente dice que pagó $' +
+          (LANG === 'en' ? '26 USD' : '444 MXN') +
+          '.\nGenera clave en /mapa/admin.html y envíasela.'
+        : '🟣 MAPA INICIÓ PAGO\nCódigo: ' + state.code + '\nPatrón: ' + a;
+    Promise.all([
+      fetch('https://api.callmebot.com/whatsapp.php?phone=5214432311761&text=' + encodeURIComponent(msg) + '&apikey=6870409'),
+      fetch('https://api.callmebot.com/whatsapp.php?phone=5214791936105&text=' + encodeURIComponent(msg) + '&apikey=2412047')
+    ]).catch(function () {});
+  }
+
   function renderStart() {
-    setProgress(4);
+    setProgress(5);
+    setMood('0');
+    setScene(0);
     root.innerHTML =
       '<section class="stage">' +
+      '<div class="hero-orb" aria-hidden="true"><img src="/img/alicia-orb.png" alt=""></div>' +
       '<p class="kicker">' +
       t.kickerStart +
       '</p>' +
-      '<h1 class="glitch">' +
+      '<h1>' +
       t.titleStart +
       '</h1>' +
       '<p class="lead">' +
@@ -441,16 +532,19 @@
       '<div class="cta-row"><button type="button" class="btn btn-solid" id="btnStart">' +
       t.startCta +
       '</button></div>' +
-      '<p class="foot-note">ERIOR CENTER · puzzle gratuito · mini revelación gratis · archivo completo $' +
+      '<p class="foot-note">ERIOR · puzzle gratis · mini revelación gratis · archivo $' +
       (LANG === 'en' ? '26 USD' : '444 MXN') +
-      '</p>' +
-      '</section>';
+      ' con clave tras pago verificado</p></section>';
     document.getElementById('btnStart').onclick = function () {
+      tone();
+      pulseFlash();
       state.step = 'room';
       state.room = 0;
       state.scores = {};
       state.unlocked = false;
+      state.keyVerified = false;
       state.archetype = null;
+      state.notified = false;
       saveState();
       render();
     };
@@ -461,6 +555,8 @@
     var meta = t.rooms[r];
     var opts = CHOICES[r];
     setProgress(12 + r * 14);
+    setMood(String(r + 1));
+    setScene(r + 1);
     var html =
       '<section class="stage">' +
       '<p class="kicker">' +
@@ -472,22 +568,33 @@
       '<p class="lead">' +
       meta.lead +
       '</p>' +
-      '<div class="choices">';
+      '<div class="choices' +
+      (r === 0 ? ' doors' : '') +
+      '">';
     opts.forEach(function (o, i) {
       html +=
         '<button type="button" class="choice" data-i="' +
         i +
-        '"><strong>' +
+        '">' +
+        '<span class="choice-media" style="background-image:url(\'' +
+        o.img +
+        '\')"></span>' +
+        '<span class="choice-shade"></span>' +
+        '<span class="choice-body"><span class="choice-glyph">' +
+        o.glyph +
+        '</span><strong>' +
         (LANG === 'en' ? o.labelEn : o.labelEs) +
         '</strong><span>' +
         (LANG === 'en' ? o.subEn : o.subEs) +
-        '</span></button>';
+        '</span></span></button>';
     });
     html += '</div></section>';
     root.innerHTML = html;
     root.querySelectorAll('.choice').forEach(function (btn) {
       btn.onclick = function () {
         var i = +btn.getAttribute('data-i');
+        tone();
+        pulseFlash();
         addScores(opts[i].scores);
         if (r >= CHOICES.length - 1) {
           state.archetype = winner();
@@ -504,6 +611,8 @@
 
   function renderMini() {
     setProgress(78);
+    setMood('5');
+    setScene(5);
     var a = archCopy(state.archetype);
     root.innerHTML =
       '<section class="stage">' +
@@ -513,84 +622,28 @@
       '<h2>' +
       t.miniTitle +
       '</h2>' +
-      '<div class="card">' +
-      '<span class="tag">' +
+      '<div class="card"><span class="tag">' +
       (LANG === 'en' ? 'Dominant pattern' : 'Patrón dominante') +
-      '</span>' +
-      '<h3>' +
+      '</span><h3>' +
       a.name +
-      '</h3>' +
-      '<p>' +
+      '</h3><p>' +
       a.mini +
-      '</p>' +
-      '</div>' +
-      '<div class="card" style="margin-top:1rem">' +
-      '<h3 style="font-size:1.2rem">' +
+      '</p></div>' +
+      '<div class="card"><h3 style="font-size:1.25rem">' +
       t.unlockTitle +
-      '</h3>' +
-      '<p style="margin-top:.4rem">' +
+      '</h3><p style="margin-top:.35rem">' +
       t.unlockLead +
       '</p>' +
-      '<div class="cta-row">' +
-      '<button type="button" class="btn btn-solid" id="btnUnlock">' +
+      '<div class="cta-row"><button type="button" class="btn btn-solid" id="btnUnlock">' +
       t.unlockCta +
-      '</button>' +
-      '</div></div></section>';
+      '</button></div></div></section>';
     document.getElementById('btnUnlock').onclick = function () {
+      tone();
+      pulseFlash();
       state.step = 'pay';
       saveState();
       render();
     };
-  }
-
-  function payPanelHtml(method) {
-    if (LANG === 'en') {
-      if (method === 'paypal') {
-        return (
-          '<p>Pay <b>$26 USD</b> via PayPal.</p>' +
-          '<div class="pay-row"><span>Link</span><b>paypal.me/sheismagique</b><button type="button" class="copy-btn" data-c="https://www.paypal.me/sheismagique">' +
-          t.copy +
-          '</button></div>' +
-          '<p class="hint"><a href="https://www.paypal.me/sheismagique" target="_blank" rel="noopener">Open PayPal →</a></p>'
-        );
-      }
-      if (method === 'alt') {
-        return '<p>Crypto or Western Union — message Pauline on WhatsApp with code <b>' + state.code + '</b> and she will send instructions.</p>';
-      }
-      return (
-        '<p>ACH / Wire · <b>$26 USD</b></p>' +
-        row('Beneficiary', 'Paulina Lopez') +
-        row('Bank', 'Lead Bank') +
-        row('Routing (ABA)', '101019644') +
-        row('Account', '219021482598') +
-        row('Type', 'Checking') +
-        '<p class="hint">Address: 1801 Main St., Kansas City, MO 64108</p>'
-      );
-    }
-    if (method === 'oxxo') {
-      return (
-        '<p>OXXO · <b>$444 MXN</b></p>' +
-        row('Tarjeta', '4741 7435 2658 3795') +
-        row('Banco', 'Banregio')
-      );
-    }
-    if (method === 'paypal') {
-      return (
-        '<p>PayPal · <b>$444 MXN</b> (o $26 USD)</p>' +
-        row('Link', 'paypal.me/sheismagique') +
-        '<p class="hint"><a href="https://www.paypal.me/sheismagique" target="_blank" rel="noopener">Ir a PayPal →</a></p>'
-      );
-    }
-    if (method === 'alt') {
-      return '<p>Crypto / Western Union / USD — escribe por WhatsApp con tu código <b>' + state.code + '</b> y te pasamos datos.</p>';
-    }
-    return (
-      '<p>Transferencia · <b>$444 MXN</b></p>' +
-      row('Nombre', 'Paulina López Gutiérrez') +
-      row('CLABE NVIO', '710969000048503916') +
-      row('CLABE Banregio', '058470000010260425') +
-      row('Cuenta', '996812170013')
-    );
   }
 
   function row(label, value) {
@@ -607,8 +660,63 @@
     );
   }
 
+  function payPanelHtml(method) {
+    if (LANG === 'en') {
+      if (method === 'paypal') {
+        return (
+          '<p>Pay <b>$26 USD</b> · memo: <b>' +
+          state.code +
+          '</b></p>' +
+          row('PayPal', 'paypal.me/sheismagique') +
+          '<p class="hint"><a href="https://www.paypal.me/sheismagique" target="_blank" rel="noopener">Open PayPal →</a></p>'
+        );
+      }
+      if (method === 'alt') {
+        return '<p>Crypto / WU — WhatsApp Pauline with code <b>' + state.code + '</b>.</p>';
+      }
+      return (
+        '<p>ACH / Wire · <b>$26 USD</b> · memo <b>' +
+        state.code +
+        '</b></p>' +
+        row('Beneficiary', 'Paulina Lopez') +
+        row('Bank', 'Lead Bank') +
+        row('Routing', '101019644') +
+        row('Account', '219021482598')
+      );
+    }
+    if (method === 'oxxo') {
+      return '<p>OXXO · <b>$444 MXN</b> · guarda tu código <b>' + state.code + '</b></p>' + row('Tarjeta', '4741 7435 2658 3795') + row('Banco', 'Banregio');
+    }
+    if (method === 'paypal') {
+      return (
+        '<p>PayPal · <b>$444 MXN</b> / $26 USD · concepto <b>' +
+        state.code +
+        '</b></p>' +
+        row('Link', 'paypal.me/sheismagique') +
+        '<p class="hint"><a href="https://www.paypal.me/sheismagique" target="_blank" rel="noopener">Ir a PayPal →</a></p>'
+      );
+    }
+    if (method === 'alt') {
+      return '<p>Crypto / WU — WhatsApp con código <b>' + state.code + '</b>.</p>';
+    }
+    return (
+      '<p>Transferencia · <b>$444 MXN</b> · concepto <b>' +
+      state.code +
+      '</b></p>' +
+      row('Nombre', 'Paulina López Gutiérrez') +
+      row('CLABE NVIO', '710969000048503916') +
+      row('CLABE Banregio', '058470000010260425')
+    );
+  }
+
   function renderPay() {
     setProgress(88);
+    setMood('pay');
+    setScene(6);
+    if (!state.code) {
+      state.code = makeCode();
+      saveState();
+    }
     var methods = t.methods;
     var active = methods[0].id;
     root.innerHTML =
@@ -622,17 +730,28 @@
       '<p class="lead">' +
       t.payLead +
       '</p>' +
-      '<div class="pay-box">' +
-      '<div class="pay-tabs" id="payTabs"></div>' +
-      '<div class="pay-panel" id="payPanel"></div>' +
-      '</div>' +
-      '<div class="cta-row" style="margin-top:1.2rem">' +
+      '<div class="pay-box"><div class="pay-tabs" id="payTabs"></div><div class="pay-panel" id="payPanel"></div></div>' +
+      '<div class="cta-row" style="margin-top:1.1rem">' +
       '<button type="button" class="btn btn-solid" id="btnPaid">' +
       t.paidCta +
       '</button>' +
       '<a class="btn btn-ghost" id="waPay" target="_blank" rel="noopener">' +
       t.waPay +
-      '</a>' +
+      '</a></div>' +
+      '<div class="waiting" id="waitNote" style="display:none">' +
+      t.keyWait +
+      '</div>' +
+      '<div class="unlock-box">' +
+      '<label for="keyIn">' +
+      t.keyLabel +
+      '</label>' +
+      '<input id="keyIn" maxlength="12" placeholder="' +
+      t.keyPlaceholder +
+      '" autocomplete="one-time-code">' +
+      '<div class="cta-row"><button type="button" class="btn btn-solid" id="btnKey">' +
+      t.keyCta +
+      '</button></div>' +
+      '<p class="err" id="keyErr"></p>' +
       '</div></section>';
 
     var tabs = document.getElementById('payTabs');
@@ -665,21 +784,47 @@
     var a = archCopy(state.archetype);
     var waMsg =
       LANG === 'en'
-        ? 'Hi! I want to pay the Unconscious Map full report ($26 USD). Pattern: ' + a.name + '. Code: ' + state.code
-        : 'Hola! Quiero pagar el Reporte Completo del Mapa del Inconsciente ($444 MXN). Patrón: ' + a.name + '. Código: ' + state.code;
+        ? 'Hi! I paid the Unconscious Map ($26 USD). Code: ' + state.code + '. Pattern: ' + a.name + '. Please send my access key.'
+        : 'Hola! Ya pagué el Mapa del Inconsciente ($444 MXN). Código: ' + state.code + '. Patrón: ' + a.name + '. Por favor envíenme la clave de acceso.';
     document.getElementById('waPay').href = waUrl(waMsg);
 
     document.getElementById('btnPaid').onclick = function () {
-      state.unlocked = true;
-      state.step = 'full';
-      if (!state.code) state.code = makeCode();
+      notifyTeam('paid');
+      state.notified = true;
       saveState();
-      render();
+      document.getElementById('waitNote').style.display = 'block';
+      tone();
+    };
+
+    document.getElementById('btnKey').onclick = async function () {
+      var err = document.getElementById('keyErr');
+      var key = document.getElementById('keyIn').value;
+      err.textContent = '';
+      try {
+        var res = await fetch(UNLOCK_FN, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'verify', orderId: state.code, key: key })
+        });
+        var data = await res.json();
+        if (!data.ok) throw new Error(data.error || 'Clave incorrecta');
+        state.unlocked = true;
+        state.keyVerified = true;
+        state.step = 'full';
+        saveState();
+        pulseFlash();
+        tone();
+        render();
+      } catch (e) {
+        err.textContent = e.message || String(e);
+      }
     };
   }
 
   function renderFull() {
     setProgress(100);
+    setMood('full');
+    setScene(0);
     var a = archCopy(state.archetype);
     var audios = ARCH[state.archetype].audios;
     var blocks = a.blocks
@@ -700,55 +845,20 @@
         );
       })
       .join('');
-
     var names = audios.map(function (x) {
       return x.name;
     });
-    var waFull =
-      LANG === 'en'
-        ? 'Hi Pauline! I unlocked my Unconscious Map. Code: ' +
-          state.code +
-          '. Pattern: ' +
-          a.name +
-          '. Recommended: ' +
-          names.join(', ') +
-          '. I want to activate frequencies — diagnosis credit $26 applied.'
-        : 'Hola Pauline! Desbloqueé mi Mapa del Inconsciente. Código: ' +
-          state.code +
-          '. Patrón: ' +
-          a.name +
-          '. Recomendados: ' +
-          names.join(', ') +
-          '. Quiero activar frecuencias — crédito del diagnóstico $444 aplicado.';
-
     function waBuy(pack) {
       var list = names.slice(0, pack).join(' + ');
       if (LANG === 'en') {
         return waUrl(
-          'Hi! I paid the Unconscious Map (' +
-            state.code +
-            '). I want pack ' +
-            pack +
-            ': ' +
-            list +
-            '. Pay only the difference: ' +
-            formatDiff(pack) +
-            ' (credit $26 already applied).'
+          'Hi! Unconscious Map paid (' + state.code + '). Pack ' + pack + ': ' + list + '. Difference only: ' + formatDiff(pack) + ' ($26 credit).'
         );
       }
       return waUrl(
-        'Hola! Ya pagué el Mapa del Inconsciente (' +
-          state.code +
-          '). Quiero pack ' +
-          pack +
-          ': ' +
-          list +
-          '. Solo pago la diferencia: ' +
-          formatDiff(pack) +
-          ' (crédito $444 ya aplicado).'
+        'Hola! Mapa pagado (' + state.code + '). Pack ' + pack + ': ' + list + '. Solo diferencia: ' + formatDiff(pack) + ' (crédito $444).'
       );
     }
-
     root.innerHTML =
       '<section class="stage">' +
       '<p class="kicker">' +
@@ -764,21 +874,21 @@
       '</p>' +
       '<div class="card"><span class="tag">' +
       (LANG === 'en' ? 'Unconscious script' : 'Guión del inconsciente') +
-      '</span><p style="font-family:var(--serif);font-size:1.25rem;color:var(--ink)">' +
+      '</span><p style="font-family:var(--serif);font-size:1.3rem;color:var(--ink)">' +
       a.script +
       '</p></div>' +
       '<div class="bloks">' +
       blocks +
       '</div>' +
       '<div class="card"><h3 style="font-size:1.15rem">' +
-      (LANG === 'en' ? '7-day micro-ritual' : 'Micro-ritual 7 días') +
-      '</h3><p style="margin-top:.4rem">' +
+      (LANG === 'en' ? 'Micro-ritual' : 'Micro-ritual') +
+      '</h3><p style="margin-top:.35rem">' +
       a.ritual +
       '</p></div>' +
       '<div class="price-line">' +
       t.creditNote +
       '</div>' +
-      '<h2 style="margin-top:1.75rem;font-size:1.5rem">' +
+      '<h2 style="margin-top:1.6rem;font-size:1.55rem">' +
       t.upsellTitle +
       '</h2>' +
       '<p class="lead">' +
@@ -809,38 +919,73 @@
       ' · ' +
       formatDiff(3) +
       '</a>' +
-      '<a class="btn btn-ghost" target="_blank" rel="noopener" href="' +
-      waUrl(waFull) +
-      '">' +
-      t.waReport +
-      '</a>' +
       '<a class="btn btn-ghost" href="' +
       t.homeHref +
       '">' +
       t.backHome +
-      '</a>' +
-      '</div>' +
-      '<p class="hint">' +
-      (LANG === 'en'
-        ? 'Diff calculator: $46 / $85 / $135 minus $26 credit. Send your receipt + code so we apply it.'
-        : 'Diferencias: $777 / $1,444 / $2,299 menos $444 de crédito. Manda comprobante + código para aplicarlo.') +
-      '</p></section>';
+      '</a></div></section>';
   }
 
   function render() {
-    root.classList.remove('stage');
-    void root.offsetWidth;
     if (state.step === 'start') renderStart();
     else if (state.step === 'room') renderRoom();
     else if (state.step === 'mini') renderMini();
     else if (state.step === 'pay') renderPay();
     else if (state.step === 'full') {
-      if (!state.unlocked) {
+      if (!(state.unlocked && state.keyVerified)) {
         state.step = 'pay';
         renderPay();
       } else renderFull();
     } else renderStart();
   }
+
+  // Particles
+  (function initFx() {
+    var c = document.getElementById('fx');
+    if (!c) return;
+    var ctx = c.getContext('2d');
+    var pts = [];
+    function resize() {
+      c.width = window.innerWidth;
+      c.height = window.innerHeight;
+    }
+    function spawn() {
+      pts = [];
+      for (var i = 0; i < 48; i++) {
+        pts.push({
+          x: Math.random() * c.width,
+          y: Math.random() * c.height,
+          r: Math.random() * 2.2 + 0.4,
+          vx: (Math.random() - 0.5) * 0.35,
+          vy: -0.15 - Math.random() * 0.35,
+          a: Math.random() * 0.5 + 0.15
+        });
+      }
+    }
+    function tick() {
+      ctx.clearRect(0, 0, c.width, c.height);
+      pts.forEach(function (p) {
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.y < -10) {
+          p.y = c.height + 10;
+          p.x = Math.random() * c.width;
+        }
+        ctx.beginPath();
+        ctx.fillStyle = 'rgba(255,220,255,' + p.a + ')';
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fill();
+      });
+      requestAnimationFrame(tick);
+    }
+    resize();
+    spawn();
+    tick();
+    window.addEventListener('resize', function () {
+      resize();
+      spawn();
+    });
+  })();
 
   document.getElementById('brandLink').textContent = t.brand;
   document.getElementById('brandLink').href = t.homeHref;

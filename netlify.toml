@@ -97,6 +97,14 @@
   to = "/en/mapa/"
   status = 301
 
+[[redirects]]
+  from = "/mapa/admin"
+  to = "/mapa/admin.html"
+  status = 200
+
+[functions.mapa-unlock]
+  timeout = 10
+
 [[headers]]
   for = "/img/*"
   [headers.values]
