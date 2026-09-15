@@ -9,15 +9,7 @@
   var CREDIT_USD = 26;
   var UNLOCK_FN = '/.netlify/functions/mapa-unlock';
 
-  var SCENES = [
-    '/img/catalog/wonderland-coherence.jpg',
-    '/img/catalog/imagine.jpg',
-    '/img/catalog/god-goddess.jpg',
-    '/img/catalog/simulation-u.jpg',
-    '/img/catalog/white-rabbit-code.jpg',
-    '/img/catalog/limitless.jpg',
-    '/img/mental-tech-cover.png'
-  ];
+  var SCENE_MODES = ['matrix', 'hole', 'dna', 'matrix', 'hole', 'dna', 'matrix'];
 
   var I18N = {
     es: {
@@ -363,7 +355,7 @@
 
   var root = document.getElementById('app');
   var bar = document.getElementById('progressBar');
-  var worldImg = document.getElementById('worldImg');
+  var worldImg = null;
   var flash = document.getElementById('flash');
 
   function loadState() {
@@ -443,24 +435,28 @@
     }, 180);
   }
 
+  var currentSceneIdx = 0;
   function setScene(idx) {
-    if (!worldImg) return;
-    var url = SCENES[idx % SCENES.length];
-    worldImg.classList.remove('is-zoom');
-    worldImg.style.backgroundImage = 'url("' + url + '")';
-    requestAnimationFrame(function () {
-      worldImg.classList.add('is-zoom');
-    });
+    currentSceneIdx = idx;
+    var mode = SCENE_MODES[idx % SCENE_MODES.length];
+    document.body.classList.remove('scene-matrix', 'scene-dna', 'scene-hole');
+    document.body.classList.add('scene-' + mode);
   }
 
   function setMood(name) {
+    var sceneClass = '';
+    document.body.className.split(/\s+/).forEach(function (c) {
+      if (c.indexOf('scene-') === 0) sceneClass = c;
+    });
     document.body.className = document.body.className
       .split(/\s+/)
       .filter(function (c) {
-        return c && c.indexOf('mood-') !== 0;
+        return c && c.indexOf('mood-') !== 0 && c.indexOf('scene-') !== 0;
       })
       .join(' ');
     document.body.classList.add('mood-' + name);
+    if (sceneClass) document.body.classList.add(sceneClass);
+    else setScene(currentSceneIdx);
   }
 
   function copyText(btn, text) {
@@ -680,11 +676,10 @@
         b.type = 'button';
         b.className = 'door-drop openable';
         b.innerHTML =
-          '<span class="bg" style="background-image:url(\'' +
-          d.img +
-          '\')"></span><span class="lbl"><strong>' +
+          '<span class="bg"></span><span class="lbl"><strong>' +
           (LANG === 'en' ? d.labelEn : d.labelEs) +
           '</strong><span>🔑</span></span>';
+        b.dataset.v = String(i);
         b.onclick = function () {
           finishRoom(d.scores);
         };
@@ -1004,14 +999,13 @@
   function gameJigsaw() {
     var opts = OUTCOMES[4];
     var order = shuffle([0, 1, 2]);
-    var img = '/img/catalog/imagine.jpg';
     root.innerHTML = roomShell(
       '<p class="game-hint">' +
         (LANG === 'en'
-          ? 'Tap two strips to swap. When the image is whole, pick the looping scene.'
-          : 'Toca dos tiras para intercambiar. Cuando la imagen esté completa, elige la escena que se repite.') +
+          ? 'Tap two energy strips to swap. When the portal aligns, pick the looping scene.'
+          : 'Toca dos tiras de energía para intercambiar. Cuando el portal se alinee, elige la escena que se repite.') +
         '</p>' +
-        '<div class="jigsaw" id="jig"></div>' +
+        '<div class="jigsaw abstract" id="jig"></div>' +
         '<div id="scenePick" style="display:none"></div>'
     );
     var jig = document.getElementById('jig');
@@ -1023,9 +1017,9 @@
         tile.type = 'button';
         tile.className = 'jig-tile';
         tile.dataset.visual = String(visualIndex);
-        // pos is which slice of image (0 left, 1 mid, 2 right)
-        tile.style.backgroundImage = 'url("' + img + '")';
-        tile.style.backgroundPosition = pos * 50 + '% 50%';
+        tile.dataset.pos = String(pos);
+        tile.style.opacity = String(0.55 + pos * 0.15);
+        tile.style.filter = 'hue-rotate(' + pos * 70 + 'deg)';
         tile.onclick = function () {
           if (selected == null) {
             selected = visualIndex;
@@ -1044,7 +1038,7 @@
           selected = null;
           paint();
           if (order[0] === 0 && order[1] === 1 && order[2] === 2) {
-            document.getElementById('gameStatus').textContent = LANG === 'en' ? 'Mirror restored' : 'Espejo restaurado';
+            document.getElementById('gameStatus').textContent = LANG === 'en' ? 'Portal restored' : 'Portal restaurado';
             showScenes();
           }
         };
@@ -1056,14 +1050,13 @@
       wrap.style.display = 'block';
       wrap.innerHTML = '<div class="doors-row"></div>';
       var row = wrap.firstChild;
-      opts.forEach(function (o) {
+      opts.forEach(function (o, i) {
         var b = document.createElement('button');
         b.type = 'button';
         b.className = 'door-drop openable';
+        b.dataset.v = String(i);
         b.innerHTML =
-          '<span class="bg" style="background-image:url(\'' +
-          o.img +
-          '\')"></span><span class="lbl"><strong>' +
+          '<span class="bg"></span><span class="lbl"><strong>' +
           (LANG === 'en' ? o.labelEn : o.labelEs) +
           '</strong></span>';
         b.onclick = function () {
@@ -1462,52 +1455,78 @@
     } else renderStart();
   }
 
-  // Particles
+  // Matrix rain + DNA helix particles
   (function initFx() {
-    var c = document.getElementById('fx');
-    if (!c) return;
-    var ctx = c.getContext('2d');
-    var pts = [];
+    var cMatrix = document.getElementById('fxMatrix');
+    var cDna = document.getElementById('fxDna');
+    if (!cMatrix || !cDna) return;
+    var mtx = cMatrix.getContext('2d');
+    var dna = cDna.getContext('2d');
+    var cols = [];
+    var helix = [];
+    var chars = 'ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ01アイウエオカキクケコサシスセソΑΒΓΔλΨΩ∞∴∵';
     function resize() {
-      c.width = window.innerWidth;
-      c.height = window.innerHeight;
-    }
-    function spawn() {
-      pts = [];
-      for (var i = 0; i < 48; i++) {
-        pts.push({
-          x: Math.random() * c.width,
-          y: Math.random() * c.height,
-          r: Math.random() * 2.2 + 0.4,
-          vx: (Math.random() - 0.5) * 0.35,
-          vy: -0.15 - Math.random() * 0.35,
-          a: Math.random() * 0.5 + 0.15
+      cMatrix.width = cDna.width = window.innerWidth;
+      cMatrix.height = cDna.height = window.innerHeight;
+      var n = Math.floor(cMatrix.width / 16);
+      cols = [];
+      for (var i = 0; i < n; i++) {
+        cols.push({ x: i * 16, y: Math.random() * cMatrix.height, speed: 1.2 + Math.random() * 3.5 });
+      }
+      helix = [];
+      for (var h = 0; h < 28; h++) {
+        helix.push({
+          t: Math.random() * Math.PI * 2,
+          y: Math.random() * cDna.height,
+          speed: 0.4 + Math.random() * 0.9,
+          amp: 40 + Math.random() * 70,
+          r: 1.5 + Math.random() * 2.5
         });
       }
     }
     function tick() {
-      ctx.clearRect(0, 0, c.width, c.height);
-      pts.forEach(function (p) {
-        p.x += p.vx;
-        p.y += p.vy;
-        if (p.y < -10) {
-          p.y = c.height + 10;
-          p.x = Math.random() * c.width;
+      // Matrix
+      mtx.fillStyle = 'rgba(5,4,10,0.12)';
+      mtx.fillRect(0, 0, cMatrix.width, cMatrix.height);
+      mtx.font = '14px "Share Tech Mono", monospace';
+      cols.forEach(function (c) {
+        var ch = chars.charAt(Math.floor(Math.random() * chars.length));
+        mtx.fillStyle = Math.random() > 0.92 ? '#fff' : '#5ef0c0';
+        mtx.fillText(ch, c.x, c.y);
+        c.y += c.speed;
+        if (c.y > cMatrix.height + 20) {
+          c.y = -20;
+          c.speed = 1.2 + Math.random() * 3.5;
         }
-        ctx.beginPath();
-        ctx.fillStyle = 'rgba(255,220,255,' + p.a + ')';
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fill();
+      });
+      // DNA
+      dna.clearRect(0, 0, cDna.width, cDna.height);
+      var cx = cDna.width * 0.5;
+      helix.forEach(function (p, i) {
+        p.t += 0.035;
+        p.y += p.speed;
+        if (p.y > cDna.height + 20) p.y = -20;
+        var x1 = cx + Math.sin(p.t) * p.amp;
+        var x2 = cx + Math.sin(p.t + Math.PI) * p.amp;
+        dna.strokeStyle = 'rgba(125,249,255,0.18)';
+        dna.beginPath();
+        dna.moveTo(x1, p.y);
+        dna.lineTo(x2, p.y);
+        dna.stroke();
+        dna.beginPath();
+        dna.fillStyle = i % 2 ? 'rgba(255,107,203,0.85)' : 'rgba(77,163,255,0.85)';
+        dna.arc(x1, p.y, p.r, 0, Math.PI * 2);
+        dna.fill();
+        dna.beginPath();
+        dna.fillStyle = i % 2 ? 'rgba(94,240,192,0.85)' : 'rgba(255,230,109,0.75)';
+        dna.arc(x2, p.y, p.r, 0, Math.PI * 2);
+        dna.fill();
       });
       requestAnimationFrame(tick);
     }
     resize();
-    spawn();
     tick();
-    window.addEventListener('resize', function () {
-      resize();
-      spawn();
-    });
+    window.addEventListener('resize', resize);
   })();
 
   document.getElementById('brandLink').textContent = t.brand;

@@ -8,15 +8,23 @@
   <title>Map of the Unconscious · Erior Center</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Syne:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/mapa/mapa.css?v=3">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Syne:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/mapa/mapa.css?v=4">
 </head>
-<body class="mood-0">
+<body class="mood-0 scene-matrix">
   <div class="world" aria-hidden="true">
-    <div class="world-img" id="worldImg"></div>
+    <div class="world-void" id="worldVoid"></div>
+    <div class="rabbit-hole" id="rabbitHole">
+      <div class="hole-ring r1"></div>
+      <div class="hole-ring r2"></div>
+      <div class="hole-ring r3"></div>
+      <div class="hole-core"></div>
+      <div class="hole-fall"></div>
+    </div>
+    <canvas id="fxDna"></canvas>
+    <canvas id="fxMatrix"></canvas>
     <div class="aurora"></div>
     <div class="aurora-spin"></div>
-    <canvas id="fx"></canvas>
     <div class="noise"></div>
     <div class="vignette"></div>
   </div>
@@ -32,6 +40,6 @@
     <div class="progress" aria-hidden="true"><i id="progressBar"></i></div>
     <main id="app"></main>
   </div>
-  <script src="/mapa/mapa.js?v=3"></script>
+  <script src="/mapa/mapa.js?v=4"></script>
 </body>
 </html>

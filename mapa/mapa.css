@@ -20,41 +20,99 @@ button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
 a{color:inherit}
 
 .world{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
-.world-img{
-  position:absolute;inset:-8%;
-  background-size:cover;background-position:center;
-  filter:saturate(1.35) contrast(1.05);
-  transform:scale(1.08);
-  transition:opacity .9s var(--ease),filter .9s ease,transform 8s ease;
-  opacity:.55;
+.world-void{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 110%, rgba(20,8,40,.95), transparent 55%),
+    radial-gradient(circle at 50% 45%, rgba(40,20,80,.35), transparent 50%),
+    linear-gradient(180deg,#02010a 0%,#0a0618 45%,#05040a 100%);
 }
-.world-img.is-zoom{transform:scale(1.18)}
+.rabbit-hole{
+  position:absolute;left:50%;top:42%;
+  width:min(72vw,520px);aspect-ratio:1;
+  transform:translate(-50%,-50%) scale(.92);
+  opacity:.55;transition:opacity .8s ease,transform 1.2s cubic-bezier(.22,1,.36,1);
+}
+body.scene-hole .rabbit-hole{opacity:.95;transform:translate(-50%,-48%) scale(1.08)}
+body.scene-dna .rabbit-hole{opacity:.35}
+body.scene-matrix .rabbit-hole{opacity:.4}
+.hole-ring{
+  position:absolute;inset:0;border-radius:50%;
+  border:2px solid transparent;
+  background:
+    linear-gradient(#05040a,#05040a) padding-box,
+    conic-gradient(from 0deg,#ff6bcb,#7b5cff,#4da3ff,#5ef0c0,#ffe66d,#ff6bcb) border-box;
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;
+  animation:spin 14s linear infinite;
+}
+.hole-ring.r1{inset:8%;animation-duration:18s;opacity:.9}
+.hole-ring.r2{inset:22%;animation-duration:12s;animation-direction:reverse;opacity:.75}
+.hole-ring.r3{inset:36%;animation-duration:9s;opacity:.6}
+.hole-core{
+  position:absolute;inset:44%;border-radius:50%;
+  background:radial-gradient(circle,#000 30%,rgba(80,40,160,.5) 55%,transparent 70%);
+  box-shadow:0 0 60px rgba(125,249,255,.25),inset 0 0 40px #000;
+  animation:holePulse 3.5s ease-in-out infinite;
+}
+.hole-fall{
+  position:absolute;inset:20%;border-radius:50%;
+  background:repeating-conic-gradient(from 0deg,rgba(255,255,255,.04) 0 8deg,transparent 8deg 16deg);
+  animation:spin 22s linear infinite;opacity:.5;
+  -webkit-mask:radial-gradient(circle,transparent 28%,#000 45%,transparent 70%);
+  mask:radial-gradient(circle,transparent 28%,#000 45%,transparent 70%);
+}
+@keyframes holePulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+#fxDna,#fxMatrix{position:absolute;inset:0;width:100%;height:100%}
+#fxDna{opacity:.85;mix-blend-mode:screen}
+#fxMatrix{opacity:.55;mix-blend-mode:screen}
+body.scene-matrix #fxMatrix{opacity:.82}
+body.scene-dna #fxDna{opacity:1}
+body.scene-hole #fxDna{opacity:.45}
+body.scene-hole #fxMatrix{opacity:.35}
 .aurora{
   position:absolute;inset:-30%;
   background:
-    radial-gradient(ellipse 45% 40% at 20% 25%, rgba(255,107,203,.55), transparent 55%),
-    radial-gradient(ellipse 40% 35% at 82% 18%, rgba(77,163,255,.5), transparent 52%),
-    radial-gradient(ellipse 50% 45% at 55% 85%, rgba(123,92,255,.48), transparent 55%),
-    radial-gradient(ellipse 35% 30% at 12% 78%, rgba(94,240,192,.35), transparent 50%),
-    radial-gradient(ellipse 30% 28% at 90% 70%, rgba(255,230,109,.28), transparent 48%);
+    radial-gradient(ellipse 45% 40% at 20% 25%, rgba(255,107,203,.45), transparent 55%),
+    radial-gradient(ellipse 40% 35% at 82% 18%, rgba(77,163,255,.4), transparent 52%),
+    radial-gradient(ellipse 50% 45% at 55% 85%, rgba(123,92,255,.4), transparent 55%),
+    radial-gradient(ellipse 35% 30% at 12% 78%, rgba(94,240,192,.28), transparent 50%),
+    radial-gradient(ellipse 30% 28% at 90% 70%, rgba(255,230,109,.22), transparent 48%);
   filter:blur(18px) saturate(1.4);
   animation:auroraDrift 14s ease-in-out infinite alternate;
-  mix-blend-mode:screen;opacity:.85;
+  mix-blend-mode:screen;opacity:.7;
 }
 .aurora-spin{
   position:absolute;inset:-40%;
-  background:conic-gradient(from 40deg, rgba(255,107,203,.25),rgba(123,92,255,.22),rgba(77,163,255,.22),rgba(94,240,192,.18),rgba(255,230,109,.16),rgba(255,107,203,.25));
-  animation:spin 32s linear infinite;mix-blend-mode:color-dodge;opacity:.35;
+  background:conic-gradient(from 40deg,rgba(255,107,203,.2),rgba(123,92,255,.18),rgba(77,163,255,.18),rgba(94,240,192,.14),rgba(255,230,109,.12),rgba(255,107,203,.2));
+  animation:spin 32s linear infinite;mix-blend-mode:color-dodge;opacity:.28;
 }
 .vignette{
   position:absolute;inset:0;
-  background:radial-gradient(ellipse at center, transparent 30%, rgba(5,4,10,.55) 70%, rgba(5,4,10,.92) 100%);
+  background:radial-gradient(ellipse at center, transparent 28%, rgba(5,4,10,.5) 68%, rgba(5,4,10,.92) 100%);
 }
 .noise{
-  position:absolute;inset:0;opacity:.08;mix-blend-mode:overlay;
+  position:absolute;inset:0;opacity:.07;mix-blend-mode:overlay;
   background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
-#fx{position:absolute;inset:0;width:100%;height:100%}
+.door-drop .bg{
+  background:
+    radial-gradient(circle at 50% 120%, rgba(0,0,0,.9), transparent 55%),
+    conic-gradient(from 180deg, rgba(255,107,203,.45), rgba(77,163,255,.35), rgba(94,240,192,.3), rgba(255,107,203,.45)) !important;
+  background-size:auto,200% 200% !important;
+  animation:irisShift 8s ease infinite;
+  opacity:.78 !important;
+}
+.door-drop[data-v="1"] .bg{filter:hue-rotate(90deg)}
+.door-drop[data-v="2"] .bg{filter:hue-rotate(180deg)}
+.jigsaw.abstract .jig-tile{
+  background-image:none !important;
+  background:linear-gradient(135deg, rgba(255,107,203,.55), rgba(77,163,255,.4)) !important;
+}
+.jigsaw.abstract .jig-tile:nth-child(2){filter:hue-rotate(50deg) brightness(.92)}
+.jigsaw.abstract .jig-tile:nth-child(3){filter:hue-rotate(120deg)}
+
 .flash{
   position:fixed;inset:0;z-index:40;pointer-events:none;
   background:var(--iris);opacity:0;mix-blend-mode:screen;
@@ -330,7 +388,12 @@ body.mood-full .aurora{filter:blur(18px) saturate(1.7) hue-rotate(310deg)}
   background:rgba(0,0,0,.35);
 }
 .door-drop .bg{
-  position:absolute;inset:0;background-size:cover;background-position:center;opacity:.5;
+  position:absolute;inset:0;opacity:.78;
+  background:
+    radial-gradient(circle at 50% 120%, rgba(0,0,0,.9), transparent 55%),
+    conic-gradient(from 180deg, rgba(255,107,203,.45), rgba(77,163,255,.35), rgba(94,240,192,.3), rgba(255,107,203,.45));
+  background-size:auto,200% 200%;
+  animation:irisShift 8s ease infinite;
 }
 .door-drop .lbl{
   position:relative;z-index:1;padding:1rem;display:flex;flex-direction:column;justify-content:flex-end;height:100%;min-height:140px;
