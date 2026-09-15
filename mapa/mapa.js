@@ -3,14 +3,12 @@
 
   var LANG = (document.documentElement.lang || 'es').toLowerCase().indexOf('en') === 0 ? 'en' : 'es';
   var WA = '5214432311761';
-  var STORAGE_KEY = 'erior_mapa_v3';
-  var GAME_VERSION = 6;
-  var DIAGNOSE_FN = '/.netlify/functions/mapa-diagnose';
+  var STORAGE_KEY = 'erior_mapa_v7';
+  var GAME_VERSION = 7;
   var CREDIT_MXN = 444;
   var CREDIT_USD = 26;
   var UNLOCK_FN = '/.netlify/functions/mapa-unlock';
-
-  var SCENE_MODES = ['matrix', 'hole', 'dna', 'matrix', 'hole', 'dna', 'matrix'];
+  var DIAGNOSE_FN = '/.netlify/functions/mapa-diagnose';
 
   var I18N = {
     es: {
@@ -18,28 +16,32 @@
       langOther: 'EN',
       langHref: '/en/mapa/',
       homeHref: '/',
-      kickerStart: 'Capa 0 · Umbral',
-      titleStart: 'El mapa del inconsciente',
-      leadStart: 'Juega 5 niveles, escribe cómo te sientes y Alicia diagnostica tu patrón inconsciente. El archivo completo se abre solo con clave tras el pago.',
-      startCta: 'Jugar el mapa',
+      reset: 'Reiniciar',
+      kickerStart: 'Reporte del inconsciente',
+      titleStart: 'La distancia no está en el deseo',
+      leadStart:
+        'Puedes querer expansión de forma consciente y, aun así, estar psicológicamente apegado a lo familiar de quien has sido. Este reporte no pregunta por qué no lo has manifestado. Pregunta qué problemas crearía realmente conseguirlo — y qué patrón lo sostiene.',
+      startCta: 'Empezar mi reporte',
+      footNote: 'Análisis gratuito parcial · archivo completo $444 MXN con clave tras pago verificado · crédito hacia frecuencias',
+      qProgress: 'Pregunta',
+      of: 'de',
+      next: 'Continuar',
+      diagnoseCta: 'Generar mi reporte',
+      busy: 'Leyendo tu inconsciente…',
       miniTag: 'Revelación parcial',
-      miniTitle: 'Tu inconsciente ya habló',
-      feelTag: 'Capa final · Confesión',
-      feelTitle: 'Escribe cómo te sientes ahora',
-      feelLead: 'Sin filtros. Lo que late en el pecho, el loop que repites, lo que no te atreves a decir en voz alta. Alicia lee tu mapa + tu texto y te da el diagnóstico.',
-      feelPlaceholder: 'Ej: Me siento estancada, como si controlara todo pero no avanzara… Me duele que…',
-      feelCta: 'Diagnosticar mi inconsciente',
-      feelBusy: 'Leyendo tu campo…',
+      miniTitle: 'Esto es solo el borde del patrón',
       unlockTitle: 'Archivo completo · $444 MXN',
-      unlockLead: 'Lectura completa, 4 bloqueos, guión inconsciente y 3 frecuencias recomendadas para TI. Los $444 se descuentan si activas audio(s).',
+      unlockLead:
+        'Lectura completa en voz Erior: el patrón, lo que tendrías que dejar atrás, el guión operativo y 3 frecuencias neuronales recomendadas para TI. Los $444 se descuentan si activas audio(s).',
       unlockCta: 'Continuar al pago ($444 MXN)',
-      payTitle: 'Paga y pide tu clave',
-      payLead: 'Monto: $444 MXN. Pon tu código en el concepto / asunto. Envía comprobante. Pauline te manda la clave — sin clave no se abre el archivo.',
+      payTitle: 'Paga y recibe tu clave',
+      payLead: 'Monto: $444 MXN. Pon tu código en el concepto. Envía comprobante. Pauline te manda la clave — sin clave no se abre el archivo.',
       paidCta: 'Ya pagué — avisar y pedir clave',
       keyLabel: 'Clave de acceso (te la envía Pauline)',
       keyPlaceholder: 'AB12CD34',
       keyCta: 'Abrir archivo con clave',
-      keyWait: 'Después de pagar, envía tu comprobante con el código MAPA-… Pauline verifica y te manda la clave de 8 caracteres. Sin clave verificada el archivo no se abre.',
+      keyWait:
+        'Después de pagar, envía tu comprobante con el código MAPA-… Pauline verifica y te manda la clave de 8 caracteres.',
       keyHint: 'Usa exactamente la clave que Pauline te envíe para este código. No inventes una.',
       codeLabel: 'Tu código de pedido',
       copyCode: 'Copiar código',
@@ -51,22 +53,45 @@
       buy1: '1 audio · diferencia',
       buy2: '2 audios + libro · diferencia',
       buy3: '3 audios + Alicia Premium · diferencia',
-      waReport: 'Enviar mi mapa a Pauline',
       backHome: 'Volver al centro',
       copy: 'Copiar',
       copied: '¡Copiado!',
-      rooms: [
-        { kicker: 'Nivel 1 · Rompecabezas', title: 'Ordena la frase y abre una puerta', lead: 'Toca una pieza, luego un hueco. Cuando la frase esté bien, suelta la llave en una puerta.' },
-        { kicker: 'Nivel 2 · Cifrado', title: 'Descifra la voz que hay que callar', lead: 'Arma la frase secreta moviendo las letras a los huecos.' },
-        { kicker: 'Nivel 3 · Ensamble', title: 'Arma el objeto que tomas', lead: 'Arrastra (o toca + hueco) 2 piezas correctas sobre un solo objeto.' },
-        { kicker: 'Nivel 4 · Algoritmo', title: 'Repite la secuencia del inconsciente', lead: 'Memoriza el patrón luminoso y repítelo tocando los nodos.' },
-        { kicker: 'Nivel 5 · Laberinto', title: 'Escapa del laberinto del inconsciente', lead: 'Muévete como Pac-Man: come todos los puntos, evita la sombra y sal por el portal.' }
-      ],
+      scriptTag: 'Guión del inconsciente',
+      protocolTag: 'Protocolo de recalibración',
+      fromYou: 'Desde tus respuestas',
+      patternTag: 'Patrón dominante',
+      freqTag: 'Frecuencia sugerida',
       methods: [
         { id: 'oxxo', label: 'OXXO' },
         { id: 'transfer', label: 'Transferencia' },
         { id: 'paypal', label: 'PayPal' },
         { id: 'alt', label: 'Crypto / WU' }
+      ],
+      questions: [
+        {
+          kicker: '01 · El deseo',
+          title: '¿Qué estás intentando crear?',
+          lead: 'Riqueza. Éxito. Amor. Visibilidad. Un cuerpo. Un negocio. Sé concreto.',
+          placeholder: 'Ej: Quiero generar mucho más dinero y que mi trabajo se vea…'
+        },
+        {
+          kicker: '02 · La incomodidad',
+          title: 'Imagina que llega mañana. ¿Qué se vuelve incómodo?',
+          lead: 'Olvida lo que mejoraría. ¿Qué tendrías que confrontar? ¿Detrás de qué ya no podrías esconderte?',
+          placeholder: 'Ej: Me incomodaría que mi familia… / Ser visto… / Tener que…'
+        },
+        {
+          kicker: '03 · La identidad',
+          title: '¿En quién tendrías que convertirte?',
+          lead: '¿A quién podrías dejar atrás? ¿Qué dejaría de ser “normal” para ti?',
+          placeholder: 'Ej: Tendría que convertirme en alguien que… y dejar de…'
+        },
+        {
+          kicker: '04 · Lo que late',
+          title: 'Escribe cómo te sientes ahora, sin filtro',
+          lead: 'El loop que repites. Lo que no dices en voz alta. La resistencia debajo del deseo.',
+          placeholder: 'Puedes quererlo con desesperación y, al mismo tiempo, te incomoda todo lo que tenerlo te exigiría…'
+        }
       ]
     },
     en: {
@@ -74,28 +99,32 @@
       langOther: 'ES',
       langHref: '/mapa/',
       homeHref: '/en/',
-      kickerStart: 'Layer 0 · Threshold',
-      titleStart: 'Map of the Unconscious',
-      leadStart: 'Play 5 levels, write how you feel, and Alicia diagnoses your unconscious pattern. The full file opens only with a real key after payment.',
-      startCta: 'Play the map',
+      reset: 'Restart',
+      kickerStart: 'Unconscious report',
+      titleStart: 'The distance isn’t in the desire',
+      leadStart:
+        'You can want expansion consciously and still be psychologically attached to the familiar self you’ve been. This report doesn’t ask why you haven’t manifested it. It asks what problems getting it would actually create — and which pattern holds that.',
+      startCta: 'Start my report',
+      footNote: 'Free partial analysis · full file $26 USD with verified payment key · credit toward frequencies',
+      qProgress: 'Question',
+      of: 'of',
+      next: 'Continue',
+      diagnoseCta: 'Generate my report',
+      busy: 'Reading your unconscious…',
       miniTag: 'Partial reveal',
-      miniTitle: 'Your unconscious already spoke',
-      feelTag: 'Final layer · Confession',
-      feelTitle: 'Write how you feel right now',
-      feelLead: 'No filter. What’s in your chest, the loop you repeat, what you won’t say out loud. Alicia reads your map + your words and diagnoses you.',
-      feelPlaceholder: 'e.g. I feel stuck — I control everything but don’t move… It hurts that…',
-      feelCta: 'Diagnose my unconscious',
-      feelBusy: 'Reading your field…',
+      miniTitle: 'This is only the edge of the pattern',
       unlockTitle: 'Full file · $26 USD',
-      unlockLead: 'Full reading, 4 blocks, unconscious script and 3 frequencies recommended for YOU. The $26 is credited if you activate audio(s).',
+      unlockLead:
+        'Full Erior reading: the pattern, what you’d have to leave behind, the operative script, and 3 neural frequencies for YOU. The $26 is credited if you activate audio(s).',
       unlockCta: 'Continue to payment ($26 USD)',
-      payTitle: 'Pay, then get your key',
-      payLead: 'Amount: $26 USD. Put your code in the memo/subject. Send the receipt. Pauline sends the key — no key, no file.',
+      payTitle: 'Pay and get your key',
+      payLead: 'Amount: $26 USD. Put your code in the memo. Send the receipt. Pauline sends the key — no key, no file.',
       paidCta: 'I paid — notify & request key',
       keyLabel: 'Access key (Pauline sends it)',
       keyPlaceholder: 'AB12CD34',
       keyCta: 'Open file with key',
-      keyWait: 'After you pay, send your receipt with the MAPA-… code. Pauline verifies and sends an 8-character key. No verified key, no file.',
+      keyWait:
+        'After you pay, send your receipt with the MAPA-… code. Pauline verifies and sends an 8-character key.',
       keyHint: 'Use exactly the key Pauline sends for this code. Don’t invent one.',
       codeLabel: 'Your order code',
       copyCode: 'Copy code',
@@ -107,21 +136,44 @@
       buy1: '1 audio · difference',
       buy2: '2 audios + book · difference',
       buy3: '3 audios + Alicia Premium · difference',
-      waReport: 'Send my map to Pauline',
       backHome: 'Back to center',
       copy: 'Copy',
       copied: 'Copied!',
-      rooms: [
-        { kicker: 'Level 1 · Puzzle', title: 'Order the phrase, then open a door', lead: 'Tap a piece, then a slot. When the phrase is right, drop the key on a door.' },
-        { kicker: 'Level 2 · Cipher', title: 'Decode the voice that must go quiet', lead: 'Build the secret phrase by moving letters into the slots.' },
-        { kicker: 'Level 3 · Assemble', title: 'Build the object you take', lead: 'Drag (or tap + slot) 2 correct pieces onto one object.' },
-        { kicker: 'Level 4 · Algorithm', title: 'Replay the unconscious sequence', lead: 'Memorize the light pattern, then repeat it on the nodes.' },
-        { kicker: 'Level 5 · Maze', title: 'Escape the unconscious maze', lead: 'Move like Pac-Man: eat every pellet, dodge the shadow, exit through the portal.' }
-      ],
+      scriptTag: 'Unconscious script',
+      protocolTag: 'Recalibration protocol',
+      fromYou: 'From your answers',
+      patternTag: 'Dominant pattern',
+      freqTag: 'Suggested frequency',
       methods: [
         { id: 'wire', label: 'ACH / Wire' },
         { id: 'paypal', label: 'PayPal' },
         { id: 'alt', label: 'Crypto / WU' }
+      ],
+      questions: [
+        {
+          kicker: '01 · Desire',
+          title: 'What are you trying to create?',
+          lead: 'Wealth. Success. Love. Visibility. A body. A business. Be concrete.',
+          placeholder: 'e.g. I want to make significantly more money and be seen for my work…'
+        },
+        {
+          kicker: '02 · Discomfort',
+          title: 'Imagine it arrives tomorrow. What becomes uncomfortable?',
+          lead: 'Forget what would improve. What would you have to confront? What couldn’t you hide behind?',
+          placeholder: 'e.g. I’d be uncomfortable if my family… / Being seen… / Having to…'
+        },
+        {
+          kicker: '03 · Identity',
+          title: 'Who would you have to become?',
+          lead: 'Who might you leave behind? What would stop feeling “normal”?',
+          placeholder: 'e.g. I’d have to become someone who… and stop…'
+        },
+        {
+          kicker: '04 · What pulses',
+          title: 'Write how you feel right now, unfiltered',
+          lead: 'The loop you repeat. What you won’t say out loud. The resistance under the desire.',
+          placeholder: 'You can want it desperately and still be uncomfortable with everything having it would require…'
+        }
       ]
     }
   };
@@ -132,38 +184,38 @@
     loop: {
       es: {
         name: 'Loop de Control',
-        mini: 'Tu inconsciente busca previsibilidad. Repite el circuito para no perder el mando.',
+        mini: 'Quieres el resultado, pero tu sistema exige previsibilidad antes de permitirte llegar.',
         script: '“Si yo no controlo, alguien más decide — y eso es peligroso.”',
         blocks: [
-          { t: 'Control como seguridad', d: 'Relajas solo cuando todo está “bajo control”.' },
-          { t: 'Miedo al caos', d: 'La incertidumbre se siente como amenaza.' },
-          { t: 'Sobrepensar', d: 'Piensas para no sentir.' },
-          { t: 'Loop de posponer', d: 'Esperas el momento perfecto que nunca llega.' }
+          { t: 'Seguridad = control', d: 'Relajas solo cuando todo está “bajo control”.' },
+          { t: 'Amenaza de caos', d: 'La incertidumbre se lee como peligro, no como espacio.' },
+          { t: 'Pensar para no sentir', d: 'Optimizas para no cruzar el umbral emocional.' },
+          { t: 'Posponer operativo', d: 'Esperas el momento perfecto que nunca llega.' }
         ],
         protocol: '7 días · Protocolo Control Off: una micro-decisión diaria sin optimizarla. Observa la señal de ansiedad sin ejecutarla.'
       },
       en: {
         name: 'Control Loop',
-        mini: 'Your unconscious wants predictability. It repeats the circuit so you never lose the wheel.',
+        mini: 'You want the outcome, but your system demands predictability before allowing arrival.',
         script: '“If I don’t control it, someone else decides — and that’s dangerous.”',
         blocks: [
-          { t: 'Control as safety', d: 'You only relax when everything feels handled.' },
-          { t: 'Fear of chaos', d: 'Uncertainty feels like threat.' },
-          { t: 'Overthinking', d: 'You think to avoid feeling.' },
-          { t: 'Postpone loop', d: 'You wait for a perfect moment that never arrives.' }
+          { t: 'Safety = control', d: 'You only relax when everything feels handled.' },
+          { t: 'Chaos threat', d: 'Uncertainty reads as danger, not space.' },
+          { t: 'Think to not feel', d: 'You optimize to avoid the emotional threshold.' },
+          { t: 'Operational delay', d: 'You wait for a perfect moment that never arrives.' }
         ],
         protocol: '7 days · Control Off protocol: one daily micro-decision with no optimizing. Watch the anxiety signal without running it.'
       },
       audios: [
-        { name: 'Booster 2.0', whyEs: 'Rompe el loop y vuelve al punto cero.', whyEn: 'Breaks the loop; returns to zero point.', img: '/img/catalog/booster-2-0.jpg' },
-        { name: 'LIMITLESS', whyEs: 'Detecta el patrón invisible.', whyEn: 'Detects the invisible pattern.', img: '/img/catalog/limitless.jpg' },
-        { name: 'Wonderland Coherence', whyEs: 'Coherencia al soltar el control.', whyEn: 'Coherence when releasing control.', img: '/img/catalog/wonderland-coherence.jpg' }
+        { name: 'Booster 2.0', whyEs: 'Reinicia el campo y corta el circuito de control.', whyEn: 'Resets the field and cuts the control circuit.', img: '/img/catalog/booster-2-0.jpg' },
+        { name: 'LIMITLESS', whyEs: 'Detecta el patrón invisible que te atrapa.', whyEn: 'Detects the invisible pattern trapping you.', img: '/img/catalog/limitless.jpg' },
+        { name: 'Wonderland Coherence', whyEs: 'Coherencia al soltar el mando.', whyEn: 'Coherence when releasing the wheel.', img: '/img/catalog/wonderland-coherence.jpg' }
       ]
     },
     espejo: {
       es: {
         name: 'Espejo Relacional',
-        mini: 'Tu vida amorosa es un espejo: atraes para confirmar una historia vieja de valor.',
+        mini: 'Quieres amor o elección… y al mismo tiempo te proteges de ser conocido de verdad.',
         script: '“Si me eligen, valgo. Si me ignoran, desaparezco.”',
         blocks: [
           { t: 'Validación externa', d: 'Tu estado depende de cómo te miran.' },
@@ -175,7 +227,7 @@
       },
       en: {
         name: 'Relational Mirror',
-        mini: 'Your love life is a mirror: you attract to confirm an old worth story.',
+        mini: 'You want love or being chosen… and still protect yourself from being truly known.',
         script: '“If they choose me, I matter. If they ignore me, I vanish.”',
         blocks: [
           { t: 'External validation', d: 'Your state depends on how you’re seen.' },
@@ -186,18 +238,18 @@
         protocol: '7 days · Fixed Worth protocol: each morning write “My worth doesn’t negotiate.” Don’t send the message that usually saves the scene.'
       },
       audios: [
-        { name: 'SEDUCTION', whyEs: 'Deja de perseguir; vuelve el magnetismo.', whyEn: 'Stop chasing; restore magnetism.', img: '/img/catalog/seduction.jpg' },
+        { name: 'SEDUCTION', whyEs: 'Deja de perseguir; recupera magnetismo.', whyEn: 'Stop chasing; restore magnetism.', img: '/img/catalog/seduction.jpg' },
         { name: 'Amor Propio Magic 4.0', whyEs: 'Merecimiento sin codependencia.', whyEn: 'Worth without codependency.', img: '/img/catalog/amor-propio-magic-4-0.jpg' },
-        { name: 'Mesmerizing Love', whyEs: 'Presencia que enamora sin forzar.', whyEn: 'Presence that magnetizes.', img: '/img/catalog/mesmerizing-love.jpg' }
+        { name: 'Mesmerizing Love', whyEs: 'Presencia que enamora sin forzar.', whyEn: 'Presence that magnetizes without force.', img: '/img/catalog/mesmerizing-love.jpg' }
       ]
     },
     vacio: {
       es: {
         name: 'Vacío de Identidad',
-        mini: 'El personaje actual ya no cabe — y el nuevo aún no se instaló.',
+        mini: 'El deseo pide una versión nueva de ti — y tu sistema aún no la ha instalado como “normal”.',
         script: '“Si elijo mal quién soy, pierdo todo lo que construí.”',
         blocks: [
-          { t: 'Piloto automático', d: 'Vives disociada/o con suavidad.' },
+          { t: 'Piloto automático', d: 'Operas disociada/o con suavidad.' },
           { t: 'Miedo a definirte', d: 'Elegir una versión se siente traición.' },
           { t: 'Comparación', d: 'Mides tu vida con películas ajenas.' },
           { t: 'Sin guión', d: 'Sabes lo que no quieres; no el rol que sí.' }
@@ -206,7 +258,7 @@
       },
       en: {
         name: 'Identity Void',
-        mini: 'The current character no longer fits — and the new one isn’t installed yet.',
+        mini: 'The desire asks for a new version of you — and your system hasn’t installed it as “normal” yet.',
         script: '“If I choose the wrong who-I-am, I lose everything I built.”',
         blocks: [
           { t: 'Autopilot', d: 'Soft dissociation.' },
@@ -218,14 +270,14 @@
       },
       audios: [
         { name: 'Identity', whyEs: 'Rediseña tu película y el rol principal.', whyEn: 'Redesign your film and lead role.', img: '/img/catalog/identity.jpg' },
-        { name: 'IMAGINE', whyEs: 'Imagina desde el resultado.', whyEn: 'Imagine from the result.', img: '/img/catalog/imagine.jpg' },
+        { name: 'IMAGINE', whyEs: 'Imagina desde el resultado ya vivido.', whyEn: 'Imagine from the lived result.', img: '/img/catalog/imagine.jpg' },
         { name: 'GOD / GODDESS', whyEs: 'Instala el YO SOY creador.', whyEn: 'Install the creative I AM.', img: '/img/catalog/god-goddess.jpg' }
       ]
     },
     ruido: {
       es: {
         name: 'Ruido Mental',
-        mini: 'Tu mente no está rota: está saturada. Demasiadas pestañas abiertas.',
+        mini: 'Quieres claridad para avanzar, pero tu mente satura el canal para no cruzar el umbral.',
         script: '“Si dejo de pensar, se me escapa algo importante.”',
         blocks: [
           { t: 'Hipervigilancia', d: 'Escaneas amenazas sin incendio.' },
@@ -233,11 +285,11 @@
           { t: 'Insomnio creativo', d: 'Ideas cuando deberías dormir.' },
           { t: 'Duda crónica', d: 'Revisas cada decisión hasta vaciarla.' }
         ],
-        protocol: '7 días · Protocolo Canal Único: 10 min/día auriculares + una sola pregunta + cero pantallas. Un insight, no diez.'
+        protocol: '7 días · Protocolo Canal Único: 10 min/día auriculares + una sola pregunta + cero pantallas.'
       },
       en: {
         name: 'Mental Noise',
-        mini: 'Your mind isn’t broken — saturated. Too many tabs open.',
+        mini: 'You want clarity to move, but your mind saturates the channel so you never cross the threshold.',
         script: '“If I stop thinking, something important will slip.”',
         blocks: [
           { t: 'Hypervigilance', d: 'Scanning threats with no fire.' },
@@ -245,18 +297,18 @@
           { t: 'Creative insomnia', d: 'Ideas when you should sleep.' },
           { t: 'Chronic doubt', d: 'Revising until the choice is empty.' }
         ],
-        protocol: '7 days · Single Channel protocol: 10 min/day headphones + one question + zero screens. One insight, not ten.'
+        protocol: '7 days · Single Channel protocol: 10 min/day headphones + one question + zero screens.'
       },
       audios: [
-        { name: 'LIMITLESS', whyEs: 'Claridad láser.', whyEn: 'Laser clarity.', img: '/img/catalog/limitless.jpg' },
-        { name: 'Keep Cool', whyEs: 'Baja el ruido del sistema.', whyEn: 'Lowers system noise.', img: '/img/catalog/keep-cool.jpg' },
+        { name: 'LIMITLESS', whyEs: 'Claridad láser sobre el ruido.', whyEn: 'Laser clarity over the noise.', img: '/img/catalog/limitless.jpg' },
+        { name: 'Keep Cool', whyEs: 'Baja el volumen del sistema.', whyEn: 'Lowers system volume.', img: '/img/catalog/keep-cool.jpg' },
         { name: 'MASTER MIND', whyEs: 'Orden para visiones grandes.', whyEn: 'Order for big visions.', img: '/img/catalog/master-mind.jpg' }
       ]
     },
     carencia: {
       es: {
         name: 'Código de Carencia',
-        mini: 'El dinero es el termómetro. Aún corre el programa “nunca alcanza”.',
+        mini: 'Quieres riqueza — y te incomoda ser la persona de tu familia que tiene significativamente más.',
         script: '“Si me llega de más, algo malo viene después.”',
         blocks: [
           { t: 'Culpa al recibir', d: 'Ganar se siente inseguro.' },
@@ -264,30 +316,30 @@
           { t: 'Techo de merecimiento', d: 'Saboteas cuando sube el nivel.' },
           { t: 'Identidad de escasez', d: 'Programa: “la gente como yo no opera a ese nivel.”' }
         ],
-        protocol: '7 días · Protocolo Señal de Abundancia: al pagar, registra internamente “circula a través de mí” y continúa sin drama. Entrena el sistema a sostener flujo.'
+        protocol: '7 días · Protocolo Señal de Abundancia: al pagar, registra “circula a través de mí” y continúa sin drama.'
       },
       en: {
         name: 'Lack Code',
-        mini: 'Money is the thermometer. “Never enough” is still running.',
+        mini: 'You want wealth — and you’re uncomfortable being the family member who has significantly more.',
         script: '“If too much arrives, something bad follows.”',
         blocks: [
           { t: 'Guilt receiving', d: 'Earning feels unsafe.' },
           { t: 'Invisible leaks', d: 'It comes and goes without a clear why.' },
           { t: 'Worth ceiling', d: 'Sabotage as the level rises.' },
-          { t: 'Poor identity', d: '“People like me don’t get that.”' }
+          { t: 'Scarcity identity', d: 'Program: “people like me don’t operate at that level.”' }
         ],
-        protocol: '7 days · Abundance Signal protocol: when you pay, register internally “it circulates through me” and continue without drama. Train the system to hold flow.'
+        protocol: '7 days · Abundance Signal protocol: when you pay, register “it circulates through me” and continue without drama.'
       },
       audios: [
         { name: 'MONEY TECH', whyEs: 'Fórmula diurna/nocturna de abundancia.', whyEn: 'Day/night abundance formula.', img: '/img/catalog/money-tech.jpg' },
-        { name: 'Master Abundance', whyEs: 'Sostener el flujo.', whyEn: 'Sustain the flow.', img: '/img/catalog/master-abundance.jpg' },
-        { name: 'LUCKY', whyEs: 'Suerte como identidad.', whyEn: 'Luck as identity.', img: '/img/catalog/lucky.jpg' }
+        { name: 'Master Abundance', whyEs: 'Sostener el flujo sin sabotaje.', whyEn: 'Sustain flow without sabotage.', img: '/img/catalog/master-abundance.jpg' },
+        { name: 'LUCKY', whyEs: 'Suerte como identidad operativa.', whyEn: 'Luck as operative identity.', img: '/img/catalog/lucky.jpg' }
       ]
     },
     sueno: {
       es: {
         name: 'Soñador Atrapado',
-        mini: 'Mundos enormes… y te quedas en el vestíbulo. El sueño se protege para no romperse.',
+        mini: 'El deseo vive enorme en tu mente — y se protege de volverse real para no romperse.',
         script: '“Mientras sea posible en mi mente, no puede fallar afuera.”',
         blocks: [
           { t: 'Fantasía-refugio', d: 'Sueñas para no arriesgar.' },
@@ -299,7 +351,7 @@
       },
       en: {
         name: 'Trapped Dreamer',
-        mini: 'Huge worlds… stuck in the lobby. The dream protects itself from becoming real.',
+        mini: 'The desire lives huge in your mind — and protects itself from becoming real so it can’t break.',
         script: '“As long as it’s possible in my mind, it can’t fail outside.”',
         blocks: [
           { t: 'Fantasy shelter', d: 'Dreaming to avoid risk.' },
@@ -317,67 +369,21 @@
     }
   };
 
-  var OUTCOMES = [
-    [
-      { labelEs: 'Puerta de metal', labelEn: 'Metal door', img: '/img/catalog/booster-2-0.jpg', scores: { loop: 2, ruido: 1 } },
-      { labelEs: 'Puerta de espejo', labelEn: 'Mirror door', img: '/img/catalog/mesmerizing-love.jpg', scores: { espejo: 2, vacio: 1 } },
-      { labelEs: 'Puerta de niebla', labelEn: 'Fog door', img: '/img/catalog/imagine.jpg', scores: { sueno: 2, vacio: 1, carencia: 1 } }
-    ],
-    [
-      { labelEs: 'Y SI SALGO MAL', labelEn: 'WHAT IF IT FAILS', scores: { loop: 2, ruido: 1 } },
-      { labelEs: 'NO SOY SUFICIENTE', labelEn: 'I AM NOT ENOUGH', scores: { espejo: 2, carencia: 1 } },
-      { labelEs: 'DESPUES LO HAGO YA', labelEn: 'DO IT LATER NOW', scores: { sueno: 2, vacio: 1 } }
-    ],
-    [
-      { labelEs: 'Llave', labelEn: 'Key', glyph: '🗝️', scores: { loop: 2, carencia: 1 }, parts: ['ojo', 'diente'] },
-      { labelEs: 'Auricular', labelEn: 'Earbud', glyph: '🎧', scores: { ruido: 2, sueno: 1 }, parts: ['onda', 'cable'] },
-      { labelEs: 'Carta', labelEn: 'Letter', glyph: '✉️', scores: { vacio: 2, espejo: 1 }, parts: ['sello', 'tinta'] }
-    ],
-    [
-      { labelEs: 'Esto ya lo viví', labelEn: 'I’ve lived this', seq: [0, 2, 1, 3], scores: { loop: 2, ruido: 1 } },
-      { labelEs: 'Me están mirando', labelEn: 'They’re watching', seq: [1, 3, 0, 2], scores: { espejo: 2, ruido: 1 } },
-      { labelEs: 'Aún no es mi momento', labelEn: 'Not my time yet', seq: [3, 1, 2, 0], scores: { sueno: 2, carencia: 1, vacio: 1 } }
-    ],
-    [
-      { labelEs: 'Casi… y se cae', labelEn: 'Almost… then drops', img: '/img/catalog/master-abundance.jpg', scores: { carencia: 2, loop: 1 } },
-      { labelEs: 'Eligen a otra persona', labelEn: 'They choose someone else', img: '/img/catalog/erior-love.jpg', scores: { espejo: 2, vacio: 1 } },
-      { labelEs: 'Tienes el mapa… no das el paso', labelEn: 'Map in hand… no step', img: '/img/catalog/wonderland-coherence.jpg', scores: { sueno: 2, ruido: 1 } }
-    ]
-  ];
-
-  var rawState = loadState();
-  var state;
-  if (!rawState || rawState.gameVersion !== GAME_VERSION) {
-    state = {
+  function blankState() {
+    return {
       step: 'start',
-      room: 0,
+      q: 0,
+      answers: { desire: '', discomfort: '', identity: '', feelings: '' },
       scores: {},
       archetype: null,
       unlocked: false,
       keyVerified: false,
       code: null,
       notified: false,
-      feelings: '',
       diagnosis: null,
       gameVersion: GAME_VERSION
     };
-  } else {
-    state = rawState;
-    if (state.unlocked && !state.keyVerified) {
-      state.unlocked = false;
-      state.step = 'start';
-      state.room = 0;
-    }
   }
-  try {
-    localStorage.removeItem('erior_mapa_v1');
-    localStorage.removeItem('erior_mapa_v2');
-  } catch (e) {}
-
-  var root = document.getElementById('app');
-  var bar = document.getElementById('progressBar');
-  var worldImg = null;
-  var flash = document.getElementById('flash');
 
   function loadState() {
     try {
@@ -387,29 +393,27 @@
     }
   }
 
-  function resetGame() {
-    state = {
-      step: 'start',
-      room: 0,
-      scores: {},
-      archetype: null,
-      unlocked: false,
-      keyVerified: false,
-      code: null,
-      notified: false,
-      feelings: '',
-      diagnosis: null,
-      gameVersion: GAME_VERSION
-    };
-    try {
-      localStorage.removeItem(STORAGE_KEY);
-      localStorage.removeItem('erior_mapa_v1');
-      localStorage.removeItem('erior_mapa_v2');
-    } catch (e) {}
-    saveState();
-    pulseFlash();
-    render();
+  var rawState = loadState();
+  var state;
+  if (!rawState || rawState.gameVersion !== GAME_VERSION) {
+    state = blankState();
+  } else {
+    state = rawState;
+    if (state.unlocked && !state.keyVerified) {
+      state.unlocked = false;
+      state.step = 'start';
+    }
+    if (!state.answers) state.answers = blankState().answers;
   }
+  try {
+    localStorage.removeItem('erior_mapa_v1');
+    localStorage.removeItem('erior_mapa_v2');
+    localStorage.removeItem('erior_mapa_v3');
+  } catch (e) {}
+
+  var root = document.getElementById('app');
+  var bar = document.getElementById('progressBar');
+  var flash = document.getElementById('flash');
 
   function saveState() {
     try {
@@ -418,28 +422,30 @@
       if (state.unlocked && state.keyVerified) {
         localStorage.setItem(
           'erior_mapa_credit',
-          JSON.stringify({ mxn: CREDIT_MXN, usd: CREDIT_USD, archetype: state.archetype, code: state.code, at: Date.now() })
+          JSON.stringify({
+            mxn: CREDIT_MXN,
+            usd: CREDIT_USD,
+            archetype: state.archetype,
+            code: state.code,
+            at: Date.now()
+          })
         );
       }
     } catch (e) {}
   }
 
-  function addScores(scores) {
-    Object.keys(scores).forEach(function (k) {
-      state.scores[k] = (state.scores[k] || 0) + scores[k];
-    });
+  function resetGame() {
+    state = blankState();
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch (e) {}
+    saveState();
+    pulseFlash();
+    render();
   }
 
-  function winner() {
-    var best = 'loop';
-    var max = -1;
-    Object.keys(state.scores).forEach(function (k) {
-      if (state.scores[k] > max) {
-        max = state.scores[k];
-        best = k;
-      }
-    });
-    return best;
+  function archCopy(id) {
+    return ARCH[id][LANG];
   }
 
   function makeCode() {
@@ -458,28 +464,21 @@
     }, 180);
   }
 
-  var currentSceneIdx = 0;
-  function setScene(idx) {
-    currentSceneIdx = idx;
-    var mode = SCENE_MODES[idx % SCENE_MODES.length];
-    document.body.classList.remove('scene-matrix', 'scene-dna', 'scene-hole');
-    document.body.classList.add('scene-' + mode);
-  }
-
   function setMood(name) {
-    var sceneClass = '';
-    document.body.className.split(/\s+/).forEach(function (c) {
-      if (c.indexOf('scene-') === 0) sceneClass = c;
-    });
     document.body.className = document.body.className
       .split(/\s+/)
       .filter(function (c) {
-        return c && c.indexOf('mood-') !== 0 && c.indexOf('scene-') !== 0;
+        return c && c.indexOf('mood-') !== 0;
       })
       .join(' ');
     document.body.classList.add('mood-' + name);
-    if (sceneClass) document.body.classList.add(sceneClass);
-    else setScene(currentSceneIdx);
+    if (!document.body.classList.contains('scene-matrix') && !document.body.classList.contains('scene-dna') && !document.body.classList.contains('scene-hole')) {
+      document.body.classList.add('scene-matrix');
+    }
+  }
+
+  function setProgress(p) {
+    if (bar) bar.style.width = Math.max(0, Math.min(100, p)) + '%';
   }
 
   function copyText(btn, text) {
@@ -509,10 +508,6 @@
     if (cb) cb();
   }
 
-  function setProgress(p) {
-    if (bar) bar.style.width = Math.max(0, Math.min(100, p)) + '%';
-  }
-
   function priceDiff(pack) {
     if (LANG === 'en') return Math.max(0, { 1: 46, 2: 85, 3: 135 }[pack] - CREDIT_USD);
     return Math.max(0, { 1: 777, 2: 1444, 3: 2299 }[pack] - CREDIT_MXN);
@@ -523,28 +518,96 @@
     return LANG === 'en' ? '$' + d + ' USD' : '$' + d.toLocaleString('es-MX') + ' MXN';
   }
 
-  function archCopy(id) {
-    return ARCH[id][LANG];
+  function esc(s) {
+    return String(s || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
   }
 
-  function tone() {
-    try {
-      var Ctx = window.AudioContext || window.webkitAudioContext;
-      if (!Ctx) return;
-      if (!tone.ctx) tone.ctx = new Ctx();
-      var ctx = tone.ctx;
-      var o = ctx.createOscillator();
-      var g = ctx.createGain();
-      o.type = 'sine';
-      o.frequency.value = 220 + Math.random() * 280;
-      g.gain.value = 0.0001;
-      o.connect(g);
-      g.connect(ctx.destination);
-      o.start();
-      g.gain.exponentialRampToValueAtTime(0.03, ctx.currentTime + 0.03);
-      g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.45);
-      o.stop(ctx.currentTime + 0.5);
-    } catch (e) {}
+  function combinedFeelings() {
+    var a = state.answers || {};
+    return [
+      'DESEO: ' + (a.desire || ''),
+      'INCOMODIDAD SI LLEGA: ' + (a.discomfort || ''),
+      'EN QUIÉN CONVERTIRME: ' + (a.identity || ''),
+      'CÓMO ME SIENTO: ' + (a.feelings || '')
+    ].join('\n\n');
+  }
+
+  function scoreFromAnswers() {
+    var text = combinedFeelings().toLowerCase();
+    var map = {
+      loop: ['control', 'ansiedad', 'perfecto', 'sobrepensar', 'caos', 'anxiety', 'worry', 'plan'],
+      espejo: ['amor', 'pareja', 'ex', 'abandono', 'rechazo', 'love', 'lonely', 'familia', 'juzg', 'visto', 'novio', 'novia'],
+      vacio: ['identidad', 'quién', 'quien', 'vacio', 'vacío', 'identity', 'empty', 'normal', 'convert'],
+      ruido: ['ruido', 'mente', 'insomnio', 'saturad', 'noise', 'stress', 'foco', 'focus', 'pensar'],
+      carencia: ['dinero', 'riqueza', 'falta', 'pobre', 'deuda', 'money', 'wealth', 'abundancia', 'más', 'mas'],
+      sueno: ['sueño', 'proyecto', 'procrastin', 'después', 'dream', 'later', 'manifest', 'empezar', 'mostrar']
+    };
+    var tally = { loop: 0, espejo: 0, vacio: 0, ruido: 0, carencia: 0, sueno: 0 };
+    Object.keys(map).forEach(function (k) {
+      map[k].forEach(function (w) {
+        if (text.indexOf(w) !== -1) tally[k] += 2;
+      });
+    });
+    return tally;
+  }
+
+  function winnerFrom(scores) {
+    var best = 'vacio';
+    var max = -1;
+    Object.keys(scores || {}).forEach(function (k) {
+      if (scores[k] > max) {
+        max = scores[k];
+        best = k;
+      }
+    });
+    return best;
+  }
+
+  function localDiagnose() {
+    var scores = scoreFromAnswers();
+    state.scores = scores;
+    var id = winnerFrom(scores);
+    var a = archCopy(id);
+    var desire = (state.answers.desire || '').replace(/\s+/g, ' ').trim().slice(0, 120);
+    var discomfort = (state.answers.discomfort || '').replace(/\s+/g, ' ').trim().slice(0, 140);
+    var reading;
+    if (LANG === 'en') {
+      reading =
+        'You say you want “' +
+        (desire || 'this expansion') +
+        '”. And in the same breath, your system names the cost: “' +
+        (discomfort || 'the discomfort of becoming someone new') +
+        '”. The resistance isn’t toward the desire itself. It’s toward the identity, expectations, and responsibilities that desire represents. Pattern detected: ' +
+        a.name +
+        '. ' +
+        a.mini;
+    } else {
+      reading =
+        'Dices que quieres “' +
+        (desire || 'esta expansión') +
+        '”. Y en la misma respiración, tu sistema nombra el costo: “' +
+        (discomfort || 'la incomodidad de convertirte en alguien nuevo') +
+        '”. La resistencia no es hacia el deseo en sí. Es hacia la identidad, las expectativas y las responsabilidades que ese deseo representa. Patrón detectado: ' +
+        a.name +
+        '. ' +
+        a.mini;
+    }
+    return {
+      ok: true,
+      source: 'local',
+      archetype: id,
+      name: a.name,
+      mini: a.mini,
+      reading: reading,
+      script: a.script,
+      blocks: a.blocks,
+      protocol: a.protocol,
+      audios: ARCH[id].audios
+    };
   }
 
   function notifyTeam(kind) {
@@ -559,83 +622,65 @@
           LANG +
           '\nCliente dice que pagó $' +
           (LANG === 'en' ? '26 USD' : '444 MXN') +
-          '.\nGenera clave en /mapa/admin.html y envíasela.'
-        : '🟣 MAPA INICIÓ PAGO\nCódigo: ' + state.code + '\nPatrón: ' + a;
+          '.'
+        : '🟣 MAPA REPORTE\nCódigo: ' + state.code + '\nPatrón: ' + a;
     Promise.all([
       fetch('https://api.callmebot.com/whatsapp.php?phone=5214432311761&text=' + encodeURIComponent(msg) + '&apikey=6870409'),
       fetch('https://api.callmebot.com/whatsapp.php?phone=5214791936105&text=' + encodeURIComponent(msg) + '&apikey=2412047')
     ]).catch(function () {});
   }
 
-  function finishRoom(scores) {
-    tone();
-    pulseFlash();
-    addScores(scores);
-    if (state.room >= OUTCOMES.length - 1) {
-      state.code = state.code || makeCode();
-      state.step = 'feel';
-    } else {
-      state.room = state.room + 1;
-    }
-    saveState();
-    render();
+  function answerKey(q) {
+    return ['desire', 'discomfort', 'identity', 'feelings'][q];
   }
 
-  function shuffle(arr) {
-    var a = arr.slice();
-    for (var i = a.length - 1; i > 0; i--) {
-      var j = Math.floor(Math.random() * (i + 1));
-      var t0 = a[i];
-      a[i] = a[j];
-      a[j] = t0;
-    }
-    return a;
-  }
-
-  /** Click-to-pick then click-to-place (mobile friendly) */
-  function bindPickPlace(trayEl, slotsEl, onChange) {
-    var selected = null;
-    function clearSel() {
-      trayEl.querySelectorAll('.piece').forEach(function (p) {
-        p.classList.remove('selected');
-      });
-      selected = null;
-    }
-    trayEl.addEventListener('click', function (e) {
-      var piece = e.target.closest('.piece');
-      if (!piece || !trayEl.contains(piece)) return;
-      if (selected === piece) {
-        clearSel();
-        return;
-      }
-      clearSel();
-      selected = piece;
-      piece.classList.add('selected');
-      tone();
-    });
-    slotsEl.addEventListener('click', function (e) {
-      var slot = e.target.closest('.slot');
-      if (!slot || !slotsEl.contains(slot)) return;
-      if (slot.firstChild && !selected) {
-        trayEl.appendChild(slot.firstChild);
-        slot.classList.remove('filled');
-        if (onChange) onChange();
-        return;
-      }
-      if (!selected) return;
-      if (slot.firstChild) trayEl.appendChild(slot.firstChild);
-      slot.appendChild(selected);
-      slot.classList.add('filled');
-      clearSel();
-      if (onChange) onChange();
-    });
-  }
-
-  function roomShell(inner) {
-    var meta = t.rooms[state.room];
-    return (
-      '<section class="stage">' +
+  function renderStart() {
+    setProgress(6);
+    setMood('0');
+    root.innerHTML =
+      '<section class="stage report-stage">' +
       '<p class="kicker">' +
+      t.kickerStart +
+      '</p>' +
+      '<h1 class="report-title">' +
+      t.titleStart +
+      '</h1>' +
+      '<p class="lead report-lead">' +
+      t.leadStart +
+      '</p>' +
+      '<div class="cta-row"><button type="button" class="btn btn-solid" id="btnStart">' +
+      t.startCta +
+      '</button></div>' +
+      '<p class="foot-note">' +
+      t.footNote +
+      '</p></section>';
+    document.getElementById('btnStart').onclick = function () {
+      pulseFlash();
+      state = blankState();
+      state.step = 'question';
+      state.q = 0;
+      state.code = makeCode();
+      saveState();
+      render();
+    };
+  }
+
+  function renderQuestion() {
+    var q = state.q || 0;
+    var meta = t.questions[q];
+    var key = answerKey(q);
+    setProgress(12 + q * 16);
+    setMood(String(Math.min(q + 1, 5)));
+    root.innerHTML =
+      '<section class="stage report-stage">' +
+      '<p class="kicker">' +
+      t.qProgress +
+      ' ' +
+      (q + 1) +
+      ' ' +
+      t.of +
+      ' 4</p>' +
+      '<p class="q-kicker">' +
       meta.kicker +
       '</p>' +
       '<h2>' +
@@ -644,824 +689,80 @@
       '<p class="lead">' +
       meta.lead +
       '</p>' +
-      inner +
-      '<p class="game-status" id="gameStatus"></p></section>'
-    );
-  }
-
-  function gameSortDoors() {
-    var words = LANG === 'en' ? ['CLOSE', 'YOUR', 'EYES', 'CHOOSE'] : ['CIERRA', 'LOS', 'OJOS', 'ELIGE'];
-    var correct = words.join(' ');
-    var doors = OUTCOMES[0];
-    root.innerHTML = roomShell(
-      '<p class="game-hint">' +
-        (LANG === 'en'
-          ? 'Order the 4 words. Then drop the key 🔑 on a door.'
-          : 'Ordena las 4 palabras. Luego suelta la llave 🔑 en una puerta.') +
-        '</p>' +
-        '<div class="slots" id="slots"></div>' +
-        '<div class="tray" id="tray"></div>' +
-        '<div id="doorsWrap" style="display:none"></div>'
-    );
-    var slots = document.getElementById('slots');
-    var tray = document.getElementById('tray');
-    words.forEach(function () {
-      var s = document.createElement('div');
-      s.className = 'slot';
-      slots.appendChild(s);
-    });
-    shuffle(words).forEach(function (w) {
-      var p = document.createElement('button');
-      p.type = 'button';
-      p.className = 'piece';
-      p.textContent = w;
-      p.dataset.w = w;
-      tray.appendChild(p);
-    });
-    function readPhrase() {
-      return Array.prototype.map
-        .call(slots.children, function (s) {
-          return s.firstChild ? s.firstChild.dataset.w : '';
-        })
-        .join(' ');
-    }
-    function unlockDoors() {
-      var wrap = document.getElementById('doorsWrap');
-      wrap.style.display = 'block';
-      wrap.innerHTML =
-        '<p class="game-hint ok-pulse">' +
-        (LANG === 'en' ? 'Phrase unlocked. Choose a door.' : 'Frase abierta. Elige una puerta.') +
-        '</p><div class="doors-row" id="doors"></div>';
-      var doorsEl = document.getElementById('doors');
-      doors.forEach(function (d, i) {
-        var b = document.createElement('button');
-        b.type = 'button';
-        b.className = 'door-drop openable';
-        b.innerHTML =
-          '<span class="bg"></span><span class="lbl"><strong>' +
-          (LANG === 'en' ? d.labelEn : d.labelEs) +
-          '</strong><span>🔑</span></span>';
-        b.dataset.v = String(i);
-        b.onclick = function () {
-          finishRoom(d.scores);
-        };
-        doorsEl.appendChild(b);
-      });
-    }
-    bindPickPlace(tray, slots, function () {
-      var status = document.getElementById('gameStatus');
-      if (readPhrase() === correct) {
-        status.textContent = LANG === 'en' ? 'Correct' : 'Correcto';
-        tray.querySelectorAll('.piece').forEach(function (p) {
-          p.classList.add('ghost');
-        });
-        unlockDoors();
-      } else {
-        status.textContent = '';
-      }
-    });
-  }
-
-  function gameCipher() {
-    var opts = OUTCOMES[1];
-    // Pick one target phrase randomly for the cipher board — player builds whichever they believe; scoring by which phrase they complete
-    var letters = [];
-    opts.forEach(function (o) {
-      var phrase = LANG === 'en' ? o.labelEn : o.labelEs;
-      phrase.replace(/[^A-ZÁÉÍÓÚÑ]/gi, '').toUpperCase().split('').forEach(function (ch) {
-        letters.push(ch);
-      });
-    });
-    // Too many letters - better: one scrambled target but allow building any of 3 by choosing tiles from a shared pool of unique letters for the chosen phrase
-    // Simpler approach: show 3 ciphered options as tiles groups - player sorts ONE phrase from its own scrambled letters
-
-    var pick = opts[Math.floor(Math.random() * opts.length)];
-    // Actually user should choose which voice - so show all 3 as mini sort puzzles? Too heavy.
-    // Better: letter bank from all 3 phrases (unique), slots for max length, and check if slots match any phrase
-
-    var phrases = opts.map(function (o) {
-      return (LANG === 'en' ? o.labelEn : o.labelEs).toUpperCase().replace(/\s+/g, ' ').trim();
-    });
-    var bank = shuffle(
-      phrases
-        .join('')
-        .replace(/[^A-ZÁÉÍÓÚÑ]/g, '')
-        .split('')
-    );
-    // Deduplicate bank length - use letters only from a random phrase but reveal cipher of all three as hints
-    var targetLetters = shuffle(phrases[Math.floor(Math.random() * 3)].replace(/ /g, '').split(''));
-
-    root.innerHTML = roomShell(
-      '<p class="game-hint">' +
-        (LANG === 'en'
-          ? 'Cipher hint: vowels became symbols. Rebuild ONE voice below.'
-          : 'Pista cifrada: las vocales son símbolos. Arma UNA de las voces.') +
-        '</p>' +
-        '<div class="cipher-box">' +
-        phrases
-          .map(function (p) {
-            return p
-              .replace(/A/g, '@')
-              .replace(/E/g, '3')
-              .replace(/I/g, '1')
-              .replace(/O/g, '0')
-              .replace(/U/g, 'µ');
-          })
-          .join('<br>') +
-        '</div>' +
-        '<div class="slots" id="slots"></div>' +
-        '<div class="tray" id="tray"></div>' +
-        '<div class="cta-row"><button type="button" class="btn" id="btnCheck">' +
-        (LANG === 'en' ? 'Check phrase' : 'Comprobar frase') +
-        '</button></div>'
-    );
-
-    // Use letters from all phrases combined unique pool for flexibility - take first phrase's letters + extras
-    var pool = shuffle(
-      Array.from(
-        new Set(
-          phrases
-            .join('')
-            .replace(/[^A-ZÁÉÍÓÚÑ]/g, '')
-            .split('')
-        )
-      )
-    );
-    // Need enough letters - for spaces use word slots instead of letter slots
-    // Switch to WORD tiles for each phrase's words
-    var allWords = [];
-    opts.forEach(function (o, oi) {
-      var phrase = (LANG === 'en' ? o.labelEn : o.labelEs).toUpperCase();
-      phrase.split(/\s+/).forEach(function (w) {
-        allWords.push({ w: w, oi: oi });
-      });
-    });
-    root.innerHTML = roomShell(
-      '<p class="game-hint">' +
-        (LANG === 'en'
-          ? 'Move word tiles into the row to rebuild the voice you must silence first.'
-          : 'Mueve las palabras a la fila para armar la voz que hay que callar primero.') +
-        '</p>' +
-        '<div class="cipher-box">' +
-        phrases
-          .map(function (p) {
-            return p
-              .replace(/A/g, '@')
-              .replace(/E/g, '3')
-              .replace(/I/g, '1')
-              .replace(/O/g, '0')
-              .replace(/U/g, 'µ');
-          })
-          .join('<br>') +
-        '</div>' +
-        '<div class="slots" id="slots"></div>' +
-        '<div class="tray" id="tray"></div>'
-    );
-    var slots = document.getElementById('slots');
-    var tray = document.getElementById('tray');
-    for (var i = 0; i < 4; i++) {
-      var s = document.createElement('div');
-      s.className = 'slot';
-      slots.appendChild(s);
-    }
-    shuffle(allWords).forEach(function (item) {
-      var p = document.createElement('button');
-      p.type = 'button';
-      p.className = 'piece';
-      p.textContent = item.w;
-      p.dataset.w = item.w;
-      tray.appendChild(p);
-    });
-    bindPickPlace(tray, slots, function () {
-      var built = Array.prototype.map
-        .call(slots.children, function (s) {
-          return s.firstChild ? s.firstChild.dataset.w : '';
-        })
-        .filter(Boolean)
-        .join(' ');
-      var status = document.getElementById('gameStatus');
-      for (var i = 0; i < phrases.length; i++) {
-        if (built === phrases[i]) {
-          status.textContent = LANG === 'en' ? 'Decoded' : 'Descifrado';
-          finishRoom(opts[i].scores);
-          return;
-        }
-      }
-      status.textContent = built ? (LANG === 'en' ? 'Keep decoding…' : 'Sigue descifrando…') : '';
-    });
-  }
-
-  function gameAssemble() {
-    var objs = OUTCOMES[2];
-    var parts = [];
-    objs.forEach(function (o, oi) {
-      o.parts.forEach(function (part) {
-        parts.push({ id: part, oi: oi, label: part.toUpperCase() });
-      });
-    });
-    // decoy parts
-    parts.push({ id: 'humo', oi: -1, label: 'HUMO' });
-    parts.push({ id: 'eco', oi: -1, label: 'ECO' });
-    root.innerHTML = roomShell(
-      '<p class="game-hint">' +
-        (LANG === 'en'
-          ? 'Place 2 matching pieces on the same object to claim it.'
-          : 'Coloca 2 piezas que coincidan en el mismo objeto para tomarlo.') +
-        '</p>' +
-        '<div class="assemble-grid" id="board"></div>' +
-        '<div class="tray" id="tray"></div>'
-    );
-    var board = document.getElementById('board');
-    var tray = document.getElementById('tray');
-    objs.forEach(function (o, oi) {
-      var card = document.createElement('div');
-      card.className = 'assemble-card';
-      card.dataset.oi = String(oi);
-      card.innerHTML =
-        '<div style="font-size:2rem">' +
-        o.glyph +
-        '</div><h4>' +
-        (LANG === 'en' ? o.labelEn : o.labelEs) +
-        '</h4><div class="assemble-slots slots" data-oi="' +
-        oi +
-        '"><div class="slot"></div><div class="slot"></div></div>';
-      board.appendChild(card);
-    });
-    shuffle(parts).forEach(function (part) {
-      var p = document.createElement('button');
-      p.type = 'button';
-      p.className = 'piece';
-      p.textContent = part.label;
-      p.dataset.oi = String(part.oi);
-      p.dataset.id = part.id;
-      tray.appendChild(p);
-    });
-    var selected = null;
-    function clearSel() {
-      tray.querySelectorAll('.piece').forEach(function (x) {
-        x.classList.remove('selected');
-      });
-      selected = null;
-    }
-    tray.onclick = function (e) {
-      var piece = e.target.closest('.piece');
-      if (!piece) return;
-      clearSel();
-      selected = piece;
-      piece.classList.add('selected');
-      tone();
-    };
-    board.onclick = function (e) {
-      var slot = e.target.closest('.slot');
-      if (!slot) return;
-      if (slot.firstChild && !selected) {
-        tray.appendChild(slot.firstChild);
-        slot.classList.remove('filled');
-        return;
-      }
-      if (!selected) return;
-      if (slot.firstChild) tray.appendChild(slot.firstChild);
-      slot.appendChild(selected);
-      slot.classList.add('filled');
-      clearSel();
-      // check each object
-      board.querySelectorAll('.assemble-card').forEach(function (card) {
-        var oi = +card.dataset.oi;
-        var filled = card.querySelectorAll('.slot .piece');
-        if (filled.length < 2) return;
-        var ok = true;
-        filled.forEach(function (p) {
-          if (+p.dataset.oi !== oi) ok = false;
-        });
-        if (ok) finishRoom(objs[oi].scores);
-      });
-    };
-  }
-
-  function gameSequence() {
-    var opts = OUTCOMES[3];
-    var pick = opts[Math.floor(Math.random() * opts.length)];
-    var symbols = ['✧', '◈', '⬡', '◎'];
-    root.innerHTML = roomShell(
-      '<p class="game-hint">' +
-        (LANG === 'en'
-          ? 'Watch the sequence, then repeat it. Your pattern reveals the locked phrase.'
-          : 'Mira la secuencia y repítela. Tu patrón revela la frase cerrada.') +
-        '</p>' +
-        '<div class="seq-board" id="nodes"></div>' +
-        '<div class="cta-row"><button type="button" class="btn btn-solid" id="btnReplay">' +
-        (LANG === 'en' ? 'Show sequence again' : 'Ver secuencia otra vez') +
-        '</button></div>'
-    );
-    var nodes = document.getElementById('nodes');
-    symbols.forEach(function (sym, i) {
-      var n = document.createElement('button');
-      n.type = 'button';
-      n.className = 'seq-node';
-      n.textContent = sym;
-      n.dataset.i = String(i);
-      nodes.appendChild(n);
-    });
-    var input = [];
-    var locked = true;
-    function playSeq() {
-      locked = true;
-      input = [];
-      var i = 0;
-      function step() {
-        nodes.querySelectorAll('.seq-node').forEach(function (n) {
-          n.classList.remove('on');
-        });
-        if (i >= pick.seq.length) {
-          locked = false;
-          document.getElementById('gameStatus').textContent = LANG === 'en' ? 'Your turn' : 'Tu turno';
-          return;
-        }
-        var el = nodes.querySelector('.seq-node[data-i="' + pick.seq[i] + '"]');
-        if (el) {
-          el.classList.add('on');
-          tone();
-        }
-        i++;
-        setTimeout(step, 650);
-      }
-      setTimeout(step, 400);
-    }
-    nodes.onclick = function (e) {
-      if (locked) return;
-      var n = e.target.closest('.seq-node');
-      if (!n) return;
-      var idx = +n.dataset.i;
-      input.push(idx);
-      n.classList.add('tap');
-      tone();
-      setTimeout(function () {
-        n.classList.remove('tap');
-      }, 200);
-      if (input.length === pick.seq.length) {
-        var ok = input.every(function (v, i) {
-          return v === pick.seq[i];
-        });
-        if (ok) {
-          document.getElementById('gameStatus').textContent = (LANG === 'en' ? pick.labelEn : pick.labelEs);
-          setTimeout(function () {
-            finishRoom(pick.scores);
-          }, 500);
-        } else {
-          document.getElementById('gameStatus').textContent = LANG === 'en' ? 'Wrong pattern — watch again' : 'Patrón incorrecto — mira otra vez';
-          input = [];
-          setTimeout(playSeq, 700);
-        }
-      }
-    };
-    document.getElementById('btnReplay').onclick = playSeq;
-    playSeq();
-  }
-
-
-  function gameMaze() {
-    var opts = OUTCOMES[4];
-    var layout = [
-      '1111111111111',
-      '1000000000001',
-      '1011101110101',
-      '1000100010001',
-      '1110101010111',
-      '1000001000001',
-      '1011101110101',
-      '1000000010001',
-      '1011111011101',
-      '1000000000003',
-      '1111111111111'
-    ];
-    var rows = layout.length;
-    var cols = layout[0].length;
-    var grid = [];
-    var pellets = 0;
-    for (var r = 0; r < rows; r++) {
-      grid[r] = [];
-      for (var c = 0; c < cols; c++) {
-        var ch = layout[r].charAt(c);
-        if (ch === '1') grid[r][c] = 1;
-        else if (ch === '3') grid[r][c] = 3;
-        else {
-          grid[r][c] = 0;
-          pellets++;
-        }
-      }
-    }
-    var player = { x: 1, y: 1 };
-    if (grid[player.y][player.x] === 0) {
-      grid[player.y][player.x] = 2;
-      pellets--;
-    }
-    var ghost = { x: cols - 2, y: 1, cool: 0 };
-    var collected = 0;
-    var total = pellets;
-    var done = false;
-    var tickTimer = null;
-    var dir = { x: 0, y: 0 };
-    var nextDir = { x: 0, y: 0 };
-
-    root.innerHTML = roomShell(
-      '<p class="game-hint">' +
-        (LANG === 'en'
-          ? 'Arrows or on-screen pad. Eat every light. When the portal opens, walk into it. Dodge the shadow.'
-          : 'Flechas o el pad. Come todas las luces. Cuando abra el portal, entra. Evita la sombra.') +
-        '</p>' +
-        '<div class="maze-wrap"><canvas id="mazeCanvas" width="390" height="330"></canvas>' +
-        '<div class="maze-pad" id="mazePad">' +
-        '<button type="button" data-dx="0" data-dy="-1" aria-label="up">▲</button>' +
-        '<div class="maze-pad-mid">' +
-        '<button type="button" data-dx="-1" data-dy="0" aria-label="left">◀</button>' +
-        '<button type="button" data-dx="1" data-dy="0" aria-label="right">▶</button></div>' +
-        '<button type="button" data-dx="0" data-dy="1" aria-label="down">▼</button></div></div>' +
-        '<div id="scenePick" style="display:none"></div>'
-    );
-
-    var canvas = document.getElementById('mazeCanvas');
-    var ctx = canvas.getContext('2d');
-    var cell = Math.floor(Math.min(canvas.width / cols, canvas.height / rows));
-    var ox = Math.floor((canvas.width - cell * cols) / 2);
-    var oy = Math.floor((canvas.height - cell * rows) / 2);
-    var status = document.getElementById('gameStatus');
-
-    function canWalk(x, y) {
-      if (y < 0 || x < 0 || y >= rows || x >= cols) return false;
-      return grid[y][x] !== 1;
-    }
-
-    function showScenes() {
-      done = true;
-      if (tickTimer) clearInterval(tickTimer);
-      status.textContent = LANG === 'en' ? 'You escaped. What kept hunting you?' : 'Escapaste. ¿Qué te perseguía?';
-      var wrap = document.getElementById('scenePick');
-      wrap.style.display = 'block';
-      wrap.innerHTML =
-        '<p class="game-hint ok-pulse">' +
-        (LANG === 'en' ? 'Name the chase.' : 'Nombra la persecución.') +
-        '</p><div class="doors-row"></div>';
-      var rowEl = wrap.querySelector('.doors-row');
-      opts.forEach(function (o) {
-        var b = document.createElement('button');
-        b.type = 'button';
-        b.className = 'door-drop openable';
-        b.innerHTML =
-          '<span class="bg"></span><span class="lbl"><strong>' +
-          (LANG === 'en' ? o.labelEn : o.labelEs) +
-          '</strong></span>';
-        b.onclick = function () {
-          window.removeEventListener('keydown', onKey);
-          finishRoom(o.scores);
-        };
-        rowEl.appendChild(b);
-      });
-    }
-
-    function tryMove(ent, dx, dy) {
-      var nx = ent.x + dx;
-      var ny = ent.y + dy;
-      if (!canWalk(nx, ny)) return false;
-      if (grid[ny][nx] === 3 && collected < total) return false;
-      ent.x = nx;
-      ent.y = ny;
-      return true;
-    }
-
-    function paint() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = 'rgba(6,4,14,.92)';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      for (var y = 0; y < rows; y++) {
-        for (var x = 0; x < cols; x++) {
-          var px = ox + x * cell;
-          var py = oy + y * cell;
-          var v = grid[y][x];
-          if (v === 1) {
-            ctx.fillStyle = 'rgba(125,80,255,.45)';
-            ctx.fillRect(px + 1, py + 1, cell - 2, cell - 2);
-            ctx.strokeStyle = 'rgba(255,107,203,.35)';
-            ctx.strokeRect(px + 1.5, py + 1.5, cell - 3, cell - 3);
-          } else if (v === 0) {
-            ctx.beginPath();
-            ctx.fillStyle = '#ffe27a';
-            ctx.arc(px + cell / 2, py + cell / 2, Math.max(2, cell * 0.12), 0, Math.PI * 2);
-            ctx.fill();
-          } else if (v === 3) {
-            var open = collected >= total;
-            ctx.fillStyle = open ? 'rgba(94,240,192,.55)' : 'rgba(255,255,255,.08)';
-            ctx.beginPath();
-            ctx.arc(px + cell / 2, py + cell / 2, cell * 0.38, 0, Math.PI * 2);
-            ctx.fill();
-            if (open) {
-              ctx.strokeStyle = '#5ef0c0';
-              ctx.stroke();
-            }
-          }
-        }
-      }
-      ctx.beginPath();
-      ctx.fillStyle = 'rgba(255,80,140,.9)';
-      ctx.arc(ox + ghost.x * cell + cell / 2, oy + ghost.y * cell + cell / 2, cell * 0.34, Math.PI, 0);
-      ctx.lineTo(ox + ghost.x * cell + cell * 0.85, oy + ghost.y * cell + cell * 0.78);
-      ctx.lineTo(ox + ghost.x * cell + cell * 0.15, oy + ghost.y * cell + cell * 0.78);
-      ctx.closePath();
-      ctx.fill();
-      ctx.beginPath();
-      ctx.fillStyle = '#7df9ff';
-      var ang = Math.atan2(dir.y || nextDir.y || 0, dir.x || nextDir.x || 1);
-      ctx.moveTo(ox + player.x * cell + cell / 2, oy + player.y * cell + cell / 2);
-      ctx.arc(
-        ox + player.x * cell + cell / 2,
-        oy + player.y * cell + cell / 2,
-        cell * 0.36,
-        ang + 0.45,
-        ang + Math.PI * 2 - 0.45
-      );
-      ctx.closePath();
-      ctx.fill();
-      status.textContent =
-        (LANG === 'en' ? 'Lights ' : 'Luces ') +
-        collected +
-        '/' +
-        total +
-        (collected >= total ? (LANG === 'en' ? ' · portal open' : ' · portal abierto') : '');
-    }
-
-    function ghostStep() {
-      var options = [
-        { x: 1, y: 0 },
-        { x: -1, y: 0 },
-        { x: 0, y: 1 },
-        { x: 0, y: -1 }
-      ].filter(function (d) {
-        return canWalk(ghost.x + d.x, ghost.y + d.y) && grid[ghost.y + d.y][ghost.x + d.x] !== 3;
-      });
-      if (!options.length) return;
-      options.sort(function (a, b) {
-        var da = Math.abs(ghost.x + a.x - player.x) + Math.abs(ghost.y + a.y - player.y);
-        var db = Math.abs(ghost.x + b.x - player.x) + Math.abs(ghost.y + b.y - player.y);
-        return da - db;
-      });
-      var pick = Math.random() < 0.7 ? options[0] : options[Math.floor(Math.random() * options.length)];
-      ghost.x += pick.x;
-      ghost.y += pick.y;
-    }
-
-    function tick() {
-      if (done) return;
-      if (nextDir.x || nextDir.y) {
-        if (tryMove(player, nextDir.x, nextDir.y)) dir = { x: nextDir.x, y: nextDir.y };
-        else tryMove(player, dir.x, dir.y);
-      } else if (dir.x || dir.y) {
-        tryMove(player, dir.x, dir.y);
-      }
-      if (grid[player.y][player.x] === 0) {
-        grid[player.y][player.x] = 2;
-        collected++;
-        tone();
-      }
-      if (grid[player.y][player.x] === 3 && collected >= total) {
-        paint();
-        showScenes();
-        return;
-      }
-      ghost.cool++;
-      if (ghost.cool % 2 === 0) ghostStep();
-      if (ghost.x === player.x && ghost.y === player.y) {
-        player.x = 1;
-        player.y = 1;
-        dir = { x: 0, y: 0 };
-        nextDir = { x: 0, y: 0 };
-        status.textContent = LANG === 'en' ? 'The shadow caught you — try again' : 'La sombra te atrapó — intenta de nuevo';
-      }
-      paint();
-    }
-
-    function setDir(dx, dy) {
-      nextDir = { x: dx, y: dy };
-      if (!dir.x && !dir.y) dir = { x: dx, y: dy };
-    }
-
-    function onKey(e) {
-      var mapKeys = {
-        ArrowUp: [0, -1],
-        ArrowDown: [0, 1],
-        ArrowLeft: [-1, 0],
-        ArrowRight: [1, 0],
-        w: [0, -1],
-        s: [0, 1],
-        a: [-1, 0],
-        d: [1, 0]
-      };
-      var m = mapKeys[e.key];
-      if (!m) return;
-      e.preventDefault();
-      setDir(m[0], m[1]);
-    }
-
-    window.addEventListener('keydown', onKey);
-    document.getElementById('mazePad').onclick = function (e) {
-      var btn = e.target.closest('button');
-      if (!btn) return;
-      setDir(parseInt(btn.getAttribute('data-dx'), 10), parseInt(btn.getAttribute('data-dy'), 10));
-    };
-
-    paint();
-    tickTimer = setInterval(tick, 160);
-  }
-
-  function localFeelDiagnose(feelings) {
-    var text = String(feelings || '').toLowerCase();
-    var map = {
-      loop: ['control', 'ansiedad', 'perfecto', 'sobrepensar', 'caos', 'anxiety', 'worry'],
-      espejo: ['amor', 'pareja', 'ex', 'abandono', 'rechazo', 'love', 'lonely', 'novio', 'novia'],
-      vacio: ['identidad', 'quién soy', 'vacio', 'vacío', 'identity', 'empty', 'lost'],
-      ruido: ['ruido', 'mente', 'insomnio', 'saturad', 'noise', 'stress', 'foco', 'focus'],
-      carencia: ['dinero', 'falta', 'pobre', 'deuda', 'money', 'broke', 'abundancia'],
-      sueno: ['sueño', 'proyecto', 'procrastin', 'después', 'dream', 'later', 'manifest']
-    };
-    var tally = Object.assign({}, state.scores || {});
-    Object.keys(map).forEach(function (k) {
-      map[k].forEach(function (w) {
-        if (text.indexOf(w) !== -1) tally[k] = (tally[k] || 0) + 2;
-      });
-    });
-    var id = winnerFrom(tally);
-    var a = archCopy(id);
-    var quote = String(feelings || '').replace(/\s+/g, ' ').trim().slice(0, 140);
-    var audios = ARCH[id].audios.map(function (au) {
-      return { name: au.name, whyEs: au.whyEs, whyEn: au.whyEn, img: au.img };
-    });
-    return {
-      ok: true,
-      source: 'local',
-      archetype: id,
-      name: a.name,
-      mini: a.mini,
-      reading:
-        (LANG === 'en'
-          ? 'Your words and your map converge on ' + a.name + '. When you wrote \"' + quote + '\", the unconscious showed its safety loop. '
-          : 'Tus palabras y tu mapa convergen en ' + a.name + '. Cuando escribiste \"' + quote + '\", el inconsciente mostró su circuito de seguridad. ') +
-        a.mini,
-      script: a.script,
-      blocks: a.blocks,
-      protocol: a.protocol || a.ritual,
-      audios: audios
-    };
-  }
-
-  function winnerFrom(scores) {
-    var best = 'loop';
-    var max = -1;
-    Object.keys(scores || {}).forEach(function (k) {
-      if (scores[k] > max) {
-        max = scores[k];
-        best = k;
-      }
-    });
-    return best;
-  }
-
-  function renderFeel() {
-    setProgress(72);
-    setMood('5');
-    setScene(5);
-    root.innerHTML =
-      '<section class="stage">' +
-      '<p class="kicker">' +
-      t.feelTag +
-      '</p>' +
-      '<h2>' +
-      t.feelTitle +
-      '</h2>' +
-      '<p class="lead">' +
-      t.feelLead +
-      '</p>' +
-      '<label class="feel-label" for="feelIn">' +
-      (LANG === 'en' ? 'Your confession' : 'Tu confesión') +
-      '</label>' +
-      '<textarea id="feelIn" class="feel-box" rows="7" maxlength="2000" placeholder="' +
-      t.feelPlaceholder.replace(/"/g, '&quot;') +
+      '<textarea id="qIn" class="feel-box report-input" rows="6" maxlength="1200" placeholder="' +
+      esc(meta.placeholder) +
       '">' +
-      (state.feelings || '') +
+      esc(state.answers[key] || '') +
       '</textarea>' +
-      '<div class="cta-row"><button type="button" class="btn btn-solid" id="btnFeel">' +
-      t.feelCta +
+      '<div class="cta-row"><button type="button" class="btn btn-solid" id="btnNext">' +
+      (q === 3 ? t.diagnoseCta : t.next) +
       '</button></div>' +
-      '<p class="err" id="feelErr"></p></section>';
+      '<p class="err" id="qErr"></p></section>';
 
-    document.getElementById('btnFeel').onclick = async function () {
-      var err = document.getElementById('feelErr');
-      var btn = document.getElementById('btnFeel');
-      var text = document.getElementById('feelIn').value.trim();
+    document.getElementById('btnNext').onclick = async function () {
+      var err = document.getElementById('qErr');
+      var val = document.getElementById('qIn').value.trim();
       err.textContent = '';
-      if (text.length < 24) {
+      if (val.length < 18) {
         err.textContent =
-          LANG === 'en'
-            ? 'Go deeper — at least a few honest sentences.'
-            : 'Ve más profundo — al menos unas frases honestas.';
+          LANG === 'en' ? 'Go deeper — a few honest sentences.' : 'Ve más profundo — unas frases honestas.';
         return;
       }
-      state.feelings = text;
+      state.answers[key] = val;
+      if (q < 3) {
+        state.q = q + 1;
+        saveState();
+        pulseFlash();
+        render();
+        return;
+      }
+      var btn = document.getElementById('btnNext');
       btn.disabled = true;
-      btn.textContent = t.feelBusy;
-      var hint = winner();
+      btn.textContent = t.busy;
+      state.scores = scoreFromAnswers();
       var diagnosis = null;
       try {
         var res = await fetch(DIAGNOSE_FN, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            feelings: text,
+            feelings: combinedFeelings(),
             scores: state.scores,
             lang: LANG,
-            archetypeHint: hint
+            archetypeHint: winnerFrom(state.scores)
           })
         });
         diagnosis = await res.json();
-        if (!diagnosis || !diagnosis.ok) throw new Error((diagnosis && diagnosis.error) || 'fail');
+        if (!diagnosis || !diagnosis.ok) throw new Error('fail');
       } catch (e) {
-        diagnosis = localFeelDiagnose(text);
+        diagnosis = localDiagnose();
       }
       state.diagnosis = diagnosis;
-      state.archetype = diagnosis.archetype || hint;
+      state.archetype = diagnosis.archetype || winnerFrom(state.scores);
       state.step = 'mini';
+      if (!state.code) state.code = makeCode();
       saveState();
       pulseFlash();
-      tone();
       render();
     };
-  }
-
-  function renderStart() {
-    setProgress(5);
-    setMood('0');
-    setScene(0);
-    root.innerHTML =
-      '<section class="stage">' +
-      '<div class="hero-orb" aria-hidden="true"><img src="/img/alicia-orb.png" alt=""></div>' +
-      '<p class="kicker">' +
-      t.kickerStart +
-      '</p>' +
-      '<h1>' +
-      t.titleStart +
-      '</h1>' +
-      '<p class="lead">' +
-      t.leadStart +
-      '</p>' +
-      '<div class="cta-row"><button type="button" class="btn btn-solid" id="btnStart">' +
-      t.startCta +
-      '</button></div>' +
-      '<p class="foot-note">ERIOR · juego-puzzle gratis · mini revelación gratis · archivo $' +
-      (LANG === 'en' ? '26 USD' : '444 MXN') +
-      ' con clave tras pago verificado</p></section>';
-    document.getElementById('btnStart').onclick = function () {
-      tone();
-      pulseFlash();
-      state.step = 'room';
-      state.room = 0;
-      state.scores = {};
-      state.unlocked = false;
-      state.keyVerified = false;
-      state.archetype = null;
-      state.notified = false;
-      state.code = null;
-      state.feelings = '';
-      state.diagnosis = null;
-      state.gameVersion = GAME_VERSION;
-      saveState();
-      render();
-    };
-  }
-
-  function renderRoom() {
-    var r = state.room;
-    setProgress(12 + r * 14);
-    setMood(String(r + 1));
-    setScene(r + 1);
-    if (r === 0) gameSortDoors();
-    else if (r === 1) gameCipher();
-    else if (r === 2) gameAssemble();
-    else if (r === 3) gameSequence();
-    else gameMaze();
   }
 
   function renderMini() {
-    setProgress(78);
+    setProgress(72);
     setMood('5');
-    setScene(5);
     if (!state.diagnosis || !state.archetype) {
-      state.step = 'feel';
-      renderFeel();
+      state.step = 'question';
+      state.q = 0;
+      render();
       return;
     }
     var d = state.diagnosis;
     var name = d.name || archCopy(state.archetype).name;
     var mini = d.mini || archCopy(state.archetype).mini;
-    var quote = String(state.feelings || '').replace(/\s+/g, ' ').trim().slice(0, 120);
+    var snippet = (state.answers.discomfort || state.answers.feelings || '').replace(/\s+/g, ' ').trim().slice(0, 140);
+    var au = d.audios && d.audios[0];
     root.innerHTML =
-      '<section class="stage">' +
+      '<section class="stage report-stage">' +
       '<p class="kicker">' +
       t.miniTag +
       '</p>' +
@@ -1469,40 +770,36 @@
       t.miniTitle +
       '</h2>' +
       '<div class="card"><span class="tag">' +
-      (LANG === 'en' ? 'Dominant pattern' : 'Patrón dominante') +
+      t.patternTag +
       '</span><h3>' +
-      name +
+      esc(name) +
       '</h3><p>' +
-      mini +
+      esc(mini) +
       '</p></div>' +
-      (quote
+      (snippet
         ? '<div class="card feel-echo"><span class="tag">' +
-          (LANG === 'en' ? 'From your words' : 'Desde tus palabras') +
-          '</span><p style="font-family:var(--serif);font-size:1.15rem">“' +
-          quote.replace(/</g, '') +
+          t.fromYou +
+          '</span><p class="quote-line">“' +
+          esc(snippet) +
           '…”</p></div>'
         : '') +
-      '<div class="card"><span class="tag">' +
-      (LANG === 'en' ? 'Suggested frequency' : 'Frecuencia sugerida') +
-      '</span><h3 style="font-size:1.2rem">' +
-      ((d.audios && d.audios[0] && d.audios[0].name) || '') +
-      '</h3><p style="margin-top:.35rem">' +
-      (d.audios && d.audios[0]
-        ? LANG === 'en'
-          ? d.audios[0].whyEn || d.audios[0].why || ''
-          : d.audios[0].whyEs || d.audios[0].why || ''
+      (au
+        ? '<div class="card"><span class="tag">' +
+          t.freqTag +
+          '</span><h3 style="font-size:1.2rem">' +
+          esc(au.name) +
+          '</h3><p style="margin-top:.35rem">' +
+          esc(LANG === 'en' ? au.whyEn || au.why || '' : au.whyEs || au.why || '') +
+          '</p></div>'
         : '') +
-      '</p></div>' +
       '<div class="card"><h3 style="font-size:1.25rem">' +
       t.unlockTitle +
       '</h3><p style="margin-top:.35rem">' +
       t.unlockLead +
-      '</p>' +
-      '<div class="cta-row"><button type="button" class="btn btn-solid" id="btnUnlock">' +
+      '</p><div class="cta-row"><button type="button" class="btn btn-solid" id="btnUnlock">' +
       t.unlockCta +
       '</button></div></div></section>';
     document.getElementById('btnUnlock').onclick = function () {
-      tone();
       pulseFlash();
       state.step = 'pay';
       saveState();
@@ -1535,9 +832,7 @@
           '<p class="hint"><a href="https://www.paypal.me/sheismagique" target="_blank" rel="noopener">Open PayPal →</a></p>'
         );
       }
-      if (method === 'alt') {
-        return '<p>Crypto / WU — WhatsApp Pauline with code <b>' + state.code + '</b>.</p>';
-      }
+      if (method === 'alt') return '<p>Crypto / WU — WhatsApp Pauline with code <b>' + state.code + '</b>.</p>';
       return (
         '<p>ACH / Wire · <b>$26 USD</b> · memo <b>' +
         state.code +
@@ -1560,9 +855,7 @@
         '<p class="hint"><a href="https://www.paypal.me/sheismagique" target="_blank" rel="noopener">Ir a PayPal →</a></p>'
       );
     }
-    if (method === 'alt') {
-      return '<p>Crypto / WU — WhatsApp con código <b>' + state.code + '</b>.</p>';
-    }
+    if (method === 'alt') return '<p>Crypto / WU — WhatsApp con código <b>' + state.code + '</b>.</p>';
     return (
       '<p>Transferencia · <b>$444 MXN</b> · concepto <b>' +
       state.code +
@@ -1576,7 +869,6 @@
   function renderPay() {
     setProgress(88);
     setMood('pay');
-    setScene(6);
     if (!state.code) {
       state.code = makeCode();
       saveState();
@@ -1584,7 +876,7 @@
     var methods = t.methods;
     var active = methods[0].id;
     root.innerHTML =
-      '<section class="stage">' +
+      '<section class="stage report-stage">' +
       '<p class="kicker">' +
       t.codeLabel +
       '</p>' +
@@ -1598,12 +890,10 @@
       '<span class="order-card-label">' +
       t.codeLabel +
       '</span>' +
-      '<strong class="order-card-code" id="orderCode">' +
+      '<strong class="order-card-code">' +
       state.code +
       '</strong>' +
-      '<button type="button" class="btn btn-ghost copy-btn" id="btnCopyCode" data-c="' +
-      state.code +
-      '">' +
+      '<button type="button" class="btn btn-ghost copy-btn" id="btnCopyCode">' +
       t.copyCode +
       '</button></div>' +
       '<div class="pay-box"><div class="pay-tabs" id="payTabs"></div><div class="pay-panel" id="payPanel"></div></div>' +
@@ -1613,11 +903,8 @@
       '</button>' +
       '<a class="btn btn-ghost" id="waPay" target="_blank" rel="noopener">' +
       t.waPay +
-      '</a>' +
-      '<button type="button" class="btn btn-ghost" id="btnReplay">' +
-      (LANG === 'en' ? '← Play the game first' : '← Primero jugar el mapa') +
-      '</button></div>' +
-      '<div class="waiting" id="waitNote">' +
+      '</a></div>' +
+      '<div class="waiting">' +
       t.keyWait +
       '</div>' +
       '<p class="hint">' +
@@ -1633,8 +920,7 @@
       '<div class="cta-row"><button type="button" class="btn btn-solid" id="btnKey">' +
       t.keyCta +
       '</button></div>' +
-      '<p class="err" id="keyErr"></p>' +
-      '</div></section>';
+      '<p class="err" id="keyErr"></p></div></section>';
 
     var tabs = document.getElementById('payTabs');
     var panel = document.getElementById('payPanel');
@@ -1667,22 +953,19 @@
       copyText(document.getElementById('btnCopyCode'), state.code);
     };
 
-    var a = archCopy(state.archetype);
+    var aName = state.archetype ? archCopy(state.archetype).name : '?';
     var waMsg =
       LANG === 'en'
-        ? 'Hi! I paid the Unconscious Map ($26 USD). Code: ' + state.code + '. Pattern: ' + a.name + '. Please send my access key.'
-        : 'Hola! Ya pagué el Mapa del Inconsciente ($444 MXN). Código: ' + state.code + '. Patrón: ' + a.name + '. Por favor envíenme la clave de acceso.';
+        ? 'Hi! I paid the Unconscious Report ($26 USD). Code: ' + state.code + '. Pattern: ' + aName + '. Please send my access key.'
+        : 'Hola! Ya pagué el Reporte del Inconsciente ($444 MXN). Código: ' + state.code + '. Patrón: ' + aName + '. Por favor envíenme la clave de acceso.';
     document.getElementById('waPay').href = waUrl(waMsg);
 
     document.getElementById('btnPaid').onclick = function () {
       notifyTeam('paid');
       state.notified = true;
       saveState();
-      tone();
+      pulseFlash();
     };
-
-    var replay = document.getElementById('btnReplay');
-    if (replay) replay.onclick = resetGame;
 
     document.getElementById('btnKey').onclick = async function () {
       var err = document.getElementById('keyErr');
@@ -1696,22 +979,17 @@
         });
         var data = await res.json();
         if (!data.ok) {
-          var msg =
+          throw new Error(
             LANG === 'en'
-              ? 'Wrong key for ' +
-                state.code +
-                '. Wait for Pauline’s key for this exact code after payment verification.'
-              : 'Clave incorrecta para ' +
-                state.code +
-                '. Espera la clave de Pauline para este mismo código tras verificar tu pago.';
-          throw new Error(msg);
+              ? 'Wrong key for ' + state.code + '. Wait for Pauline’s key after payment verification.'
+              : 'Clave incorrecta para ' + state.code + '. Espera la clave de Pauline tras verificar tu pago.'
+          );
         }
         state.unlocked = true;
         state.keyVerified = true;
         state.step = 'full';
         saveState();
         pulseFlash();
-        tone();
         render();
       } catch (e) {
         err.textContent = e.message || String(e);
@@ -1722,19 +1000,18 @@
   function renderFull() {
     setProgress(100);
     setMood('full');
-    setScene(0);
     var a = archCopy(state.archetype);
     var d = state.diagnosis || {};
     var audios = d.audios && d.audios.length ? d.audios : ARCH[state.archetype].audios;
     var blocksSrc = d.blocks && d.blocks.length ? d.blocks : a.blocks;
     var blocks = blocksSrc
       .map(function (b) {
-        return '<div class="blok"><b>' + b.t + '</b><span>' + b.d + '</span></div>';
+        return '<div class="blok"><b>' + esc(b.t) + '</b><span>' + esc(b.d) + '</span></div>';
       })
       .join('');
     var reading = d.reading || a.mini;
     var script = d.script || a.script;
-    var ritual = d.protocol || d.ritual || a.protocol || a.ritual;
+    var protocol = d.protocol || d.ritual || a.protocol;
     var title = d.name || a.name;
     var audioHtml = audios
       .map(function (au) {
@@ -1742,9 +1019,9 @@
           '<div class="audio-card"><img src="' +
           au.img +
           '" alt=""><div><h4>' +
-          au.name +
+          esc(au.name) +
           '</h4><p>' +
-          (LANG === 'en' ? au.whyEn || au.why || '' : au.whyEs || au.why || '') +
+          esc(LANG === 'en' ? au.whyEn || au.why || '' : au.whyEs || au.why || '') +
           '</p></div></div>'
         );
       })
@@ -1756,46 +1033,59 @@
       var list = names.slice(0, pack).join(' + ');
       if (LANG === 'en') {
         return waUrl(
-          'Hi! Unconscious Map paid (' + state.code + '). Pack ' + pack + ': ' + list + '. Difference only: ' + formatDiff(pack) + ' ($26 credit).'
+          'Hi! Unconscious Report paid (' + state.code + '). Pack ' + pack + ': ' + list + '. Difference only: ' + formatDiff(pack) + ' ($26 credit).'
         );
       }
       return waUrl(
-        'Hola! Mapa pagado (' + state.code + '). Pack ' + pack + ': ' + list + '. Solo diferencia: ' + formatDiff(pack) + ' (crédito $444).'
+        'Hola! Reporte pagado (' + state.code + '). Pack ' + pack + ': ' + list + '. Solo diferencia: ' + formatDiff(pack) + ' (crédito $444).'
       );
     }
-    var feelBit = state.feelings
-      ? '<div class="card feel-echo"><span class="tag">' +
-        (LANG === 'en' ? 'Your confession' : 'Tu confesión') +
-        '</span><p style="white-space:pre-wrap">' +
-        String(state.feelings).replace(/</g, '') +
-        '</p></div>'
-      : '';
+    var answersHtml =
+      '<div class="card feel-echo"><span class="tag">' +
+      t.fromYou +
+      '</span>' +
+      '<p><b>' +
+      (LANG === 'en' ? 'Desire' : 'Deseo') +
+      ':</b> ' +
+      esc(state.answers.desire) +
+      '</p>' +
+      '<p style="margin-top:.55rem"><b>' +
+      (LANG === 'en' ? 'If it arrived' : 'Si llegara') +
+      ':</b> ' +
+      esc(state.answers.discomfort) +
+      '</p>' +
+      '<p style="margin-top:.55rem"><b>' +
+      (LANG === 'en' ? 'Become' : 'Convertirme') +
+      ':</b> ' +
+      esc(state.answers.identity) +
+      '</p></div>';
+
     root.innerHTML =
-      '<section class="stage">' +
+      '<section class="stage report-stage">' +
       '<p class="kicker">' +
       t.fullTag +
       ' · ' +
       state.code +
       '</p>' +
       '<h2>' +
-      title +
+      esc(title) +
       '</h2>' +
-      '<p class="lead">' +
-      reading +
+      '<p class="lead report-reading">' +
+      esc(reading) +
       '</p>' +
-      feelBit +
+      answersHtml +
       '<div class="card"><span class="tag">' +
-      (LANG === 'en' ? 'Unconscious script' : 'Guión del inconsciente') +
-      '</span><p style="font-family:var(--serif);font-size:1.3rem;color:var(--ink)">' +
-      script +
+      t.scriptTag +
+      '</span><p class="quote-line">' +
+      esc(script) +
       '</p></div>' +
       '<div class="bloks">' +
       blocks +
       '</div>' +
       '<div class="card"><h3 style="font-size:1.15rem">' +
-      (LANG === 'en' ? 'Recalibration protocol' : 'Protocolo de recalibración') +
+      t.protocolTag +
       '</h3><p style="margin-top:.35rem">' +
-      ritual +
+      esc(protocol) +
       '</p></div>' +
       '<div class="price-line">' +
       t.creditNote +
@@ -1840,8 +1130,7 @@
 
   function render() {
     if (state.step === 'start') renderStart();
-    else if (state.step === 'room') renderRoom();
-    else if (state.step === 'feel') renderFeel();
+    else if (state.step === 'question') renderQuestion();
     else if (state.step === 'mini') renderMini();
     else if (state.step === 'pay') renderPay();
     else if (state.step === 'full') {
@@ -1852,7 +1141,7 @@
     } else renderStart();
   }
 
-  // Matrix rain + DNA helix particles
+  // Soft background motion only
   (function initFx() {
     var cMatrix = document.getElementById('fxMatrix');
     var cDna = document.getElementById('fxDna');
@@ -1861,87 +1150,85 @@
     var dna = cDna.getContext('2d');
     var cols = [];
     var helix = [];
-    var chars = 'ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ01アイウエオカキクケコサシスセソΑΒΓΔλΨΩ∞∴∵';
+    var chars = '01ΑΒΓΔλΨΩ∞∴∵ERIOR';
     function resize() {
       cMatrix.width = cDna.width = window.innerWidth;
       cMatrix.height = cDna.height = window.innerHeight;
-      var n = Math.floor(cMatrix.width / 16);
+      var n = Math.floor(cMatrix.width / 22);
       cols = [];
       for (var i = 0; i < n; i++) {
-        cols.push({ x: i * 16, y: Math.random() * cMatrix.height, speed: 1.2 + Math.random() * 3.5 });
+        cols.push({ x: i * 22, y: Math.random() * cMatrix.height, speed: 0.6 + Math.random() * 1.8 });
       }
       helix = [];
-      for (var h = 0; h < 28; h++) {
+      for (var h = 0; h < 18; h++) {
         helix.push({
           t: Math.random() * Math.PI * 2,
           y: Math.random() * cDna.height,
-          speed: 0.4 + Math.random() * 0.9,
-          amp: 40 + Math.random() * 70,
-          r: 1.5 + Math.random() * 2.5
+          speed: 0.25 + Math.random() * 0.5,
+          amp: 36 + Math.random() * 50,
+          r: 1.2 + Math.random() * 1.8
         });
       }
     }
     function tick() {
-      // Matrix
-      mtx.fillStyle = 'rgba(5,4,10,0.12)';
+      mtx.fillStyle = 'rgba(5,4,10,0.18)';
       mtx.fillRect(0, 0, cMatrix.width, cMatrix.height);
-      mtx.font = '14px "Share Tech Mono", monospace';
+      mtx.font = '12px "Share Tech Mono", monospace';
       cols.forEach(function (c) {
         var ch = chars.charAt(Math.floor(Math.random() * chars.length));
-        mtx.fillStyle = Math.random() > 0.92 ? '#fff' : '#5ef0c0';
+        mtx.fillStyle = 'rgba(94,240,192,0.35)';
         mtx.fillText(ch, c.x, c.y);
         c.y += c.speed;
         if (c.y > cMatrix.height + 20) {
           c.y = -20;
-          c.speed = 1.2 + Math.random() * 3.5;
+          c.speed = 0.6 + Math.random() * 1.8;
         }
       });
-      // DNA
       dna.clearRect(0, 0, cDna.width, cDna.height);
       var cx = cDna.width * 0.5;
       helix.forEach(function (p, i) {
-        p.t += 0.035;
+        p.t += 0.02;
         p.y += p.speed;
         if (p.y > cDna.height + 20) p.y = -20;
         var x1 = cx + Math.sin(p.t) * p.amp;
         var x2 = cx + Math.sin(p.t + Math.PI) * p.amp;
-        dna.strokeStyle = 'rgba(125,249,255,0.18)';
+        dna.strokeStyle = 'rgba(125,249,255,0.1)';
         dna.beginPath();
         dna.moveTo(x1, p.y);
         dna.lineTo(x2, p.y);
         dna.stroke();
         dna.beginPath();
-        dna.fillStyle = i % 2 ? 'rgba(255,107,203,0.85)' : 'rgba(77,163,255,0.85)';
+        dna.fillStyle = i % 2 ? 'rgba(255,107,203,0.45)' : 'rgba(77,163,255,0.45)';
         dna.arc(x1, p.y, p.r, 0, Math.PI * 2);
         dna.fill();
         dna.beginPath();
-        dna.fillStyle = i % 2 ? 'rgba(94,240,192,0.85)' : 'rgba(255,230,109,0.75)';
+        dna.fillStyle = i % 2 ? 'rgba(94,240,192,0.4)' : 'rgba(255,230,109,0.35)';
         dna.arc(x2, p.y, p.r, 0, Math.PI * 2);
         dna.fill();
       });
       requestAnimationFrame(tick);
     }
     resize();
-    tick();
     window.addEventListener('resize', resize);
+    tick();
   })();
 
-  document.getElementById('brandLink').textContent = t.brand;
-  document.getElementById('brandLink').href = t.homeHref;
-  document.getElementById('langLink').textContent = t.langOther;
-  document.getElementById('langLink').href = t.langHref;
-  var resetBtn = document.getElementById('btnReset');
-  if (resetBtn) {
-    resetBtn.textContent = LANG === 'en' ? 'Restart' : 'Reiniciar';
-    resetBtn.onclick = function () {
-      if (window.confirm(LANG === 'en' ? 'Restart the game from level 1?' : '¿Reiniciar el juego desde el nivel 1?')) resetGame();
+  var brand = document.getElementById('brandLink');
+  var lang = document.getElementById('langLink');
+  var btnReset = document.getElementById('btnReset');
+  if (brand) brand.href = t.homeHref;
+  if (lang) {
+    lang.href = t.langHref;
+    lang.textContent = t.langOther;
+  }
+  if (btnReset) {
+    btnReset.textContent = t.reset;
+    btnReset.onclick = function () {
+      if (window.confirm(LANG === 'en' ? 'Restart the report from the beginning?' : '¿Reiniciar el reporte desde el inicio?')) resetGame();
     };
   }
 
-  try {
-    var q = new URLSearchParams(window.location.search);
-    if (q.get('play') === '1' || q.get('reset') === '1') resetGame();
-  } catch (e) {}
-
-  render();
+  var q = new URLSearchParams(location.search);
+  if (q.get('play') === '1' || q.get('reset') === '1') resetGame();
+  else render();
 })();

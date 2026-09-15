@@ -558,3 +558,20 @@ body.mood-full .aurora{filter:blur(18px) saturate(1.7) hue-rotate(310deg)}
 }
 .feel-box:focus{outline:2px solid rgba(125,249,255,.45)}
 .feel-echo p{color:var(--mute);line-height:1.5}
+.report-stage .report-title{
+  font-family:var(--serif);font-weight:500;font-size:clamp(2rem,6vw,3.1rem);
+  line-height:1.12;letter-spacing:-.02em;max-width:16ch;
+}
+.report-lead,.report-reading{max-width:38rem;font-size:1.05rem;line-height:1.65}
+.q-kicker{
+  font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:.35rem;
+}
+.report-input{min-height:10rem;font-size:1.05rem;line-height:1.55}
+.quote-line{
+  font-family:var(--serif)!important;font-size:1.35rem!important;
+  line-height:1.35;color:var(--ink)!important;margin-top:.35rem;
+}
+.report-stage h2{font-family:var(--serif);font-weight:500;font-size:clamp(1.6rem,4vw,2.2rem);line-height:1.15}
+body.scene-matrix #fxMatrix{opacity:.42}
+body.scene-dna #fxDna{opacity:.55}

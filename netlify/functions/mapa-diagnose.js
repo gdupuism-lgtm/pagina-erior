@@ -127,16 +127,16 @@ function localDiagnose(feelings, scores, lang, hint) {
   const quote = snippet(feelings, lang);
   const en = lang === 'en';
   const reading = en
-    ? 'Your map and your words point to **' +
-      name +
-      '**. When you wrote “' +
+    ? 'You want expansion — and at the same time your system names the cost. When you wrote “' +
       quote +
-      '”, the unconscious wasn’t complaining — it was showing the loop it uses to keep you safe. The game choices and this confession agree: the pattern is already online.'
-    : 'Tu mapa y tus palabras apuntan a **' +
+      '”, it wasn’t a complaint: it was the map of what you’d have to leave behind. Your answers converge on **' +
       name +
-      '**. Cuando escribiste “' +
+      '**. The familiar self is persuasive; this report names the code so you can recalibrate what feels normal.'
+    : 'Quieres expansión — y a la vez tu sistema nombra el costo. Cuando escribiste “' +
       quote +
-      '”, el inconsciente no se quejaba: mostraba el circuito con el que se protege. Las elecciones del juego y esta confesión coinciden: el patrón ya está activo.';
+      '”, no era queja: era el mapa de lo que tendrías que dejar atrás. Tus respuestas convergen en **' +
+      name +
+      '**. Lo familiar es persuasivo; este reporte nombra el código para recalibrar lo que se siente normal.';
   const script = en
     ? '“If I don’t stay inside this pattern, I disappear.”'
     : '“Si salgo de este patrón, dejo de existir como me conozco.”';
