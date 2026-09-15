@@ -81,6 +81,7 @@ a{color:inherit}
   -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
   animation:irisShift 6s ease infinite;
 }
+.topbar-right{display:flex;align-items:center;gap:.85rem}
 .lang-link{font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);text-decoration:none}
 .lang-link:hover{color:var(--gold)}
 .progress{

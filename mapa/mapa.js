@@ -3,7 +3,8 @@
 
   var LANG = (document.documentElement.lang || 'es').toLowerCase().indexOf('en') === 0 ? 'en' : 'es';
   var WA = '5214432311761';
-  var STORAGE_KEY = 'erior_mapa_v2';
+  var STORAGE_KEY = 'erior_mapa_v3';
+  var GAME_VERSION = 3;
   var CREDIT_MXN = 444;
   var CREDIT_USD = 26;
   var UNLOCK_FN = '/.netlify/functions/mapa-unlock';
@@ -333,21 +334,32 @@
     ]
   ];
 
-  var state = loadState() || {
-    step: 'start',
-    room: 0,
-    scores: {},
-    archetype: null,
-    unlocked: false,
-    code: null,
-    notified: false
-  };
-
-  // Force re-lock if someone had v1 free unlock
-  if (state.unlocked && !state.keyVerified) {
-    state.unlocked = false;
-    state.step = state.archetype ? 'pay' : state.step;
+  var rawState = loadState();
+  var state;
+  if (!rawState || rawState.gameVersion !== GAME_VERSION) {
+    state = {
+      step: 'start',
+      room: 0,
+      scores: {},
+      archetype: null,
+      unlocked: false,
+      keyVerified: false,
+      code: null,
+      notified: false,
+      gameVersion: GAME_VERSION
+    };
+  } else {
+    state = rawState;
+    if (state.unlocked && !state.keyVerified) {
+      state.unlocked = false;
+      state.step = 'start';
+      state.room = 0;
+    }
   }
+  try {
+    localStorage.removeItem('erior_mapa_v1');
+    localStorage.removeItem('erior_mapa_v2');
+  } catch (e) {}
 
   var root = document.getElementById('app');
   var bar = document.getElementById('progressBar');
@@ -362,8 +374,31 @@
     }
   }
 
+  function resetGame() {
+    state = {
+      step: 'start',
+      room: 0,
+      scores: {},
+      archetype: null,
+      unlocked: false,
+      keyVerified: false,
+      code: null,
+      notified: false,
+      gameVersion: GAME_VERSION
+    };
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem('erior_mapa_v1');
+      localStorage.removeItem('erior_mapa_v2');
+    } catch (e) {}
+    saveState();
+    pulseFlash();
+    render();
+  }
+
   function saveState() {
     try {
+      state.gameVersion = GAME_VERSION;
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
       if (state.unlocked && state.keyVerified) {
         localStorage.setItem(
@@ -1072,6 +1107,8 @@
       state.keyVerified = false;
       state.archetype = null;
       state.notified = false;
+      state.code = null;
+      state.gameVersion = GAME_VERSION;
       saveState();
       render();
     };
@@ -1217,7 +1254,10 @@
       '</button>' +
       '<a class="btn btn-ghost" id="waPay" target="_blank" rel="noopener">' +
       t.waPay +
-      '</a></div>' +
+      '</a>' +
+      '<button type="button" class="btn btn-ghost" id="btnReplay">' +
+      (LANG === 'en' ? '← Play the game first' : '← Primero jugar el mapa') +
+      '</button></div>' +
       '<div class="waiting" id="waitNote" style="display:none">' +
       t.keyWait +
       '</div>' +
@@ -1275,6 +1315,9 @@
       document.getElementById('waitNote').style.display = 'block';
       tone();
     };
+
+    var replay = document.getElementById('btnReplay');
+    if (replay) replay.onclick = resetGame;
 
     document.getElementById('btnKey').onclick = async function () {
       var err = document.getElementById('keyErr');
@@ -1471,6 +1514,18 @@
   document.getElementById('brandLink').href = t.homeHref;
   document.getElementById('langLink').textContent = t.langOther;
   document.getElementById('langLink').href = t.langHref;
+  var resetBtn = document.getElementById('btnReset');
+  if (resetBtn) {
+    resetBtn.textContent = LANG === 'en' ? 'Restart' : 'Reiniciar';
+    resetBtn.onclick = function () {
+      if (window.confirm(LANG === 'en' ? 'Restart the game from level 1?' : '¿Reiniciar el juego desde el nivel 1?')) resetGame();
+    };
+  }
+
+  try {
+    var q = new URLSearchParams(window.location.search);
+    if (q.get('play') === '1' || q.get('reset') === '1') resetGame();
+  } catch (e) {}
 
   render();
 })();
