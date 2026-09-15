@@ -4,7 +4,8 @@
   var LANG = (document.documentElement.lang || 'es').toLowerCase().indexOf('en') === 0 ? 'en' : 'es';
   var WA = '5214432311761';
   var STORAGE_KEY = 'erior_mapa_v3';
-  var GAME_VERSION = 4;
+  var GAME_VERSION = 5;
+  var DIAGNOSE_FN = '/.netlify/functions/mapa-diagnose';
   var CREDIT_MXN = 444;
   var CREDIT_USD = 26;
   var UNLOCK_FN = '/.netlify/functions/mapa-unlock';
@@ -19,12 +20,18 @@
       homeHref: '/',
       kickerStart: 'Capa 0 · Umbral',
       titleStart: 'El mapa del inconsciente',
-      leadStart: 'No es un test de botones. Es un juego: ordena piezas, descifra códigos, mueve objetos y abre tu archivo solo con clave real tras el pago.',
+      leadStart: 'Juega 5 niveles, escribe cómo te sientes y Alicia diagnostica tu patrón inconsciente. El archivo completo se abre solo con clave tras el pago.',
       startCta: 'Jugar el mapa',
       miniTag: 'Revelación parcial',
-      miniTitle: 'Esto es solo el borde',
+      miniTitle: 'Tu inconsciente ya habló',
+      feelTag: 'Capa final · Confesión',
+      feelTitle: 'Escribe cómo te sientes ahora',
+      feelLead: 'Sin filtros. Lo que late en el pecho, el loop que repites, lo que no te atreves a decir en voz alta. Alicia lee tu mapa + tu texto y te da el diagnóstico.',
+      feelPlaceholder: 'Ej: Me siento estancada, como si controlara todo pero no avanzara… Me duele que…',
+      feelCta: 'Diagnosticar mi inconsciente',
+      feelBusy: 'Leyendo tu campo…',
       unlockTitle: 'Archivo completo · $444 MXN',
-      unlockLead: 'Patrón completo, 4 bloqueos, guión inconsciente y 2–3 frecuencias. Los $444 se descuentan si luego activas audio(s).',
+      unlockLead: 'Lectura completa, 4 bloqueos, guión inconsciente y 3 frecuencias recomendadas para TI. Los $444 se descuentan si activas audio(s).',
       unlockCta: 'Continuar al pago ($444 MXN)',
       payTitle: 'Paga y pide tu clave',
       payLead: 'Monto: $444 MXN. Pon tu código en el concepto / asunto. Envía comprobante. Pauline te manda la clave — sin clave no se abre el archivo.',
@@ -53,7 +60,7 @@
         { kicker: 'Nivel 2 · Cifrado', title: 'Descifra la voz que hay que callar', lead: 'Arma la frase secreta moviendo las letras a los huecos.' },
         { kicker: 'Nivel 3 · Ensamble', title: 'Arma el objeto que tomas', lead: 'Arrastra (o toca + hueco) 2 piezas correctas sobre un solo objeto.' },
         { kicker: 'Nivel 4 · Algoritmo', title: 'Repite la secuencia del inconsciente', lead: 'Memoriza el patrón luminoso y repítelo tocando los nodos.' },
-        { kicker: 'Nivel 5 · Rompecabezas', title: 'Arma el portal pieza por pieza', lead: 'Toca una pieza del montón y luego un hueco del tablero. Completa las 6 piezas.' }
+        { kicker: 'Nivel 5 · Laberinto', title: 'Escapa del laberinto del inconsciente', lead: 'Muévete como Pac-Man: come todos los puntos, evita la sombra y sal por el portal.' }
       ],
       methods: [
         { id: 'oxxo', label: 'OXXO' },
@@ -69,12 +76,18 @@
       homeHref: '/en/',
       kickerStart: 'Layer 0 · Threshold',
       titleStart: 'Map of the Unconscious',
-      leadStart: 'Not a button quiz. A game: sort pieces, crack ciphers, move objects — and open your file only with a real key after payment.',
+      leadStart: 'Play 5 levels, write how you feel, and Alicia diagnoses your unconscious pattern. The full file opens only with a real key after payment.',
       startCta: 'Play the map',
       miniTag: 'Partial reveal',
-      miniTitle: 'This is only the edge',
+      miniTitle: 'Your unconscious already spoke',
+      feelTag: 'Final layer · Confession',
+      feelTitle: 'Write how you feel right now',
+      feelLead: 'No filter. What’s in your chest, the loop you repeat, what you won’t say out loud. Alicia reads your map + your words and diagnoses you.',
+      feelPlaceholder: 'e.g. I feel stuck — I control everything but don’t move… It hurts that…',
+      feelCta: 'Diagnose my unconscious',
+      feelBusy: 'Reading your field…',
       unlockTitle: 'Full file · $26 USD',
-      unlockLead: 'Full pattern, 4 blocks, unconscious script and 2–3 frequencies. The $26 is credited if you activate audio(s) after.',
+      unlockLead: 'Full reading, 4 blocks, unconscious script and 3 frequencies recommended for YOU. The $26 is credited if you activate audio(s).',
       unlockCta: 'Continue to payment ($26 USD)',
       payTitle: 'Pay, then get your key',
       payLead: 'Amount: $26 USD. Put your code in the memo/subject. Send the receipt. Pauline sends the key — no key, no file.',
@@ -103,7 +116,7 @@
         { kicker: 'Level 2 · Cipher', title: 'Decode the voice that must go quiet', lead: 'Build the secret phrase by moving letters into the slots.' },
         { kicker: 'Level 3 · Assemble', title: 'Build the object you take', lead: 'Drag (or tap + slot) 2 correct pieces onto one object.' },
         { kicker: 'Level 4 · Algorithm', title: 'Replay the unconscious sequence', lead: 'Memorize the light pattern, then repeat it on the nodes.' },
-        { kicker: 'Level 5 · Jigsaw', title: 'Assemble the portal piece by piece', lead: 'Tap a piece from the pile, then a board slot. Fill all 6 pieces.' }
+        { kicker: 'Level 5 · Maze', title: 'Escape the unconscious maze', lead: 'Move like Pac-Man: eat every pellet, dodge the shadow, exit through the portal.' }
       ],
       methods: [
         { id: 'wire', label: 'ACH / Wire' },
@@ -344,6 +357,8 @@
       keyVerified: false,
       code: null,
       notified: false,
+      feelings: '',
+      diagnosis: null,
       gameVersion: GAME_VERSION
     };
   } else {
@@ -382,6 +397,8 @@
       keyVerified: false,
       code: null,
       notified: false,
+      feelings: '',
+      diagnosis: null,
       gameVersion: GAME_VERSION
     };
     try {
@@ -555,9 +572,8 @@
     pulseFlash();
     addScores(scores);
     if (state.room >= OUTCOMES.length - 1) {
-      state.archetype = winner();
       state.code = state.code || makeCode();
-      state.step = 'mini';
+      state.step = 'feel';
     } else {
       state.room = state.room + 1;
     }
@@ -1002,62 +1018,90 @@
     playSeq();
   }
 
-  function gameJigsaw() {
+
+  function gameMaze() {
     var opts = OUTCOMES[4];
-    var ids = [0, 1, 2, 3, 4, 5];
+    var layout = [
+      '1111111111111',
+      '1000000000001',
+      '1011101110101',
+      '1000100010001',
+      '1110101010111',
+      '1000001000001',
+      '1011101110101',
+      '1000000010001',
+      '1011111011101',
+      '1000000000003',
+      '1111111111111'
+    ];
+    var rows = layout.length;
+    var cols = layout[0].length;
+    var grid = [];
+    var pellets = 0;
+    for (var r = 0; r < rows; r++) {
+      grid[r] = [];
+      for (var c = 0; c < cols; c++) {
+        var ch = layout[r].charAt(c);
+        if (ch === '1') grid[r][c] = 1;
+        else if (ch === '3') grid[r][c] = 3;
+        else {
+          grid[r][c] = 0;
+          pellets++;
+        }
+      }
+    }
+    var player = { x: 1, y: 1 };
+    if (grid[player.y][player.x] === 0) {
+      grid[player.y][player.x] = 2;
+      pellets--;
+    }
+    var ghost = { x: cols - 2, y: 1, cool: 0 };
+    var collected = 0;
+    var total = pellets;
+    var done = false;
+    var tickTimer = null;
+    var dir = { x: 0, y: 0 };
+    var nextDir = { x: 0, y: 0 };
+
     root.innerHTML = roomShell(
       '<p class="game-hint">' +
         (LANG === 'en'
-          ? 'Look at the small preview. Tap a piece, then tap its empty slot. Numbers help: 1 goes top-left.'
-          : 'Mira la vista previa. Toca una pieza y luego su hueco vacío. Los números ayudan: el 1 va arriba a la izquierda.') +
+          ? 'Arrows or on-screen pad. Eat every light. When the portal opens, walk into it. Dodge the shadow.'
+          : 'Flechas o el pad. Come todas las luces. Cuando abra el portal, entra. Evita la sombra.') +
         '</p>' +
-        '<div class="puzzle-preview" aria-hidden="true">' +
-        '<span class="puzzle-preview-label">' +
-        (LANG === 'en' ? 'Complete portal' : 'Portal completo') +
-        '</span><div class="puzzle-preview-art"></div></div>' +
-        '<div class="puzzle-board slots" id="puzzleBoard"></div>' +
-        '<p class="puzzle-tray-label">' +
-        (LANG === 'en' ? 'Pieces' : 'Piezas') +
-        '</p>' +
-        '<div class="puzzle-tray tray" id="puzzleTray"></div>' +
+        '<div class="maze-wrap"><canvas id="mazeCanvas" width="390" height="330"></canvas>' +
+        '<div class="maze-pad" id="mazePad">' +
+        '<button type="button" data-dx="0" data-dy="-1" aria-label="up">▲</button>' +
+        '<div class="maze-pad-mid">' +
+        '<button type="button" data-dx="-1" data-dy="0" aria-label="left">◀</button>' +
+        '<button type="button" data-dx="1" data-dy="0" aria-label="right">▶</button></div>' +
+        '<button type="button" data-dx="0" data-dy="1" aria-label="down">▼</button></div></div>' +
         '<div id="scenePick" style="display:none"></div>'
     );
-    var board = document.getElementById('puzzleBoard');
-    var tray = document.getElementById('puzzleTray');
-    var cols = 3;
-    ids.forEach(function (id) {
-      var slot = document.createElement('div');
-      slot.className = 'slot puzzle-slot';
-      slot.dataset.expect = String(id);
-      var col = id % cols;
-      var row = Math.floor(id / cols);
-      slot.innerHTML = '<span class="puzzle-ghost-num">' + (id + 1) + '</span>';
-      slot.style.setProperty('--gx', String(col));
-      slot.style.setProperty('--gy', String(row));
-      board.appendChild(slot);
-    });
-    shuffle(ids).forEach(function (id) {
-      var piece = document.createElement('button');
-      piece.type = 'button';
-      piece.className = 'piece puzzle-piece shape-' + id;
-      piece.dataset.id = String(id);
-      piece.setAttribute('aria-label', (LANG === 'en' ? 'Piece ' : 'Pieza ') + (id + 1));
-      var col = id % cols;
-      var row = Math.floor(id / cols);
-      piece.style.setProperty('--px', String(col));
-      piece.style.setProperty('--py', String(row));
-      piece.innerHTML =
-        '<span class="puzzle-face"></span><span class="puzzle-num">' + (id + 1) + '</span>';
-      tray.appendChild(piece);
-    });
+
+    var canvas = document.getElementById('mazeCanvas');
+    var ctx = canvas.getContext('2d');
+    var cell = Math.floor(Math.min(canvas.width / cols, canvas.height / rows));
+    var ox = Math.floor((canvas.width - cell * cols) / 2);
+    var oy = Math.floor((canvas.height - cell * rows) / 2);
+    var status = document.getElementById('gameStatus');
+
+    function canWalk(x, y) {
+      if (y < 0 || x < 0 || y >= rows || x >= cols) return false;
+      return grid[y][x] !== 1;
+    }
+
     function showScenes() {
+      done = true;
+      if (tickTimer) clearInterval(tickTimer);
+      status.textContent = LANG === 'en' ? 'You escaped. What kept hunting you?' : 'Escapaste. ¿Qué te perseguía?';
       var wrap = document.getElementById('scenePick');
       wrap.style.display = 'block';
       wrap.innerHTML =
         '<p class="game-hint ok-pulse">' +
-        (LANG === 'en' ? 'Portal open. Which scene keeps looping?' : 'Portal abierto. ¿Qué escena se repite?') +
+        (LANG === 'en' ? 'Name the chase.' : 'Nombra la persecución.') +
         '</p><div class="doors-row"></div>';
-      var row = wrap.querySelector('.doors-row');
+      var rowEl = wrap.querySelector('.doors-row');
       opts.forEach(function (o) {
         var b = document.createElement('button');
         b.type = 'button';
@@ -1067,41 +1111,287 @@
           (LANG === 'en' ? o.labelEn : o.labelEs) +
           '</strong></span>';
         b.onclick = function () {
+          window.removeEventListener('keydown', onKey);
           finishRoom(o.scores);
         };
-        row.appendChild(b);
+        rowEl.appendChild(b);
       });
     }
-    var done = false;
-    bindPickPlace(tray, board, function () {
-      if (done) return;
-      var slots = board.querySelectorAll('.puzzle-slot');
-      var ok = true;
-      var filled = 0;
-      slots.forEach(function (slot) {
-        var piece = slot.querySelector('.puzzle-piece');
-        if (!piece) {
-          ok = false;
-          return;
+
+    function tryMove(ent, dx, dy) {
+      var nx = ent.x + dx;
+      var ny = ent.y + dy;
+      if (!canWalk(nx, ny)) return false;
+      if (grid[ny][nx] === 3 && collected < total) return false;
+      ent.x = nx;
+      ent.y = ny;
+      return true;
+    }
+
+    function paint() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = 'rgba(6,4,14,.92)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      for (var y = 0; y < rows; y++) {
+        for (var x = 0; x < cols; x++) {
+          var px = ox + x * cell;
+          var py = oy + y * cell;
+          var v = grid[y][x];
+          if (v === 1) {
+            ctx.fillStyle = 'rgba(125,80,255,.45)';
+            ctx.fillRect(px + 1, py + 1, cell - 2, cell - 2);
+            ctx.strokeStyle = 'rgba(255,107,203,.35)';
+            ctx.strokeRect(px + 1.5, py + 1.5, cell - 3, cell - 3);
+          } else if (v === 0) {
+            ctx.beginPath();
+            ctx.fillStyle = '#ffe27a';
+            ctx.arc(px + cell / 2, py + cell / 2, Math.max(2, cell * 0.12), 0, Math.PI * 2);
+            ctx.fill();
+          } else if (v === 3) {
+            var open = collected >= total;
+            ctx.fillStyle = open ? 'rgba(94,240,192,.55)' : 'rgba(255,255,255,.08)';
+            ctx.beginPath();
+            ctx.arc(px + cell / 2, py + cell / 2, cell * 0.38, 0, Math.PI * 2);
+            ctx.fill();
+            if (open) {
+              ctx.strokeStyle = '#5ef0c0';
+              ctx.stroke();
+            }
+          }
         }
-        filled += 1;
-        if (piece.dataset.id !== slot.dataset.expect) ok = false;
+      }
+      ctx.beginPath();
+      ctx.fillStyle = 'rgba(255,80,140,.9)';
+      ctx.arc(ox + ghost.x * cell + cell / 2, oy + ghost.y * cell + cell / 2, cell * 0.34, Math.PI, 0);
+      ctx.lineTo(ox + ghost.x * cell + cell * 0.85, oy + ghost.y * cell + cell * 0.78);
+      ctx.lineTo(ox + ghost.x * cell + cell * 0.15, oy + ghost.y * cell + cell * 0.78);
+      ctx.closePath();
+      ctx.fill();
+      ctx.beginPath();
+      ctx.fillStyle = '#7df9ff';
+      var ang = Math.atan2(dir.y || nextDir.y || 0, dir.x || nextDir.x || 1);
+      ctx.moveTo(ox + player.x * cell + cell / 2, oy + player.y * cell + cell / 2);
+      ctx.arc(
+        ox + player.x * cell + cell / 2,
+        oy + player.y * cell + cell / 2,
+        cell * 0.36,
+        ang + 0.45,
+        ang + Math.PI * 2 - 0.45
+      );
+      ctx.closePath();
+      ctx.fill();
+      status.textContent =
+        (LANG === 'en' ? 'Lights ' : 'Luces ') +
+        collected +
+        '/' +
+        total +
+        (collected >= total ? (LANG === 'en' ? ' · portal open' : ' · portal abierto') : '');
+    }
+
+    function ghostStep() {
+      var options = [
+        { x: 1, y: 0 },
+        { x: -1, y: 0 },
+        { x: 0, y: 1 },
+        { x: 0, y: -1 }
+      ].filter(function (d) {
+        return canWalk(ghost.x + d.x, ghost.y + d.y) && grid[ghost.y + d.y][ghost.x + d.x] !== 3;
       });
-      var status = document.getElementById('gameStatus');
-      if (ok && filled === 6) {
-        done = true;
-        status.textContent = LANG === 'en' ? 'Puzzle complete' : 'Rompecabezas completo';
-        board.classList.add('solved');
-        tray.querySelectorAll('.piece').forEach(function (p) {
-          p.classList.add('ghost');
-        });
+      if (!options.length) return;
+      options.sort(function (a, b) {
+        var da = Math.abs(ghost.x + a.x - player.x) + Math.abs(ghost.y + a.y - player.y);
+        var db = Math.abs(ghost.x + b.x - player.x) + Math.abs(ghost.y + b.y - player.y);
+        return da - db;
+      });
+      var pick = Math.random() < 0.7 ? options[0] : options[Math.floor(Math.random() * options.length)];
+      ghost.x += pick.x;
+      ghost.y += pick.y;
+    }
+
+    function tick() {
+      if (done) return;
+      if (nextDir.x || nextDir.y) {
+        if (tryMove(player, nextDir.x, nextDir.y)) dir = { x: nextDir.x, y: nextDir.y };
+        else tryMove(player, dir.x, dir.y);
+      } else if (dir.x || dir.y) {
+        tryMove(player, dir.x, dir.y);
+      }
+      if (grid[player.y][player.x] === 0) {
+        grid[player.y][player.x] = 2;
+        collected++;
+        tone();
+      }
+      if (grid[player.y][player.x] === 3 && collected >= total) {
+        paint();
         showScenes();
-      } else if (filled === 6) {
-        status.textContent = LANG === 'en' ? 'Almost — check the numbers' : 'Casi — revisa los números';
-      } else {
-        status.textContent = '';
+        return;
+      }
+      ghost.cool++;
+      if (ghost.cool % 2 === 0) ghostStep();
+      if (ghost.x === player.x && ghost.y === player.y) {
+        player.x = 1;
+        player.y = 1;
+        dir = { x: 0, y: 0 };
+        nextDir = { x: 0, y: 0 };
+        status.textContent = LANG === 'en' ? 'The shadow caught you — try again' : 'La sombra te atrapó — intenta de nuevo';
+      }
+      paint();
+    }
+
+    function setDir(dx, dy) {
+      nextDir = { x: dx, y: dy };
+      if (!dir.x && !dir.y) dir = { x: dx, y: dy };
+    }
+
+    function onKey(e) {
+      var mapKeys = {
+        ArrowUp: [0, -1],
+        ArrowDown: [0, 1],
+        ArrowLeft: [-1, 0],
+        ArrowRight: [1, 0],
+        w: [0, -1],
+        s: [0, 1],
+        a: [-1, 0],
+        d: [1, 0]
+      };
+      var m = mapKeys[e.key];
+      if (!m) return;
+      e.preventDefault();
+      setDir(m[0], m[1]);
+    }
+
+    window.addEventListener('keydown', onKey);
+    document.getElementById('mazePad').onclick = function (e) {
+      var btn = e.target.closest('button');
+      if (!btn) return;
+      setDir(parseInt(btn.getAttribute('data-dx'), 10), parseInt(btn.getAttribute('data-dy'), 10));
+    };
+
+    paint();
+    tickTimer = setInterval(tick, 160);
+  }
+
+  function localFeelDiagnose(feelings) {
+    var text = String(feelings || '').toLowerCase();
+    var map = {
+      loop: ['control', 'ansiedad', 'perfecto', 'sobrepensar', 'caos', 'anxiety', 'worry'],
+      espejo: ['amor', 'pareja', 'ex', 'abandono', 'rechazo', 'love', 'lonely', 'novio', 'novia'],
+      vacio: ['identidad', 'quién soy', 'vacio', 'vacío', 'identity', 'empty', 'lost'],
+      ruido: ['ruido', 'mente', 'insomnio', 'saturad', 'noise', 'stress', 'foco', 'focus'],
+      carencia: ['dinero', 'falta', 'pobre', 'deuda', 'money', 'broke', 'abundancia'],
+      sueno: ['sueño', 'proyecto', 'procrastin', 'después', 'dream', 'later', 'manifest']
+    };
+    var tally = Object.assign({}, state.scores || {});
+    Object.keys(map).forEach(function (k) {
+      map[k].forEach(function (w) {
+        if (text.indexOf(w) !== -1) tally[k] = (tally[k] || 0) + 2;
+      });
+    });
+    var id = winnerFrom(tally);
+    var a = archCopy(id);
+    var quote = String(feelings || '').replace(/\s+/g, ' ').trim().slice(0, 140);
+    var audios = ARCH[id].audios.map(function (au) {
+      return { name: au.name, whyEs: au.whyEs, whyEn: au.whyEn, img: au.img };
+    });
+    return {
+      ok: true,
+      source: 'local',
+      archetype: id,
+      name: a.name,
+      mini: a.mini,
+      reading:
+        (LANG === 'en'
+          ? 'Your words and your map converge on ' + a.name + '. When you wrote \"' + quote + '\", the unconscious showed its safety loop. '
+          : 'Tus palabras y tu mapa convergen en ' + a.name + '. Cuando escribiste \"' + quote + '\", el inconsciente mostró su circuito de seguridad. ') +
+        a.mini,
+      script: a.script,
+      blocks: a.blocks,
+      ritual: a.ritual,
+      audios: audios
+    };
+  }
+
+  function winnerFrom(scores) {
+    var best = 'loop';
+    var max = -1;
+    Object.keys(scores || {}).forEach(function (k) {
+      if (scores[k] > max) {
+        max = scores[k];
+        best = k;
       }
     });
+    return best;
+  }
+
+  function renderFeel() {
+    setProgress(72);
+    setMood('5');
+    setScene(5);
+    root.innerHTML =
+      '<section class="stage">' +
+      '<p class="kicker">' +
+      t.feelTag +
+      '</p>' +
+      '<h2>' +
+      t.feelTitle +
+      '</h2>' +
+      '<p class="lead">' +
+      t.feelLead +
+      '</p>' +
+      '<label class="feel-label" for="feelIn">' +
+      (LANG === 'en' ? 'Your confession' : 'Tu confesión') +
+      '</label>' +
+      '<textarea id="feelIn" class="feel-box" rows="7" maxlength="2000" placeholder="' +
+      t.feelPlaceholder.replace(/"/g, '&quot;') +
+      '">' +
+      (state.feelings || '') +
+      '</textarea>' +
+      '<div class="cta-row"><button type="button" class="btn btn-solid" id="btnFeel">' +
+      t.feelCta +
+      '</button></div>' +
+      '<p class="err" id="feelErr"></p></section>';
+
+    document.getElementById('btnFeel').onclick = async function () {
+      var err = document.getElementById('feelErr');
+      var btn = document.getElementById('btnFeel');
+      var text = document.getElementById('feelIn').value.trim();
+      err.textContent = '';
+      if (text.length < 24) {
+        err.textContent =
+          LANG === 'en'
+            ? 'Go deeper — at least a few honest sentences.'
+            : 'Ve más profundo — al menos unas frases honestas.';
+        return;
+      }
+      state.feelings = text;
+      btn.disabled = true;
+      btn.textContent = t.feelBusy;
+      var hint = winner();
+      var diagnosis = null;
+      try {
+        var res = await fetch(DIAGNOSE_FN, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            feelings: text,
+            scores: state.scores,
+            lang: LANG,
+            archetypeHint: hint
+          })
+        });
+        diagnosis = await res.json();
+        if (!diagnosis || !diagnosis.ok) throw new Error((diagnosis && diagnosis.error) || 'fail');
+      } catch (e) {
+        diagnosis = localFeelDiagnose(text);
+      }
+      state.diagnosis = diagnosis;
+      state.archetype = diagnosis.archetype || hint;
+      state.step = 'mini';
+      saveState();
+      pulseFlash();
+      tone();
+      render();
+    };
   }
 
   function renderStart() {
@@ -1137,6 +1427,8 @@
       state.archetype = null;
       state.notified = false;
       state.code = null;
+      state.feelings = '';
+      state.diagnosis = null;
       state.gameVersion = GAME_VERSION;
       saveState();
       render();
@@ -1152,14 +1444,22 @@
     else if (r === 1) gameCipher();
     else if (r === 2) gameAssemble();
     else if (r === 3) gameSequence();
-    else gameJigsaw();
+    else gameMaze();
   }
 
   function renderMini() {
     setProgress(78);
     setMood('5');
     setScene(5);
-    var a = archCopy(state.archetype);
+    if (!state.diagnosis || !state.archetype) {
+      state.step = 'feel';
+      renderFeel();
+      return;
+    }
+    var d = state.diagnosis;
+    var name = d.name || archCopy(state.archetype).name;
+    var mini = d.mini || archCopy(state.archetype).mini;
+    var quote = String(state.feelings || '').replace(/\s+/g, ' ').trim().slice(0, 120);
     root.innerHTML =
       '<section class="stage">' +
       '<p class="kicker">' +
@@ -1171,9 +1471,27 @@
       '<div class="card"><span class="tag">' +
       (LANG === 'en' ? 'Dominant pattern' : 'Patrón dominante') +
       '</span><h3>' +
-      a.name +
+      name +
       '</h3><p>' +
-      a.mini +
+      mini +
+      '</p></div>' +
+      (quote
+        ? '<div class="card feel-echo"><span class="tag">' +
+          (LANG === 'en' ? 'From your words' : 'Desde tus palabras') +
+          '</span><p style="font-family:var(--serif);font-size:1.15rem">“' +
+          quote.replace(/</g, '') +
+          '…”</p></div>'
+        : '') +
+      '<div class="card"><span class="tag">' +
+      (LANG === 'en' ? 'Suggested frequency' : 'Frecuencia sugerida') +
+      '</span><h3 style="font-size:1.2rem">' +
+      ((d.audios && d.audios[0] && d.audios[0].name) || '') +
+      '</h3><p style="margin-top:.35rem">' +
+      (d.audios && d.audios[0]
+        ? LANG === 'en'
+          ? d.audios[0].whyEn || d.audios[0].why || ''
+          : d.audios[0].whyEs || d.audios[0].why || ''
+        : '') +
       '</p></div>' +
       '<div class="card"><h3 style="font-size:1.25rem">' +
       t.unlockTitle +
@@ -1406,12 +1724,18 @@
     setMood('full');
     setScene(0);
     var a = archCopy(state.archetype);
-    var audios = ARCH[state.archetype].audios;
-    var blocks = a.blocks
+    var d = state.diagnosis || {};
+    var audios = d.audios && d.audios.length ? d.audios : ARCH[state.archetype].audios;
+    var blocksSrc = d.blocks && d.blocks.length ? d.blocks : a.blocks;
+    var blocks = blocksSrc
       .map(function (b) {
         return '<div class="blok"><b>' + b.t + '</b><span>' + b.d + '</span></div>';
       })
       .join('');
+    var reading = d.reading || a.mini;
+    var script = d.script || a.script;
+    var ritual = d.ritual || a.ritual;
+    var title = d.name || a.name;
     var audioHtml = audios
       .map(function (au) {
         return (
@@ -1420,7 +1744,7 @@
           '" alt=""><div><h4>' +
           au.name +
           '</h4><p>' +
-          (LANG === 'en' ? au.whyEn : au.whyEs) +
+          (LANG === 'en' ? au.whyEn || au.why || '' : au.whyEs || au.why || '') +
           '</p></div></div>'
         );
       })
@@ -1439,6 +1763,13 @@
         'Hola! Mapa pagado (' + state.code + '). Pack ' + pack + ': ' + list + '. Solo diferencia: ' + formatDiff(pack) + ' (crédito $444).'
       );
     }
+    var feelBit = state.feelings
+      ? '<div class="card feel-echo"><span class="tag">' +
+        (LANG === 'en' ? 'Your confession' : 'Tu confesión') +
+        '</span><p style="white-space:pre-wrap">' +
+        String(state.feelings).replace(/</g, '') +
+        '</p></div>'
+      : '';
     root.innerHTML =
       '<section class="stage">' +
       '<p class="kicker">' +
@@ -1447,15 +1778,16 @@
       state.code +
       '</p>' +
       '<h2>' +
-      a.name +
+      title +
       '</h2>' +
       '<p class="lead">' +
-      a.mini +
+      reading +
       '</p>' +
+      feelBit +
       '<div class="card"><span class="tag">' +
       (LANG === 'en' ? 'Unconscious script' : 'Guión del inconsciente') +
       '</span><p style="font-family:var(--serif);font-size:1.3rem;color:var(--ink)">' +
-      a.script +
+      script +
       '</p></div>' +
       '<div class="bloks">' +
       blocks +
@@ -1463,7 +1795,7 @@
       '<div class="card"><h3 style="font-size:1.15rem">' +
       (LANG === 'en' ? 'Micro-ritual' : 'Micro-ritual') +
       '</h3><p style="margin-top:.35rem">' +
-      a.ritual +
+      ritual +
       '</p></div>' +
       '<div class="price-line">' +
       t.creditNote +
@@ -1509,6 +1841,7 @@
   function render() {
     if (state.step === 'start') renderStart();
     else if (state.step === 'room') renderRoom();
+    else if (state.step === 'feel') renderFeel();
     else if (state.step === 'mini') renderMini();
     else if (state.step === 'pay') renderPay();
     else if (state.step === 'full') {

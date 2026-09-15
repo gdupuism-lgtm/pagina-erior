@@ -1,0 +1,314 @@
+/**
+ * Diagnóstico del Mapa del Inconsciente.
+ * POST { feelings, scores, lang, archetypeHint }
+ * Usa ANTHROPIC_API_KEY si existe; si no, fallback local Erior.
+ */
+const ANTHROPIC_URL = 'https://api.anthropic.com/v1/messages';
+const MODEL = process.env.ANTHROPIC_MODEL || 'claude-haiku-4-5-20251001';
+
+const ARCH_META = {
+  loop: {
+    nameEs: 'Loop de Control',
+    nameEn: 'Control Loop',
+    audios: [
+      { name: 'Booster 2.0', img: '/img/catalog/booster-2-0.jpg', whyEs: 'Reinicia el campo y corta el circuito de control.', whyEn: 'Resets the field and cuts the control circuit.' },
+      { name: 'LIMITLESS', img: '/img/catalog/limitless.jpg', whyEs: 'Detecta el patrón invisible que te atrapa.', whyEn: 'Detects the invisible pattern trapping you.' },
+      { name: 'Wonderland Coherence', img: '/img/catalog/wonderland-coherence.jpg', whyEs: 'Coherencia al soltar el mando.', whyEn: 'Coherence when releasing the wheel.' }
+    ]
+  },
+  espejo: {
+    nameEs: 'Espejo Relacional',
+    nameEn: 'Relational Mirror',
+    audios: [
+      { name: 'SEDUCTION', img: '/img/catalog/seduction.jpg', whyEs: 'Deja de perseguir; recupera magnetismo.', whyEn: 'Stop chasing; restore magnetism.' },
+      { name: 'Amor Propio Magic 4.0', img: '/img/catalog/amor-propio-magic-4-0.jpg', whyEs: 'Merecimiento sin codependencia.', whyEn: 'Worth without codependency.' },
+      { name: 'Mesmerizing Love', img: '/img/catalog/mesmerizing-love.jpg', whyEs: 'Presencia que enamora sin forzar.', whyEn: 'Presence that magnetizes without force.' }
+    ]
+  },
+  vacio: {
+    nameEs: 'Vacío de Identidad',
+    nameEn: 'Identity Void',
+    audios: [
+      { name: 'Identity', img: '/img/catalog/identity.jpg', whyEs: 'Rediseña tu película y el rol principal.', whyEn: 'Redesign your film and lead role.' },
+      { name: 'IMAGINE', img: '/img/catalog/imagine.jpg', whyEs: 'Imagina desde el resultado ya vivido.', whyEn: 'Imagine from the lived result.' },
+      { name: 'GOD / GODDESS', img: '/img/catalog/god-goddess.jpg', whyEs: 'Instala el YO SOY creador.', whyEn: 'Install the creative I AM.' }
+    ]
+  },
+  ruido: {
+    nameEs: 'Ruido Mental',
+    nameEn: 'Mental Noise',
+    audios: [
+      { name: 'LIMITLESS', img: '/img/catalog/limitless.jpg', whyEs: 'Claridad láser sobre el ruido.', whyEn: 'Laser clarity over the noise.' },
+      { name: 'Keep Cool', img: '/img/catalog/keep-cool.jpg', whyEs: 'Baja el volumen del sistema.', whyEn: 'Lowers system volume.' },
+      { name: 'MASTER MIND', img: '/img/catalog/master-mind.jpg', whyEs: 'Orden para visiones grandes.', whyEn: 'Order for big visions.' }
+    ]
+  },
+  carencia: {
+    nameEs: 'Código de Carencia',
+    nameEn: 'Lack Code',
+    audios: [
+      { name: 'MONEY TECH', img: '/img/catalog/money-tech.jpg', whyEs: 'Fórmula diurna/nocturna de abundancia.', whyEn: 'Day/night abundance formula.' },
+      { name: 'Master Abundance', img: '/img/catalog/master-abundance.jpg', whyEs: 'Sostener el flujo sin sabotaje.', whyEn: 'Sustain flow without sabotage.' },
+      { name: 'LUCKY', img: '/img/catalog/lucky.jpg', whyEs: 'Suerte como identidad.', whyEn: 'Luck as identity.' }
+    ]
+  },
+  sueno: {
+    nameEs: 'Soñador Atrapado',
+    nameEn: 'Trapped Dreamer',
+    audios: [
+      { name: 'IMAGINE', img: '/img/catalog/imagine.jpg', whyEs: 'Materializa desde imaginación entrenada.', whyEn: 'Materialize from trained imagination.' },
+      { name: 'White Rabbit Code', img: '/img/catalog/white-rabbit-code.jpg', whyEs: 'Boost para salir del vestíbulo.', whyEn: 'Boost to leave the lobby.' },
+      { name: 'Simulation U', img: '/img/catalog/simulation-u.jpg', whyEs: 'Entiende el juego y juega en serio.', whyEn: 'Understand the game; play for real.' }
+    ]
+  }
+};
+
+const KEYWORDS = {
+  loop: ['control', 'ansiedad', 'ansioso', 'perfecto', 'plan', 'miedo a fallar', 'overthink', 'sobrepensar', 'caos', 'seguridad', 'anxiety', 'perfect', 'worry'],
+  espejo: ['amor', 'pareja', 'ex', 'abandono', 'rechazo', 'celos', 'validación', 'soledad', 'love', 'relationship', 'lonely', 'chosen', 'ignored', 'novio', 'novia'],
+  vacio: ['identidad', 'quién soy', 'vacío', 'vacío', 'no sé quién', 'personaje', 'comparar', 'propósito', 'identity', 'empty', 'who am i', 'lost'],
+  ruido: ['ruido', 'mente', 'insomnio', 'pensar', 'saturad', 'estrés', 'tabs', 'claridad', 'foco', 'noise', 'overwhelm', 'stress', 'insomnia', 'focus'],
+  carencia: ['dinero', 'falta', 'no alcanza', 'pobre', 'deuda', 'abundancia', 'cobrar', 'money', 'broke', 'scarce', 'lack', 'bill'],
+  sueno: ['sueño', 'proyecto', 'procrastin', 'después', 'inspiración', 'miedo a mostrar', 'dream', 'later', 'project', 'manifest', 'empezar']
+};
+
+function cors(origin) {
+  const allowed = [
+    'https://eriorcenterguiaaudios.netlify.app',
+    'http://localhost:8888',
+    'http://localhost:3000',
+    'http://127.0.0.1:8888'
+  ];
+  return {
+    'Access-Control-Allow-Origin': allowed.includes(origin) ? origin : allowed[0],
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Content-Type': 'application/json'
+  };
+}
+
+function pickArchetype(feelings, scores, hint) {
+  const text = String(feelings || '').toLowerCase();
+  const tally = Object.assign({}, scores || {});
+  Object.keys(KEYWORDS).forEach(function (k) {
+    KEYWORDS[k].forEach(function (w) {
+      if (text.indexOf(w) !== -1) tally[k] = (tally[k] || 0) + 2;
+    });
+  });
+  if (hint) tally[hint] = (tally[hint] || 0) + 1;
+  let best = hint || 'loop';
+  let max = -1;
+  Object.keys(tally).forEach(function (k) {
+    if (tally[k] > max) {
+      max = tally[k];
+      best = k;
+    }
+  });
+  return best;
+}
+
+function snippet(feelings, lang) {
+  const clean = String(feelings || '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, 160);
+  if (!clean) {
+    return lang === 'en'
+      ? 'what you didn’t quite name out loud'
+      : 'lo que aún no nombrabas del todo';
+  }
+  return clean;
+}
+
+function localDiagnose(feelings, scores, lang, hint) {
+  const id = pickArchetype(feelings, scores, hint);
+  const meta = ARCH_META[id];
+  const name = lang === 'en' ? meta.nameEn : meta.nameEs;
+  const quote = snippet(feelings, lang);
+  const en = lang === 'en';
+  const reading = en
+    ? 'Your map and your words point to **' +
+      name +
+      '**. When you wrote “' +
+      quote +
+      '”, the unconscious wasn’t complaining — it was showing the loop it uses to keep you safe. The game choices and this confession agree: the pattern is already online.'
+    : 'Tu mapa y tus palabras apuntan a **' +
+      name +
+      '**. Cuando escribiste “' +
+      quote +
+      '”, el inconsciente no se quejaba: mostraba el circuito con el que se protege. Las elecciones del juego y esta confesión coinciden: el patrón ya está activo.';
+  const script = en
+    ? '“If I don’t stay inside this pattern, I disappear.”'
+    : '“Si salgo de este patrón, dejo de existir como me conozco.”';
+  const blocks =
+    en
+      ? [
+          { t: 'Primary signal', d: 'Your body treats this pattern as survival, not preference.' },
+          { t: 'Hidden bargain', d: 'You trade aliveness for a familiar kind of safety.' },
+          { t: 'Mirror in the text', d: 'Your own words already named the wound: “' + quote + '”.' },
+          { t: 'Exit door', d: 'A frequency that installs a new identity while you listen — not more willpower.' }
+        ]
+      : [
+          { t: 'Señal primaria', d: 'Tu cuerpo trata este patrón como supervivencia, no como gusto.' },
+          { t: 'Negociación oculta', d: 'Cambias vitalidad por una seguridad familiar.' },
+          { t: 'Espejo en el texto', d: 'Tus propias palabras ya nombraron la herida: “' + quote + '”.' },
+          { t: 'Puerta de salida', d: 'Una frecuencia que instala identidad nueva mientras escuchas — no más fuerza de voluntad.' }
+        ];
+  const ritual = en
+    ? 'For 7 days: reread one line of what you wrote each morning, then take one imperfect action that the pattern usually blocks.'
+    : '7 días: releé cada mañana una línea de lo que escribiste y da un paso imperfecto que tu patrón suele bloquear.';
+  return {
+    ok: true,
+    source: 'local',
+    archetype: id,
+    name: name,
+    reading: reading,
+    script: script,
+    blocks: blocks,
+    ritual: ritual,
+    audios: meta.audios,
+    mini: en
+      ? 'Partial reveal: ' + name + ' is already speaking through what you feel.'
+      : 'Revelación parcial: ' + name + ' ya habla a través de lo que sientes.'
+  };
+}
+
+async function aiDiagnose(feelings, scores, lang, hint) {
+  const key = String(process.env.ANTHROPIC_API_KEY || '').trim();
+  if (!key) return null;
+
+  const system = `Eres Alicia de ERIOR CENTER. Diagnosticas el inconsciente con tono preciso, íntimo y vendible (sin ser agresiva).
+Patrones válidos (elige UNO): loop, espejo, vacio, ruido, carencia, sueno.
+Responde SOLO JSON válido (sin markdown) con esta forma:
+{
+  "archetype": "loop|espejo|vacio|ruido|carencia|sueno",
+  "name": "nombre del patrón",
+  "mini": "1-2 frases de revelación parcial",
+  "reading": "párrafo de 4-6 frases citando fragmentos de lo que escribió la persona, en voz Erior (realidad maleable, frecuencia, identidad)",
+  "script": "frase entre comillas del guión inconsciente",
+  "blocks": [{"t":"título","d":"1 frase"}, ... exactamente 4],
+  "ritual": "micro-ritual de 7 días concreto",
+  "audios": [{"name":"NOMBRE EXACTO DEL CATÁLOGO","why":"por qué para ESTA persona","img":"/img/catalog/...jpg"}, ... exactamente 3]
+}
+Audios permitidos (elige los que encajen): LIMITLESS, Booster 2.0, Wonderland Coherence, SEDUCTION, Amor Propio Magic 4.0, Mesmerizing Love, Identity, IMAGINE, GOD / GODDESS, Keep Cool, MASTER MIND, MONEY TECH, Master Abundance, LUCKY, White Rabbit Code, Simulation U, Mind Movie, ICON AURA, SELECT, VITAMIND, Audio YOU, Éclat.
+Imágenes: usa rutas /img/catalog/slug.jpg (slug en minúsculas con guiones, ej. limitless.jpg, seduction.jpg, amor-propio-magic-4-0.jpg, money-tech.jpg, white-rabbit-code.jpg, god-goddess.jpg, master-mind.jpg, master-abundance.jpg, wonderland-coherence.jpg, booster-2-0.jpg, simulation-u.jpg, keep-cool.jpg, mesmerizing-love.jpg, imagine.jpg, identity.jpg, lucky.jpg).
+Idioma de salida: ${lang === 'en' ? 'English' : 'Español'}.
+Nunca digas que eres una IA. Nunca des consejo médico. Cierra la lectura empujando hacia activar la frecuencia (audio).`;
+
+  const user =
+    'Texto de la persona:\n"""' +
+    String(feelings || '').slice(0, 2500) +
+    '"""\nScores del juego: ' +
+    JSON.stringify(scores || {}) +
+    '\nHint del mapa: ' +
+    (hint || 'none');
+
+  const res = await fetch(ANTHROPIC_URL, {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+      'x-api-key': key,
+      'anthropic-version': '2023-06-01'
+    },
+    body: JSON.stringify({
+      model: MODEL,
+      max_tokens: 1200,
+      temperature: 0.55,
+      system: system,
+      messages: [{ role: 'user', content: user }]
+    })
+  });
+
+  if (!res.ok) {
+    const errText = await res.text();
+    console.error('mapa-diagnose anthropic', res.status, errText.slice(0, 300));
+    return null;
+  }
+  const data = await res.json();
+  const text = (data.content || [])
+    .map(function (c) {
+      return c.text || '';
+    })
+    .join('')
+    .trim();
+  const jsonMatch = text.match(/\{[\s\S]*\}/);
+  if (!jsonMatch) return null;
+  let parsed;
+  try {
+    parsed = JSON.parse(jsonMatch[0]);
+  } catch (e) {
+    return null;
+  }
+  const id = ARCH_META[parsed.archetype] ? parsed.archetype : pickArchetype(feelings, scores, hint);
+  const meta = ARCH_META[id];
+  const audios =
+    Array.isArray(parsed.audios) && parsed.audios.length
+      ? parsed.audios.slice(0, 3).map(function (a, i) {
+          const fallback = meta.audios[i] || meta.audios[0];
+          return {
+            name: a.name || fallback.name,
+            whyEs: a.why || fallback.whyEs,
+            whyEn: a.why || fallback.whyEn,
+            img: a.img || fallback.img
+          };
+        })
+      : meta.audios;
+
+  return {
+    ok: true,
+    source: 'ai',
+    archetype: id,
+    name: parsed.name || (lang === 'en' ? meta.nameEn : meta.nameEs),
+    reading: parsed.reading || '',
+    script: parsed.script || '',
+    blocks: Array.isArray(parsed.blocks) ? parsed.blocks.slice(0, 4) : [],
+    ritual: parsed.ritual || '',
+    audios: audios,
+    mini: parsed.mini || ''
+  };
+}
+
+exports.handler = async function (event) {
+  const origin = event.headers.origin || event.headers.Origin || '';
+  const headers = cors(origin);
+  if (event.httpMethod === 'OPTIONS') return { statusCode: 204, headers };
+  if (event.httpMethod !== 'POST') {
+    return { statusCode: 405, headers, body: JSON.stringify({ ok: false, error: 'POST only' }) };
+  }
+
+  let body = {};
+  try {
+    body = JSON.parse(event.body || '{}');
+  } catch (e) {
+    return { statusCode: 400, headers, body: JSON.stringify({ ok: false, error: 'JSON inválido' }) };
+  }
+
+  const feelings = String(body.feelings || '').trim();
+  if (feelings.length < 20) {
+    return {
+      statusCode: 400,
+      headers,
+      body: JSON.stringify({
+        ok: false,
+        error:
+          body.lang === 'en'
+            ? 'Write at least a few honest sentences about how you feel.'
+            : 'Escribe al menos unas frases honestas sobre cómo te sientes.'
+      })
+    };
+  }
+
+  const lang = body.lang === 'en' ? 'en' : 'es';
+  const scores = body.scores || {};
+  const hint = body.archetypeHint || null;
+
+  try {
+    const ai = await aiDiagnose(feelings, scores, lang, hint);
+    const result = ai || localDiagnose(feelings, scores, lang, hint);
+    return { statusCode: 200, headers, body: JSON.stringify(result) };
+  } catch (e) {
+    console.error(e);
+    const result = localDiagnose(feelings, scores, lang, hint);
+    return { statusCode: 200, headers, body: JSON.stringify(result) };
+  }
+};
