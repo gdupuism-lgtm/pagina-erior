@@ -3858,6 +3858,62 @@ body::before{
   text-shadow:0 1px 2px rgba(0,0,0,.6);
 }
 
+.cover-combo-impact{
+  position:relative;isolation:isolate;
+  width:min(520px,94vw);margin:0 auto .85rem;
+  padding:clamp(.85rem,2.8vw,1.15rem) clamp(.9rem,3vw,1.2rem);
+  border-radius:22px;
+  background:linear-gradient(160deg,rgba(10,8,18,.92) 0%,rgba(18,12,28,.9) 55%,rgba(8,10,22,.94) 100%);
+  backdrop-filter:blur(28px) saturate(160%);
+  -webkit-backdrop-filter:blur(28px) saturate(160%);
+  box-shadow:0 18px 52px rgba(0,0,0,.48),0 0 40px rgba(80,180,255,.08),inset 0 1px 0 rgba(255,255,255,.1);
+  text-align:center;cursor:pointer;
+  transition:transform .3s cubic-bezier(.22,1,.36,1),box-shadow .3s ease;
+}
+.cover-combo-impact::before{
+  content:'';position:absolute;inset:-1px;border-radius:23px;padding:1.5px;pointer-events:none;z-index:-1;
+  background:linear-gradient(125deg,#7DF9FF,#FFD700,#FF6BDB,#7DF9FF);
+  background-size:280% 280%;animation:premiumFrameIri 8s ease-in-out infinite;
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;opacity:.8;
+}
+.cover-combo-impact:hover{
+  transform:translateY(-3px);
+  box-shadow:0 24px 64px rgba(0,0,0,.55),0 0 48px rgba(125,249,255,.16),inset 0 1px 0 rgba(255,255,255,.14);
+}
+.cover-combo-badge{
+  display:inline-block;font-family:'Jost',sans-serif;font-size:.52rem;letter-spacing:.18em;text-transform:uppercase;
+  color:rgba(255,220,140,.95);margin-bottom:.45rem;
+}
+.cover-combo-title{
+  font-family:'Syne',sans-serif;font-weight:700;font-size:clamp(.95rem,3.6vw,1.2rem);line-height:1.25;
+  color:#fff;margin:0 0 .35rem;letter-spacing:.02em;
+}
+.cover-combo-title em{font-style:normal;color:#FFD700}
+.cover-combo-sub{
+  font-size:clamp(.68rem,2.5vw,.78rem);color:rgba(210,205,230,.78);line-height:1.45;margin:0 0 .7rem;
+}
+.cover-combo-arts{
+  display:flex;align-items:center;justify-content:center;gap:.45rem;margin:0 0 .75rem;
+}
+.cover-combo-arts img{
+  width:clamp(64px,18vw,88px);height:clamp(64px,18vw,88px);object-fit:cover;border-radius:14px;
+  box-shadow:0 8px 24px rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.12);
+}
+.cover-combo-arts .cover-combo-plus{
+  font-size:1.1rem;color:rgba(255,215,0,.85);font-weight:600;
+}
+.cover-combo-price{
+  font-family:'Cormorant Garamond',serif;font-size:clamp(1.15rem,4vw,1.45rem);color:var(--gold);margin:0 0 .2rem;
+}
+.cover-combo-price span{font-size:.72em;opacity:.55;text-decoration:line-through;margin-right:.4rem;color:rgba(200,195,220,.55)}
+.cover-combo-cta{
+  display:inline-flex;align-items:center;justify-content:center;gap:.4rem;margin-top:.55rem;
+  padding:.55rem 1.1rem;border-radius:999px;border:1px solid rgba(255,215,0,.4);
+  background:rgba(201,160,96,.14);color:#FFE7A8;font-family:'Jost',sans-serif;
+  font-size:.68rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+}
 .cover-promo-jewel{
   position:relative;isolation:isolate;
   width:min(480px,94vw);margin:0 auto;
@@ -4370,6 +4426,21 @@ body::before{
         </div>
       </div>
 
+      <div class="cover-combo-impact" id="coverComboImpact" role="button" tabindex="0" aria-label="Combo Booster 2.0 + LIMITLESS + MENTAL TECH book" onclick="openComboPackPay()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openComboPackPay();}">
+        <span class="cover-combo-badge">Star combo · September</span>
+        <h2 class="cover-combo-title">2 frequencies. <em>1 book.</em> A new mind.</h2>
+        <p class="cover-combo-sub">BOOSTER 2.0 + LIMITLESS<br>and you get MENTAL TECH free</p>
+        <div class="cover-combo-arts" aria-hidden="true">
+          <img src="img/catalog/booster-2-0.jpg" alt="" width="88" height="88" loading="lazy" decoding="async">
+          <span class="cover-combo-plus">+</span>
+          <img src="img/catalog/limitless.jpg" alt="" width="88" height="88" loading="lazy" decoding="async">
+          <span class="cover-combo-plus">+</span>
+          <img src="img/mental-tech-cover.png" alt="" width="88" height="88" loading="lazy" decoding="async" style="object-fit:contain;background:#0a0a0f">
+        </div>
+        <p class="cover-combo-price"><span>~~$142~~</span>$85 USD</p>
+        <span class="cover-combo-cta">I want this combo →</span>
+      </div>
+
       <div class="cover-promo-countdown cover-promo-jewel promo-countdown-block promo-summer-glow" id="coverPromoJewel" onclick="openPromoModal()" role="button" tabindex="0" aria-label="View September promo Erior">
         <div class="cover-promo-offer">
           <span class="promo-badge-lastmonth">SEPTEMBER PROMO</span>
@@ -4414,9 +4485,9 @@ body::before{
               <div id="mjFloatWrap">
                 <model-viewer
                   id="mjModel"
-                  data-src="icon-aura-hero.glb"
-                  alt="Alien Icon Aura — presencia magnética Erior Center"
-                  title="Icon Aura Erior Center"
+                  data-src="hero-alien.glb"
+                  alt="Erior Center hero 3D"
+                  title="Erior Center"
                   autoplay
                   interaction-prompt="none"
                   disable-zoom
@@ -5434,12 +5505,16 @@ function promoWaUrl(tab){
 function openPromoPay(tab){
   closePromoModal();
   var map={
-    launch:'🛸 Promo septiembre — Audio $777',
-    limitless:'🧠 LIMITLESS — Promo septiembre',
-    booster:'⚡ Booster 2.0 — Promo septiembre',
-    hombre:'👽 Amor Propio Magic Hombre 2.0 — Promo septiembre'
+    launch:'🛸 September promo — Audio $46 USD',
+    limitless:'🧠 LIMITLESS — September promo',
+    booster:'⚡ Booster 2.0 — September promo',
+    hombre:'👽 Self-Love Magic for Men 2.0 — September promo',
+    combo:'💿 Pack 2 — BOOSTER 2.0 + LIMITLESS + book ($85 USD)'
   };
   openPaymentModal(map[tab]||map.launch);
+}
+function openComboPackPay(){
+  openPaymentModal('💿 Pack 2 — BOOSTER 2.0 + LIMITLESS + book ($85 USD)');
 }
 function openAmor4Payment(){
   openPaymentModal('💖 Amor Propio Magic 4.0');
@@ -8948,7 +9023,7 @@ initTestimonialVideo();
   }
 
   function applyLayoutCamera(){
-    var isCharacter=/michael|mixamo|character|avatar|person|icon-aura-hero|alien/i.test(glbSrc||'');
+    var isCharacter=/michael|mixamo|character|avatar|person|icon-aura-hero|hero-alien|bb8|alien/i.test(glbSrc||'');
     if(isCharacter){
     viewer.setAttribute('field-of-view','24deg');
       viewer.setAttribute('camera-target','0m 0.85m 0m');
