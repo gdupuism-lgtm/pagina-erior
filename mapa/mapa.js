@@ -26,8 +26,8 @@
       homeHref: '/',
       kickerStart: 'Capa 0 · Umbral',
       titleStart: 'El mapa del inconsciente',
-      leadStart: 'No es un formulario. Es una experiencia: puertas, objetos, voces y un archivo que solo se abre cuando el pago es real.',
-      startCta: 'Entrar al mapa',
+      leadStart: 'No es un test de botones. Es un juego: ordena piezas, descifra códigos, mueve objetos y abre tu archivo solo con clave real tras el pago.',
+      startCta: 'Jugar el mapa',
       miniTag: 'Revelación parcial',
       miniTitle: 'Esto es solo el borde',
       unlockTitle: 'Archivo completo · $444 MXN',
@@ -53,11 +53,11 @@
       copy: 'Copiar',
       copied: '¡Copiado!',
       rooms: [
-        { kicker: 'Capa 1 · Tres puertas', title: '¿Cuál se abre sola cuando cierras los ojos?', lead: 'Toca la puerta. Siente cuál ya conoces.' },
-        { kicker: 'Capa 2 · El ruido', title: '¿Qué voz hay que callar primero?', lead: 'Elige la que más te gobierna sin permiso.' },
-        { kicker: 'Capa 3 · Objeto', title: 'En la habitación hay un objeto. ¿Cuál tomas?', lead: 'No es metáfora. Es tu estrategia.' },
-        { kicker: 'Capa 4 · Clave', title: 'Una frase abre la cerradura. ¿Cuál es tuya?', lead: 'La que incomoda casi siempre es la verdadera.' },
-        { kicker: 'Capa 5 · Espejo', title: 'Si tu vida fuera una serie… ¿qué escena se repite?', lead: 'Última pieza. El inconsciente ama los bucles.' }
+        { kicker: 'Nivel 1 · Rompecabezas', title: 'Ordena la frase y abre una puerta', lead: 'Toca una pieza, luego un hueco. Cuando la frase esté bien, suelta la llave en una puerta.' },
+        { kicker: 'Nivel 2 · Cifrado', title: 'Descifra la voz que hay que callar', lead: 'Arma la frase secreta moviendo las letras a los huecos.' },
+        { kicker: 'Nivel 3 · Ensamble', title: 'Arma el objeto que tomas', lead: 'Arrastra (o toca + hueco) 2 piezas correctas sobre un solo objeto.' },
+        { kicker: 'Nivel 4 · Algoritmo', title: 'Repite la secuencia del inconsciente', lead: 'Memoriza el patrón luminoso y repítelo tocando los nodos.' },
+        { kicker: 'Nivel 5 · Espejo', title: 'Arma el espejo y elige la escena que se repite', lead: 'Toca dos tiras para intercambiarlas hasta completar la imagen.' }
       ],
       methods: [
         { id: 'oxxo', label: 'OXXO' },
@@ -73,8 +73,8 @@
       homeHref: '/en/',
       kickerStart: 'Layer 0 · Threshold',
       titleStart: 'Map of the Unconscious',
-      leadStart: 'Not a form. An experience: doors, objects, voices — and a file that only opens when payment is real.',
-      startCta: 'Enter the map',
+      leadStart: 'Not a button quiz. A game: sort pieces, crack ciphers, move objects — and open your file only with a real key after payment.',
+      startCta: 'Play the map',
       miniTag: 'Partial reveal',
       miniTitle: 'This is only the edge',
       unlockTitle: 'Full file · $26 USD',
@@ -100,11 +100,11 @@
       copy: 'Copy',
       copied: 'Copied!',
       rooms: [
-        { kicker: 'Layer 1 · Three doors', title: 'Which one opens by itself when you close your eyes?', lead: 'Touch the door. Feel which one you already know.' },
-        { kicker: 'Layer 2 · The noise', title: 'Which voice must go quiet first?', lead: 'Pick the one running you without permission.' },
-        { kicker: 'Layer 3 · Object', title: 'There’s an object in the room. Which do you take?', lead: 'Not a cute metaphor. Your strategy.' },
-        { kicker: 'Layer 4 · Key', title: 'One sentence opens the lock. Which is yours?', lead: 'The one that stings is almost always true.' },
-        { kicker: 'Layer 5 · Mirror', title: 'If your life were a series… which scene keeps looping?', lead: 'Last piece. The unconscious loves loops.' }
+        { kicker: 'Level 1 · Puzzle', title: 'Order the phrase, then open a door', lead: 'Tap a piece, then a slot. When the phrase is right, drop the key on a door.' },
+        { kicker: 'Level 2 · Cipher', title: 'Decode the voice that must go quiet', lead: 'Build the secret phrase by moving letters into the slots.' },
+        { kicker: 'Level 3 · Assemble', title: 'Build the object you take', lead: 'Drag (or tap + slot) 2 correct pieces onto one object.' },
+        { kicker: 'Level 4 · Algorithm', title: 'Replay the unconscious sequence', lead: 'Memorize the light pattern, then repeat it on the nodes.' },
+        { kicker: 'Level 5 · Mirror', title: 'Assemble the mirror and pick the looping scene', lead: 'Tap two strips to swap until the image is complete.' }
       ],
       methods: [
         { id: 'wire', label: 'ACH / Wire' },
@@ -305,31 +305,31 @@
     }
   };
 
-  var CHOICES = [
+  var OUTCOMES = [
     [
-      { glyph: '🜔', labelEs: 'Puerta de metal', subEs: 'Fría, candado brillante', labelEn: 'Metal door', subEn: 'Cold, shiny lock', img: '/img/catalog/booster-2-0.jpg', scores: { loop: 2, ruido: 1 } },
-      { glyph: '🪞', labelEs: 'Puerta de espejo', subEs: 'Te ves… a medias', labelEn: 'Mirror door', subEn: 'You see yourself… halfway', img: '/img/catalog/mesmerizing-love.jpg', scores: { espejo: 2, vacio: 1 } },
-      { glyph: '🌫️', labelEs: 'Puerta de niebla', subEs: 'No sabes qué hay — y llama', labelEn: 'Fog door', subEn: 'Unknown — and it calls', img: '/img/catalog/imagine.jpg', scores: { sueno: 2, vacio: 1, carencia: 1 } }
+      { labelEs: 'Puerta de metal', labelEn: 'Metal door', img: '/img/catalog/booster-2-0.jpg', scores: { loop: 2, ruido: 1 } },
+      { labelEs: 'Puerta de espejo', labelEn: 'Mirror door', img: '/img/catalog/mesmerizing-love.jpg', scores: { espejo: 2, vacio: 1 } },
+      { labelEs: 'Puerta de niebla', labelEn: 'Fog door', img: '/img/catalog/imagine.jpg', scores: { sueno: 2, vacio: 1, carencia: 1 } }
     ],
     [
-      { glyph: '⚠️', labelEs: '“¿Y si salgo mal?”', subEs: 'Control anticipado', labelEn: '“What if it goes wrong?”', subEn: 'Preemptive control', img: '/img/catalog/keep-cool.jpg', scores: { loop: 2, ruido: 1 } },
-      { glyph: '💔', labelEs: '“No soy suficiente”', subEs: 'Espejo roto', labelEn: '“I’m not enough”', subEn: 'Cracked mirror', img: '/img/catalog/amor-propio-magic-4-0.jpg', scores: { espejo: 2, carencia: 1 } },
-      { glyph: '⏳', labelEs: '“Después lo hago”', subEs: 'Posponer el salto', labelEn: '“I’ll do it later”', subEn: 'Postpone the leap', img: '/img/catalog/white-rabbit-code.jpg', scores: { sueno: 2, vacio: 1 } }
+      { labelEs: 'Y SI SALGO MAL', labelEn: 'WHAT IF IT FAILS', scores: { loop: 2, ruido: 1 } },
+      { labelEs: 'NO SOY SUFICIENTE', labelEn: 'I AM NOT ENOUGH', scores: { espejo: 2, carencia: 1 } },
+      { labelEs: 'DESPUES LO HAGO YA', labelEn: 'DO IT LATER NOW', scores: { sueno: 2, vacio: 1 } }
     ],
     [
-      { glyph: '🗝️', labelEs: 'Llave oxidada', subEs: 'Pesada, de otro tiempo', labelEn: 'Rusted key', subEn: 'Heavy, from another time', img: '/img/catalog/identity.jpg', scores: { loop: 2, carencia: 1 } },
-      { glyph: '🎧', labelEs: 'Un auricular solo', subEs: 'Frecuencia lejana', labelEn: 'Single earbud', subEn: 'Distant frequency', img: '/img/catalog/limitless.jpg', scores: { ruido: 2, sueno: 1 } },
-      { glyph: '✉️', labelEs: 'Carta sin abrir', subEs: 'Tu nombre mal escrito', labelEn: 'Unopened letter', subEn: 'Your name misspelled', img: '/img/catalog/god-goddess.jpg', scores: { vacio: 2, espejo: 1 } }
+      { labelEs: 'Llave', labelEn: 'Key', glyph: '🗝️', scores: { loop: 2, carencia: 1 }, parts: ['ojo', 'diente'] },
+      { labelEs: 'Auricular', labelEn: 'Earbud', glyph: '🎧', scores: { ruido: 2, sueno: 1 }, parts: ['onda', 'cable'] },
+      { labelEs: 'Carta', labelEn: 'Letter', glyph: '✉️', scores: { vacio: 2, espejo: 1 }, parts: ['sello', 'tinta'] }
     ],
     [
-      { glyph: '🔁', labelEs: '“Esto ya lo viví”', subEs: 'Déjà vu-trampa', labelEn: '“I’ve lived this”', subEn: 'Trap déjà vu', img: '/img/catalog/simulation-u.jpg', scores: { loop: 2, ruido: 1 } },
-      { glyph: '👁', labelEs: '“Me están mirando”', subEs: 'Aunque no haya nadie', labelEn: '“They’re watching”', subEn: 'Even when alone', img: '/img/catalog/seduction.jpg', scores: { espejo: 2, ruido: 1 } },
-      { glyph: '🌑', labelEs: '“Aún no es mi momento”', subEs: 'La frase más cara', labelEn: '“Not my time yet”', subEn: 'Most expensive sentence', img: '/img/catalog/money-tech.jpg', scores: { sueno: 2, carencia: 1, vacio: 1 } }
+      { labelEs: 'Esto ya lo viví', labelEn: 'I’ve lived this', seq: [0, 2, 1, 3], scores: { loop: 2, ruido: 1 } },
+      { labelEs: 'Me están mirando', labelEn: 'They’re watching', seq: [1, 3, 0, 2], scores: { espejo: 2, ruido: 1 } },
+      { labelEs: 'Aún no es mi momento', labelEn: 'Not my time yet', seq: [3, 1, 2, 0], scores: { sueno: 2, carencia: 1, vacio: 1 } }
     ],
     [
-      { glyph: '🎬', labelEs: 'Casi lo logras… y cae', subEs: 'Cliffhanger eterno', labelEn: 'Almost… then it drops', subEn: 'Eternal cliffhanger', img: '/img/catalog/master-abundance.jpg', scores: { carencia: 2, loop: 1 } },
-      { glyph: '🚪', labelEs: 'Eligen a otra persona', subEs: 'Tú en el pasillo', labelEn: 'They choose someone else', subEn: 'You in the hallway', img: '/img/catalog/erior-love.jpg', scores: { espejo: 2, vacio: 1 } },
-      { glyph: '🗺️', labelEs: 'Tienes el mapa… no das el paso', subEs: 'Vestíbulo infinito', labelEn: 'You have the map… no step', subEn: 'Infinite lobby', img: '/img/catalog/wonderland-coherence.jpg', scores: { sueno: 2, ruido: 1 } }
+      { labelEs: 'Casi… y se cae', labelEn: 'Almost… then drops', img: '/img/catalog/master-abundance.jpg', scores: { carencia: 2, loop: 1 } },
+      { labelEs: 'Eligen a otra persona', labelEn: 'They choose someone else', img: '/img/catalog/erior-love.jpg', scores: { espejo: 2, vacio: 1 } },
+      { labelEs: 'Tienes el mapa… no das el paso', labelEn: 'Map in hand… no step', img: '/img/catalog/wonderland-coherence.jpg', scores: { sueno: 2, ruido: 1 } }
     ]
   ];
 
@@ -513,6 +513,533 @@
     ]).catch(function () {});
   }
 
+  function finishRoom(scores) {
+    tone();
+    pulseFlash();
+    addScores(scores);
+    if (state.room >= OUTCOMES.length - 1) {
+      state.archetype = winner();
+      state.code = state.code || makeCode();
+      state.step = 'mini';
+    } else {
+      state.room = state.room + 1;
+    }
+    saveState();
+    render();
+  }
+
+  function shuffle(arr) {
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t0 = a[i];
+      a[i] = a[j];
+      a[j] = t0;
+    }
+    return a;
+  }
+
+  /** Click-to-pick then click-to-place (mobile friendly) */
+  function bindPickPlace(trayEl, slotsEl, onChange) {
+    var selected = null;
+    function clearSel() {
+      trayEl.querySelectorAll('.piece').forEach(function (p) {
+        p.classList.remove('selected');
+      });
+      selected = null;
+    }
+    trayEl.addEventListener('click', function (e) {
+      var piece = e.target.closest('.piece');
+      if (!piece || !trayEl.contains(piece)) return;
+      if (selected === piece) {
+        clearSel();
+        return;
+      }
+      clearSel();
+      selected = piece;
+      piece.classList.add('selected');
+      tone();
+    });
+    slotsEl.addEventListener('click', function (e) {
+      var slot = e.target.closest('.slot');
+      if (!slot || !slotsEl.contains(slot)) return;
+      if (slot.firstChild && !selected) {
+        trayEl.appendChild(slot.firstChild);
+        slot.classList.remove('filled');
+        if (onChange) onChange();
+        return;
+      }
+      if (!selected) return;
+      if (slot.firstChild) trayEl.appendChild(slot.firstChild);
+      slot.appendChild(selected);
+      slot.classList.add('filled');
+      clearSel();
+      if (onChange) onChange();
+    });
+  }
+
+  function roomShell(inner) {
+    var meta = t.rooms[state.room];
+    return (
+      '<section class="stage">' +
+      '<p class="kicker">' +
+      meta.kicker +
+      '</p>' +
+      '<h2>' +
+      meta.title +
+      '</h2>' +
+      '<p class="lead">' +
+      meta.lead +
+      '</p>' +
+      inner +
+      '<p class="game-status" id="gameStatus"></p></section>'
+    );
+  }
+
+  function gameSortDoors() {
+    var words = LANG === 'en' ? ['CLOSE', 'YOUR', 'EYES', 'CHOOSE'] : ['CIERRA', 'LOS', 'OJOS', 'ELIGE'];
+    var correct = words.join(' ');
+    var doors = OUTCOMES[0];
+    root.innerHTML = roomShell(
+      '<p class="game-hint">' +
+        (LANG === 'en'
+          ? 'Order the 4 words. Then drop the key 🔑 on a door.'
+          : 'Ordena las 4 palabras. Luego suelta la llave 🔑 en una puerta.') +
+        '</p>' +
+        '<div class="slots" id="slots"></div>' +
+        '<div class="tray" id="tray"></div>' +
+        '<div id="doorsWrap" style="display:none"></div>'
+    );
+    var slots = document.getElementById('slots');
+    var tray = document.getElementById('tray');
+    words.forEach(function () {
+      var s = document.createElement('div');
+      s.className = 'slot';
+      slots.appendChild(s);
+    });
+    shuffle(words).forEach(function (w) {
+      var p = document.createElement('button');
+      p.type = 'button';
+      p.className = 'piece';
+      p.textContent = w;
+      p.dataset.w = w;
+      tray.appendChild(p);
+    });
+    function readPhrase() {
+      return Array.prototype.map
+        .call(slots.children, function (s) {
+          return s.firstChild ? s.firstChild.dataset.w : '';
+        })
+        .join(' ');
+    }
+    function unlockDoors() {
+      var wrap = document.getElementById('doorsWrap');
+      wrap.style.display = 'block';
+      wrap.innerHTML =
+        '<p class="game-hint ok-pulse">' +
+        (LANG === 'en' ? 'Phrase unlocked. Choose a door.' : 'Frase abierta. Elige una puerta.') +
+        '</p><div class="doors-row" id="doors"></div>';
+      var doorsEl = document.getElementById('doors');
+      doors.forEach(function (d, i) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'door-drop openable';
+        b.innerHTML =
+          '<span class="bg" style="background-image:url(\'' +
+          d.img +
+          '\')"></span><span class="lbl"><strong>' +
+          (LANG === 'en' ? d.labelEn : d.labelEs) +
+          '</strong><span>🔑</span></span>';
+        b.onclick = function () {
+          finishRoom(d.scores);
+        };
+        doorsEl.appendChild(b);
+      });
+    }
+    bindPickPlace(tray, slots, function () {
+      var status = document.getElementById('gameStatus');
+      if (readPhrase() === correct) {
+        status.textContent = LANG === 'en' ? 'Correct' : 'Correcto';
+        tray.querySelectorAll('.piece').forEach(function (p) {
+          p.classList.add('ghost');
+        });
+        unlockDoors();
+      } else {
+        status.textContent = '';
+      }
+    });
+  }
+
+  function gameCipher() {
+    var opts = OUTCOMES[1];
+    // Pick one target phrase randomly for the cipher board — player builds whichever they believe; scoring by which phrase they complete
+    var letters = [];
+    opts.forEach(function (o) {
+      var phrase = LANG === 'en' ? o.labelEn : o.labelEs;
+      phrase.replace(/[^A-ZÁÉÍÓÚÑ]/gi, '').toUpperCase().split('').forEach(function (ch) {
+        letters.push(ch);
+      });
+    });
+    // Too many letters - better: one scrambled target but allow building any of 3 by choosing tiles from a shared pool of unique letters for the chosen phrase
+    // Simpler approach: show 3 ciphered options as tiles groups - player sorts ONE phrase from its own scrambled letters
+
+    var pick = opts[Math.floor(Math.random() * opts.length)];
+    // Actually user should choose which voice - so show all 3 as mini sort puzzles? Too heavy.
+    // Better: letter bank from all 3 phrases (unique), slots for max length, and check if slots match any phrase
+
+    var phrases = opts.map(function (o) {
+      return (LANG === 'en' ? o.labelEn : o.labelEs).toUpperCase().replace(/\s+/g, ' ').trim();
+    });
+    var bank = shuffle(
+      phrases
+        .join('')
+        .replace(/[^A-ZÁÉÍÓÚÑ]/g, '')
+        .split('')
+    );
+    // Deduplicate bank length - use letters only from a random phrase but reveal cipher of all three as hints
+    var targetLetters = shuffle(phrases[Math.floor(Math.random() * 3)].replace(/ /g, '').split(''));
+
+    root.innerHTML = roomShell(
+      '<p class="game-hint">' +
+        (LANG === 'en'
+          ? 'Cipher hint: vowels became symbols. Rebuild ONE voice below.'
+          : 'Pista cifrada: las vocales son símbolos. Arma UNA de las voces.') +
+        '</p>' +
+        '<div class="cipher-box">' +
+        phrases
+          .map(function (p) {
+            return p
+              .replace(/A/g, '@')
+              .replace(/E/g, '3')
+              .replace(/I/g, '1')
+              .replace(/O/g, '0')
+              .replace(/U/g, 'µ');
+          })
+          .join('<br>') +
+        '</div>' +
+        '<div class="slots" id="slots"></div>' +
+        '<div class="tray" id="tray"></div>' +
+        '<div class="cta-row"><button type="button" class="btn" id="btnCheck">' +
+        (LANG === 'en' ? 'Check phrase' : 'Comprobar frase') +
+        '</button></div>'
+    );
+
+    // Use letters from all phrases combined unique pool for flexibility - take first phrase's letters + extras
+    var pool = shuffle(
+      Array.from(
+        new Set(
+          phrases
+            .join('')
+            .replace(/[^A-ZÁÉÍÓÚÑ]/g, '')
+            .split('')
+        )
+      )
+    );
+    // Need enough letters - for spaces use word slots instead of letter slots
+    // Switch to WORD tiles for each phrase's words
+    var allWords = [];
+    opts.forEach(function (o, oi) {
+      var phrase = (LANG === 'en' ? o.labelEn : o.labelEs).toUpperCase();
+      phrase.split(/\s+/).forEach(function (w) {
+        allWords.push({ w: w, oi: oi });
+      });
+    });
+    root.innerHTML = roomShell(
+      '<p class="game-hint">' +
+        (LANG === 'en'
+          ? 'Move word tiles into the row to rebuild the voice you must silence first.'
+          : 'Mueve las palabras a la fila para armar la voz que hay que callar primero.') +
+        '</p>' +
+        '<div class="cipher-box">' +
+        phrases
+          .map(function (p) {
+            return p
+              .replace(/A/g, '@')
+              .replace(/E/g, '3')
+              .replace(/I/g, '1')
+              .replace(/O/g, '0')
+              .replace(/U/g, 'µ');
+          })
+          .join('<br>') +
+        '</div>' +
+        '<div class="slots" id="slots"></div>' +
+        '<div class="tray" id="tray"></div>'
+    );
+    var slots = document.getElementById('slots');
+    var tray = document.getElementById('tray');
+    for (var i = 0; i < 4; i++) {
+      var s = document.createElement('div');
+      s.className = 'slot';
+      slots.appendChild(s);
+    }
+    shuffle(allWords).forEach(function (item) {
+      var p = document.createElement('button');
+      p.type = 'button';
+      p.className = 'piece';
+      p.textContent = item.w;
+      p.dataset.w = item.w;
+      tray.appendChild(p);
+    });
+    bindPickPlace(tray, slots, function () {
+      var built = Array.prototype.map
+        .call(slots.children, function (s) {
+          return s.firstChild ? s.firstChild.dataset.w : '';
+        })
+        .filter(Boolean)
+        .join(' ');
+      var status = document.getElementById('gameStatus');
+      for (var i = 0; i < phrases.length; i++) {
+        if (built === phrases[i]) {
+          status.textContent = LANG === 'en' ? 'Decoded' : 'Descifrado';
+          finishRoom(opts[i].scores);
+          return;
+        }
+      }
+      status.textContent = built ? (LANG === 'en' ? 'Keep decoding…' : 'Sigue descifrando…') : '';
+    });
+  }
+
+  function gameAssemble() {
+    var objs = OUTCOMES[2];
+    var parts = [];
+    objs.forEach(function (o, oi) {
+      o.parts.forEach(function (part) {
+        parts.push({ id: part, oi: oi, label: part.toUpperCase() });
+      });
+    });
+    // decoy parts
+    parts.push({ id: 'humo', oi: -1, label: 'HUMO' });
+    parts.push({ id: 'eco', oi: -1, label: 'ECO' });
+    root.innerHTML = roomShell(
+      '<p class="game-hint">' +
+        (LANG === 'en'
+          ? 'Place 2 matching pieces on the same object to claim it.'
+          : 'Coloca 2 piezas que coincidan en el mismo objeto para tomarlo.') +
+        '</p>' +
+        '<div class="assemble-grid" id="board"></div>' +
+        '<div class="tray" id="tray"></div>'
+    );
+    var board = document.getElementById('board');
+    var tray = document.getElementById('tray');
+    objs.forEach(function (o, oi) {
+      var card = document.createElement('div');
+      card.className = 'assemble-card';
+      card.dataset.oi = String(oi);
+      card.innerHTML =
+        '<div style="font-size:2rem">' +
+        o.glyph +
+        '</div><h4>' +
+        (LANG === 'en' ? o.labelEn : o.labelEs) +
+        '</h4><div class="assemble-slots slots" data-oi="' +
+        oi +
+        '"><div class="slot"></div><div class="slot"></div></div>';
+      board.appendChild(card);
+    });
+    shuffle(parts).forEach(function (part) {
+      var p = document.createElement('button');
+      p.type = 'button';
+      p.className = 'piece';
+      p.textContent = part.label;
+      p.dataset.oi = String(part.oi);
+      p.dataset.id = part.id;
+      tray.appendChild(p);
+    });
+    var selected = null;
+    function clearSel() {
+      tray.querySelectorAll('.piece').forEach(function (x) {
+        x.classList.remove('selected');
+      });
+      selected = null;
+    }
+    tray.onclick = function (e) {
+      var piece = e.target.closest('.piece');
+      if (!piece) return;
+      clearSel();
+      selected = piece;
+      piece.classList.add('selected');
+      tone();
+    };
+    board.onclick = function (e) {
+      var slot = e.target.closest('.slot');
+      if (!slot) return;
+      if (slot.firstChild && !selected) {
+        tray.appendChild(slot.firstChild);
+        slot.classList.remove('filled');
+        return;
+      }
+      if (!selected) return;
+      if (slot.firstChild) tray.appendChild(slot.firstChild);
+      slot.appendChild(selected);
+      slot.classList.add('filled');
+      clearSel();
+      // check each object
+      board.querySelectorAll('.assemble-card').forEach(function (card) {
+        var oi = +card.dataset.oi;
+        var filled = card.querySelectorAll('.slot .piece');
+        if (filled.length < 2) return;
+        var ok = true;
+        filled.forEach(function (p) {
+          if (+p.dataset.oi !== oi) ok = false;
+        });
+        if (ok) finishRoom(objs[oi].scores);
+      });
+    };
+  }
+
+  function gameSequence() {
+    var opts = OUTCOMES[3];
+    var pick = opts[Math.floor(Math.random() * opts.length)];
+    var symbols = ['✧', '◈', '⬡', '◎'];
+    root.innerHTML = roomShell(
+      '<p class="game-hint">' +
+        (LANG === 'en'
+          ? 'Watch the sequence, then repeat it. Your pattern reveals the locked phrase.'
+          : 'Mira la secuencia y repítela. Tu patrón revela la frase cerrada.') +
+        '</p>' +
+        '<div class="seq-board" id="nodes"></div>' +
+        '<div class="cta-row"><button type="button" class="btn btn-solid" id="btnReplay">' +
+        (LANG === 'en' ? 'Show sequence again' : 'Ver secuencia otra vez') +
+        '</button></div>'
+    );
+    var nodes = document.getElementById('nodes');
+    symbols.forEach(function (sym, i) {
+      var n = document.createElement('button');
+      n.type = 'button';
+      n.className = 'seq-node';
+      n.textContent = sym;
+      n.dataset.i = String(i);
+      nodes.appendChild(n);
+    });
+    var input = [];
+    var locked = true;
+    function playSeq() {
+      locked = true;
+      input = [];
+      var i = 0;
+      function step() {
+        nodes.querySelectorAll('.seq-node').forEach(function (n) {
+          n.classList.remove('on');
+        });
+        if (i >= pick.seq.length) {
+          locked = false;
+          document.getElementById('gameStatus').textContent = LANG === 'en' ? 'Your turn' : 'Tu turno';
+          return;
+        }
+        var el = nodes.querySelector('.seq-node[data-i="' + pick.seq[i] + '"]');
+        if (el) {
+          el.classList.add('on');
+          tone();
+        }
+        i++;
+        setTimeout(step, 650);
+      }
+      setTimeout(step, 400);
+    }
+    nodes.onclick = function (e) {
+      if (locked) return;
+      var n = e.target.closest('.seq-node');
+      if (!n) return;
+      var idx = +n.dataset.i;
+      input.push(idx);
+      n.classList.add('tap');
+      tone();
+      setTimeout(function () {
+        n.classList.remove('tap');
+      }, 200);
+      if (input.length === pick.seq.length) {
+        var ok = input.every(function (v, i) {
+          return v === pick.seq[i];
+        });
+        if (ok) {
+          document.getElementById('gameStatus').textContent = (LANG === 'en' ? pick.labelEn : pick.labelEs);
+          setTimeout(function () {
+            finishRoom(pick.scores);
+          }, 500);
+        } else {
+          document.getElementById('gameStatus').textContent = LANG === 'en' ? 'Wrong pattern — watch again' : 'Patrón incorrecto — mira otra vez';
+          input = [];
+          setTimeout(playSeq, 700);
+        }
+      }
+    };
+    document.getElementById('btnReplay').onclick = playSeq;
+    playSeq();
+  }
+
+  function gameJigsaw() {
+    var opts = OUTCOMES[4];
+    var order = shuffle([0, 1, 2]);
+    var img = '/img/catalog/imagine.jpg';
+    root.innerHTML = roomShell(
+      '<p class="game-hint">' +
+        (LANG === 'en'
+          ? 'Tap two strips to swap. When the image is whole, pick the looping scene.'
+          : 'Toca dos tiras para intercambiar. Cuando la imagen esté completa, elige la escena que se repite.') +
+        '</p>' +
+        '<div class="jigsaw" id="jig"></div>' +
+        '<div id="scenePick" style="display:none"></div>'
+    );
+    var jig = document.getElementById('jig');
+    var selected = null;
+    function paint() {
+      jig.innerHTML = '';
+      order.forEach(function (pos, visualIndex) {
+        var tile = document.createElement('button');
+        tile.type = 'button';
+        tile.className = 'jig-tile';
+        tile.dataset.visual = String(visualIndex);
+        // pos is which slice of image (0 left, 1 mid, 2 right)
+        tile.style.backgroundImage = 'url("' + img + '")';
+        tile.style.backgroundPosition = pos * 50 + '% 50%';
+        tile.onclick = function () {
+          if (selected == null) {
+            selected = visualIndex;
+            tile.classList.add('selected');
+            tone();
+            return;
+          }
+          if (selected === visualIndex) {
+            tile.classList.remove('selected');
+            selected = null;
+            return;
+          }
+          var tmp = order[selected];
+          order[selected] = order[visualIndex];
+          order[visualIndex] = tmp;
+          selected = null;
+          paint();
+          if (order[0] === 0 && order[1] === 1 && order[2] === 2) {
+            document.getElementById('gameStatus').textContent = LANG === 'en' ? 'Mirror restored' : 'Espejo restaurado';
+            showScenes();
+          }
+        };
+        jig.appendChild(tile);
+      });
+    }
+    function showScenes() {
+      var wrap = document.getElementById('scenePick');
+      wrap.style.display = 'block';
+      wrap.innerHTML = '<div class="doors-row"></div>';
+      var row = wrap.firstChild;
+      opts.forEach(function (o) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'door-drop openable';
+        b.innerHTML =
+          '<span class="bg" style="background-image:url(\'' +
+          o.img +
+          '\')"></span><span class="lbl"><strong>' +
+          (LANG === 'en' ? o.labelEn : o.labelEs) +
+          '</strong></span>';
+        b.onclick = function () {
+          finishRoom(o.scores);
+        };
+        row.appendChild(b);
+      });
+    }
+    paint();
+  }
+
   function renderStart() {
     setProgress(5);
     setMood('0');
@@ -532,7 +1059,7 @@
       '<div class="cta-row"><button type="button" class="btn btn-solid" id="btnStart">' +
       t.startCta +
       '</button></div>' +
-      '<p class="foot-note">ERIOR · puzzle gratis · mini revelación gratis · archivo $' +
+      '<p class="foot-note">ERIOR · juego-puzzle gratis · mini revelación gratis · archivo $' +
       (LANG === 'en' ? '26 USD' : '444 MXN') +
       ' con clave tras pago verificado</p></section>';
     document.getElementById('btnStart').onclick = function () {
@@ -552,61 +1079,14 @@
 
   function renderRoom() {
     var r = state.room;
-    var meta = t.rooms[r];
-    var opts = CHOICES[r];
     setProgress(12 + r * 14);
     setMood(String(r + 1));
     setScene(r + 1);
-    var html =
-      '<section class="stage">' +
-      '<p class="kicker">' +
-      meta.kicker +
-      '</p>' +
-      '<h2>' +
-      meta.title +
-      '</h2>' +
-      '<p class="lead">' +
-      meta.lead +
-      '</p>' +
-      '<div class="choices' +
-      (r === 0 ? ' doors' : '') +
-      '">';
-    opts.forEach(function (o, i) {
-      html +=
-        '<button type="button" class="choice" data-i="' +
-        i +
-        '">' +
-        '<span class="choice-media" style="background-image:url(\'' +
-        o.img +
-        '\')"></span>' +
-        '<span class="choice-shade"></span>' +
-        '<span class="choice-body"><span class="choice-glyph">' +
-        o.glyph +
-        '</span><strong>' +
-        (LANG === 'en' ? o.labelEn : o.labelEs) +
-        '</strong><span>' +
-        (LANG === 'en' ? o.subEn : o.subEs) +
-        '</span></span></button>';
-    });
-    html += '</div></section>';
-    root.innerHTML = html;
-    root.querySelectorAll('.choice').forEach(function (btn) {
-      btn.onclick = function () {
-        var i = +btn.getAttribute('data-i');
-        tone();
-        pulseFlash();
-        addScores(opts[i].scores);
-        if (r >= CHOICES.length - 1) {
-          state.archetype = winner();
-          state.code = state.code || makeCode();
-          state.step = 'mini';
-        } else {
-          state.room = r + 1;
-        }
-        saveState();
-        render();
-      };
-    });
+    if (r === 0) gameSortDoors();
+    else if (r === 1) gameCipher();
+    else if (r === 2) gameAssemble();
+    else if (r === 3) gameSequence();
+    else gameJigsaw();
   }
 
   function renderMini() {

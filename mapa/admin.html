@@ -3,31 +3,44 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="robots" content="noindex">
+  <meta name="robots" content="noindex,nofollow">
   <title>Admin · Mapa Inconsciente</title>
   <style>
     body{font-family:system-ui,sans-serif;background:#0b0a10;color:#f4f0e8;min-height:100vh;display:grid;place-items:center;padding:1.5rem}
-    .box{width:min(420px,100%);border:1px solid rgba(255,255,255,.12);padding:1.5rem;border-radius:12px;background:rgba(20,16,28,.9)}
-    h1{font-size:1.1rem;margin:0 0 1rem}
+    .box{width:min(460px,100%);border:1px solid rgba(255,255,255,.12);padding:1.5rem;border-radius:12px;background:rgba(20,16,28,.9)}
+    h1{font-size:1.1rem;margin:0 0 .75rem}
+    .help{opacity:.75;font-size:.88rem;line-height:1.45;margin-bottom:1rem}
+    .help code{background:rgba(255,255,255,.08);padding:.1rem .35rem;border-radius:4px}
     label{display:block;font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;opacity:.65;margin:.85rem 0 .35rem}
     input{width:100%;padding:.75rem;border-radius:8px;border:1px solid rgba(255,255,255,.18);background:#120f18;color:#fff}
     button{margin-top:1rem;width:100%;padding:.9rem;border:0;border-radius:8px;background:linear-gradient(135deg,#ff6bcb,#7b5cff,#4da3ff);color:#0a0810;font-weight:700;cursor:pointer}
-    .out{margin-top:1rem;padding:1rem;border-radius:8px;background:rgba(125,249,255,.08);border:1px dashed rgba(125,249,255,.35);word-break:break-all;min-height:2.5rem}
-    .err{color:#ff8a8a;font-size:.85rem;margin-top:.6rem}
+    .out{margin-top:1rem;padding:1rem;border-radius:8px;background:rgba(125,249,255,.08);border:1px dashed rgba(125,249,255,.35);word-break:break-all;min-height:2.5rem;font-size:1.25rem;letter-spacing:.12em;text-align:center}
+    .err{color:#ff8a8a;font-size:.85rem;margin-top:.6rem;line-height:1.4}
     a{color:#9ad;font-size:.8rem}
+    .steps{margin:.75rem 0 0;padding-left:1.1rem;font-size:.8rem;opacity:.7;line-height:1.45}
   </style>
 </head>
 <body>
   <div class="box">
     <h1>Generar clave · Mapa del Inconsciente</h1>
-    <p style="opacity:.7;font-size:.9rem;line-height:1.4">Cuando el cliente pague y mande comprobante + código MAPA-…, genera aquí la clave y envíasela por WhatsApp.</p>
+    <p class="help">
+      Password por defecto (si aún no configuraste Netlify): <code>mapa444</code><br>
+      Flujo: cliente paga + manda comprobante con código <code>MAPA-…</code> → generas clave aquí → se la mandas por WhatsApp.
+    </p>
     <label>Código del cliente (MAPA-…)</label>
-    <input id="orderId" placeholder="MAPA-XXXX" autocomplete="off">
+    <input id="orderId" placeholder="MAPA-XXXX" autocomplete="off" autocapitalize="characters">
     <label>Password admin</label>
-    <input id="adminPass" type="password" placeholder="••••••••" autocomplete="current-password">
+    <input id="adminPass" type="password" placeholder="mapa444" autocomplete="current-password">
     <button type="button" id="go">Generar clave</button>
     <div class="out" id="out">—</div>
     <div class="err" id="err"></div>
+    <ol class="steps">
+      <li>Netlify → Site configuration → Environment variables</li>
+      <li>Add <code>MAPA_ADMIN_PASS</code> = tu password secreta</li>
+      <li>Add <code>MAPA_UNLOCK_SECRET</code> = frase larga random</li>
+      <li>Deploys → Trigger deploy (Clear cache and deploy site)</li>
+      <li>Usa ese password aquí (si no, usa <code>mapa444</code>)</li>
+    </ol>
     <p style="margin-top:1rem"><a href="/mapa/">← Volver al mapa</a></p>
   </div>
   <script>
@@ -42,8 +55,8 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             action: 'issue',
-            orderId: document.getElementById('orderId').value,
-            adminPass: document.getElementById('adminPass').value
+            orderId: document.getElementById('orderId').value.trim(),
+            adminPass: document.getElementById('adminPass').value.trim()
           })
         });
         var data = await res.json();

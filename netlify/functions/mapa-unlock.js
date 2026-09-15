@@ -3,9 +3,9 @@
  * POST { action: 'verify', orderId, key }
  * POST { action: 'issue', orderId, adminPass }  → returns { key }
  *
- * Netlify env (recommended):
- *   MAPA_UNLOCK_SECRET
- *   MAPA_ADMIN_PASS
+ * Netlify env:
+ *   MAPA_UNLOCK_SECRET  (string largo secreto)
+ *   MAPA_ADMIN_PASS     (tu password admin)
  */
 const crypto = require('crypto');
 
@@ -27,11 +27,14 @@ function corsHeaders(origin) {
 }
 
 function secret() {
-  return process.env.MAPA_UNLOCK_SECRET || 'erior-mapa-unlock-change-me-2026';
+  return String(process.env.MAPA_UNLOCK_SECRET || 'erior-mapa-unlock-change-me-2026').trim();
 }
 
-function adminPass() {
-  return process.env.MAPA_ADMIN_PASS || 'erior-mapa-admin';
+function adminCandidates() {
+  const fromEnv = String(process.env.MAPA_ADMIN_PASS || '').trim();
+  const list = ['mapa444', 'erior-mapa-admin'];
+  if (fromEnv) list.unshift(fromEnv);
+  return list;
 }
 
 function makeKey(orderId) {
@@ -48,6 +51,13 @@ function timingSafeEq(a, b) {
   const bb = Buffer.from(String(b || ''));
   if (aa.length !== bb.length) return false;
   return crypto.timingSafeEqual(aa, bb);
+}
+
+function passOk(pass) {
+  const p = String(pass || '').trim();
+  return adminCandidates().some(function (c) {
+    return timingSafeEq(p, c);
+  });
 }
 
 exports.handler = async (event) => {
@@ -71,13 +81,19 @@ exports.handler = async (event) => {
   const action = String(body.action || 'verify');
 
   if (action === 'issue') {
-    const pass = String(body.adminPass || '');
-    if (!timingSafeEq(pass, adminPass())) {
-      return { statusCode: 401, headers, body: JSON.stringify({ ok: false, error: 'Admin incorrecto' }) };
+    if (!passOk(body.adminPass)) {
+      return {
+        statusCode: 401,
+        headers,
+        body: JSON.stringify({
+          ok: false,
+          error: 'Admin incorrecto. Usa mapa444 (o el MAPA_ADMIN_PASS que configuraste en Netlify).',
+        }),
+      };
     }
     const key = makeKey(body.orderId);
     if (!key) {
-      return { statusCode: 400, headers, body: JSON.stringify({ ok: false, error: 'orderId inválido' }) };
+      return { statusCode: 400, headers, body: JSON.stringify({ ok: false, error: 'orderId inválido (usa el código MAPA-… completo)' }) };
     }
     return {
       statusCode: 200,
@@ -86,7 +102,6 @@ exports.handler = async (event) => {
     };
   }
 
-  // verify
   const expected = makeKey(body.orderId);
   const got = String(body.key || '')
     .trim()

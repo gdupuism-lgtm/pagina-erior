@@ -289,3 +289,90 @@ body.mood-full .aurora{filter:blur(18px) saturate(1.7) hue-rotate(310deg)}
   .choice{min-height:148px}
   .choice-body{min-height:148px}
 }
+
+/* —— Mini-juegos —— */
+.game-hint{
+  font-size:.9rem;color:var(--mute);line-height:1.45;margin-bottom:1rem;
+  padding:.85rem 1rem;border-radius:14px;
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);
+}
+.tray,.slots{
+  display:flex;flex-wrap:wrap;gap:.55rem;justify-content:center;
+  margin:.75rem 0 1rem;min-height:3.2rem;
+}
+.slot{
+  min-width:4.6rem;min-height:3rem;padding:.55rem .7rem;
+  border-radius:12px;border:1.5px dashed rgba(255,255,255,.28);
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(0,0,0,.25);transition:border-color .2s,box-shadow .2s;
+}
+.slot.filled{border-style:solid;border-color:rgba(125,249,255,.45);box-shadow:0 0 18px rgba(125,249,255,.15)}
+.slot.target-hot{border-color:rgba(255,226,122,.7);box-shadow:0 0 20px rgba(255,226,122,.2)}
+.piece{
+  min-width:4.6rem;padding:.65rem .8rem;border-radius:12px;cursor:grab;
+  font-family:var(--serif);font-size:1.05rem;font-weight:500;text-align:center;
+  border:1px solid transparent;
+  background:linear-gradient(rgba(18,14,28,.85),rgba(18,14,28,.85)) padding-box,var(--iris) border-box;
+  background-size:auto,200% 200%;animation:irisShift 7s ease infinite;
+  user-select:none;touch-action:none;
+  box-shadow:0 8px 24px rgba(0,0,0,.35);
+  transition:transform .2s var(--ease),opacity .2s;
+}
+.piece:active,.piece.dragging{cursor:grabbing;transform:scale(1.06);z-index:5}
+.piece.selected{outline:2px solid #ffe27a;transform:scale(1.05)}
+.piece.ghost{opacity:.35;pointer-events:none}
+.doors-row{display:grid;gap:.75rem;margin-top:1rem}
+@media(min-width:700px){.doors-row{grid-template-columns:repeat(3,1fr)}}
+.door-drop{
+  position:relative;overflow:hidden;border-radius:16px;min-height:140px;
+  border:1px solid rgba(255,255,255,.16);cursor:pointer;
+  background:rgba(0,0,0,.35);
+}
+.door-drop .bg{
+  position:absolute;inset:0;background-size:cover;background-position:center;opacity:.5;
+}
+.door-drop .lbl{
+  position:relative;z-index:1;padding:1rem;display:flex;flex-direction:column;justify-content:flex-end;height:100%;min-height:140px;
+  background:linear-gradient(transparent,rgba(5,4,12,.88));
+}
+.door-drop strong{font-family:var(--serif);font-size:1.2rem}
+.door-drop span{font-size:.8rem;color:var(--mute)}
+.door-drop.openable{box-shadow:0 0 0 2px rgba(255,226,122,.55),0 0 40px rgba(255,107,203,.25)}
+.cipher-box{
+  font-family:ui-monospace,Consolas,monospace;font-size:clamp(1rem,3.5vw,1.25rem);
+  letter-spacing:.08em;padding:1rem;border-radius:14px;text-align:center;
+  background:rgba(0,0,0,.4);border:1px solid rgba(125,249,255,.25);
+  color:#b8f6ff;margin-bottom:1rem;
+}
+.seq-board{display:flex;flex-wrap:wrap;gap:.6rem;justify-content:center;margin:1rem 0}
+.seq-node{
+  width:3.4rem;height:3.4rem;border-radius:50%;
+  display:grid;place-items:center;font-size:1.2rem;
+  border:2px solid rgba(255,255,255,.25);background:rgba(255,255,255,.06);
+  transition:transform .2s,box-shadow .2s,background .2s;
+}
+.seq-node.on{background:var(--iris);background-size:200% 200%;animation:irisShift 3s ease infinite;color:#0a0812;border-color:transparent;transform:scale(1.08)}
+.seq-node.tap{box-shadow:0 0 0 3px rgba(255,226,122,.5)}
+.jigsaw{
+  display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;
+  width:min(100%,420px);margin:0 auto 1rem;aspect-ratio:1.4;
+  border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,.2);
+}
+.jig-tile{
+  background-size:300% 100%;background-repeat:no-repeat;
+  cursor:pointer;position:relative;
+  transition:outline .15s,transform .2s;
+}
+.jig-tile.selected{outline:3px solid #ffe27a;z-index:2;transform:scale(.98)}
+.assemble-grid{display:grid;gap:.75rem}
+@media(min-width:700px){.assemble-grid{grid-template-columns:repeat(3,1fr)}}
+.assemble-card{
+  border-radius:16px;padding:.85rem;min-height:160px;
+  border:1px dashed rgba(255,255,255,.25);background:rgba(0,0,0,.28);
+  display:flex;flex-direction:column;align-items:center;gap:.5rem;
+}
+.assemble-card h4{font-family:var(--serif);font-size:1.1rem}
+.assemble-slots{display:flex;gap:.4rem;flex-wrap:wrap;justify-content:center;min-height:2.8rem}
+.ok-pulse{animation:floaty .8s ease}
+.game-status{text-align:center;font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin:.5rem 0 0;min-height:1.2em}
+
