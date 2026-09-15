@@ -3908,6 +3908,26 @@ body::before{
   font-family:'Cormorant Garamond',serif;font-size:clamp(1.15rem,4vw,1.45rem);color:var(--gold);margin:0 0 .2rem;
 }
 .cover-combo-price span{font-size:.72em;opacity:.55;text-decoration:line-through;margin-right:.4rem;color:rgba(200,195,220,.55)}
+.cover-mapa-entry{
+  display:block;width:min(520px,94vw);margin:0 auto .85rem;
+  padding:.95rem 1.1rem;text-align:center;text-decoration:none;color:inherit;
+  border:1px solid rgba(212,176,106,.28);border-radius:16px;
+  background:rgba(8,7,14,.72);backdrop-filter:blur(16px);
+  transition:border-color .25s,transform .25s cubic-bezier(.22,1,.36,1);
+}
+.cover-mapa-entry:hover{border-color:rgba(212,176,106,.55);transform:translateY(-2px)}
+.cover-mapa-kicker{
+  display:block;font-family:'Jost',sans-serif;font-size:.5rem;letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(212,176,106,.85);margin-bottom:.35rem;
+}
+.cover-mapa-entry strong{
+  display:block;font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;
+  font-size:clamp(1.15rem,4vw,1.45rem);letter-spacing:.04em;color:rgba(244,240,232,.95);
+}
+.cover-mapa-sub{
+  display:block;margin-top:.35rem;font-family:'Jost',sans-serif;font-size:.68rem;
+  line-height:1.4;color:rgba(200,195,220,.62);
+}
 .cover-combo-cta{
   display:inline-flex;align-items:center;justify-content:center;gap:.4rem;margin-top:.55rem;
   padding:.55rem 1.1rem;border-radius:999px;border:1px solid rgba(255,215,0,.4);
@@ -4440,6 +4460,12 @@ body::before{
         <p class="cover-combo-price"><span>~~$142~~</span>$85 USD</p>
         <span class="cover-combo-cta">I want this combo →</span>
       </div>
+
+      <a class="cover-mapa-entry" href="/en/mapa/">
+        <span class="cover-mapa-kicker">Free puzzle</span>
+        <strong>Map of the Unconscious</strong>
+        <span class="cover-mapa-sub">Free mini reveal · full file $26 USD (credited toward audios)</span>
+      </a>
 
       <div class="cover-promo-countdown cover-promo-jewel promo-countdown-block promo-summer-glow" id="coverPromoJewel" onclick="openPromoModal()" role="button" tabindex="0" aria-label="View September promo Erior">
         <div class="cover-promo-offer">

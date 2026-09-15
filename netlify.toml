@@ -77,6 +77,26 @@
   to = "/en/"
   status = 301
 
+[[redirects]]
+  from = "/mapa"
+  to = "/mapa/"
+  status = 301
+
+[[redirects]]
+  from = "/inconsciente"
+  to = "/mapa/"
+  status = 301
+
+[[redirects]]
+  from = "/en/mapa"
+  to = "/en/mapa/"
+  status = 301
+
+[[redirects]]
+  from = "/en/unconscious"
+  to = "/en/mapa/"
+  status = 301
+
 [[headers]]
   for = "/img/*"
   [headers.values]
