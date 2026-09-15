@@ -143,20 +143,20 @@ function localDiagnose(feelings, scores, lang, hint) {
   const blocks =
     en
       ? [
-          { t: 'Primary signal', d: 'Your body treats this pattern as survival, not preference.' },
-          { t: 'Hidden bargain', d: 'You trade aliveness for a familiar kind of safety.' },
-          { t: 'Mirror in the text', d: 'Your own words already named the wound: “' + quote + '”.' },
-          { t: 'Exit door', d: 'A frequency that installs a new identity while you listen — not more willpower.' }
+          { t: 'Primary neural signal', d: 'Your system treats this pattern as survival, not preference.' },
+          { t: 'Hidden contract', d: 'You trade expansion for the familiar safety of the known self.' },
+          { t: 'Text evidence', d: 'Your own words already marked the code: “' + quote + '”.' },
+          { t: 'Recalibration', d: 'A neural frequency that installs a new identity while you listen — not more willpower.' }
         ]
       : [
-          { t: 'Señal primaria', d: 'Tu cuerpo trata este patrón como supervivencia, no como gusto.' },
-          { t: 'Negociación oculta', d: 'Cambias vitalidad por una seguridad familiar.' },
-          { t: 'Espejo en el texto', d: 'Tus propias palabras ya nombraron la herida: “' + quote + '”.' },
-          { t: 'Puerta de salida', d: 'Una frecuencia que instala identidad nueva mientras escuchas — no más fuerza de voluntad.' }
+          { t: 'Señal neuronal primaria', d: 'Tu sistema trata este patrón como supervivencia, no como preferencia.' },
+          { t: 'Contrato oculto', d: 'Cambias expansión por la seguridad familiar del yo conocido.' },
+          { t: 'Evidencia en el texto', d: 'Tus propias palabras ya marcaron el código: “' + quote + '”.' },
+          { t: 'Recalibración', d: 'Una frecuencia neuronal que instala identidad nueva mientras escuchas — no más fuerza de voluntad.' }
         ];
-  const ritual = en
-    ? 'For 7 days: reread one line of what you wrote each morning, then take one imperfect action that the pattern usually blocks.'
-    : '7 días: releé cada mañana una línea de lo que escribiste y da un paso imperfecto que tu patrón suele bloquear.';
+  const protocol = en
+    ? '7-day Recalibration Protocol: each morning reread one line you wrote, then take one imperfect action your pattern usually blocks. Track the signal; do not debate it.'
+    : 'Protocolo de recalibración 7 días: cada mañana releé una línea de lo que escribiste y ejecuta un paso imperfecto que tu patrón suele bloquear. Registra la señal; no la debates.';
   return {
     ok: true,
     source: 'local',
@@ -165,7 +165,8 @@ function localDiagnose(feelings, scores, lang, hint) {
     reading: reading,
     script: script,
     blocks: blocks,
-    ritual: ritual,
+    protocol: protocol,
+    ritual: protocol,
     audios: meta.audios,
     mini: en
       ? 'Partial reveal: ' + name + ' is already speaking through what you feel.'
@@ -177,23 +178,25 @@ async function aiDiagnose(feelings, scores, lang, hint) {
   const key = String(process.env.ANTHROPIC_API_KEY || '').trim();
   if (!key) return null;
 
-  const system = `Eres Alicia de ERIOR CENTER. Diagnosticas el inconsciente con tono preciso, íntimo y vendible (sin ser agresiva).
+  const system = `Eres Alicia de ERIOR CENTER. Entregas un DIAGNÓSTICO de tecnología mental: patrones inconscientes + frecuencias neuronales. Tono preciso, clínico-premium, íntimo y vendible (sin agresividad).
+PROHIBIDO: lenguaje de tarot, brujería, “universo te obedece”, “vibración mística”, “espejo roto”, “permiso faltante”, “micro-ritual”, monedas imaginarias, afirmaciones new-age frente al espejo.
+OBLIGATORIO: vocabulario de sistema / código / señal / patrón / recalibración / frecuencia neuronal / identidad operativa / umbral / protocolo.
 Patrones válidos (elige UNO): loop, espejo, vacio, ruido, carencia, sueno.
 Responde SOLO JSON válido (sin markdown) con esta forma:
 {
   "archetype": "loop|espejo|vacio|ruido|carencia|sueno",
-  "name": "nombre del patrón",
-  "mini": "1-2 frases de revelación parcial",
-  "reading": "párrafo de 4-6 frases citando fragmentos de lo que escribió la persona, en voz Erior (realidad maleable, frecuencia, identidad)",
-  "script": "frase entre comillas del guión inconsciente",
-  "blocks": [{"t":"título","d":"1 frase"}, ... exactamente 4],
-  "ritual": "micro-ritual de 7 días concreto",
-  "audios": [{"name":"NOMBRE EXACTO DEL CATÁLOGO","why":"por qué para ESTA persona","img":"/img/catalog/...jpg"}, ... exactamente 3]
+  "name": "nombre técnico del patrón",
+  "mini": "1-2 frases de revelación parcial (tecnología mental)",
+  "reading": "párrafo 4-6 frases citando fragmentos del texto; explica el patrón como código instalado en el inconsciente",
+  "script": "frase entre comillas del guión operativo del inconsciente (sin misticismo)",
+  "blocks": [{"t":"título técnico","d":"1 frase"}, ... exactamente 4],
+  "protocol": "protocolo de recalibración 7 días concreto y accionable (sin ritual mágico)",
+  "audios": [{"name":"NOMBRE EXACTO DEL CATÁLOGO","why":"por qué esta frecuencia neuronal para ESTA persona","img":"/img/catalog/...jpg"}, ... exactamente 3]
 }
-Audios permitidos (elige los que encajen): LIMITLESS, Booster 2.0, Wonderland Coherence, SEDUCTION, Amor Propio Magic 4.0, Mesmerizing Love, Identity, IMAGINE, GOD / GODDESS, Keep Cool, MASTER MIND, MONEY TECH, Master Abundance, LUCKY, White Rabbit Code, Simulation U, Mind Movie, ICON AURA, SELECT, VITAMIND, Audio YOU, Éclat.
-Imágenes: usa rutas /img/catalog/slug.jpg (slug en minúsculas con guiones, ej. limitless.jpg, seduction.jpg, amor-propio-magic-4-0.jpg, money-tech.jpg, white-rabbit-code.jpg, god-goddess.jpg, master-mind.jpg, master-abundance.jpg, wonderland-coherence.jpg, booster-2-0.jpg, simulation-u.jpg, keep-cool.jpg, mesmerizing-love.jpg, imagine.jpg, identity.jpg, lucky.jpg).
-Idioma de salida: ${lang === 'en' ? 'English' : 'Español'}.
-Nunca digas que eres una IA. Nunca des consejo médico. Cierra la lectura empujando hacia activar la frecuencia (audio).`;
+Audios: LIMITLESS, Booster 2.0, Wonderland Coherence, SEDUCTION, Amor Propio Magic 4.0, Mesmerizing Love, Identity, IMAGINE, GOD / GODDESS, Keep Cool, MASTER MIND, MONEY TECH, Master Abundance, LUCKY, White Rabbit Code, Simulation U, Mind Movie, ICON AURA, SELECT, VITAMIND, Audio YOU, Éclat.
+Imágenes /img/catalog/slug.jpg (limitless.jpg, seduction.jpg, amor-propio-magic-4-0.jpg, money-tech.jpg, white-rabbit-code.jpg, god-goddess.jpg, master-mind.jpg, master-abundance.jpg, wonderland-coherence.jpg, booster-2-0.jpg, simulation-u.jpg, keep-cool.jpg, mesmerizing-love.jpg, imagine.jpg, identity.jpg, lucky.jpg).
+Idioma: ${lang === 'en' ? 'English' : 'Español'}.
+Nunca digas que eres una IA. Nunca des consejo médico. Cierra empujando a instalar la frecuencia (audio Erior) como tecnología de recalibración.`
 
   const user =
     'Texto de la persona:\n"""' +
@@ -262,7 +265,8 @@ Nunca digas que eres una IA. Nunca des consejo médico. Cierra la lectura empuja
     reading: parsed.reading || '',
     script: parsed.script || '',
     blocks: Array.isArray(parsed.blocks) ? parsed.blocks.slice(0, 4) : [],
-    ritual: parsed.ritual || '',
+    protocol: parsed.protocol || parsed.ritual || '',
+    ritual: parsed.protocol || parsed.ritual || '',
     audios: audios,
     mini: parsed.mini || ''
   };

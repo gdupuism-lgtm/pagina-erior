@@ -114,7 +114,7 @@ exports.handler = async (event) => {
       body: JSON.stringify({
         ok: false,
         error:
-          'Clave incorrecta para este código. Debe generarse en /mapa/admin.html con el mismo MAPA-… (password mapa444). No inventes la clave.',
+          'Clave incorrecta. Espera la clave de Pauline tras verificar tu pago con este código MAPA-…',
       }),
     };
   }

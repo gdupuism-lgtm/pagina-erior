@@ -4,7 +4,7 @@
   var LANG = (document.documentElement.lang || 'es').toLowerCase().indexOf('en') === 0 ? 'en' : 'es';
   var WA = '5214432311761';
   var STORAGE_KEY = 'erior_mapa_v3';
-  var GAME_VERSION = 5;
+  var GAME_VERSION = 6;
   var DIAGNOSE_FN = '/.netlify/functions/mapa-diagnose';
   var CREDIT_MXN = 444;
   var CREDIT_USD = 26;
@@ -36,18 +36,18 @@
       payTitle: 'Paga y pide tu clave',
       payLead: 'Monto: $444 MXN. Pon tu código en el concepto / asunto. Envía comprobante. Pauline te manda la clave — sin clave no se abre el archivo.',
       paidCta: 'Ya pagué — avisar y pedir clave',
-      keyLabel: 'Clave de 8 caracteres (la genera el admin, no se inventa)',
+      keyLabel: 'Clave de acceso (te la envía Pauline)',
       keyPlaceholder: 'AB12CD34',
       keyCta: 'Abrir archivo con clave',
-      keyWait: 'Pasos: 1) Copia tu código MAPA-… 2) Abre /mapa/admin.html 3) Pega el código + password mapa444 4) Genera la clave 5) Pégala aquí. Si inventas una clave, fallará.',
-      keyHint: 'La clave depende de TU código. Si en admin usaste otro MAPA-…, no abrirá.',
+      keyWait: 'Después de pagar, envía tu comprobante con el código MAPA-… Pauline verifica y te manda la clave de 8 caracteres. Sin clave verificada el archivo no se abre.',
+      keyHint: 'Usa exactamente la clave que Pauline te envíe para este código. No inventes una.',
       codeLabel: 'Tu código de pedido',
       copyCode: 'Copiar código',
       waPay: 'Pagar / avisar por WhatsApp',
       fullTag: 'Archivo completo',
       creditNote: 'Crédito activo: $444 MXN. Si activas frecuencia(s) ahora, solo pagas la diferencia.',
-      upsellTitle: 'Activa la frecuencia',
-      upsellLead: 'Estas 3 señales cortan tu patrón. Elige 1, 2 o 3 — el diagnóstico ya está pagado.',
+      upsellTitle: 'Instala la frecuencia neuronal',
+      upsellLead: 'Estas 3 frecuencias recalibran el patrón detectado. Elige 1, 2 o 3 — el diagnóstico ya está pagado.',
       buy1: '1 audio · diferencia',
       buy2: '2 audios + libro · diferencia',
       buy3: '3 audios + Alicia Premium · diferencia',
@@ -92,18 +92,18 @@
       payTitle: 'Pay, then get your key',
       payLead: 'Amount: $26 USD. Put your code in the memo/subject. Send the receipt. Pauline sends the key — no key, no file.',
       paidCta: 'I paid — notify & request key',
-      keyLabel: '8-character key (from admin — not invented)',
+      keyLabel: 'Access key (Pauline sends it)',
       keyPlaceholder: 'AB12CD34',
       keyCta: 'Open file with key',
-      keyWait: 'Steps: 1) Copy your MAPA-… code 2) Open /mapa/admin.html 3) Paste code + password mapa444 4) Generate key 5) Paste it here. Invented keys always fail.',
-      keyHint: 'The key is tied to YOUR code. If admin used a different MAPA-…, it won’t open.',
+      keyWait: 'After you pay, send your receipt with the MAPA-… code. Pauline verifies and sends an 8-character key. No verified key, no file.',
+      keyHint: 'Use exactly the key Pauline sends for this code. Don’t invent one.',
       codeLabel: 'Your order code',
       copyCode: 'Copy code',
       waPay: 'Pay / notify on WhatsApp',
       fullTag: 'Full file',
       creditNote: 'Active credit: $26 USD. If you activate frequenc(ies) now, you only pay the difference.',
-      upsellTitle: 'Activate the frequency',
-      upsellLead: 'These 3 signals cut your pattern. Choose 1, 2 or 3 — diagnosis already paid.',
+      upsellTitle: 'Install the neural frequency',
+      upsellLead: 'These 3 frequencies recalibrate the detected pattern. Choose 1, 2 or 3 — diagnosis already paid.',
       buy1: '1 audio · difference',
       buy2: '2 audios + book · difference',
       buy3: '3 audios + Alicia Premium · difference',
@@ -140,7 +140,7 @@
           { t: 'Sobrepensar', d: 'Piensas para no sentir.' },
           { t: 'Loop de posponer', d: 'Esperas el momento perfecto que nunca llega.' }
         ],
-        ritual: '7 días: una micro-decisión al azar sin optimizarla. Observa la ansiedad sin obedecerla.'
+        protocol: '7 días · Protocolo Control Off: una micro-decisión diaria sin optimizarla. Observa la señal de ansiedad sin ejecutarla.'
       },
       en: {
         name: 'Control Loop',
@@ -152,7 +152,7 @@
           { t: 'Overthinking', d: 'You think to avoid feeling.' },
           { t: 'Postpone loop', d: 'You wait for a perfect moment that never arrives.' }
         ],
-        ritual: '7 days: one random micro-decision, no optimizing. Watch anxiety without obeying it.'
+        protocol: '7 days · Control Off protocol: one daily micro-decision with no optimizing. Watch the anxiety signal without running it.'
       },
       audios: [
         { name: 'Booster 2.0', whyEs: 'Rompe el loop y vuelve al punto cero.', whyEn: 'Breaks the loop; returns to zero point.', img: '/img/catalog/booster-2-0.jpg' },
@@ -171,7 +171,7 @@
           { t: 'Miedo al abandono', d: 'Aceptas migajas para no quedarte sola/o.' },
           { t: 'Identidad en el otro', d: 'Te defines por la relación.' }
         ],
-        ritual: 'Escribe 10 veces: “Mi valor no negocia.” No envíes el mensaje que suele “salvar” la escena.'
+        protocol: '7 días · Protocolo Valor Fijo: cada mañana escribe “Mi valor no negocia.” No envíes el mensaje que suele “salvar” la escena.'
       },
       en: {
         name: 'Relational Mirror',
@@ -183,7 +183,7 @@
           { t: 'Abandonment fear', d: 'You accept crumbs to avoid being alone.' },
           { t: 'Identity in the other', d: 'You define yourself by the relationship.' }
         ],
-        ritual: 'Write 10×: “My worth doesn’t negotiate.” Don’t send the message that usually saves the scene.'
+        protocol: '7 days · Fixed Worth protocol: each morning write “My worth doesn’t negotiate.” Don’t send the message that usually saves the scene.'
       },
       audios: [
         { name: 'SEDUCTION', whyEs: 'Deja de perseguir; vuelve el magnetismo.', whyEn: 'Stop chasing; restore magnetism.', img: '/img/catalog/seduction.jpg' },
@@ -202,7 +202,7 @@
           { t: 'Comparación', d: 'Mides tu vida con películas ajenas.' },
           { t: 'Sin guión', d: 'Sabes lo que no quieres; no el rol que sí.' }
         ],
-        ritual: '3 mañanas: “Hoy soy la persona que ___.” Un gesto mínimo acorde.'
+        protocol: '7 días · Protocolo Identidad Activa: 3 mañanas “Hoy opero como la persona que ___.” Un gesto mínimo coherente.'
       },
       en: {
         name: 'Identity Void',
@@ -214,7 +214,7 @@
           { t: 'Comparison', d: 'You measure life against other films.' },
           { t: 'No script', d: 'You know what you don’t want — not the role you do.' }
         ],
-        ritual: '3 mornings: “Today I am the person who ___.” One tiny matching act.'
+        protocol: '7 days · Active Identity protocol: 3 mornings “Today I operate as the person who ___.” One matching micro-action.'
       },
       audios: [
         { name: 'Identity', whyEs: 'Rediseña tu película y el rol principal.', whyEn: 'Redesign your film and lead role.', img: '/img/catalog/identity.jpg' },
@@ -233,7 +233,7 @@
           { t: 'Insomnio creativo', d: 'Ideas cuando deberías dormir.' },
           { t: 'Duda crónica', d: 'Revisas cada decisión hasta vaciarla.' }
         ],
-        ritual: '10 min/día: auriculares, una pregunta, cero pantallas. Un solo insight.'
+        protocol: '7 días · Protocolo Canal Único: 10 min/día auriculares + una sola pregunta + cero pantallas. Un insight, no diez.'
       },
       en: {
         name: 'Mental Noise',
@@ -245,7 +245,7 @@
           { t: 'Creative insomnia', d: 'Ideas when you should sleep.' },
           { t: 'Chronic doubt', d: 'Revising until the choice is empty.' }
         ],
-        ritual: '10 min/day: headphones, one question, zero screens. One insight only.'
+        protocol: '7 days · Single Channel protocol: 10 min/day headphones + one question + zero screens. One insight, not ten.'
       },
       audios: [
         { name: 'LIMITLESS', whyEs: 'Claridad láser.', whyEn: 'Laser clarity.', img: '/img/catalog/limitless.jpg' },
@@ -262,9 +262,9 @@
           { t: 'Culpa al recibir', d: 'Ganar se siente inseguro.' },
           { t: 'Fugas invisibles', d: 'Entra y se va sin explicación.' },
           { t: 'Techo de merecimiento', d: 'Saboteas cuando sube el nivel.' },
-          { t: 'Identidad pobre', d: '“La gente como yo no tiene eso.”' }
+          { t: 'Identidad de escasez', d: 'Programa: “la gente como yo no opera a ese nivel.”' }
         ],
-        ritual: 'Al pagar algo hoy: “Circula a través de mí.” Nueva señal, sin drama.'
+        protocol: '7 días · Protocolo Señal de Abundancia: al pagar, registra internamente “circula a través de mí” y continúa sin drama. Entrena el sistema a sostener flujo.'
       },
       en: {
         name: 'Lack Code',
@@ -276,7 +276,7 @@
           { t: 'Worth ceiling', d: 'Sabotage as the level rises.' },
           { t: 'Poor identity', d: '“People like me don’t get that.”' }
         ],
-        ritual: 'When you pay today: whisper “It circulates through me.”'
+        protocol: '7 days · Abundance Signal protocol: when you pay, register internally “it circulates through me” and continue without drama. Train the system to hold flow.'
       },
       audios: [
         { name: 'MONEY TECH', whyEs: 'Fórmula diurna/nocturna de abundancia.', whyEn: 'Day/night abundance formula.', img: '/img/catalog/money-tech.jpg' },
@@ -293,9 +293,9 @@
           { t: 'Fantasía-refugio', d: 'Sueñas para no arriesgar.' },
           { t: 'Perfeccionismo', d: 'Nunca está “listo”.' },
           { t: 'Miedo al juicio', d: 'Si lo muestro, me pueden reducir.' },
-          { t: 'Procrastinación sagrada', d: 'Esperas inspiración en vez de ritual.' }
+          { t: 'Retraso operativo', d: 'Esperas inspiración en vez de protocolo.' }
         ],
-        ritual: 'Hoy: publica o envía una versión imperfecta. El acto > la obra maestra.'
+        protocol: 'Hoy · Protocolo Salida del Vestíbulo: publica o envía una versión imperfecta. El acto > la obra maestra.'
       },
       en: {
         name: 'Trapped Dreamer',
@@ -305,9 +305,9 @@
           { t: 'Fantasy shelter', d: 'Dreaming to avoid risk.' },
           { t: 'Perfectionism', d: 'Never “ready”.' },
           { t: 'Fear of judgment', d: 'Showing it might shrink you.' },
-          { t: 'Sacred delay', d: 'Waiting for inspiration instead of ritual.' }
+          { t: 'Operational delay', d: 'Waiting for inspiration instead of protocol.' }
         ],
-        ritual: 'Today: publish or send an imperfect version. Act > masterpiece.'
+        protocol: 'Today · Leave-the-Lobby protocol: publish or send an imperfect version. Act > masterpiece.'
       },
       audios: [
         { name: 'IMAGINE', whyEs: 'Materializa desde imaginación entrenada.', whyEn: 'Materialize from trained imagination.', img: '/img/catalog/imagine.jpg' },
@@ -1306,7 +1306,7 @@
         a.mini,
       script: a.script,
       blocks: a.blocks,
-      ritual: a.ritual,
+      protocol: a.protocol || a.ritual,
       audios: audios
     };
   }
@@ -1700,10 +1700,10 @@
             LANG === 'en'
               ? 'Wrong key for ' +
                 state.code +
-                '. Generate it in /mapa/admin.html with this exact code + password mapa444.'
+                '. Wait for Pauline’s key for this exact code after payment verification.'
               : 'Clave incorrecta para ' +
                 state.code +
-                '. Genérala en /mapa/admin.html con este mismo código + password mapa444.';
+                '. Espera la clave de Pauline para este mismo código tras verificar tu pago.';
           throw new Error(msg);
         }
         state.unlocked = true;
@@ -1734,7 +1734,7 @@
       .join('');
     var reading = d.reading || a.mini;
     var script = d.script || a.script;
-    var ritual = d.ritual || a.ritual;
+    var ritual = d.protocol || d.ritual || a.protocol || a.ritual;
     var title = d.name || a.name;
     var audioHtml = audios
       .map(function (au) {
@@ -1793,7 +1793,7 @@
       blocks +
       '</div>' +
       '<div class="card"><h3 style="font-size:1.15rem">' +
-      (LANG === 'en' ? 'Micro-ritual' : 'Micro-ritual') +
+      (LANG === 'en' ? 'Recalibration protocol' : 'Protocolo de recalibración') +
       '</h3><p style="margin-top:.35rem">' +
       ritual +
       '</p></div>' +
