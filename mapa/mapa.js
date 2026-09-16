@@ -3,12 +3,10 @@
 
   var LANG = (document.documentElement.lang || 'es').toLowerCase().indexOf('en') === 0 ? 'en' : 'es';
   var WA = '5214432311761';
-  var STORAGE_KEY = 'erior_mapa_v7';
-  var GAME_VERSION = 7;
-  var CREDIT_MXN = 444;
-  var CREDIT_USD = 26;
-  var UNLOCK_FN = '/.netlify/functions/mapa-unlock';
+  var STORAGE_KEY = 'erior_mapa_v8';
+  var GAME_VERSION = 8;
   var DIAGNOSE_FN = '/.netlify/functions/mapa-diagnose';
+  var PRICE = { es: { 1: 777, 2: 1444, 3: 2299 }, en: { 1: 46, 2: 85, 3: 135 } };
 
   var I18N = {
     es: {
@@ -22,37 +20,18 @@
       leadStart:
         'Puedes querer expansión de forma consciente y, aun así, estar psicológicamente apegado a lo familiar de quien has sido. Este reporte no pregunta por qué no lo has manifestado. Pregunta qué problemas crearía realmente conseguirlo — y qué patrón lo sostiene.',
       startCta: 'Empezar mi reporte',
-      footNote: 'Análisis gratuito parcial · archivo completo $444 MXN con clave tras pago verificado · crédito hacia frecuencias',
+      footNote: 'Diagnóstico gratuito · al final te sugerimos la frecuencia neuronal que encaja contigo',
       qProgress: 'Pregunta',
       of: 'de',
       next: 'Continuar',
       diagnoseCta: 'Generar mi reporte',
       busy: 'Leyendo tu inconsciente…',
-      miniTag: 'Revelación parcial',
-      miniTitle: 'Esto es solo el borde del patrón',
-      unlockTitle: 'Archivo completo · $444 MXN',
-      unlockLead:
-        'Lectura completa en voz Erior: el patrón, lo que tendrías que dejar atrás, el guión operativo y 3 frecuencias neuronales recomendadas para TI. Los $444 se descuentan si activas audio(s).',
-      unlockCta: 'Continuar al pago ($444 MXN)',
-      payTitle: 'Paga y recibe tu clave',
-      payLead: 'Monto: $444 MXN. Pon tu código en el concepto. Envía comprobante. Pauline te manda la clave — sin clave no se abre el archivo.',
-      paidCta: 'Ya pagué — avisar y pedir clave',
-      keyLabel: 'Clave de acceso (te la envía Pauline)',
-      keyPlaceholder: 'AB12CD34',
-      keyCta: 'Abrir archivo con clave',
-      keyWait:
-        'Después de pagar, envía tu comprobante con el código MAPA-… Pauline verifica y te manda la clave de 8 caracteres.',
-      keyHint: 'Usa exactamente la clave que Pauline te envíe para este código. No inventes una.',
-      codeLabel: 'Tu código de pedido',
-      copyCode: 'Copiar código',
-      waPay: 'Pagar / avisar por WhatsApp',
-      fullTag: 'Archivo completo',
-      creditNote: 'Crédito activo: $444 MXN. Si activas frecuencia(s) ahora, solo pagas la diferencia.',
-      upsellTitle: 'Instala la frecuencia neuronal',
-      upsellLead: 'Estas 3 frecuencias recalibran el patrón detectado. Elige 1, 2 o 3 — el diagnóstico ya está pagado.',
-      buy1: '1 audio · diferencia',
-      buy2: '2 audios + libro · diferencia',
-      buy3: '3 audios + Alicia Premium · diferencia',
+      fullTag: 'Tu reporte',
+      upsellTitle: 'Siguiente paso: instala la frecuencia',
+      upsellLead: 'El diagnóstico ya está. Estas 3 frecuencias neuronales son las que más cortan TU patrón. Elige 1, 2 o 3 y escríbenos por WhatsApp.',
+      buy1: 'Quiero 1 audio',
+      buy2: 'Quiero 2 audios + libro',
+      buy3: 'Quiero 3 audios + Alicia Premium',
       backHome: 'Volver al centro',
       copy: 'Copiar',
       copied: '¡Copiado!',
@@ -61,12 +40,6 @@
       fromYou: 'Desde tus respuestas',
       patternTag: 'Patrón dominante',
       freqTag: 'Frecuencia sugerida',
-      methods: [
-        { id: 'oxxo', label: 'OXXO' },
-        { id: 'transfer', label: 'Transferencia' },
-        { id: 'paypal', label: 'PayPal' },
-        { id: 'alt', label: 'Crypto / WU' }
-      ],
       questions: [
         {
           kicker: '01 · El deseo',
@@ -105,37 +78,18 @@
       leadStart:
         'You can want expansion consciously and still be psychologically attached to the familiar self you’ve been. This report doesn’t ask why you haven’t manifested it. It asks what problems getting it would actually create — and which pattern holds that.',
       startCta: 'Start my report',
-      footNote: 'Free partial analysis · full file $26 USD with verified payment key · credit toward frequencies',
+      footNote: 'Free diagnosis · at the end we suggest the neural frequency that fits you',
       qProgress: 'Question',
       of: 'of',
       next: 'Continue',
       diagnoseCta: 'Generate my report',
       busy: 'Reading your unconscious…',
-      miniTag: 'Partial reveal',
-      miniTitle: 'This is only the edge of the pattern',
-      unlockTitle: 'Full file · $26 USD',
-      unlockLead:
-        'Full Erior reading: the pattern, what you’d have to leave behind, the operative script, and 3 neural frequencies for YOU. The $26 is credited if you activate audio(s).',
-      unlockCta: 'Continue to payment ($26 USD)',
-      payTitle: 'Pay and get your key',
-      payLead: 'Amount: $26 USD. Put your code in the memo. Send the receipt. Pauline sends the key — no key, no file.',
-      paidCta: 'I paid — notify & request key',
-      keyLabel: 'Access key (Pauline sends it)',
-      keyPlaceholder: 'AB12CD34',
-      keyCta: 'Open file with key',
-      keyWait:
-        'After you pay, send your receipt with the MAPA-… code. Pauline verifies and sends an 8-character key.',
-      keyHint: 'Use exactly the key Pauline sends for this code. Don’t invent one.',
-      codeLabel: 'Your order code',
-      copyCode: 'Copy code',
-      waPay: 'Pay / notify on WhatsApp',
-      fullTag: 'Full file',
-      creditNote: 'Active credit: $26 USD. If you activate frequenc(ies) now, you only pay the difference.',
-      upsellTitle: 'Install the neural frequency',
-      upsellLead: 'These 3 frequencies recalibrate the detected pattern. Choose 1, 2 or 3 — diagnosis already paid.',
-      buy1: '1 audio · difference',
-      buy2: '2 audios + book · difference',
-      buy3: '3 audios + Alicia Premium · difference',
+      fullTag: 'Your report',
+      upsellTitle: 'Next step: install the frequency',
+      upsellLead: 'The diagnosis is done. These 3 neural frequencies best cut YOUR pattern. Choose 1, 2 or 3 and message us on WhatsApp.',
+      buy1: 'I want 1 audio',
+      buy2: 'I want 2 audios + book',
+      buy3: 'I want 3 audios + Alicia Premium',
       backHome: 'Back to center',
       copy: 'Copy',
       copied: 'Copied!',
@@ -144,11 +98,6 @@
       fromYou: 'From your answers',
       patternTag: 'Dominant pattern',
       freqTag: 'Suggested frequency',
-      methods: [
-        { id: 'wire', label: 'ACH / Wire' },
-        { id: 'paypal', label: 'PayPal' },
-        { id: 'alt', label: 'Crypto / WU' }
-      ],
       questions: [
         {
           kicker: '01 · Desire',
@@ -376,10 +325,7 @@
       answers: { desire: '', discomfort: '', identity: '', feelings: '' },
       scores: {},
       archetype: null,
-      unlocked: false,
-      keyVerified: false,
       code: null,
-      notified: false,
       diagnosis: null,
       gameVersion: GAME_VERSION
     };
@@ -399,10 +345,6 @@
     state = blankState();
   } else {
     state = rawState;
-    if (state.unlocked && !state.keyVerified) {
-      state.unlocked = false;
-      state.step = 'start';
-    }
     if (!state.answers) state.answers = blankState().answers;
   }
   try {
@@ -419,18 +361,6 @@
     try {
       state.gameVersion = GAME_VERSION;
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-      if (state.unlocked && state.keyVerified) {
-        localStorage.setItem(
-          'erior_mapa_credit',
-          JSON.stringify({
-            mxn: CREDIT_MXN,
-            usd: CREDIT_USD,
-            archetype: state.archetype,
-            code: state.code,
-            at: Date.now()
-          })
-        );
-      }
     } catch (e) {}
   }
 
@@ -508,13 +438,8 @@
     if (cb) cb();
   }
 
-  function priceDiff(pack) {
-    if (LANG === 'en') return Math.max(0, { 1: 46, 2: 85, 3: 135 }[pack] - CREDIT_USD);
-    return Math.max(0, { 1: 777, 2: 1444, 3: 2299 }[pack] - CREDIT_MXN);
-  }
-
-  function formatDiff(pack) {
-    var d = priceDiff(pack);
+  function formatPrice(pack) {
+    var d = PRICE[LANG][pack];
     return LANG === 'en' ? '$' + d + ' USD' : '$' + d.toLocaleString('es-MX') + ' MXN';
   }
 
@@ -608,26 +533,6 @@
       protocol: a.protocol,
       audios: ARCH[id].audios
     };
-  }
-
-  function notifyTeam(kind) {
-    var a = state.archetype ? archCopy(state.archetype).name : '?';
-    var msg =
-      kind === 'paid'
-        ? '🔑 MAPA PAGO PENDIENTE VERIFICAR\nCódigo: ' +
-          state.code +
-          '\nPatrón: ' +
-          a +
-          '\nIdioma: ' +
-          LANG +
-          '\nCliente dice que pagó $' +
-          (LANG === 'en' ? '26 USD' : '444 MXN') +
-          '.'
-        : '🟣 MAPA REPORTE\nCódigo: ' + state.code + '\nPatrón: ' + a;
-    Promise.all([
-      fetch('https://api.callmebot.com/whatsapp.php?phone=5214432311761&text=' + encodeURIComponent(msg) + '&apikey=6870409'),
-      fetch('https://api.callmebot.com/whatsapp.php?phone=5214791936105&text=' + encodeURIComponent(msg) + '&apikey=2412047')
-    ]).catch(function () {});
   }
 
   function answerKey(q) {
@@ -739,261 +644,11 @@
       }
       state.diagnosis = diagnosis;
       state.archetype = diagnosis.archetype || winnerFrom(state.scores);
-      state.step = 'mini';
+      state.step = 'full';
       if (!state.code) state.code = makeCode();
       saveState();
       pulseFlash();
       render();
-    };
-  }
-
-  function renderMini() {
-    setProgress(72);
-    setMood('5');
-    if (!state.diagnosis || !state.archetype) {
-      state.step = 'question';
-      state.q = 0;
-      render();
-      return;
-    }
-    var d = state.diagnosis;
-    var name = d.name || archCopy(state.archetype).name;
-    var mini = d.mini || archCopy(state.archetype).mini;
-    var snippet = (state.answers.discomfort || state.answers.feelings || '').replace(/\s+/g, ' ').trim().slice(0, 140);
-    var au = d.audios && d.audios[0];
-    root.innerHTML =
-      '<section class="stage report-stage">' +
-      '<p class="kicker">' +
-      t.miniTag +
-      '</p>' +
-      '<h2>' +
-      t.miniTitle +
-      '</h2>' +
-      '<div class="card"><span class="tag">' +
-      t.patternTag +
-      '</span><h3>' +
-      esc(name) +
-      '</h3><p>' +
-      esc(mini) +
-      '</p></div>' +
-      (snippet
-        ? '<div class="card feel-echo"><span class="tag">' +
-          t.fromYou +
-          '</span><p class="quote-line">“' +
-          esc(snippet) +
-          '…”</p></div>'
-        : '') +
-      (au
-        ? '<div class="card"><span class="tag">' +
-          t.freqTag +
-          '</span><h3 style="font-size:1.2rem">' +
-          esc(au.name) +
-          '</h3><p style="margin-top:.35rem">' +
-          esc(LANG === 'en' ? au.whyEn || au.why || '' : au.whyEs || au.why || '') +
-          '</p></div>'
-        : '') +
-      '<div class="card"><h3 style="font-size:1.25rem">' +
-      t.unlockTitle +
-      '</h3><p style="margin-top:.35rem">' +
-      t.unlockLead +
-      '</p><div class="cta-row"><button type="button" class="btn btn-solid" id="btnUnlock">' +
-      t.unlockCta +
-      '</button></div></div></section>';
-    document.getElementById('btnUnlock').onclick = function () {
-      pulseFlash();
-      state.step = 'pay';
-      saveState();
-      render();
-    };
-  }
-
-  function row(label, value) {
-    return (
-      '<div class="pay-row"><span>' +
-      label +
-      '</span><b>' +
-      value +
-      '</b><button type="button" class="copy-btn" data-c="' +
-      value.replace(/"/g, '&quot;') +
-      '">' +
-      t.copy +
-      '</button></div>'
-    );
-  }
-
-  function payPanelHtml(method) {
-    if (LANG === 'en') {
-      if (method === 'paypal') {
-        return (
-          '<p>Pay <b>$26 USD</b> · memo: <b>' +
-          state.code +
-          '</b></p>' +
-          row('PayPal', 'paypal.me/sheismagique') +
-          '<p class="hint"><a href="https://www.paypal.me/sheismagique" target="_blank" rel="noopener">Open PayPal →</a></p>'
-        );
-      }
-      if (method === 'alt') return '<p>Crypto / WU — WhatsApp Pauline with code <b>' + state.code + '</b>.</p>';
-      return (
-        '<p>ACH / Wire · <b>$26 USD</b> · memo <b>' +
-        state.code +
-        '</b></p>' +
-        row('Beneficiary', 'Paulina Lopez') +
-        row('Bank', 'Lead Bank') +
-        row('Routing', '101019644') +
-        row('Account', '219021482598')
-      );
-    }
-    if (method === 'oxxo') {
-      return '<p>OXXO · <b>$444 MXN</b> · guarda tu código <b>' + state.code + '</b></p>' + row('Tarjeta', '4741 7435 2658 3795') + row('Banco', 'Banregio');
-    }
-    if (method === 'paypal') {
-      return (
-        '<p>PayPal · <b>$444 MXN</b> / $26 USD · concepto <b>' +
-        state.code +
-        '</b></p>' +
-        row('Link', 'paypal.me/sheismagique') +
-        '<p class="hint"><a href="https://www.paypal.me/sheismagique" target="_blank" rel="noopener">Ir a PayPal →</a></p>'
-      );
-    }
-    if (method === 'alt') return '<p>Crypto / WU — WhatsApp con código <b>' + state.code + '</b>.</p>';
-    return (
-      '<p>Transferencia · <b>$444 MXN</b> · concepto <b>' +
-      state.code +
-      '</b></p>' +
-      row('Nombre', 'Paulina López Gutiérrez') +
-      row('CLABE NVIO', '710969000048503916') +
-      row('CLABE Banregio', '058470000010260425')
-    );
-  }
-
-  function renderPay() {
-    setProgress(88);
-    setMood('pay');
-    if (!state.code) {
-      state.code = makeCode();
-      saveState();
-    }
-    var methods = t.methods;
-    var active = methods[0].id;
-    root.innerHTML =
-      '<section class="stage report-stage">' +
-      '<p class="kicker">' +
-      t.codeLabel +
-      '</p>' +
-      '<h2>' +
-      t.payTitle +
-      '</h2>' +
-      '<p class="lead">' +
-      t.payLead +
-      '</p>' +
-      '<div class="order-card">' +
-      '<span class="order-card-label">' +
-      t.codeLabel +
-      '</span>' +
-      '<strong class="order-card-code">' +
-      state.code +
-      '</strong>' +
-      '<button type="button" class="btn btn-ghost copy-btn" id="btnCopyCode">' +
-      t.copyCode +
-      '</button></div>' +
-      '<div class="pay-box"><div class="pay-tabs" id="payTabs"></div><div class="pay-panel" id="payPanel"></div></div>' +
-      '<div class="cta-row" style="margin-top:1.1rem">' +
-      '<button type="button" class="btn btn-solid" id="btnPaid">' +
-      t.paidCta +
-      '</button>' +
-      '<a class="btn btn-ghost" id="waPay" target="_blank" rel="noopener">' +
-      t.waPay +
-      '</a></div>' +
-      '<div class="waiting">' +
-      t.keyWait +
-      '</div>' +
-      '<p class="hint">' +
-      t.keyHint +
-      '</p>' +
-      '<div class="unlock-box">' +
-      '<label for="keyIn">' +
-      t.keyLabel +
-      '</label>' +
-      '<input id="keyIn" maxlength="12" placeholder="' +
-      t.keyPlaceholder +
-      '" autocomplete="one-time-code">' +
-      '<div class="cta-row"><button type="button" class="btn btn-solid" id="btnKey">' +
-      t.keyCta +
-      '</button></div>' +
-      '<p class="err" id="keyErr"></p></div></section>';
-
-    var tabs = document.getElementById('payTabs');
-    var panel = document.getElementById('payPanel');
-    function paint(id) {
-      active = id;
-      tabs.querySelectorAll('.pay-tab').forEach(function (b) {
-        b.classList.toggle('active', b.dataset.m === id);
-      });
-      panel.innerHTML = payPanelHtml(id);
-      panel.querySelectorAll('.copy-btn').forEach(function (b) {
-        b.onclick = function () {
-          copyText(b, b.getAttribute('data-c'));
-        };
-      });
-    }
-    methods.forEach(function (m) {
-      var b = document.createElement('button');
-      b.type = 'button';
-      b.className = 'pay-tab';
-      b.dataset.m = m.id;
-      b.textContent = m.label;
-      b.onclick = function () {
-        paint(m.id);
-      };
-      tabs.appendChild(b);
-    });
-    paint(active);
-
-    document.getElementById('btnCopyCode').onclick = function () {
-      copyText(document.getElementById('btnCopyCode'), state.code);
-    };
-
-    var aName = state.archetype ? archCopy(state.archetype).name : '?';
-    var waMsg =
-      LANG === 'en'
-        ? 'Hi! I paid the Unconscious Report ($26 USD). Code: ' + state.code + '. Pattern: ' + aName + '. Please send my access key.'
-        : 'Hola! Ya pagué el Reporte del Inconsciente ($444 MXN). Código: ' + state.code + '. Patrón: ' + aName + '. Por favor envíenme la clave de acceso.';
-    document.getElementById('waPay').href = waUrl(waMsg);
-
-    document.getElementById('btnPaid').onclick = function () {
-      notifyTeam('paid');
-      state.notified = true;
-      saveState();
-      pulseFlash();
-    };
-
-    document.getElementById('btnKey').onclick = async function () {
-      var err = document.getElementById('keyErr');
-      var key = document.getElementById('keyIn').value;
-      err.textContent = '';
-      try {
-        var res = await fetch(UNLOCK_FN, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'verify', orderId: state.code, key: key })
-        });
-        var data = await res.json();
-        if (!data.ok) {
-          throw new Error(
-            LANG === 'en'
-              ? 'Wrong key for ' + state.code + '. Wait for Pauline’s key after payment verification.'
-              : 'Clave incorrecta para ' + state.code + '. Espera la clave de Pauline tras verificar tu pago.'
-          );
-        }
-        state.unlocked = true;
-        state.keyVerified = true;
-        state.step = 'full';
-        saveState();
-        pulseFlash();
-        render();
-      } catch (e) {
-        err.textContent = e.message || String(e);
-      }
     };
   }
 
@@ -1033,11 +688,31 @@
       var list = names.slice(0, pack).join(' + ');
       if (LANG === 'en') {
         return waUrl(
-          'Hi! Unconscious Report paid (' + state.code + '). Pack ' + pack + ': ' + list + '. Difference only: ' + formatDiff(pack) + ' ($26 credit).'
+          'Hi! I finished the Unconscious Report (' +
+            (state.code || '') +
+            '). Pattern: ' +
+            title +
+            '. I want pack ' +
+            pack +
+            ': ' +
+            list +
+            ' · ' +
+            formatPrice(pack) +
+            '.'
         );
       }
       return waUrl(
-        'Hola! Reporte pagado (' + state.code + '). Pack ' + pack + ': ' + list + '. Solo diferencia: ' + formatDiff(pack) + ' (crédito $444).'
+        'Hola! Terminé el Reporte del Inconsciente (' +
+          (state.code || '') +
+          '). Patrón: ' +
+          title +
+          '. Quiero pack ' +
+          pack +
+          ': ' +
+          list +
+          ' · ' +
+          formatPrice(pack) +
+          '.'
       );
     }
     var answersHtml =
@@ -1087,9 +762,6 @@
       '</h3><p style="margin-top:.35rem">' +
       esc(protocol) +
       '</p></div>' +
-      '<div class="price-line">' +
-      t.creditNote +
-      '</div>' +
       '<h2 style="margin-top:1.6rem;font-size:1.55rem">' +
       t.upsellTitle +
       '</h2>' +
@@ -1105,21 +777,21 @@
       '">' +
       t.buy1 +
       ' · ' +
-      formatDiff(1) +
+      formatPrice(1) +
       '</a>' +
       '<a class="btn" target="_blank" rel="noopener" href="' +
       waBuy(2) +
       '">' +
       t.buy2 +
       ' · ' +
-      formatDiff(2) +
+      formatPrice(2) +
       '</a>' +
       '<a class="btn" target="_blank" rel="noopener" href="' +
       waBuy(3) +
       '">' +
       t.buy3 +
       ' · ' +
-      formatDiff(3) +
+      formatPrice(3) +
       '</a>' +
       '<a class="btn btn-ghost" href="' +
       t.homeHref +
@@ -1131,14 +803,8 @@
   function render() {
     if (state.step === 'start') renderStart();
     else if (state.step === 'question') renderQuestion();
-    else if (state.step === 'mini') renderMini();
-    else if (state.step === 'pay') renderPay();
-    else if (state.step === 'full') {
-      if (!(state.unlocked && state.keyVerified)) {
-        state.step = 'pay';
-        renderPay();
-      } else renderFull();
-    } else renderStart();
+    else if (state.step === 'full') renderFull();
+    else renderStart();
   }
 
   // Soft background motion only
