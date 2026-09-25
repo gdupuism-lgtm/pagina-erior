@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Reto 28 Admin · códigos</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="protocolo.css?v=22">
+</head>
+<body class="is-admin">
+  <div class="sky" aria-hidden="true"></div>
+  <div class="aurora" aria-hidden="true"></div>
+  <div class="wrap" style="padding-bottom:3rem">
+    <header class="topbar">
+      <a class="brand" href="index.html">Erior · Reto 28</a>
+      <span class="top-link">Solo tú</span>
+    </header>
+
+    <div id="loginView" class="card foil-card">
+      <span class="kicker">Admin Reto 28</span>
+      <h2 class="sec-title">Códigos</h2>
+      <p class="sec-sub">Misma clave que Alicia. En local también sirve <code>ERIOR28</code>.</p>
+      <label for="adminKey">Clave</label>
+      <input id="adminKey" type="password" autocomplete="current-password">
+      <button type="button" class="btn btn-gold btn-full" id="btnLogin" style="margin-top:1rem">Entrar</button>
+      <p class="note" id="loginMsg" style="color:#e8b1a0"></p>
+    </div>
+
+    <div id="panelView" class="hidden">
+      <section>
+        <span class="kicker">Por cada audio que vendas</span>
+        <h1 class="title-3d" aria-label="Tú abres 30 días.">
+          <span class="title-depth">Tú abres 30 días.</span>
+          <span class="title-foil">Tú abres 30 días.</span>
+        </h1>
+        <ol class="flow-list">
+          <li>Le mandas el audio y le das la app.</li>
+          <li>Aquí escribes su nombre. Generas el código.</li>
+          <li>30 días. Máximo laptop + celular.</li>
+          <li>Si vuelve a comprar: +30 días. Sus datos se quedan.</li>
+        </ol>
+      </section>
+
+      <section class="card foil-card">
+        <span class="kicker">Nuevo acceso</span>
+        <div class="grid-2">
+          <div>
+            <label for="fName">Nombre (así sale en el muro)</label>
+            <input id="fName" placeholder="Camila">
+          </div>
+          <div>
+            <label for="fContact">WhatsApp (solo lo ves tú)</label>
+            <input id="fContact" placeholder="521...">
+          </div>
+        </div>
+        <label>Audios que le mandas</label>
+        <div class="choices">
+          <label class="chip"><input type="radio" name="fPack" value="1" checked> 1 audio</label>
+          <label class="chip"><input type="radio" name="fPack" value="2"> 2 audios</label>
+          <label class="chip"><input type="radio" name="fPack" value="3"> 3 audios</label>
+        </div>
+        <label for="fNotes">Nota interna</label>
+        <input id="fNotes" placeholder="Audio MONEY TECH · 25 sep">
+        <button type="button" class="btn btn-gold btn-full" id="btnIssue" style="margin-top:1rem">Generar y copiar WhatsApp</button>
+        <p class="note" id="issueMsg"></p>
+        <div id="issueBox" class="hidden" style="margin-top:1rem"></div>
+      </section>
+
+      <section class="card foil-card">
+        <span class="kicker">Entregados</span>
+        <div id="codeList"></div>
+      </section>
+
+      <section class="card foil-card">
+        <span class="kicker">Muro</span>
+        <p class="sec-sub">Lo que ves aquí es lo que ven todas. Si no te gusta, bórralo.</p>
+        <div id="wallAdmin"></div>
+      </section>
+
+      <section class="card foil-card">
+        <span class="kicker">Notificaciones</span>
+        <p class="copy">Llega a quienes ya activaron en su celular.</p>
+        <label for="pushBody">Mensaje</label>
+        <textarea id="pushBody" placeholder="Reto 28. Tus pasos de hoy."></textarea>
+        <button type="button" class="btn btn-gold btn-full" id="btnPush" style="margin-top:1rem">Enviar ahora</button>
+        <p class="note" id="pushMsg"></p>
+      </section>
+    </div>
+  </div>
+  <script src="access.js?v=22"></script>
+  <script>
+    var key = '';
+    function $(id) { return document.getElementById(id); }
+    function packVal() {
+      var el = document.querySelector('[name="fPack"]:checked');
+      return el ? el.value : '1';
+    }
+    function left(c) {
+      if (!c.expires_at) return 30;
+      return Math.max(0, Math.ceil((new Date(c.expires_at).getTime() - Date.now()) / 86400000));
+    }
+    function waText(row) {
+      var origin = location.origin + location.pathname.replace(/admin\.html.*/, 'index.html');
+      return [
+        'Ya tienes tu acceso al Reto 28.',
+        '',
+        'Ábrelo aquí:',
+        origin + '?acceso=' + encodeURIComponent(row.code),
+        '',
+        'Código: ' + row.code,
+        'Vigencia: 30 días. Tus audios y tu ficha se quedan.',
+        '',
+        'Luego: Compartir → Añadir a pantalla de inicio.'
+      ].join('\n');
+    }
+    function renderList(codes) {
+      if (!codes.length) { $('codeList').innerHTML = '<p class="copy">Aún no entregas accesos.</p>'; return; }
+      $('codeList').innerHTML = codes.map(function (c) {
+        var n = left(c);
+        var used = (c.devices && c.devices.length) || 0;
+        var max = c.max_devices || 2;
+        var state = c.active === false ? 'cerrado' : (n <= 0 ? 'vencido' : n + ' días');
+        return '<div class="pay-row admin-code"><span><b>' + (c.client_name || '') + '</b> · ' + state + ' · ' + used + '/' + max + ' aparatos<br><code>' + c.code + '</code></span>' +
+          '<span class="admin-btns">' +
+          '<button type="button" data-wa="' + encodeURIComponent(waText(c)) + '">WA</button>' +
+          '<button type="button" data-plus="' + c.code + '">+30</button>' +
+          '<button type="button" data-free="' + c.code + '">Aparatos</button>' +
+          '</span></div>';
+      }).join('');
+      document.querySelectorAll('[data-wa]').forEach(function (b) {
+        b.onclick = function () {
+          window.open('https://wa.me/5214432311761?text=' + b.getAttribute('data-wa'), '_blank');
+        };
+      });
+      document.querySelectorAll('[data-plus]').forEach(function (b) {
+        b.onclick = function () {
+          P28Access.reactivate(b.getAttribute('data-plus'), key).then(function () { refresh(); });
+        };
+      });
+      document.querySelectorAll('[data-free]').forEach(function (b) {
+        b.onclick = function () {
+          P28Access.resetDevices(b.getAttribute('data-free'), key).then(function () { refresh(); });
+        };
+      });
+    }
+    function renderWallAdmin(items) {
+      if (!items.length) { $('wallAdmin').innerHTML = '<p class="copy">Muro vacío.</p>'; return; }
+      $('wallAdmin').innerHTML = items.map(function (w) {
+        return '<div class="pay-row"><span><b>' + w.who + '</b>' + (w.day ? ' · día ' + w.day : '') + '<br>' + w.txt + '</span><button type="button" data-del="' + (w.id || '') + '">Borrar</button></div>';
+      }).join('');
+      document.querySelectorAll('[data-del]').forEach(function (b) {
+        b.onclick = function () {
+          if (!b.getAttribute('data-del')) return;
+          P28Access.deleteWall(b.getAttribute('data-del'), key).then(function () { refresh(); });
+        };
+      });
+    }
+    function refresh() {
+      P28Access.listCodes(key).then(renderList);
+      P28Access.getWall().then(renderWallAdmin);
+    }
+    $('btnPush') && ($('btnPush').onclick = function () {
+      var body = $('pushBody').value.trim() || 'Reto 28. Tus pasos de hoy.';
+      P28Access.broadcast('ERIOR', body, key).then(function (res) {
+        var n = res.data && res.data.sent;
+        $('pushMsg').textContent = 'Enviado a ' + (n || 0) + ' celulares.';
+      });
+    });
+    $('btnLogin').onclick = function () {
+      key = $('adminKey').value.trim();
+      if (P28Access.checkLocalAdmin(key)) {
+        $('loginView').classList.add('hidden');
+        $('panelView').classList.remove('hidden');
+        refresh();
+        return;
+      }
+      P28Access.call('list', {}, key).then(function (res) {
+        if (!res.ok) { $('loginMsg').textContent = 'Clave incorrecta o API no disponible. En local prueba ERIOR28.'; return; }
+        $('loginView').classList.add('hidden');
+        $('panelView').classList.remove('hidden');
+        renderList((res.data && res.data.codes) || []);
+      });
+    };
+    $('btnIssue').onclick = function () {
+      var name = $('fName').value.trim();
+      if (name.length < 2) { $('issueMsg').textContent = 'Nombre de quien recibe el audio.'; return; }
+      P28Access.issue({ name: name, pack: packVal(), contact: $('fContact').value, notes: $('fNotes').value, days: 30 }, key).then(function (row) {
+        var text = waText(row);
+        $('issueBox').classList.remove('hidden');
+        $('issueBox').innerHTML = '<p class="copy">Código <b>' + row.code + '</b> para ' + row.client_name + ' · 30 días</p>';
+        navigator.clipboard.writeText(text).catch(function () {});
+        var num = String($('fContact').value).replace(/\D/g, '');
+        if (num.length >= 10) window.open('https://wa.me/' + num + '?text=' + encodeURIComponent(text), '_blank');
+        $('issueMsg').textContent = 'Acceso creado. 30 días. 2 aparatos.';
+        refresh();
+      });
+    };
+  </script>
+</body>
+</html>

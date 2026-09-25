@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <defs>
+    <radialGradient id="fill" cx="38%" cy="32%" r="78%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="70%" stop-color="#7effb2"/>
+      <stop offset="100%" stop-color="#3dffc5"/>
+    </radialGradient>
+  </defs>
+  <circle cx="100" cy="100" r="94" fill="#06140c" stroke="#7effb2" stroke-width="6"/>
+  <circle cx="100" cy="100" r="82" fill="url(#fill)" stroke="#0b3d28" stroke-width="4"/>
+  <text x="100" y="108" text-anchor="middle" font-family="Georgia,serif" font-size="52" fill="#06140c">28</text>
+  <text x="100" y="132" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" letter-spacing="3" fill="#06140c">OFICIAL</text>
+</svg>

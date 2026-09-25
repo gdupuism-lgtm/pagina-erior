@@ -1,0 +1,61 @@
+window.P28_PHRASES = [
+  { t: 'ERIOR', x: 'Las decisiones son portales. Eliges, y el pasillo aparece.' },
+  { t: 'ERIOR', x: 'No todo lo que no ves es imaginación. Parte ya está ocurriendo fuera de tu rango.' },
+  { t: 'ERIOR', x: 'Sigue la emoción más alta que puedas sostener ahora. Eso es el camino.' },
+  { t: 'ERIOR', x: 'No hay coincidencias. Hay alineación que todavía no nombras.' },
+  { t: 'ERIOR', x: 'El miedo es excitación sin aliento. Respira. Sigue.' },
+  { t: 'ERIOR', x: 'Eres una frecuencia que elige. El mundo se reordena alrededor.' },
+  { t: 'ERIOR', x: 'No esperes permiso del resultado. El resultado espera tu estado.' },
+  { t: 'ERIOR', x: 'La versión de ti que ya lo tiene no pregunta si es posible.' },
+  { t: 'ERIOR', x: 'Lo invisible no es vacío. Es materia que aún no compactaste.' },
+  { t: 'ERIOR', x: 'Cada “sí” abre una puerta que el “después” mantiene cerrada.' },
+  { t: 'ERIOR', x: 'No persigas. Irradias. Lo que es tuyo reconoce la señal.' },
+  { t: 'ERIOR', x: 'Dudar no cancela el portal. Solo te deja parado frente a él.' },
+  { t: 'ERIOR', x: 'El tiempo no te retrasa. Te entrega el instante en que ya puedes sostenerlo.' },
+  { t: 'ERIOR', x: 'Actúa como el que ya cruzó. El puente se construye bajo ese peso.' },
+  { t: 'ERIOR', x: 'Tu propósito no es un deseo. Es una coordenada. Camina hacia ella.' },
+  { t: 'ERIOR', x: 'Si hoy se siente “nada”, estás en la capa donde se instala. No te salgas.' },
+  { t: 'ERIOR', x: 'El programa viejo grita cuando pierde el control. Eso es evidencia, no fracaso.' },
+  { t: 'ERIOR', x: 'No comparezcas ante tu día 0. Comparece ante el sí que diste.' },
+  { t: 'ERIOR', x: 'Lo que pides ya te está buscando. Ponte localizable: estado + audio.' },
+  { t: 'ERIOR', x: 'Una decisión limpia vale más que mil visualizaciones flojas.' },
+  { t: 'ERIOR', x: 'No todo lo real cabe en los ojos. Parte cabe en la frecuencia.' },
+  { t: 'ERIOR', x: 'Cierra el chat. Abre el portal. Tu futuro no está en el scroll.' },
+  { t: 'ERIOR', x: 'Sostén. El universo no premia la ansiedad. Premia la constancia en calma.' },
+  { t: 'ERIOR', x: 'Hoy no se evalúa. Hoy se instala. El ver llega después del ser.' },
+  { t: 'ERIOR', x: 'Eres el que elige la realidad, no el que espera el recuento.' },
+  { t: 'ERIOR', x: 'Si cambias de audio a mitad, cambias de portal. Sostén el que abriste.' },
+  { t: 'ERIOR', x: '11:11. Estás en el reto. No en el piloto automático.' },
+  { t: 'ERIOR', x: 'La excitación que sientes es el yo nuevo pidiendo paso. Déjalo pasar.' },
+  { t: 'ERIOR', x: 'No hay “muy tarde”. Hay “ahora que ya puedes sostenerlo”.' },
+  { t: 'ERIOR', x: 'Cada casilla es una línea del testimonio del día 28.' },
+  { t: 'ERIOR', x: 'Paz no es no sentir. Es no soltar cuando sientes.' },
+  { t: 'ERIOR', x: 'El brillo no es el resultado. El brillo es que volviste a los pasos.' }
+];
+
+window.P28_LISTEN = [
+  { t: 'ERIOR', x: '¿Ya escuchaste tu audio hoy?' },
+  { t: 'ERIOR', x: 'Tu audio. Ahora. El portal no se abre con intención suelta.' },
+  { t: 'ERIOR', x: 'Noche: bocina bajito, loop. El subconsciente trabaja si le das frecuencia.' },
+  { t: 'ERIOR', x: 'Día: audífonos. Mínimo un bloque. ¿Ya lo pusiste?' },
+  { t: 'ERIOR', x: 'Si se complica: volumen bajo, pero que se oiga. No rompas la racha.' }
+];
+
+window.P28_CATALOG = [
+  { id: 'satori', name: 'SATORI', pitch: 'Satori instala el clic: el instante en que dejas de buscar y ya estás. Despiertas al “es ahora”.' },
+  { id: 'booster', name: 'Booster 2.0', pitch: 'Booster 2.0 limpia loops, ruido mental y el programa viejo. Deja espacio para que entre lo nuevo.' },
+  { id: 'limitless', name: 'LIMITLESS', pitch: 'LIMITLESS instala foco láser. Mente despierta. Menos niebla, más dirección.' },
+  { id: 'imagine', name: 'IMAGINE', pitch: 'IMAGINE instala imaginar desde el resultado. Ya soy. Ya ocurrió.' },
+  { id: 'seduction', name: 'SEDUCTION', pitch: 'SEDUCTION instala magnetismo. Dejas de perseguir. Te vuelves señal.' },
+  { id: 'magic4', name: 'Amor Propio Magic 4.0', pitch: 'Magic 4.0 instala merecimiento. Corta la validación externa.' },
+  { id: 'masterMind', name: 'MASTER MIND', pitch: 'MASTER MIND corta autosabotaje. Sostienes lo que empiezas.' },
+  { id: 'identity', name: 'Identity', pitch: 'Identity instala al personaje principal. Propósito. Tú al centro.' },
+  { id: 'moneyTech', name: 'MONEY TECH', pitch: 'MONEY TECH instala el canal de dinero día y noche.' },
+  { id: 'abundance', name: 'Master Abundance', pitch: 'Master Abundance instala identidad de abundancia para negocio.' },
+  { id: 'vitamind', name: 'VITAMIND', pitch: 'VITAMIND instala energía y vitalidad en el cuerpo.' },
+  { id: 'fitWave', name: 'FIT WAVE', pitch: 'FIT WAVE instala creencias nuevas del cuerpo y la forma.' },
+  { id: 'keepCool', name: 'KEEP COOL', pitch: 'KEEP COOL instala paz. Dejas de reaccionar al ruido.' },
+  { id: 'eclat', name: 'Éclat', pitch: 'Éclat instala avatar y resplandor. Te ves como quien ya llegó.' },
+  { id: 'lucky', name: 'Lucky', pitch: 'Lucky instala suerte y timing. Las puertas se alinean.' },
+  { id: 'hombre', name: 'Amor Propio Magic Hombre 2.0', pitch: 'Magic Hombre instala sostenerte tú. Independencia y seguridad.' }
+];

@@ -1,0 +1,14 @@
+{
+  "name": "Reto de Manifestación · 28 días",
+  "short_name": "Reto 28",
+  "description": "Reto de Manifestación 28 días: rutina, audios, calendario y muro oficial.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#050a08",
+  "theme_color": "#050a08",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

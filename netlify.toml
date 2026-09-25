@@ -135,3 +135,32 @@
 
 [functions.libro-file]
   timeout = 26
+
+[functions.p28-api]
+  timeout = 20
+
+[[redirects]]
+  from = "/reto-28"
+  to = "/protocolo-28/"
+  status = 301
+
+[[redirects]]
+  from = "/reto-28/*"
+  to = "/protocolo-28/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/reto28"
+  to = "/protocolo-28/"
+  status = 301
+
+[[redirects]]
+  from = "/reto28/*"
+  to = "/protocolo-28/:splat"
+  status = 200
+
+[[headers]]
+  for = "/protocolo-28/*.mp4"
+  [headers.values]
+    Content-Type = "video/mp4"
+    Accept-Ranges = "bytes"

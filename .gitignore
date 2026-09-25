@@ -32,3 +32,7 @@ proyecto-farmacia-erior/
 # Archivos grandes opcionales (descomenta si no quieres en GitHub)
 # testimonio1.mp4
 # *.glb
+
+# Reto 28 — códigos y claves no van al sitio público
+protocolo-28/data.json
+protocolo-28/vapid.json

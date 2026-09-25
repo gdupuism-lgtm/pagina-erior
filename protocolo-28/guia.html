@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cómo usar el Reto 28 · Erior Center</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,400&family=Jost:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{background:#1a1a1a;color:#142018;font-family:Jost,sans-serif}
+    .bar{position:sticky;top:0;z-index:5;display:flex;gap:.6rem;justify-content:center;padding:.8rem;background:#111;border-bottom:1px solid #333}
+    .bar button,.bar a{border:0;background:#7effb2;color:#06140c;padding:.7rem 1.1rem;border-radius:999px;font:700 .7rem Syne,sans-serif;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;cursor:pointer}
+    .bar a{background:transparent;color:#7effb2;border:1px solid #7effb2}
+    .sheet{width:min(900px,94vw);margin:1.2rem auto 3rem}
+    .page{background:#f4f7f2;color:#142018;border-radius:4px;padding:18mm 16mm 18mm;margin:0 0 1.2rem;min-height:1040px;position:relative;page-break-after:always;box-shadow:0 8px 28px rgba(0,0,0,.25)}
+    .brand{font-family:Syne,sans-serif;font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:#0b5c3a}
+    h1{font-family:"Cormorant Garamond",Georgia,serif;font-weight:400;font-size:42px;line-height:.95;margin:.25rem 0 .4rem}
+    h2{font-family:"Cormorant Garamond",Georgia,serif;font-weight:400;font-size:28px;margin:0 0 8px}
+    h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:400;font-size:18px}
+    .sub{font-family:"Cormorant Garamond",Georgia;font-style:italic;font-size:20px;color:#c43d78;margin-bottom:10px}
+    p,li{font-size:13.8px;line-height:1.5}
+    .seals{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin:16px 0 8px}
+    .seal{width:140px;text-align:center}
+    .seal-ring{width:120px;height:120px;margin:0 auto 8px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;border:7px solid #0b3d28;box-shadow:0 0 0 5px #f4f7f2, 0 0 0 8px #0b3d28}
+    .seal-ring b{font-family:"Cormorant Garamond",Georgia;font-size:36px;line-height:1;color:#06140c}
+    .seal-ring span{font-family:Syne,sans-serif;font-size:8px;letter-spacing:.14em;margin-top:4px}
+    .s-off{background:radial-gradient(circle at 40% 35%,#fff,#7effb2 70%,#3dffc5)}
+    .s-reto{background:radial-gradient(circle at 40% 35%,#fff,#ff9ec4 62%,#ff6ba8);border-color:#8a1848}
+    .s-acc{background:radial-gradient(circle at 40% 35%,#fff,#b8f6ff 62%,#5ef6ff);border-color:#0a5a66}
+    .seal figcaption{font-size:11px;line-height:1.35;color:#2a3a30}
+    .seal figcaption strong{display:block;color:#06140c;margin-bottom:2px}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+    .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+    .card{border:1.5px solid #c5d4ca;border-radius:12px;padding:11px 12px;background:#fff}
+    .num{font-family:Syne,sans-serif;font-size:10px;letter-spacing:.14em;color:#0b5c3a;text-transform:uppercase}
+    .phone{width:210px;margin:0 auto;border:3px solid #0b3d28;border-radius:28px;padding:7px 7px 10px;background:#04110c;box-shadow:0 10px 0 #0a2a1c, 0 16px 24px rgba(0,0,0,.22)}
+    .notch{width:68px;height:7px;border-radius:8px;background:#7effb2;margin:2px auto 7px}
+    .screen{min-height:320px;border-radius:18px;background:radial-gradient(circle at 20% 0%,#1a3a2a 0%,#06140c 55%);color:#e8fff4;padding:10px;position:relative;overflow:hidden}
+    .screen:before{content:"";position:absolute;inset:auto -20% -30% 20%;height:140px;background:radial-gradient(circle,#ff6ba833,transparent 70%);pointer-events:none}
+    .screen h3{color:#7effb2}
+    .dock{display:flex;justify-content:space-between;margin-top:10px;font-size:7px;letter-spacing:.05em;text-transform:uppercase;color:#8aa896;position:relative;z-index:1}
+    .dock b{color:#ff6ba8}
+    .ig{font-family:Syne,sans-serif;font-size:13px;letter-spacing:.04em;color:#7effb2;margin-bottom:6px}
+    .stories{display:flex;gap:6px;margin:0 0 8px}
+    .st{width:34px;text-align:center;font-size:6.5px;color:#c8e8d6}
+    .st i{display:block;width:28px;height:28px;margin:0 auto 3px;border-radius:50%;border:2px solid #ff6ba8;background:linear-gradient(135deg,#7effb2,#5ef6ff)}
+    .post{border:1px solid #1d3a2c;border-radius:10px;padding:7px;margin:0 0 7px;background:#071810;position:relative;z-index:1}
+    .who{display:flex;gap:6px;align-items:center;font-size:8px;margin-bottom:5px}
+    .av{width:16px;height:16px;border-radius:50%;background:linear-gradient(135deg,#7effb2,#ff6ba8);color:#06140c;display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:700}
+    .vid{height:54px;border-radius:8px;background:linear-gradient(180deg,#123226,#0a1c14);display:flex;align-items:center;justify-content:center;color:#7effb2;font-size:18px}
+    .chk{font-size:9.5px;padding:4px 0;border-bottom:1px solid #1d3328;color:#d4efe0}
+    .gold{margin-top:8px;padding:7px;border-radius:99px;background:linear-gradient(90deg,#7effb2,#ff6ba8);color:#06140c;text-align:center;font-size:9px;font-weight:800;letter-spacing:.06em}
+    .field{margin-top:8px;padding:7px 10px;border-radius:99px;border:1px solid #2a4a38;font-size:9px;color:#9ecbb4}
+    .cap{text-align:center;font-size:12px;margin-top:8px;color:#2a3a30}
+    .foot{position:absolute;left:16mm;right:16mm;bottom:11mm;display:flex;justify-content:space-between;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#5a6e62}
+    .warn{border:2px solid #c43d78;background:#ffe8f1;padding:11px 13px;border-radius:10px;margin:10px 0}
+    ol{margin:.25rem 0 0 1.1rem}
+    ol li{margin:.32rem 0}
+    .center{text-align:center;padding-top:20px}
+    .arrow{font-size:11px;color:#0b5c3a;font-weight:700}
+    .cal{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin:8px 0}
+    .cal i{display:block;height:16px;border-radius:4px;background:#d5e0d8}
+    .cal i.on{background:linear-gradient(135deg,#7effb2,#ff6ba8)}
+    @media print{
+      .bar{display:none}
+      body{background:#fff}
+      .sheet{width:auto;margin:0}
+      .page{box-shadow:none;margin:0;min-height:auto;break-after:page;border-radius:0}
+      .page:last-child{break-after:auto}
+    }
+  </style>
+</head>
+<body>
+  <div class="bar">
+    <button type="button" onclick="window.print()">Descargar / imprimir PDF</button>
+    <a href="index.html">Volver al reto</a>
+  </div>
+  <div class="sheet">
+
+    <article class="page center">
+      <p class="brand">Erior Center · She Is Magique · Documento oficial</p>
+      <h1>Cómo usar tu Reto 28</h1>
+      <p class="sub">Guía visual. Toca lo que ves en las fotos.</p>
+      <p>Esta app te la manda Erior cuando ya tienes tu audio.<br>Entras con tu código P28. No hay compras dentro de la app.</p>
+      <div class="seals">
+        <figure class="seal">
+          <div class="seal-ring s-off"><b>28</b><span>OFICIAL</span></div>
+          <figcaption><strong>Sello verde</strong>Esta guía es de Erior Center.</figcaption>
+        </figure>
+        <figure class="seal">
+          <div class="seal-ring s-reto"><b>28</b><span>RETO</span></div>
+          <figcaption><strong>Sello rosa</strong>28 días de pasos, no un audio suelto.</figcaption>
+        </figure>
+        <figure class="seal">
+          <div class="seal-ring s-acc"><b>P28</b><span>CÓDIGO</span></div>
+          <figcaption><strong>Sello cian</strong>Sin el código que te mandamos, no abre.</figcaption>
+        </figure>
+      </div>
+      <div class="card" style="text-align:left;margin-top:10px">
+        <span class="num">Qué vas a ver en este PDF</span>
+        <p style="margin-top:6px">Cada página tiene una foto del celular y flechas de “toca aquí”. El menú de abajo siempre es el mismo: <b>Inicio · Audios · Días · Muro · Yo</b>.</p>
+      </div>
+      <p style="margin-top:16px;font-size:13px">eriorcenter@gmail.com · WhatsApp +52 1 443 231 1761 · @eriorcenter · @sheismagique</p>
+      <div class="foot"><span>P28-GUIA-USO</span><span>1 / 8</span></div>
+    </article>
+
+    <article class="page">
+      <p class="brand">Paso 1 · La portada</p>
+      <h2>Primero ves “Reto 28”. Toca la pantalla.</h2>
+      <p class="sub">No te asustes si no ves el video todavía. Esa es la portada.</p>
+      <div class="grid2" style="margin-top:12px">
+        <div>
+          <div class="phone">
+            <div class="notch"></div>
+            <div class="screen" style="min-height:360px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center">
+              <div style="width:46px;height:58px;border:2px solid #7effb2;border-radius:8px;margin-bottom:12px"></div>
+              <div style="font:800 28px Syne,sans-serif;color:#e8fff4;text-shadow:0 0 12px #7effb2">Reto 28</div>
+              <p style="margin-top:8px;font-size:11px;color:#9ecbb4">Erior Center</p>
+              <p style="margin-top:18px;font-size:10px;color:#ff6ba8">Toca para entrar</p>
+            </div>
+          </div>
+          <p class="cap"><b>Imagen 1.</b> Portada. Un toque en cualquier parte y pasas al código.</p>
+        </div>
+        <div>
+          <ol>
+            <li>Abre el link que te mandó Erior por WhatsApp.</li>
+            <li>Vas a ver letras grandes: <b>Reto 28</b>.</li>
+            <li>Abajo dice <b>Toca para entrar</b>. Toca.</li>
+            <li>Si te pide “Añadir a inicio”: en iPhone, Safari → Compartir → <b>Añadir a pantalla de inicio</b>. En Android, Chrome → <b>Instalar</b>.</li>
+          </ol>
+          <div class="card" style="margin-top:14px">
+            <span class="num">Si se ve en blanco</span>
+            <p>Usa Safari (iPhone) o Chrome (Android). No abras el archivo desde Descargas. Entra por el link.</p>
+          </div>
+        </div>
+      </div>
+      <div class="foot"><span>Portada → código → video → Inicio</span><span>2 / 8</span></div>
+    </article>
+
+    <article class="page">
+      <p class="brand">Paso 2 · Tu código</p>
+      <h2>Escribes el P28 y tocas Entrar.</h2>
+      <div class="grid2" style="margin-top:12px">
+        <div>
+          <div class="phone">
+            <div class="notch"></div>
+            <div class="screen">
+              <p class="num" style="color:#7effb2">Erior Center</p>
+              <h3 style="margin:8px 0 4px">Tu código</h3>
+              <p style="font-size:10px;opacity:.75">El que te mandó Erior. Entras y ya estás en tu reto.</p>
+              <div class="field">P28-XXXX-XXXX</div>
+              <div class="gold">ENTRAR</div>
+            </div>
+          </div>
+          <p class="cap"><b>Imagen 2.</b> Aquí pegas el código. El botón rosa-verde es <b>Entrar</b>.</p>
+        </div>
+        <div>
+          <ol>
+            <li>Copia el código del mensaje (empieza con <b>P28-</b>).</li>
+            <li>Pégalo en el recuadro.</li>
+            <li>Toca <b>Entrar</b>.</li>
+            <li>La primera vez llena tu ficha: nombre, Instagram, WhatsApp y 5 preguntas. Toca <b>Guardar mi ficha</b>.</li>
+            <li>Luego sale el video de bienvenida. Míralo. Toca <b>Entrar</b> otra vez y ya estás en Inicio.</li>
+          </ol>
+          <div class="warn"><b>Si no abre:</b> el código no es de un audio viejo. Es el P28 que Erior te mandó con esta app. Escríbenos por WhatsApp con tu nombre.</div>
+        </div>
+      </div>
+      <div class="foot"><span>El código es tu llave. No se comparte</span><span>3 / 8</span></div>
+    </article>
+
+    <article class="page">
+      <p class="brand">Paso 3 · Inicio</p>
+      <h2>Se ve como Instagram. El video siempre está aquí.</h2>
+      <div class="grid2" style="margin-top:10px">
+        <div>
+          <div class="phone">
+            <div class="notch"></div>
+            <div class="screen">
+              <p class="ig">Reto 28</p>
+              <div class="stories">
+                <div class="st"><i></i>Video</div>
+                <div class="st"><i style="background:linear-gradient(135deg,#ff6ba8,#7effb2)"></i>Hoy</div>
+                <div class="st"><i></i>Día 2</div>
+                <div class="st"><i></i>Día 3</div>
+              </div>
+              <div class="post">
+                <div class="who"><span class="av">E</span><b>Erior</b></div>
+                <div class="vid">▶</div>
+              </div>
+              <div class="post">
+                <div class="who"><span class="av">28</span><b>Pasos de hoy</b></div>
+                <div class="chk">☐ Noche: audio en loop</div>
+                <div class="chk">☐ Día: mínimo 4 h</div>
+                <div class="chk">☐ Completé los pasos</div>
+                <div class="gold">PONER MI AUDIO</div>
+              </div>
+              <div class="dock"><b>Inicio</b><span>Audios</span><span>Días</span><span>Muro</span><span>Yo</span></div>
+            </div>
+          </div>
+          <p class="cap"><b>Imagen 3.</b> Inicio. Historias arriba. Video en el centro. Pasos abajo. Menú rosa = dónde estás.</p>
+        </div>
+        <div>
+          <div class="card">
+            <span class="num">Qué tocas</span>
+            <p style="margin-top:6px"><b>Historias de arriba:</b> el primer círculo es el video otra vez.<br>
+            <b>Cuadro con ▶:</b> el mismo video de bienvenida, siempre en Inicio.<br>
+            <b>Pasos de hoy:</b> instrucciones del día (escribir, no scrollear, meditar 25 min, respiración, etc.).<br>
+            <b>Las 3 casillas:</b> noche + 4 horas + pasos. Cuando las 3 están, el día se sella.<br>
+            <b>Poner mi audio:</b> te manda a Audios.</p>
+          </div>
+          <div class="card" style="margin-top:10px">
+            <span class="num">Si te equivocaste</span>
+            <p>Puedes destildar una casilla. El día se destapa. En <b>Días</b> también: toca el cuadro y se quita.</p>
+          </div>
+        </div>
+      </div>
+      <div class="foot"><span>5 pestañas: Inicio · Audios · Días · Muro · Yo</span><span>4 / 8</span></div>
+    </article>
+
+    <article class="page">
+      <p class="brand">Paso 4 · Audios</p>
+      <h2>Propósito una sola vez. Luego tu bóveda.</h2>
+      <div class="grid2" style="margin-top:10px">
+        <div>
+          <div class="phone">
+            <div class="notch"></div>
+            <div class="screen">
+              <p class="ig">Audios</p>
+              <div class="post">
+                <p class="num" style="color:#7effb2">Propósito de tus 28 días</p>
+                <p style="font-size:9px;opacity:.75;margin:4px 0">Se escribe una sola vez</p>
+                <div class="field" style="border-radius:10px">quiero manifestar mucho dinero</div>
+                <div class="gold">SELLAR PROPÓSITO</div>
+              </div>
+              <div class="post">
+                <p class="num" style="color:#7effb2">Capa 1</p>
+                <h3 style="font-size:13px">Tu audio</h3>
+                <div style="height:6px;border-radius:99px;background:#1d3328;margin:8px 0;overflow:hidden"><i style="display:block;width:48%;height:100%;background:linear-gradient(90deg,#7effb2,#ff6ba8)"></i></div>
+                <p style="font-size:11px;text-align:center">◀ &nbsp; ▶ &nbsp; ▶▶ &nbsp; ∞</p>
+              </div>
+              <div class="dock"><span>Inicio</span><b>Audios</b><span>Días</span><span>Muro</span><span>Yo</span></div>
+            </div>
+          </div>
+          <p class="cap"><b>Imagen 4.</b> Audios. Primero sellas el propósito. Después play, barra y loop (∞).</p>
+        </div>
+        <ol>
+          <li>Escribe tu propósito (1 frase). Toca <b>Sellar propósito</b>. Ya no se cambia.</li>
+          <li>La app te arma un plan de escucha solo con los audios que Erior te asignó.</li>
+          <li>Toca <b>Elegir archivo</b> y sube el MP3/M4A que te mandamos. Queda en este aparato.</li>
+          <li>Ponle nombre (ejemplo: tu audio + “noche”).</li>
+          <li><b>Noche:</b> loop ON (∞), bocina bajito, que se oiga.<br><b>Día:</b> audífonos, mínimo 4 horas (puedes partirlas).</li>
+          <li>Si cambias de pestaña, el mini player sigue abajo.</li>
+        </ol>
+      </div>
+      <div class="card" style="margin-top:12px">
+        <span class="num">Regla de los 28 días</span>
+        <p style="margin-top:6px">No se cambia el audio a mitad. Si duele, se escucha igual. El plan no te pide comprar más dentro de la app.</p>
+      </div>
+      <div class="foot"><span>Propósito = 1 vez. Audios = los que te asignaron</span><span>5 / 8</span></div>
+    </article>
+
+    <article class="page">
+      <p class="brand">Paso 5 · Días y Muro</p>
+      <h2>Calendario que se puede deshacer. Muro con tu nombre.</h2>
+      <div class="grid2" style="margin-top:10px">
+        <div>
+          <div class="phone">
+            <div class="notch"></div>
+            <div class="screen">
+              <p class="ig">Días</p>
+              <p style="font-size:9px;opacity:.7;margin-bottom:6px">Tócalo otra vez y se quita</p>
+              <div class="cal">
+                <i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i><i></i>
+                <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+                <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+                <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+              </div>
+              <p style="font-size:8px;color:#9ecbb4">Tornasol = cumplido</p>
+              <div class="dock"><span>Inicio</span><span>Audios</span><b>Días</b><span>Muro</span><span>Yo</span></div>
+            </div>
+          </div>
+          <p class="cap"><b>Imagen 5.</b> 28 cuadros. Verde-rosa = día hecho. Un toque más = se borra ese día.</p>
+        </div>
+        <div>
+          <div class="phone">
+            <div class="notch"></div>
+            <div class="screen">
+              <p class="ig">Muro</p>
+              <div class="post">
+                <div class="who"><span class="av">C</span><b>Camila</b></div>
+                <p style="font-size:10px">Día 28. Me sostuve. El loop viejo ya no manda.</p>
+              </div>
+              <div class="field" style="border-radius:10px">Qué cambió. Sin inventar.</div>
+              <div class="gold">PUBLICAR</div>
+              <div class="dock"><span>Inicio</span><span>Audios</span><span>Días</span><b>Muro</b><span>Yo</span></div>
+            </div>
+          </div>
+          <p class="cap"><b>Imagen 6.</b> Muro. Solo sale tu nombre. Erior puede quitar un comentario.</p>
+        </div>
+      </div>
+      <div class="grid2" style="margin-top:12px">
+        <div class="card"><span class="num">Días</span><p>Si marcaste sin querer, toca el cuadro otra vez. También se limpian las casillas de ese día.</p></div>
+        <div class="card"><span class="num">Muro</span><p>El día 28 escribes qué se movió. Honesto. Sin inventar. Todas lo ven.</p></div>
+      </div>
+      <div class="foot"><span>Calendario persistente. Se puede deshacer</span><span>6 / 8</span></div>
+    </article>
+
+    <article class="page">
+      <p class="brand">Paso 6 · Yo</p>
+      <h2>Tus días restantes y un solo botón de avisos.</h2>
+      <div class="grid2" style="margin-top:10px">
+        <div>
+          <div class="phone">
+            <div class="notch"></div>
+            <div class="screen">
+              <p class="ig">Yo</p>
+              <div class="post">
+                <p class="num" style="color:#7effb2">Tu acceso</p>
+                <p style="font-size:12px;margin:6px 0">Quedan <b>30</b> días.</p>
+                <p style="font-size:9px;opacity:.7">Tus audios y tu ficha se quedan en este aparato.</p>
+              </div>
+              <div class="gold">TURN ON NOTIFICATIONS</div>
+              <p style="font-size:8px;text-align:center;margin-top:10px;color:#9ecbb4">PDF · Editar ficha</p>
+              <div class="dock"><span>Inicio</span><span>Audios</span><span>Días</span><span>Muro</span><b>Yo</b></div>
+            </div>
+          </div>
+          <p class="cap"><b>Imagen 7.</b> Yo. El botón largo enciende 4 avisos al día. Cuando está activo dice <b>On</b>.</p>
+        </div>
+        <div>
+          <div class="card">
+            <span class="num">Turn on notifications</span>
+            <p style="margin-top:6px">Un toque. El celular te pide permiso. Acepta. El botón cambia a <b>On</b>.</p>
+            <p style="margin-top:8px">Eso activa 4 avisos al día (escuchar, frase, recordatorio). Tú no los configuras: solo enciendes.</p>
+          </div>
+          <div class="card" style="margin-top:10px">
+            <span class="num">iPhone</span>
+            <p>Instala primero (Añadir a pantalla de inicio) y luego toca el botón. Si no, a veces no llegan.</p>
+          </div>
+          <div class="card" style="margin-top:10px">
+            <span class="num">A los 30 días</span>
+            <p>La app te avisa. No se borra tu ficha, ni tus audios, ni el calendario. Erior puede abrirte otros 30 días con el mismo código.</p>
+          </div>
+        </div>
+      </div>
+      <div class="foot"><span>Un botón. Cuatro avisos. Tus datos se quedan</span><span>7 / 8</span></div>
+    </article>
+
+    <article class="page">
+      <p class="brand">Cierre</p>
+      <h2>Las 4 semanas. Y si algo no abre.</h2>
+      <p class="sub">Ya diste el paso. Empieza esta noche.</p>
+      <div class="grid2" style="margin-top:8px">
+        <div class="card"><span class="num">Días 1–7</span><h3>Instalación</h3><p>Cumple los pasos. No evalúes.</p></div>
+        <div class="card"><span class="num">Días 8–14</span><h3>Limpieza</h3><p>Si duele: mismo audio.</p></div>
+        <div class="card"><span class="num">Días 15–21</span><h3>Recalibración</h3><p>El loop viejo pierde fuerza.</p></div>
+        <div class="card"><span class="num">Días 22–28</span><h3>Evidencia</h3><p>Día 28: testimonio al muro.</p></div>
+      </div>
+      <div class="warn" style="margin-top:14px">
+        <b>Mapa rápido:</b> Portada (toca) → código P28 → <b>Entrar</b> → ficha → video → Inicio. Menú de abajo para todo lo demás.
+      </div>
+      <div class="card" style="margin-top:12px">
+        <span class="num">Si algo no abre</span>
+        <p style="margin-top:6px">1. ¿El código es el P28 que te mandamos con esta app?<br>
+        2. ¿Mismo navegador donde guardaste la ficha?<br>
+        3. iPhone sin avisos: instala, luego <b>Turn on notifications</b>.<br>
+        4. WhatsApp +52 1 443 231 1761 · eriorcenter@gmail.com</p>
+      </div>
+      <div class="seals" style="margin-top:16px">
+        <figure class="seal">
+          <div class="seal-ring s-off"><b>28</b><span>OFICIAL</span></div>
+          <figcaption><strong>Oficial</strong>Si no te la mandamos nosotras, no es válida.</figcaption>
+        </figure>
+        <figure class="seal">
+          <div class="seal-ring s-reto"><b>28</b><span>RETO</span></div>
+          <figcaption><strong>Reto</strong>28 días de pasos. No es un audio suelto.</figcaption>
+        </figure>
+        <figure class="seal">
+          <div class="seal-ring s-acc"><b>P28</b><span>CÓDIGO</span></div>
+          <figcaption><strong>Acceso</strong>Si el código no abre, WhatsApp con tu nombre.</figcaption>
+        </figure>
+      </div>
+      <p style="margin-top:12px;font-size:13px">Erior Center · Reto de Manifestación 28 días · no sustituye atención médica, psicológica ni financiera.<br>© Erior Center · @eriorcenter · @sheismagique</p>
+      <div class="foot"><span>Solo quien ya recibió su audio y su código</span><span>8 / 8</span></div>
+    </article>
+
+  </div>
+</body>
+</html>

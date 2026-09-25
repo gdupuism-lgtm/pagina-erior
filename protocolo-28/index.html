@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#050a08">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Reto 28">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <meta name="description" content="Reto de Manifestación 28 días. App de audios Erior Center.">
+  <title>Reto 28 · Erior Center</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="protocolo.css?v=22">
+</head>
+<body class="is-boot">
+  <div class="sky" aria-hidden="true"></div>
+  <div class="aurora" aria-hidden="true"></div>
+  <div class="aurora-2" aria-hidden="true"></div>
+  <div class="beam" aria-hidden="true"></div>
+  <div class="beam-2" aria-hidden="true"></div>
+  <div class="orb orb-a" aria-hidden="true"></div>
+  <div class="orb orb-b" aria-hidden="true"></div>
+  <div class="orb orb-c" aria-hidden="true"></div>
+  <div class="sand" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="vignette" aria-hidden="true"></div>
+  <div class="mark28" aria-hidden="true">28</div>
+
+  <div id="bootSplash" class="boot-splash">
+    <div class="logo-mark" aria-hidden="true">
+      <svg viewBox="0 0 120 155" fill="none"><circle cx="60" cy="30" r="22" stroke="#7effb2" stroke-width="2.5"/><path d="M15 104 Q13 108 17 109 L103 109 Q107 109 105 104 L63 36 Q61 32 57 36 Z" stroke="#ff6ba8" stroke-width="2.5" stroke-linejoin="round"/><path d="M60 102 L96 124 Q99 127 96 130 L63 150 Q61 152 57 150 L24 130 Q21 127 24 124 Z" stroke="#5ef6ff" stroke-width="2.5" stroke-linejoin="round"/></svg>
+    </div>
+    <h1 class="title-3d" aria-label="Reto 28">
+      <span class="title-depth">Reto 28</span>
+      <span class="title-foil">Reto 28</span>
+    </h1>
+    <p class="hero-line">Erior Center</p>
+    <p class="boot-hint">Toca para entrar</p>
+  </div>
+
+  <div class="wrap">
+    <header class="ig-top no-print">
+      <p class="ig-logo">Reto 28</p>
+      <button type="button" class="ig-ico" id="btnInstall" aria-label="Instalar">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v10.2l3.2-3.2 1.4 1.4L12 17.2 7.4 11.4l1.4-1.4L11 13.2V3h1zm-7 14.5h14V21H5v-3.5z"/></svg>
+      </button>
+    </header>
+
+    <section id="expiredGate" class="no-print">
+      <div class="card foil-card gate-box">
+        <span class="kicker">Acceso</span>
+        <h2 class="sec-title">Se cumplieron los 30 días</h2>
+        <p class="sec-sub">Tus audios, tu ficha y tu calendario siguen en este aparato. No se borraron. Erior puede abrirte otros 30 días con el mismo código.</p>
+      </div>
+    </section>
+
+    <section id="gate" class="no-print">
+      <div class="card foil-card gate-box">
+        <span class="kicker">Erior Center</span>
+        <h2 class="sec-title">Tu código</h2>
+        <p class="sec-sub">El que te mandó Erior. Entras y ya estás en tu reto.</p>
+        <label for="accessCode">Código</label>
+        <input id="accessCode" type="text" autocomplete="off" placeholder="P28-XXXX-XXXX" autocapitalize="characters">
+        <p id="gateErr" class="note" style="color:#e8b1a0"></p>
+        <button type="button" class="btn btn-gold btn-full" id="btnUnlock" style="margin-top:1rem">Entrar</button>
+      </div>
+    </section>
+
+    <section id="intake" class="no-print">
+      <div class="form-card card foil-card" id="formCard">
+        <span class="kicker">Tu ficha</span>
+        <h2 class="sec-title">Personaliza tu Reto 28</h2>
+        <p class="sec-sub">Así se arma tu documento y tus audios.</p>
+
+        <label for="name">Tu nombre</label>
+        <input id="name" name="name" type="text" autocomplete="name" placeholder="Como quieres que aparezca en el muro">
+
+        <label for="ig">Instagram (solo lo ve Erior)</label>
+        <input id="ig" name="ig" type="text" placeholder="@tuusuario">
+
+        <label for="phone">WhatsApp (solo lo ve Erior)</label>
+        <input id="phone" name="phone" type="tel" inputmode="tel" placeholder="52 1 443 000 0000">
+
+        <label for="email">Correo (solo lo ve Erior)</label>
+        <input id="email" name="email" type="email" autocomplete="email" placeholder="tucorreo@email.com">
+
+        <label>¿Cómo te identificas?</label>
+        <div class="choices">
+          <label class="chip"><input type="radio" name="gender" value="mujer"> Mujer</label>
+          <label class="chip"><input type="radio" name="gender" value="hombre"> Hombre</label>
+          <label class="chip"><input type="radio" name="gender" value="otro" checked> Prefiero no decir</label>
+        </div>
+
+        <label>¿Ya tenías un audio Erior?</label>
+        <div class="choices">
+          <label class="chip"><input type="radio" name="owned" value="no" checked> No</label>
+          <label class="chip"><input type="radio" name="owned" value="si"> Sí</label>
+        </div>
+        <div id="ownedWrap" class="hidden">
+          <label for="ownedName">¿Cuál?</label>
+          <input id="ownedName" name="ownedName" type="text" placeholder="Ej. Booster 2.0, Magic 4.0…">
+        </div>
+
+        <label>1. ¿Cuál es tu prioridad ahora?</label>
+        <div class="choices">
+          <label class="chip"><input type="radio" name="area" value="dinero"> Dinero / abundancia / negocio</label>
+          <label class="chip"><input type="radio" name="area" value="amor"> Amor / atracción / relaciones</label>
+          <label class="chip"><input type="radio" name="area" value="propio"> Amor propio / confianza</label>
+          <label class="chip"><input type="radio" name="area" value="claridad"> Claridad / enfoque</label>
+          <label class="chip"><input type="radio" name="area" value="salud"> Salud / energía</label>
+          <label class="chip"><input type="radio" name="area" value="cuerpo"> Cuerpo / peso / apariencia</label>
+          <label class="chip"><input type="radio" name="area" value="paz"> Paz / calma</label>
+        </div>
+
+        <label>2. ¿Esto lleva tiempo o es puntual?</label>
+        <div class="choices">
+          <label class="chip"><input type="radio" name="time" value="largo" checked> Meses / años</label>
+          <label class="chip"><input type="radio" name="time" value="reciente"> Pasó algo reciente</label>
+          <label class="chip"><input type="radio" name="time" value="ya"> Una situación que necesito resolver YA</label>
+        </div>
+
+        <label for="pain">3. ¿Qué es lo que más te duele o te frena?</label>
+        <textarea id="pain" name="pain" placeholder="1 o 2 líneas. Sé honesta/o."></textarea>
+
+        <label>4. ¿Cuándo quieres empezar a ver cambios?</label>
+        <div class="choices">
+          <label class="chip"><input type="radio" name="urgency" value="ya" checked> Lo antes posible</label>
+          <label class="chip"><input type="radio" name="urgency" value="semana"> Esta semana</label>
+          <label class="chip"><input type="radio" name="urgency" value="largo"> Sin prisa</label>
+        </div>
+
+        <label for="wants">5. Si pudieras cambiar o atraer 3 cosas, ¿cuáles serían?</label>
+        <textarea id="wants" name="wants" placeholder="Breve. Esto se vuelve tu frase de instalación."></textarea>
+
+        <p id="formErr" class="note" style="color:#e8b1a0"></p>
+        <button type="button" class="btn btn-gold btn-full" id="btnBuild" style="margin-top:1rem">Guardar mi ficha</button>
+      </div>
+    </section>
+
+    <div id="welcomeGate" class="welcome-gate hidden" hidden>
+      <div class="welcome-card foil-card">
+        <span class="kicker">Paso 2</span>
+        <h2>Reto 28</h2>
+        <p class="copy">Tu video de inicio. Luego queda en Inicio, como una historia.</p>
+        <video id="appVideo" controls playsinline preload="metadata" src="bienvenida.mp4"></video>
+        <button type="button" class="btn btn-gold btn-full" id="btnWelcomeGo" style="margin-top:1rem">Entrar</button>
+      </div>
+    </div>
+
+    <div id="appShell" class="app-shell no-print">
+      <section class="view on" id="viewHoy" data-view="hoy">
+        <div class="stories" id="storyBar"></div>
+
+        <article class="post" id="homeVideoCard">
+          <header class="post-head">
+            <span class="avatar">E</span>
+            <div>
+              <b>Erior</b>
+              <small>Bienvenida · Reto 28</small>
+            </div>
+          </header>
+          <video id="homeVideo" controls playsinline preload="metadata" src="bienvenida.mp4"></video>
+        </article>
+
+        <div id="progressBox"></div>
+        <div id="upgradeHoy"></div>
+        <article class="post" id="missionPost">
+          <div class="mission" id="missionBox"></div>
+        </article>
+        <article class="post">
+          <header class="post-head">
+            <span class="avatar">28</span>
+            <div>
+              <b>Pasos de hoy</b>
+              <small>Instrucciones + recomendación</small>
+            </div>
+          </header>
+          <div class="post-body">
+            <div id="dayTools"></div>
+            <label class="check"><input type="checkbox" id="chkNight"> Noche: audio en loop (bocina bajito)</label>
+            <label class="check"><input type="checkbox" id="chkDay"> Día: mínimo 4 h con audífonos</label>
+            <label class="check"><input type="checkbox" id="chkMission"> Completé los pasos de hoy</label>
+            <button type="button" class="btn btn-gold btn-full" id="btnGoAudio" style="margin-top:1rem">Poner mi audio</button>
+          </div>
+        </article>
+      </section>
+
+      <section class="view" id="viewAudios" data-view="audios">
+        <h2 class="sec-title">Audios</h2>
+        <p class="sec-sub">Tu bóveda. Se quedan en este aparato.</p>
+        <div class="card foil-card sand-card" id="purposeCard">
+          <span class="num">Propósito de tus 28 días</span>
+          <label for="purposeIn">Se escribe una sola vez</label>
+          <textarea id="purposeIn" placeholder="Ej. quiero manifestar mucho dinero"></textarea>
+          <button type="button" class="btn btn-gold btn-full" id="btnPurpose" style="margin-top:.8rem">Sellar propósito</button>
+          <p class="note hidden" id="purposeLockNote">Ya está sellado. El plan de escucha usa solo los audios que te asignaron.</p>
+          <p class="note" id="purposeMsg"></p>
+        </div>
+        <div id="listenPlan"></div>
+        <div class="player foil-card" id="playerCard">
+          <div class="player-top">
+            <div class="vinyl" id="vinyl" aria-hidden="true"></div>
+            <div>
+              <span class="num" id="playerLayer">Sin audio</span>
+              <h3 id="playerTitle">Elige o mete un audio</h3>
+              <p class="note" id="playerMeta">Loop, volumen y barra.</p>
+            </div>
+          </div>
+          <div class="seek-row">
+            <span id="tCur">0:00</span>
+            <input type="range" id="seek" min="0" max="1000" value="0" aria-label="Progreso">
+            <span id="tDur">0:00</span>
+          </div>
+          <div class="player-ctrl">
+            <button type="button" class="icon-btn" id="btnPrev" aria-label="Anterior">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6h2.2v12H6V6zm3.2 6 8.8 6.2V5.8L9.2 12z"/></svg>
+            </button>
+            <button type="button" class="icon-btn play-main" id="btnPlay" aria-label="Reproducir">
+              <svg class="ic-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5-11-6.5z"/></svg>
+              <svg class="ic-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3.4v14H7V5zm6.6 0H17v14h-3.4V5z"/></svg>
+            </button>
+            <button type="button" class="icon-btn" id="btnNext" aria-label="Siguiente">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.8 6H18v12h-2.2V6zM6 18.2V5.8L14.8 12 6 18.2z"/></svg>
+            </button>
+            <button type="button" class="icon-btn on" id="btnLoop" aria-label="Repetir en loop" aria-pressed="true">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h9.2l-1.6-1.6L16 4l4 4-4 4-1.4-1.4L16.2 9H7a3 3 0 0 0-3 3H2a5 5 0 0 1 5-5zm10 10H7.8l1.6 1.6L8 20l-4-4 4-4 1.4 1.4L7.8 15H17a3 3 0 0 0 3-3h2a5 5 0 0 1-5 5z"/></svg>
+            </button>
+          </div>
+          <div class="vol-row">
+            <span>Vol</span>
+            <input type="range" id="vol" min="0" max="100" value="72" aria-label="Volumen">
+            <span id="volPct">72%</span>
+          </div>
+        </div>
+
+        <div class="card foil-card add-audio" id="addAudioCard" style="margin-top:1rem">
+          <span class="num">Subir audio</span>
+          <label for="audioTitle">Nombre</label>
+          <input id="audioTitle" type="text" placeholder="Ej. Booster 2.0 · noche">
+          <label>Capa</label>
+          <div class="choices" id="layerChips">
+            <label class="chip"><input type="radio" name="layer" value="1" checked> Capa 1</label>
+            <label class="chip"><input type="radio" name="layer" value="2"> Capa 2</label>
+            <label class="chip"><input type="radio" name="layer" value="3"> Capa 3</label>
+            <label class="chip"><input type="radio" name="layer" value="extra"> Extra</label>
+          </div>
+          <input type="file" id="audioFile" accept="audio/*,.mp3,.m4a,.wav,.aac,.ogg,.flac" hidden>
+          <button type="button" class="btn btn-gold btn-full" id="btnPickAudio" style="margin-top:1rem">Elegir archivo</button>
+          <p class="note">MP3, M4A o WAV. Queda solo en este teléfono.</p>
+          <p class="note" id="audioAddMsg"></p>
+        </div>
+        <div id="vaultList"></div>
+        <div id="upgradeAudios"></div>
+      </section>
+
+      <section class="view" id="viewCal" data-view="cal">
+        <h2 class="sec-title">Días</h2>
+        <p class="sec-sub">Si lo marcaste sin querer, tócalo otra vez y se quita. Tus checks de ese día también se limpian.</p>
+        <div class="days" id="dayGridApp"></div>
+        <p class="day-legend">Tornasol = cumplido. Tócalo de nuevo para deshacer.</p>
+      </section>
+
+      <section class="view" id="viewCom" data-view="com">
+        <h2 class="sec-title">Muro</h2>
+        <p class="sec-sub">Solo el nombre. Como un feed. Erior puede quitar un comentario.</p>
+        <div class="wall" id="wall"></div>
+        <div class="card foil-card">
+          <label for="testi">Publicar</label>
+          <textarea id="testi" placeholder="Qué cambió. Sin inventar. Honesto."></textarea>
+          <button type="button" class="btn btn-gold btn-full" id="btnTesti" style="margin-top:.9rem">Publicar</button>
+          <p class="note" id="testiMsg"></p>
+        </div>
+      </section>
+
+      <section class="view" id="viewCuenta" data-view="cuenta">
+        <h2 class="sec-title">Yo</h2>
+        <div id="myPackBox"></div>
+        <div id="upgradeBox"></div>
+        <div class="card foil-card" style="margin-top:1rem">
+          <button type="button" class="btn btn-gold btn-full" id="btnRemind">Turn on notifications</button>
+          <input id="remindAt" type="time" value="21:00" hidden>
+          <p class="note" id="remindMsg"></p>
+        </div>
+        <div class="actions" style="margin-top:1rem">
+          <button type="button" class="btn btn-ghost" id="btnPrint">PDF</button>
+          <button type="button" class="btn btn-ghost" id="btnEdit">Editar ficha</button>
+        </div>
+      </section>
+    </div>
+
+    <div id="miniPlayer" class="mini-player hidden" aria-live="polite">
+      <button type="button" class="mini-go" id="miniGo">
+        <span class="mini-dot" aria-hidden="true"></span>
+        <span id="miniTitle">Audio</span>
+      </button>
+      <button type="button" class="icon-btn mini-play" id="miniPlay" aria-label="Reproducir">
+        <svg class="ic-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5-11-6.5z"/></svg>
+        <svg class="ic-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3.4v14H7V5zm6.6 0H17v14h-3.4V5z"/></svg>
+      </button>
+    </div>
+
+    <nav class="app-dock no-print" id="appDock" aria-label="Reto 28">
+      <button type="button" class="on" data-go="hoy">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11.2 12 4l8 7.2V20a1 1 0 0 1-1 1h-5.2v-6.2H10.2V21H5a1 1 0 0 1-1-1v-8.8z"/></svg>
+        <span>Inicio</span>
+      </button>
+      <button type="button" data-go="audios">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4v11.2A3.4 3.4 0 1 0 9.7 18V8.2L18 6.4V15a3.4 3.4 0 1 0 1.7 2.8V4.8L8 7V4z"/></svg>
+        <span>Audios</span>
+      </button>
+      <button type="button" data-go="cal">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h2v2h6V3h2v2h3v16H4V5h3V3zm12 6H5v10h14V9z"/></svg>
+        <span>Días</span>
+      </button>
+      <button type="button" data-go="com">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v10.4H8.2L4 19.2V5zm3.2 3.2v1.6h9.6V8.2H7.2zm0 3.2v1.6h6.4v-1.6H7.2z"/></svg>
+        <span>Muro</span>
+      </button>
+      <button type="button" data-go="cuenta">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4zm0 2c-3.6 0-8 1.8-8 4.4V21h16v-2.6c0-2.6-4.4-4.4-8-4.4z"/></svg>
+        <span>Yo</span>
+      </button>
+    </nav>
+
+    <section id="dossier" class="dossier hidden" hidden>
+      <div class="print-only" style="margin-bottom:1.2rem">
+        <p style="letter-spacing:.4em;text-transform:uppercase;font-size:.7rem">Erior Center · Documento oficial</p>
+        <h1 style="font-size:2.4rem;margin:.2rem 0">Reto de Manifestación</h1>
+      </div>
+      <div class="dossier-head">
+        <div class="who">
+          <span class="serial" id="serialOut">P28</span>
+          <h2 id="whoName">Nombre</h2>
+          <p id="whoMeta"></p>
+        </div>
+        <div class="stamp" aria-hidden="true">Reto 28<br>Oficial<br>Erior</div>
+      </div>
+      <p class="copy" id="patternOut"></p>
+      <div class="intent">
+        <small>Frase de instalación · léela cada noche antes del loop</small>
+        <p id="intentOut"></p>
+      </div>
+      <div class="audio-row" id="audioPrimary"></div>
+      <div class="audio-row" id="audioSecond"></div>
+      <div class="weeks">
+        <div class="week"><strong>Noche · 28 días</strong><h4>Bocina junto a ti, volumen bajo, loop.</h4><p class="copy">Duermes y despiertas con la frecuencia.</p></div>
+        <div class="week"><strong>Día · mínimo 4 horas</strong><h4>Audífonos. Puedes partir las horas.</h4><p class="copy">Instalación en la vida real.</p></div>
+      </div>
+      <h3 class="sec-title" style="font-size:1.7rem;margin-top:1.4rem">Las 4 semanas</h3>
+      <div class="weeks">
+        <div class="week"><strong>Días 1–7</strong><h4>Instalación</h4><p class="copy">No juzgues. Solo cumple los pasos.</p></div>
+        <div class="week"><strong>Días 8–14</strong><h4>Limpieza</h4><p class="copy">Si duele: se escucha igual. No se cambia el audio.</p></div>
+        <div class="week"><strong>Días 15–21</strong><h4>Recalibración</h4><p class="copy">El loop viejo pierde fuerza.</p></div>
+        <div class="week"><strong>Días 22–28</strong><h4>Evidencia</h4><p class="copy">Día 28: testimonio al muro. Solo tu nombre.</p></div>
+      </div>
+      <div class="print-only" style="margin-top:1rem">
+        <p class="copy">Marca a mano cada día cumplido. Noche + 4 h de día = día válido.</p>
+        <p class="copy">1 2 3 4 5 6 7 · 8 9 10 11 12 13 14 · 15 16 17 18 19 20 21 · 22 23 24 25 26 27 28</p>
+      </div>
+    </section>
+  </div>
+
+  <div id="celebrate" class="celebrate hidden" hidden>
+    <div class="celebrate-bg" aria-hidden="true"></div>
+    <div class="spark" id="spark" aria-hidden="true"></div>
+    <div class="celebrate-card">
+      <span class="kicker">Reto 28</span>
+      <h2 id="celebrateTitle"></h2>
+      <p id="celebrateText"></p>
+    </div>
+  </div>
+
+  <script src="access.js?v=22"></script>
+  <script src="phrases.js?v=22"></script>
+  <script src="routines.js?v=22"></script>
+  <script src="plan.js?v=22"></script>
+  <script src="vault.js?v=22"></script>
+  <script src="protocolo.js?v=22"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js').catch(function () {});
+    }
+  </script>
+</body>
+</html>
