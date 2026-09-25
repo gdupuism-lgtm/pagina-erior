@@ -426,6 +426,7 @@
     renderStories(s);
     renderListenPlan(s);
     lockPurpose(s);
+    renderInstallAndRemind(s);
     maybeWelcome(s);
     window.scrollTo(0, 0);
   }
@@ -460,6 +461,54 @@
     });
   }
 
+  function isIOSPhone() {
+    return /iPad|iPhone|iPod/.test(navigator.userAgent || '') || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  }
+
+  function isStandaloneApp() {
+    return (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone === true;
+  }
+
+  function promptInstall() {
+    if (deferredInstall) { deferredInstall.prompt(); return; }
+    if (isIOSPhone()) {
+      alert('iPhone: toca Compartir (el cuadrado con flecha) → Añadir a pantalla de inicio. Luego abre Reto 28 desde el icono.');
+      return;
+    }
+    alert('Android: menú ⋮ → Instalar app / Añadir a pantalla de inicio. Luego abre Reto 28 desde el icono, no desde Chrome.');
+  }
+
+  function remindHint() {
+    if (isIOSPhone() && !isStandaloneApp()) {
+      return 'En iPhone los avisos solo funcionan si instalas. Compartir → Añadir a pantalla de inicio. Abre el icono y toca de nuevo.';
+    }
+    if (typeof Notification !== 'undefined' && Notification.permission === 'denied') {
+      if (isIOSPhone()) return 'El iPhone bloqueó los avisos. Ajustes → Notificaciones → Reto 28 → Permitir. Luego toca de nuevo.';
+      return 'El celular bloqueó los avisos. Chrome → ⋮ → Ajustes → Notificaciones del sitio → eriorcenterguiaaudios → Permitir. O el candado de la barra. Luego toca de nuevo.';
+    }
+    if (typeof Notification !== 'undefined' && Notification.permission === 'granted') return '';
+    return 'Toca el botón. Acepta el permiso. En celular, instala primero para que se sienta como app.';
+  }
+
+  function renderInstallAndRemind(s) {
+    var card = $('installCard');
+    if (card) {
+      if (isStandaloneApp()) {
+        card.classList.add('hidden');
+        card.setAttribute('hidden', '');
+      } else {
+        card.classList.remove('hidden');
+        card.removeAttribute('hidden');
+      }
+    }
+    if ($('btnRemind') && s && s.remindOn && typeof Notification !== 'undefined' && Notification.permission === 'granted') {
+      $('btnRemind').textContent = 'On';
+    }
+    if ($('remindMsg') && !(s && s.remindOn && typeof Notification !== 'undefined' && Notification.permission === 'granted')) {
+      $('remindMsg').textContent = remindHint();
+    }
+  }
+
   function maybeWelcome(s) {
     var box = $('welcomeGate');
     if (!box) return;
@@ -468,6 +517,7 @@
     } catch (e) {
       if (s && s.welcomed) return;
     }
+    document.body.classList.add('is-welcome');
     box.classList.remove('hidden');
     box.removeAttribute('hidden');
   }
@@ -578,17 +628,28 @@
 
   function activateReminders(demo) {
     var hour = ($('remindAt') && $('remindAt').value) || '21:00';
-    var s = patch(function (st) { st.remindAt = hour; st.remindOn = true; });
-    if (!('Notification' in window)) {
-      $('remindMsg').textContent = 'Este navegador no permite notificaciones.';
+    if (isIOSPhone() && !isStandaloneApp()) {
+      if ($('remindMsg')) $('remindMsg').textContent = remindHint();
+      promptInstall();
       return;
     }
+    if (!('Notification' in window)) {
+      $('remindMsg').textContent = isIOSPhone()
+        ? 'Instala primero (Añadir a pantalla de inicio) y abre el icono. Luego toca de nuevo.'
+        : 'Este navegador no permite notificaciones.';
+      return;
+    }
+    if (Notification.permission === 'denied') {
+      if ($('remindMsg')) $('remindMsg').textContent = remindHint();
+      return;
+    }
+    var s = patch(function (st) { st.remindAt = hour; st.remindOn = true; });
     Notification.requestPermission().then(function (p) {
       if (p !== 'granted') {
-        $('remindMsg').textContent = 'Permiso denegado.';
+        $('remindMsg').textContent = remindHint();
         return;
       }
-      $('remindMsg').textContent = '';
+      $('remindMsg').textContent = 'On. Van a llegar 4 avisos al día.';
       if ($('btnRemind')) $('btnRemind').textContent = 'On';
       if (demo) firePhrase(true, ['portal', 'listen', 'offer'][Math.floor(Math.random() * 3)]);
       if (!navigator.serviceWorker || !window.P28Access) return;
@@ -711,6 +772,7 @@
     patch(function (st) { st.welcomed = true; });
     try { sessionStorage.setItem('p28-intro', '1'); } catch (e) {}
     pauseWelcomeVideos();
+    document.body.classList.remove('is-welcome');
     if ($('welcomeGate')) {
       $('welcomeGate').classList.add('hidden');
       $('welcomeGate').setAttribute('hidden', '');
@@ -754,6 +816,7 @@
     renderMission(state);
   });
   $('btnRemind') && $('btnRemind').addEventListener('click', function () { activateReminders(false); });
+  $('btnInstallYo') && $('btnInstallYo').addEventListener('click', promptInstall);
   ['chkNight', 'chkDay', 'chkMission'].forEach(function (id) {
     $(id) && $(id).addEventListener('change', function () {
       toggleCheck(id === 'chkNight' ? 'night' : id === 'chkDay' ? 'day' : 'mission');
@@ -766,10 +829,7 @@
     e.preventDefault();
     deferredInstall = e;
   });
-  $('btnInstall') && $('btnInstall').addEventListener('click', function () {
-    if (deferredInstall) { deferredInstall.prompt(); return; }
-    alert('iPhone: Compartir → Añadir a pantalla de inicio. Android: menú → Instalar app.');
-  });
+  $('btnInstall') && $('btnInstall').addEventListener('click', promptInstall);
 
   window.P28 = { currentDay: currentDay, go: go, load: load, renderListenPlan: renderListenPlan };
 

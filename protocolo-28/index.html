@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#050a08">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Reto 28">
@@ -14,7 +15,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="protocolo.css?v=22">
+  <link rel="stylesheet" href="protocolo.css?v=24">
 </head>
 <body class="is-boot">
   <div class="sky" aria-hidden="true"></div>
@@ -146,7 +147,7 @@
         <span class="kicker">Paso 2</span>
         <h2>Reto 28</h2>
         <p class="copy">Tu video de inicio. Luego queda en Inicio, como una historia.</p>
-        <video id="appVideo" controls playsinline preload="metadata" src="bienvenida.mp4"></video>
+        <video id="appVideo" controls playsinline webkit-playsinline preload="none" src="bienvenida.mp4"></video>
         <button type="button" class="btn btn-gold btn-full" id="btnWelcomeGo" style="margin-top:1rem">Entrar</button>
       </div>
     </div>
@@ -163,7 +164,7 @@
               <small>Bienvenida · Reto 28</small>
             </div>
           </header>
-          <video id="homeVideo" controls playsinline preload="metadata" src="bienvenida.mp4"></video>
+          <video id="homeVideo" controls playsinline webkit-playsinline preload="none" src="bienvenida.mp4"></video>
         </article>
 
         <div id="progressBox"></div>
@@ -280,6 +281,11 @@
         <h2 class="sec-title">Yo</h2>
         <div id="myPackBox"></div>
         <div id="upgradeBox"></div>
+        <div class="card foil-card hidden" id="installCard" hidden>
+          <span class="num">Instalar como app</span>
+          <p class="copy" style="margin:.4rem 0 .8rem">En el celular ábrela desde el icono, no desde Chrome. Así se ve como app y ahí sí llegan los avisos.</p>
+          <button type="button" class="btn btn-gold btn-full" id="btnInstallYo">Instalar Reto 28</button>
+        </div>
         <div class="card foil-card" style="margin-top:1rem">
           <button type="button" class="btn btn-gold btn-full" id="btnRemind">Turn on notifications</button>
           <input id="remindAt" type="time" value="21:00" hidden>
@@ -379,7 +385,7 @@
   <script src="routines.js?v=22"></script>
   <script src="plan.js?v=22"></script>
   <script src="vault.js?v=22"></script>
-  <script src="protocolo.js?v=22"></script>
+  <script src="protocolo.js?v=24"></script>
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js').catch(function () {});
