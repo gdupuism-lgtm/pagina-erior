@@ -1,4 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
   <rect width="512" height="512" rx="96" fill="#050a08"/>
-  <text x="256" y="310" text-anchor="middle" font-family="Georgia,serif" font-size="220" fill="#7effb2">28</text>
+  <g fill="none" stroke="#c9a84c" stroke-width="7" stroke-linejoin="round">
+    <circle cx="256" cy="148" r="28"/>
+    <path d="M198 268 L256 176 L314 268"/>
+    <path d="M214 248 L298 248 L256 176 Z"/>
+    <path d="M256 278 L292 314 L256 350 L220 314 Z"/>
+  </g>
+  <text x="256" y="420" text-anchor="middle" font-family="Georgia,Times,serif" font-size="42" letter-spacing="10" fill="#c9a84c">ERIOR</text>
 </svg>
