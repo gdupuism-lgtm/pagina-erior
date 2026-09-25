@@ -9,7 +9,7 @@ self.addEventListener('fetch', function (e) {
   e.respondWith(fetch(e.request).catch(function () { return caches.match('./index.html'); }));
 });
 self.addEventListener('push', function (e) {
-  var data = { title: 'ERIOR', body: 'Reto de Manifestación 28.' };
+  var data = { title: 'Erior Center', body: 'Erior Center.' };
   try {
     if (e.data) data = e.data.json();
   } catch (err) {

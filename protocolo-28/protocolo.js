@@ -472,10 +472,10 @@
   function promptInstall() {
     if (deferredInstall) { deferredInstall.prompt(); return; }
     if (isIOSPhone()) {
-      alert('iPhone: toca Compartir (el cuadrado con flecha) → Añadir a pantalla de inicio. Luego abre Reto 28 desde el icono.');
+      alert('iPhone: toca Compartir (el cuadrado con flecha) → Añadir a pantalla de inicio. Luego abre Erior Center desde el icono.');
       return;
     }
-    alert('Android: menú ⋮ → Instalar app / Añadir a pantalla de inicio. Luego abre Reto 28 desde el icono, no desde Chrome.');
+    alert('Android: menú ⋮ → Instalar app / Añadir a pantalla de inicio. Luego abre Erior Center desde el icono, no desde Chrome.');
   }
 
   function remindHint() {
@@ -483,7 +483,7 @@
       return 'En iPhone los avisos solo funcionan si instalas. Compartir → Añadir a pantalla de inicio. Abre el icono y toca de nuevo.';
     }
     if (typeof Notification !== 'undefined' && Notification.permission === 'denied') {
-      if (isIOSPhone()) return 'El iPhone bloqueó los avisos. Ajustes → Notificaciones → Reto 28 → Permitir. Luego toca de nuevo.';
+      if (isIOSPhone()) return 'El iPhone bloqueó los avisos. Ajustes → Notificaciones → Erior Center → Permitir. Luego toca de nuevo.';
       return 'El celular bloqueó los avisos. Chrome → ⋮ → Ajustes → Notificaciones del sitio → eriorcenterguiaaudios → Permitir. O el candado de la barra. Luego toca de nuevo.';
     }
     if (typeof Notification !== 'undefined' && Notification.permission === 'granted') return '';

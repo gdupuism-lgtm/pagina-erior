@@ -799,7 +799,7 @@ body.is-playing .mini-play .ic-pause{display:block}
   text-align:center;padding:2rem 1.2rem;
   cursor:pointer;
 }
-.boot-splash .title-3d{font-size:clamp(3.4rem,16vw,6.4rem);margin:.2rem 0 .4rem}
+.boot-splash .title-3d{font-size:clamp(2.05rem,10.2vw,3.7rem);letter-spacing:-.04em;margin:.2rem 0 .4rem;max-width:92vw}
 .boot-hint{margin-top:1.4rem;font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:var(--dim);font-weight:800}
 body:not(.is-boot) #bootSplash{display:none!important}
 body.is-boot .wrap{visibility:hidden}
@@ -811,7 +811,7 @@ body.is-boot .wrap{visibility:hidden}
   backdrop-filter:blur(14px);
 }
 .ig-logo{
-  font-family:var(--display);font-weight:800;font-size:1.55rem;letter-spacing:-.05em;line-height:1;
+  font-family:var(--display);font-weight:800;font-size:clamp(1.2rem,5.4vw,1.45rem);letter-spacing:-.04em;line-height:1;
   background-image:var(--metal);background-size:140% 180%;
   -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
   animation:metalshift 9s ease infinite;

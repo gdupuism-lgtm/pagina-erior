@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex,nofollow">
-  <title>Reto 28 Admin · códigos</title>
+  <title>Erior Center Admin · códigos</title>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="protocolo.css?v=23">
 </head>
@@ -13,12 +13,12 @@
   <div class="aurora" aria-hidden="true"></div>
   <div class="wrap" style="padding-bottom:3rem">
     <header class="topbar">
-      <a class="brand" href="index.html">Erior · Reto 28</a>
+      <a class="brand" href="index.html">Erior Center</a>
       <span class="top-link">Solo tú</span>
     </header>
 
     <div id="loginView" class="card foil-card">
-      <span class="kicker">Admin Reto 28</span>
+      <span class="kicker">Admin Erior Center</span>
       <h2 class="sec-title">Códigos</h2>
       <p class="sec-sub">Clave de este panel: <code>ERIOR28</code>. Esa se la pasas a quien genera los códigos.</p>
       <label for="adminKey">Clave</label>
@@ -82,7 +82,7 @@
         <span class="kicker">Notificaciones</span>
         <p class="copy">Llega a quienes ya activaron en su celular.</p>
         <label for="pushBody">Mensaje</label>
-        <textarea id="pushBody" placeholder="Reto 28. Tus pasos de hoy."></textarea>
+        <textarea id="pushBody" placeholder="Erior Center. Tus pasos de hoy."></textarea>
         <button type="button" class="btn btn-gold btn-full" id="btnPush" style="margin-top:1rem">Enviar ahora</button>
         <p class="note" id="pushMsg"></p>
       </section>
@@ -103,7 +103,7 @@
     function waText(row) {
       var origin = location.origin + location.pathname.replace(/admin\.html.*/, 'index.html');
       return [
-        'Ya tienes tu acceso al Reto 28.',
+        'Ya tienes tu acceso a Erior Center.',
         '',
         'Ábrelo aquí:',
         origin + '?acceso=' + encodeURIComponent(row.code),
@@ -161,7 +161,7 @@
       P28Access.getWall().then(renderWallAdmin);
     }
     $('btnPush') && ($('btnPush').onclick = function () {
-      var body = $('pushBody').value.trim() || 'Reto 28. Tus pasos de hoy.';
+      var body = $('pushBody').value.trim() || 'Erior Center. Tus pasos de hoy.';
       P28Access.broadcast('ERIOR', body, key).then(function (res) {
         var n = res.data && res.data.sent;
         $('pushMsg').textContent = 'Enviado a ' + (n || 0) + ' celulares.';

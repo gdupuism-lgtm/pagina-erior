@@ -1,7 +1,7 @@
 {
-  "name": "Reto 28",
-  "short_name": "Reto 28",
-  "description": "Reto de Manifestación 28 días. Audios, pasos, calendario y muro.",
+  "name": "Erior Center",
+  "short_name": "Erior Center",
+  "description": "Erior Center. Audios, pasos, calendario y muro.",
   "start_url": "./index.html?source=pwa",
   "scope": "./",
   "id": "/protocolo-28/",

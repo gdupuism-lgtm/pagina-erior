@@ -169,7 +169,7 @@
       '<div class="progress-panel">' +
         '<div class="ring" style="--p:' + pct + '"><div><b>' + done + '</b><small>/ 28</small></div></div>' +
         '<div class="bars">' +
-          '<div class="bar-line"><span>Reto 28</span><b>' + pct + '%</b></div>' +
+          '<div class="bar-line"><span>28 días</span><b>' + pct + '%</b></div>' +
           '<div class="track"><i style="width:' + pct + '%"></i></div>' +
           '<div class="bar-line"><span>Pasos de hoy</span><b>' + pasos + '/3</b></div>' +
           '<div class="track"><i style="width:' + Math.round((pasos / 3) * 100) + '%"></i></div>' +
@@ -364,8 +364,8 @@
     try {
       navigator.mediaSession.metadata = new MediaMetadata({
         title: t.title,
-        artist: 'ERIOR · Reto 28',
-        album: 'Reto de Manifestación 28'
+        artist: 'Erior Center',
+        album: 'Erior Center'
       });
       navigator.mediaSession.setActionHandler('play', play);
       navigator.mediaSession.setActionHandler('pause', pause);
