@@ -6,7 +6,7 @@
   <meta name="robots" content="noindex,nofollow">
   <title>Reto 28 Admin · códigos</title>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="protocolo.css?v=22">
+  <link rel="stylesheet" href="protocolo.css?v=23">
 </head>
 <body class="is-admin">
   <div class="sky" aria-hidden="true"></div>
@@ -20,7 +20,7 @@
     <div id="loginView" class="card foil-card">
       <span class="kicker">Admin Reto 28</span>
       <h2 class="sec-title">Códigos</h2>
-      <p class="sec-sub">Misma clave que Alicia. En local también sirve <code>ERIOR28</code>.</p>
+      <p class="sec-sub">Clave de este panel: <code>ERIOR28</code>. Esa se la pasas a quien genera los códigos.</p>
       <label for="adminKey">Clave</label>
       <input id="adminKey" type="password" autocomplete="current-password">
       <button type="button" class="btn btn-gold btn-full" id="btnLogin" style="margin-top:1rem">Entrar</button>
@@ -88,7 +88,7 @@
       </section>
     </div>
   </div>
-  <script src="access.js?v=22"></script>
+  <script src="access.js?v=23"></script>
   <script>
     var key = '';
     function $(id) { return document.getElementById(id); }
@@ -192,8 +192,10 @@
         navigator.clipboard.writeText(text).catch(function () {});
         var num = String($('fContact').value).replace(/\D/g, '');
         if (num.length >= 10) window.open('https://wa.me/' + num + '?text=' + encodeURIComponent(text), '_blank');
-        $('issueMsg').textContent = 'Acceso creado. 30 días. 2 aparatos.';
+        $('issueMsg').textContent = 'Acceso creado. 30 días. Ya sirve en la app.';
         refresh();
+      }).catch(function (err) {
+        $('issueMsg').textContent = (err && err.message) || 'No se pudo crear el acceso.';
       });
     };
   </script>

@@ -198,7 +198,10 @@
       notes: row.notes, code: row.code, days: row.days, max_devices: row.max_devices
     }, adminKey)
       .then(function (res) {
-        if (res.ok && res.data.row) row = res.data.row;
+        if (!res.ok || !res.data || !res.data.row) {
+          throw new Error((res.data && res.data.error) || 'No se pudo guardar el código. Entra con la clave ERIOR28.');
+        }
+        row = res.data.row;
         var db = localDb();
         db.codes = db.codes || [];
         db.codes.unshift(row);
@@ -244,8 +247,12 @@
     });
   }
 
+  function isLocalHost() {
+    return /^https?:\/\/localhost:\d+/.test(location.origin);
+  }
+
   function checkLocalAdmin(pass) {
-    return String(pass || '') === ADMIN_LOCAL;
+    return isLocalHost() && String(pass || '') === ADMIN_LOCAL;
   }
 
   w.P28Access = {
