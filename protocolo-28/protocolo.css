@@ -53,68 +53,69 @@ img{max-width:100%;display:block}
 .sky{
   position:fixed;inset:0;z-index:0;pointer-events:none;
   background:
-    radial-gradient(ellipse 130% 90% at 50% -8%, rgba(62,255,197,.72), transparent 64%),
-    radial-gradient(ellipse 95% 80% at 108% 68%, rgba(255,107,168,.7), transparent 62%),
-    radial-gradient(ellipse 90% 78% at -8% 58%, rgba(94,246,255,.58), transparent 60%),
-    radial-gradient(ellipse 110% 70% at 50% 112%, rgba(224,140,255,.52), transparent 58%),
-    radial-gradient(ellipse 70% 50% at 70% 30%, rgba(255,200,120,.22), transparent 55%),
-    #050a08;
+    radial-gradient(ellipse 80% 55% at 18% 8%, rgba(80,255,190,.38), transparent 58%),
+    radial-gradient(ellipse 70% 60% at 88% 18%, rgba(140,80,255,.42), transparent 56%),
+    radial-gradient(ellipse 90% 50% at 50% 100%, rgba(40,220,180,.28), transparent 55%),
+    radial-gradient(ellipse 50% 40% at 70% 70%, rgba(90,60,220,.3), transparent 50%),
+    #03040a;
 }
 .aurora{
-  position:fixed;inset:-18%;z-index:0;pointer-events:none;opacity:1;
-  background:conic-gradient(from 180deg at 50% 40%,
-    rgba(62,255,197,.28) 0deg,
-    rgba(62,255,197,.7) 50deg,
-    rgba(255,107,168,.68) 120deg,
-    rgba(94,246,255,.58) 190deg,
-    rgba(224,140,255,.55) 260deg,
-    rgba(62,255,197,.28) 360deg);
-  animation:aurora 16s linear infinite;
-  filter:blur(16px);
+  position:fixed;inset:-20%;z-index:0;pointer-events:none;opacity:.95;
+  background:
+    repeating-linear-gradient(118deg,
+      transparent 0 7%,
+      rgba(70,255,190,.22) 10%,
+      rgba(120,80,255,.2) 13%,
+      transparent 16% 24%);
+  animation:aurorawave 18s ease-in-out infinite;
+  filter:blur(22px);
+  mix-blend-mode:screen;
 }
 .aurora-2{
-  position:fixed;inset:-22%;z-index:0;pointer-events:none;opacity:.82;
-  background:conic-gradient(from 40deg at 40% 60%,
-    rgba(255,107,168,.2) 0deg,
-    rgba(255,107,168,.62) 80deg,
-    rgba(62,255,197,.55) 170deg,
-    rgba(94,246,255,.42) 230deg,
-    rgba(255,107,168,.2) 280deg);
-  animation:aurora-rev 20s linear infinite;
-  filter:blur(22px);
+  position:fixed;inset:-25%;z-index:0;pointer-events:none;opacity:.8;
+  background:
+    repeating-linear-gradient(72deg,
+      transparent 0 8%,
+      rgba(160,90,255,.24) 11%,
+      rgba(60,240,200,.18) 14%,
+      transparent 18% 26%);
+  animation:aurorawave 22s ease-in-out infinite reverse;
+  filter:blur(28px);
+  mix-blend-mode:screen;
 }
 .aurora-3{
-  position:fixed;inset:-12%;z-index:0;pointer-events:none;opacity:.55;
-  background:conic-gradient(from 280deg at 70% 20%,
-    transparent 0deg,
-    rgba(94,246,255,.45) 70deg,
-    rgba(255,200,140,.28) 140deg,
-    rgba(224,140,255,.4) 210deg,
-    transparent 300deg);
-  animation:aurora 24s linear infinite reverse;
-  filter:blur(28px);
+  position:fixed;inset:-10%;z-index:0;pointer-events:none;opacity:.55;
+  background:
+    radial-gradient(ellipse 60% 80% at 30% 20%, rgba(80,255,200,.28), transparent 62%),
+    radial-gradient(ellipse 50% 70% at 80% 80%, rgba(150,80,255,.26), transparent 60%);
+  animation:orb 16s ease-in-out infinite;
+  filter:blur(30px);
 }
 .beam{
   position:fixed;inset:0;z-index:1;pointer-events:none;
-  background:linear-gradient(105deg,transparent 28%,rgba(200,255,222,.34) 46%,rgba(255,107,168,.28) 52%,rgba(94,246,255,.22) 58%,transparent 72%);
+  background:linear-gradient(105deg,transparent 28%,rgba(80,255,200,.28) 46%,rgba(140,80,255,.24) 54%,transparent 72%);
   background-size:180% 180%;
   animation:beam 5.2s ease-in-out infinite;
   mix-blend-mode:screen;
 }
 .beam-2{
   position:fixed;inset:0;z-index:1;pointer-events:none;
-  background:linear-gradient(250deg,transparent 32%,rgba(255,107,168,.22) 48%,rgba(126,255,178,.2) 54%,transparent 70%);
+  background:linear-gradient(250deg,transparent 32%,rgba(150,80,255,.22) 48%,rgba(70,255,190,.2) 54%,transparent 70%);
   background-size:200% 200%;
   animation:beam 7.4s ease-in-out infinite reverse;
   mix-blend-mode:screen;
 }
 .orb{position:fixed;border-radius:50%;pointer-events:none;z-index:1;mix-blend-mode:screen;filter:blur(26px)}
-.orb-a{width:min(62vw,460px);height:min(62vw,460px);background:rgba(126,255,178,.42);top:-6%;left:-14%;animation:orb 11s ease-in-out infinite}
-.orb-b{width:min(58vw,420px);height:min(58vw,420px);background:rgba(255,107,168,.4);bottom:-8%;right:-12%;animation:orb 13s ease-in-out infinite reverse}
-.orb-c{width:min(46vw,320px);height:min(46vw,320px);background:rgba(94,246,255,.34);top:36%;left:48%;animation:orb 9s ease-in-out infinite}
-.orb-d{width:min(50vw,360px);height:min(50vw,360px);background:rgba(224,140,255,.28);top:58%;left:-10%;animation:orb 15s ease-in-out infinite reverse}
+.orb-a{width:min(62vw,460px);height:min(62vw,460px);background:rgba(70,255,190,.32);top:-6%;left:-14%;animation:orb 11s ease-in-out infinite}
+.orb-b{width:min(58vw,420px);height:min(58vw,420px);background:rgba(150,80,255,.34);bottom:-8%;right:-12%;animation:orb 13s ease-in-out infinite reverse}
+.orb-c{width:min(46vw,320px);height:min(46vw,320px);background:rgba(60,230,210,.26);top:36%;left:48%;animation:orb 9s ease-in-out infinite}
+.orb-d{width:min(50vw,360px);height:min(50vw,360px);background:rgba(120,70,255,.24);top:58%;left:-10%;animation:orb 15s ease-in-out infinite reverse}
 @keyframes aurora{to{transform:rotate(360deg)}}
 @keyframes aurora-rev{to{transform:rotate(-360deg)}}
+@keyframes aurorawave{
+  0%,100%{transform:translate3d(0,0,0) scale(1)}
+  50%{transform:translate3d(-4%,3%,0) scale(1.06)}
+}
 @keyframes beam{0%,100%{background-position:0% 40%}50%{background-position:100% 60%}}
 @keyframes orb{
   0%,100%{transform:translate(0,0) scale(1);opacity:.85}
@@ -170,35 +171,25 @@ body.is-app.has-mini .wrap{padding-bottom:10.2rem}
 
 .logo-mark{width:min(220px,56vw);height:auto;margin:0 auto .4rem;display:block;filter:drop-shadow(0 0 22px rgba(255,255,255,.32))}
 .welcome-mark{width:96px;height:auto;margin:.15rem auto .7rem;display:block;filter:drop-shadow(0 0 14px rgba(255,255,255,.24))}
-.logo-photo{
-  position:relative;
-  display:grid;place-items:center;
-  margin:0 auto;
-  border-radius:50%;
+.logo-tile{position:relative;display:grid;place-items:center;margin:0 auto}
+.logo-tile img{
+  width:100%;height:auto;display:block;
+  object-fit:contain;object-position:center;
+  filter:drop-shadow(0 18px 40px rgba(0,0,0,.45));
 }
-.logo-photo::before{
-  content:"";
-  position:absolute;
-  inset:-16%;
-  border-radius:50%;
-  background:radial-gradient(circle,transparent 46%,rgba(126,255,178,.14) 60%,rgba(255,107,168,.1) 72%,transparent 84%);
-  filter:blur(10px);
-  z-index:0;pointer-events:none;
-}
-.logo-photo img{
+.logo-tile-hero{width:min(260px,68vw)}
+.logo-tile-hero img{border-radius:22%}
+.logo-tile-mid{width:120px;margin:.15rem auto .7rem}
+.logo-tile-mini{width:46px;margin:0}
+.boot-name{
   position:relative;z-index:1;
-  width:100%;height:auto;
-  display:block;
-  object-fit:contain;
-  object-position:center;
-  border-radius:50%;
-  filter:drop-shadow(0 16px 36px rgba(0,0,0,.4));
+  margin:.35rem 0 0;
+  font-family:var(--display);font-weight:800;
+  font-size:.82rem;letter-spacing:.28em;
+  text-transform:uppercase;color:var(--ink);
+  text-shadow:0 0 18px rgba(80,255,200,.35);
 }
-.logo-photo-hero{width:min(300px,76vw)}
-.logo-photo-mid{width:128px;margin:.2rem auto .75rem}
-.logo-photo-mini{width:48px;margin:0}
-.logo-photo-mini::before{inset:-12%}
-.boot-hint{margin-top:1.2rem}
+.boot-hint{margin-top:.7rem}
 .hero-line{
   font-family:var(--display);font-size:clamp(1.15rem,3.6vw,1.45rem);font-weight:800;
   letter-spacing:-.03em;margin:-.2rem 0 1rem;
@@ -848,7 +839,7 @@ body.is-playing .mini-play .ic-pause{display:block}
   text-align:center;padding:2rem 1.2rem;
   cursor:pointer;overflow:hidden;
 }
-.boot-splash .logo-photo,.boot-splash .boot-hint{position:relative;z-index:1}
+.boot-splash .logo-tile,.boot-splash .boot-name,.boot-splash .boot-hint{position:relative;z-index:1}
 .boot-splash .title-3d{font-size:clamp(2.05rem,10.2vw,3.7rem);letter-spacing:-.04em;margin:.2rem 0 .4rem;max-width:92vw}
 .boot-hint{margin-top:1.4rem;font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:var(--dim);font-weight:800}
 body:not(.is-boot) #bootSplash{display:none!important}
