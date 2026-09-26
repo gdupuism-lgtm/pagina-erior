@@ -123,6 +123,15 @@
     return ({ dinero: 'Dinero / abundancia', amor: 'Amor / relaciones', propio: 'Amor propio', claridad: 'Claridad / enfoque', salud: 'Salud / energía', cuerpo: 'Cuerpo', paz: 'Paz / calma' })[a] || a;
   }
 
+  function focusLine(s) {
+    var d = (s && s.data) || {};
+    var label = areaLabel(d.area);
+    var want = String((s && s.purpose) || d.wants || '').replace(/\s+/g, ' ').trim();
+    var line = 'Tu reto de estos 28 días: ' + label + '.';
+    if (want) line += ' Lo que instalas: ' + want.slice(0, 140);
+    return line;
+  }
+
   function collect() {
     return {
       name: val('name'), ig: val('ig').replace(/^@/, ''), phone: val('phone'), email: val('email'),
@@ -317,7 +326,7 @@
       '<h2>' + r.t + '</h2>' +
       (steps ? '<ol class="steps-list">' + steps + '</ol>' : '<p class="copy">' + r.x + '</p>') +
       (r.rec ? '<p class="day-rec">' + r.rec + '</p>' : '') +
-      (s.purpose ? '<p class="note" style="margin-top:.8rem">Propósito de tus 28 días: ' + s.purpose + '</p>' : (s.data ? '<p class="note" style="margin-top:.8rem">' + intentLine(s.data.name, s.data.wants, s.data.area) + '</p>' : ''));
+      (s.data ? '<p class="note" style="margin-top:.8rem">' + focusLine(s) + '</p>' : '');
     renderDayTools(r, n);
     if ($('chkNight')) {
       $('chkNight').checked = !!done.night;
@@ -1215,9 +1224,7 @@
     else if ($('intake')) $('intake').scrollIntoView({ behavior: 'smooth' });
   });
   $('btnPrint') && $('btnPrint').addEventListener('click', function () {
-    $('dossier').classList.remove('hidden');
-    $('dossier').removeAttribute('hidden');
-    window.print();
+    window.location.href = 'guia.html';
   });
   $('btnTesti') && $('btnTesti').addEventListener('click', sendTesti);
   $('btnPurpose') && $('btnPurpose').addEventListener('click', function () {
@@ -1228,7 +1235,7 @@
     }
     var p = (($('purposeIn') && $('purposeIn').value) || '').trim();
     if (p.length < 8) {
-      if ($('purposeMsg')) $('purposeMsg').textContent = 'Escribe el propósito de tus 28 días. Ejemplo: quiero manifestar mucho dinero.';
+      if ($('purposeMsg')) $('purposeMsg').textContent = 'Escribe el propósito de tus 28 días. Una frase de lo que quieres instalar.';
       return;
     }
     var state = patch(function (st) { st.purpose = p; });

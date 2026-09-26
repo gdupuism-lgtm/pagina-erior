@@ -94,7 +94,7 @@
       <div id="visionWait" class="vision-screen hidden">
         <div class="vision-orb" aria-hidden="true"></div>
         <h2>Dame un momento.</h2>
-        <p>Armo tu ficha y tu visualización con lo que acabas de decir.</p>
+        <p>Guardo tu ficha para tus 28 días. Solo lo que elegiste.</p>
       </div>
 
       <div class="form-card card foil-card hidden" id="formCard" hidden>
@@ -199,6 +199,7 @@
         </article>
 
         <div id="dayNowBox"></div>
+        <div class="card foil-card" id="homeAffirm" style="margin-top:1rem"></div>
         <div id="progressBox"></div>
         <div id="upgradeHoy"></div>
         <article class="post" id="missionPost">
@@ -228,7 +229,7 @@
         <div class="card foil-card sand-card" id="purposeCard">
           <span class="num">Propósito de tus 28 días</span>
           <label for="purposeIn">Se escribe una sola vez</label>
-          <textarea id="purposeIn" placeholder="Ej. quiero manifestar mucho dinero"></textarea>
+          <textarea id="purposeIn" placeholder="Ej. lo que quieres instalar en estos 28 días"></textarea>
           <button type="button" class="btn btn-gold btn-full" id="btnPurpose" style="margin-top:.8rem">Sellar propósito</button>
           <p class="note hidden" id="purposeLockNote">Ya está sellado. El plan de escucha usa solo los audios que te asignaron.</p>
           <p class="note" id="purposeMsg"></p>
@@ -295,8 +296,10 @@
         <h2 class="sec-title">Mind Movie</h2>
         <p class="sec-sub">Tu película. Una sola. La dejas aquí y la ves cuando quieras.</p>
         <div class="card foil-card" id="mindMovieBox"></div>
-        <div class="card foil-card" id="affirmCard" style="margin-top:1rem"></div>
         <div id="mmWantWrap" class="mm-want-wrap" hidden></div>
+        <h2 class="sec-title" style="margin-top:1.6rem">Afirmaciones</h2>
+        <p class="sec-sub">Una al día. No se elige ni se cambia. Mañana es otra.</p>
+        <div class="card foil-card" id="affirmCard"></div>
       </section>
 
       <section class="view" id="viewCal" data-view="cal">
@@ -336,7 +339,7 @@
           <p class="note" id="remindMsg"></p>
         </div>
         <div class="actions" style="margin-top:1rem">
-          <button type="button" class="btn btn-ghost" id="btnPrint">PDF</button>
+          <button type="button" class="btn btn-ghost" id="btnPrint">Cómo usar</button>
           <button type="button" class="btn btn-ghost" id="btnEdit">Editar ficha</button>
         </div>
       </section>
@@ -435,8 +438,8 @@
   <script src="routines.js?v=22"></script>
   <script src="plan.js?v=22"></script>
   <script src="vault.js?v=25"></script>
-  <script src="vision.js?v=3"></script>
-  <script src="protocolo.js?v=35"></script>
+  <script src="vision.js?v=4"></script>
+  <script src="protocolo.js?v=36"></script>
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js?v=37', { scope: './' }).catch(function () {});
