@@ -171,14 +171,19 @@ body.is-app.has-mini .wrap{padding-bottom:10.2rem}
 
 .logo-mark{width:min(220px,56vw);height:auto;margin:0 auto .4rem;display:block;filter:drop-shadow(0 0 22px rgba(255,255,255,.32))}
 .welcome-mark{width:96px;height:auto;margin:.15rem auto .7rem;display:block;filter:drop-shadow(0 0 14px rgba(255,255,255,.24))}
-.logo-tile{position:relative;display:grid;place-items:center;margin:0 auto}
-.logo-tile img{
-  width:100%;height:auto;display:block;
-  object-fit:contain;object-position:center;
-  filter:drop-shadow(0 18px 40px rgba(0,0,0,.45));
+.logo-tile{
+  position:relative;margin:0 auto;
+  aspect-ratio:1;overflow:hidden;border-radius:28%;
+  box-shadow:0 16px 40px rgba(0,0,0,.4);
 }
-.logo-tile-hero{width:min(260px,68vw)}
-.logo-tile-hero img{border-radius:22%}
+.logo-tile img{
+  width:122%;height:122%;max-width:none;
+  display:block;object-fit:cover;object-position:center;
+  position:absolute;left:-11%;top:-11%;
+}
+.logo-tile-hero{width:min(220px,56vw)}
+.logo-tile-mid{width:92px;margin:.15rem auto .7rem}
+.logo-tile-mini{width:40px;margin:0}
 .logo-tile-mid{width:120px;margin:.15rem auto .7rem}
 .logo-tile-mini{width:46px;margin:0}
 .boot-name{
@@ -838,6 +843,7 @@ body.is-playing .mini-play .ic-pause{display:block}
   display:grid;place-items:center;align-content:center;
   text-align:center;padding:2rem 1.2rem;
   cursor:pointer;overflow:hidden;
+  overscroll-behavior:none;
 }
 .boot-splash .logo-tile,.boot-splash .boot-name,.boot-splash .boot-hint{position:relative;z-index:1}
 .boot-splash .title-3d{font-size:clamp(2.05rem,10.2vw,3.7rem);letter-spacing:-.04em;margin:.2rem 0 .4rem;max-width:92vw}
