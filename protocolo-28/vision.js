@@ -277,6 +277,10 @@
     return list[(Math.max(1, n) - 1) % list.length];
   }
 
+  function waMind() {
+    return 'https://wa.me/5214432311761?text=' + encodeURIComponent('Hola, quiero mi Mind Movie.');
+  }
+
   function renderMindMovie(s) {
     var box = $('mindMovieBox');
     if (!box) return;
@@ -286,6 +290,16 @@
       '<input id="mmFile" type="file" accept="video/*" hidden>' +
       '<button type="button" class="btn btn-gold btn-full" id="btnMmPick" style="margin-top:1rem">Subir o cambiar video</button>' +
       '<p class="note" id="mmMsg">' + (s.mindMovie ? 'Ya está en tu perfil. Queda en este aparato, atado a tu código.' : 'Sube el video que te armó Erior. Una sola película.') + '</p>';
+    var want = $('mmWantWrap');
+    if (want) {
+      if (s.mindMovie) {
+        want.innerHTML = '';
+        want.hidden = true;
+      } else {
+        want.hidden = false;
+        want.innerHTML = '<a class="btn btn-gold btn-full mm-want" href="' + waMind() + '" target="_blank" rel="noopener">Quiero mi Mind Movie</a>';
+      }
+    }
     if ($('btnMmPick')) $('btnMmPick').onclick = function () { $('mmFile') && $('mmFile').click(); };
     if ($('mmFile')) $('mmFile').onchange = function () {
       var f = this.files && this.files[0];

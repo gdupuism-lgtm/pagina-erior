@@ -54,12 +54,20 @@
     return Math.max(0, Math.round((b.getTime() - a.getTime()) / 86400000));
   }
 
+  function calendarDaysUsed(from) {
+    if (!from) return 1;
+    var a = new Date(mexicoYmd(from) + 'T12:00:00');
+    var b = new Date(mexicoYmd(Date.now()) + 'T12:00:00');
+    return Math.max(1, Math.round((b.getTime() - a.getTime()) / 86400000) + 1);
+  }
+
   function isExpired(row) {
     if (!row) return true;
     if (row.active === false) return true;
-    var exp = row.expires_at;
-    if (!exp) return false;
-    return Date.now() > new Date(exp).getTime();
+    ensureRow(row);
+    if (row.expires_at && Date.now() > new Date(row.expires_at).getTime()) return true;
+    var start = row.started_at || row.created_at;
+    return !!(start && calendarDaysUsed(start) > 30);
   }
 
   function ensureRow(row) {
@@ -170,6 +178,7 @@
       err.code = 'expired';
       throw err;
     }
+    if (!row.started_at) row.started_at = new Date().toISOString();
     if (!bindDevice(row, device, label)) {
       var e2 = new Error('Este código ya tiene sus accesos ocupados.');
       e2.code = 'devices';
@@ -287,6 +296,7 @@
       if (!row) throw new Error('No encontré ese código.');
       row.active = true;
       row.days = 30;
+      row.started_at = new Date().toISOString();
       row.expires_at = plusDays(Date.now(), 30);
       saveLocalDb(db);
       return row;

@@ -54,9 +54,35 @@ function plusDays(from, n) {
   return d.toISOString();
 }
 
+function mexicoYmd(d) {
+  try {
+    return new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'America/Mexico_City', year: 'numeric', month: '2-digit', day: '2-digit'
+    }).format(new Date(d));
+  } catch (e) {
+    return new Date(d).toISOString().slice(0, 10);
+  }
+}
+
+function calendarDaysUsed(from) {
+  if (!from) return 1;
+  const a = new Date(`${mexicoYmd(from)}T12:00:00`);
+  const b = new Date(`${mexicoYmd(Date.now())}T12:00:00`);
+  return Math.max(1, Math.round((b.getTime() - a.getTime()) / 86400000) + 1);
+}
+
 function daysLeft(expires) {
   if (!expires) return 30;
   return Math.max(0, Math.ceil((new Date(expires).getTime() - Date.now()) / 86400000));
+}
+
+function rowExpired(row) {
+  if (!row) return true;
+  if (row.active === false) return true;
+  ensureCode(row);
+  if (row.expires_at && Date.now() > new Date(row.expires_at).getTime()) return true;
+  const start = row.started_at || row.created_at;
+  return !!(start && calendarDaysUsed(start) > 30);
 }
 
 function ensureCode(row) {
@@ -229,10 +255,11 @@ const server = http.createServer(async (req, res) => {
       const row = (db.codes || []).find((c) => c.code === code && c.active !== false);
       if (!row) { send(res, 403, { ok: false, error: 'Ese código no existe o ya no sirve', code: 'missing' }); return; }
       ensureCode(row);
-      if (Date.now() > new Date(row.expires_at).getTime()) {
+      if (rowExpired(row)) {
         send(res, 403, { ok: false, error: 'Tu acceso de 30 días terminó. Tus datos siguen. Erior puede reactivar otros 30.', code: 'expired' });
         return;
       }
+      if (!row.started_at) row.started_at = new Date().toISOString();
       const known = (row.devices || []).find((d) => d.id === device);
       if (!known) {
         if ((row.devices || []).length >= (row.max_devices || 2)) {
@@ -284,6 +311,7 @@ const server = http.createServer(async (req, res) => {
         if (c.code === code) {
           c.active = true;
           c.days = days;
+          c.started_at = new Date().toISOString();
           c.expires_at = plusDays(Date.now(), days);
           row = c;
         }

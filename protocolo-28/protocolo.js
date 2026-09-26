@@ -180,16 +180,26 @@
     return 'https://wa.me/' + WA + '?text=' + encodeURIComponent(lines.join('\n'));
   }
 
-  function expiredAccess(access) {
+  function expiredAccess(s) {
+    var access = s && s.access;
     if (!access) return false;
-    if (access.expired) return true;
-    if (!access.expires_at) return false;
-    return Date.now() > new Date(access.expires_at).getTime();
+    if (access.expired || access.active === false) return true;
+    if (access.expires_at && Date.now() > new Date(access.expires_at).getTime()) return true;
+    return daysUsed(s) > 30;
+  }
+
+  function markExpired(st) {
+    if (!st || !st.access) return;
+    st.access.expired = true;
+    st.access.expires_at = st.access.expires_at || new Date(0).toISOString();
   }
 
   function applyMode(s) {
     document.body.classList.remove('is-app', 'is-unlocked', 'is-lock', 'is-expired');
-    if (s.access && expiredAccess(s.access)) {
+    if (s.access) lockClock(s);
+    if (s.access && expiredAccess(s)) {
+      markExpired(s);
+      try { save(s); } catch (e) {}
       document.body.classList.add('is-expired');
       return;
     }
@@ -432,7 +442,7 @@
     var oldT = new Date(oldExp).getTime();
     var newT = new Date(incomingExp).getTime();
     if (newT > oldT + 20 * 86400000) return incomingExp;
-    return oldExp;
+    return newT < oldT ? incomingExp : oldExp;
   }
 
   function olderIso(a, b) {
@@ -463,13 +473,17 @@
     if (!st) return st;
     var code = st.access && st.access.code;
     var c = loadClock(code);
+    var before = c.expires_at || (st.access && st.access.expires_at) || '';
+    if (st.access) {
+      st.access.expires_at = keepExpiry(c.expires_at || st.access.expires_at, st.access.expires_at)
+        || plusDaysIso(st.start || Date.now(), 30);
+    }
+    var extended = before && st.access && st.access.expires_at
+      && (new Date(st.access.expires_at).getTime() > new Date(before).getTime() + 20 * 86400000);
     st.start = recoverStart(st) || c.start || (st.access && st.access.expires_at
       ? plusDaysIso(st.access.expires_at, -30)
       : new Date().toISOString());
-    if (st.access) {
-      st.access.expires_at = keepExpiry(c.expires_at || st.access.expires_at, st.access.expires_at)
-        || plusDaysIso(st.start, 30);
-    }
+    if (extended) st.start = plusDaysIso(st.access.expires_at, -30);
     if (code && st.start) saveClock(code, { start: st.start, expires_at: st.access && st.access.expires_at });
     return st;
   }
@@ -992,7 +1006,13 @@
       $('gateErr').textContent = '';
       applyMode(state);
     }).catch(function (err) {
-      $('gateErr').textContent = err.message || 'Código no válido.';
+      var msg = (err && err.message) || '';
+      if ((err && err.code === 'expired') || /30 días terminó|venc/i.test(msg)) {
+        patch(markExpired);
+        applyMode(load());
+        return;
+      }
+      $('gateErr').textContent = msg || 'Código no válido.';
     });
   }
 
@@ -1089,11 +1109,7 @@
     }).catch(function (err) {
       var msg = (err && err.message) || '';
       if ((err && err.code === 'expired') || /30 días terminó|venc/i.test(msg)) {
-        patch(function (st) {
-          if (!st.access) return;
-          st.access.expired = true;
-          st.access.expires_at = st.access.expires_at || new Date(0).toISOString();
-        });
+        patch(markExpired);
         applyMode(load());
         return;
       }
@@ -1133,4 +1149,12 @@
   setTimeout(endSplash, 2200);
   setInterval(tryNotify, 30000);
   setInterval(paintTimer, 1000);
+  function guardAccess() {
+    var s = load();
+    if (s.access && expiredAccess(s)) applyMode(s);
+  }
+  setInterval(guardAccess, 30000);
+  document.addEventListener('visibilitychange', function () {
+    if (!document.hidden) guardAccess();
+  });
 })();

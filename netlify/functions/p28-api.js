@@ -75,6 +75,23 @@ function plusDays(from, n) {
   return d.toISOString();
 }
 
+function mexicoYmd(d) {
+  try {
+    return new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'America/Mexico_City', year: 'numeric', month: '2-digit', day: '2-digit'
+    }).format(new Date(d));
+  } catch (e) {
+    return new Date(d).toISOString().slice(0, 10);
+  }
+}
+
+function calendarDaysUsed(from) {
+  if (!from) return 1;
+  const a = new Date(`${mexicoYmd(from)}T12:00:00`);
+  const b = new Date(`${mexicoYmd(Date.now())}T12:00:00`);
+  return Math.max(1, Math.round((b.getTime() - a.getTime()) / 86400000) + 1);
+}
+
 function daysLeft(expires) {
   if (!expires) return 30;
   return Math.max(0, Math.ceil((new Date(expires).getTime() - Date.now()) / 86400000));
@@ -87,6 +104,15 @@ function ensureCode(row) {
   row.devices = row.devices || [];
   if (!row.expires_at) row.expires_at = plusDays(row.created_at || Date.now(), row.days);
   return row;
+}
+
+function rowExpired(row) {
+  if (!row) return true;
+  if (row.active === false) return true;
+  ensureCode(row);
+  if (row.expires_at && Date.now() > new Date(row.expires_at).getTime()) return true;
+  const start = row.started_at || row.created_at;
+  return !!(start && calendarDaysUsed(start) > 30);
 }
 
 function accessFrom(row) {
@@ -317,9 +343,10 @@ exports.handler = async (event, context) => {
         return { statusCode: 403, headers, body: JSON.stringify({ ok: false, error: 'Ese código no existe o ya no sirve', code: 'missing' }) };
       }
       ensureCode(row);
-      if (Date.now() > new Date(row.expires_at).getTime()) {
+      if (rowExpired(row)) {
         return { statusCode: 403, headers, body: JSON.stringify({ ok: false, error: 'Tu acceso de 30 días terminó. Tus datos siguen. Erior puede reactivar otros 30.', code: 'expired' }) };
       }
+      if (!row.started_at) row.started_at = new Date().toISOString();
       if (!bindDevice(row, device, deviceLabel)) {
         return { statusCode: 403, headers, body: JSON.stringify({ ok: false, error: 'Este código ya tiene sus accesos ocupados.', code: 'devices' }) };
       }
@@ -423,6 +450,7 @@ exports.handler = async (event, context) => {
       if (!row) return { statusCode: 404, headers, body: JSON.stringify({ ok: false, error: 'No encontré ese código' }) };
       row.active = true;
       row.days = days;
+      row.started_at = new Date().toISOString();
       row.expires_at = plusDays(Date.now(), days);
       await saveCodes(codes);
       return { statusCode: 200, headers, body: JSON.stringify({ ok: true, row }) };

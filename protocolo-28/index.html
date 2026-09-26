@@ -16,28 +16,30 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="protocolo.css?v=29">
+  <link rel="stylesheet" href="protocolo.css?v=30">
 </head>
 <body class="is-boot">
   <div class="sky" aria-hidden="true"></div>
   <div class="aurora" aria-hidden="true"></div>
   <div class="aurora-2" aria-hidden="true"></div>
+  <div class="aurora-3" aria-hidden="true"></div>
   <div class="beam" aria-hidden="true"></div>
   <div class="beam-2" aria-hidden="true"></div>
   <div class="orb orb-a" aria-hidden="true"></div>
   <div class="orb orb-b" aria-hidden="true"></div>
   <div class="orb orb-c" aria-hidden="true"></div>
+  <div class="orb orb-d" aria-hidden="true"></div>
   <div class="sand" aria-hidden="true"></div>
   <div class="grain" aria-hidden="true"></div>
   <div class="vignette" aria-hidden="true"></div>
   <div id="bootSplash" class="boot-splash" aria-label="Erior Center">
-    <img class="logo-mark" src="mark.png" alt="">
+    <img class="logo-mark logo-cans" src="logo-cans.png" alt="">
     <p class="boot-hint">Toca para entrar</p>
   </div>
 
   <div class="wrap">
     <header class="ig-top no-print">
-      <p class="ig-logo" aria-label="Erior Center"><img src="mark.png" alt=""></p>
+      <p class="ig-logo" aria-label="Erior Center"><img class="logo-cans" src="logo-cans.png" alt=""></p>
       <button type="button" class="ig-ico" id="btnInstall" aria-label="Instalar">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v10.2l3.2-3.2 1.4 1.4L12 17.2 7.4 11.4l1.4-1.4L11 13.2V3h1zm-7 14.5h14V21H5v-3.5z"/></svg>
       </button>
@@ -157,7 +159,7 @@
     <div id="welcomeGate" class="welcome-gate hidden" hidden>
       <div class="welcome-card foil-card">
         <span class="kicker">Paso 2</span>
-        <img class="welcome-mark" src="mark.png" alt="">
+        <img class="welcome-mark logo-cans" src="logo-cans.png" alt="">
         <p class="copy">Tu video de inicio. Luego queda en Inicio, como una historia.</p>
         <video id="appVideo" controls playsinline webkit-playsinline preload="none" src="bienvenida.mp4"></video>
         <button type="button" class="btn btn-gold btn-full" id="btnWelcomeGo" style="margin-top:1rem">Entrar</button>
@@ -277,6 +279,7 @@
         <p class="sec-sub">Tu película. Una sola. La dejas aquí y la ves cuando quieras.</p>
         <div class="card foil-card" id="mindMovieBox"></div>
         <div class="card foil-card" id="affirmCard" style="margin-top:1rem"></div>
+        <div id="mmWantWrap" class="mm-want-wrap" hidden></div>
       </section>
 
       <section class="view" id="viewCal" data-view="cal">
@@ -399,19 +402,19 @@
     <div class="celebrate-bg" aria-hidden="true"></div>
     <div class="spark" id="spark" aria-hidden="true"></div>
     <div class="celebrate-card">
-      <img class="welcome-mark" src="mark.png" alt="">
+      <img class="welcome-mark logo-cans" src="logo-cans.png" alt="">
       <h2 id="celebrateTitle"></h2>
       <p id="celebrateText"></p>
     </div>
   </div>
 
-  <script src="access.js?v=26"></script>
+  <script src="access.js?v=27"></script>
   <script src="phrases.js?v=22"></script>
   <script src="routines.js?v=22"></script>
   <script src="plan.js?v=22"></script>
   <script src="vault.js?v=25"></script>
-  <script src="vision.js?v=2"></script>
-  <script src="protocolo.js?v=29"></script>
+  <script src="vision.js?v=3"></script>
+  <script src="protocolo.js?v=30"></script>
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js').catch(function () {});
