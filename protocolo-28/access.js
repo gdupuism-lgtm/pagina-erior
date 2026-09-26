@@ -72,6 +72,51 @@
     };
   }
 
+  function sessionCode(code) {
+    if (code) {
+      try { localStorage.setItem('erior-p28-session', JSON.stringify({ code: normalize(code) })); } catch (e) {}
+    }
+    try { return JSON.parse(localStorage.getItem('erior-p28-session') || '{}').code || ''; } catch (e) { return ''; }
+  }
+
+  function bindSession(code) {
+    sessionCode(code);
+  }
+
+  function storeKey() {
+    var c = sessionCode();
+    if (!c) return 'erior-p28';
+    var keyed = 'erior-p28-' + c;
+    if (localStorage.getItem(keyed)) return keyed;
+    try {
+      var legacy = JSON.parse(localStorage.getItem('erior-p28') || '{}');
+      if (legacy.access && normalize(legacy.access.code) === c) return 'erior-p28';
+    } catch (e) {}
+    return keyed;
+  }
+
+  function mediaDbName() {
+    var c = sessionCode();
+    if (!c) return 'erior-p28-media';
+    try {
+      var legacy = JSON.parse(localStorage.getItem('erior-p28') || '{}');
+      if (legacy.access && normalize(legacy.access.code) === c) return 'erior-p28-media';
+    } catch (e) {}
+    return 'erior-p28-media-' + c.replace(/[^A-Z0-9]/g, '');
+  }
+
+  function getProfile(code) {
+    return call('profile-get', { code: normalize(code) });
+  }
+
+  function saveProfile(code, payload) {
+    return call('profile-set', Object.assign({ code: normalize(code) }, payload || {}));
+  }
+
+  function revoke(code, adminKey) {
+    return call('revoke', { code: normalize(code) }, adminKey);
+  }
+
   function deviceId() {
     try {
       var id = localStorage.getItem('erior-p28-device');
@@ -166,7 +211,12 @@
     var device = deviceId();
     var label = deviceLabel();
     return call('unlock', { code: c, device: device, deviceLabel: label }).then(function (res) {
-      if (res.ok && res.data.access) return res.data.access;
+      if (res.ok && res.data.access) {
+        bindSession(res.data.access.code || c);
+        var access = res.data.access;
+        access.profile = res.data.profile || null;
+        return access;
+      }
       if (res.data && res.data.error) {
         var err = new Error(res.data.error);
         err.code = res.data.code || '';
@@ -174,7 +224,7 @@
       }
       try {
         var local = unlockLocal(c, device, label);
-        if (local) return local;
+        if (local) { bindSession(c); return local; }
       } catch (e) {
         throw e;
       }
@@ -269,6 +319,13 @@
     unlock: unlock,
     issue: issue,
     reactivate: reactivate,
+    revoke: revoke,
+    getProfile: getProfile,
+    saveProfile: saveProfile,
+    bindSession: bindSession,
+    sessionCode: sessionCode,
+    storeKey: storeKey,
+    mediaDbName: mediaDbName,
     resetDevices: resetDevices,
     listCodes: listCodes,
     getWall: getWall,

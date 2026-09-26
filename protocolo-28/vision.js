@@ -1,12 +1,4 @@
 (function (w) {
-  var STICKERS = [
-    { e: '🎧', t: 10, l: 6 }, { e: '💸', t: 14, l: 74 }, { e: '💋', t: 26, l: 14 },
-    { e: '✈️', t: 18, l: 46 }, { e: '💍', t: 6, l: 34 }, { e: '🌙', t: 34, l: 80 },
-    { e: '🦋', t: 56, l: 8 }, { e: '🏙️', t: 60, l: 72 }, { e: '☕', t: 46, l: 40 },
-    { e: '🍒', t: 70, l: 24 }, { e: '🏔️', t: 76, l: 58 }, { e: '✉️', t: 8, l: 80 },
-    { e: '⭐', t: 40, l: 8 }, { e: '🌹', t: 68, l: 78 }
-  ];
-
   var HOMES = [
     { v: 'penthouse', t: 'Penthouse' },
     { v: 'playa', t: 'Casa en la playa' },
@@ -34,7 +26,7 @@
   var step = 0;
   var draft = emptyDraft();
   var editing = false;
-  var vizI = 0;
+  var movieUrl = '';
 
   function $(id) { return document.getElementById(id); }
   function emptyDraft() {
@@ -48,7 +40,8 @@
     return (w.P28Access && P28Access.firstName(raw)) || String(raw || '').trim().split(/\s+/)[0];
   }
   function load() {
-    try { return JSON.parse(localStorage.getItem('erior-p28') || '{}'); } catch (e) { return {}; }
+    var key = (w.P28Access && P28Access.storeKey()) || 'erior-p28';
+    try { return JSON.parse(localStorage.getItem(key) || '{}'); } catch (e) { return {}; }
   }
 
   function steps() {
@@ -101,27 +94,8 @@
     return steps().filter(function (s) { return !s.skip || !s.skip(); });
   }
 
-  function paintStickers(id) {
-    var box = $(id || 'stickerField');
-    if (!box || box.getAttribute('data-ready') === '1') return;
-    box.setAttribute('data-ready', '1');
-    box.innerHTML = STICKERS.map(function (s, i) {
-      return '<button type="button" class="sticker" data-i="' + i + '" style="top:' + s.t + '%;left:' + s.l + '%;animation-delay:' + (i * .18) + 's">' + s.e + '</button>';
-    }).join('');
-    box.onclick = function (e) {
-      var b = e.target.closest && e.target.closest('.sticker');
-      if (!b) return;
-      e.stopPropagation();
-      var x = ((Math.random() * 56) - 28).toFixed(0);
-      var y = ((Math.random() * 56) - 28).toFixed(0);
-      var r = ((Math.random() * 28) - 14).toFixed(0);
-      b.style.transform = 'translate(' + x + 'px,' + y + 'px) rotate(' + r + 'deg) scale(1.18)';
-      b.classList.add('nudge');
-    };
-  }
-
   function showPane(id) {
-    ['stickerIntro', 'visionAsk', 'visionWait'].forEach(function (k) {
+    ['visionAsk', 'visionWait'].forEach(function (k) {
       if ($(k)) {
         $(k).classList.toggle('on', k === id);
         $(k).classList.toggle('hidden', k !== id);
@@ -253,10 +227,7 @@
     renderStep();
   }
   function back() {
-    if (step <= 0) {
-      showPane('stickerIntro');
-      return;
-    }
+    if (step <= 0) return;
     step -= 1;
     renderStep();
   }
@@ -285,16 +256,9 @@
       });
     }
     if (state && state.vision) draft.vision = Object.assign(draft.vision, state.vision);
-    paintStickers('stickerField');
-    paintStickers('bootStickers');
-    if (editing) {
-      step = 0;
-      showPane('visionAsk');
-      renderStep();
-      return;
-    }
     step = 0;
-    showPane('stickerIntro');
+    showPane('visionAsk');
+    renderStep();
   }
 
   function dailyAffirm(s) {
@@ -313,98 +277,51 @@
     return list[(Math.max(1, n) - 1) % list.length];
   }
 
-  function vizCards(s) {
-    s = s || load();
-    var name = firstName((s.data && s.data.name) || '');
-    var v = s.vision || {};
-    var wants = s.purpose || (s.data && s.data.wants) || 'esta vida';
-    var area = (s.data && s.data.area) || '';
-    var cards = [];
-    cards.push({
-      k: '01',
-      t: 'Tu yo de después',
-      x: (name ? name + '. ' : '') + 'Ya sostienes: ' + wants + '. No lo pides. Lo ocupas.',
-      e: '✨'
-    });
-    if (v.city) cards.push({ k: '02', t: 'La ciudad', x: 'Te despiertas en ' + v.city + '. Eso ya no es fantasía. Es coordenada.', e: '🏙️' });
-    if (v.home) {
-      var home = (HOMES.filter(function (h) { return h.v === v.home; })[0] || {}).t || v.home;
-      cards.push({ k: '03', t: 'Tu casa', x: 'Vives en: ' + home + '. Entras como quien paga y elige.', e: '🏡' });
+  function renderMindMovie(s) {
+    var box = $('mindMovieBox');
+    if (!box) return;
+    box.innerHTML =
+      '<span class="num">Tu Mind Movie</span>' +
+      '<div id="mmPlayerWrap"></div>' +
+      '<input id="mmFile" type="file" accept="video/*" hidden>' +
+      '<button type="button" class="btn btn-gold btn-full" id="btnMmPick" style="margin-top:1rem">Subir o cambiar video</button>' +
+      '<p class="note" id="mmMsg">' + (s.mindMovie ? 'Ya está en tu perfil. Queda en este aparato, atado a tu código.' : 'Sube el video que te armó Erior. Una sola película.') + '</p>';
+    if ($('btnMmPick')) $('btnMmPick').onclick = function () { $('mmFile') && $('mmFile').click(); };
+    if ($('mmFile')) $('mmFile').onchange = function () {
+      var f = this.files && this.files[0];
+      if (!f || !w.P28Vault) return;
+      if ($('mmMsg')) $('mmMsg').textContent = 'Guardando…';
+      P28Vault.saveMindMovie(f).then(function () {
+        renderApp(load());
+      }).catch(function (err) {
+        if ($('mmMsg')) $('mmMsg').textContent = err.message || 'No se pudo guardar.';
+      });
+    };
+    if (w.P28Vault && P28Vault.getMindMovie) {
+      P28Vault.getMindMovie().then(function (blob) {
+        if (!blob) return;
+        if (movieUrl) URL.revokeObjectURL(movieUrl);
+        movieUrl = URL.createObjectURL(blob);
+        var wrap = $('mmPlayerWrap');
+        if (wrap) wrap.innerHTML = '<video id="mmVideo" controls playsinline src="' + movieUrl + '"></video>';
+      });
     }
-    if (v.person) cards.push({ k: '04', t: 'Esa persona', x: v.person + (v.personKind ? ' · ' + v.personKind : '') + '. La frecuencia es tuya. El resto se ordena.', e: '💗' });
-    if (area === 'dinero') cards.push({ k: '05', t: 'Dinero en movimiento', x: 'El canal está abierto. Cobra, elige, no mendigas el timing.', e: '💸' });
-    if (area === 'amor' || v.hasPerson === 'si') cards.push({ k: '06', t: 'Amor sin hueco', x: 'Atraes desde completud. Dejas de perseguir.', e: '🌹' });
-    if (v.why) cards.push({ k: '07', t: 'Por qué importa', x: v.why, e: '🌙' });
-    cards.push({
-      k: '28',
-      t: 'Día 28',
-      x: 'Testimonio al muro. Solo tu nombre. El loop viejo ya no manda.',
-      e: '28'
-    });
-    return cards;
   }
 
   function renderApp(s) {
     s = s || load();
+    var n = (w.P28 && P28.currentDay) ? P28.currentDay(s) : 1;
     var aff = $('affirmCard');
     if (aff) {
       aff.innerHTML =
-        '<span class="num">Afirmación de hoy</span>' +
+        '<span class="num">Frase del día ' + n + ' de 28</span>' +
         '<p class="affirm-txt">' + dailyAffirm(s) + '</p>' +
-        '<p class="note">Una al día. Léela antes del audio de noche.</p>';
+        '<p class="note">Cambia sola mañana. Hoy es esta.</p>';
     }
-    var cards = vizCards(s);
-    if (vizI >= cards.length) vizI = 0;
-    var c = cards[vizI] || cards[0];
-    var deck = $('vizDeck');
-    if (deck && c) {
-      deck.innerHTML =
-        '<span class="num">Visualización · ' + c.k + '</span>' +
-        '<div class="viz-card" id="vizCard">' +
-          '<span class="viz-emoji">' + c.e + '</span>' +
-          '<h3>' + c.t + '</h3>' +
-          '<p>' + c.x + '</p>' +
-        '</div>' +
-        '<div class="viz-nav">' +
-          '<button type="button" class="btn btn-ghost" id="vizPrev">Anterior</button>' +
-          '<button type="button" class="btn btn-gold" id="vizNext">Siguiente visión</button>' +
-        '</div>' +
-        '<p class="note">Desliza o toca. Son escenas hechas con lo que escribiste. Pon tu audio mientras las lees.</p>';
-      if ($('vizNext')) $('vizNext').onclick = function () { vizI = (vizI + 1) % cards.length; renderApp(s); };
-      if ($('vizPrev')) $('vizPrev').onclick = function () { vizI = (vizI - 1 + cards.length) % cards.length; renderApp(s); };
-      bindSwipe($('vizCard'), function (dir) {
-        vizI = (vizI + dir + cards.length) % cards.length;
-        renderApp(s);
-      });
-    }
-    var hoy = $('affirmHoy');
-    if (hoy) {
-      hoy.innerHTML =
-        '<header class="post-head"><span class="avatar">A</span><div><b>Afirmación</b><small>Hoy</small></div></header>' +
-        '<div class="post-body"><p class="copy">' + dailyAffirm(s) + '</p>' +
-        '<button type="button" class="btn btn-ghost btn-full" id="btnGoVision" style="margin-top:.8rem">Ver visualización</button></div>';
-      if ($('btnGoVision') && w.P28 && P28.go) $('btnGoVision').onclick = function () { P28.go('vision'); };
-    }
-  }
-
-  function bindSwipe(el, fn) {
-    if (!el) return;
-    var x0 = 0;
-    el.ontouchstart = function (e) { x0 = e.changedTouches[0].clientX; };
-    el.ontouchend = function (e) {
-      var dx = e.changedTouches[0].clientX - x0;
-      if (Math.abs(dx) > 40) fn(dx < 0 ? 1 : -1);
-    };
+    renderMindMovie(s);
   }
 
   function bind() {
-    paintStickers('stickerField');
-    paintStickers('bootStickers');
-    if ($('btnStickerGo')) $('btnStickerGo').onclick = function () {
-      step = 0;
-      showPane('visionAsk');
-      renderStep();
-    };
     if ($('btnVisionGo')) $('btnVisionGo').onclick = next;
     if ($('btnVisionBack')) $('btnVisionBack').onclick = back;
     document.addEventListener('keydown', function (e) {

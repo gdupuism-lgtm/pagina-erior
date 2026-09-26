@@ -1,7 +1,7 @@
 (function () {
   var WA = '5214432311761';
   var MAIL = 'eriorcenter@gmail.com';
-  var STORE = 'erior-p28';
+  function storeKey() { return (window.P28Access && P28Access.storeKey()) || 'erior-p28'; }
   var PACKS = { 1: 999, 2: 1555, 3: 2222 };
   var PACK_COPY = {
     1: { t: 'Capa 1', x: 'Tu audio de este reto. Noche en loop. Día, mínimo 4 horas.' },
@@ -34,9 +34,9 @@
     return el ? String(el.value || '').trim() : '';
   }
   function txt(s) { return String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''); }
-  function save(state) { localStorage.setItem(STORE, JSON.stringify(state)); }
+  function save(state) { localStorage.setItem(storeKey(), JSON.stringify(state)); }
   function load() {
-    try { return JSON.parse(localStorage.getItem(STORE) || '{}'); } catch (e) { return {}; }
+    try { return JSON.parse(localStorage.getItem(storeKey()) || '{}'); } catch (e) { return {}; }
   }
   function patch(fn) {
     var s = load();
@@ -389,18 +389,77 @@
     if ($('upgradeHoy')) $('upgradeHoy').innerHTML = '';
   }
 
+  function liveDaysLeft(access) {
+    if (!access || !access.expires_at) return 30;
+    return window.P28Access ? P28Access.daysLeft(access.expires_at) : 30;
+  }
+
+  function syncProfile(s) {
+    if (!s || !s.access || !s.access.code || !window.P28Access || !P28Access.saveProfile) return;
+    P28Access.saveProfile(s.access.code, {
+      data: s.data || {},
+      vision: s.vision || {},
+      photo: s.photo || '',
+      purpose: s.purpose || ''
+    }).catch(function () {});
+  }
+
+  function mergeProfile(st, profile) {
+    if (!profile) return;
+    if (profile.data && !st.data) st.data = profile.data;
+    if (profile.vision && !st.vision) st.vision = profile.vision;
+    if (profile.photo) st.photo = profile.photo;
+    if (profile.purpose && !st.purpose) st.purpose = profile.purpose;
+  }
+
   function renderMyPack(s) {
     if (!$('myPackBox')) return;
     var pack = (s.access && s.access.pack) || s.pack || 1;
     var copy = PACK_COPY[pack] || PACK_COPY[1];
-    var left = s.access && (s.access.days_left != null)
-      ? s.access.days_left
-      : (s.access && s.access.expires_at && window.P28Access ? P28Access.daysLeft(s.access.expires_at) : '—');
+    var left = liveDaysLeft(s.access);
+    var n = currentDay(s);
+    var name = firstName((s.data && s.data.name) || (s.access && s.access.name) || '');
+    var photo = s.photo
+      ? '<img class="profile-photo" src="' + s.photo + '" alt="">'
+      : '<span class="profile-photo empty">' + (name ? name.charAt(0) : 'E') + '</span>';
     $('myPackBox').innerHTML =
-      '<div class="card foil-card"><span class="num">Tu acceso</span>' +
-      '<p class="copy" style="margin:.4rem 0 .8rem">Quedan <b>' + left + '</b> días.</p>' +
-      '<p class="note">' + copy.x + '</p></div>';
+      '<div class="card foil-card profile-card">' +
+      '<button type="button" class="profile-pic" id="btnPhoto">' + photo + '<small>Cambiar foto</small></button>' +
+      '<input id="photoFile" type="file" accept="image/*" hidden>' +
+      '<h3>' + (name || 'Tu perfil') + '</h3>' +
+      '<p class="note">' + (s.access && s.access.code ? s.access.code : '') + '</p>' +
+      '<p class="copy" style="margin:.7rem 0 .2rem">Día <b>' + n + '</b> de 28 del reto.</p>' +
+      '<p class="copy">Te quedan <b>' + left + '</b> de 30 días de uso.</p>' +
+      '<p class="note" style="margin-top:.7rem">' + copy.x + '</p></div>';
     renderUpgrades(s);
+    if ($('btnPhoto') && $('photoFile')) {
+      $('btnPhoto').onclick = function () { $('photoFile').click(); };
+      $('photoFile').onchange = function () {
+        var f = this.files && this.files[0];
+        if (!f) return;
+        compressPhoto(f, function (dataUrl) {
+          var state = patch(function (st) { st.photo = dataUrl; });
+          syncProfile(state);
+          renderMyPack(state);
+        });
+      };
+    }
+  }
+
+  function compressPhoto(file, cb) {
+    var img = new Image();
+    var url = URL.createObjectURL(file);
+    img.onload = function () {
+      var c = document.createElement('canvas');
+      var scale = Math.min(480 / img.width, 480 / img.height, 1);
+      c.width = Math.max(1, Math.round(img.width * scale));
+      c.height = Math.max(1, Math.round(img.height * scale));
+      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+      cb(c.toDataURL('image/jpeg', 0.82));
+      URL.revokeObjectURL(url);
+    };
+    img.onerror = function () { URL.revokeObjectURL(url); };
+    img.src = url;
   }
 
   function showApp(s) {
@@ -430,6 +489,13 @@
     renderInstallAndRemind(s);
     if (s.remindOn && typeof Notification !== 'undefined' && Notification.permission === 'granted') {
       subscribePhone(s.remindAt || '21:00').catch(function () {});
+    }
+    if ($('dayNowBox')) {
+      var n = currentDay(s);
+      var left = liveDaysLeft(s.access);
+      $('dayNowBox').innerHTML =
+        '<div class="card foil-card"><span class="num">Hoy</span>' +
+        '<p class="copy" style="margin:.4rem 0 0">Día <b>' + n + '</b> de 28. Te quedan <b>' + left + '</b> días de uso de la app.</p></div>';
     }
     if (window.P28Vision) P28Vision.renderApp(s);
     maybeWelcome(s);
@@ -556,6 +622,7 @@
       st.remindAt = st.remindAt || '21:00';
     });
     applyMode(state);
+    syncProfile(state);
     pingErior('P28 FICHA: ' + firstName(data.name) + ' · ' + areaLabel(data.area) + ' · pack ' + state.pack + ' · ' + data.serial);
   }
 
@@ -813,9 +880,11 @@
     }
     $('gateErr').textContent = 'Revisando…';
     P28Access.unlock(code).then(function (access) {
+      if (P28Access.bindSession) P28Access.bindSession(access.code);
       var state = patch(function (st) {
         st.access = access;
         st.pack = access.pack || st.pack || 1;
+        mergeProfile(st, access.profile);
       });
       $('gateErr').textContent = '';
       applyMode(state);
@@ -871,6 +940,7 @@
       return;
     }
     var state = patch(function (st) { st.purpose = p; });
+    syncProfile(state);
     if ($('purposeMsg')) $('purposeMsg').textContent = 'Sellado. Una sola vez. El plan usa solo tus audios asignados.';
     lockPurpose(state);
     renderListenPlan(state);
@@ -899,11 +969,14 @@
       applyMode(saved);
       return;
     }
+    if (P28Access.bindSession) P28Access.bindSession(saved.access.code);
     P28Access.unlock(saved.access.code).then(function (access) {
       var state = patch(function (st) {
         st.access = Object.assign({}, st.access || {}, access);
         delete st.access.expired;
+        delete st.access.profile;
         st.pack = access.pack || st.pack;
+        mergeProfile(st, access.profile);
       });
       applyMode(state);
     }).catch(function (err) {

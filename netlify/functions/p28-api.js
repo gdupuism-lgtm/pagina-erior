@@ -331,7 +331,38 @@ exports.handler = async (event, context) => {
           body: JSON.stringify({ last_used_at: row.last_used_at }),
         });
       }
-      return { statusCode: 200, headers, body: JSON.stringify({ ok: true, access: accessFrom(row) }) };
+      const profile = await blobGet('profile-' + code, null);
+      return { statusCode: 200, headers, body: JSON.stringify({ ok: true, access: accessFrom(row), profile }) };
+    }
+
+    if (action === 'profile-get') {
+      const code = normalizeCode(body.code);
+      if (!code) return { statusCode: 400, headers, body: JSON.stringify({ ok: false, error: 'Falta código' }) };
+      const codes = await loadCodes();
+      const row = codes.find((c) => normalizeCode(c.code) === code);
+      if (!row) return { statusCode: 404, headers, body: JSON.stringify({ ok: false, error: 'No encontré ese código' }) };
+      const profile = await blobGet('profile-' + code, null);
+      return { statusCode: 200, headers, body: JSON.stringify({ ok: true, profile, access: accessFrom(row), active: row.active !== false }) };
+    }
+
+    if (action === 'profile-set') {
+      const code = normalizeCode(body.code);
+      if (!code) return { statusCode: 400, headers, body: JSON.stringify({ ok: false, error: 'Falta código' }) };
+      const codes = await loadCodes();
+      const row = codes.find((c) => normalizeCode(c.code) === code);
+      if (!row || row.active === false) {
+        return { statusCode: 403, headers, body: JSON.stringify({ ok: false, error: 'Ese código no está activo' }) };
+      }
+      const photo = String(body.photo || '');
+      const profile = {
+        data: body.data || {},
+        vision: body.vision || {},
+        photo: photo.length > 380000 ? '' : photo,
+        purpose: String(body.purpose || '').slice(0, 400),
+        updated_at: new Date().toISOString(),
+      };
+      await blobSet('profile-' + code, profile);
+      return { statusCode: 200, headers, body: JSON.stringify({ ok: true }) };
     }
 
     if (!p28AdminOk(event)) {

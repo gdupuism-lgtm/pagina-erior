@@ -88,7 +88,7 @@
       </section>
     </div>
   </div>
-  <script src="access.js?v=24"></script>
+  <script src="access.js?v=25"></script>
   <script>
     var key = '';
     try { key = sessionStorage.getItem('erior-p28-admin') || ''; } catch (e) { key = ''; }
@@ -135,6 +135,9 @@
           '<span class="admin-btns">' +
           '<button type="button" data-wa="' + encodeURIComponent(waText(c)) + '">WA</button>' +
           '<button type="button" data-plus="' + c.code + '">+30</button>' +
+          (c.active === false
+            ? '<button type="button" data-on="' + c.code + '">Abrir</button>'
+            : '<button type="button" data-off="' + c.code + '">Cerrar</button>') +
           '<button type="button" data-free="' + c.code + '">Aparatos</button>' +
           '</span></div>';
       }).join('');
@@ -151,6 +154,17 @@
       document.querySelectorAll('[data-free]').forEach(function (b) {
         b.onclick = function () {
           P28Access.resetDevices(b.getAttribute('data-free'), key).then(function () { refresh(); });
+        };
+      });
+      document.querySelectorAll('[data-off]').forEach(function (b) {
+        b.onclick = function () {
+          if (!P28Access.revoke) return;
+          P28Access.revoke(b.getAttribute('data-off'), key).then(function () { refresh(); });
+        };
+      });
+      document.querySelectorAll('[data-on]').forEach(function (b) {
+        b.onclick = function () {
+          P28Access.reactivate(b.getAttribute('data-on'), key).then(function () { refresh(); });
         };
       });
     }

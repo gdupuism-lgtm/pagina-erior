@@ -806,7 +806,6 @@ body.is-playing .mini-play .ic-pause{display:block}
   cursor:pointer;overflow:hidden;
 }
 .boot-splash .logo-mark,.boot-splash .boot-hint{position:relative;z-index:1}
-.boot-stickers{inset:6% 0 26% 0}
 .boot-splash .title-3d{font-size:clamp(2.05rem,10.2vw,3.7rem);letter-spacing:-.04em;margin:.2rem 0 .4rem;max-width:92vw}
 .boot-hint{margin-top:1.4rem;font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:var(--dim);font-weight:800}
 body:not(.is-boot) #bootSplash{display:none!important}
@@ -1020,3 +1019,12 @@ body.is-unlocked .sky{opacity:.35}
 .viz-card h3{font-size:1.3rem;letter-spacing:-.03em;margin-bottom:.45rem}
 .viz-card p{line-height:1.45;color:#3a2a30}
 .viz-nav{display:grid;grid-template-columns:1fr 1.4fr;gap:.5rem}
+.profile-card{text-align:center}
+.profile-pic{border:0;background:transparent;color:inherit;cursor:pointer}
+.profile-photo{
+  width:92px;height:92px;border-radius:50%;object-fit:cover;margin:0 auto .45rem;
+  display:grid;place-items:center;background:linear-gradient(145deg,var(--gold),var(--rose));
+  color:#06140c;font-weight:800;font-size:1.6rem;
+}
+.profile-pic small{display:block;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-top:.25rem}
+#mmVideo{width:100%;border-radius:16px;margin-top:.7rem;background:#000;max-height:52vh}

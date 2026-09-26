@@ -161,6 +161,24 @@ const server = http.createServer(async (req, res) => {
       send(res, 200, { ok: true });
       return;
     }
+    if (action === 'profile-get') {
+      const code = String(body.code || '').toUpperCase();
+      send(res, 200, { ok: true, profile: (db.profiles && db.profiles[code]) || null });
+      return;
+    }
+    if (action === 'profile-set') {
+      const code = String(body.code || '').toUpperCase();
+      db.profiles = db.profiles || {};
+      db.profiles[code] = {
+        data: body.data || {},
+        vision: body.vision || {},
+        photo: String(body.photo || ''),
+        purpose: String(body.purpose || ''),
+      };
+      save(db);
+      send(res, 200, { ok: true });
+      return;
+    }
     if (action === 'push-test') {
       send(res, 200, { ok: true, sent: 0, note: 'local: no hay push de servidor' });
       return;

@@ -1,6 +1,6 @@
 (function (w) {
-  var STORE = 'erior-p28';
-  var DB_NAME = 'erior-p28-media';
+  function storeKey() { return (w.P28Access && P28Access.storeKey()) || 'erior-p28'; }
+  function DB_NAME() { return (w.P28Access && P28Access.mediaDbName()) || 'erior-p28-media'; }
   var MAX_MB = 120;
   var DAY_GOAL = 4 * 3600;
   var PACKS = { 1: 999, 2: 1555, 3: 2222 };
@@ -17,9 +17,9 @@
 
   function $(id) { return document.getElementById(id); }
   function load() {
-    try { return JSON.parse(localStorage.getItem(STORE) || '{}'); } catch (e) { return {}; }
+    try { return JSON.parse(localStorage.getItem(storeKey()) || '{}'); } catch (e) { return {}; }
   }
-  function save(s) { localStorage.setItem(STORE, JSON.stringify(s)); }
+  function save(s) { localStorage.setItem(storeKey(), JSON.stringify(s)); }
   function patch(fn) {
     var s = load();
     fn(s);
@@ -61,7 +61,7 @@
   function idbOpen() {
     return new Promise(function (resolve, reject) {
       if (!window.indexedDB) return reject(new Error('Este navegador no guarda archivos grandes.'));
-      var req = indexedDB.open(DB_NAME, 1);
+      var req = indexedDB.open(DB_NAME(), 1);
       req.onupgradeneeded = function () {
         if (!req.result.objectStoreNames.contains('files')) req.result.createObjectStore('files');
       };
@@ -675,6 +675,19 @@
     toggle: toggle,
     addFile: addFile,
     cheer: showCelebrate,
-    listenToday: listenToday
+    listenToday: listenToday,
+    saveMindMovie: function (file) {
+      if (!file) return Promise.reject(new Error('Elige un video.'));
+      if (file.size > MAX_MB * 1024 * 1024) return Promise.reject(new Error('Ese video pesa más de ' + MAX_MB + ' MB.'));
+      return idbPut('mind-movie', file).then(function () {
+        patch(function (st) { st.mindMovie = { name: file.name, at: new Date().toISOString(), size: file.size }; });
+      });
+    },
+    getMindMovie: function () { return idbGet('mind-movie'); },
+    removeMindMovie: function () {
+      return idbDel('mind-movie').then(function () {
+        patch(function (st) { delete st.mindMovie; });
+      });
+    }
   };
 })(window);
