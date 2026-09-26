@@ -16,7 +16,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="protocolo.css?v=27">
+  <link rel="stylesheet" href="protocolo.css?v=28">
 </head>
 <body class="is-boot">
   <div class="sky" aria-hidden="true"></div>
@@ -31,8 +31,9 @@
   <div class="grain" aria-hidden="true"></div>
   <div class="vignette" aria-hidden="true"></div>
   <div id="bootSplash" class="boot-splash" aria-label="Erior Center">
+    <div class="sticker-field boot-stickers" id="bootStickers" aria-hidden="true"></div>
     <img class="logo-mark" src="mark.png" alt="">
-    <p class="boot-hint">Toca para entrar</p>
+    <p class="boot-hint">Toca para entrar · toca los stickers</p>
   </div>
 
   <div class="wrap">
@@ -63,8 +64,38 @@
       </div>
     </section>
 
-    <section id="intake" class="no-print">
-      <div class="form-card card foil-card" id="formCard">
+    <section id="intake" class="no-print vision-root">
+      <div class="vision-wash" aria-hidden="true"></div>
+
+      <div id="stickerIntro" class="vision-screen on">
+        <div class="sticker-field" id="stickerField" aria-hidden="true"></div>
+        <div class="sticker-hero">
+          <img class="logo-mark" src="mark.png" alt="">
+          <h1>Erior Center</h1>
+          <p>Arma la vida que ya es tuya.</p>
+          <button type="button" class="btn btn-gold btn-full" id="btnStickerGo">Continuar</button>
+        </div>
+      </div>
+
+      <div id="visionAsk" class="vision-screen hidden">
+        <div class="vision-top">
+          <button type="button" class="vision-back" id="btnVisionBack" aria-label="Atrás">←</button>
+          <div class="vision-track"><i id="visionBar"></i></div>
+        </div>
+        <h2 id="visionQ"></h2>
+        <p class="vision-sub hidden" id="visionSub"></p>
+        <div id="visionBody"></div>
+        <p class="note" id="visionErr" style="color:#e8b1a0"></p>
+        <button type="button" class="btn btn-gold btn-full" id="btnVisionGo">Continuar</button>
+      </div>
+
+      <div id="visionWait" class="vision-screen hidden">
+        <div class="vision-orb" aria-hidden="true"></div>
+        <h2>Dame un momento.</h2>
+        <p>Armo tu ficha y tu visualización con lo que acabas de decir.</p>
+      </div>
+
+      <div class="form-card card foil-card hidden" id="formCard" hidden>
         <span class="kicker">Tu ficha</span>
         <h2 class="sec-title">Personaliza tu ficha</h2>
         <p class="sec-sub">Así se arma tu documento y tus audios.</p>
@@ -160,6 +191,7 @@
         </article>
 
         <div id="progressBox"></div>
+        <article class="post" id="affirmHoy"></article>
         <div id="upgradeHoy"></div>
         <article class="post" id="missionPost">
           <div class="mission" id="missionBox"></div>
@@ -251,6 +283,13 @@
         <div id="upgradeAudios"></div>
       </section>
 
+      <section class="view" id="viewVision" data-view="vision">
+        <h2 class="sec-title">Tu visión</h2>
+        <p class="sec-sub">Afirmación del día y escenas hechas con tu ficha. Pon tu audio mientras las lees.</p>
+        <div class="card foil-card" id="affirmCard"></div>
+        <div class="card foil-card" id="vizDeck" style="margin-top:1rem"></div>
+      </section>
+
       <section class="view" id="viewCal" data-view="cal">
         <h2 class="sec-title">Días</h2>
         <p class="sec-sub">Si lo marcaste sin querer, tócalo otra vez y se quita. Tus checks de ese día también se limpian.</p>
@@ -310,6 +349,10 @@
       <button type="button" data-go="audios">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4v11.2A3.4 3.4 0 1 0 9.7 18V8.2L18 6.4V15a3.4 3.4 0 1 0 1.7 2.8V4.8L8 7V4z"/></svg>
         <span>Audios</span>
+      </button>
+      <button type="button" data-go="vision">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5c4.4 0 8.2 2.6 10 7-1.8 4.4-5.6 7-10 7S3.8 16.4 2 12c1.8-4.4 5.6-7 10-7zm0 3.2A3.8 3.8 0 1 0 15.8 12 3.8 3.8 0 0 0 12 8.2z"/></svg>
+        <span>Visión</span>
       </button>
       <button type="button" data-go="cal">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h2v2h6V3h2v2h3v16H4V5h3V3zm12 6H5v10h14V9z"/></svg>
@@ -378,7 +421,8 @@
   <script src="routines.js?v=22"></script>
   <script src="plan.js?v=22"></script>
   <script src="vault.js?v=24"></script>
-  <script src="protocolo.js?v=26"></script>
+  <script src="vision.js?v=1"></script>
+  <script src="protocolo.js?v=27"></script>
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js?v=28').catch(function () {});

@@ -554,12 +554,12 @@ body.is-app .app-shell{display:block}
 .app-dock{
   display:none;position:fixed;left:50%;bottom:calc(12px + env(safe-area-inset-bottom));
   transform:translateX(-50%);z-index:20;
-  width:min(420px,92vw);
+  width:min(460px,96vw);
   background:var(--plate);border:1px solid rgba(255,255,255,.18);
   border-radius:22px;padding:6px;
   backdrop-filter:blur(22px) saturate(1.4);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.26), 0 12px 28px rgba(0,0,0,.35);
-  grid-template-columns:repeat(5,1fr);
+  grid-template-columns:repeat(6,1fr);
 }
 body.is-app .app-dock{display:grid}
 .app-dock button{
@@ -803,8 +803,10 @@ body.is-playing .mini-play .ic-pause{display:block}
   position:fixed;inset:0;z-index:90;
   display:grid;place-items:center;align-content:center;
   text-align:center;padding:2rem 1.2rem;
-  cursor:pointer;
+  cursor:pointer;overflow:hidden;
 }
+.boot-splash .logo-mark,.boot-splash .boot-hint{position:relative;z-index:1}
+.boot-stickers{inset:6% 0 26% 0}
 .boot-splash .title-3d{font-size:clamp(2.05rem,10.2vw,3.7rem);letter-spacing:-.04em;margin:.2rem 0 .4rem;max-width:92vw}
 .boot-hint{margin-top:1.4rem;font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:var(--dim);font-weight:800}
 body:not(.is-boot) #bootSplash{display:none!important}
@@ -917,7 +919,14 @@ body.is-welcome .orb,
 body.is-welcome .sand,
 body.is-welcome .grain,
 body.is-welcome .vignette,
-body.is-welcome .mark28{display:none!important}
+body.is-welcome .mark28,
+body.is-unlocked .aurora,
+body.is-unlocked .aurora-2,
+body.is-unlocked .beam,
+body.is-unlocked .beam-2,
+body.is-unlocked .orb,
+body.is-unlocked .sand,
+body.is-unlocked .grain{display:none!important}
 
 @media (max-width:820px){
   .aurora,.aurora-2,.beam,.beam-2,.orb,.sand,.grain{animation:none!important}
@@ -933,3 +942,81 @@ body.is-welcome .mark28{display:none!important}
   #btnInstall{display:none}
 }
 body.is-app{overscroll-behavior-y:none}
+
+body.is-unlocked .ig-top{display:none}
+body.is-unlocked .wrap{width:100%;max-width:none;padding:0}
+.vision-root{position:relative;min-height:100dvh;z-index:3}
+.vision-wash{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 90% 50% at 50% -10%, rgba(255,182,198,.42), transparent 58%),
+    radial-gradient(ellipse 50% 40% at 90% 90%, rgba(62,255,197,.22), transparent 50%),
+    linear-gradient(180deg,#1a0e14 0%,#0a080c 55%,#050508 100%);
+}
+body.is-unlocked .sky{opacity:.35}
+.vision-screen{display:none;position:relative;z-index:2;min-height:100dvh;padding:calc(1.2rem + env(safe-area-inset-top)) 1.4rem 2rem;flex-direction:column}
+.vision-screen.on{display:flex}
+.vision-screen.hidden{display:none!important}
+.sticker-field{position:absolute;inset:0 0 30% 0;overflow:hidden;z-index:0}
+.sticker{
+  position:absolute;width:58px;height:58px;border:0;border-radius:16px;cursor:pointer;
+  background:rgba(255,255,255,.92);box-shadow:0 10px 24px rgba(0,0,0,.22);
+  font-size:1.7rem;display:grid;place-items:center;padding:0;
+  animation:stickerfloat 5.6s ease-in-out infinite;
+  transition:transform .35s cubic-bezier(.22,1,.36,1);
+}
+.sticker.nudge{animation:none}
+@keyframes stickerfloat{
+  0%,100%{transform:translateY(0) rotate(-4deg)}
+  50%{transform:translateY(-10px) rotate(5deg)}
+}
+.sticker-hero{
+  position:relative;z-index:1;margin-top:auto;text-align:center;padding-bottom:1.2rem;
+}
+.sticker-hero h1{
+  font-family:var(--display);font-size:clamp(2.4rem,10vw,3.4rem);font-weight:800;letter-spacing:-.05em;margin:.4rem 0 .35rem;
+  background-image:var(--metal);background-size:140% 180%;
+  -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+}
+.sticker-hero p{color:var(--soft);margin-bottom:1.3rem}
+.sticker-hero .logo-mark{width:72px;height:72px;margin:0 auto;filter:drop-shadow(0 0 16px rgba(255,255,255,.28))}
+.vision-top{display:flex;align-items:center;gap:.7rem;margin-bottom:1.6rem}
+.vision-back{border:0;background:transparent;color:var(--ink);font-size:1.3rem;cursor:pointer;width:36px}
+.vision-track{flex:1;height:4px;border-radius:99px;background:rgba(255,255,255,.12);overflow:hidden}
+.vision-track i{display:block;height:100%;width:8%;background:linear-gradient(90deg,var(--gold),var(--rose));transition:width .3s var(--ease)}
+.vision-screen h2{
+  font-family:var(--display);font-size:clamp(1.7rem,7vw,2.35rem);font-weight:800;letter-spacing:-.04em;line-height:1.2;margin-bottom:.7rem;
+}
+.vision-sub{color:var(--soft);margin-bottom:1rem;line-height:1.45}
+#visionBody{flex:1}
+#visionBody input,#visionBody textarea{
+  width:100%;border:0;border-radius:22px;padding:1rem 1.15rem;margin:.35rem 0 .7rem;
+  background:rgba(255,255,255,.94);color:#1a1014;
+}
+#visionBody textarea{min-height:140px;resize:vertical}
+#visionBody label,.vision-mini{display:block;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-top:.7rem}
+.vision-pills{display:grid;gap:.55rem;margin:.4rem 0 1rem}
+.vision-pills.wrap{display:flex;flex-wrap:wrap;gap:.5rem}
+.vision-pill{
+  border:0;border-radius:999px;padding:.85rem 1.1rem;cursor:pointer;text-align:left;
+  background:rgba(255,255,255,.94);color:#1a1014;font-weight:600;
+}
+.vision-pill.on{background:linear-gradient(135deg,var(--gold-hot),var(--rose));color:#06140c}
+#visionAsk .btn,#stickerIntro .btn{margin-top:auto}
+.vision-orb{
+  width:86px;height:86px;border-radius:50%;margin:18vh auto 1.4rem;
+  background:radial-gradient(circle at 35% 30%,#fff,#ffd0e0 40%,#7effb2 90%);
+  box-shadow:0 0 40px rgba(255,182,198,.55);animation:stickerfloat 2.4s ease-in-out infinite;
+}
+#visionWait{justify-content:center;text-align:center}
+#visionWait p{color:var(--soft);max-width:18rem;margin:0 auto}
+.affirm-txt{font-family:var(--display);font-size:1.35rem;font-weight:800;letter-spacing:-.03em;line-height:1.35;margin:.6rem 0}
+.viz-card{
+  margin:.7rem 0 1rem;padding:1.4rem 1.2rem 1.5rem;border-radius:22px;min-height:220px;
+  background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(255,230,238,.92));
+  color:#1a1014;box-shadow:0 16px 36px rgba(0,0,0,.22);
+}
+.viz-emoji{font-size:2rem;display:block;margin-bottom:.5rem}
+.viz-card h3{font-size:1.3rem;letter-spacing:-.03em;margin-bottom:.45rem}
+.viz-card p{line-height:1.45;color:#3a2a30}
+.viz-nav{display:grid;grid-template-columns:1fr 1.4fr;gap:.5rem}

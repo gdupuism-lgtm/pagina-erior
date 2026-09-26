@@ -193,7 +193,8 @@
     }
     document.body.classList.add('is-unlocked');
     if (s.access.name && $('name') && !$('name').value) $('name').value = s.access.name;
-    if ($('intake')) $('intake').scrollIntoView({ behavior: 'smooth' });
+    if (window.P28Vision) P28Vision.start(s);
+    else if ($('intake')) $('intake').scrollIntoView({ behavior: 'smooth' });
   }
 
   function renderNotif() {}
@@ -430,6 +431,7 @@
     if (s.remindOn && typeof Notification !== 'undefined' && Notification.permission === 'granted') {
       subscribePhone(s.remindAt || '21:00').catch(function () {});
     }
+    if (window.P28Vision) P28Vision.renderApp(s);
     maybeWelcome(s);
     window.scrollTo(0, 0);
   }
@@ -525,22 +527,28 @@
     box.removeAttribute('hidden');
   }
 
-  function build() {
+  function build(fromData, vision) {
     var s0 = load();
     if (!s0.access) {
-      $('formErr').textContent = 'Primero entra con tu código.';
+      if ($('formErr')) $('formErr').textContent = 'Primero entra con tu código.';
+      if ($('visionErr')) $('visionErr').textContent = 'Primero entra con tu código.';
       $('gate').scrollIntoView({ behavior: 'smooth' });
       return;
     }
-    var data = collect();
+    var data = fromData || collect();
     var err = validate(data);
-    if (err) { $('formErr').textContent = err; return; }
-    $('formErr').textContent = '';
+    if (err) {
+      if ($('formErr')) $('formErr').textContent = err;
+      if ($('visionErr')) $('visionErr').textContent = err;
+      return;
+    }
+    if ($('formErr')) $('formErr').textContent = '';
     data.serial = s0.data && s0.data.serial ? s0.data.serial : serial(data.name);
     var rec = recommend(data);
     var state = patch(function (st) {
       st.data = data;
       st.rec = rec;
+      if (vision) st.vision = vision;
       st.days = st.days || {};
       st.checks = st.checks || {};
       st.pack = (st.access && st.access.pack) || st.pack || 1;
@@ -567,6 +575,7 @@
     if (name === 'com') renderWall();
     if (name === 'hoy') renderStories(load());
     if (name === 'audios') renderListenPlan(load());
+    if (name === 'vision' && window.P28Vision) P28Vision.renderApp(load());
     if (window.P28Vault) P28Vault.render(load());
   }
 
@@ -841,7 +850,8 @@
   $('btnEdit') && $('btnEdit').addEventListener('click', function () {
     document.body.classList.remove('is-app');
     document.body.classList.add('is-unlocked');
-    $('intake').scrollIntoView({ behavior: 'smooth' });
+    if (window.P28Vision) P28Vision.start(load(), true);
+    else if ($('intake')) $('intake').scrollIntoView({ behavior: 'smooth' });
   });
   $('btnPrint') && $('btnPrint').addEventListener('click', function () {
     $('dossier').classList.remove('hidden');
@@ -882,7 +892,7 @@
   });
   $('btnInstall') && $('btnInstall').addEventListener('click', promptInstall);
 
-  window.P28 = { currentDay: currentDay, go: go, load: load, renderListenPlan: renderListenPlan };
+  window.P28 = { currentDay: currentDay, go: go, load: load, renderListenPlan: renderListenPlan, build: build };
 
   function refreshThenApply(saved) {
     if (!saved.access || !saved.access.code || !window.P28Access) {
