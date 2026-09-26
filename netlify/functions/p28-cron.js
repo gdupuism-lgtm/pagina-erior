@@ -39,10 +39,10 @@ async function store() {
   var siteID = process.env.SITE_ID || process.env.NETLIFY_SITE_ID || '';
   var token = process.env.NETLIFY_BLOBS_TOKEN || process.env.NETLIFY_AUTH_TOKEN || '';
   try {
-    if (siteID && token) return getStore({ name: 'p28', siteID: siteID, token: token, consistency: 'strong' });
+    if (siteID && token) return getStore({ name: 'p28', siteID: siteID, token: token });
   } catch (e0) { /* fall through */ }
   try {
-    return getStore({ name: 'p28', consistency: 'strong' });
+    return getStore({ name: 'p28' });
   } catch (e) {
     try { return getStore('p28'); } catch (e2) { return null; }
   }

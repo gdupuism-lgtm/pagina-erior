@@ -593,7 +593,7 @@
     if (window.P28Vault) P28Vault.render(s);
     if ($('remindAt') && s.remindAt) $('remindAt').value = s.remindAt;
     if ($('btnRemind') && s.remindOn) $('btnRemind').textContent = 'Avisos activos';
-    go('hoy');
+    go(s.view || 'hoy');
     renderStories(s);
     renderListenPlan(s);
     lockPurpose(s);
@@ -739,10 +739,12 @@
   }
 
   function go(name) {
-    document.querySelectorAll('.view').forEach(function (v) {
-      var on = v.getAttribute('data-view') === name;
-      v.classList.toggle('on', on);
-    });
+    var current = document.querySelector('.view.on');
+    if (!current || current.getAttribute('data-view') !== name) {
+      document.querySelectorAll('.view').forEach(function (v) {
+        v.classList.toggle('on', v.getAttribute('data-view') === name);
+      });
+    }
     document.querySelectorAll('.app-dock button').forEach(function (b) {
       b.classList.toggle('on', b.getAttribute('data-go') === name);
     });

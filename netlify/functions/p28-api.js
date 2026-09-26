@@ -194,12 +194,19 @@ async function blobStore() {
     const { getStore } = require('@netlify/blobs');
     const siteID = (blobsContext && blobsContext.site && blobsContext.site.id) || process.env.SITE_ID || process.env.NETLIFY_SITE_ID || '';
     const token = process.env.NETLIFY_BLOBS_TOKEN || process.env.NETLIFY_AUTH_TOKEN || '';
-    if (siteID && token) {
-      try { return getStore({ name: 'p28', siteID, token, consistency: 'strong' }); } catch (e) { lastBlobError = e.message || String(e); }
+    const tries = [];
+    if (siteID && token) tries.push({ name: 'p28', siteID: siteID, token: token, consistency: 'eventual' });
+    tries.push({ name: 'p28', consistency: 'eventual' });
+    for (let i = 0; i < tries.length; i += 1) {
+      try {
+        return getStore(tries[i]);
+      } catch (e) {
+        lastBlobError = e.message || String(e);
+      }
     }
-    try { return getStore({ name: 'p28', consistency: 'strong' }); } catch (e1) {
-      lastBlobError = e1.message || String(e1);
-      return getStore('p28');
+    try { return getStore('p28'); } catch (e2) {
+      lastBlobError = e2.message || String(e2);
+      return null;
     }
   } catch (e) {
     lastBlobError = e.message || String(e);
@@ -211,7 +218,12 @@ async function blobGet(key, fallback) {
   try {
     const store = await blobStore();
     if (!store) return fallback;
-    const data = await store.get(key, { type: 'json' });
+    let data;
+    try {
+      data = await store.get(key, { type: 'json', consistency: 'eventual' });
+    } catch (e) {
+      data = await store.get(key, { type: 'json' });
+    }
     return data || fallback;
   } catch (e) {
     lastBlobError = e.message || String(e);
@@ -222,23 +234,23 @@ async function blobGet(key, fallback) {
 async function blobSet(key, value) {
   const store = await blobStore();
   if (!store) return false;
-  try {
-    if (typeof store.setJSON === 'function') {
-      await store.setJSON(key, value);
-      return true;
-    }
-    await store.set(key, JSON.stringify(value));
-    return true;
-  } catch (e) {
-    lastBlobError = e.message || String(e);
+  const payload = JSON.stringify(value);
+  const writes = [
+    function () { return store.setJSON(key, value, { consistency: 'eventual' }); },
+    function () { return store.setJSON(key, value); },
+    function () { return store.set(key, payload, { consistency: 'eventual' }); },
+    function () { return store.set(key, payload); },
+  ];
+  for (let i = 0; i < writes.length; i += 1) {
     try {
-      await store.set(key, JSON.stringify(value));
+      if (i < 2 && typeof store.setJSON !== 'function') continue;
+      await writes[i]();
       return true;
-    } catch (e2) {
-      lastBlobError = e2.message || String(e2);
-      return false;
+    } catch (e) {
+      lastBlobError = e.message || String(e);
     }
   }
+  return false;
 }
 
 async function blobListRows() {
@@ -251,7 +263,9 @@ async function blobListRows() {
     for (let i = 0; i < blobs.length; i += 1) {
       const key = blobs[i] && blobs[i].key;
       if (!key) continue;
-      const data = await store.get(key, { type: 'json' });
+      let data;
+      try { data = await store.get(key, { type: 'json', consistency: 'eventual' }); }
+      catch (e) { data = await store.get(key, { type: 'json' }); }
       if (data && data.code) out.push(data);
     }
     return out;
