@@ -140,14 +140,25 @@
     return list[(Math.max(1, n) - 1) % list.length];
   }
 
+  function mexicoYmd(d) {
+    try {
+      return new Intl.DateTimeFormat('en-CA', {
+        timeZone: 'America/Mexico_City', year: 'numeric', month: '2-digit', day: '2-digit'
+      }).format(new Date(d));
+    } catch (e) {
+      return new Date(d).toISOString().slice(0, 10);
+    }
+  }
+
+  function daysUsed(s) {
+    if (!s || !s.start) return 1;
+    var a = new Date(mexicoYmd(s.start) + 'T12:00:00');
+    var b = new Date(mexicoYmd(Date.now()) + 'T12:00:00');
+    return Math.max(1, Math.round((b.getTime() - a.getTime()) / 86400000) + 1);
+  }
+
   function currentDay(s) {
-    if (!s.start) return 1;
-    var start = new Date(s.start);
-    start.setHours(0, 0, 0, 0);
-    var now = new Date();
-    now.setHours(0, 0, 0, 0);
-    var n = Math.floor((now - start) / 86400000) + 1;
-    if (n < 1) return 1;
+    var n = daysUsed(s);
     if (n > 28) return 28;
     return n;
   }
@@ -188,6 +199,9 @@
     }
     if (s.data && s.rec) {
       document.body.classList.add('is-app');
+      lockClock(s);
+      restoreRemind(s);
+      save(s);
       showApp(s);
       return;
     }
@@ -389,9 +403,92 @@
     if ($('upgradeHoy')) $('upgradeHoy').innerHTML = '';
   }
 
-  function liveDaysLeft(access) {
-    if (!access || !access.expires_at) return 30;
-    return window.P28Access ? P28Access.daysLeft(access.expires_at) : 30;
+  function clockKey(code) {
+    return 'erior-p28-clock-' + String(code || (window.P28Access && P28Access.sessionCode()) || 'x');
+  }
+  function loadClock(code) {
+    try { return JSON.parse(localStorage.getItem(clockKey(code)) || '{}'); } catch (e) { return {}; }
+  }
+  function saveClock(code, clock) {
+    if (!code) return;
+    try { localStorage.setItem(clockKey(code), JSON.stringify(clock)); } catch (e) {}
+  }
+  function loadRemind() {
+    try { return JSON.parse(localStorage.getItem('erior-p28-remind') || '{}'); } catch (e) { return {}; }
+  }
+  function saveRemind(r) {
+    try { localStorage.setItem('erior-p28-remind', JSON.stringify(r)); } catch (e) {}
+  }
+
+  function plusDaysIso(from, n) {
+    var d = new Date(from || Date.now());
+    d.setTime(d.getTime() + (n || 30) * 86400000);
+    return d.toISOString();
+  }
+
+  function keepExpiry(oldExp, incomingExp) {
+    if (!oldExp) return incomingExp || '';
+    if (!incomingExp) return oldExp;
+    var oldT = new Date(oldExp).getTime();
+    var newT = new Date(incomingExp).getTime();
+    if (newT > oldT + 20 * 86400000) return incomingExp;
+    return oldExp;
+  }
+
+  function olderIso(a, b) {
+    if (!a) return b || '';
+    if (!b) return a;
+    return new Date(a).getTime() <= new Date(b).getTime() ? a : b;
+  }
+
+  function recoverStart(st) {
+    var found = (st && st.start) || '';
+    var code = st && st.access && st.access.code;
+    var c = loadClock(code);
+    found = olderIso(found, c.start);
+    try {
+      Object.keys(localStorage).forEach(function (k) {
+        if (k.indexOf('erior-p28') !== 0) return;
+        if (k.indexOf('remind') >= 0 || k.indexOf('session') >= 0 || k.indexOf('issued') >= 0 || k.indexOf('device') >= 0) return;
+        try {
+          var o = JSON.parse(localStorage.getItem(k) || '{}');
+          if (o.start) found = olderIso(found, o.start);
+        } catch (e2) {}
+      });
+    } catch (e) {}
+    return found;
+  }
+
+  function lockClock(st) {
+    if (!st) return st;
+    var code = st.access && st.access.code;
+    var c = loadClock(code);
+    st.start = recoverStart(st) || c.start || (st.access && st.access.expires_at
+      ? plusDaysIso(st.access.expires_at, -30)
+      : new Date().toISOString());
+    if (st.access) {
+      st.access.expires_at = keepExpiry(c.expires_at || st.access.expires_at, st.access.expires_at)
+        || plusDaysIso(st.start, 30);
+    }
+    if (code && st.start) saveClock(code, { start: st.start, expires_at: st.access && st.access.expires_at });
+    return st;
+  }
+
+  function restoreRemind(st) {
+    if (!st) return st;
+    var r = loadRemind();
+    var granted = typeof Notification !== 'undefined' && Notification.permission === 'granted';
+    if (granted || r.on) {
+      st.remindOn = true;
+      st.remindAt = st.remindAt || r.at || '21:00';
+      saveRemind({ on: true, at: st.remindAt });
+    }
+    return st;
+  }
+
+  function liveDaysLeft(access, s) {
+    s = s || load();
+    return Math.max(0, 30 - daysUsed(s));
   }
 
   function syncProfile(s) {
@@ -416,7 +513,7 @@
     if (!$('myPackBox')) return;
     var pack = (s.access && s.access.pack) || s.pack || 1;
     var copy = PACK_COPY[pack] || PACK_COPY[1];
-    var left = liveDaysLeft(s.access);
+    var left = liveDaysLeft(s.access, s);
     var n = currentDay(s);
     var name = firstName((s.data && s.data.name) || (s.access && s.access.name) || '');
     var photo = s.photo
@@ -492,7 +589,7 @@
     }
     if ($('dayNowBox')) {
       var n = currentDay(s);
-      var left = liveDaysLeft(s.access);
+      var left = liveDaysLeft(s.access, s);
       $('dayNowBox').innerHTML =
         '<div class="card foil-card"><span class="num">Hoy</span>' +
         '<p class="copy" style="margin:.4rem 0 0">Día <b>' + n + '</b> de 28. Te quedan <b>' + left + '</b> días de uso de la app.</p></div>';
@@ -618,8 +715,9 @@
       st.days = st.days || {};
       st.checks = st.checks || {};
       st.pack = (st.access && st.access.pack) || st.pack || 1;
-      st.start = st.start || new Date().toISOString();
+      st.start = st.start || loadClock(st.access && st.access.code).start || new Date().toISOString();
       st.remindAt = st.remindAt || '21:00';
+      lockClock(st);
     });
     applyMode(state);
     syncProfile(state);
@@ -749,6 +847,7 @@
       return;
     }
     var s = patch(function (st) { st.remindAt = hour; st.remindOn = true; });
+    saveRemind({ on: true, at: hour });
     if ($('remindMsg')) $('remindMsg').textContent = 'Pidiendo permiso…';
     Notification.requestPermission().then(function (p) {
       if (p !== 'granted') {
@@ -882,9 +981,13 @@
     P28Access.unlock(code).then(function (access) {
       if (P28Access.bindSession) P28Access.bindSession(access.code);
       var state = patch(function (st) {
+        var oldExp = st.access && st.access.expires_at;
         st.access = access;
+        st.access.expires_at = keepExpiry(oldExp || loadClock(access.code).expires_at, access.expires_at);
         st.pack = access.pack || st.pack || 1;
         mergeProfile(st, access.profile);
+        lockClock(st);
+        restoreRemind(st);
       });
       $('gateErr').textContent = '';
       applyMode(state);
@@ -972,11 +1075,15 @@
     if (P28Access.bindSession) P28Access.bindSession(saved.access.code);
     P28Access.unlock(saved.access.code).then(function (access) {
       var state = patch(function (st) {
+        var oldExp = st.access && st.access.expires_at;
         st.access = Object.assign({}, st.access || {}, access);
+        st.access.expires_at = keepExpiry(oldExp || loadClock(access.code).expires_at, access.expires_at);
         delete st.access.expired;
         delete st.access.profile;
         st.pack = access.pack || st.pack;
         mergeProfile(st, access.profile);
+        lockClock(st);
+        restoreRemind(st);
       });
       applyMode(state);
     }).catch(function (err) {

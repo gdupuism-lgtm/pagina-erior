@@ -37,9 +37,21 @@
     return d.toISOString();
   }
 
+  function mexicoYmd(d) {
+    try {
+      return new Intl.DateTimeFormat('en-CA', {
+        timeZone: 'America/Mexico_City', year: 'numeric', month: '2-digit', day: '2-digit'
+      }).format(new Date(d));
+    } catch (e) {
+      return new Date(d).toISOString().slice(0, 10);
+    }
+  }
+
   function daysLeft(expires) {
     if (!expires) return 30;
-    return Math.max(0, Math.ceil((new Date(expires).getTime() - Date.now()) / 86400000));
+    var a = new Date(mexicoYmd(Date.now()) + 'T12:00:00');
+    var b = new Date(mexicoYmd(expires) + 'T12:00:00');
+    return Math.max(0, Math.round((b.getTime() - a.getTime()) / 86400000));
   }
 
   function isExpired(row) {
