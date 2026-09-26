@@ -153,6 +153,10 @@
     return call('subscribe', { subscription: subscription, code: code, hour: hour });
   }
 
+  function pushTest(subscription) {
+    return call('push-test', { subscription: subscription });
+  }
+
   function broadcast(title, body, adminKey) {
     return call('broadcast', { title: title, body: body }, adminKey);
   }
@@ -199,7 +203,10 @@
     }, adminKey)
       .then(function (res) {
         if (!res.ok || !res.data || !res.data.row) {
-          throw new Error((res.data && res.data.error) || 'No se pudo guardar el código. Entra con la clave ERIOR28.');
+          var why = (res.data && res.data.error) || '';
+          if (res.status === 401) throw new Error('La clave no pasó. Entra otra vez con ERIOR28.');
+          if (res.status === 0) throw new Error('No hay conexión con el servidor. Recarga admin y vuelve a generar.');
+          throw new Error(why || 'No se pudo guardar el código. Recarga admin, entra con ERIOR28 e inténtalo otra vez.');
         }
         row = res.data.row;
         var db = localDb();
@@ -269,6 +276,7 @@
     deleteWall: deleteWall,
     vapidPublic: vapidPublic,
     subscribePush: subscribePush,
+    pushTest: pushTest,
     broadcast: broadcast,
     checkLocalAdmin: checkLocalAdmin,
     call: call,

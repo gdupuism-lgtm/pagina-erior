@@ -427,6 +427,9 @@
     renderListenPlan(s);
     lockPurpose(s);
     renderInstallAndRemind(s);
+    if (s.remindOn && typeof Notification !== 'undefined' && Notification.permission === 'granted') {
+      subscribePhone(s.remindAt || '21:00').catch(function () {});
+    }
     maybeWelcome(s);
     window.scrollTo(0, 0);
   }
@@ -606,15 +609,20 @@
   }
 
   function showNativeNotif(title, body, tag) {
+    var opts = { body: body, icon: 'icon-192.png', badge: 'icon-192.png', tag: tag || 'p28-daily', renotify: true };
     if (navigator.serviceWorker && navigator.serviceWorker.ready) {
       navigator.serviceWorker.ready.then(function (reg) {
+        if (reg.showNotification) return reg.showNotification(title, opts);
         if (reg.active) reg.active.postMessage({ type: 'notify', title: title, body: body, tag: tag || 'p28-daily' });
-        else if (reg.showNotification) reg.showNotification(title, { body: body, icon: 'icon.svg', tag: tag || 'p28-daily' });
+      }).catch(function () {
+        if (typeof Notification !== 'undefined' && Notification.permission === 'granted') {
+          new Notification(title, opts);
+        }
       });
       return;
     }
     if (typeof Notification !== 'undefined' && Notification.permission === 'granted') {
-      new Notification(title, { body: body, icon: 'icon.svg' });
+      new Notification(title, opts);
     }
   }
 
@@ -624,6 +632,27 @@
     var out = new Uint8Array(raw.length);
     for (var i = 0; i < raw.length; i++) out[i] = raw.charCodeAt(i);
     return out;
+  }
+
+  function subscribePhone(hour, sendTest) {
+    var s = load();
+    if (!navigator.serviceWorker || !window.P28Access) return Promise.resolve();
+    if (typeof Notification === 'undefined' || Notification.permission !== 'granted') return Promise.resolve();
+    return P28Access.vapidPublic().then(function (pub) {
+      if (!pub) throw new Error('Falta la llave de avisos.');
+      return navigator.serviceWorker.ready.then(function (reg) {
+        return reg.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: urlB64ToUint8(pub)
+        });
+      }).then(function (sub) {
+        var json = sub.toJSON();
+        return P28Access.subscribePush(json, s.access && s.access.code, hour || s.remindAt || '21:00').then(function () {
+          if (!sendTest || !P28Access.pushTest) return { ok: true };
+          return P28Access.pushTest(json);
+        });
+      });
+    });
   }
 
   function activateReminders(demo) {
@@ -644,26 +673,25 @@
       return;
     }
     var s = patch(function (st) { st.remindAt = hour; st.remindOn = true; });
+    if ($('remindMsg')) $('remindMsg').textContent = 'Pidiendo permiso…';
     Notification.requestPermission().then(function (p) {
       if (p !== 'granted') {
         $('remindMsg').textContent = remindHint();
         return;
       }
-      $('remindMsg').textContent = 'On. Van a llegar 4 avisos al día.';
+      $('remindMsg').textContent = 'On. Mandando aviso de prueba…';
       if ($('btnRemind')) $('btnRemind').textContent = 'On';
+      showNativeNotif('Erior Center', 'Avisos encendidos. Este es el de prueba.', 'p28-test');
       if (demo) firePhrase(true, ['portal', 'listen', 'offer'][Math.floor(Math.random() * 3)]);
-      if (!navigator.serviceWorker || !window.P28Access) return;
-      P28Access.vapidPublic().then(function (pub) {
-        if (!pub) return;
-        return navigator.serviceWorker.ready.then(function (reg) {
-          return reg.pushManager.subscribe({
-            userVisibleOnly: true,
-            applicationServerKey: urlB64ToUint8(pub)
-          });
-        }).then(function (sub) {
-          return P28Access.subscribePush(sub.toJSON(), s.access && s.access.code, hour);
-        });
-      }).catch(function () {});
+      subscribePhone(hour, true).then(function (res) {
+        if (res && res.data && res.data.error) {
+          $('remindMsg').textContent = 'On aquí. El aviso al celular falló: ' + res.data.error;
+          return;
+        }
+        $('remindMsg').textContent = 'On. Ya te mandé uno de prueba. Van 4 al día: 08:08, 11:11, 16:16 y tu hora de noche.';
+      }).catch(function (err) {
+        $('remindMsg').textContent = 'On aquí. Si no llegó el aviso, instala la app y toca de nuevo. ' + ((err && err.message) || '');
+      });
     });
   }
 
@@ -718,19 +746,42 @@
     renderNotif(s);
   }
 
+  function mexicoClock() {
+    try {
+      var hmParts = new Intl.DateTimeFormat('en-GB', {
+        timeZone: 'America/Mexico_City', hour: '2-digit', minute: '2-digit', hour12: false
+      }).formatToParts(new Date());
+      var dateParts = new Intl.DateTimeFormat('en-CA', {
+        timeZone: 'America/Mexico_City', year: 'numeric', month: '2-digit', day: '2-digit'
+      }).formatToParts(new Date());
+      var h = '00', m = '00', y = '1970', mo = '01', d = '01';
+      hmParts.forEach(function (p) { if (p.type === 'hour') h = p.value; if (p.type === 'minute') m = p.value; });
+      dateParts.forEach(function (p) {
+        if (p.type === 'year') y = p.value;
+        if (p.type === 'month') mo = p.value;
+        if (p.type === 'day') d = p.value;
+      });
+      return { hm: h + ':' + m, date: y + '-' + mo + '-' + d };
+    } catch (e) {
+      var now = new Date();
+      return {
+        hm: ('0' + now.getHours()).slice(-2) + ':' + ('0' + now.getMinutes()).slice(-2),
+        date: now.toISOString().slice(0, 10)
+      };
+    }
+  }
+
   function tryNotify() {
     var s = load();
     if (!s.remindOn || !s.access) return;
     if (typeof Notification === 'undefined' || Notification.permission !== 'granted') return;
-    var now = new Date();
-    var hm = ('0' + now.getHours()).slice(-2) + ':' + ('0' + now.getMinutes()).slice(-2);
-    var today = now.toISOString().slice(0, 10);
+    var clock = mexicoClock();
     var night = s.remindAt || '21:00';
     var slots = { '08:08': 'listen', '11:11': 'portal', '16:16': 'offer' };
     slots[night] = slots[night] || 'night';
-    var kind = slots[hm];
+    var kind = slots[clock.hm];
     if (!kind) return;
-    var key = today + '-' + hm;
+    var key = clock.date + '-' + clock.hm;
     if (s.lastPing === key) return;
     patch(function (st) { st.lastPing = key; });
     firePhrase(false, kind);
@@ -815,7 +866,7 @@
     renderListenPlan(state);
     renderMission(state);
   });
-  $('btnRemind') && $('btnRemind').addEventListener('click', function () { activateReminders(false); });
+  $('btnRemind') && $('btnRemind').addEventListener('click', function () { activateReminders(true); });
   $('btnInstallYo') && $('btnInstallYo').addEventListener('click', promptInstall);
   ['chkNight', 'chkDay', 'chkMission'].forEach(function (id) {
     $(id) && $(id).addEventListener('change', function () {

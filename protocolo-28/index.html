@@ -16,7 +16,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="protocolo.css?v=26">
+  <link rel="stylesheet" href="protocolo.css?v=27">
 </head>
 <body class="is-boot">
   <div class="sky" aria-hidden="true"></div>
@@ -219,8 +219,9 @@
             <button type="button" class="icon-btn" id="btnNext" aria-label="Siguiente">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.8 6H18v12h-2.2V6zM6 18.2V5.8L14.8 12 6 18.2z"/></svg>
             </button>
-            <button type="button" class="icon-btn on" id="btnLoop" aria-label="Repetir en loop" aria-pressed="true">
+            <button type="button" class="icon-btn on loop-all" id="btnLoop" aria-label="Loop de toda la playlist" aria-pressed="true">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h9.2l-1.6-1.6L16 4l4 4-4 4-1.4-1.4L16.2 9H7a3 3 0 0 0-3 3H2a5 5 0 0 1 5-5zm10 10H7.8l1.6 1.6L8 20l-4-4 4-4 1.4 1.4L7.8 15H17a3 3 0 0 0 3-3h2a5 5 0 0 1-5 5z"/></svg>
+              <span class="loop-badge" id="loopBadge">ALL</span>
             </button>
           </div>
           <div class="vol-row">
@@ -372,15 +373,15 @@
     </div>
   </div>
 
-  <script src="access.js?v=23"></script>
+  <script src="access.js?v=24"></script>
   <script src="phrases.js?v=22"></script>
   <script src="routines.js?v=22"></script>
   <script src="plan.js?v=22"></script>
-  <script src="vault.js?v=23"></script>
-  <script src="protocolo.js?v=25"></script>
+  <script src="vault.js?v=24"></script>
+  <script src="protocolo.js?v=26"></script>
   <script>
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js').catch(function () {});
+      navigator.serviceWorker.register('sw.js?v=28').catch(function () {});
     }
   </script>
 </body>

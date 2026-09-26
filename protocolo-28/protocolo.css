@@ -667,12 +667,18 @@ input[type="range"]::-webkit-slider-thumb{
 .icon-btn{
   width:44px;height:44px;border:0;border-radius:50%;cursor:pointer;
   background:rgba(255,255,255,.04);color:var(--ink);
-  display:grid;place-items:center;
+  display:grid;place-items:center;position:relative;
   transition:transform .2s var(--ease), background .2s, box-shadow .2s;
 }
 .icon-btn svg{width:20px;height:20px;fill:currentColor}
 .icon-btn:active{transform:scale(.94)}
 .icon-btn.on{color:#06140c;background:linear-gradient(135deg,var(--gold-hot),var(--rose))}
+.loop-badge{
+  position:absolute;right:-2px;bottom:-2px;min-width:16px;height:14px;padding:0 3px;
+  border-radius:6px;font-size:.48rem;font-weight:800;letter-spacing:.04em;line-height:14px;
+  background:#06140c;color:#e8fff4;display:grid;place-items:center;
+}
+.icon-btn:not(.on) .loop-badge{display:none}
 .play-main{
   width:62px;height:62px;
   background:linear-gradient(145deg,#e8fff4,var(--gold) 55%,var(--rose));

@@ -6,7 +6,7 @@
   <meta name="robots" content="noindex,nofollow">
   <title>Erior Center Admin · códigos</title>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="protocolo.css?v=23">
+  <link rel="stylesheet" href="protocolo.css?v=27">
 </head>
 <body class="is-admin">
   <div class="sky" aria-hidden="true"></div>
@@ -88,10 +88,20 @@
       </section>
     </div>
   </div>
-  <script src="access.js?v=23"></script>
+  <script src="access.js?v=24"></script>
   <script>
     var key = '';
+    try { key = sessionStorage.getItem('erior-p28-admin') || ''; } catch (e) { key = ''; }
     function $(id) { return document.getElementById(id); }
+    function rememberKey(k) {
+      key = k;
+      try { sessionStorage.setItem('erior-p28-admin', k); } catch (e) {}
+    }
+    function openPanel() {
+      $('loginView').classList.add('hidden');
+      $('panelView').classList.remove('hidden');
+      refresh();
+    }
     function packVal() {
       var el = document.querySelector('[name="fPack"]:checked');
       return el ? el.value : '1';
@@ -168,23 +178,32 @@
       });
     });
     $('btnLogin').onclick = function () {
-      key = $('adminKey').value.trim();
+      rememberKey($('adminKey').value.trim());
       if (P28Access.checkLocalAdmin(key)) {
-        $('loginView').classList.add('hidden');
-        $('panelView').classList.remove('hidden');
-        refresh();
+        openPanel();
         return;
       }
+      $('loginMsg').textContent = 'Entrando…';
       P28Access.call('list', {}, key).then(function (res) {
-        if (!res.ok) { $('loginMsg').textContent = 'Clave incorrecta o API no disponible. En local prueba ERIOR28.'; return; }
-        $('loginView').classList.add('hidden');
-        $('panelView').classList.remove('hidden');
+        if (!res.ok) { $('loginMsg').textContent = 'Clave incorrecta o API no disponible. Prueba ERIOR28.'; return; }
         renderList((res.data && res.data.codes) || []);
+        openPanel();
       });
     };
+    if (key) {
+      $('adminKey').value = key;
+      P28Access.call('list', {}, key).then(function (res) {
+        if (res.ok) {
+          renderList((res.data && res.data.codes) || []);
+          openPanel();
+        }
+      });
+    }
     $('btnIssue').onclick = function () {
       var name = $('fName').value.trim();
       if (name.length < 2) { $('issueMsg').textContent = 'Nombre de quien recibe el audio.'; return; }
+      if (!key) { $('issueMsg').textContent = 'Entra otra vez con ERIOR28.'; return; }
+      $('issueMsg').textContent = 'Guardando el código…';
       P28Access.issue({ name: name, pack: packVal(), contact: $('fContact').value, notes: $('fNotes').value, days: 30 }, key).then(function (row) {
         var text = waText(row);
         $('issueBox').classList.remove('hidden');

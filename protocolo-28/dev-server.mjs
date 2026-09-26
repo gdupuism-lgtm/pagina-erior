@@ -161,6 +161,10 @@ const server = http.createServer(async (req, res) => {
       send(res, 200, { ok: true });
       return;
     }
+    if (action === 'push-test') {
+      send(res, 200, { ok: true, sent: 0, note: 'local: no hay push de servidor' });
+      return;
+    }
     if (action === 'subscribe') {
       const sub = body.subscription;
       if (!sub || !sub.endpoint) { send(res, 400, { ok: false, error: 'Falta suscripción' }); return; }

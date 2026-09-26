@@ -24,15 +24,31 @@ function seedCodes() {
 
 async function loadCodes() {
   const map = new Map();
-  seedCodes().concat(await blobGet('codes', [])).forEach((c) => {
+  const issued = await blobGet('issued', []);
+  const snap = await blobGet('codes', []);
+  seedCodes().concat(Array.isArray(issued) ? issued : []).concat(Array.isArray(snap) ? snap : []).forEach((c) => {
     if (c && c.code) map.set(normalizeCode(c.code), ensureCode(c));
   });
   return Array.from(map.values());
 }
 
 async function saveCodes(codes) {
-  const ok = await blobSet('codes', codes);
+  const existing = await blobGet('codes', []);
+  const map = new Map();
+  (Array.isArray(existing) ? existing : []).forEach((c) => {
+    if (c && c.code) map.set(normalizeCode(c.code), ensureCode(c));
+  });
+  (codes || []).forEach((c) => {
+    if (c && c.code) map.set(normalizeCode(c.code), ensureCode(c));
+  });
+  const ok = await blobSet('codes', Array.from(map.values()));
   if (!ok) throw new Error('No se pudieron guardar los códigos. Intenta de nuevo.');
+}
+
+async function appendIssued(row) {
+  const log = await blobGet('issued', []);
+  const next = [row].concat(Array.isArray(log) ? log : []).slice(0, 800);
+  return blobSet('issued', next);
 }
 
 function randPart(n) {
@@ -99,12 +115,17 @@ function bindDevice(row, device, deviceLabel) {
   return true;
 }
 
+let blobsContext = null;
+
 async function blobStore() {
   try {
     const { getStore } = require('@netlify/blobs');
-    try {
-      return getStore({ name: 'p28', consistency: 'strong' });
-    } catch (e) {
+    const siteID = (blobsContext && blobsContext.site && blobsContext.site.id) || process.env.SITE_ID || process.env.NETLIFY_SITE_ID || '';
+    const token = process.env.NETLIFY_BLOBS_TOKEN || process.env.NETLIFY_AUTH_TOKEN || '';
+    if (siteID && token) {
+      try { return getStore({ name: 'p28', siteID, token, consistency: 'strong' }); } catch (e) { /* fall through */ }
+    }
+    try { return getStore({ name: 'p28', consistency: 'strong' }); } catch (e1) {
       return getStore('p28');
     }
   } catch (e) {
@@ -113,17 +134,25 @@ async function blobStore() {
 }
 
 async function blobGet(key, fallback) {
-  const store = await blobStore();
-  if (!store) return fallback;
-  const data = await store.get(key, { type: 'json' });
-  return data || fallback;
+  try {
+    const store = await blobStore();
+    if (!store) return fallback;
+    const data = await store.get(key, { type: 'json' });
+    return data || fallback;
+  } catch (e) {
+    return fallback;
+  }
 }
 
 async function blobSet(key, value) {
-  const store = await blobStore();
-  if (!store) return false;
-  await store.setJSON(key, value);
-  return true;
+  try {
+    const store = await blobStore();
+    if (!store) return false;
+    await store.setJSON(key, value);
+    return true;
+  } catch (e) {
+    return false;
+  }
 }
 
 async function listCodesSb() {
@@ -144,7 +173,24 @@ async function listWallSb() {
   return Array.isArray(res.data) ? res.data : [];
 }
 
-exports.handler = async (event) => {
+async function sendOnePush(sub, title, body, tag) {
+  let webpush;
+  try {
+    webpush = require('web-push');
+  } catch (e) {
+    throw new Error('web-push no está instalado');
+  }
+  const pub = process.env.P28_VAPID_PUBLIC || 'BAiWc2iqXyjI9cHcH1SjemkJyEXVG__4CKyOngh1hnZsIjhzTB19ul1Dv6x09d7Gt7fRwZoKg6glr4hZPvH3hRo';
+  const priv = process.env.P28_VAPID_PRIVATE || 'TIixs1I_-Eg2opdnKaLcMd-nGG4fk_NdsMcGET4Maq0';
+  webpush.setVapidDetails('mailto:eriorcenter@gmail.com', pub, priv);
+  await webpush.sendNotification(
+    { endpoint: sub.endpoint, keys: sub.keys },
+    JSON.stringify({ title: title || 'Erior Center', body: body || '', tag: tag || 'p28-daily' })
+  );
+}
+
+exports.handler = async (event, context) => {
+  blobsContext = context || null;
   const origin = event.headers.origin || event.headers.Origin || '';
   const headers = corsHeaders(origin);
 
@@ -186,6 +232,19 @@ exports.handler = async (event) => {
       else subs.push(next);
       await blobSet('subs', subs);
       return { statusCode: 200, headers, body: JSON.stringify({ ok: true }) };
+    }
+
+    if (action === 'push-test') {
+      const sub = body.subscription;
+      if (!sub || !sub.endpoint) {
+        return { statusCode: 400, headers, body: JSON.stringify({ ok: false, error: 'Falta suscripción' }) };
+      }
+      try {
+        await sendOnePush(sub, 'Erior Center', 'Avisos encendidos. Este es el de prueba.', 'p28-test');
+        return { statusCode: 200, headers, body: JSON.stringify({ ok: true, sent: 1 }) };
+      } catch (e) {
+        return { statusCode: 200, headers, body: JSON.stringify({ ok: false, error: e.message || 'No se pudo enviar el aviso' }) };
+      }
     }
 
     if (action === 'wall' && event.httpMethod === 'GET') {
@@ -305,16 +364,23 @@ exports.handler = async (event) => {
         expires_at: plusDays(Date.now(), days),
       };
       if (sb) {
-        const res = await sbFetch('erior_p28_codes', {
-          method: 'POST',
-          headers: { Prefer: 'return=representation' },
-          body: JSON.stringify({ code: row.code, client_name: row.client_name, pack: row.pack, client_contact: row.client_contact, notes: row.notes, active: true }),
-        });
-        if (res.ok && res.data && res.data[0]) row.id = res.data[0].id;
+        try {
+          const res = await sbFetch('erior_p28_codes', {
+            method: 'POST',
+            headers: { Prefer: 'return=representation' },
+            body: JSON.stringify({ code: row.code, client_name: row.client_name, pack: row.pack, client_contact: row.client_contact, notes: row.notes, active: true }),
+          });
+          if (res.ok && res.data && res.data[0]) row.id = res.data[0].id;
+        } catch (e) { /* el blob es la fuente real */ }
       }
       const codes = await loadCodes();
       codes.unshift(row);
-      await saveCodes(codes);
+      const issuedOk = await appendIssued(row);
+      try {
+        await saveCodes(codes);
+      } catch (e) {
+        if (!issuedOk) throw e;
+      }
       return { statusCode: 200, headers, body: JSON.stringify({ ok: true, row, mode: 'blob' }) };
     }
 

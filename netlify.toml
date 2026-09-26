@@ -139,6 +139,10 @@
 [functions.p28-api]
   timeout = 20
 
+[functions."p28-cron"]
+  timeout = 20
+  schedule = "*/15 * * * *"
+
 [[redirects]]
   from = "/reto-28"
   to = "/protocolo-28/"

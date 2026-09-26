@@ -13,7 +13,7 @@
   var cheerTimer = null;
 
   el.preload = 'metadata';
-  el.loop = true;
+  el.loop = false;
 
   function $(id) { return document.getElementById(id); }
   function load() {
@@ -264,18 +264,37 @@
       : '';
   }
 
+  function loopMode(s) {
+    s = s || load();
+    if (s.player && s.player.loopMode) return s.player.loopMode;
+    if (s.player && s.player.loop === false) return 'off';
+    return 'all';
+  }
+
+  function applyLoopToEl(mode) {
+    el.loop = mode === 'one';
+  }
+
+  function loopLabel(mode) {
+    if (mode === 'all') return 'loop playlist';
+    if (mode === 'one') return 'loop 1 audio';
+    return 'loop off';
+  }
+
   function paintPlayer(s) {
     s = s || load();
     var t = current(s);
     var playing = !el.paused && !el.ended;
+    var mode = loopMode(s);
+    applyLoopToEl(mode);
     document.body.classList.toggle('is-playing', playing);
     if ($('vinyl')) $('vinyl').classList.toggle('spin', playing);
     if ($('playerTitle')) $('playerTitle').textContent = t ? t.title : 'Elige o mete un audio';
     if ($('playerLayer')) $('playerLayer').textContent = t ? layerLabel(t.layer) : 'Sin audio';
     if ($('playerMeta')) {
       $('playerMeta').textContent = t
-        ? (t.plays || 0) + ' reproducciones · ' + (s.player && s.player.loop !== false ? 'loop on' : 'loop off')
-        : 'Loop, volumen y barra, como en una app.';
+        ? (t.plays || 0) + ' reproducciones · ' + loopLabel(mode)
+        : 'Loop de playlist, de un audio, o apagado.';
     }
     if ($('miniTitle')) $('miniTitle').textContent = t ? t.title : 'Audio';
     document.body.classList.toggle('has-mini', !!(t && el.src));
@@ -286,9 +305,12 @@
       if ($('volPct')) $('volPct').textContent = v + '%';
     }
     if ($('btnLoop')) {
-      var loopOn = !s.player || s.player.loop !== false;
-      $('btnLoop').classList.toggle('on', loopOn);
-      $('btnLoop').setAttribute('aria-pressed', loopOn ? 'true' : 'false');
+      $('btnLoop').classList.toggle('on', mode !== 'off');
+      $('btnLoop').classList.toggle('loop-all', mode === 'all');
+      $('btnLoop').classList.toggle('loop-one', mode === 'one');
+      $('btnLoop').setAttribute('aria-pressed', mode !== 'off' ? 'true' : 'false');
+      $('btnLoop').setAttribute('aria-label', mode === 'all' ? 'Loop de toda la playlist' : mode === 'one' ? 'Loop de este audio' : 'Loop apagado');
+      if ($('loopBadge')) $('loopBadge').textContent = mode === 'all' ? 'ALL' : mode === 'one' ? '1' : '';
     }
     renderVaultList(s);
   }
@@ -377,9 +399,9 @@
     } catch (e) {}
   }
 
-  function loadTrack(id, autoplay) {
+  function loadTrack(id, autoplay, fromStart) {
     var s = patch(function (st) {
-      st.player = st.player || { vol: 0.72, loop: true };
+      st.player = st.player || { vol: 0.72, loop: true, loopMode: 'all' };
       st.player.currentId = id;
     });
     var t = current(s);
@@ -389,9 +411,10 @@
       if (objectUrl) URL.revokeObjectURL(objectUrl);
       objectUrl = URL.createObjectURL(blob);
       el.src = objectUrl;
-      el.loop = !s.player || s.player.loop !== false;
+      applyLoopToEl(loopMode(s));
       el.volume = (s.player && s.player.vol != null) ? s.player.vol : 0.72;
-      if (t.lastTime && t.lastTime > 3) el.currentTime = t.lastTime;
+      if (!fromStart && t.lastTime && t.lastTime > 3) el.currentTime = t.lastTime;
+      else el.currentTime = 0;
       bindMedia(t);
       paintPlayer(s);
       if (autoplay) return el.play().catch(function () {});
@@ -420,7 +443,7 @@
     var i = 0;
     for (var n = 0; n < list.length; n++) if (cur && list[n].id === cur.id) i = n;
     var nextI = (i + dir + list.length) % list.length;
-    loadTrack(list[nextI].id, true);
+    loadTrack(list[nextI].id, true, true);
   }
   function prev() { step(-1); }
   function next() { step(1); }
@@ -435,12 +458,15 @@
     fillRange($('vol'), v * 100);
     if ($('volPct')) $('volPct').textContent = Math.round(v * 100) + '%';
   }
-  function setLoop(on) {
-    el.loop = !!on;
+  function cycleLoop() {
+    var cur = loopMode();
+    var nextMode = cur === 'all' ? 'one' : cur === 'one' ? 'off' : 'all';
     patch(function (st) {
       st.player = st.player || {};
-      st.player.loop = !!on;
+      st.player.loopMode = nextMode;
+      st.player.loop = nextMode !== 'off';
     });
+    applyLoopToEl(nextMode);
     paintPlayer();
   }
 
@@ -462,7 +488,7 @@
       var s = patch(function (st) {
         st.library = st.library || [];
         st.library.push(track);
-        st.player = st.player || { vol: 0.72, loop: true };
+        st.player = st.player || { vol: 0.72, loop: true, loopMode: 'all' };
         st.player.currentId = id;
       });
       var n = s.library.length;
@@ -520,7 +546,7 @@
     paintPlayer(s);
     if (w.P28 && w.P28.renderListenPlan) w.P28.renderListenPlan(s);
     if (s.player && s.player.vol != null) el.volume = s.player.vol;
-    el.loop = !s.player || s.player.loop !== false;
+    applyLoopToEl(loopMode(s));
   }
 
   function bind() {
@@ -529,7 +555,7 @@
     if ($('miniGo')) $('miniGo').onclick = function () { if (w.P28 && w.P28.go) w.P28.go('audios'); };
     if ($('btnPrev')) $('btnPrev').onclick = prev;
     if ($('btnNext')) $('btnNext').onclick = next;
-    if ($('btnLoop')) $('btnLoop').onclick = function () { setLoop(!el.loop); };
+    if ($('btnLoop')) $('btnLoop').onclick = function () { cycleLoop(); };
     if ($('btnGoAudio')) $('btnGoAudio').onclick = function () {
       if (w.P28 && w.P28.go) w.P28.go('audios');
       play();
@@ -611,6 +637,25 @@
     });
     el.addEventListener('ended', function () {
       persistPos();
+      patch(function (st) {
+        var cur = current(st);
+        if (!cur) return;
+        st.library = (st.library || []).map(function (x) {
+          if (x.id !== cur.id) return x;
+          x.lastTime = 0;
+          return x;
+        });
+      });
+      var mode = loopMode();
+      var list = library(load());
+      if (mode === 'all') {
+        if (list.length > 1) next();
+        else {
+          el.currentTime = 0;
+          el.play().catch(function () {});
+        }
+        return;
+      }
       paintPlayer();
     });
     document.addEventListener('visibilitychange', function () {
