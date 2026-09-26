@@ -322,32 +322,76 @@
     renderNotif(s);
   }
 
-  function renderDays(box, checked) {
+  function dayFulfilled(s, n) {
+    var checks = (s.checks && s.checks[n]) || {};
+    return !!(s.days && s.days[n]) || !!(checks.night && checks.day && checks.mission);
+  }
+
+  function lockUntilDay(s) {
+    var used = daysUsed(s);
+    return used > 28 ? 29 : currentDay(s);
+  }
+
+  function settlePastDays(s) {
+    s = s || load();
+    if (!s.access) return s;
+    s.days = s.days || {};
+    s.dayLock = s.dayLock || {};
+    var until = lockUntilDay(s);
+    var sealed = [];
+    var changed = false;
+    for (var i = 1; i < until; i++) {
+      if (s.dayLock[i]) continue;
+      if (dayFulfilled(s, i)) {
+        s.days[i] = true;
+        s.dayLock[i] = 'done';
+        sealed.push(i);
+      } else {
+        s.days[i] = false;
+        s.dayLock[i] = 'miss';
+      }
+      changed = true;
+    }
+    if (changed) save(s);
+    sealed.forEach(function (n) {
+      if (window.P28Vault) P28Vault.onSeal(n, s);
+    });
+    return s;
+  }
+
+  function renderDays(box, s) {
     if (!box) return;
+    s = settlePastDays(s || load());
+    var today = currentDay(s);
     box.innerHTML = '';
     for (var i = 1; i <= 28; i++) {
+      var done = !!(s.days && s.days[i]);
+      var miss = !!(s.dayLock && s.dayLock[i] === 'miss');
+      var locked = i !== today || daysUsed(s) > 28;
       var b = document.createElement('button');
       b.type = 'button';
-      b.className = 'day' + (checked[i] ? ' on' : '');
+      b.className = 'day' + (done ? ' on' : '') + (miss ? ' miss' : '') + (locked ? ' locked' : '') + (i === today && daysUsed(s) <= 28 ? ' now' : '');
       b.textContent = i;
-      b.setAttribute('aria-pressed', checked[i] ? 'true' : 'false');
-      b.onclick = (function (n) {
-        return function () {
-          var state = patch(function (s) {
-            s.days = s.days || {};
-            s.days[n] = !s.days[n];
-            if (!s.days[n]) {
-              s.checks = s.checks || {};
-              s.checks[n] = { night: false, day: false, mission: false };
-            }
-          });
-          this.classList.toggle('on', state.days[n]);
-          this.setAttribute('aria-pressed', state.days[n] ? 'true' : 'false');
-          if (!state.days[n] && n === currentDay(state)) renderMission(state);
-          if (state.days[n] && window.P28Vault) P28Vault.onSeal(n, state);
-          if (state.days[n] && n === 28) go('com');
-        };
-      })(i);
+      b.disabled = locked;
+      b.setAttribute('aria-pressed', done ? 'true' : 'false');
+      if (!locked) {
+        b.onclick = (function (n) {
+          return function () {
+            var state = patch(function (st) {
+              st.days = st.days || {};
+              st.days[n] = !st.days[n];
+              if (!st.days[n]) {
+                st.checks = st.checks || {};
+                st.checks[n] = { night: false, day: false, mission: false };
+              }
+            });
+            renderDays(box, state);
+            if (!state.days[n] && n === currentDay(state)) renderMission(state);
+            if (state.days[n] && window.P28Vault) P28Vault.onSeal(n, state);
+            if (state.days[n] && n === 28) go('com');
+          };
+        })(i);
+      }
       box.appendChild(b);
     }
   }
@@ -429,11 +473,22 @@
     if (!code) return;
     try { localStorage.setItem(clockKey(code), JSON.stringify(clock)); } catch (e) {}
   }
+  function remindKey() {
+    var c = (window.P28Access && P28Access.sessionCode && P28Access.sessionCode()) || '';
+    return c ? 'erior-p28-remind-' + c : 'erior-p28-remind';
+  }
   function loadRemind() {
-    try { return JSON.parse(localStorage.getItem('erior-p28-remind') || '{}'); } catch (e) { return {}; }
+    try {
+      var keyed = JSON.parse(localStorage.getItem(remindKey()) || '{}');
+      if (keyed && (keyed.on || keyed.off || keyed.at)) return keyed;
+      return JSON.parse(localStorage.getItem('erior-p28-remind') || '{}');
+    } catch (e) { return {}; }
   }
   function saveRemind(r) {
-    try { localStorage.setItem('erior-p28-remind', JSON.stringify(r)); } catch (e) {}
+    try {
+      localStorage.setItem(remindKey(), JSON.stringify(r));
+      localStorage.setItem('erior-p28-remind', JSON.stringify(r));
+    } catch (e) {}
   }
 
   function plusDaysIso(from, n) {
@@ -497,11 +552,15 @@
   function restoreRemind(st) {
     if (!st) return st;
     var r = loadRemind();
-    var granted = typeof Notification !== 'undefined' && Notification.permission === 'granted';
-    if (granted || r.on) {
+    if (st.remindOff || r.off) {
+      st.remindOff = true;
+      st.remindOn = false;
+      return st;
+    }
+    if (r.on || st.remindOn || (typeof Notification !== 'undefined' && Notification.permission === 'granted')) {
       st.remindOn = true;
       st.remindAt = st.remindAt || r.at || '21:00';
-      saveRemind({ on: true, at: st.remindAt });
+      saveRemind({ on: true, off: false, at: st.remindAt });
     }
     return st;
   }
@@ -517,7 +576,10 @@
       data: s.data || {},
       vision: s.vision || {},
       photo: s.photo || '',
-      purpose: s.purpose || ''
+      purpose: s.purpose || '',
+      remindOn: !!s.remindOn && !s.remindOff,
+      remindOff: !!s.remindOff,
+      remindAt: s.remindAt || '21:00'
     }).catch(function () {});
   }
 
@@ -527,6 +589,17 @@
     if (profile.vision && !st.vision) st.vision = profile.vision;
     if (profile.photo) st.photo = profile.photo;
     if (profile.purpose && !st.purpose) st.purpose = profile.purpose;
+    if (profile.remindOff) {
+      st.remindOff = true;
+      st.remindOn = false;
+      saveRemind({ on: false, off: true, at: st.remindAt || profile.remindAt || '21:00' });
+      return;
+    }
+    if (profile.remindOn && !st.remindOff) {
+      st.remindOn = true;
+      st.remindAt = st.remindAt || profile.remindAt || '21:00';
+      saveRemind({ on: true, off: false, at: st.remindAt });
+    }
   }
 
   function renderMyPack(s) {
@@ -592,21 +665,19 @@
       $('audioSecond').classList.remove('hidden');
       renderAudio($('audioSecond'), rec.second, rec.why2 || '', 'Audio 2');
     }
-    renderDays($('dayGridApp'), s.days || {});
+    renderDays($('dayGridApp'), s);
     renderMission(s);
     renderWall();
     renderMyPack(s);
     if (window.P28Vault) P28Vault.render(s);
     if ($('remindAt') && s.remindAt) $('remindAt').value = s.remindAt;
-    if ($('btnRemind') && s.remindOn) $('btnRemind').textContent = 'Avisos activos';
+    paintRemindUi(s);
     go(s.view || 'hoy');
     renderStories(s);
     renderListenPlan(s);
     lockPurpose(s);
     renderInstallAndRemind(s);
-    if (s.remindOn && typeof Notification !== 'undefined' && Notification.permission === 'granted') {
-      subscribePhone(s.remindAt || '21:00').catch(function () {});
-    }
+    keepRemindAlive();
     if ($('dayNowBox')) {
       var n = currentDay(s);
       var left = liveDaysLeft(s.access, s);
@@ -702,12 +773,18 @@
 
   function renderInstallAndRemind(s) {
     syncInstallUi();
-    if ($('btnRemind') && s && s.remindOn && typeof Notification !== 'undefined' && Notification.permission === 'granted') {
-      $('btnRemind').textContent = 'Avisos activos';
+    paintRemindUi(s);
+    if (!$('remindMsg')) return;
+    var wanted = !!(s && s.remindOn && !s.remindOff);
+    var granted = typeof Notification !== 'undefined' && Notification.permission === 'granted';
+    if (wanted && granted) return;
+    if (wanted) {
+      $('remindMsg').textContent = (isIOSPhone() && !isStandaloneApp())
+        ? remindHint()
+        : 'Los avisos ya están pedidos. En este celular toca Permitir para que te lleguen aquí también.';
+      return;
     }
-    if ($('remindMsg') && !(s && s.remindOn && typeof Notification !== 'undefined' && Notification.permission === 'granted')) {
-      $('remindMsg').textContent = remindHint();
-    }
+    $('remindMsg').textContent = remindHint();
   }
 
   function maybeWelcome(s) {
@@ -794,7 +871,7 @@
         st.days[n] = false;
       }
     });
-    renderDays($('dayGridApp'), state.days || {});
+    renderDays($('dayGridApp'), state);
     if (window.P28Vault) {
       P28Vault.renderProgress(state);
       if (!was && state.days && state.days[n]) P28Vault.onSeal(n, state);
@@ -855,13 +932,69 @@
           applicationServerKey: urlB64ToUint8(pub)
         });
       }).then(function (sub) {
+        var now = load();
+        if (now.remindOff) return { ok: false };
         var json = sub.toJSON();
-        return P28Access.subscribePush(json, s.access && s.access.code, hour || s.remindAt || '21:00').then(function () {
+        return P28Access.subscribePush(json, now.access && now.access.code, hour || now.remindAt || '21:00').then(function () {
           if (!sendTest || !P28Access.pushTest) return { ok: true };
           return P28Access.pushTest(json);
         });
       });
     });
+  }
+
+  function paintRemindUi(s) {
+    s = s || load();
+    var wanted = !!(s.remindOn && !s.remindOff);
+    var granted = typeof Notification !== 'undefined' && Notification.permission === 'granted';
+    if ($('btnRemind')) {
+      if (wanted && granted) $('btnRemind').textContent = 'Avisos activos';
+      else if (wanted) $('btnRemind').textContent = 'Permitir en este celular';
+      else $('btnRemind').textContent = 'Activar avisos';
+    }
+    if ($('btnRemindOff')) {
+      if (wanted) {
+        $('btnRemindOff').classList.remove('hidden');
+        $('btnRemindOff').removeAttribute('hidden');
+      } else {
+        $('btnRemindOff').classList.add('hidden');
+        $('btnRemindOff').setAttribute('hidden', '');
+      }
+    }
+    if (wanted && !granted && $('remindMsg') && !($('remindMsg').textContent || '').trim()) {
+      $('remindMsg').textContent = 'Los avisos ya están pedidos. En este celular toca Permitir para que te lleguen aquí también.';
+    }
+  }
+
+  function keepRemindAlive() {
+    var s = restoreRemind(load());
+    if (!s.remindOn || s.remindOff) {
+      paintRemindUi(s);
+      return;
+    }
+    save(s);
+    paintRemindUi(s);
+    if (typeof Notification === 'undefined' || Notification.permission !== 'granted') return;
+    subscribePhone(s.remindAt || '21:00', false).catch(function () {});
+  }
+
+  function cancelReminders() {
+    var s = patch(function (st) {
+      st.remindOn = false;
+      st.remindOff = true;
+    });
+    saveRemind({ on: false, off: true, at: s.remindAt || '21:00' });
+    syncProfile(s);
+    paintRemindUi(s);
+    if ($('remindMsg')) $('remindMsg').textContent = 'Avisos apagados. Ya no te llegan hasta que los enciendas otra vez.';
+    if (!navigator.serviceWorker || !window.P28Access || !P28Access.unsubscribePush) return;
+    navigator.serviceWorker.ready.then(function (reg) {
+      return reg.pushManager.getSubscription();
+    }).then(function (sub) {
+      if (!sub) return;
+      P28Access.unsubscribePush(sub.endpoint);
+      return sub.unsubscribe();
+    }).catch(function () {});
   }
 
   function activateReminders(demo) {
@@ -881,8 +1014,14 @@
       if ($('remindMsg')) $('remindMsg').textContent = remindHint();
       return;
     }
-    var s = patch(function (st) { st.remindAt = hour; st.remindOn = true; });
-    saveRemind({ on: true, at: hour });
+    var s = patch(function (st) {
+      st.remindAt = hour;
+      st.remindOn = true;
+      st.remindOff = false;
+    });
+    saveRemind({ on: true, off: false, at: hour });
+    syncProfile(s);
+    paintRemindUi(s);
     if ($('remindMsg')) $('remindMsg').textContent = 'Pidiendo permiso…';
     Notification.requestPermission().then(function (p) {
       if (p !== 'granted') {
@@ -890,17 +1029,17 @@
         return;
       }
       $('remindMsg').textContent = 'Avisos activos. Mandando uno de prueba…';
-      if ($('btnRemind')) $('btnRemind').textContent = 'Avisos activos';
+      paintRemindUi(load());
       showNativeNotif('Erior Center', 'Avisos encendidos. Este es el de prueba.', 'p28-test');
       if (demo) firePhrase(true, ['portal', 'listen', 'offer'][Math.floor(Math.random() * 3)]);
       subscribePhone(hour, true).then(function (res) {
         if (res && res.data && res.data.error) {
-          $('remindMsg').textContent = 'Avisos activos aquí. El aviso al celular falló: ' + res.data.error;
+          $('remindMsg').textContent = 'Avisos activos. Siguen encendidos. El de prueba falló: ' + res.data.error;
           return;
         }
-        $('remindMsg').textContent = 'Avisos activos. Ya te mandé uno de prueba. Van 4 al día: 08:08, 11:11, 16:16 y tu hora de noche.';
+        $('remindMsg').textContent = 'Avisos activos. Van 4 al día (08:08, 11:11, 16:16 y noche) hasta que los canceles tú.';
       }).catch(function (err) {
-        $('remindMsg').textContent = 'Avisos activos aquí. Si no llegó al celular, instala la app y toca de nuevo. ' + ((err && err.message) || '');
+        $('remindMsg').textContent = 'Avisos activos. Si no llegó el de prueba, deja la app abierta un segundo. ' + ((err && err.message) || '');
       });
     });
   }
@@ -1091,6 +1230,7 @@
     renderMission(state);
   });
   $('btnRemind') && $('btnRemind').addEventListener('click', function () { activateReminders(true); });
+  $('btnRemindOff') && $('btnRemindOff').addEventListener('click', cancelReminders);
   $('btnInstallYo') && $('btnInstallYo').addEventListener('click', promptInstall);
   $('btnInstallHome') && $('btnInstallHome').addEventListener('click', promptInstall);
   ['chkNight', 'chkDay', 'chkMission'].forEach(function (id) {
@@ -1167,6 +1307,8 @@
   }
   setTimeout(endSplash, 2200);
   setInterval(tryNotify, 30000);
+  setInterval(keepRemindAlive, 45000);
+  setInterval(function () { renderDays($('dayGridApp'), load()); }, 60000);
   setInterval(paintTimer, 1000);
   function guardAccess() {
     var s = load();
@@ -1174,6 +1316,9 @@
   }
   setInterval(guardAccess, 30000);
   document.addEventListener('visibilitychange', function () {
-    if (!document.hidden) guardAccess();
+    if (document.hidden) return;
+    guardAccess();
+    keepRemindAlive();
+    renderDays($('dayGridApp'), load());
   });
 })();

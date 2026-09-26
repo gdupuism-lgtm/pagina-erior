@@ -530,8 +530,14 @@ body.is-lock .mini-player{display:none!important}
 .day.on{
   background:linear-gradient(145deg,var(--gold-hot),var(--rose));
   border-color:transparent;color:#06140c;font-weight:700;
-  box-shadow:0 6px 16px rgba(62,255,197),.28);
+  box-shadow:0 6px 16px rgba(62,255,197,.28);
 }
+.day.miss{
+  background:#121214;color:#6a6a72;opacity:.62;
+  text-decoration:line-through;border-color:rgba(255,255,255,.08);
+}
+.day.locked,.day:disabled{cursor:default;transform:none;pointer-events:none}
+.day.now{box-shadow:0 0 0 2px #050a08,0 0 0 4px var(--aqua)}
 .day-legend{font-size:.72rem;color:var(--dim);margin-top:.55rem}
 
 .pay{margin-top:1.4rem;padding:1.2rem 1.15rem;border-radius:18px;border:1px solid rgba(255,255,255,.16);background:var(--plate);box-shadow:inset 0 1px 0 rgba(255,255,255,.22)}

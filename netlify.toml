@@ -144,6 +144,7 @@
 [functions."p28-cron"]
   timeout = 20
   schedule = "*/15 * * * *"
+  external_node_modules = ["@netlify/blobs"]
 
 [[redirects]]
   from = "/reto-28"

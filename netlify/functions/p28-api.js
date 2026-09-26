@@ -179,6 +179,10 @@ function bindDevice(row, device, deviceLabel) {
 let blobsContext = null;
 let lastBlobError = '';
 
+function subBlobKey(endpoint) {
+  return 'sub-' + String(endpoint || '').replace(/[^a-zA-Z0-9]/g, '').slice(-40);
+}
+
 function attachBlobs(event, context) {
   blobsContext = context || null;
   try {
@@ -340,16 +344,28 @@ exports.handler = async (event, context) => {
       if (!sub || !sub.endpoint) {
         return { statusCode: 400, headers, body: JSON.stringify({ ok: false, error: 'Falta suscripción' }) };
       }
-      const subs = await blobGet('subs', []);
       const next = {
         endpoint: sub.endpoint,
         keys: sub.keys,
         code: String(body.code || ''),
         hour: String(body.hour || '21:00'),
+        on: true,
       };
+      const subs = await blobGet('subs', []);
       const i = subs.findIndex((s) => s.endpoint === sub.endpoint);
-      if (i >= 0) subs[i] = next;
+      if (i >= 0) subs[i] = Object.assign({}, subs[i], next);
       else subs.push(next);
+      await blobSet(subBlobKey(sub.endpoint), next);
+      await blobSet('subs', subs);
+      return { statusCode: 200, headers, body: JSON.stringify({ ok: true }) };
+    }
+
+    if (action === 'unsubscribe') {
+      const endpoint = String(body.endpoint || '');
+      if (!endpoint) return { statusCode: 400, headers, body: JSON.stringify({ ok: false, error: 'Falta endpoint' }) };
+      const prev = (await blobGet(subBlobKey(endpoint), {})) || {};
+      await blobSet(subBlobKey(endpoint), Object.assign({}, prev, { endpoint: endpoint, on: false }));
+      const subs = (await blobGet('subs', [])).filter((s) => s.endpoint !== endpoint);
       await blobSet('subs', subs);
       return { statusCode: 200, headers, body: JSON.stringify({ ok: true }) };
     }
@@ -475,11 +491,15 @@ exports.handler = async (event, context) => {
         return { statusCode: 403, headers, body: JSON.stringify({ ok: false, error: 'Ese código no está activo' }) };
       }
       const photo = String(body.photo || '');
+      const prev = (await blobGet('profile-' + code, {})) || {};
       const profile = {
-        data: body.data || {},
-        vision: body.vision || {},
-        photo: photo.length > 380000 ? '' : photo,
-        purpose: String(body.purpose || '').slice(0, 400),
+        data: body.data || prev.data || {},
+        vision: body.vision || prev.vision || {},
+        photo: photo.length > 380000 ? (prev.photo || '') : (photo || prev.photo || ''),
+        purpose: String(body.purpose || prev.purpose || '').slice(0, 400),
+        remindOn: body.remindOn == null ? !!prev.remindOn : !!body.remindOn,
+        remindOff: body.remindOff == null ? !!prev.remindOff : !!body.remindOff,
+        remindAt: String(body.remindAt || prev.remindAt || '21:00'),
         updated_at: new Date().toISOString(),
       };
       await blobSet('profile-' + code, profile);
@@ -594,17 +614,23 @@ exports.handler = async (event, context) => {
         tag: 'p28-daily',
       });
       const subs = await blobGet('subs', []);
+      const keep = [];
       let sent = 0;
       for (let i = 0; i < subs.length; i += 1) {
         try {
           await webpush.sendNotification({ endpoint: subs[i].endpoint, keys: subs[i].keys }, payload);
           sent += 1;
+          keep.push(subs[i]);
         } catch (e) {
-          if (e.statusCode === 404 || e.statusCode === 410) subs.splice(i, 1);
+          if (e.statusCode === 404 || e.statusCode === 410) {
+            await blobSet(subBlobKey(subs[i].endpoint), Object.assign({}, subs[i], { on: false }));
+          } else {
+            keep.push(subs[i]);
+          }
         }
       }
-      await blobSet('subs', subs);
-      return { statusCode: 200, headers, body: JSON.stringify({ ok: true, sent, total: subs.length }) };
+      await blobSet('subs', keep);
+      return { statusCode: 200, headers, body: JSON.stringify({ ok: true, sent, total: keep.length }) };
     }
 
     if (action === 'revoke') {

@@ -219,6 +219,10 @@
     return call('subscribe', { subscription: subscription, code: code, hour: hour });
   }
 
+  function unsubscribePush(endpoint) {
+    return call('unsubscribe', { endpoint: endpoint });
+  }
+
   function pushTest(subscription) {
     return call('push-test', { subscription: subscription });
   }
@@ -355,6 +359,7 @@
     deleteWall: deleteWall,
     vapidPublic: vapidPublic,
     subscribePush: subscribePush,
+    unsubscribePush: unsubscribePush,
     pushTest: pushTest,
     broadcast: broadcast,
     checkLocalAdmin: checkLocalAdmin,

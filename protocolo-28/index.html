@@ -17,7 +17,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="protocolo.css?v=40">
+  <link rel="stylesheet" href="protocolo.css?v=41">
 </head>
 <body class="is-boot">
   <div class="sky" aria-hidden="true"></div>
@@ -294,9 +294,9 @@
 
       <section class="view" id="viewCal" data-view="cal">
         <h2 class="sec-title">Días</h2>
-        <p class="sec-sub">Si lo marcaste sin querer, tócalo otra vez y se quita. Tus checks de ese día también se limpian.</p>
+        <p class="sec-sub">Hoy sí lo puedes marcar. Si cumpliste (noche + 4 h + pasos), al cambiar el día se sella solo. Si no, se tacha. El día pasado ya no se toca.</p>
         <div class="days" id="dayGridApp"></div>
-        <p class="day-legend">Tornasol = cumplido. Tócalo de nuevo para deshacer.</p>
+        <p class="day-legend">Tornasol = cumplido. Tachado = no cumplido. Solo el día de hoy se toca.</p>
       </section>
 
       <section class="view" id="viewCom" data-view="com">
@@ -321,7 +321,10 @@
           <button type="button" class="btn btn-gold btn-full" id="btnInstallYo">Instalar app</button>
         </div>
         <div class="card foil-card" style="margin-top:1rem">
+          <span class="num">Avisos</span>
+          <p class="copy" style="margin:.4rem 0 .8rem">Si los enciendes, te llegan los 4 al día aunque cierres la app. En cada celular toca una vez para permitir. Solo se apagan si tú tocas Cancelar avisos.</p>
           <button type="button" class="btn btn-gold btn-full" id="btnRemind">Activar avisos</button>
+          <button type="button" class="btn btn-ghost btn-full hidden" id="btnRemindOff" hidden style="margin-top:.7rem">Cancelar avisos</button>
           <input id="remindAt" type="time" value="21:00" hidden>
           <p class="note" id="remindMsg"></p>
         </div>
@@ -420,16 +423,16 @@
     </div>
   </div>
 
-  <script src="access.js?v=27"></script>
+  <script src="access.js?v=28"></script>
   <script src="phrases.js?v=22"></script>
   <script src="routines.js?v=22"></script>
   <script src="plan.js?v=22"></script>
   <script src="vault.js?v=25"></script>
   <script src="vision.js?v=3"></script>
-  <script src="protocolo.js?v=33"></script>
+  <script src="protocolo.js?v=34"></script>
   <script>
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js?v=36', { scope: './' }).catch(function () {});
+      navigator.serviceWorker.register('sw.js?v=37', { scope: './' }).catch(function () {});
     }
   </script>
 </body>
