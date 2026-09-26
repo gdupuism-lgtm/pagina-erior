@@ -592,7 +592,7 @@
     renderMyPack(s);
     if (window.P28Vault) P28Vault.render(s);
     if ($('remindAt') && s.remindAt) $('remindAt').value = s.remindAt;
-    if ($('btnRemind') && s.remindOn) $('btnRemind').textContent = 'On';
+    if ($('btnRemind') && s.remindOn) $('btnRemind').textContent = 'Avisos activos';
     go('hoy');
     renderStories(s);
     renderListenPlan(s);
@@ -684,7 +684,7 @@
       }
     }
     if ($('btnRemind') && s && s.remindOn && typeof Notification !== 'undefined' && Notification.permission === 'granted') {
-      $('btnRemind').textContent = 'On';
+      $('btnRemind').textContent = 'Avisos activos';
     }
     if ($('remindMsg') && !(s && s.remindOn && typeof Notification !== 'undefined' && Notification.permission === 'granted')) {
       $('remindMsg').textContent = remindHint();
@@ -868,18 +868,18 @@
         $('remindMsg').textContent = remindHint();
         return;
       }
-      $('remindMsg').textContent = 'On. Mandando aviso de prueba…';
-      if ($('btnRemind')) $('btnRemind').textContent = 'On';
+      $('remindMsg').textContent = 'Avisos activos. Mandando uno de prueba…';
+      if ($('btnRemind')) $('btnRemind').textContent = 'Avisos activos';
       showNativeNotif('Erior Center', 'Avisos encendidos. Este es el de prueba.', 'p28-test');
       if (demo) firePhrase(true, ['portal', 'listen', 'offer'][Math.floor(Math.random() * 3)]);
       subscribePhone(hour, true).then(function (res) {
         if (res && res.data && res.data.error) {
-          $('remindMsg').textContent = 'On aquí. El aviso al celular falló: ' + res.data.error;
+          $('remindMsg').textContent = 'Avisos activos aquí. El aviso al celular falló: ' + res.data.error;
           return;
         }
-        $('remindMsg').textContent = 'On. Ya te mandé uno de prueba. Van 4 al día: 08:08, 11:11, 16:16 y tu hora de noche.';
+        $('remindMsg').textContent = 'Avisos activos. Ya te mandé uno de prueba. Van 4 al día: 08:08, 11:11, 16:16 y tu hora de noche.';
       }).catch(function (err) {
-        $('remindMsg').textContent = 'On aquí. Si no llegó el aviso, instala la app y toca de nuevo. ' + ((err && err.message) || '');
+        $('remindMsg').textContent = 'Avisos activos aquí. Si no llegó al celular, instala la app y toca de nuevo. ' + ((err && err.message) || '');
       });
     });
   }

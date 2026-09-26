@@ -1,9 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="96" fill="#050508"/>
-  <g fill="none" stroke="#ffffff" stroke-width="12" stroke-linejoin="round" stroke-linecap="round">
-    <circle cx="256" cy="168" r="32"/>
-    <path d="M186 292 L256 176 L326 292"/>
-    <path d="M206 268 H306"/>
-    <path d="M256 310 L300 354 L256 398 L212 354 Z"/>
+  <rect width="512" height="512" rx="112" fill="#050508"/>
+  <g fill="none">
+    <path d="M118 250 C118 118 394 118 394 250" stroke="#8a8a94" stroke-width="14" stroke-linecap="round"/>
+    <path d="M142 250 C142 142 370 142 370 250" stroke="#141418" stroke-width="28" stroke-linecap="round"/>
+    <ellipse cx="118" cy="318" rx="46" ry="54" fill="#111116" stroke="#3a3a42" stroke-width="3"/>
+    <ellipse cx="394" cy="318" rx="46" ry="54" fill="#111116" stroke="#3a3a42" stroke-width="3"/>
+    <g transform="translate(256 300) scale(.52) translate(-256 -268)" stroke="#fff" stroke-width="12" stroke-linejoin="round" stroke-linecap="round">
+      <circle cx="256" cy="168" r="32"/>
+      <path d="M186 292 L256 176 L326 292"/>
+      <path d="M206 268 H306"/>
+      <path d="M256 310 L300 354 L256 398 L212 354 Z"/>
+    </g>
   </g>
 </svg>

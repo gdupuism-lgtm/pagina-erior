@@ -9,14 +9,15 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Erior Center">
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=27">
-  <link rel="apple-touch-icon" href="apple-touch-icon.png?v=27">
-  <meta name="description" content="Erior Center. App de audios, pasos y calendario.">
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=31">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png?v=31">
+  <link rel="icon" type="image/svg+xml" href="icon.svg?v=31">
+  <meta name="description" content="Erior Center. Reto de Manifestación 28 días.">
   <title>Erior Center</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="protocolo.css?v=30">
+  <link rel="stylesheet" href="protocolo.css?v=31">
 </head>
 <body class="is-boot">
   <div class="sky" aria-hidden="true"></div>
@@ -33,13 +34,22 @@
   <div class="grain" aria-hidden="true"></div>
   <div class="vignette" aria-hidden="true"></div>
   <div id="bootSplash" class="boot-splash" aria-label="Erior Center">
-    <img class="logo-mark logo-cans" src="logo-cans.png" alt="">
+    <div class="brand-lockup brand-lockup-hero">
+      <span class="brand-halo" aria-hidden="true"></span>
+      <img class="brand-seal" src="lockup.svg?v=2" alt="">
+      <p class="brand-word metal-hot">ERIOR</p>
+      <p class="brand-word-ref" aria-hidden="true">ERIOR</p>
+    </div>
     <p class="boot-hint">Toca para entrar</p>
   </div>
 
   <div class="wrap">
     <header class="ig-top no-print">
-      <p class="ig-logo" aria-label="Erior Center"><img class="logo-cans" src="logo-cans.png" alt=""></p>
+      <p class="ig-logo" aria-label="Erior Center">
+        <span class="brand-lockup brand-lockup-mini">
+          <img class="brand-seal" src="lockup.svg?v=2" alt="">
+        </span>
+      </p>
       <button type="button" class="ig-ico" id="btnInstall" aria-label="Instalar">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v10.2l3.2-3.2 1.4 1.4L12 17.2 7.4 11.4l1.4-1.4L11 13.2V3h1zm-7 14.5h14V21H5v-3.5z"/></svg>
       </button>
@@ -57,7 +67,7 @@
       <div class="card foil-card gate-box">
         <span class="kicker">Acceso</span>
         <h2 class="sec-title">Tu código</h2>
-        <p class="sec-sub">El que te mandó Erior. Entras y ya estás en tu reto.</p>
+        <p class="sec-sub">El que te mandó Erior para el Reto de Manifestación 28 días.</p>
         <label for="accessCode">Código</label>
         <input id="accessCode" type="text" autocomplete="off" placeholder="P28-XXXX-XXXX" autocapitalize="characters">
         <p id="gateErr" class="note" style="color:#e8b1a0"></p>
@@ -158,9 +168,10 @@
 
     <div id="welcomeGate" class="welcome-gate hidden" hidden>
       <div class="welcome-card foil-card">
-        <span class="kicker">Paso 2</span>
-        <img class="welcome-mark logo-cans" src="logo-cans.png" alt="">
-        <p class="copy">Tu video de inicio. Luego queda en Inicio, como una historia.</p>
+        <div class="brand-lockup brand-lockup-mid">
+          <img class="brand-seal" src="lockup.svg?v=2" alt="">
+        </div>
+        <p class="copy">Tu video de inicio. Luego queda en Inicio.</p>
         <video id="appVideo" controls playsinline webkit-playsinline preload="none" src="bienvenida.mp4"></video>
         <button type="button" class="btn btn-gold btn-full" id="btnWelcomeGo" style="margin-top:1rem">Entrar</button>
       </div>
@@ -172,7 +183,7 @@
 
         <article class="post" id="homeVideoCard">
           <header class="post-head">
-            <span class="avatar">E</span>
+            <span class="avatar avatar-mark"><img src="lockup.svg?v=2" alt=""></span>
             <div>
               <b>Erior</b>
               <small>Bienvenida</small>
@@ -258,11 +269,11 @@
           <span class="num">Subir audio</span>
           <label for="audioTitle">Nombre</label>
           <input id="audioTitle" type="text" placeholder="Ej. Booster 2.0 · noche">
-          <label>Capa</label>
+          <label>Capa que te asignó Erior</label>
           <div class="choices" id="layerChips">
-            <label class="chip"><input type="radio" name="layer" value="1" checked> Capa 1</label>
-            <label class="chip"><input type="radio" name="layer" value="2"> Capa 2</label>
-            <label class="chip"><input type="radio" name="layer" value="3"> Capa 3</label>
+            <label class="chip"><input type="radio" name="layer" value="1" checked> 1</label>
+            <label class="chip"><input type="radio" name="layer" value="2"> 2</label>
+            <label class="chip"><input type="radio" name="layer" value="3"> 3</label>
             <label class="chip"><input type="radio" name="layer" value="extra"> Extra</label>
           </div>
           <input type="file" id="audioFile" accept="audio/*,.mp3,.m4a,.wav,.aac,.ogg,.flac" hidden>
@@ -311,7 +322,7 @@
           <button type="button" class="btn btn-gold btn-full" id="btnInstallYo">Instalar</button>
         </div>
         <div class="card foil-card" style="margin-top:1rem">
-          <button type="button" class="btn btn-gold btn-full" id="btnRemind">Turn on notifications</button>
+          <button type="button" class="btn btn-gold btn-full" id="btnRemind">Activar avisos</button>
           <input id="remindAt" type="time" value="21:00" hidden>
           <p class="note" id="remindMsg"></p>
         </div>
@@ -402,7 +413,9 @@
     <div class="celebrate-bg" aria-hidden="true"></div>
     <div class="spark" id="spark" aria-hidden="true"></div>
     <div class="celebrate-card">
-      <img class="welcome-mark logo-cans" src="logo-cans.png" alt="">
+      <div class="brand-lockup brand-lockup-mid">
+        <img class="brand-seal" src="lockup.svg?v=2" alt="">
+      </div>
       <h2 id="celebrateTitle"></h2>
       <p id="celebrateText"></p>
     </div>
@@ -414,7 +427,7 @@
   <script src="plan.js?v=22"></script>
   <script src="vault.js?v=25"></script>
   <script src="vision.js?v=3"></script>
-  <script src="protocolo.js?v=30"></script>
+  <script src="protocolo.js?v=31"></script>
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js').catch(function () {});
