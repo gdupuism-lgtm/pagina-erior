@@ -154,8 +154,8 @@ body.is-app.has-mini .wrap{padding-bottom:10.2rem}
 .top-link{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);text-decoration:none}
 .top-link:hover{color:var(--ink)}
 
-.logo-mark{width:54px;margin:0 auto 1rem}
-.logo-mark svg{width:100%;height:auto;filter:drop-shadow(0 0 16px rgba(62,255,197,.45))}
+.logo-mark{width:min(220px,56vw);height:auto;margin:0 auto .4rem;display:block;filter:drop-shadow(0 0 22px rgba(255,255,255,.32))}
+.welcome-mark{width:96px;height:auto;margin:.15rem auto .7rem;display:block;filter:drop-shadow(0 0 14px rgba(255,255,255,.24))}
 .hero-line{
   font-family:var(--display);font-size:clamp(1.15rem,3.6vw,1.45rem);font-weight:800;
   letter-spacing:-.03em;margin:-.2rem 0 1rem;
@@ -811,12 +811,10 @@ body.is-boot .wrap{visibility:hidden}
   backdrop-filter:blur(14px);
 }
 .ig-logo{
-  font-family:var(--display);font-weight:800;font-size:clamp(1.2rem,5.4vw,1.45rem);letter-spacing:-.04em;line-height:1;
-  background-image:var(--metal);background-size:140% 180%;
-  -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
-  animation:metalshift 9s ease infinite;
-  filter:drop-shadow(0 1px 0 rgba(255,255,255,.55)) drop-shadow(0 5px 0 rgba(50,36,28,.2)) drop-shadow(0 10px 16px rgba(0,0,0,.3));
+  margin:0;line-height:0;
+  filter:drop-shadow(0 0 10px rgba(255,255,255,.22));
 }
+.ig-logo img{height:42px;width:auto;display:block}
 .ig-ico{
   width:40px;height:40px;border:0;border-radius:50%;cursor:pointer;
   background:rgba(255,255,255,.06);color:var(--ink);display:grid;place-items:center;
