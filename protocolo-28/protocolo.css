@@ -172,20 +172,18 @@ body.is-app.has-mini .wrap{padding-bottom:10.2rem}
 .logo-mark{width:min(220px,56vw);height:auto;margin:0 auto .4rem;display:block;filter:drop-shadow(0 0 22px rgba(255,255,255,.32))}
 .welcome-mark{width:96px;height:auto;margin:.15rem auto .7rem;display:block;filter:drop-shadow(0 0 14px rgba(255,255,255,.24))}
 .logo-tile{
-  position:relative;margin:0 auto;
-  aspect-ratio:1;overflow:hidden;border-radius:28%;
-  box-shadow:0 16px 40px rgba(0,0,0,.4);
+  display:block;position:relative;flex:0 0 auto;
+  overflow:hidden;border-radius:28%;
+  box-shadow:0 12px 28px rgba(0,0,0,.35);
 }
 .logo-tile img{
-  width:122%;height:122%;max-width:none;
-  display:block;object-fit:cover;object-position:center;
-  position:absolute;left:-11%;top:-11%;
+  position:absolute;inset:0;
+  width:100%;height:100%;max-width:none;
+  object-fit:cover;object-position:center;
 }
-.logo-tile-hero{width:min(220px,56vw)}
-.logo-tile-mid{width:92px;margin:.15rem auto .7rem}
-.logo-tile-mini{width:40px;margin:0}
-.logo-tile-mid{width:120px;margin:.15rem auto .7rem}
-.logo-tile-mini{width:46px;margin:0}
+.logo-tile-hero{width:min(220px,56vw);height:min(220px,56vw);margin:0 auto}
+.logo-tile-mid{width:92px;height:92px;margin:.15rem auto .7rem}
+.logo-tile-mini{width:40px;height:40px;margin:0}
 .boot-name{
   position:relative;z-index:1;
   margin:.35rem 0 0;
@@ -858,10 +856,10 @@ body.is-boot .wrap{visibility:hidden}
   backdrop-filter:blur(14px);
 }
 .ig-logo{
-  margin:0;line-height:0;
+  margin:0;line-height:0;width:40px;height:40px;
   filter:drop-shadow(0 0 10px rgba(255,255,255,.22));
 }
-.ig-logo img{height:auto;width:auto;display:block}
+.ig-logo .logo-tile,.ig-logo img{width:40px;height:40px}
 .ig-ico{
   width:40px;height:40px;border:0;border-radius:50%;cursor:pointer;
   background:rgba(255,255,255,.06);color:var(--ink);display:grid;place-items:center;
