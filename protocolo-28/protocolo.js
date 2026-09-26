@@ -187,6 +187,61 @@
     return list[n - 1] || { d: n, t: 'Pasos de hoy', x: 'Noche en loop + 4 horas de día.', steps: ['Audio de noche en loop.', 'De día, mínimo 4 horas.'] };
   }
 
+  function youOf(s) {
+    return firstName((s && s.data && s.data.name) || (s && s.access && s.access.name) || '');
+  }
+  function wantOf(s) {
+    return String((s && s.purpose) || (s && s.data && s.data.wants) || '').replace(/\s+/g, ' ').trim();
+  }
+  function whoOf(s) {
+    var v = (s && s.vision) || {};
+    return String(v.person || v.personKind || '').replace(/\s+/g, ' ').trim();
+  }
+  function fillPersonal(text, s) {
+    var name = youOf(s) || 'tú';
+    var want = wantOf(s) || 'lo que estás instalando';
+    var who = whoOf(s) || ((s && s.data && s.data.area) === 'amor' ? 'esa persona' : 'tu vida nueva');
+    return String(text || '')
+      .replace(/\{name\}/g, name)
+      .replace(/\{want\}/g, want)
+      .replace(/\{who\}/g, who);
+  }
+  function personalRoutine(s, n) {
+    var raw = routine(n);
+    return {
+      d: raw.d, kind: raw.kind, timer: raw.timer, video: raw.video,
+      t: fillPersonal(raw.t, s),
+      x: fillPersonal(raw.x, s),
+      rec: fillPersonal(raw.rec, s),
+      steps: (raw.steps || []).map(function (line) { return fillPersonal(line, s); })
+    };
+  }
+  function routineTasks(s, n) {
+    var r = personalRoutine(s, n);
+    var tasks = (r.steps || []).map(function (line, i) {
+      return { id: 's' + i, label: line };
+    });
+    tasks.push({ id: 'night', label: 'Noche: audio en loop, bocina bajito.' });
+    tasks.push({ id: 'day', label: 'Día: mínimo 4 horas con audífonos.' });
+    return { n: n, r: r, tasks: tasks };
+  }
+  function mexicoPretty() {
+    try {
+      return new Intl.DateTimeFormat('es-MX', {
+        timeZone: 'America/Mexico_City', weekday: 'long', day: 'numeric', month: 'short'
+      }).format(new Date());
+    } catch (e) {
+      return mexicoYmd(Date.now());
+    }
+  }
+  function allTasksDone(s, n) {
+    var checks = (s && s.checks && s.checks[n]) || {};
+    if (s && s.days && s.days[n]) return true;
+    if (checks.night && checks.day && checks.mission) return true;
+    var tasks = routineTasks(s, n).tasks;
+    return !!tasks.length && tasks.every(function (t) { return !!checks[t.id]; });
+  }
+
   function waPayUrl(pack) {
     pack = Number(pack) || 1;
     var lines = [
@@ -249,6 +304,8 @@
     var s = sec % 60;
     return (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
   }
+
+  var lastPaintDay = 0;
 
   function renderDayTools(r, n) {
     var box = $('dayTools');
@@ -316,29 +373,37 @@
 
   function renderMission(s) {
     var n = currentDay(s);
-    var r = routine(n);
+    var pack = routineTasks(s, n);
+    var r = pack.r;
     var done = (s.checks && s.checks[n]) || {};
-    var steps = (r.steps || []).map(function (line, i) {
-      return '<li><b>' + (i + 1) + '.</b> ' + line + '</li>';
-    }).join('');
-    $('missionBox').innerHTML =
-      '<div class="day-n">Día ' + n + ' de 28 · pasos</div>' +
-      '<h2>' + r.t + '</h2>' +
-      (steps ? '<ol class="steps-list">' + steps + '</ol>' : '<p class="copy">' + r.x + '</p>') +
-      (r.rec ? '<p class="day-rec">' + r.rec + '</p>' : '') +
-      (s.data ? '<p class="note" style="margin-top:.8rem">' + focusLine(s) + '</p>' : '');
-    renderDayTools(r, n);
-    if ($('chkNight')) {
-      $('chkNight').checked = !!done.night;
-      $('chkDay').checked = !!done.day;
-      $('chkMission').checked = !!done.mission;
+    var sealed = !!(s.days && s.days[n]);
+    lastPaintDay = n;
+    if ($('missionBox')) {
+      $('missionBox').innerHTML =
+        '<div class="day-n">Hoy · ' + mexicoPretty() + ' · Día ' + n + ' de 28</div>' +
+        '<h2>' + r.t + '</h2>' +
+        '<p class="copy">' + r.x + '</p>' +
+        (r.rec ? '<p class="day-rec">' + r.rec + '</p>' : '') +
+        (s.data ? '<p class="note" style="margin-top:.8rem">' + focusLine(s) + '</p>' : '') +
+        '<p class="note">Esta lista es de hoy. Mañana, a medianoche de México, cambia sola.</p>';
     }
+    if ($('dayListMeta')) {
+      $('dayListMeta').textContent = 'Día ' + n + ' · toca una vez. No se deshace. Mañana es otra.';
+    }
+    var list = $('dayCheckList');
+    if (list) {
+      list.innerHTML = pack.tasks.map(function (t) {
+        var on = sealed || !!done[t.id];
+        return '<button type="button" class="task-item' + (on ? ' on' : '') + '" data-task="' + t.id + '"' + (on ? ' disabled' : '') + '>' +
+          '<span class="tick">✓</span><span class="task-label">' + t.label + '</span></button>';
+      }).join('');
+    }
+    renderDayTools(r, n);
     renderNotif(s);
   }
 
   function dayFulfilled(s, n) {
-    var checks = (s.checks && s.checks[n]) || {};
-    return !!(s.days && s.days[n]) || !!(checks.night && checks.day && checks.mission);
+    return allTasksDone(s, n);
   }
 
   function lockUntilDay(s) {
@@ -391,18 +456,18 @@
       if (!locked) {
         b.onclick = (function (n) {
           return function () {
+            var before = load();
+            if (before.days && before.days[n]) return;
             var state = patch(function (st) {
               st.days = st.days || {};
-              st.days[n] = !st.days[n];
-              if (!st.days[n]) {
-                st.checks = st.checks || {};
-                st.checks[n] = { night: false, day: false, mission: false };
-              }
+              st.days[n] = true;
+              st.dayLock = st.dayLock || {};
+              st.dayLock[n] = 'done';
             });
             renderDays(box, state);
-            if (!state.days[n] && n === currentDay(state)) renderMission(state);
-            if (state.days[n] && window.P28Vault) P28Vault.onSeal(n, state);
-            if (state.days[n] && n === 28) go('com');
+            renderMission(state);
+            if (window.P28Vault) P28Vault.onSeal(n, state);
+            if (n === 28) go('com');
           };
         })(i);
       }
@@ -833,7 +898,16 @@
     });
     applyMode(state);
     syncProfile(state);
-    pingErior('P28 FICHA: ' + firstName(data.name) + ' · ' + areaLabel(data.area) + ' · pack ' + state.pack + ' · ' + data.serial);
+    pingErior(
+      'P28 FICHA: ' + firstName(data.name) +
+      '\nIG: @' + (data.ig || '—') +
+      '\nWA: ' + (data.phone || '—') +
+      '\nMail: ' + (data.email || '—') +
+      '\n' + areaLabel(data.area) +
+      '\nInstala: ' + (data.wants || '—') +
+      '\nFrena: ' + (data.pain || '—') +
+      '\n' + data.serial
+    );
   }
 
   function go(name) {
@@ -858,21 +932,24 @@
     if (window.P28Vault) P28Vault.render(load());
   }
 
-  function toggleCheck(key) {
+  function lockTask(key) {
     var before = load();
     var n = currentDay(before);
+    var checks = (before.checks && before.checks[n]) || {};
+    if (checks[key] || (before.days && before.days[n])) return;
     var was = !!(before.days && before.days[n]);
     var state = patch(function (st) {
       st.checks = st.checks || {};
       st.checks[n] = st.checks[n] || {};
-      st.checks[n][key] = !st.checks[n][key];
+      st.checks[n][key] = true;
       st.days = st.days || {};
-      if (st.checks[n].night && st.checks[n].day && st.checks[n].mission) {
+      if (allTasksDone(st, n)) {
         st.days[n] = true;
-      } else {
-        st.days[n] = false;
+        st.dayLock = st.dayLock || {};
+        st.dayLock[n] = 'done';
       }
     });
+    renderMission(state);
     renderDays($('dayGridApp'), state);
     if (window.P28Vault) {
       P28Vault.renderProgress(state);
@@ -1243,11 +1320,13 @@
   $('btnRemindOff') && $('btnRemindOff').addEventListener('click', cancelReminders);
   $('btnInstallYo') && $('btnInstallYo').addEventListener('click', promptInstall);
   $('btnInstallHome') && $('btnInstallHome').addEventListener('click', promptInstall);
-  ['chkNight', 'chkDay', 'chkMission'].forEach(function (id) {
-    $(id) && $(id).addEventListener('change', function () {
-      toggleCheck(id === 'chkNight' ? 'night' : id === 'chkDay' ? 'day' : 'mission');
+  if ($('dayCheckList')) {
+    $('dayCheckList').addEventListener('click', function (e) {
+      var b = e.target.closest && e.target.closest('[data-task]');
+      if (!b || b.disabled) return;
+      lockTask(b.getAttribute('data-task'));
     });
-  });
+  }
   document.querySelectorAll('.app-dock button').forEach(function (b) {
     b.addEventListener('click', function () { go(b.getAttribute('data-go')); });
   });
@@ -1326,7 +1405,13 @@
   setTimeout(endSplash, 2200);
   setInterval(tryNotify, 30000);
   setInterval(keepRemindAlive, 45000);
-  setInterval(function () { renderDays($('dayGridApp'), load()); }, 60000);
+  function refreshToday() {
+    var s = load();
+    renderDays($('dayGridApp'), s);
+    if (!document.body.classList.contains('is-app')) return;
+    if (currentDay(s) !== lastPaintDay) renderMission(s);
+  }
+  setInterval(refreshToday, 60000);
   setInterval(paintTimer, 1000);
   function guardAccess() {
     var s = load();
@@ -1337,6 +1422,6 @@
     if (document.hidden) return;
     guardAccess();
     keepRemindAlive();
-    renderDays($('dayGridApp'), load());
+    refreshToday();
   });
 })();

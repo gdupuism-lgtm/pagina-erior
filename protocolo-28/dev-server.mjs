@@ -195,14 +195,33 @@ const server = http.createServer(async (req, res) => {
     if (action === 'profile-set') {
       const code = String(body.code || '').toUpperCase();
       db.profiles = db.profiles || {};
-      db.profiles[code] = {
+      const profile = {
         data: body.data || {},
         vision: body.vision || {},
         photo: String(body.photo || ''),
         purpose: String(body.purpose || ''),
       };
+      db.profiles[code] = profile;
+      const d = profile.data || {};
+      const ficha = {
+        name: String(d.name || ''),
+        ig: String(d.ig || '').replace(/^@/, ''),
+        phone: String(d.phone || ''),
+        email: String(d.email || ''),
+        area: String(d.area || ''),
+        wants: String(d.wants || ''),
+        pain: String(d.pain || ''),
+        purpose: String(profile.purpose || ''),
+        gender: String(d.gender || ''),
+      };
+      (db.codes || []).forEach((c) => {
+        if (String(c.code || '').toUpperCase() === code) {
+          c.ficha = ficha;
+          if (ficha.phone && !c.client_contact) c.client_contact = ficha.phone;
+        }
+      });
       save(db);
-      send(res, 200, { ok: true });
+      send(res, 200, { ok: true, ficha });
       return;
     }
     if (action === 'push-test') {
@@ -277,7 +296,24 @@ const server = http.createServer(async (req, res) => {
     }
     if (action === 'list') {
       (db.codes || []).forEach(ensureCode);
-      send(res, 200, { ok: true, codes: db.codes || [] });
+      const codes = (db.codes || []).map((c) => {
+        const code = String(c.code || '').toUpperCase();
+        const profile = db.profiles && db.profiles[code];
+        const d = (profile && profile.data) || {};
+        const ficha = c.ficha || {
+          name: d.name || '',
+          ig: String(d.ig || '').replace(/^@/, ''),
+          phone: d.phone || '',
+          email: d.email || '',
+          area: d.area || '',
+          wants: d.wants || '',
+          pain: d.pain || '',
+          purpose: (profile && profile.purpose) || '',
+          gender: d.gender || '',
+        };
+        return Object.assign({}, c, { ficha: ficha });
+      });
+      send(res, 200, { ok: true, codes });
       return;
     }
     if (action === 'issue') {

@@ -957,6 +957,32 @@ body.is-app .view{margin:0}
 }
 .steps-list li b{margin-right:.4rem;color:var(--gold)}
 .day-rec{margin:.6rem 0 0;padding:.8rem .9rem;border-left:2px solid var(--rose);font-size:.85rem;color:var(--soft)}
+.task-list{display:grid;gap:.55rem;margin:.2rem 0 .4rem}
+.task-item{
+  display:grid;grid-template-columns:28px 1fr;gap:.7rem;align-items:start;
+  width:100%;text-align:left;cursor:pointer;
+  padding:.85rem .9rem;border-radius:16px;border:1px solid var(--line);
+  background:rgba(255,255,255,.04);color:var(--soft);font:inherit;
+}
+.task-item .tick{
+  width:22px;height:22px;border-radius:7px;border:1.5px solid rgba(126,255,178,.4);
+  display:grid;place-items:center;margin-top:1px;color:transparent;font-size:.72rem;font-weight:800;
+}
+.task-item.on{
+  pointer-events:none;cursor:default;opacity:.92;
+  border-color:rgba(126,255,178,.4);
+  background:linear-gradient(135deg,rgba(62,255,197,.16),rgba(232,180,200,.08));
+}
+.task-item.on .tick{background:var(--gold);border-color:transparent;color:#06140c}
+.task-item.on .task-label{text-decoration:line-through;color:var(--dim)}
+.task-item:disabled{pointer-events:none}
+.ficha-card{padding:1rem 0;border-bottom:1px solid var(--line)}
+.ficha-card:last-child{border-bottom:0}
+.ficha-name{margin:0 0 .45rem}
+.ficha-line{margin:.2rem 0;font-size:.88rem;color:var(--soft)}
+.ficha-line a{color:var(--gold-hot)}
+.ficha-line span{color:var(--dim)}
+.admin-code small{color:var(--dim)}
 .day-timer{margin:0 0 1rem;text-align:center}
 .day-timer .clock{
   font-family:var(--display);font-weight:800;font-size:2.4rem;letter-spacing:-.05em;

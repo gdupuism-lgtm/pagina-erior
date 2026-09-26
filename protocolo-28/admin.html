@@ -6,7 +6,7 @@
   <meta name="robots" content="noindex,nofollow">
   <title>Erior Center Admin · códigos</title>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="protocolo.css?v=27">
+  <link rel="stylesheet" href="protocolo.css?v=44">
 </head>
 <body class="is-admin">
   <div class="sky" aria-hidden="true"></div>
@@ -68,6 +68,12 @@
       </section>
 
       <section class="card foil-card">
+        <span class="kicker">Datos que pusieron en la app</span>
+        <p class="sec-sub">Instagram, WhatsApp y correo de la ficha. Se actualizan cuando entra y guarda.</p>
+        <div id="fichaList"></div>
+      </section>
+
+      <section class="card foil-card">
         <span class="kicker">Entregados</span>
         <div id="codeList"></div>
       </section>
@@ -88,7 +94,7 @@
       </section>
     </div>
   </div>
-  <script src="access.js?v=27"></script>
+  <script src="access.js?v=29"></script>
   <script>
     var key = '';
     try { key = sessionStorage.getItem('erior-p28-admin') || ''; } catch (e) { key = ''; }
@@ -124,17 +130,62 @@
         'Luego: Compartir → Añadir a pantalla de inicio.'
       ].join('\n');
     }
+    function esc(s) {
+      return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+    }
+    function fichaOf(c) {
+      return (c && c.ficha) || {};
+    }
+    function waMe(phone) {
+      var n = String(phone || '').replace(/\D/g, '');
+      if (n.length === 10) n = '52' + n;
+      return n.length >= 10 ? 'https://wa.me/' + n : '';
+    }
+    function areaName(a) {
+      return ({ dinero: 'Dinero', amor: 'Amor', propio: 'Amor propio', claridad: 'Claridad', salud: 'Salud', cuerpo: 'Cuerpo', paz: 'Paz' })[a] || a || '—';
+    }
+    function renderFichas(codes) {
+      var box = $('fichaList');
+      if (!box) return;
+      var rows = (codes || []).filter(function (c) {
+        return P28Access.normalize(c.code) !== 'P28-WSYX-2LEF';
+      });
+      if (!rows.length) { box.innerHTML = '<p class="copy">Aún no hay fichas.</p>'; return; }
+      box.innerHTML = rows.map(function (c) {
+        var f = fichaOf(c);
+        var name = f.name || c.client_name || 'Sin nombre';
+        var ig = f.ig || '';
+        var phone = f.phone || c.client_contact || '';
+        var email = f.email || '';
+        var wa = waMe(phone);
+        var igHref = ig ? 'https://instagram.com/' + encodeURIComponent(ig) : '';
+        return '<article class="ficha-card">' +
+          '<p class="ficha-name"><b>' + esc(name) + '</b> · ' + esc(c.code) + '</p>' +
+          '<p class="ficha-line">Instagram: ' + (igHref ? '<a href="' + igHref + '" target="_blank" rel="noopener">@' + esc(ig) + '</a>' : '<span>aún no lo puso</span>') + '</p>' +
+          '<p class="ficha-line">WhatsApp: ' + (wa ? '<a href="' + wa + '" target="_blank" rel="noopener">' + esc(phone) + '</a>' : (phone ? esc(phone) : '<span>aún no lo puso</span>')) + '</p>' +
+          '<p class="ficha-line">Correo: ' + (email ? '<a href="mailto:' + esc(email) + '">' + esc(email) + '</a>' : '<span>aún no lo puso</span>') + '</p>' +
+          '<p class="ficha-line">Prioridad: ' + esc(areaName(f.area)) + '</p>' +
+          (f.wants ? '<p class="ficha-line">Instala: ' + esc(f.wants) + '</p>' : '') +
+          (f.pain ? '<p class="ficha-line">Le frena: ' + esc(f.pain) + '</p>' : '') +
+          (f.purpose ? '<p class="ficha-line">Propósito: ' + esc(f.purpose) + '</p>' : '') +
+          '</article>';
+      }).join('');
+    }
     function renderList(codes) {
       codes = (codes || []).filter(function (c) {
         return P28Access.normalize(c.code) !== 'P28-WSYX-2LEF';
       });
+      renderFichas(codes);
       if (!codes.length) { $('codeList').innerHTML = '<p class="copy">Aún no entregas accesos.</p>'; return; }
       $('codeList').innerHTML = codes.map(function (c) {
         var n = left(c);
         var used = (c.devices && c.devices.length) || 0;
         var max = c.max_devices || 2;
         var state = c.active === false ? 'cerrado' : (n <= 0 ? 'vencido' : n + ' días');
-        return '<div class="pay-row admin-code"><span><b>' + (c.client_name || '') + '</b> · ' + state + ' · ' + used + '/' + max + ' aparatos<br><code>' + c.code + '</code></span>' +
+        var f = fichaOf(c);
+        var phone = f.phone || c.client_contact || '';
+        var ig = f.ig ? ' · @' + f.ig : '';
+        return '<div class="pay-row admin-code"><span><b>' + esc(c.client_name || f.name || '') + '</b> · ' + state + ' · ' + used + '/' + max + ' aparatos<br><code>' + esc(c.code) + '</code>' + (phone || ig ? '<br><small>' + esc(phone + ig) + '</small>' : '<br><small>Ficha: aún no entra</small>') + '</span>' +
           '<span class="admin-btns">' +
           '<button type="button" data-wa="' + encodeURIComponent(waText(c)) + '">WA</button>' +
           '<button type="button" data-plus="' + c.code + '">+30</button>' +

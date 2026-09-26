@@ -17,7 +17,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="protocolo.css?v=43">
+  <link rel="stylesheet" href="protocolo.css?v=44">
   <script>
     window.__p28Install = null;
     window.addEventListener('beforeinstallprompt', function (e) {
@@ -211,15 +211,13 @@
           <header class="post-head">
             <span class="avatar">28</span>
             <div>
-              <b>Pasos de hoy</b>
-              <small>Instrucciones + recomendación</small>
+              <b>Lista de hoy</b>
+              <small id="dayListMeta">Toca cada una una vez. No se deshace. Mañana es otra.</small>
             </div>
           </header>
           <div class="post-body">
             <div id="dayTools"></div>
-            <label class="check"><input type="checkbox" id="chkNight"> Noche: audio en loop (bocina bajito)</label>
-            <label class="check"><input type="checkbox" id="chkDay"> Día: mínimo 4 h con audífonos</label>
-            <label class="check"><input type="checkbox" id="chkMission"> Completé los pasos de hoy</label>
+            <div class="task-list" id="dayCheckList"></div>
             <button type="button" class="btn btn-gold btn-full" id="btnGoAudio" style="margin-top:1rem">Poner mi audio</button>
           </div>
         </article>
@@ -443,16 +441,16 @@
     </div>
   </div>
 
-  <script src="access.js?v=28"></script>
+  <script src="access.js?v=29"></script>
   <script src="phrases.js?v=23"></script>
-  <script src="routines.js?v=22"></script>
+  <script src="routines.js?v=23"></script>
   <script src="plan.js?v=22"></script>
-  <script src="vault.js?v=25"></script>
+  <script src="vault.js?v=26"></script>
   <script src="vision.js?v=5"></script>
-  <script src="protocolo.js?v=38"></script>
+  <script src="protocolo.js?v=39"></script>
   <script>
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js?v=38', { scope: './' }).catch(function () {});
+      navigator.serviceWorker.register('sw.js?v=39', { scope: './' }).catch(function () {});
     }
   </script>
 </body>

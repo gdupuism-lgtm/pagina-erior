@@ -522,16 +522,22 @@
   function onSeal(n, s) {
     s = s || load();
     var days = s.days || {};
+    var name = String((s.data && s.data.name) || (s.access && s.access.name) || '').trim().split(/\s+/)[0];
+    var left = Math.max(0, 28 - n);
+    var goOn = left
+      ? ('Mañana hay otra lista nueva. Te quedan ' + left + ' días. No pares.')
+      : 'Ciclo cerrado. Escribe tu testimonio en el muro. Solo tu nombre.';
+    var hi = name ? (name + ', lo lograste hoy. ') : 'Lo lograste hoy. ';
     if (n === 28 && weekComplete(days, 4)) {
-      cheerOnce('week-4', 'Los 28 días', 'Ciclo cerrado. Escribe tu testimonio en el muro. Solo tu nombre.');
+      cheerOnce('week-4', 'Los 28 días', hi + 'Ciclo cerrado. Testimonio al muro. Solo tu nombre.');
     } else if (n === 21 && weekComplete(days, 3)) {
-      cheerOnce('week-3', 'Semana 3 cerrada', 'Recalibración. El programa viejo ya no manda igual.');
+      cheerOnce('week-3', 'Semana 3 cerrada', hi + 'Recalibración. ' + goOn);
     } else if (n === 14 && weekComplete(days, 2)) {
-      cheerOnce('week-2', 'Semana 2 cerrada', 'Limpieza. Si dolió y lo escuchaste igual, eso cuenta.');
+      cheerOnce('week-2', 'Semana 2 cerrada', hi + 'Limpieza. Si dolió y lo escuchaste igual, eso cuenta. ' + goOn);
     } else if (n === 7 && weekComplete(days, 1)) {
-      cheerOnce('week-1', 'Semana 1 cerrada', 'Instalación hecha. No evalúes resultados. Evalúa que te cumpliste.');
+      cheerOnce('week-1', 'Semana 1 cerrada', hi + 'Instalación hecha. No evalúes el resultado. Evalúa que te cumpliste. ' + goOn);
     } else {
-      cheerOnce('day-' + n, 'Día ' + n + ' sellado', 'Noche + 4 h + los pasos de hoy. El loop viejo perdió un día.');
+      cheerOnce('day-' + n, 'Día ' + n + ' sellado', hi + goOn);
     }
     if (n === 7 || n === 14 || n === 21) renderNudge(s);
     renderProgress(s);

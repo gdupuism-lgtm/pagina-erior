@@ -138,7 +138,58 @@ function ensureCode(row) {
   row.days = row.days || 30;
   row.devices = row.devices || [];
   if (!row.expires_at) row.expires_at = plusDays(row.created_at || Date.now(), row.days);
+  row.ficha = row.ficha || {};
   return row;
+}
+
+function fichaFromProfile(profile) {
+  const d = (profile && profile.data) || {};
+  return {
+    name: String(d.name || '').slice(0, 40),
+    ig: String(d.ig || '').replace(/^@/, '').slice(0, 80),
+    phone: String(d.phone || '').slice(0, 40),
+    email: String(d.email || '').slice(0, 80),
+    area: String(d.area || '').slice(0, 24),
+    wants: String(d.wants || '').slice(0, 240),
+    pain: String(d.pain || '').slice(0, 240),
+    purpose: String((profile && profile.purpose) || '').slice(0, 240),
+    gender: String(d.gender || '').slice(0, 16)
+  };
+}
+
+function mergeFicha(row, profile) {
+  const next = fichaFromProfile(profile);
+  const prev = (row && row.ficha) || {};
+  const out = {
+    name: next.name || prev.name || '',
+    ig: next.ig || prev.ig || '',
+    phone: next.phone || prev.phone || '',
+    email: next.email || prev.email || '',
+    area: next.area || prev.area || '',
+    wants: next.wants || prev.wants || '',
+    pain: next.pain || prev.pain || '',
+    purpose: next.purpose || prev.purpose || '',
+    gender: next.gender || prev.gender || ''
+  };
+  if (row) {
+    row.ficha = out;
+    if (out.phone && !row.client_contact) row.client_contact = out.phone;
+  }
+  return out;
+}
+
+async function attachFichas(codes) {
+  const list = Array.isArray(codes) ? codes : [];
+  const out = [];
+  for (let i = 0; i < list.length; i += 1) {
+    const row = Object.assign({}, list[i]);
+    const code = normalizeCode(row.code);
+    let profile = null;
+    try { profile = await blobGet('profile-' + code, null); } catch (e) { profile = null; }
+    row.ficha = mergeFicha(row, profile);
+    out.push(row);
+  }
+  return out;
 }
 
 function rowExpired(row) {
@@ -503,7 +554,9 @@ exports.handler = async (event, context) => {
         updated_at: new Date().toISOString(),
       };
       await blobSet('profile-' + code, profile);
-      return { statusCode: 200, headers, body: JSON.stringify({ ok: true }) };
+      row.ficha = mergeFicha(row, profile);
+      try { await persistRow(row); } catch (e) { /* la ficha ya quedó en profile- */ }
+      return { statusCode: 200, headers, body: JSON.stringify({ ok: true, ficha: row.ficha }) };
     }
 
     if (!p28AdminOk(event)) {
@@ -511,7 +564,7 @@ exports.handler = async (event, context) => {
     }
 
     if (action === 'list') {
-      const codes = await loadCodes();
+      const codes = await attachFichas(await loadCodes());
       return { statusCode: 200, headers, body: JSON.stringify({ ok: true, codes, mode: 'blob' }) };
     }
 
