@@ -17,7 +17,14 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="protocolo.css?v=41">
+  <link rel="stylesheet" href="protocolo.css?v=42">
+  <script>
+    window.__p28Install = null;
+    window.addEventListener('beforeinstallprompt', function (e) {
+      e.preventDefault();
+      window.__p28Install = e;
+    });
+  </script>
 </head>
 <body class="is-boot">
   <div class="sky" aria-hidden="true"></div>
@@ -429,7 +436,7 @@
   <script src="plan.js?v=22"></script>
   <script src="vault.js?v=25"></script>
   <script src="vision.js?v=3"></script>
-  <script src="protocolo.js?v=34"></script>
+  <script src="protocolo.js?v=35"></script>
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js?v=37', { scope: './' }).catch(function () {});

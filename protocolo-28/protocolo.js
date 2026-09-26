@@ -8,11 +8,16 @@
     2: { t: 'Capas 1 y 2', x: 'Deseo + lo que lo sabotea. Dos frecuencias en tu bóveda.' },
     3: { t: 'Tres capas', x: 'Deseo + limpieza + identidad. El ciclo completo.' }
   };
-  var deferredInstall = null;
+  var deferredInstall = window.__p28Install || null;
   window.addEventListener('beforeinstallprompt', function (e) {
     e.preventDefault();
     deferredInstall = e;
+    window.__p28Install = e;
     syncInstallUi();
+  });
+  window.addEventListener('appinstalled', function () {
+    deferredInstall = null;
+    window.__p28Install = null;
   });
 
   var AUDIOS = {
@@ -734,29 +739,33 @@
   }
 
   function syncInstallUi() {
-    var installed = isStandaloneApp();
-    document.body.classList.toggle('is-pwa', installed);
+    document.body.classList.toggle('is-pwa', isStandaloneApp());
     ['installCard', 'installHome'].forEach(function (id) {
       var el = $(id);
       if (!el) return;
-      if (installed) {
-        el.classList.add('hidden');
-        el.setAttribute('hidden', '');
-      } else {
-        el.classList.remove('hidden');
-        el.removeAttribute('hidden');
-      }
+      el.classList.remove('hidden');
+      el.removeAttribute('hidden');
     });
-    if ($('btnInstall')) $('btnInstall').hidden = installed;
+    if ($('btnInstall')) $('btnInstall').hidden = false;
   }
 
   function promptInstall() {
-    if (deferredInstall) { deferredInstall.prompt(); return; }
+    var ev = deferredInstall || window.__p28Install;
+    if (ev && ev.prompt) {
+      ev.prompt();
+      if (ev.userChoice) {
+        ev.userChoice.then(function () {
+          deferredInstall = null;
+          window.__p28Install = null;
+        }).catch(function () {});
+      }
+      return;
+    }
     if (isIOSPhone()) {
       alert('iPhone: toca Compartir (el cuadrado con flecha) → Añadir a pantalla de inicio. Luego abre Erior Center desde el icono.');
       return;
     }
-    alert('Android: menú ⋮ → Instalar app / Añadir a pantalla de inicio. Luego abre Erior Center desde el icono, no desde Chrome.');
+    alert('En el celular: toca el menú ⋮ de Chrome → Instalar app / Añadir a pantalla de inicio. Luego ábrela desde el icono, no desde Chrome.');
   }
 
   function remindHint() {
