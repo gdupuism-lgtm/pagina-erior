@@ -2,17 +2,17 @@
   "name": "Erior Center",
   "short_name": "Erior Center",
   "description": "Erior Center. Audios, pasos, calendario y muro.",
-  "start_url": "./index.html?source=pwa",
+  "lang": "es",
+  "start_url": "./index.html",
   "scope": "./",
-  "id": "/protocolo-28/",
   "display": "standalone",
-  "display_override": ["standalone", "minimal-ui"],
   "orientation": "portrait",
-  "background_color": "#050508",
-  "theme_color": "#050a08",
+  "background_color": "#03040a",
+  "theme_color": "#03040a",
   "icons": [
     { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" },
-    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ]
 }

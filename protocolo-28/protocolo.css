@@ -866,6 +866,16 @@ body.is-boot .wrap{visibility:hidden}
   background:rgba(255,255,255,.06);color:var(--ink);display:grid;place-items:center;
 }
 .ig-ico svg{width:20px;height:20px;fill:currentColor}
+.ig-install{
+  flex:0 0 auto;border:0;border-radius:999px;cursor:pointer;
+  padding:.48rem .95rem;
+  font-family:var(--brand);font-size:.66rem;font-weight:800;
+  letter-spacing:.12em;text-transform:uppercase;
+  background:linear-gradient(180deg,#ffffff 0%,#e8fff4 18%,#7effb2 55%,#ffe8f2 100%);
+  color:#06140c;
+}
+#installHome{margin:0 0 1rem;padding:1rem 1.05rem}
+body.is-pwa .install-cta,body.is-pwa #btnInstall,body.is-pwa #installHome,body.is-pwa #installCard{display:none!important}
 
 body.is-app .wrap{width:min(480px,100vw);padding:0 1rem 7.4rem}
 body.is-app.has-mini .wrap{padding-bottom:10.2rem}
@@ -990,7 +1000,6 @@ a.mm-want{text-decoration:none}
   html,body{overscroll-behavior:none}
   body.is-app .ig-top{padding-top:calc(.55rem + env(safe-area-inset-top))}
   body.is-app .app-dock{padding-bottom:calc(.45rem + env(safe-area-inset-bottom))}
-  #btnInstall{display:none}
 }
 body.is-app{overscroll-behavior-y:none}
 

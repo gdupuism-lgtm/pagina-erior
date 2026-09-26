@@ -9,6 +9,11 @@
     3: { t: 'Tres capas', x: 'Deseo + limpieza + identidad. El ciclo completo.' }
   };
   var deferredInstall = null;
+  window.addEventListener('beforeinstallprompt', function (e) {
+    e.preventDefault();
+    deferredInstall = e;
+    syncInstallUi();
+  });
 
   var AUDIOS = {
     booster: { id: 'booster', name: 'Booster 2.0', img: '../img/catalog/booster-2-0.jpg', pitch: 'Limpia loops, ruido mental y el programa viejo.' },
@@ -196,6 +201,7 @@
 
   function applyMode(s) {
     document.body.classList.remove('is-app', 'is-unlocked', 'is-lock', 'is-expired');
+    syncInstallUi();
     if (s.access) lockClock(s);
     if (s.access && expiredAccess(s)) {
       markExpired(s);
@@ -648,7 +654,29 @@
   }
 
   function isStandaloneApp() {
-    return (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone === true;
+    try {
+      if (window.navigator.standalone === true) return true;
+      return !!(window.matchMedia && window.matchMedia('(display-mode: standalone)').matches);
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function syncInstallUi() {
+    var installed = isStandaloneApp();
+    document.body.classList.toggle('is-pwa', installed);
+    ['installCard', 'installHome'].forEach(function (id) {
+      var el = $(id);
+      if (!el) return;
+      if (installed) {
+        el.classList.add('hidden');
+        el.setAttribute('hidden', '');
+      } else {
+        el.classList.remove('hidden');
+        el.removeAttribute('hidden');
+      }
+    });
+    if ($('btnInstall')) $('btnInstall').hidden = installed;
   }
 
   function promptInstall() {
@@ -673,16 +701,7 @@
   }
 
   function renderInstallAndRemind(s) {
-    var card = $('installCard');
-    if (card) {
-      if (isStandaloneApp()) {
-        card.classList.add('hidden');
-        card.setAttribute('hidden', '');
-      } else {
-        card.classList.remove('hidden');
-        card.removeAttribute('hidden');
-      }
-    }
+    syncInstallUi();
     if ($('btnRemind') && s && s.remindOn && typeof Notification !== 'undefined' && Notification.permission === 'granted') {
       $('btnRemind').textContent = 'Avisos activos';
     }
@@ -1073,6 +1092,7 @@
   });
   $('btnRemind') && $('btnRemind').addEventListener('click', function () { activateReminders(true); });
   $('btnInstallYo') && $('btnInstallYo').addEventListener('click', promptInstall);
+  $('btnInstallHome') && $('btnInstallHome').addEventListener('click', promptInstall);
   ['chkNight', 'chkDay', 'chkMission'].forEach(function (id) {
     $(id) && $(id).addEventListener('change', function () {
       toggleCheck(id === 'chkNight' ? 'night' : id === 'chkDay' ? 'day' : 'mission');
@@ -1081,11 +1101,8 @@
   document.querySelectorAll('.app-dock button').forEach(function (b) {
     b.addEventListener('click', function () { go(b.getAttribute('data-go')); });
   });
-  window.addEventListener('beforeinstallprompt', function (e) {
-    e.preventDefault();
-    deferredInstall = e;
-  });
   $('btnInstall') && $('btnInstall').addEventListener('click', promptInstall);
+  syncInstallUi();
 
   window.P28 = { currentDay: currentDay, go: go, load: load, renderListenPlan: renderListenPlan, build: build };
 
