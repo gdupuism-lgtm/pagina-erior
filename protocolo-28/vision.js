@@ -263,20 +263,61 @@
     renderStep();
   }
 
-  function dailyAffirm(s) {
-    s = s || load();
+  function dayIndex(s) {
     var n = (w.P28 && P28.currentDay) ? P28.currentDay(s) : 1;
+    return Math.max(1, n);
+  }
+  function pickLine(list, n, fallback) {
+    if (!list || !list.length) return fallback;
+    return list[(n - 1) % list.length] || fallback;
+  }
+  function dailyQuote(s) {
+    s = s || load();
+    var n = dayIndex(s);
     var list = w.P28_PHRASES || [];
-    var p = list[(Math.max(1, n) - 1) % Math.max(1, list.length)];
+    var p = list[(n - 1) % Math.max(1, list.length)];
     return (p && p.x) || 'Hoy no se evalúa. Hoy se instala.';
   }
+  function dailyAffirm(s) {
+    s = s || load();
+    return pickLine(w.P28_AFFIRMS, dayIndex(s), 'Yo soy muy magnetic@.');
+  }
 
-  function paintAffirm(el, s, n) {
+  function paintQuote(el, s, n) {
+    if (!el) return;
+    el.innerHTML =
+      '<span class="num">Quote del día</span>' +
+      '<p class="affirm-txt">' + dailyQuote(s) + '</p>' +
+      '<p class="note">Un mensaje. Mañana es otro.</p>';
+  }
+
+  function paintIamCard(el, s, n, teaser) {
     if (!el) return;
     el.innerHTML =
       '<span class="num">Afirmación · día ' + n + ' de 28</span>' +
-      '<p class="affirm-txt">' + dailyAffirm(s) + '</p>' +
-      '<p class="note">Hoy es esta. Mañana cambia sola. No se elige ni se cambia.</p>';
+      '<div class="iam-txt">' + dailyAffirm(s) + '</div>' +
+      '<p class="note">' + (teaser
+        ? 'Toca. Hoy es esta. Mañana cambia sola.'
+        : 'Léela en voz alta. Hoy es esta. Mañana cambia sola. No se elige.') + '</p>';
+  }
+
+  function paintAffirmList(el, s, n) {
+    if (!el) return;
+    var list = w.P28_AFFIRMS || [];
+    var said = '';
+    if (n > 1) {
+      said = '<div class="affirm-said">' + list.slice(0, n - 1).map(function (line, i) {
+        return '<p><b>' + (i + 1) + '</b> ' + line + '</p>';
+      }).join('') + '</div>';
+    }
+    el.innerHTML =
+      '<span class="num">Los 28 días</span>' +
+      '<p class="note">Hoy se ve. Las que ya pasaron se quedan aquí. Las de adelante aparecen solas.</p>' +
+      '<div class="affirm-strip">' + list.map(function (_, i) {
+        var d = i + 1;
+        var cls = 'affirm-chip' + (d === n ? ' now' : (d < n ? ' past' : ''));
+        return '<span class="' + cls + '">' + d + '</span>';
+      }).join('') + '</div>' + said;
   }
 
   function waMind() {
@@ -326,9 +367,16 @@
 
   function renderApp(s) {
     s = s || load();
-    var n = (w.P28 && P28.currentDay) ? P28.currentDay(s) : 1;
-    paintAffirm($('affirmCard'), s, n);
-    paintAffirm($('homeAffirm'), s, n);
+    var n = dayIndex(s);
+    paintQuote($('homeAffirm'), s, n);
+    paintIamCard($('homeIam'), s, n, true);
+    paintIamCard($('affirmHero'), s, n, false);
+    paintAffirmList($('affirmAll'), s, n);
+    if ($('homeIam')) {
+      $('homeIam').onclick = function () {
+        if (w.P28 && P28.go) P28.go('afirma');
+      };
+    }
     renderMindMovie(s);
   }
 
@@ -347,5 +395,5 @@
 
   bind();
 
-  w.P28Vision = { start: start, renderApp: renderApp, dailyAffirm: dailyAffirm };
+  w.P28Vision = { start: start, renderApp: renderApp, dailyAffirm: dailyAffirm, dailyQuote: dailyQuote };
 })(window);

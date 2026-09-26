@@ -33,6 +33,37 @@ window.P28_PHRASES = [
   { t: 'ERIOR', x: 'El brillo no es el resultado. El brillo es que volviste a los pasos.' }
 ];
 
+window.P28_AFFIRMS = [
+  'Yo soy muy magnetic@.',
+  'Yo soy abundante.',
+  'Yo tengo todo lo que deseo.',
+  'Yo soy la versión que ya lo tiene.',
+  'Yo atraigo sin perseguir.',
+  'Yo merezco lo que pido.',
+  'Yo irradio. El mundo se acomoda.',
+  'Yo soy canal de dinero.',
+  'Yo estoy localizable para lo mío.',
+  'Yo elijo y el pasillo aparece.',
+  'Yo soy paz que no se suelta.',
+  'Yo sostengo mi sí.',
+  'Yo soy el portal.',
+  'Yo soy imán. Me eligen.',
+  'Yo soy claridad.',
+  'Yo tengo energía de verdad.',
+  'Yo soy suerte y timing.',
+  'Yo ya crucé.',
+  'Yo soy suficiente.',
+  'Yo instalo. Hoy no evalúo.',
+  'Yo soy señal. Lo mío me encuentra.',
+  'Yo dejo espacio a lo nuevo.',
+  'Yo soy constancia en calma.',
+  'Yo recibo. Estoy list@.',
+  'Yo soy el personaje principal.',
+  'Yo no persigo. Yo atraigo.',
+  'Yo soy evidencia.',
+  'Yo elijo mi realidad.'
+];
+
 window.P28_LISTEN = [
   { t: 'ERIOR', x: '¿Ya escuchaste tu audio hoy?' },
   { t: 'ERIOR', x: 'Tu audio. Ahora. El portal no se abre con intención suelta.' },

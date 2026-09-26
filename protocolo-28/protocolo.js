@@ -520,28 +520,12 @@
     return newT < oldT ? incomingExp : oldExp;
   }
 
-  function olderIso(a, b) {
-    if (!a) return b || '';
-    if (!b) return a;
-    return new Date(a).getTime() <= new Date(b).getTime() ? a : b;
-  }
-
   function recoverStart(st) {
-    var found = (st && st.start) || '';
     var code = st && st.access && st.access.code;
     var c = loadClock(code);
-    found = olderIso(found, c.start);
-    try {
-      Object.keys(localStorage).forEach(function (k) {
-        if (k.indexOf('erior-p28') !== 0) return;
-        if (k.indexOf('remind') >= 0 || k.indexOf('session') >= 0 || k.indexOf('issued') >= 0 || k.indexOf('device') >= 0) return;
-        try {
-          var o = JSON.parse(localStorage.getItem(k) || '{}');
-          if (o.start) found = olderIso(found, o.start);
-        } catch (e2) {}
-      });
-    } catch (e) {}
-    return found;
+    if (c.start) return c.start;
+    if (st && st.start && st.access && !st.access.expired) return st.start;
+    return '';
   }
 
   function lockClock(st) {
@@ -870,7 +854,7 @@
     if (name === 'com') renderWall();
     if (name === 'hoy') renderStories(load());
     if (name === 'audios') renderListenPlan(load());
-    if (name === 'vision' && window.P28Vision) P28Vision.renderApp(load());
+    if ((name === 'vision' || name === 'afirma') && window.P28Vision) P28Vision.renderApp(load());
     if (window.P28Vault) P28Vault.render(load());
   }
 
@@ -1210,6 +1194,16 @@
     go('hoy');
   });
 
+  $('btnExpiredAgain') && $('btnExpiredAgain').addEventListener('click', function () {
+    try { localStorage.removeItem('erior-p28-session'); } catch (e) {}
+    try {
+      var s = load();
+      delete s.access;
+      delete s.start;
+      save(s);
+    } catch (e2) {}
+    location.reload();
+  });
   $('btnUnlock') && $('btnUnlock').addEventListener('click', function () {
     doUnlock($('accessCode').value);
   });
@@ -1300,6 +1294,14 @@
   function finishBoot() {
     document.body.classList.remove('is-boot');
     var params = new URLSearchParams(location.search);
+    if (params.get('reset') === '1') {
+      try {
+        Object.keys(localStorage).forEach(function (k) {
+          if (k && k.indexOf('erior-p28') === 0 && k.indexOf('issued') < 0) localStorage.removeItem(k);
+        });
+      } catch (e) {}
+      if (history.replaceState) history.replaceState({}, '', location.pathname + location.hash);
+    }
     var q = params.get('acceso') || params.get('k');
     var saved = load();
     if (q) {
