@@ -13,42 +13,77 @@ function p28AdminOk(event) {
   return checkAdminKey(event);
 }
 
+const HIDDEN_CODES = new Set(['P28-WSYX-2LEF']);
+
+function keepCode(c) {
+  if (!c || !c.code) return false;
+  return !HIDDEN_CODES.has(normalizeCode(c.code));
+}
+
 function seedCodes() {
   try {
     const seed = require('./p28-seed.json');
-    return Array.isArray(seed.codes) ? seed.codes.slice() : [];
+    return Array.isArray(seed.codes) ? seed.codes.filter(keepCode) : [];
   } catch (e) {
     return [];
   }
+}
+
+function putCode(map, c) {
+  if (!keepCode(c)) return;
+  map.set(normalizeCode(c.code), ensureCode(c));
 }
 
 async function loadCodes() {
   const map = new Map();
   const issued = await blobGet('issued', []);
   const snap = await blobGet('codes', []);
-  seedCodes().concat(Array.isArray(issued) ? issued : []).concat(Array.isArray(snap) ? snap : []).forEach((c) => {
-    if (c && c.code) map.set(normalizeCode(c.code), ensureCode(c));
-  });
-  return Array.from(map.values());
+  const rows = await blobListRows();
+  let sbRows = [];
+  if (getSupabaseConfig()) {
+    try { sbRows = await listCodesSb(); } catch (e) { sbRows = []; }
+  }
+  seedCodes()
+    .concat(Array.isArray(issued) ? issued : [])
+    .concat(Array.isArray(snap) ? snap : [])
+    .concat(rows)
+    .concat(sbRows)
+    .forEach((c) => putCode(map, c));
+  return Array.from(map.values()).sort((a, b) => String(b.created_at || '').localeCompare(String(a.created_at || '')));
+}
+
+async function persistRow(row) {
+  if (!keepCode(row)) return true;
+  return blobSet('row-' + normalizeCode(row.code), ensureCode(row));
 }
 
 async function saveCodes(codes) {
   const existing = await blobGet('codes', []);
   const map = new Map();
-  (Array.isArray(existing) ? existing : []).forEach((c) => {
-    if (c && c.code) map.set(normalizeCode(c.code), ensureCode(c));
-  });
-  (codes || []).forEach((c) => {
-    if (c && c.code) map.set(normalizeCode(c.code), ensureCode(c));
-  });
-  const ok = await blobSet('codes', Array.from(map.values()));
-  if (!ok) throw new Error('No se pudieron guardar los códigos. Intenta de nuevo.');
+  (Array.isArray(existing) ? existing : []).forEach((c) => putCode(map, c));
+  (codes || []).forEach((c) => putCode(map, c));
+  const all = Array.from(map.values());
+  let any = false;
+  for (let i = 0; i < all.length; i += 1) {
+    if (await persistRow(all[i])) any = true;
+  }
+  const ok = await blobSet('codes', all);
+  if (!ok && !any) {
+    throw new Error(saveError());
+  }
+  return true;
 }
 
 async function appendIssued(row) {
-  const log = await blobGet('issued', []);
-  const next = [row].concat(Array.isArray(log) ? log : []).slice(0, 800);
+  const log = (await blobGet('issued', [])).filter(keepCode);
+  const next = [row].concat(Array.isArray(log) ? log : []).filter(keepCode).slice(0, 800);
   return blobSet('issued', next);
+}
+
+function saveError() {
+  return lastBlobError
+    ? ('No se pudieron guardar los códigos. ' + lastBlobError)
+    : 'No se pudieron guardar los códigos. Intenta de nuevo.';
 }
 
 function randPart(n) {
@@ -142,6 +177,17 @@ function bindDevice(row, device, deviceLabel) {
 }
 
 let blobsContext = null;
+let lastBlobError = '';
+
+function attachBlobs(event, context) {
+  blobsContext = context || null;
+  try {
+    const blobs = require('@netlify/blobs');
+    if (event && typeof blobs.connectLambda === 'function') blobs.connectLambda(event);
+  } catch (e) {
+    lastBlobError = e.message || String(e);
+  }
+}
 
 async function blobStore() {
   try {
@@ -149,12 +195,14 @@ async function blobStore() {
     const siteID = (blobsContext && blobsContext.site && blobsContext.site.id) || process.env.SITE_ID || process.env.NETLIFY_SITE_ID || '';
     const token = process.env.NETLIFY_BLOBS_TOKEN || process.env.NETLIFY_AUTH_TOKEN || '';
     if (siteID && token) {
-      try { return getStore({ name: 'p28', siteID, token, consistency: 'strong' }); } catch (e) { /* fall through */ }
+      try { return getStore({ name: 'p28', siteID, token, consistency: 'strong' }); } catch (e) { lastBlobError = e.message || String(e); }
     }
     try { return getStore({ name: 'p28', consistency: 'strong' }); } catch (e1) {
+      lastBlobError = e1.message || String(e1);
       return getStore('p28');
     }
   } catch (e) {
+    lastBlobError = e.message || String(e);
     return null;
   }
 }
@@ -166,18 +214,50 @@ async function blobGet(key, fallback) {
     const data = await store.get(key, { type: 'json' });
     return data || fallback;
   } catch (e) {
+    lastBlobError = e.message || String(e);
     return fallback;
   }
 }
 
 async function blobSet(key, value) {
+  const store = await blobStore();
+  if (!store) return false;
   try {
-    const store = await blobStore();
-    if (!store) return false;
-    await store.setJSON(key, value);
+    if (typeof store.setJSON === 'function') {
+      await store.setJSON(key, value);
+      return true;
+    }
+    await store.set(key, JSON.stringify(value));
     return true;
   } catch (e) {
-    return false;
+    lastBlobError = e.message || String(e);
+    try {
+      await store.set(key, JSON.stringify(value));
+      return true;
+    } catch (e2) {
+      lastBlobError = e2.message || String(e2);
+      return false;
+    }
+  }
+}
+
+async function blobListRows() {
+  try {
+    const store = await blobStore();
+    if (!store || typeof store.list !== 'function') return [];
+    const page = await store.list({ prefix: 'row-' });
+    const blobs = (page && page.blobs) || [];
+    const out = [];
+    for (let i = 0; i < blobs.length; i += 1) {
+      const key = blobs[i] && blobs[i].key;
+      if (!key) continue;
+      const data = await store.get(key, { type: 'json' });
+      if (data && data.code) out.push(data);
+    }
+    return out;
+  } catch (e) {
+    lastBlobError = e.message || String(e);
+    return [];
   }
 }
 
@@ -216,7 +296,7 @@ async function sendOnePush(sub, title, body, tag) {
 }
 
 exports.handler = async (event, context) => {
-  blobsContext = context || null;
+  attachBlobs(event, context);
   const origin = event.headers.origin || event.headers.Origin || '';
   const headers = corsHeaders(origin);
 
@@ -421,6 +501,7 @@ exports.handler = async (event, context) => {
         created_at: new Date().toISOString(),
         expires_at: plusDays(Date.now(), days),
       };
+      let sbOk = false;
       if (sb) {
         try {
           const res = await sbFetch('erior_p28_codes', {
@@ -428,16 +509,23 @@ exports.handler = async (event, context) => {
             headers: { Prefer: 'return=representation' },
             body: JSON.stringify({ code: row.code, client_name: row.client_name, pack: row.pack, client_contact: row.client_contact, notes: row.notes, active: true }),
           });
-          if (res.ok && res.data && res.data[0]) row.id = res.data[0].id;
+          if (res.ok && res.data && res.data[0]) {
+            row.id = res.data[0].id;
+            sbOk = true;
+          }
         } catch (e) { /* el blob es la fuente real */ }
       }
       const codes = await loadCodes();
       codes.unshift(row);
+      const rowOk = await persistRow(row);
       const issuedOk = await appendIssued(row);
+      let listOk = false;
       try {
         await saveCodes(codes);
-      } catch (e) {
-        if (!issuedOk) throw e;
+        listOk = true;
+      } catch (e) { /* si ya quedó en row-/issued/supabase, sirve */ }
+      if (!rowOk && !issuedOk && !listOk && !sbOk) {
+        throw new Error(saveError());
       }
       return { statusCode: 200, headers, body: JSON.stringify({ ok: true, row, mode: 'blob' }) };
     }

@@ -23,17 +23,6 @@
       "devices": [],
       "created_at": "2026-09-24T20:27:06.825Z",
       "expires_at": "2026-10-25T21:57:00.381Z"
-    },
-    {
-      "code": "P28-WSYX-2LEF",
-      "client_name": "Camila",
-      "pack": 3,
-      "active": true,
-      "days": 30,
-      "max_devices": 2,
-      "devices": [],
-      "created_at": "2026-09-24T20:19:10.731Z",
-      "expires_at": "2026-10-24T20:19:10.731Z"
     }
   ]
 }

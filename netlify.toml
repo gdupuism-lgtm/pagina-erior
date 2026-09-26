@@ -123,6 +123,7 @@
 
 [functions]
   node_bundler = "esbuild"
+  external_node_modules = ["@netlify/blobs"]
 
 [functions.claude]
   timeout = 26
@@ -138,6 +139,7 @@
 
 [functions.p28-api]
   timeout = 20
+  external_node_modules = ["@netlify/blobs"]
 
 [functions."p28-cron"]
   timeout = 20

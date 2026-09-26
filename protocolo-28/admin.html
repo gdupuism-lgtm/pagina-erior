@@ -47,7 +47,7 @@
         <div class="grid-2">
           <div>
             <label for="fName">Nombre (así sale en el muro)</label>
-            <input id="fName" placeholder="Camila">
+            <input id="fName" placeholder="su nombre">
           </div>
           <div>
             <label for="fContact">WhatsApp (solo lo ves tú)</label>
@@ -88,7 +88,7 @@
       </section>
     </div>
   </div>
-  <script src="access.js?v=26"></script>
+  <script src="access.js?v=27"></script>
   <script>
     var key = '';
     try { key = sessionStorage.getItem('erior-p28-admin') || ''; } catch (e) { key = ''; }
@@ -125,6 +125,9 @@
       ].join('\n');
     }
     function renderList(codes) {
+      codes = (codes || []).filter(function (c) {
+        return P28Access.normalize(c.code) !== 'P28-WSYX-2LEF';
+      });
       if (!codes.length) { $('codeList').innerHTML = '<p class="copy">Aún no entregas accesos.</p>'; return; }
       $('codeList').innerHTML = codes.map(function (c) {
         var n = left(c);
