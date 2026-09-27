@@ -175,7 +175,9 @@ async function run() {
     const tz = sub.tz || 'America/Mexico_City';
     const now = clockInTz(tz);
     const seed = sub.seed || sub.code || sub.endpoint;
-    const slots = slotsForDay(now.date, seed);
+    const slots = (Array.isArray(sub.slots) && sub.slots.length && sub.slotsDate === now.date)
+      ? sub.slots
+      : slotsForDay(now.date, seed);
     const kinds = ['listen', 'portal', 'offer', 'night'];
     let kind = '';
     let slot = '';
@@ -211,7 +213,7 @@ async function run() {
   return { ok: true, sent: sent, total: keep.length, at: stamp.date + ' ' + stamp.h + ':' + stamp.m };
 }
 
-exports.config = { schedule: '*/15 * * * *' };
+exports.config = { schedule: '*/10 * * * *' };
 
 exports.handler = async (event) => {
   attachBlobs(event);

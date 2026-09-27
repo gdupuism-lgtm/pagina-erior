@@ -241,6 +241,7 @@ const server = http.createServer(async (req, res) => {
           tz: String(body.tz || ''),
           seed: String(body.seed || body.code || ''),
           slots: Array.isArray(body.slots) ? body.slots : [],
+          slotsDate: String(body.slotsDate || ''),
         });
         save(db);
       } else {
@@ -250,6 +251,7 @@ const server = http.createServer(async (req, res) => {
           tz: body.tz || s.tz,
           seed: body.seed || s.seed,
           slots: Array.isArray(body.slots) ? body.slots : s.slots,
+          slotsDate: body.slotsDate || s.slotsDate,
         }) : s));
         save(db);
       }
@@ -460,7 +462,9 @@ function tickPush() {
   const db = load();
   const kinds = ['listen', 'portal', 'offer', 'night'];
   (db.subs || []).forEach(async (s) => {
-    const slots = slotsForDay(date, s.seed || s.code || s.endpoint);
+    const slots = (Array.isArray(s.slots) && s.slots.length && s.slotsDate === date)
+      ? s.slots
+      : slotsForDay(date, s.seed || s.code || s.endpoint);
     const idx = slots.indexOf(hm);
     if (idx < 0) return;
     const today = date + '-' + hm + '-' + String(s.endpoint || '').slice(-12);

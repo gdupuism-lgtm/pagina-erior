@@ -224,7 +224,8 @@
       hour: extra.hour || '',
       tz: extra.tz || '',
       seed: extra.seed || '',
-      slots: extra.slots || []
+      slots: extra.slots || [],
+      slotsDate: extra.slotsDate || ''
     });
   }
 

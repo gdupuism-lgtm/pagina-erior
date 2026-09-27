@@ -381,7 +381,10 @@
         '<h2>' + r.t + '</h2>' +
         '<p class="copy">' + r.x + '</p>' +
         (r.rec ? '<p class="day-rec">' + r.rec + '</p>' : '') +
-        (s.data ? '<p class="note" style="margin-top:.8rem">' + focusLine(s) + '</p>' : '');
+        (s.data ? '<p class="note" style="margin-top:.8rem">' + focusLine(s) + '</p>' : '') +
+        (n === 28
+          ? '<a class="btn btn-gold btn-full" href="https://www.instagram.com/eriorcenter/" target="_blank" rel="noopener" style="margin-top:1rem">Ir a @eriorcenter</a>'
+          : '');
     }
     if ($('dayListMeta')) {
       $('dayListMeta').textContent = 'Día ' + n + ' · toca una. Queda.';
@@ -471,26 +474,7 @@
     }
   }
 
-  function renderWall() {
-    if (!$('wall')) return;
-    function paint(items) {
-      var seen = {};
-      var all = (items || []).filter(function (w) {
-        var k = (w.id || '') + (w.who || '') + (w.txt || '');
-        if (seen[k]) return false;
-        seen[k] = true;
-        return !!(w.who && w.txt);
-      });
-      localStorage.setItem('erior-p28-wall-cache', JSON.stringify(all));
-      $('wall').innerHTML = all.map(function (w) {
-        var who = firstName(w.who);
-        var letter = (who || 'E').charAt(0).toUpperCase();
-        return '<div class="bubble"><span class="avatar">' + letter + '</span><div><strong>' + who + (w.day ? ' · día ' + w.day : '') + '</strong><p class="copy">' + w.txt + '</p></div></div>';
-      }).join('') || '<p class="copy">Aún no hay publicaciones. El día 28 este muro se llena.</p>';
-    }
-    try { paint(JSON.parse(localStorage.getItem('erior-p28-wall-cache') || '[]')); } catch (e) {}
-    if (window.P28Access) P28Access.getWall().then(paint);
-  }
+  function renderWall() {}
 
   function renderAudio(el, audio, why, badge) {
     if (!el || !audio) return;
@@ -518,23 +502,8 @@
     return 'https://wa.me/' + WA + '?text=' + encodeURIComponent(lines.join('\n'));
   }
 
-  function renderUpgrades(s) {
-    var pack = Number((s.access && s.access.pack) || s.pack || 1);
-    var rec = s.rec || {};
-    var layers = [
-      { n: 1, audio: rec.primary, open: pack >= 1, label: 'Capa 1' },
-      { n: 2, audio: rec.second, open: pack >= 2, label: 'Capa 2' },
-      { n: 3, audio: rec.third, open: pack >= 3, label: 'Capa 3' }
-    ];
-    var rows = layers.map(function (L) {
-      if (!L.audio || !L.open) return '';
-      return '<div class="layer-row on"><span>' + L.label + ' · ' + L.audio.name + '</span><em>Tuya</em></div>';
-    }).join('');
-    if ($('upgradeBox')) {
-      $('upgradeBox').innerHTML = rows
-        ? '<div class="card foil-card" style="margin-top:1rem"><span class="num">Tus audios</span>' + rows + '</div>'
-        : '';
-    }
+  function renderUpgrades() {
+    if ($('upgradeBox')) $('upgradeBox').innerHTML = '';
     if ($('upgradeHoy')) $('upgradeHoy').innerHTML = '';
   }
 
@@ -639,24 +608,51 @@
     }
     return h >>> 0;
   }
-  function slotsForDay(dateYmd, seed) {
-    var h = hashStr(String(dateYmd) + '|' + String(seed || ''));
-    var used = {};
+  function pad2(n) { return ('0' + n).slice(-2); }
+  function minsToHm(m) {
+    m = ((m % 1440) + 1440) % 1440;
+    return pad2(Math.floor(m / 60)) + ':' + pad2(m % 60);
+  }
+  function upcomingSlots() {
+    var c = clockInTz(localTz());
+    var start = c.h * 60 + c.m + 12;
+    var end = 22 * 60;
     var out = [];
-    var guard = 0;
-    while (out.length < 4 && guard < 80) {
-      h = (Math.imul(h, 1664525) + 1013904223) >>> 0;
-      var hour = 8 + (h % 14);
-      if (!used[hour]) {
-        used[hour] = true;
-        h = (Math.imul(h, 1664525) + 1013904223) >>> 0;
-        var min = h % 60;
-        out.push(('0' + hour).slice(-2) + ':' + ('0' + min).slice(-2));
+    if (start > end - 30) {
+      var usedH = {};
+      while (out.length < 4) {
+        var hour = 8 + Math.floor(Math.random() * 14);
+        if (usedH[hour]) continue;
+        usedH[hour] = true;
+        out.push(pad2(hour) + ':' + pad2(Math.floor(Math.random() * 60)));
       }
-      guard += 1;
+      out.sort();
+      return out;
     }
-    out.sort();
+    var span = end - start;
+    for (var i = 0; i < 4; i++) {
+      var lo = start + Math.floor((span * i) / 4);
+      var hi = start + Math.floor((span * (i + 1)) / 4) - 1;
+      if (hi < lo) hi = lo;
+      out.push(minsToHm(lo + Math.floor(Math.random() * (hi - lo + 1))));
+    }
     return out;
+  }
+  function nearSlot(clock, slot, windowMin) {
+    var p = String(slot || '').split(':');
+    var th = Number(p[0]) || 0;
+    var tm = Number(p[1]) || 0;
+    return Math.abs(clock.h * 60 + clock.m - (th * 60 + tm)) <= (windowMin || 2);
+  }
+  function refreshRemindSlots(st, force) {
+    st = st || {};
+    var tz = st.remindTz || localTz();
+    var today = clockInTz(tz).date;
+    if (!force && st.remindSlotsDate === today && st.remindSlots && st.remindSlots.length === 4) return false;
+    st.remindTz = tz;
+    st.remindSlots = upcomingSlots();
+    st.remindSlotsDate = today;
+    return true;
   }
   function clockInTz(tz) {
     try {
@@ -724,8 +720,6 @@
 
   function renderMyPack(s) {
     if (!$('myPackBox')) return;
-    var pack = (s.access && s.access.pack) || s.pack || 1;
-    var copy = PACK_COPY[pack] || PACK_COPY[1];
     var left = liveDaysLeft(s.access, s);
     var n = currentDay(s);
     var name = firstName((s.data && s.data.name) || (s.access && s.access.name) || '');
@@ -739,8 +733,7 @@
       '<h3>' + (name || 'Tu perfil') + '</h3>' +
       '<p class="note">' + (s.access && s.access.code ? s.access.code : '') + '</p>' +
       '<p class="copy" style="margin:.7rem 0 .2rem">Día <b>' + n + '</b> de 28 del reto.</p>' +
-      '<p class="copy">Te quedan <b>' + left + '</b> de 30 días de uso.</p>' +
-      '<p class="note" style="margin-top:.7rem">' + copy.x + '</p></div>';
+      '<p class="copy">Te quedan <b>' + left + '</b> de 30 días de uso.</p></div>';
     renderUpgrades(s);
     if ($('btnPhoto') && $('photoFile')) {
       $('btnPhoto').onclick = function () { $('photoFile').click(); };
@@ -968,6 +961,7 @@
   }
 
   function go(name) {
+    if (name === 'com') name = 'hoy';
     var current = document.querySelector('.view.on');
     if (!current || current.getAttribute('data-view') !== name) {
       document.querySelectorAll('.view').forEach(function (v) {
@@ -982,7 +976,6 @@
       var homeVid = $('homeVideo');
       if (homeVid && !homeVid.paused) homeVid.pause();
     }
-    if (name === 'com') renderWall();
     if (name === 'hoy') renderStories(load());
     if (name === 'audios') renderListenPlan(load());
     if ((name === 'vision' || name === 'afirma') && window.P28Vision) P28Vision.renderApp(load());
@@ -1076,7 +1069,8 @@
         return P28Access.subscribePush(json, now.access && now.access.code, {
           tz: tz,
           seed: seed,
-          slots: slotsForDay(clockInTz(tz).date, seed)
+          slots: now.remindSlots || upcomingSlots(),
+          slotsDate: now.remindSlotsDate || clockInTz(tz).date
         }).then(function () {
           if (!sendTest || !P28Access.pushTest) return { ok: true };
           return P28Access.pushTest(json);
@@ -1117,12 +1111,11 @@
     save(s);
     paintRemindUi(s);
     if (typeof Notification === 'undefined' || Notification.permission !== 'granted') return;
-    if (!s.remindTz || !s.remindSeed) {
-      s = patch(function (st) {
-        st.remindTz = st.remindTz || localTz();
-        st.remindSeed = st.remindSeed || ((st.access && st.access.code) || 'erior');
-      });
-    }
+    s = patch(function (st) {
+      st.remindTz = st.remindTz || localTz();
+      st.remindSeed = st.remindSeed || ((st.access && st.access.code) || 'erior');
+      refreshRemindSlots(st, false);
+    });
     subscribePhone(false).catch(function () {});
   }
 
@@ -1166,6 +1159,7 @@
       st.remindOff = false;
       st.remindTz = localTz();
       st.remindSeed = st.remindSeed || ((st.access && st.access.code) || String(Date.now()));
+      refreshRemindSlots(st, true);
     });
     saveRemind({ on: true, off: false, tz: s.remindTz, seed: s.remindSeed });
     syncProfile(s);
@@ -1242,14 +1236,16 @@
     if (!s.remindOn || s.remindOff || !s.access) return;
     if (typeof Notification === 'undefined' || Notification.permission !== 'granted') return;
     var tz = s.remindTz || localTz();
-    var seed = s.remindSeed || (s.access && s.access.code) || '';
     var clock = clockInTz(tz);
-    var slots = slotsForDay(clock.date, seed);
+    if (s.remindSlotsDate !== clock.date || !s.remindSlots || !s.remindSlots.length) {
+      s = patch(function (st) { refreshRemindSlots(st, true); });
+    }
+    var slots = s.remindSlots || [];
     var kinds = ['listen', 'portal', 'offer', 'night'];
     var kind = '';
     var slot = '';
     for (var i = 0; i < slots.length; i++) {
-      if (clock.hm === slots[i]) {
+      if (nearSlot(clock, slots[i], 2)) {
         kind = kinds[i];
         slot = slots[i];
         break;

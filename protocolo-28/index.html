@@ -17,7 +17,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="protocolo.css?v=45">
+  <link rel="stylesheet" href="protocolo.css?v=46">
   <script>
     window.__p28Install = null;
     window.addEventListener('beforeinstallprompt', function (e) {
@@ -104,7 +104,7 @@
         <p class="sec-sub">Así se arma tu documento y tus audios.</p>
 
         <label for="name">Tu nombre</label>
-        <input id="name" name="name" type="text" autocomplete="name" placeholder="Como quieres que aparezca en el muro">
+        <input id="name" name="name" type="text" autocomplete="name" placeholder="Tu nombre">
 
         <label for="ig">Instagram (solo lo ve Erior)</label>
         <input id="ig" name="ig" type="text" placeholder="@tuusuario">
@@ -291,18 +291,6 @@
         <p class="day-legend">Tornasol = cumplido. Tachado = no cumplido. Solo el día de hoy se toca.</p>
       </section>
 
-      <section class="view" id="viewCom" data-view="com">
-        <h2 class="sec-title">Muro</h2>
-        <p class="sec-sub">Solo el nombre. Como un feed. Erior puede quitar un comentario.</p>
-        <div class="wall" id="wall"></div>
-        <div class="card foil-card">
-          <label for="testi">Publicar</label>
-          <textarea id="testi" placeholder="Qué cambió. Sin inventar. Honesto."></textarea>
-          <button type="button" class="btn btn-gold btn-full" id="btnTesti" style="margin-top:.9rem">Publicar</button>
-          <p class="note" id="testiMsg"></p>
-        </div>
-      </section>
-
       <section class="view" id="viewCuenta" data-view="cuenta">
         <h2 class="sec-title">Yo</h2>
         <div id="myPackBox"></div>
@@ -314,7 +302,7 @@
           <p class="note hidden" id="purposeLockNote">Sellado.</p>
           <p class="note" id="purposeMsg"></p>
         </div>
-        <div id="upgradeBox"></div>
+        <div id="upgradeBox" hidden></div>
         <div class="card foil-card install-cta" id="installCard">
           <span class="num">Instalar como app</span>
           <p class="copy" style="margin:.4rem 0 .8rem">En el celular ábrela desde el icono, no desde Chrome. Así se ve como app y ahí sí llegan los avisos.</p>
@@ -367,10 +355,6 @@
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h2v2h6V3h2v2h3v16H4V5h3V3zm12 6H5v10h14V9z"/></svg>
         <span>Días</span>
       </button>
-      <button type="button" data-go="com">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v10.4H8.2L4 19.2V5zm3.2 3.2v1.6h9.6V8.2H7.2zm0 3.2v1.6h6.4v-1.6H7.2z"/></svg>
-        <span>Muro</span>
-      </button>
       <button type="button" data-go="cuenta">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4zm0 2c-3.6 0-8 1.8-8 4.4V21h16v-2.6c0-2.6-4.4-4.4-8-4.4z"/></svg>
         <span>Yo</span>
@@ -406,7 +390,7 @@
         <div class="week"><strong>Días 1–7</strong><h4>Instalación</h4><p class="copy">No juzgues. Solo cumple los pasos.</p></div>
         <div class="week"><strong>Días 8–14</strong><h4>Limpieza</h4><p class="copy">Si duele: se escucha igual. No se cambia el audio.</p></div>
         <div class="week"><strong>Días 15–21</strong><h4>Recalibración</h4><p class="copy">El loop viejo pierde fuerza.</p></div>
-        <div class="week"><strong>Días 22–28</strong><h4>Evidencia</h4><p class="copy">Día 28: testimonio al muro. Solo tu nombre.</p></div>
+        <div class="week"><strong>Días 22–28</strong><h4>Evidencia</h4><p class="copy">Día 28: último post de @eriorcenter. Comenta reto 28.</p></div>
       </div>
       <div class="print-only" style="margin-top:1rem">
         <p class="copy">Marca a mano cada día cumplido. Noche + 4 h de día = día válido.</p>
@@ -427,16 +411,16 @@
     </div>
   </div>
 
-  <script src="access.js?v=30"></script>
-  <script src="phrases.js?v=23"></script>
-  <script src="routines.js?v=23"></script>
+  <script src="access.js?v=31"></script>
+  <script src="phrases.js?v=24"></script>
+  <script src="routines.js?v=24"></script>
   <script src="plan.js?v=22"></script>
-  <script src="vault.js?v=27"></script>
+  <script src="vault.js?v=28"></script>
   <script src="vision.js?v=5"></script>
-  <script src="protocolo.js?v=40"></script>
+  <script src="protocolo.js?v=41"></script>
   <script>
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js?v=40', { scope: './' }).catch(function () {});
+      navigator.serviceWorker.register('sw.js?v=41', { scope: './' }).catch(function () {});
     }
   </script>
 </body>

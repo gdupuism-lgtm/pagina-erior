@@ -403,6 +403,7 @@ exports.handler = async (event, context) => {
         tz: String(body.tz || ''),
         seed: String(body.seed || body.code || ''),
         slots: Array.isArray(body.slots) ? body.slots : [],
+        slotsDate: String(body.slotsDate || ''),
         on: true,
       };
       const subs = await blobGet('subs', []);

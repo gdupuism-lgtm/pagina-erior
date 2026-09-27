@@ -698,10 +698,10 @@
     var left = Math.max(0, 28 - n);
     var goOn = left
       ? ('Mañana hay otra lista nueva. Te quedan ' + left + ' días. No pares.')
-      : 'Ciclo cerrado. Escribe tu testimonio en el muro. Solo tu nombre.';
+      : 'Ciclo cerrado. En el último post de @eriorcenter escribe reto 28.';
     var hi = name ? (name + ', lo lograste hoy. ') : 'Lo lograste hoy. ';
     if (n === 28 && weekComplete(days, 4)) {
-      cheerOnce('week-4', 'Los 28 días', hi + 'Ciclo cerrado. Testimonio al muro. Solo tu nombre.');
+      cheerOnce('week-4', 'Los 28 días', hi + 'Ciclo cerrado. En el último post de @eriorcenter escribe reto 28.');
     } else if (n === 21 && weekComplete(days, 3)) {
       cheerOnce('week-3', 'Semana 3 cerrada', hi + 'Recalibración. ' + goOn);
     } else if (n === 14 && weekComplete(days, 2)) {
