@@ -215,8 +215,17 @@
     });
   }
 
-  function subscribePush(subscription, code, hour) {
-    return call('subscribe', { subscription: subscription, code: code, hour: hour });
+  function subscribePush(subscription, code, extra) {
+    extra = extra || {};
+    if (typeof extra === 'string') extra = { hour: extra };
+    return call('subscribe', {
+      subscription: subscription,
+      code: code,
+      hour: extra.hour || '',
+      tz: extra.tz || '',
+      seed: extra.seed || '',
+      slots: extra.slots || []
+    });
   }
 
   function unsubscribePush(endpoint) {

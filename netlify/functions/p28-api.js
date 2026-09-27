@@ -399,7 +399,10 @@ exports.handler = async (event, context) => {
         endpoint: sub.endpoint,
         keys: sub.keys,
         code: String(body.code || ''),
-        hour: String(body.hour || '21:00'),
+        hour: String(body.hour || ''),
+        tz: String(body.tz || ''),
+        seed: String(body.seed || body.code || ''),
+        slots: Array.isArray(body.slots) ? body.slots : [],
         on: true,
       };
       const subs = await blobGet('subs', []);

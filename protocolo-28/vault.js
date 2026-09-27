@@ -27,11 +27,37 @@
     return s;
   }
   function todayKey() { return new Date().toISOString().slice(0, 10); }
-  function layerLabel(v) {
-    if (v === '2') return 'Capa 2';
-    if (v === '3') return 'Capa 3';
-    if (v === 'extra') return 'Extra';
-    return 'Capa 1';
+  function esc(s) {
+    return String(s || '').replace(/[&<>"']/g, function (c) {
+      return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c];
+    });
+  }
+  function playlists(s) { return (s && s.playlists) || []; }
+  function playlistById(s, id) {
+    return playlists(s).filter(function (p) { return p.id === id; })[0] || null;
+  }
+  function activePl(s) {
+    s = s || load();
+    var id = s.player && s.player.playlistId;
+    return id ? playlistById(s, id) : null;
+  }
+  function trackById(s, id) {
+    return library(s).filter(function (t) { return t.id === id; })[0] || null;
+  }
+  function expandQueue(s) {
+    s = s || load();
+    var pl = activePl(s);
+    var lib = library(s);
+    if (!pl) {
+      return lib.map(function (t) { return { id: t.id, times: 1, nth: 1 }; });
+    }
+    var q = [];
+    (pl.items || []).forEach(function (it) {
+      if (!trackById(s, it.id)) return;
+      var n = Math.max(1, Math.min(99, Number(it.times) || 1));
+      for (var i = 0; i < n; i++) q.push({ id: it.id, times: n, nth: i + 1 });
+    });
+    return q;
   }
   function fmt(sec) {
     sec = Math.max(0, Math.floor(Number(sec) || 0));
@@ -228,40 +254,77 @@
   function renderVaultList(s) {
     var box = $('vaultList');
     if (!box) return;
+    s = s || load();
     var list = library(s);
     var cur = current(s);
+    var pl = activePl(s);
     if (!list.length) {
-      box.innerHTML = '<p class="note">Aún no hay audios en la bóveda. Mete el que te mandó Erior.</p>';
+      box.innerHTML = '<p class="note">Sube un audio para oírlo.</p>';
       return;
     }
-    box.innerHTML = '<div class="vault-list">' + list.map(function (t) {
+    box.innerHTML = '<div class="vault-head">Tus audios</div><div class="vault-list">' + list.map(function (t) {
       var on = cur && cur.id === t.id;
       return '<div class="track-row' + (on ? ' on' : '') + '" data-play="' + t.id + '">' +
-        '<div><b>' + t.title + '</b><small>' + layerLabel(t.layer) + ' · ' + (t.plays || 0) + ' reproducciones' +
-        (t.duration ? ' · ' + fmt(t.duration) : '') + '</small></div>' +
-        '<button type="button" data-play="' + t.id + '">Oír</button>' +
+        '<div><b>' + esc(t.title) + '</b><small>' +
+        (t.duration ? fmt(t.duration) : 'Audio') +
+        '</small></div>' +
+        '<button type="button" data-add-pl="' + t.id + '">' + (pl ? '+' : 'Lista') + '</button>' +
         '<button type="button" data-del="' + t.id + '">Quitar</button></div>';
     }).join('') + '</div>';
   }
 
-  function renderUpgradeAudios(s) {
-    var box = $('upgradeAudios');
-    if (!box) return;
+  function renderPlaylists(s) {
+    var bar = $('plBar');
+    var queue = $('plQueue');
+    if (!bar) return;
     s = s || load();
-    var pack = Number((s.access && s.access.pack) || s.pack || 1);
-    var rec = s.rec || {};
-    var rows = '';
-    function card(n, audio, why, open) {
-      if (!audio) return '';
-      if (!open) return '';
-      return '<div class="layer-row on"><span>Capa ' + n + ' · ' + audio.name + '</span><em>Tuya</em></div>';
+    var pls = playlists(s);
+    var curId = (s.player && s.player.playlistId) || '';
+    var html = '<div class="pl-row">';
+    html += '<button type="button" class="pl-chip add" data-pl-new>+ Lista</button>';
+    pls.forEach(function (p) {
+      html += '<button type="button" class="pl-chip' + (p.id === curId ? ' on' : '') + '" data-pl="' + p.id + '">' + esc(p.name) + '</button>';
+    });
+    if (curId) html += '<button type="button" class="pl-chip ghost" data-pl-del="' + curId + '">Borrar</button>';
+    html += '</div>';
+    if (s.plNew) {
+      html += '<div class="pl-new"><input id="plNameIn" type="text" placeholder="Nombre de la lista" maxlength="40">' +
+        '<button type="button" class="btn btn-gold" id="btnPlCreate">Crear</button></div>';
     }
-    rows += card(1, rec.primary, rec.why1, pack >= 1);
-    rows += card(2, rec.second, rec.why2, pack >= 2);
-    rows += card(3, rec.third, '', pack >= 3);
-    box.innerHTML = rows
-      ? '<div class="card foil-card" style="margin-top:1rem"><span class="num">Tus capas</span>' + rows + '</div>'
-      : '';
+    bar.innerHTML = html;
+    if (s.plNew && $('plNameIn')) {
+      setTimeout(function () { if ($('plNameIn')) $('plNameIn').focus(); }, 40);
+    }
+    if (!queue) return;
+    var pl = activePl(s);
+    if (!pl) {
+      queue.innerHTML = '';
+      return;
+    }
+    if (!pl.items || !pl.items.length) {
+      queue.innerHTML = '<p class="note">Toca Lista en un audio. Pon las veces y oye.</p>';
+      return;
+    }
+    var q = expandQueue(s);
+    var qi = Number((s.player && s.player.queueIndex) || 0);
+    var slot = q[qi];
+    queue.innerHTML = '<div class="pl-queue">' + pl.items.map(function (it, i) {
+      var t = trackById(s, it.id);
+      var on = slot && slot.id === it.id;
+      return '<div class="q-row' + (on ? ' on' : '') + '">' +
+        '<button type="button" class="q-play" data-pl-item="' + i + '">' + esc(t ? t.title : 'Audio') + '</button>' +
+        '<div class="q-times">' +
+          '<button type="button" data-times-minus="' + i + '">−</button>' +
+          '<b data-times-edit="' + i + '">×' + (it.times || 1) + '</b>' +
+          '<button type="button" data-times-plus="' + i + '">+</button>' +
+        '</div>' +
+        '<button type="button" class="q-rm" data-pl-rm="' + i + '">×</button></div>';
+    }).join('') + '</div>';
+  }
+
+  function renderUpgradeAudios() {
+    var box = $('upgradeAudios');
+    if (box) box.innerHTML = '';
   }
 
   function loopMode(s) {
@@ -276,9 +339,9 @@
   }
 
   function loopLabel(mode) {
-    if (mode === 'all') return 'loop playlist';
-    if (mode === 'one') return 'loop 1 audio';
-    return 'loop off';
+    if (mode === 'all') return 'lista';
+    if (mode === 'one') return 'este audio';
+    return 'sin repetir';
   }
 
   function paintPlayer(s) {
@@ -286,15 +349,21 @@
     var t = current(s);
     var playing = !el.paused && !el.ended;
     var mode = loopMode(s);
+    var pl = activePl(s);
+    var q = expandQueue(s);
+    var qi = Number((s.player && s.player.queueIndex) || 0);
+    var slot = q[qi];
     applyLoopToEl(mode);
     document.body.classList.toggle('is-playing', playing);
     if ($('vinyl')) $('vinyl').classList.toggle('spin', playing);
-    if ($('playerTitle')) $('playerTitle').textContent = t ? t.title : 'Elige o mete un audio';
-    if ($('playerLayer')) $('playerLayer').textContent = t ? layerLabel(t.layer) : 'Sin audio';
+    if ($('playerTitle')) $('playerTitle').textContent = t ? t.title : 'Elige un audio';
+    if ($('playerLayer')) $('playerLayer').textContent = pl ? pl.name : (t ? 'Ahora' : 'Audios');
     if ($('playerMeta')) {
-      $('playerMeta').textContent = t
-        ? (t.plays || 0) + ' reproducciones · ' + loopLabel(mode)
-        : 'Loop de playlist, de un audio, o apagado.';
+      var meta = '';
+      if (slot && slot.times > 1) meta = slot.nth + ' de ' + slot.times;
+      if (pl && q.length) meta += (meta ? ' · ' : '') + (qi + 1) + '/' + q.length;
+      if (!meta && t) meta = loopLabel(mode);
+      $('playerMeta').textContent = meta;
     }
     if ($('miniTitle')) $('miniTitle').textContent = t ? t.title : 'Audio';
     document.body.classList.toggle('has-mini', !!(t && el.src));
@@ -309,9 +378,10 @@
       $('btnLoop').classList.toggle('loop-all', mode === 'all');
       $('btnLoop').classList.toggle('loop-one', mode === 'one');
       $('btnLoop').setAttribute('aria-pressed', mode !== 'off' ? 'true' : 'false');
-      $('btnLoop').setAttribute('aria-label', mode === 'all' ? 'Loop de toda la playlist' : mode === 'one' ? 'Loop de este audio' : 'Loop apagado');
-      if ($('loopBadge')) $('loopBadge').textContent = mode === 'all' ? 'ALL' : mode === 'one' ? '1' : '';
+      $('btnLoop').setAttribute('aria-label', mode === 'all' ? 'Repetir lista' : mode === 'one' ? 'Repetir este audio' : 'Sin repetir');
+      if ($('loopBadge')) $('loopBadge').textContent = mode === 'all' ? 'LISTA' : mode === 'one' ? '1' : '';
     }
+    renderPlaylists(s);
     renderVaultList(s);
   }
 
@@ -421,10 +491,42 @@
     });
   }
 
+  function playQueueIndex(i, autoplay) {
+    var s = load();
+    var q = expandQueue(s);
+    if (!q.length) return Promise.resolve();
+    i = ((i % q.length) + q.length) % q.length;
+    patch(function (st) {
+      st.player = st.player || {};
+      st.player.queueIndex = i;
+      st.player.currentId = q[i].id;
+    });
+    return loadTrack(q[i].id, autoplay !== false, true);
+  }
+  function playPlaylist(plId) {
+    patch(function (st) {
+      st.player = st.player || {};
+      st.player.playlistId = plId || '';
+      st.player.queueIndex = 0;
+      if (!st.player.loopMode) st.player.loopMode = 'all';
+    });
+    return playQueueIndex(0, true);
+  }
+  function playTrackNow(id) {
+    patch(function (st) {
+      st.player = st.player || {};
+      st.player.playlistId = '';
+      st.player.currentId = id;
+      st.player.queueIndex = 0;
+    });
+    return loadTrack(id, true, true);
+  }
   function play() {
     var s = load();
     var t = current(s);
     if (!t) {
+      var q = expandQueue(s);
+      if (q.length) return playQueueIndex(0, true);
       if (w.P28 && w.P28.go) w.P28.go('audios');
       return;
     }
@@ -437,13 +539,15 @@
   function pause() { el.pause(); persistPos(); paintPlayer(); }
   function toggle() { if (el.paused) play(); else pause(); }
   function step(dir) {
-    var list = library(load());
-    if (!list.length) return;
-    var cur = current();
-    var i = 0;
-    for (var n = 0; n < list.length; n++) if (cur && list[n].id === cur.id) i = n;
-    var nextI = (i + dir + list.length) % list.length;
-    loadTrack(list[nextI].id, true, true);
+    var s = load();
+    var q = expandQueue(s);
+    if (!q.length) return;
+    var i = Number((s.player && s.player.queueIndex) || 0);
+    if (!activePl(s)) {
+      var cur = current(s);
+      for (var n = 0; n < q.length; n++) if (cur && q[n].id === cur.id) i = n;
+    }
+    playQueueIndex(i + dir, true);
   }
   function prev() { step(-1); }
   function next() { step(1); }
@@ -470,7 +574,7 @@
     paintPlayer();
   }
 
-  function addFile(file, title, layer) {
+  function addFile(file, title) {
     if (!file) return Promise.reject(new Error('Elige un archivo de audio.'));
     if (file.size > MAX_MB * 1024 * 1024) return Promise.reject(new Error('Ese archivo pesa más de ' + MAX_MB + ' MB.'));
     var name = (title || file.name || 'Audio Erior').replace(/\.[a-z0-9]{2,5}$/i, '').trim();
@@ -478,7 +582,6 @@
     var track = {
       id: id,
       title: name.slice(0, 80),
-      layer: layer || '1',
       plays: 0,
       lastTime: 0,
       duration: 0,
@@ -490,20 +593,89 @@
         st.library.push(track);
         st.player = st.player || { vol: 0.72, loop: true, loopMode: 'all' };
         st.player.currentId = id;
+        st.player.playlistId = '';
+        st.player.queueIndex = 0;
       });
-      var n = s.library.length;
-      showCelebrate(n === 1 ? 'Tu bóveda está viva' : 'Capa nueva', n === 1
-        ? 'Ya puedes oír tu audio aquí. Volumen, loop y progreso, en este celular.'
-        : 'Audio ' + n + ' en tu reto. No te quedes en una sola frecuencia.');
+      showCelebrate(track.title, 'Listo.');
       render(s);
-      return loadTrack(id, false);
+      return loadTrack(id, true, true);
     });
+  }
+
+  function setItemTimes(index, times) {
+    var s = load();
+    var pl = activePl(s);
+    if (!pl || !pl.items || !pl.items[index]) return;
+    var n = Math.max(1, Math.min(99, Number(times) || 1));
+    patch(function (st) {
+      var p = playlistById(st, pl.id);
+      if (p && p.items[index]) p.items[index].times = n;
+    });
+    render(load());
+  }
+  function addToPlaylist(trackId, times) {
+    var s = load();
+    var pl = activePl(s);
+    if (!pl) {
+      patch(function (st) { st.plNew = true; st.pendingAdd = trackId; });
+      render(load());
+      return;
+    }
+    patch(function (st) {
+      var p = playlistById(st, pl.id);
+      if (!p) return;
+      p.items = p.items || [];
+      var found = p.items.filter(function (it) { return it.id === trackId; })[0];
+      if (found) found.times = Math.min(99, (found.times || 1) + (times || 1));
+      else p.items.push({ id: trackId, times: times || 1 });
+    });
+    render(load());
+  }
+  function createPlaylist(name) {
+    var s0 = load();
+    var pending = s0.pendingAdd || '';
+    var id = 'pl-' + Date.now().toString(36);
+    patch(function (st) {
+      st.playlists = st.playlists || [];
+      st.playlists.push({ id: id, name: String(name || 'Lista').trim().slice(0, 40) || 'Lista', items: [] });
+      st.player = st.player || {};
+      st.player.playlistId = id;
+      st.plNew = false;
+      st.pendingAdd = '';
+    });
+    if (pending) addToPlaylist(pending, 1);
+    else render(load());
+    return id;
+  }
+  function removeFromPlaylist(index) {
+    var pl = activePl();
+    if (!pl) return;
+    patch(function (st) {
+      var p = playlistById(st, pl.id);
+      if (!p) return;
+      p.items = (p.items || []).filter(function (_, i) { return i !== index; });
+    });
+    render(load());
+  }
+  function deletePlaylist(id) {
+    patch(function (st) {
+      st.playlists = (st.playlists || []).filter(function (p) { return p.id !== id; });
+      if (st.player && st.player.playlistId === id) {
+        st.player.playlistId = '';
+        st.player.queueIndex = 0;
+      }
+    });
+    render(load());
   }
 
   function removeTrack(id) {
     return idbDel(id).then(function () {
       var s = patch(function (st) {
         st.library = (st.library || []).filter(function (t) { return t.id !== id; });
+        st.playlists = (st.playlists || []).map(function (p) {
+          p.items = (p.items || []).filter(function (it) { return it.id !== id; });
+          return p;
+        });
         if (st.player && st.player.currentId === id) {
           st.player.currentId = st.library[0] ? st.library[0].id : '';
         }
@@ -547,10 +719,8 @@
     s = s || load();
     renderProgress(s);
     renderNudge(s, 'upgradeHoy');
-    renderVaultList(s);
     renderUpgradeAudios(s);
     paintPlayer(s);
-    if (w.P28 && w.P28.renderListenPlan) w.P28.renderListenPlan(s);
     if (s.player && s.player.vol != null) el.volume = s.player.vol;
     applyLoopToEl(loopMode(s));
   }
@@ -571,11 +741,9 @@
       var f = this.files && this.files[0];
       if (!f) return;
       var title = ($('audioTitle') && $('audioTitle').value) || '';
-      var layerEl = document.querySelector('[name="layer"]:checked');
-      var layer = layerEl ? layerEl.value : '1';
       if ($('audioAddMsg')) $('audioAddMsg').textContent = 'Guardando…';
-      addFile(f, title, layer).then(function () {
-        if ($('audioAddMsg')) $('audioAddMsg').textContent = 'Listo. Ya está en tu bóveda.';
+      addFile(f, title).then(function () {
+        if ($('audioAddMsg')) $('audioAddMsg').textContent = '';
         if ($('audioTitle')) $('audioTitle').value = '';
         $('audioFile').value = '';
       }).catch(function (err) {
@@ -599,15 +767,91 @@
       $('seek').onmouseup = $('seek').ontouchend = commitSeek;
       $('seek').onchange = commitSeek;
     }
+    function hit(el, name) {
+      if (!el) return null;
+      if (el.getAttribute && el.getAttribute(name) != null) return el.getAttribute(name);
+      if (el.closest) {
+        var n = el.closest('[' + name + ']');
+        return n ? n.getAttribute(name) : null;
+      }
+      return null;
+    }
     if ($('vaultList')) {
       $('vaultList').onclick = function (e) {
-        var playId = e.target.getAttribute('data-play') || (e.target.closest && e.target.closest('[data-play]') && e.target.closest('[data-play]').getAttribute('data-play'));
-        var delId = e.target.getAttribute('data-del');
+        var delId = hit(e.target, 'data-del');
+        var addId = hit(e.target, 'data-add-pl');
+        var playId = hit(e.target, 'data-play');
         if (delId) {
-          if (confirm('¿Quitar este audio de la bóveda? El archivo se borra de este celular.')) removeTrack(delId);
+          if (confirm('¿Quitar este audio?')) removeTrack(delId);
           return;
         }
-        if (playId) loadTrack(playId, true);
+        if (addId) {
+          e.stopPropagation();
+          addToPlaylist(addId, 1);
+          return;
+        }
+        if (playId) playTrackNow(playId);
+      };
+    }
+    if ($('plBar')) {
+      $('plBar').onclick = function (e) {
+        if (e.target.id === 'btnPlCreate' || (e.target.closest && e.target.closest('#btnPlCreate'))) {
+          createPlaylist(($('plNameIn') && $('plNameIn').value) || 'Lista');
+          return;
+        }
+        var del = hit(e.target, 'data-pl-del');
+        var pl = hit(e.target, 'data-pl');
+        if (e.target.closest && e.target.closest('[data-pl-new]')) {
+          patch(function (st) { st.plNew = !st.plNew; });
+          render(load());
+          return;
+        }
+        if (del) {
+          deletePlaylist(del);
+          return;
+        }
+        if (pl) playPlaylist(pl);
+      };
+      $('plBar').onkeydown = function (e) {
+        if (e.key === 'Enter' && e.target && e.target.id === 'plNameIn') {
+          e.preventDefault();
+          createPlaylist(e.target.value || 'Lista');
+        }
+      };
+    }
+    if ($('plQueue')) {
+      $('plQueue').onclick = function (e) {
+        var item = hit(e.target, 'data-pl-item');
+        var minus = hit(e.target, 'data-times-minus');
+        var plus = hit(e.target, 'data-times-plus');
+        var edit = hit(e.target, 'data-times-edit');
+        var rm = hit(e.target, 'data-pl-rm');
+        var pl = activePl();
+        if (item != null && pl && pl.items[Number(item)]) {
+          var q = expandQueue();
+          var want = pl.items[Number(item)].id;
+          var idx = 0;
+          for (var i = 0; i < q.length; i++) if (q[i].id === want) { idx = i; break; }
+          playQueueIndex(idx, true);
+          return;
+        }
+        if (minus != null) {
+          var curM = (pl && pl.items[Number(minus)] && pl.items[Number(minus)].times) || 1;
+          setItemTimes(Number(minus), curM - 1);
+          return;
+        }
+        if (plus != null) {
+          var curP = (pl && pl.items[Number(plus)] && pl.items[Number(plus)].times) || 1;
+          setItemTimes(Number(plus), curP + 1);
+          return;
+        }
+        if (edit != null) {
+          var curE = (pl && pl.items[Number(edit)] && pl.items[Number(edit)].times) || 1;
+          var typed = w.prompt ? w.prompt('Veces', String(curE)) : String(curE);
+          if (typed != null) setItemTimes(Number(edit), typed);
+          return;
+        }
+        if (rm != null) removeFromPlaylist(Number(rm));
       };
     }
     var drop = $('addAudioCard');
@@ -621,9 +865,8 @@
       drop.addEventListener('drop', function (e) {
         var f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
         if (!f) return;
-        var layerEl = document.querySelector('[name="layer"]:checked');
-        addFile(f, ($('audioTitle') && $('audioTitle').value) || '', layerEl ? layerEl.value : '1')
-          .then(function () { if ($('audioAddMsg')) $('audioAddMsg').textContent = 'Listo. Ya está en tu bóveda.'; })
+        addFile(f, ($('audioTitle') && $('audioTitle').value) || '')
+          .then(function () { if ($('audioAddMsg')) $('audioAddMsg').textContent = ''; })
           .catch(function (err) { if ($('audioAddMsg')) $('audioAddMsg').textContent = err.message || 'No se pudo guardar.'; });
       });
     }
@@ -653,9 +896,14 @@
         });
       });
       var mode = loopMode();
-      var list = library(load());
+      if (mode === 'one') {
+        el.currentTime = 0;
+        el.play().catch(function () {});
+        return;
+      }
       if (mode === 'all') {
-        if (list.length > 1) next();
+        var q = expandQueue();
+        if (q.length > 1) next();
         else {
           el.currentTime = 0;
           el.play().catch(function () {});

@@ -236,8 +236,6 @@
   }
   function allTasksDone(s, n) {
     var checks = (s && s.checks && s.checks[n]) || {};
-    if (s && s.days && s.days[n]) return true;
-    if (checks.night && checks.day && checks.mission) return true;
     var tasks = routineTasks(s, n).tasks;
     return !!tasks.length && tasks.every(function (t) { return !!checks[t.id]; });
   }
@@ -376,24 +374,22 @@
     var pack = routineTasks(s, n);
     var r = pack.r;
     var done = (s.checks && s.checks[n]) || {};
-    var sealed = !!(s.days && s.days[n]);
     lastPaintDay = n;
     if ($('missionBox')) {
       $('missionBox').innerHTML =
-        '<div class="day-n">Hoy · ' + mexicoPretty() + ' · Día ' + n + ' de 28</div>' +
+        '<div class="day-n">Hoy · Día ' + n + ' de 28</div>' +
         '<h2>' + r.t + '</h2>' +
         '<p class="copy">' + r.x + '</p>' +
         (r.rec ? '<p class="day-rec">' + r.rec + '</p>' : '') +
-        (s.data ? '<p class="note" style="margin-top:.8rem">' + focusLine(s) + '</p>' : '') +
-        '<p class="note">Esta lista es de hoy. Mañana, a medianoche de México, cambia sola.</p>';
+        (s.data ? '<p class="note" style="margin-top:.8rem">' + focusLine(s) + '</p>' : '');
     }
     if ($('dayListMeta')) {
-      $('dayListMeta').textContent = 'Día ' + n + ' · toca una vez. No se deshace. Mañana es otra.';
+      $('dayListMeta').textContent = 'Día ' + n + ' · toca una. Queda.';
     }
     var list = $('dayCheckList');
     if (list) {
       list.innerHTML = pack.tasks.map(function (t) {
-        var on = sealed || !!done[t.id];
+        var on = !!done[t.id];
         return '<button type="button" class="task-item' + (on ? ' on' : '') + '" data-task="' + t.id + '"' + (on ? ' disabled' : '') + '>' +
           '<span class="tick">✓</span><span class="task-label">' + t.label + '</span></button>';
       }).join('');
@@ -403,7 +399,7 @@
   }
 
   function dayFulfilled(s, n) {
-    return allTasksDone(s, n);
+    return !!(s && s.days && s.days[n]) || allTasksDone(s, n);
   }
 
   function lockUntilDay(s) {
@@ -623,9 +619,70 @@
     if (r.on || st.remindOn || (typeof Notification !== 'undefined' && Notification.permission === 'granted')) {
       st.remindOn = true;
       st.remindAt = st.remindAt || r.at || '21:00';
-      saveRemind({ on: true, off: false, at: st.remindAt });
+      st.remindTz = st.remindTz || r.tz || localTz();
+      st.remindSeed = st.remindSeed || r.seed || ((st.access && st.access.code) || 'erior');
+      saveRemind({ on: true, off: false, at: st.remindAt, tz: st.remindTz, seed: st.remindSeed });
     }
     return st;
+  }
+
+  function localTz() {
+    try { return Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC'; }
+    catch (e) { return 'UTC'; }
+  }
+  function hashStr(s) {
+    var h = 2166136261;
+    s = String(s || '');
+    for (var i = 0; i < s.length; i++) {
+      h ^= s.charCodeAt(i);
+      h = Math.imul(h, 16777619);
+    }
+    return h >>> 0;
+  }
+  function slotsForDay(dateYmd, seed) {
+    var h = hashStr(String(dateYmd) + '|' + String(seed || ''));
+    var used = {};
+    var out = [];
+    var guard = 0;
+    while (out.length < 4 && guard < 80) {
+      h = (Math.imul(h, 1664525) + 1013904223) >>> 0;
+      var hour = 8 + (h % 14);
+      if (!used[hour]) {
+        used[hour] = true;
+        h = (Math.imul(h, 1664525) + 1013904223) >>> 0;
+        var min = h % 60;
+        out.push(('0' + hour).slice(-2) + ':' + ('0' + min).slice(-2));
+      }
+      guard += 1;
+    }
+    out.sort();
+    return out;
+  }
+  function clockInTz(tz) {
+    try {
+      var hmParts = new Intl.DateTimeFormat('en-GB', {
+        timeZone: tz || localTz(), hour: '2-digit', minute: '2-digit', hour12: false
+      }).formatToParts(new Date());
+      var dateParts = new Intl.DateTimeFormat('en-CA', {
+        timeZone: tz || localTz(), year: 'numeric', month: '2-digit', day: '2-digit'
+      }).formatToParts(new Date());
+      var h = '00', m = '00', y = '1970', mo = '01', d = '01';
+      hmParts.forEach(function (p) { if (p.type === 'hour') h = p.value; if (p.type === 'minute') m = p.value; });
+      dateParts.forEach(function (p) {
+        if (p.type === 'year') y = p.value;
+        if (p.type === 'month') mo = p.value;
+        if (p.type === 'day') d = p.value;
+      });
+      return { hm: h + ':' + m, date: y + '-' + mo + '-' + d, h: Number(h), m: Number(m) };
+    } catch (e) {
+      var now = new Date();
+      return {
+        hm: ('0' + now.getHours()).slice(-2) + ':' + ('0' + now.getMinutes()).slice(-2),
+        date: now.toISOString().slice(0, 10),
+        h: now.getHours(),
+        m: now.getMinutes()
+      };
+    }
   }
 
   function liveDaysLeft(access, s) {
@@ -936,7 +993,7 @@
     var before = load();
     var n = currentDay(before);
     var checks = (before.checks && before.checks[n]) || {};
-    if (checks[key] || (before.days && before.days[n])) return;
+    if (checks[key]) return;
     var was = !!(before.days && before.days[n]);
     var state = patch(function (st) {
       st.checks = st.checks || {};
@@ -999,7 +1056,7 @@
     return out;
   }
 
-  function subscribePhone(hour, sendTest) {
+  function subscribePhone(sendTest) {
     var s = load();
     if (!navigator.serviceWorker || !window.P28Access) return Promise.resolve();
     if (typeof Notification === 'undefined' || Notification.permission !== 'granted') return Promise.resolve();
@@ -1014,7 +1071,13 @@
         var now = load();
         if (now.remindOff) return { ok: false };
         var json = sub.toJSON();
-        return P28Access.subscribePush(json, now.access && now.access.code, hour || now.remindAt || '21:00').then(function () {
+        var tz = now.remindTz || localTz();
+        var seed = now.remindSeed || (now.access && now.access.code) || '';
+        return P28Access.subscribePush(json, now.access && now.access.code, {
+          tz: tz,
+          seed: seed,
+          slots: slotsForDay(clockInTz(tz).date, seed)
+        }).then(function () {
           if (!sendTest || !P28Access.pushTest) return { ok: true };
           return P28Access.pushTest(json);
         });
@@ -1054,7 +1117,13 @@
     save(s);
     paintRemindUi(s);
     if (typeof Notification === 'undefined' || Notification.permission !== 'granted') return;
-    subscribePhone(s.remindAt || '21:00', false).catch(function () {});
+    if (!s.remindTz || !s.remindSeed) {
+      s = patch(function (st) {
+        st.remindTz = st.remindTz || localTz();
+        st.remindSeed = st.remindSeed || ((st.access && st.access.code) || 'erior');
+      });
+    }
+    subscribePhone(false).catch(function () {});
   }
 
   function cancelReminders() {
@@ -1076,8 +1145,7 @@
     }).catch(function () {});
   }
 
-  function activateReminders(demo) {
-    var hour = ($('remindAt') && $('remindAt').value) || '21:00';
+  function activateReminders() {
     if (isIOSPhone() && !isStandaloneApp()) {
       if ($('remindMsg')) $('remindMsg').textContent = remindHint();
       promptInstall();
@@ -1085,8 +1153,8 @@
     }
     if (!('Notification' in window)) {
       $('remindMsg').textContent = isIOSPhone()
-        ? 'Instala primero (Añadir a pantalla de inicio) y abre el icono. Luego toca de nuevo.'
-        : 'Este navegador no permite notificaciones.';
+        ? 'Instala primero. Luego toca de nuevo.'
+        : 'Este navegador no permite avisos.';
       return;
     }
     if (Notification.permission === 'denied') {
@@ -1094,31 +1162,26 @@
       return;
     }
     var s = patch(function (st) {
-      st.remindAt = hour;
       st.remindOn = true;
       st.remindOff = false;
+      st.remindTz = localTz();
+      st.remindSeed = st.remindSeed || ((st.access && st.access.code) || String(Date.now()));
     });
-    saveRemind({ on: true, off: false, at: hour });
+    saveRemind({ on: true, off: false, tz: s.remindTz, seed: s.remindSeed });
     syncProfile(s);
     paintRemindUi(s);
-    if ($('remindMsg')) $('remindMsg').textContent = 'Pidiendo permiso…';
+    if ($('remindMsg')) $('remindMsg').textContent = '';
     Notification.requestPermission().then(function (p) {
       if (p !== 'granted') {
         $('remindMsg').textContent = remindHint();
         return;
       }
-      $('remindMsg').textContent = 'Avisos activos. Mandando uno de prueba…';
       paintRemindUi(load());
-      showNativeNotif('Erior Center', 'Avisos encendidos. Este es el de prueba.', 'p28-test');
-      if (demo) firePhrase(true, ['portal', 'listen', 'offer'][Math.floor(Math.random() * 3)]);
-      subscribePhone(hour, true).then(function (res) {
-        if (res && res.data && res.data.error) {
-          $('remindMsg').textContent = 'Avisos activos. Siguen encendidos. El de prueba falló: ' + res.data.error;
-          return;
-        }
-        $('remindMsg').textContent = 'Avisos activos. Van 4 al día (08:08, 11:11, 16:16 y noche) hasta que los canceles tú.';
-      }).catch(function (err) {
-        $('remindMsg').textContent = 'Avisos activos. Si no llegó el de prueba, deja la app abierta un segundo. ' + ((err && err.message) || '');
+      showNativeNotif('Erior Center', 'Avisos encendidos.', 'p28-test');
+      subscribePhone(false).then(function () {
+        if ($('remindMsg')) $('remindMsg').textContent = 'Avisos activos.';
+      }).catch(function () {
+        if ($('remindMsg')) $('remindMsg').textContent = 'Avisos activos.';
       });
     });
   }
@@ -1174,42 +1237,26 @@
     renderNotif(s);
   }
 
-  function mexicoClock() {
-    try {
-      var hmParts = new Intl.DateTimeFormat('en-GB', {
-        timeZone: 'America/Mexico_City', hour: '2-digit', minute: '2-digit', hour12: false
-      }).formatToParts(new Date());
-      var dateParts = new Intl.DateTimeFormat('en-CA', {
-        timeZone: 'America/Mexico_City', year: 'numeric', month: '2-digit', day: '2-digit'
-      }).formatToParts(new Date());
-      var h = '00', m = '00', y = '1970', mo = '01', d = '01';
-      hmParts.forEach(function (p) { if (p.type === 'hour') h = p.value; if (p.type === 'minute') m = p.value; });
-      dateParts.forEach(function (p) {
-        if (p.type === 'year') y = p.value;
-        if (p.type === 'month') mo = p.value;
-        if (p.type === 'day') d = p.value;
-      });
-      return { hm: h + ':' + m, date: y + '-' + mo + '-' + d };
-    } catch (e) {
-      var now = new Date();
-      return {
-        hm: ('0' + now.getHours()).slice(-2) + ':' + ('0' + now.getMinutes()).slice(-2),
-        date: now.toISOString().slice(0, 10)
-      };
-    }
-  }
-
   function tryNotify() {
     var s = load();
-    if (!s.remindOn || !s.access) return;
+    if (!s.remindOn || s.remindOff || !s.access) return;
     if (typeof Notification === 'undefined' || Notification.permission !== 'granted') return;
-    var clock = mexicoClock();
-    var night = s.remindAt || '21:00';
-    var slots = { '08:08': 'listen', '11:11': 'portal', '16:16': 'offer' };
-    slots[night] = slots[night] || 'night';
-    var kind = slots[clock.hm];
+    var tz = s.remindTz || localTz();
+    var seed = s.remindSeed || (s.access && s.access.code) || '';
+    var clock = clockInTz(tz);
+    var slots = slotsForDay(clock.date, seed);
+    var kinds = ['listen', 'portal', 'offer', 'night'];
+    var kind = '';
+    var slot = '';
+    for (var i = 0; i < slots.length; i++) {
+      if (clock.hm === slots[i]) {
+        kind = kinds[i];
+        slot = slots[i];
+        break;
+      }
+    }
     if (!kind) return;
-    var key = clock.date + '-' + clock.hm;
+    var key = clock.date + '-' + slot;
     if (s.lastPing === key) return;
     patch(function (st) { st.lastPing = key; });
     firePhrase(false, kind);
@@ -1300,7 +1347,7 @@
   $('btnTesti') && $('btnTesti').addEventListener('click', sendTesti);
   $('btnPurpose') && $('btnPurpose').addEventListener('click', function () {
     if (load().purpose) {
-      if ($('purposeMsg')) $('purposeMsg').textContent = 'Ya está sellado. Es el propósito de tus 28 días.';
+      if ($('purposeMsg')) $('purposeMsg').textContent = 'Sellado.';
       lockPurpose(load());
       return;
     }
@@ -1311,12 +1358,12 @@
     }
     var state = patch(function (st) { st.purpose = p; });
     syncProfile(state);
-    if ($('purposeMsg')) $('purposeMsg').textContent = 'Sellado. Una sola vez. El plan usa solo tus audios asignados.';
+    if ($('purposeMsg')) $('purposeMsg').textContent = 'Sellado.';
     lockPurpose(state);
     renderListenPlan(state);
     renderMission(state);
   });
-  $('btnRemind') && $('btnRemind').addEventListener('click', function () { activateReminders(true); });
+  $('btnRemind') && $('btnRemind').addEventListener('click', function () { activateReminders(); });
   $('btnRemindOff') && $('btnRemindOff').addEventListener('click', cancelReminders);
   $('btnInstallYo') && $('btnInstallYo').addEventListener('click', promptInstall);
   $('btnInstallHome') && $('btnInstallHome').addEventListener('click', promptInstall);

@@ -17,7 +17,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="protocolo.css?v=44">
+  <link rel="stylesheet" href="protocolo.css?v=45">
   <script>
     window.__p28Install = null;
     window.addEventListener('beforeinstallprompt', function (e) {
@@ -212,7 +212,7 @@
             <span class="avatar">28</span>
             <div>
               <b>Lista de hoy</b>
-              <small id="dayListMeta">Toca cada una una vez. No se deshace. Mañana es otra.</small>
+              <small id="dayListMeta">Toca una. Queda.</small>
             </div>
           </header>
           <div class="post-body">
@@ -224,26 +224,12 @@
       </section>
 
       <section class="view" id="viewAudios" data-view="audios">
-        <h2 class="sec-title">Audios</h2>
-        <p class="sec-sub">Tu bóveda. Se quedan en este aparato.</p>
-        <div class="card foil-card sand-card" id="purposeCard">
-          <span class="num">Propósito de tus 28 días</span>
-          <label for="purposeIn">Se escribe una sola vez</label>
-          <textarea id="purposeIn" placeholder="Ej. lo que quieres instalar en estos 28 días"></textarea>
-          <button type="button" class="btn btn-gold btn-full" id="btnPurpose" style="margin-top:.8rem">Sellar propósito</button>
-          <p class="note hidden" id="purposeLockNote">Ya está sellado. El plan de escucha usa solo los audios que te asignaron.</p>
-          <p class="note" id="purposeMsg"></p>
-        </div>
-        <div id="listenPlan"></div>
-        <div class="player foil-card" id="playerCard">
-          <div class="player-top">
-            <div class="vinyl" id="vinyl" aria-hidden="true"></div>
-            <div>
-              <span class="num" id="playerLayer">Sin audio</span>
-              <h3 id="playerTitle">Elige o mete un audio</h3>
-              <p class="note" id="playerMeta">Loop, volumen y barra.</p>
-            </div>
-          </div>
+        <div class="player foil-card player-now" id="playerCard">
+          <div class="now-art vinyl" id="vinyl" aria-hidden="true"></div>
+          <div class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+          <span class="num" id="playerLayer">Ahora</span>
+          <h3 id="playerTitle">Elige un audio</h3>
+          <p class="note" id="playerMeta"></p>
           <div class="seek-row">
             <span id="tCur">0:00</span>
             <input type="range" id="seek" min="0" max="1000" value="0" aria-label="Progreso">
@@ -260,9 +246,9 @@
             <button type="button" class="icon-btn" id="btnNext" aria-label="Siguiente">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.8 6H18v12h-2.2V6zM6 18.2V5.8L14.8 12 6 18.2z"/></svg>
             </button>
-            <button type="button" class="icon-btn on loop-all" id="btnLoop" aria-label="Loop de toda la playlist" aria-pressed="true">
+            <button type="button" class="icon-btn on loop-all" id="btnLoop" aria-label="Repetir lista" aria-pressed="true">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h9.2l-1.6-1.6L16 4l4 4-4 4-1.4-1.4L16.2 9H7a3 3 0 0 0-3 3H2a5 5 0 0 1 5-5zm10 10H7.8l1.6 1.6L8 20l-4-4 4-4 1.4 1.4L7.8 15H17a3 3 0 0 0 3-3h2a5 5 0 0 1-5 5z"/></svg>
-              <span class="loop-badge" id="loopBadge">ALL</span>
+              <span class="loop-badge" id="loopBadge">LISTA</span>
             </button>
           </div>
           <div class="vol-row">
@@ -271,25 +257,17 @@
             <span id="volPct">72%</span>
           </div>
         </div>
-
-        <div class="card foil-card add-audio" id="addAudioCard" style="margin-top:1rem">
-          <span class="num">Subir audio</span>
-          <label for="audioTitle">Nombre</label>
-          <input id="audioTitle" type="text" placeholder="Ej. Booster 2.0 · noche">
-          <label>Capa que te asignó Erior</label>
-          <div class="choices" id="layerChips">
-            <label class="chip"><input type="radio" name="layer" value="1" checked> 1</label>
-            <label class="chip"><input type="radio" name="layer" value="2"> 2</label>
-            <label class="chip"><input type="radio" name="layer" value="3"> 3</label>
-            <label class="chip"><input type="radio" name="layer" value="extra"> Extra</label>
-          </div>
+        <div id="plBar" class="pl-bar"></div>
+        <div id="plQueue"></div>
+        <div id="vaultList"></div>
+        <div class="card foil-card add-audio" id="addAudioCard">
+          <input id="audioTitle" type="text" placeholder="Nombre del audio">
           <input type="file" id="audioFile" accept="audio/*,.mp3,.m4a,.wav,.aac,.ogg,.flac" hidden>
-          <button type="button" class="btn btn-gold btn-full" id="btnPickAudio" style="margin-top:1rem">Elegir archivo</button>
-          <p class="note">MP3, M4A o WAV. Queda solo en este teléfono.</p>
+          <button type="button" class="btn btn-gold btn-full" id="btnPickAudio">Subir audio</button>
           <p class="note" id="audioAddMsg"></p>
         </div>
-        <div id="vaultList"></div>
-        <div id="upgradeAudios"></div>
+        <div id="upgradeAudios" hidden></div>
+        <div id="listenPlan" hidden></div>
       </section>
 
       <section class="view" id="viewVision" data-view="vision">
@@ -328,6 +306,14 @@
       <section class="view" id="viewCuenta" data-view="cuenta">
         <h2 class="sec-title">Yo</h2>
         <div id="myPackBox"></div>
+        <div class="card foil-card sand-card" id="purposeCard" style="margin-top:1rem">
+          <span class="num">Propósito</span>
+          <label for="purposeIn">Una vez</label>
+          <textarea id="purposeIn" placeholder="Lo que instalas en estos 28 días"></textarea>
+          <button type="button" class="btn btn-gold btn-full" id="btnPurpose" style="margin-top:.8rem">Sellar</button>
+          <p class="note hidden" id="purposeLockNote">Sellado.</p>
+          <p class="note" id="purposeMsg"></p>
+        </div>
         <div id="upgradeBox"></div>
         <div class="card foil-card install-cta" id="installCard">
           <span class="num">Instalar como app</span>
@@ -336,7 +322,7 @@
         </div>
         <div class="card foil-card" style="margin-top:1rem">
           <span class="num">Avisos</span>
-          <p class="copy" style="margin:.4rem 0 .8rem">Si los enciendes, te llegan los 4 al día aunque cierres la app. En cada celular toca una vez para permitir. Solo se apagan si tú tocas Cancelar avisos.</p>
+          <p class="copy" style="margin:.4rem 0 .8rem">4 al día. En cada celular, una vez. Se apagan solo si cancelas.</p>
           <button type="button" class="btn btn-gold btn-full" id="btnRemind">Activar avisos</button>
           <button type="button" class="btn btn-ghost btn-full hidden" id="btnRemindOff" hidden style="margin-top:.7rem">Cancelar avisos</button>
           <input id="remindAt" type="time" value="21:00" hidden>
@@ -441,16 +427,16 @@
     </div>
   </div>
 
-  <script src="access.js?v=29"></script>
+  <script src="access.js?v=30"></script>
   <script src="phrases.js?v=23"></script>
   <script src="routines.js?v=23"></script>
   <script src="plan.js?v=22"></script>
-  <script src="vault.js?v=26"></script>
+  <script src="vault.js?v=27"></script>
   <script src="vision.js?v=5"></script>
-  <script src="protocolo.js?v=39"></script>
+  <script src="protocolo.js?v=40"></script>
   <script>
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js?v=39', { scope: './' }).catch(function () {});
+      navigator.serviceWorker.register('sw.js?v=40', { scope: './' }).catch(function () {});
     }
   </script>
 </body>

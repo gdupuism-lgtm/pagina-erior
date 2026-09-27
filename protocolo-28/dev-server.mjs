@@ -237,11 +237,20 @@ const server = http.createServer(async (req, res) => {
           endpoint: sub.endpoint,
           keys: sub.keys,
           code: String(body.code || ''),
-          hour: String(body.hour || '21:00'),
+          hour: String(body.hour || ''),
+          tz: String(body.tz || ''),
+          seed: String(body.seed || body.code || ''),
+          slots: Array.isArray(body.slots) ? body.slots : [],
         });
         save(db);
       } else {
-        db.subs = db.subs.map((s) => (s.endpoint === sub.endpoint ? Object.assign({}, s, { hour: body.hour || s.hour, code: body.code || s.code }) : s));
+        db.subs = db.subs.map((s) => (s.endpoint === sub.endpoint ? Object.assign({}, s, {
+          hour: body.hour || s.hour,
+          code: body.code || s.code,
+          tz: body.tz || s.tz,
+          seed: body.seed || s.seed,
+          slots: Array.isArray(body.slots) ? body.slots : s.slots,
+        }) : s));
         save(db);
       }
       send(res, 200, { ok: true });
@@ -415,18 +424,51 @@ const server = http.createServer(async (req, res) => {
   fs.createReadStream(file).pipe(res);
 });
 
+function hashStr(s) {
+  let h = 2166136261;
+  s = String(s || '');
+  for (let i = 0; i < s.length; i += 1) {
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return h >>> 0;
+}
+function slotsForDay(dateYmd, seed) {
+  let h = hashStr(String(dateYmd) + '|' + String(seed || ''));
+  const used = {};
+  const out = [];
+  let guard = 0;
+  while (out.length < 4 && guard < 80) {
+    h = (Math.imul(h, 1664525) + 1013904223) >>> 0;
+    const hour = 8 + (h % 14);
+    if (!used[hour]) {
+      used[hour] = true;
+      h = (Math.imul(h, 1664525) + 1013904223) >>> 0;
+      const min = h % 60;
+      out.push(String(hour).padStart(2, '0') + ':' + String(min).padStart(2, '0'));
+    }
+    guard += 1;
+  }
+  out.sort();
+  return out;
+}
+
 function tickPush() {
   const now = new Date();
   const hm = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+  const date = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
   const db = load();
-  const payload = JSON.stringify({ title: 'ERIOR', body: 'Reto 28 · tu día sigue.', tag: 'p28-daily' });
+  const kinds = ['listen', 'portal', 'offer', 'night'];
   (db.subs || []).forEach(async (s) => {
-    if (s.hour !== hm && hm !== '11:11') return;
-    const today = now.toISOString().slice(0, 10) + '-' + hm + '-' + s.endpoint.slice(-12);
+    const slots = slotsForDay(date, s.seed || s.code || s.endpoint);
+    const idx = slots.indexOf(hm);
+    if (idx < 0) return;
+    const today = date + '-' + hm + '-' + String(s.endpoint || '').slice(-12);
     db.sent = db.sent || {};
     if (db.sent[today]) return;
     db.sent[today] = true;
     save(db);
+    const payload = JSON.stringify({ title: 'Erior Center', body: 'Erior Center.', tag: 'p28-' + (kinds[idx] || 'listen') });
     try {
       await webpush.sendNotification({ endpoint: s.endpoint, keys: s.keys }, payload);
     } catch (e) { /* ignore stale */ }
