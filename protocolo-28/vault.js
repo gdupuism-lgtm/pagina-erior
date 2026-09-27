@@ -262,13 +262,18 @@
       box.innerHTML = '<p class="note">Sube un audio para oírlo.</p>';
       return;
     }
-    box.innerHTML = '<div class="vault-head">Tus audios</div><div class="vault-list">' + list.map(function (t) {
+    var inPl = {};
+    if (pl) (pl.items || []).forEach(function (it) { inPl[it.id] = true; });
+    box.innerHTML = '<div class="vault-head">' + (pl ? 'Meter a ' + esc(pl.name) : 'Tus audios') + '</div><div class="vault-list">' + list.map(function (t) {
       var on = cur && cur.id === t.id;
-      return '<div class="track-row' + (on ? ' on' : '') + '" data-play="' + t.id + '">' +
+      return '<div class="track-row' + (on ? ' on' : '') + '" data-play="' + t.id + '" draggable="true" data-drag="' + t.id + '">' +
         '<div><b>' + esc(t.title) + '</b><small>' +
         (t.duration ? fmt(t.duration) : 'Audio') +
+        (inPl[t.id] ? ' · en la lista' : '') +
         '</small></div>' +
-        '<button type="button" data-add-pl="' + t.id + '">' + (pl ? '+' : 'Lista') + '</button>' +
+        (pl
+          ? '<button type="button" class="track-add" data-add-pl="' + t.id + '">' + (inPl[t.id] ? 'Ya' : 'Meter') + '</button>'
+          : '') +
         '<button type="button" data-del="' + t.id + '">Quitar</button></div>';
     }).join('') + '</div>';
   }
@@ -285,7 +290,6 @@
     pls.forEach(function (p) {
       html += '<button type="button" class="pl-chip' + (p.id === curId ? ' on' : '') + '" data-pl="' + p.id + '">' + esc(p.name) + '</button>';
     });
-    if (curId) html += '<button type="button" class="pl-chip ghost" data-pl-del="' + curId + '">Borrar</button>';
     html += '</div>';
     if (s.plNew) {
       html += '<div class="pl-new"><input id="plNameIn" type="text" placeholder="Nombre de la lista" maxlength="40">' +
@@ -301,25 +305,35 @@
       queue.innerHTML = '';
       return;
     }
-    if (!pl.items || !pl.items.length) {
-      queue.innerHTML = '<p class="note">Toca Lista en un audio. Pon las veces y oye.</p>';
-      return;
-    }
     var q = expandQueue(s);
     var qi = Number((s.player && s.player.queueIndex) || 0);
     var slot = q[qi];
-    queue.innerHTML = '<div class="pl-queue">' + pl.items.map(function (it, i) {
-      var t = trackById(s, it.id);
-      var on = slot && slot.id === it.id;
-      return '<div class="q-row' + (on ? ' on' : '') + '">' +
-        '<button type="button" class="q-play" data-pl-item="' + i + '">' + esc(t ? t.title : 'Audio') + '</button>' +
-        '<div class="q-times">' +
-          '<button type="button" data-times-minus="' + i + '">−</button>' +
-          '<b data-times-edit="' + i + '">×' + (it.times || 1) + '</b>' +
-          '<button type="button" data-times-plus="' + i + '">+</button>' +
+    var items = pl.items || [];
+    var rows = items.length
+      ? items.map(function (it, i) {
+        var t = trackById(s, it.id);
+        var on = slot && slot.id === it.id;
+        return '<div class="q-row' + (on ? ' on' : '') + '" draggable="true" data-pl-index="' + i + '">' +
+          '<button type="button" class="q-play" data-pl-item="' + i + '">' + esc(t ? t.title : 'Audio') + '</button>' +
+          '<div class="q-times">' +
+            '<button type="button" data-times-minus="' + i + '">−</button>' +
+            '<b data-times-edit="' + i + '">×' + (it.times || 1) + '</b>' +
+            '<button type="button" data-times-plus="' + i + '">+</button>' +
+          '</div>' +
+          '<button type="button" class="q-rm" data-pl-rm="' + i + '">×</button></div>';
+      }).join('')
+      : '<p class="pl-empty">Arrastra un audio aquí o toca Meter.</p>';
+    queue.innerHTML =
+      '<div class="pl-folder foil-card" id="plFolder">' +
+        '<div class="pl-folder-head">' +
+          '<div><span class="num">Lista</span><h3>' + esc(pl.name) + '</h3></div>' +
+          '<div class="pl-folder-actions">' +
+            '<button type="button" class="btn btn-gold" id="btnPlPlay"' + (items.length ? '' : ' disabled') + '>Oír</button>' +
+            '<button type="button" class="btn btn-ghost" data-pl-del="' + pl.id + '">Borrar</button>' +
+          '</div>' +
         '</div>' +
-        '<button type="button" class="q-rm" data-pl-rm="' + i + '">×</button></div>';
-    }).join('') + '</div>';
+        '<div class="pl-drop' + (items.length ? '' : ' empty') + '" id="plDrop">' + rows + '</div>' +
+      '</div>';
   }
 
   function renderUpgradeAudios() {
@@ -613,6 +627,14 @@
     });
     render(load());
   }
+  function openPlaylist(id) {
+    patch(function (st) {
+      st.player = st.player || {};
+      st.player.playlistId = id || '';
+      st.plNew = false;
+    });
+    render(load());
+  }
   function addToPlaylist(trackId, times) {
     var s = load();
     var pl = activePl(s);
@@ -625,9 +647,22 @@
       var p = playlistById(st, pl.id);
       if (!p) return;
       p.items = p.items || [];
-      var found = p.items.filter(function (it) { return it.id === trackId; })[0];
-      if (found) found.times = Math.min(99, (found.times || 1) + (times || 1));
-      else p.items.push({ id: trackId, times: times || 1 });
+      if (p.items.some(function (it) { return it.id === trackId; })) return;
+      p.items.push({ id: trackId, times: times || 1 });
+    });
+    render(load());
+  }
+  function moveItem(from, to) {
+    var pl = activePl();
+    if (!pl || !pl.items) return;
+    from = Number(from);
+    to = Number(to);
+    if (from === to || from < 0 || to < 0 || from >= pl.items.length || to >= pl.items.length) return;
+    patch(function (st) {
+      var p = playlistById(st, pl.id);
+      if (!p || !p.items) return;
+      var item = p.items.splice(from, 1)[0];
+      p.items.splice(to, 0, item);
     });
     render(load());
   }
@@ -792,6 +827,17 @@
         }
         if (playId) playTrackNow(playId);
       };
+      $('vaultList').ondragstart = function (e) {
+        var id = hit(e.target, 'data-drag');
+        if (!id) return;
+        try { e.dataTransfer.setData('text/plain', id); e.dataTransfer.effectAllowed = 'copy'; } catch (err) {}
+        $('vaultList').setAttribute('data-dragging', id);
+      };
+      $('vaultList').ondragend = function () {
+        $('vaultList').removeAttribute('data-dragging');
+        var drop = $('plDrop');
+        if (drop) drop.classList.remove('drag');
+      };
     }
     if ($('plBar')) {
       $('plBar').onclick = function (e) {
@@ -810,7 +856,7 @@
           deletePlaylist(del);
           return;
         }
-        if (pl) playPlaylist(pl);
+        if (pl) openPlaylist(pl);
       };
       $('plBar').onkeydown = function (e) {
         if (e.key === 'Enter' && e.target && e.target.id === 'plNameIn') {
@@ -821,6 +867,16 @@
     }
     if ($('plQueue')) {
       $('plQueue').onclick = function (e) {
+        if (e.target.id === 'btnPlPlay' || (e.target.closest && e.target.closest('#btnPlPlay'))) {
+          var pl0 = activePl();
+          if (pl0) playPlaylist(pl0.id);
+          return;
+        }
+        var delPl = hit(e.target, 'data-pl-del');
+        if (delPl) {
+          deletePlaylist(delPl);
+          return;
+        }
         var item = hit(e.target, 'data-pl-item');
         var minus = hit(e.target, 'data-times-minus');
         var plus = hit(e.target, 'data-times-plus');
@@ -852,6 +908,42 @@
           return;
         }
         if (rm != null) removeFromPlaylist(Number(rm));
+      };
+      $('plQueue').ondragover = function (e) {
+        e.preventDefault();
+        var drop = $('plDrop');
+        if (drop) drop.classList.add('drag');
+      };
+      $('plQueue').ondragleave = function (e) {
+        if (e.target.id === 'plDrop' || e.target.id === 'plFolder' || e.target.id === 'plQueue') {
+          var drop = $('plDrop');
+          if (drop) drop.classList.remove('drag');
+        }
+      };
+      $('plQueue').ondrop = function (e) {
+        e.preventDefault();
+        var drop = $('plDrop');
+        if (drop) drop.classList.remove('drag');
+        var from = $('vaultList') && $('vaultList').getAttribute('data-dragging');
+        var text = '';
+        try { text = e.dataTransfer && e.dataTransfer.getData('text/plain'); } catch (err) {}
+        var id = from || text;
+        var to = hit(e.target, 'data-pl-index');
+        var src = $('plQueue').getAttribute('data-drag-index');
+        if (src != null && src !== '' && to != null) {
+          moveItem(src, to);
+          $('plQueue').removeAttribute('data-drag-index');
+          return;
+        }
+        if (id && trackById(load(), id)) addToPlaylist(id, 1);
+        if ($('vaultList')) $('vaultList').removeAttribute('data-dragging');
+        $('plQueue').removeAttribute('data-drag-index');
+      };
+      $('plQueue').ondragstart = function (e) {
+        var idx = hit(e.target, 'data-pl-index');
+        if (idx == null) return;
+        $('plQueue').setAttribute('data-drag-index', idx);
+        try { e.dataTransfer.setData('text/plain', idx); e.dataTransfer.effectAllowed = 'move'; } catch (err) {}
       };
     }
     var drop = $('addAudioCard');

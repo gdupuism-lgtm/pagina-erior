@@ -699,7 +699,20 @@ body.is-playing .eq i{opacity:1;animation:eqbeat .7s ease-in-out infinite altern
 .pl-chip.on{border-color:rgba(62,255,197,.5);background:rgba(62,255,197,.14)}
 .pl-chip.add,.pl-chip.ghost{color:var(--gold)}
 .pl-new{display:grid;grid-template-columns:1fr auto;gap:.5rem;margin-top:.55rem}
-.pl-queue{display:grid;gap:.5rem;margin:.35rem 0 1rem}
+.pl-queue{margin:.35rem 0 1rem}
+.pl-folder{padding:1.05rem 1.05rem 1.15rem}
+.pl-folder-head{display:grid;grid-template-columns:1fr auto;gap:.7rem;align-items:center;margin-bottom:.75rem}
+.pl-folder-head h3{font-size:1.25rem;margin:.1rem 0 0}
+.pl-folder-actions{display:flex;gap:.45rem;align-items:center}
+.pl-folder-actions .btn{padding:.5rem .85rem;width:auto;margin:0}
+.pl-drop{
+  min-height:92px;border:1px dashed rgba(255,255,255,.2);border-radius:16px;
+  padding:.5rem;display:grid;gap:.45rem;
+}
+.pl-drop.empty{place-items:center;padding:1.35rem .9rem}
+.pl-drop.drag{border-color:rgba(62,255,197,.7);background:rgba(62,255,197,.1)}
+.pl-empty{margin:0;color:var(--dim);font-size:.84rem;text-align:center;line-height:1.4}
+.track-add{color:var(--gold)!important;font-weight:700}
 .q-row{
   display:grid;grid-template-columns:1fr auto auto;gap:.4rem;align-items:center;
   padding:.72rem .8rem;border-radius:16px;border:1px solid var(--line);
@@ -709,10 +722,10 @@ body.is-playing .eq i{opacity:1;animation:eqbeat .7s ease-in-out infinite altern
 .q-play{border:0;background:transparent;color:var(--ink);text-align:left;cursor:pointer;font-weight:500;font-size:.92rem}
 .q-times{display:flex;align-items:center;gap:.2rem}
 .q-times button{
-  width:28px;height:28px;border:0;border-radius:50%;cursor:pointer;
-  background:rgba(255,255,255,.06);color:var(--gold);font-size:.95rem;
+  width:34px;height:34px;border:0;border-radius:50%;cursor:pointer;
+  background:rgba(255,255,255,.08);color:var(--gold);font-size:1.1rem;
 }
-.q-times b{min-width:2.1rem;text-align:center;font-size:.78rem;color:var(--gold);cursor:pointer}
+.q-times b{min-width:2.4rem;text-align:center;font-size:.88rem;color:var(--gold);cursor:pointer}
 .q-rm{border:0;background:transparent;color:var(--dim);cursor:pointer;font-size:1.15rem;line-height:1}
 .vault-head{font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);margin:1.15rem 0 .45rem}
 #viewAudios .add-audio{margin-top:.4rem}
