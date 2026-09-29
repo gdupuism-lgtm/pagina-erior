@@ -17,7 +17,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="protocolo.css?v=48">
+  <link rel="stylesheet" href="protocolo.css?v=49">
   <script>
     window.__p28Install = null;
     window.addEventListener('beforeinstallprompt', function (e) {
@@ -256,10 +256,29 @@
             <input type="range" id="vol" min="0" max="100" value="72" aria-label="Volumen">
             <span id="volPct">72%</span>
           </div>
+          <details class="eq-box">
+            <summary>Ecualizador · voz y fondo</summary>
+            <div class="eq-presets" id="eqPresets">
+              <button type="button" class="pl-chip" data-eq="normal">Normal</button>
+              <button type="button" class="pl-chip" data-eq="voz">Más voz</button>
+              <button type="button" class="pl-chip" data-eq="fondo">Más frecuencia</button>
+            </div>
+            <div class="vol-row">
+              <span>Voz</span>
+              <input type="range" id="eqVoice" min="0" max="100" value="50" aria-label="Voz">
+              <span id="eqVoicePct">Normal</span>
+            </div>
+            <div class="vol-row">
+              <span>Fondo</span>
+              <input type="range" id="eqBg" min="0" max="100" value="50" aria-label="Frecuencia de fondo">
+              <span id="eqBgPct">Normal</span>
+            </div>
+            <p class="note eq-note" id="eqNote" hidden></p>
+          </details>
         </div>
+        <div id="vaultList"></div>
         <div id="plBar" class="pl-bar"></div>
         <div id="plQueue"></div>
-        <div id="vaultList"></div>
         <div class="card foil-card add-audio" id="addAudioCard">
           <input id="audioTitle" type="text" placeholder="Nombre del audio">
           <input type="file" id="audioFile" accept="audio/*,.mp3,.m4a,.wav,.aac,.ogg,.flac" hidden>
@@ -322,7 +341,7 @@
 
     <div id="miniPlayer" class="mini-player hidden" aria-live="polite">
       <button type="button" class="mini-go" id="miniGo">
-        <span class="mini-dot" aria-hidden="true"></span>
+        <span class="mini-dot" id="miniDot" aria-hidden="true"></span>
         <span id="miniTitle">Audio</span>
       </button>
       <button type="button" class="icon-btn mini-play" id="miniPlay" aria-label="Reproducir">
@@ -412,12 +431,12 @@
   <script src="phrases.js?v=24"></script>
   <script src="routines.js?v=24"></script>
   <script src="plan.js?v=22"></script>
-  <script src="vault.js?v=29"></script>
+  <script src="vault.js?v=30"></script>
   <script src="vision.js?v=6"></script>
   <script src="protocolo.js?v=43"></script>
   <script>
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js?v=44', { scope: './' }).catch(function () {});
+      navigator.serviceWorker.register('sw.js?v=45', { scope: './' }).catch(function () {});
     }
   </script>
 </body>

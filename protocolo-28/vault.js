@@ -32,6 +32,75 @@
       return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c];
     });
   }
+  var COVER_DIR = '../img/catalog/';
+  var COVERS = [
+    [/booster/, 'booster-2-0.jpg'],
+    [/limitless/, 'limitless.jpg'],
+    [/hombre|\bmen\b/, 'amor-propio-magic-hombre-2-0.jpg'],
+    [/imagine/, 'imagine.jpg'],
+    [/seduction/, 'seduction.jpg'],
+    [/attraction|atraccion/, 'attraction.jpg'],
+    [/erior love/, 'erior-love.jpg'],
+    [/mesmerizing/, 'mesmerizing-love.jpg'],
+    [/audio erior|erior 3/, 'audio-erior-3-0.jpg'],
+    [/magic 3/, 'amor-propio-magic-3-0.jpg'],
+    [/magic 2/, 'amor-magic-2-0.jpg'],
+    [/magic|amor propio/, 'amor-propio-magic-4-0.jpg'],
+    [/mind movie/, 'mind-movie.jpg'],
+    [/master ?mind/, 'master-mind.jpg'],
+    [/identity|identidad/, 'identity.jpg'],
+    [/abundance|abundancia/, 'master-abundance.jpg'],
+    [/money|dinero/, 'money-tech.jpg'],
+    [/lucky|suerte/, 'lucky.jpg'],
+    [/vitamind|vitamin/, 'vitamind.jpg'],
+    [/fit ?wave/, 'fit-wave.jpg'],
+    [/keep ?cool/, 'keep-cool.jpg'],
+    [/eclat/, 'eclat.jpg'],
+    [/11 ?11/, '11-11.jpg'],
+    [/audio you/, 'audio-you.jpg'],
+    [/curious/, 'curious-curiouser.jpg'],
+    [/emergency|999/, 'emergency-999.jpg'],
+    [/kids/, 'erior-kids.jpg'],
+    [/\bgod\b|goddess|diosa/, 'god-goddess.jpg'],
+    [/aura/, 'icon-aura.jpg'],
+    [/glow/, 'mental-glow-up.jpg'],
+    [/satori/, 'satori.jpg'],
+    [/\bselect\b/, 'select.jpg'],
+    [/simulation/, 'simulation-u.jpg'],
+    [/telegram|liberar emociones/, 'telegram-liberar-emociones.jpg'],
+    [/rabbit/, 'white-rabbit-code.jpg'],
+    [/wonderland|coherence/, 'wonderland-coherence.jpg']
+  ];
+  function coverFor(title) {
+    var t = String(title || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]+/g, ' ').trim();
+    if (!t) return '';
+    for (var i = 0; i < COVERS.length; i++) {
+      if (COVERS[i][0].test(t)) return COVER_DIR + COVERS[i][1];
+    }
+    return '';
+  }
+  function posterHtml(t, opts) {
+    opts = opts || {};
+    var cv = coverFor(t.title);
+    var attrs = opts.attrs || '';
+    return '<div class="poster' + (opts.sm ? ' sm' : '') + (opts.on ? ' on' : '') + (cv ? '' : ' no-img') + '"' + attrs + '>' +
+      (cv
+        ? '<img src="' + cv + '" alt="" loading="lazy" decoding="async" draggable="false">'
+        : '<span class="poster-mark">' + esc(t.title) + '</span>') +
+      (opts.top || '') +
+      '<div class="poster-foot">' +
+        '<div class="poster-txt"><b>' + esc(t.title) + '</b>' +
+          (opts.chip ? '<span class="poster-chip">' + esc(opts.chip) + '</span>' : '') +
+        '</div>' +
+        '<span class="poster-play" aria-hidden="true">' +
+          '<svg class="ic-play" viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5-11-6.5z"/></svg>' +
+          '<svg class="ic-pause" viewBox="0 0 24 24"><path d="M7 5h3.4v14H7V5zm6.6 0H17v14h-3.4V5z"/></svg>' +
+        '</span>' +
+      '</div>' +
+    '</div>';
+  }
+
   function playlists(s) { return (s && s.playlists) || []; }
   function playlistById(s, id) {
     return playlists(s).filter(function (p) { return p.id === id; })[0] || null;
@@ -260,22 +329,74 @@
     var pl = activePl(s);
     if (!list.length) {
       box.innerHTML = '<p class="note">Sube un audio para oírlo.</p>';
+      box.removeAttribute('data-sig');
       return;
     }
     var inPl = {};
     if (pl) (pl.items || []).forEach(function (it) { inPl[it.id] = true; });
-    box.innerHTML = '<div class="vault-head">' + (pl ? 'Meter a ' + esc(pl.name) : 'Tus audios') + '</div><div class="vault-list">' + list.map(function (t) {
-      var on = cur && cur.id === t.id;
-      return '<div class="track-row' + (on ? ' on' : '') + '" data-play="' + t.id + '" draggable="true" data-drag="' + t.id + '">' +
-        '<div><b>' + esc(t.title) + '</b><small>' +
-        (t.duration ? fmt(t.duration) : 'Audio') +
-        (inPl[t.id] ? ' · en la lista' : '') +
-        '</small></div>' +
-        (pl
-          ? '<button type="button" class="track-add" data-add-pl="' + t.id + '">' + (inPl[t.id] ? 'Ya' : 'Meter') + '</button>'
-          : '') +
-        '<button type="button" data-del="' + t.id + '">Quitar</button></div>';
-    }).join('') + '</div>';
+    var html = '<div class="rail-head"><h3>' + (pl ? 'Meter a ' + esc(pl.name) : 'Tus audios') + '</h3><span>' + list.length + '</span></div>' +
+      '<div class="rail rail-hero" data-rail="main">' + list.map(function (t) {
+        var on = cur && cur.id === t.id;
+        var top = '<button type="button" class="poster-x" data-del="' + t.id + '" aria-label="Quitar">×</button>' +
+          (pl ? '<button type="button" class="poster-add' + (inPl[t.id] ? ' in' : '') + '" data-add-pl="' + t.id + '">' + (inPl[t.id] ? 'Ya' : 'Meter') + '</button>' : '');
+        return posterHtml(t, {
+          on: on,
+          top: top,
+          chip: t.duration ? fmt(t.duration) : 'Audio',
+          attrs: ' data-play="' + t.id + '" draggable="true" data-drag="' + t.id + '"'
+        });
+      }).join('') + '</div>';
+    playlists(s).forEach(function (p) {
+      var items = (p.items || []).filter(function (it) { return trackById(s, it.id); });
+      if (!items.length) return;
+      html += '<div class="rail-head"><h3>' + esc(p.name) + '</h3>' +
+        '<button type="button" class="rail-open" data-pl-open="' + p.id + '">Editar</button></div>' +
+        '<div class="rail rail-row" data-rail="' + p.id + '">' + items.map(function (it) {
+          var t = trackById(s, it.id);
+          var idx = (p.items || []).indexOf(it);
+          var on = pl && pl.id === p.id && cur && cur.id === t.id;
+          return posterHtml(t, {
+            sm: true,
+            on: on,
+            chip: (it.times || 1) > 1 ? '×' + it.times : '',
+            attrs: ' data-pl-start="' + p.id + ':' + idx + '"'
+          });
+        }).join('') + '</div>';
+    });
+    if (box.getAttribute('data-sig') === html) return;
+    var keep = {};
+    Array.prototype.forEach.call(box.querySelectorAll('.rail-row'), function (r) {
+      keep[r.getAttribute('data-rail')] = r.scrollLeft;
+    });
+    box.innerHTML = html;
+    box.setAttribute('data-sig', html);
+    Array.prototype.forEach.call(box.querySelectorAll('.rail-row'), function (r) {
+      var k = r.getAttribute('data-rail');
+      if (keep[k]) r.scrollLeft = keep[k];
+    });
+    var hero = box.querySelector('.rail-hero');
+    if (hero) {
+      hero.onscroll = function () { heroDepth(hero); };
+      var on = hero.querySelector('.poster.on') || hero.querySelector('.poster');
+      requestAnimationFrame(function () {
+        if (on) hero.scrollLeft = on.offsetLeft - (hero.clientWidth - on.clientWidth) / 2;
+        heroDepth(hero);
+      });
+    }
+  }
+  var depthRaf = 0;
+  function heroDepth(hero) {
+    if (depthRaf) return;
+    depthRaf = requestAnimationFrame(function () {
+      depthRaf = 0;
+      var mid = hero.scrollLeft + hero.clientWidth / 2;
+      Array.prototype.forEach.call(hero.querySelectorAll('.poster'), function (p) {
+        var c = p.offsetLeft + p.clientWidth / 2;
+        var d = Math.min(1, Math.abs(c - mid) / (p.clientWidth || 1));
+        p.style.transform = 'scale(' + (1 - d * 0.12).toFixed(3) + ')';
+        p.style.opacity = (1 - d * 0.35).toFixed(3);
+      });
+    });
   }
 
   function renderPlaylists(s) {
@@ -313,7 +434,9 @@
       ? items.map(function (it, i) {
         var t = trackById(s, it.id);
         var on = slot && slot.id === it.id;
+        var cv = t ? coverFor(t.title) : '';
         return '<div class="q-row' + (on ? ' on' : '') + '" draggable="true" data-pl-index="' + i + '">' +
+          (cv ? '<img class="q-thumb" src="' + cv + '" alt="" loading="lazy" draggable="false">' : '<span class="q-thumb"></span>') +
           '<button type="button" class="q-play" data-pl-item="' + i + '">' + esc(t ? t.title : 'Audio') + '</button>' +
           '<div class="q-times">' +
             '<button type="button" data-times-minus="' + i + '">−</button>' +
@@ -369,7 +492,16 @@
     var slot = q[qi];
     applyLoopToEl(mode);
     document.body.classList.toggle('is-playing', playing);
-    if ($('vinyl')) $('vinyl').classList.toggle('spin', playing);
+    var cv = t ? coverFor(t.title) : '';
+    if ($('vinyl')) {
+      $('vinyl').classList.toggle('has-cover', !!cv);
+      $('vinyl').style.backgroundImage = cv ? 'url("' + cv + '")' : '';
+      $('vinyl').classList.toggle('spin', playing && !cv);
+    }
+    if ($('miniDot')) {
+      $('miniDot').classList.toggle('has-cover', !!cv);
+      $('miniDot').style.backgroundImage = cv ? 'url("' + cv + '")' : '';
+    }
     if ($('playerTitle')) $('playerTitle').textContent = t ? t.title : 'Elige un audio';
     if ($('playerLayer')) $('playerLayer').textContent = pl ? pl.name : (t ? 'Ahora' : 'Audios');
     if ($('playerMeta')) {
@@ -468,11 +600,10 @@
   function bindMedia(t) {
     if (!('mediaSession' in navigator) || !t) return;
     try {
-      navigator.mediaSession.metadata = new MediaMetadata({
-        title: t.title,
-        artist: 'Erior Center',
-        album: 'Erior Center'
-      });
+      var cv = coverFor(t.title);
+      var meta = { title: t.title, artist: 'Erior Center', album: 'Erior Center' };
+      if (cv) meta.artwork = [{ src: new URL(cv, location.href).href, sizes: '512x512', type: 'image/jpeg' }];
+      navigator.mediaSession.metadata = new MediaMetadata(meta);
       navigator.mediaSession.setActionHandler('play', play);
       navigator.mediaSession.setActionHandler('pause', pause);
       navigator.mediaSession.setActionHandler('previoustrack', prev);
@@ -501,7 +632,10 @@
       else el.currentTime = 0;
       bindMedia(t);
       paintPlayer(s);
-      if (autoplay) return el.play().catch(function () {});
+      if (autoplay) {
+        applyEq(eqOf(s));
+        return el.play().catch(function () {});
+      }
     });
   }
 
@@ -526,6 +660,20 @@
     });
     return playQueueIndex(0, true);
   }
+  function playPlaylistFrom(plId, itemIndex) {
+    var s = patch(function (st) {
+      st.player = st.player || {};
+      st.player.playlistId = plId || '';
+      if (!st.player.loopMode) st.player.loopMode = 'all';
+    });
+    var pl = playlistById(s, plId);
+    if (!pl || !pl.items || !pl.items[itemIndex]) return playQueueIndex(0, true);
+    var want = pl.items[itemIndex].id;
+    var q = expandQueue(s);
+    var idx = 0;
+    for (var i = 0; i < q.length; i++) if (q[i].id === want) { idx = i; break; }
+    return playQueueIndex(idx, true);
+  }
   function playTrackNow(id) {
     patch(function (st) {
       st.player = st.player || {};
@@ -548,6 +696,7 @@
       loadTrack(t.id, true);
       return;
     }
+    applyEq(eqOf(s));
     el.play().catch(function () {});
   }
   function pause() { el.pause(); persistPos(); paintPlayer(); }
@@ -576,6 +725,102 @@
     fillRange($('vol'), v * 100);
     if ($('volPct')) $('volPct').textContent = Math.round(v * 100) + '%';
   }
+  var ac = null;
+  var eqNodes = null;
+  var EQ_PRESETS = { normal: { v: 50, b: 50 }, voz: { v: 82, b: 32 }, fondo: { v: 18, b: 72 } };
+  function eqOf(s) {
+    var e = (s && s.player && s.player.eq) || {};
+    return { v: e.v == null ? 50 : Number(e.v), b: e.b == null ? 50 : Number(e.b) };
+  }
+  function eqNeutral(e) { return e.v === 50 && e.b === 50; }
+  function eqDb(pct, up, down) {
+    return pct >= 50 ? ((pct - 50) / 50) * up : -((50 - pct) / 50) * down;
+  }
+  function ensureGraph() {
+    if (eqNodes) return true;
+    var AC = w.AudioContext || w.webkitAudioContext;
+    if (!AC) return false;
+    try {
+      ac = new AC();
+      var src = ac.createMediaElementSource(el);
+      var low = ac.createBiquadFilter();
+      low.type = 'lowshelf';
+      low.frequency.value = 300;
+      var body = ac.createBiquadFilter();
+      body.type = 'peaking';
+      body.frequency.value = 950;
+      body.Q.value = 0.8;
+      var pres = ac.createBiquadFilter();
+      pres.type = 'peaking';
+      pres.frequency.value = 2700;
+      pres.Q.value = 1;
+      var air = ac.createBiquadFilter();
+      air.type = 'highshelf';
+      air.frequency.value = 6500;
+      var out = ac.createGain();
+      src.connect(low);
+      low.connect(body);
+      body.connect(pres);
+      pres.connect(air);
+      air.connect(out);
+      out.connect(ac.destination);
+      eqNodes = { low: low, body: body, pres: pres, air: air, out: out };
+      return true;
+    } catch (e) {
+      eqNodes = null;
+      return false;
+    }
+  }
+  function wakeAudio() {
+    if (ac && ac.state === 'suspended') ac.resume().catch(function () {});
+  }
+  function applyEq(e) {
+    e = e || eqOf(load());
+    if (eqNeutral(e) && !eqNodes) return;
+    if (!ensureGraph()) return;
+    var gv = eqDb(e.v, 9, 26);
+    var gb = eqDb(e.b, 12, 20);
+    var now = ac.currentTime;
+    eqNodes.body.gain.setTargetAtTime(gv, now, 0.04);
+    eqNodes.pres.gain.setTargetAtTime(gv, now, 0.04);
+    eqNodes.low.gain.setTargetAtTime(gb, now, 0.04);
+    eqNodes.air.gain.setTargetAtTime(gb * 0.7, now, 0.04);
+    var boost = Math.max(0, gv, gb);
+    eqNodes.out.gain.setTargetAtTime(Math.pow(10, (-boost * 0.6) / 20), now, 0.04);
+    wakeAudio();
+  }
+  function eqLabel(pct) {
+    var n = Math.round((pct - 50) * 2);
+    if (!n) return 'Normal';
+    return (n > 0 ? '+' : '−') + Math.abs(n);
+  }
+  function paintEq(s) {
+    var e = eqOf(s || load());
+    if ($('eqVoice')) { $('eqVoice').value = e.v; fillRange($('eqVoice'), e.v); }
+    if ($('eqBg')) { $('eqBg').value = e.b; fillRange($('eqBg'), e.b); }
+    if ($('eqVoicePct')) $('eqVoicePct').textContent = eqLabel(e.v);
+    if ($('eqBgPct')) $('eqBgPct').textContent = eqLabel(e.b);
+    var box = $('eqPresets');
+    if (box) {
+      Array.prototype.forEach.call(box.querySelectorAll('[data-eq]'), function (b) {
+        var p = EQ_PRESETS[b.getAttribute('data-eq')];
+        b.classList.toggle('on', !!p && p.v === e.v && p.b === e.b);
+      });
+    }
+  }
+  function setEq(next) {
+    var s = patch(function (st) {
+      st.player = st.player || {};
+      var cur = eqOf(st);
+      st.player.eq = {
+        v: Math.max(0, Math.min(100, Math.round(next.v != null ? next.v : cur.v))),
+        b: Math.max(0, Math.min(100, Math.round(next.b != null ? next.b : cur.b)))
+      };
+    });
+    applyEq(eqOf(s));
+    paintEq(s);
+  }
+
   function cycleLoop() {
     var cur = loopMode();
     var nextMode = cur === 'all' ? 'one' : cur === 'one' ? 'off' : 'all';
@@ -756,6 +1001,7 @@
     renderNudge(s, 'upgradeHoy');
     renderUpgradeAudios(s);
     paintPlayer(s);
+    paintEq(s);
     if (s.player && s.player.vol != null) el.volume = s.player.vol;
     applyLoopToEl(loopMode(s));
   }
@@ -787,6 +1033,18 @@
     };
     if ($('vol')) {
       $('vol').oninput = function () { setVol(this.value); };
+    }
+    if ($('eqVoice')) $('eqVoice').oninput = function () { setEq({ v: Number(this.value) }); };
+    if ($('eqBg')) $('eqBg').oninput = function () { setEq({ b: Number(this.value) }); };
+    if ($('eqPresets')) {
+      $('eqPresets').onclick = function (e) {
+        var k = hit(e.target, 'data-eq');
+        if (k && EQ_PRESETS[k]) setEq(EQ_PRESETS[k]);
+      };
+    }
+    if ($('eqNote') && /iPad|iPhone|iPod/.test(navigator.userAgent || '')) {
+      $('eqNote').textContent = 'En iPhone, si lo mueves, el audio puede pausarse al bloquear la pantalla. Para la noche déjalo en Normal.';
+      $('eqNote').hidden = false;
     }
     if ($('seek')) {
       $('seek').onmousedown = $('seek').ontouchstart = function () { seeking = true; };
@@ -825,7 +1083,33 @@
           addToPlaylist(addId, 1);
           return;
         }
-        if (playId) playTrackNow(playId);
+        var openId = hit(e.target, 'data-pl-open');
+        if (openId) {
+          openPlaylist(openId);
+          if ($('plQueue') && $('plQueue').scrollIntoView) $('plQueue').scrollIntoView({ behavior: 'smooth', block: 'start' });
+          return;
+        }
+        var s0 = load();
+        var cur0 = current(s0);
+        var start = hit(e.target, 'data-pl-start');
+        if (start) {
+          var parts = start.split(':');
+          var pl0 = playlistById(s0, parts[0]);
+          var it0 = pl0 && pl0.items && pl0.items[Number(parts[1])];
+          if (el.src && activePl(s0) && activePl(s0).id === parts[0] && it0 && cur0 && cur0.id === it0.id) {
+            toggle();
+            return;
+          }
+          playPlaylistFrom(parts[0], Number(parts[1]));
+          return;
+        }
+        if (playId) {
+          if (el.src && !activePl(s0) && cur0 && cur0.id === playId) {
+            toggle();
+            return;
+          }
+          playTrackNow(playId);
+        }
       };
       $('vaultList').ondragstart = function (e) {
         var id = hit(e.target, 'data-drag');
@@ -969,6 +1253,7 @@
       tickUI();
     });
     el.addEventListener('play', function () {
+      wakeAudio();
       startListenClock();
       paintPlayer();
     });
