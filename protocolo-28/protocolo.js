@@ -1237,10 +1237,10 @@
           return;
         }
         showNativeNotif('Erior Center', 'Avisos encendidos.', 'p28-test');
-        if ($('remindMsg')) $('remindMsg').textContent = 'Avisos activos. Te llegan aunque cierres la app.';
+        if ($('remindMsg')) $('remindMsg').textContent = 'Con la app cerrada todavía no llegan' + (res && res.error ? ' (' + res.error + ')' : '') + '. Toca de nuevo en un rato.';
       }).catch(function (err) {
         showNativeNotif('Erior Center', 'Avisos encendidos.', 'p28-test');
-        if ($('remindMsg')) $('remindMsg').textContent = (err && err.message) || 'Avisos activos en este celular.';
+        if ($('remindMsg')) $('remindMsg').textContent = 'Con la app cerrada todavía no llegan: ' + ((err && err.message) || 'error') + '. Toca de nuevo en un rato.';
       });
     });
   }

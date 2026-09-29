@@ -1,0 +1,18 @@
+name: p28 avisos
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+jobs:
+  tick:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Despertar avisos
+        run: |
+          curl -sS -m 25 -X POST https://eriorcenterguiaaudios.netlify.app/.netlify/functions/p28-api \
+            -H 'Content-Type: application/json' \
+            -H 'x-tick-key: p28-tick-8e2f41' \
+            -d '{"action":"tick","source":"github"}'

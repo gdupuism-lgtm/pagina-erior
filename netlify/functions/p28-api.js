@@ -364,6 +364,155 @@ async function sendOnePush(sub, title, body, tag) {
   );
 }
 
+const P28_TICK_KEY = 'p28-tick-8e2f41';
+
+const DAILY_MESSAGES = {
+  listen: { title: 'Erior Center', body: '¿Ya escuchaste tu audio hoy?' },
+  portal: { title: 'Erior Center', body: 'Estás en el reto. No en el piloto automático.' },
+  offer: { title: 'Erior Center', body: 'Tu audio está ahí. Ponlo ahora.' },
+  night: { title: 'Erior Center', body: 'Audio en loop, bajito. Déjalo trabajar.' },
+};
+
+function hashStr(s) {
+  let h = 2166136261;
+  s = String(s || '');
+  for (let i = 0; i < s.length; i += 1) {
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return h >>> 0;
+}
+
+/* Igual que daySlots() en protocolo.js */
+function slotsForDay(dateYmd, seed) {
+  let h = hashStr(String(dateYmd) + '|' + String(seed || ''));
+  const used = {};
+  const out = [];
+  let guard = 0;
+  while (out.length < 4 && guard < 80) {
+    h = (Math.imul(h, 1664525) + 1013904223) >>> 0;
+    const hour = 8 + (h % 14);
+    if (!used[hour]) {
+      used[hour] = true;
+      h = (Math.imul(h, 1664525) + 1013904223) >>> 0;
+      const min = h % 60;
+      out.push(String(hour).padStart(2, '0') + ':' + String(min).padStart(2, '0'));
+    }
+    guard += 1;
+  }
+  out.sort();
+  return out;
+}
+
+function clockInTz(tz) {
+  try {
+    const fmt = new Intl.DateTimeFormat('en-GB', {
+      timeZone: tz || 'UTC',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+    });
+    const p = {};
+    fmt.formatToParts(new Date()).forEach((x) => { p[x.type] = x.value; });
+    let h = Number(p.hour);
+    if (h === 24) h = 0;
+    return { date: p.year + '-' + p.month + '-' + p.day, h: h, m: Number(p.minute) };
+  } catch (e) {
+    const d = new Date();
+    return { date: d.toISOString().slice(0, 10), h: d.getUTCHours(), m: d.getUTCMinutes() };
+  }
+}
+
+function hmMinutes(hm) {
+  const p = String(hm || '12:00').split(':');
+  let h = Number(p[0]);
+  if (h === 24) h = 0;
+  if (!Number.isFinite(h)) h = 12;
+  return h * 60 + (Number(p[1]) || 0);
+}
+
+function daySlotsFor(sub, date) {
+  const slots = slotsForDay(date, sub.seed || sub.code || sub.endpoint);
+  if (sub.bonusSlot && sub.bonusDate === date) slots.push(sub.bonusSlot);
+  return slots;
+}
+
+function pingKey(date, slot, endpoint) {
+  return date + '-' + slot + '-' + String(endpoint || '').slice(-18);
+}
+
+async function loadAllSubs() {
+  const map = new Map();
+  (await blobGet('subs', [])).forEach((row) => {
+    if (row && row.endpoint && row.on !== false) map.set(row.endpoint, row);
+  });
+  try {
+    const store = await blobStore();
+    if (store && typeof store.list === 'function') {
+      const page = await store.list({ prefix: 'sub-' });
+      const blobs = (page && page.blobs) || [];
+      for (let i = 0; i < blobs.length; i += 1) {
+        const one = await blobGet(blobs[i].key, null);
+        if (!one || !one.endpoint) continue;
+        if (one.on === false) map.delete(one.endpoint);
+        else map.set(one.endpoint, one);
+      }
+    }
+  } catch (e) {
+    lastBlobError = e.message || String(e);
+  }
+  return Array.from(map.values());
+}
+
+async function runTick(source) {
+  const subs = await loadAllSubs();
+  const pings = await blobGet('pings', {});
+  const oldest = new Date(Date.now() - 3 * 86400000).toISOString().slice(0, 10);
+  Object.keys(pings).forEach((k) => { if (k.slice(0, 10) < oldest) delete pings[k]; });
+
+  const kinds = ['listen', 'portal', 'offer', 'night'];
+  const errors = [];
+  const dead = [];
+  let sent = 0;
+  let due = 0;
+  for (let i = 0; i < subs.length; i += 1) {
+    const sub = subs[i];
+    const now = clockInTz(sub.tz || 'America/Mexico_City');
+    const nowMin = now.h * 60 + now.m;
+    const slots = daySlotsFor(sub, now.date);
+    let n = -1;
+    for (let j = 0; j < slots.length; j += 1) {
+      const diff = nowMin - hmMinutes(slots[j]);
+      if (diff >= -2 && diff <= 20 && !pings[pingKey(now.date, slots[j], sub.endpoint)]) { n = j; break; }
+    }
+    if (n < 0) continue;
+    due += 1;
+    const msg = DAILY_MESSAGES[kinds[n]] || DAILY_MESSAGES.listen;
+    try {
+      await sendOnePush(sub, msg.title, msg.body, 'p28-' + (kinds[n] || 'listen'));
+      pings[pingKey(now.date, slots[n], sub.endpoint)] = new Date().toISOString();
+      sent += 1;
+    } catch (e) {
+      errors.push(String(e.statusCode || '') + ' ' + String(e.body || e.message || 'send').slice(0, 120));
+      if (e.statusCode === 404 || e.statusCode === 410) {
+        dead.push(sub.endpoint);
+        await blobSet(subBlobKey(sub.endpoint), Object.assign({}, sub, { on: false }));
+      }
+    }
+  }
+  if (dead.length) {
+    const list = (await blobGet('subs', [])).filter((s) => dead.indexOf(s.endpoint) < 0);
+    await blobSet('subs', list);
+  }
+  await blobSet('pings', pings);
+  const out = { at: new Date().toISOString(), source: source || '', total: subs.length, due, sent, errors, blobError: lastBlobError };
+  await blobSet('tick-last', out);
+  return out;
+}
+
 exports.handler = async (event, context) => {
   attachBlobs(event, context);
   const origin = event.headers.origin || event.headers.Origin || '';
@@ -406,6 +555,7 @@ exports.handler = async (event, context) => {
         slotsDate: String(body.slotsDate || ''),
         bonusSlot: String(body.bonusSlot || ''),
         bonusDate: String(body.bonusDate || ''),
+        at: new Date().toISOString(),
         on: true,
       };
       const subs = await blobGet('subs', []);
@@ -438,6 +588,15 @@ exports.handler = async (event, context) => {
       } catch (e) {
         return { statusCode: 200, headers, body: JSON.stringify({ ok: false, error: e.message || 'No se pudo enviar el aviso' }) };
       }
+    }
+
+    if (action === 'tick') {
+      const got = event.headers['x-tick-key'] || event.headers['X-Tick-Key'] || qs.k || '';
+      if (got !== P28_TICK_KEY && !p28AdminOk(event)) {
+        return { statusCode: 401, headers, body: JSON.stringify({ ok: false, error: 'No autorizado' }) };
+      }
+      const out = await runTick(String(body.source || qs.source || 'http'));
+      return { statusCode: 200, headers, body: JSON.stringify(Object.assign({ ok: true }, out)) };
     }
 
     if (action === 'wall' && event.httpMethod === 'GET') {
@@ -647,6 +806,26 @@ exports.handler = async (event, context) => {
       return { statusCode: 200, headers, body: JSON.stringify({ ok: true, row }) };
     }
 
+    if (action === 'push-status') {
+      const subs = await loadAllSubs();
+      const pings = await blobGet('pings', {});
+      const list = subs.map((s) => {
+        const now = clockInTz(s.tz || 'America/Mexico_City');
+        const slots = daySlotsFor(s, now.date);
+        return {
+          code: s.code || '',
+          tz: s.tz || '',
+          at: s.at || '',
+          push: String(s.endpoint || '').split('/')[2] || '',
+          now: now.date + ' ' + String(now.h).padStart(2, '0') + ':' + String(now.m).padStart(2, '0'),
+          slots,
+          sentToday: slots.filter((x) => pings[pingKey(now.date, x, s.endpoint)]),
+        };
+      });
+      const tickLast = await blobGet('tick-last', null);
+      return { statusCode: 200, headers, body: JSON.stringify({ ok: true, total: subs.length, tickLast, subs: list, blobError: lastBlobError }) };
+    }
+
     if (action === 'wall-del') {
       const id = String(body.id || '');
       if (sb) {
@@ -672,7 +851,7 @@ exports.handler = async (event, context) => {
         body: String(body.body || 'Reto de Manifestación 28.'),
         tag: 'p28-daily',
       });
-      const subs = await blobGet('subs', []);
+      const subs = await loadAllSubs();
       const keep = [];
       let sent = 0;
       for (let i = 0; i < subs.length; i += 1) {

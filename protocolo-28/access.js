@@ -248,6 +248,10 @@
     return call('broadcast', { title: title, body: body }, adminKey);
   }
 
+  function pushStatus(adminKey) {
+    return call('push-status', {}, adminKey);
+  }
+
   function unlock(code) {
     var c = normalize(code);
     var device = deviceId();
@@ -379,6 +383,7 @@
     unsubscribePush: unsubscribePush,
     pushTest: pushTest,
     broadcast: broadcast,
+    pushStatus: pushStatus,
     checkLocalAdmin: checkLocalAdmin,
     call: call,
     daysLeft: daysLeft,

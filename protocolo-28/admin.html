@@ -91,10 +91,12 @@
         <textarea id="pushBody" placeholder="Erior Center. Tus pasos de hoy."></textarea>
         <button type="button" class="btn btn-gold btn-full" id="btnPush" style="margin-top:1rem">Enviar ahora</button>
         <p class="note" id="pushMsg"></p>
+        <button type="button" class="btn btn-ghost btn-full" id="btnPushStatus" style="margin-top:.8rem">Revisar avisos automáticos</button>
+        <pre class="note" id="pushStatus" style="white-space:pre-wrap;text-align:left;font-size:.78rem"></pre>
       </section>
     </div>
   </div>
-  <script src="access.js?v=29"></script>
+  <script src="access.js?v=33"></script>
   <script>
     var key = '';
     try { key = sessionStorage.getItem('erior-p28-admin') || ''; } catch (e) { key = ''; }
@@ -243,6 +245,28 @@
       P28Access.broadcast('ERIOR', body, key).then(function (res) {
         var n = res.data && res.data.sent;
         $('pushMsg').textContent = 'Enviado a ' + (n || 0) + ' celulares.';
+      });
+    });
+    $('btnPushStatus') && ($('btnPushStatus').onclick = function () {
+      $('pushStatus').textContent = 'Revisando…';
+      P28Access.pushStatus(key).then(function (res) {
+        var d = res.data || {};
+        if (!res.ok) { $('pushStatus').textContent = 'No pude revisar: ' + (d.error || res.status); return; }
+        var t = d.tickLast;
+        var lines = ['Celulares con avisos: ' + (d.total || 0)];
+        if (t) {
+          var mins = Math.round((Date.now() - new Date(t.at).getTime()) / 60000);
+          lines.push('Última revisión: hace ' + mins + ' min (' + (t.source || '') + '), enviados ' + t.sent + ' de ' + t.due + ' pendientes');
+          if (t.errors && t.errors.length) lines.push('Errores: ' + t.errors.join(' | '));
+        } else {
+          lines.push('El reloj automático todavía no ha corrido.');
+        }
+        (d.subs || []).forEach(function (s) {
+          lines.push('');
+          lines.push((s.code || 'sin código') + ' · ' + (s.tz || '?') + ' · ' + s.push);
+          lines.push('  Su hora: ' + s.now + ' · Hoy: ' + s.slots.join(', ') + ' · Ya enviados: ' + (s.sentToday.join(', ') || 'ninguno'));
+        });
+        $('pushStatus').textContent = lines.join('\n');
       });
     });
     $('btnLogin').onclick = function () {
