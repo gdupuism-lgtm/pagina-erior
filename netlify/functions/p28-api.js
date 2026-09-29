@@ -806,6 +806,26 @@ exports.handler = async (event, context) => {
       return { statusCode: 200, headers, body: JSON.stringify({ ok: true, row }) };
     }
 
+    if (action === 'push-code') {
+      const code = normalizeCode(body.code);
+      if (!code) return { statusCode: 400, headers, body: JSON.stringify({ ok: false, error: 'Falta el código' }) };
+      const subs = (await loadAllSubs()).filter((s) => normalizeCode(s.code) === code);
+      let sent = 0;
+      const errors = [];
+      for (let i = 0; i < subs.length; i += 1) {
+        try {
+          await sendOnePush(subs[i], 'Erior Center', String(body.body || 'Prueba: este aviso llegó con la app cerrada.'), 'p28-test');
+          sent += 1;
+        } catch (e) {
+          errors.push(String(e.statusCode || '') + ' ' + String(e.body || e.message || 'send').slice(0, 120));
+          if (e.statusCode === 404 || e.statusCode === 410) {
+            await blobSet(subBlobKey(subs[i].endpoint), Object.assign({}, subs[i], { on: false }));
+          }
+        }
+      }
+      return { statusCode: 200, headers, body: JSON.stringify({ ok: true, total: subs.length, sent, errors }) };
+    }
+
     if (action === 'push-status') {
       const subs = await loadAllSubs();
       const pings = await blobGet('pings', {});

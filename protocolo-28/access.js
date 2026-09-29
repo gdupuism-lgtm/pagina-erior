@@ -252,6 +252,10 @@
     return call('push-status', {}, adminKey);
   }
 
+  function pushCode(code, adminKey) {
+    return call('push-code', { code: code }, adminKey);
+  }
+
   function unlock(code) {
     var c = normalize(code);
     var device = deviceId();
@@ -384,6 +388,7 @@
     pushTest: pushTest,
     broadcast: broadcast,
     pushStatus: pushStatus,
+    pushCode: pushCode,
     checkLocalAdmin: checkLocalAdmin,
     call: call,
     daysLeft: daysLeft,

@@ -91,12 +91,16 @@
         <textarea id="pushBody" placeholder="Erior Center. Tus pasos de hoy."></textarea>
         <button type="button" class="btn btn-gold btn-full" id="btnPush" style="margin-top:1rem">Enviar ahora</button>
         <p class="note" id="pushMsg"></p>
+        <label for="pushCode" style="margin-top:1rem">Probar en un solo código</label>
+        <input id="pushCode" type="text" placeholder="P28-XXXX-XXXX" autocomplete="off">
+        <button type="button" class="btn btn-ghost btn-full" id="btnPushCode" style="margin-top:.6rem">Mandar prueba a ese código</button>
+        <p class="note" id="pushCodeMsg"></p>
         <button type="button" class="btn btn-ghost btn-full" id="btnPushStatus" style="margin-top:.8rem">Revisar avisos automáticos</button>
         <pre class="note" id="pushStatus" style="white-space:pre-wrap;text-align:left;font-size:.78rem"></pre>
       </section>
     </div>
   </div>
-  <script src="access.js?v=33"></script>
+  <script src="access.js?v=34"></script>
   <script>
     var key = '';
     try { key = sessionStorage.getItem('erior-p28-admin') || ''; } catch (e) { key = ''; }
@@ -245,6 +249,18 @@
       P28Access.broadcast('ERIOR', body, key).then(function (res) {
         var n = res.data && res.data.sent;
         $('pushMsg').textContent = 'Enviado a ' + (n || 0) + ' celulares.';
+      });
+    });
+    $('btnPushCode') && ($('btnPushCode').onclick = function () {
+      var code = $('pushCode').value.trim();
+      if (!code) { $('pushCodeMsg').textContent = 'Escribe el código.'; return; }
+      $('pushCodeMsg').textContent = 'Mandando…';
+      P28Access.pushCode(code, key).then(function (res) {
+        var d = res.data || {};
+        if (!res.ok) { $('pushCodeMsg').textContent = 'No se pudo: ' + (d.error || res.status); return; }
+        if (!d.total) { $('pushCodeMsg').textContent = 'Ese código no tiene avisos activos en ningún celular.'; return; }
+        $('pushCodeMsg').textContent = 'Enviado a ' + d.sent + ' de ' + d.total + ' celulares.' +
+          (d.errors && d.errors.length ? ' Errores: ' + d.errors.join(' | ') : '');
       });
     });
     $('btnPushStatus') && ($('btnPushStatus').onclick = function () {
