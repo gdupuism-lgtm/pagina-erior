@@ -67,7 +67,8 @@
     [/satori/, 'satori.jpg'],
     [/\bselect\b/, 'select.jpg'],
     [/simulation/, 'simulation-u.jpg'],
-    [/telegram|liberar emociones/, 'telegram-liberar-emociones.jpg'],
+    [/privado|private/, 'telegram-privado.jpg'],
+    [/telegram|liberar emociones|release emotions/, 'telegram-liberar-emociones.jpg'],
     [/rabbit/, 'white-rabbit-code.jpg'],
     [/wonderland|coherence/, 'wonderland-coherence.jpg']
   ];
