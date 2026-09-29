@@ -412,13 +412,36 @@
   <script src="phrases.js?v=24"></script>
   <script src="routines.js?v=24"></script>
   <script src="plan.js?v=22"></script>
-  <script src="vault.js?v=32"></script>
+  <script src="vault.js?v=33"></script>
   <script src="vision.js?v=6"></script>
   <script src="protocolo.js?v=44"></script>
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js?v=45', { scope: './' }).catch(function () {});
     }
+    (function () {
+      /* Si hay versión nueva en línea, recarga al volver a la app (nunca con audio sonando). */
+      function sig(html) {
+        return (String(html).match(/[\w-]+\.(?:js|css)\?v=\d+/g) || []).join('|');
+      }
+      var mine = sig(document.documentElement.innerHTML);
+      function check() {
+        if (document.hidden || document.body.classList.contains('is-playing')) return;
+        fetch('index.html?fresh=' + Date.now(), { cache: 'no-store' })
+          .then(function (r) { return r.ok ? r.text() : ''; })
+          .then(function (html) {
+            var live = sig(html);
+            if (!live || live === mine) return;
+            if (sessionStorage.getItem('p28-reloaded') === live) return;
+            if (document.body.classList.contains('is-playing')) return;
+            sessionStorage.setItem('p28-reloaded', live);
+            location.reload();
+          })
+          .catch(function () {});
+      }
+      document.addEventListener('visibilitychange', check);
+      setTimeout(check, 4000);
+    })();
   </script>
 </body>
 </html>
