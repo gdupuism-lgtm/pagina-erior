@@ -86,8 +86,9 @@
 
       <section class="card foil-card">
         <span class="kicker">Notificaciones</span>
-        <p class="copy">Llega a quienes ya activaron en su celular.</p>
-        <label for="pushBody">Mensaje</label>
+        <p class="copy">Los 5 avisos del día se mandan solos. No tienes que hacer nada.</p>
+        <p class="copy">Lo que escribas aquí es un aviso extra: le llega ahora mismo a todas las que activaron avisos.</p>
+        <label for="pushBody">Mensaje extra</label>
         <textarea id="pushBody" placeholder="Erior Center. Tus pasos de hoy."></textarea>
         <button type="button" class="btn btn-gold btn-full" id="btnPush" style="margin-top:1rem">Enviar ahora</button>
         <p class="note" id="pushMsg"></p>
@@ -245,7 +246,10 @@
       P28Access.getWall().then(renderWallAdmin);
     }
     $('btnPush') && ($('btnPush').onclick = function () {
-      var body = $('pushBody').value.trim() || 'Erior Center. Tus pasos de hoy.';
+      var body = $('pushBody').value.trim();
+      if (!body) { $('pushMsg').textContent = 'Escribe el mensaje.'; return; }
+      if (!window.confirm('Se manda ahora a todas las que tienen avisos:\n\n' + body)) return;
+      $('pushMsg').textContent = 'Mandando…';
       P28Access.broadcast('ERIOR', body, key).then(function (res) {
         var n = res.data && res.data.sent;
         $('pushMsg').textContent = 'Enviado a ' + (n || 0) + ' celulares.';
@@ -280,7 +284,8 @@
         (d.subs || []).forEach(function (s) {
           lines.push('');
           lines.push((s.code || 'sin código') + ' · ' + (s.tz || '?') + ' · ' + s.push);
-          lines.push('  Su hora: ' + s.now + ' · Hoy: ' + s.slots.join(', ') + ' · Ya enviados: ' + (s.sentToday.join(', ') || 'ninguno'));
+          lines.push('  Su hora: ' + s.now + ' · Ya enviados: ' + (s.sentToday.join(', ') || 'ninguno'));
+          (s.today || s.slots || []).forEach(function (m) { lines.push('  · ' + m); });
         });
         $('pushStatus').textContent = lines.join('\n');
       });
