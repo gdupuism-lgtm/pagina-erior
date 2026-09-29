@@ -1,0 +1,28 @@
+{
+  "name": "downloads",
+  "version": "1.0.0",
+  "description": "",
+  "main": "_patch-index-models.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gdupuism-lgtm/pagina-erior.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/gdupuism-lgtm/pagina-erior/issues"
+  },
+  "homepage": "https://github.com/gdupuism-lgtm/pagina-erior#readme",
+  "dependencies": {
+    "sharp": "^0.35.4",
+    "web-push": "^3.6.7"
+  }
+}
