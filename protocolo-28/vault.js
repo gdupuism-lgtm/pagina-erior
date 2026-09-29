@@ -32,62 +32,101 @@
       return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c];
     });
   }
-  var COVER_DIR = '../img/catalog/';
-  var COVERS = [
-    [/booster/, 'booster-2-0.jpg'],
-    [/limitless/, 'limitless.jpg'],
-    [/hombre|\bmen\b/, 'amor-propio-magic-hombre-2-0.jpg'],
-    [/imagine/, 'imagine.jpg'],
-    [/seduction/, 'seduction.jpg'],
-    [/attraction|atraccion/, 'attraction.jpg'],
-    [/erior love/, 'erior-love.jpg'],
-    [/mesmerizing/, 'mesmerizing-love.jpg'],
-    [/audio erior|erior 3/, 'audio-erior-3-0.jpg'],
-    [/magic 3/, 'amor-propio-magic-3-0.jpg'],
-    [/magic 2/, 'amor-magic-2-0.jpg'],
-    [/magic|amor propio/, 'amor-propio-magic-4-0.jpg'],
-    [/mind movie/, 'mind-movie.jpg'],
-    [/master ?mind/, 'master-mind.jpg'],
-    [/identity|identidad/, 'identity.jpg'],
-    [/abundance|abundancia/, 'master-abundance.jpg'],
-    [/money|dinero/, 'money-tech.jpg'],
-    [/lucky|suerte/, 'lucky.jpg'],
-    [/vitamind|vitamin/, 'vitamind.jpg'],
-    [/fit ?wave/, 'fit-wave.jpg'],
-    [/keep ?cool/, 'keep-cool.jpg'],
-    [/eclat/, 'eclat.jpg'],
-    [/11 ?11/, '11-11.jpg'],
-    [/audio you/, 'audio-you.jpg'],
-    [/curious/, 'curious-curiouser.jpg'],
-    [/emergency|999/, 'emergency-999.jpg'],
-    [/kids/, 'erior-kids.jpg'],
-    [/\bgod\b|goddess|diosa/, 'god-goddess.jpg'],
-    [/aura/, 'icon-aura.jpg'],
-    [/glow/, 'mental-glow-up.jpg'],
-    [/satori/, 'satori.jpg'],
-    [/\bselect\b/, 'select.jpg'],
-    [/simulation/, 'simulation-u.jpg'],
-    [/privado|private/, 'telegram-privado.jpg'],
-    [/telegram|liberar emociones|release emotions/, 'telegram-liberar-emociones.jpg'],
-    [/rabbit/, 'white-rabbit-code.jpg'],
-    [/wonderland|coherence/, 'wonderland-coherence.jpg']
-  ];
-  function coverFor(title) {
-    var t = String(title || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-      .replace(/[^a-z0-9]+/g, ' ').trim();
-    if (!t) return '';
-    for (var i = 0; i < COVERS.length; i++) {
-      if (COVERS[i][0].test(t)) return COVER_DIR + COVERS[i][1];
+  var imgUrls = {};
+  var imgAsked = {};
+  var imgInput = null;
+  var PIC_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h3l1.6-2h6.8L17 5h3a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2zm8 3.5a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9zm0 2a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5z"/></svg>';
+  function imgKey(kind, id) { return 'img-' + kind + '-' + id; }
+  /* kind: 'a' audio, 'pl' lista. La foto vive en IndexedDB; obj.img solo marca que existe. */
+  function imgFor(kind, obj) {
+    if (!obj || !obj.img) return '';
+    var k = imgKey(kind, obj.id);
+    if (imgUrls[k]) return imgUrls[k];
+    if (!imgAsked[k]) {
+      imgAsked[k] = true;
+      idbGet(k).then(function (blob) {
+        if (!blob) return;
+        imgUrls[k] = URL.createObjectURL(blob);
+        paintPlayer();
+        if (current() && current().id === obj.id) bindMedia(current());
+      }).catch(function () {});
     }
     return '';
   }
+  function shrinkImage(file) {
+    return new Promise(function (resolve, reject) {
+      var url = URL.createObjectURL(file);
+      var img = new Image();
+      img.onload = function () {
+        var r = Math.min(1, 900 / Math.max(img.naturalWidth || 1, img.naturalHeight || 1));
+        var c = document.createElement('canvas');
+        c.width = Math.max(1, Math.round(img.naturalWidth * r));
+        c.height = Math.max(1, Math.round(img.naturalHeight * r));
+        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+        URL.revokeObjectURL(url);
+        if (!c.toBlob) return resolve(file);
+        c.toBlob(function (b) { resolve(b || file); }, 'image/jpeg', 0.86);
+      };
+      img.onerror = function () {
+        URL.revokeObjectURL(url);
+        reject(new Error('No pude abrir esa imagen. Prueba con otra.'));
+      };
+      img.src = url;
+    });
+  }
+  function setImage(kind, id, file) {
+    return shrinkImage(file).then(function (blob) {
+      var k = imgKey(kind, id);
+      return idbPut(k, blob).then(function () {
+        if (imgUrls[k]) URL.revokeObjectURL(imgUrls[k]);
+        imgUrls[k] = URL.createObjectURL(blob);
+        imgAsked[k] = true;
+        var s = patch(function (st) {
+          var list = kind === 'pl' ? (st.playlists || []) : (st.library || []);
+          list.forEach(function (x) { if (x.id === id) x.img = Date.now(); });
+        });
+        paintPlayer(s);
+        bindMedia(current(s));
+      });
+    });
+  }
+  function dropImage(kind, id) {
+    var k = imgKey(kind, id);
+    if (imgUrls[k]) URL.revokeObjectURL(imgUrls[k]);
+    delete imgUrls[k];
+    delete imgAsked[k];
+    return idbDel(k);
+  }
+  function pickImage(kind, id) {
+    if (!imgInput) {
+      imgInput = document.createElement('input');
+      imgInput.type = 'file';
+      imgInput.accept = 'image/*';
+      imgInput.hidden = true;
+      document.body.appendChild(imgInput);
+    }
+    imgInput.value = '';
+    imgInput.onchange = function () {
+      var f = imgInput.files && imgInput.files[0];
+      if (!f) return;
+      setImage(kind, id, f).catch(function (err) {
+        alert((err && err.message) || 'No se pudo poner la foto.');
+      });
+    };
+    imgInput.click();
+  }
+  function artFor(t, s) {
+    var a = imgFor('a', t);
+    if (a) return a;
+    return imgFor('pl', activePl(s));
+  }
   function posterHtml(t, opts) {
     opts = opts || {};
-    var cv = coverFor(t.title);
+    var cv = opts.img || '';
     var attrs = opts.attrs || '';
     return '<div class="poster' + (opts.sm ? ' sm' : '') + (opts.on ? ' on' : '') + (cv ? '' : ' no-img') + '"' + attrs + '>' +
       (cv
-        ? '<img src="' + cv + '" alt="" loading="lazy" decoding="async" draggable="false">'
+        ? '<img src="' + cv + '" alt="" decoding="async" draggable="false">'
         : '<span class="poster-mark">' + esc(t.title) + '</span>') +
       (opts.top || '') +
       '<div class="poster-foot">' +
@@ -339,8 +378,10 @@
       '<div class="rail rail-hero" data-rail="main">' + list.map(function (t) {
         var on = cur && cur.id === t.id;
         var top = '<button type="button" class="poster-x" data-del="' + t.id + '" aria-label="Quitar">×</button>' +
+          '<button type="button" class="poster-pic" data-img="a:' + t.id + '" aria-label="Poner foto">' + PIC_SVG + '</button>' +
           (pl ? '<button type="button" class="poster-add' + (inPl[t.id] ? ' in' : '') + '" data-add-pl="' + t.id + '">' + (inPl[t.id] ? 'Ya' : 'Meter') + '</button>' : '');
         return posterHtml(t, {
+          img: imgFor('a', t),
           on: on,
           top: top,
           chip: t.duration ? fmt(t.duration) : 'Audio',
@@ -350,14 +391,26 @@
     playlists(s).forEach(function (p) {
       var items = (p.items || []).filter(function (it) { return trackById(s, it.id); });
       if (!items.length) return;
+      var plImg = imgFor('pl', p);
+      var firstIdx = (p.items || []).indexOf(items[0]);
       html += '<div class="rail-head"><h3>' + esc(p.name) + '</h3>' +
         '<button type="button" class="rail-open" data-pl-open="' + p.id + '">Editar</button></div>' +
-        '<div class="rail rail-row" data-rail="' + p.id + '">' + items.map(function (it) {
+        '<div class="rail rail-row" data-rail="' + p.id + '">' +
+        posterHtml({ title: p.name }, {
+          sm: true,
+          img: plImg,
+          on: pl && pl.id === p.id && !el.paused,
+          top: '<button type="button" class="poster-pic" data-img="pl:' + p.id + '" aria-label="Poner foto a la lista">' + PIC_SVG + '</button>',
+          chip: 'Lista · ' + items.length,
+          attrs: ' data-pl-start="' + p.id + ':' + firstIdx + '"'
+        }) +
+        items.map(function (it) {
           var t = trackById(s, it.id);
           var idx = (p.items || []).indexOf(it);
           var on = pl && pl.id === p.id && cur && cur.id === t.id;
           return posterHtml(t, {
             sm: true,
+            img: imgFor('a', t),
             on: on,
             chip: (it.times || 1) > 1 ? '×' + it.times : '',
             attrs: ' data-pl-start="' + p.id + ':' + idx + '"'
@@ -435,7 +488,7 @@
       ? items.map(function (it, i) {
         var t = trackById(s, it.id);
         var on = slot && slot.id === it.id;
-        var cv = t ? coverFor(t.title) : '';
+        var cv = t ? imgFor('a', t) : '';
         return '<div class="q-row' + (on ? ' on' : '') + '" draggable="true" data-pl-index="' + i + '">' +
           (cv ? '<img class="q-thumb" src="' + cv + '" alt="" loading="lazy" draggable="false">' : '<span class="q-thumb"></span>') +
           '<button type="button" class="q-play" data-pl-item="' + i + '">' + esc(t ? t.title : 'Audio') + '</button>' +
@@ -447,9 +500,12 @@
           '<button type="button" class="q-rm" data-pl-rm="' + i + '">×</button></div>';
       }).join('')
       : '<p class="pl-empty">Arrastra un audio aquí o toca Meter.</p>';
+    var plArt = imgFor('pl', pl);
     queue.innerHTML =
       '<div class="pl-folder foil-card" id="plFolder">' +
         '<div class="pl-folder-head">' +
+          '<button type="button" class="pl-art' + (plArt ? ' has-img' : '') + '" data-img="pl:' + pl.id + '" aria-label="Poner foto a la lista"' +
+            (plArt ? ' style="background-image:url(\'' + plArt + '\')"' : '') + '>' + (plArt ? '' : PIC_SVG + '<small>Foto</small>') + '</button>' +
           '<div><span class="num">Lista</span><h3>' + esc(pl.name) + '</h3></div>' +
           '<div class="pl-folder-actions">' +
             '<button type="button" class="btn btn-gold" id="btnPlPlay"' + (items.length ? '' : ' disabled') + '>Oír</button>' +
@@ -493,7 +549,7 @@
     var slot = q[qi];
     applyLoopToEl(mode);
     document.body.classList.toggle('is-playing', playing);
-    var cv = t ? coverFor(t.title) : '';
+    var cv = t ? artFor(t, s) : '';
     if ($('vinyl')) {
       $('vinyl').classList.toggle('has-cover', !!cv);
       $('vinyl').style.backgroundImage = cv ? 'url("' + cv + '")' : '';
@@ -601,9 +657,9 @@
   function bindMedia(t) {
     if (!('mediaSession' in navigator) || !t) return;
     try {
-      var cv = coverFor(t.title);
+      var cv = artFor(t, load());
       var meta = { title: t.title, artist: 'Erior Center', album: 'Erior Center' };
-      if (cv) meta.artwork = [{ src: new URL(cv, location.href).href, sizes: '512x512', type: 'image/jpeg' }];
+      if (cv) meta.artwork = [{ src: cv, sizes: '512x512', type: 'image/jpeg' }];
       navigator.mediaSession.metadata = new MediaMetadata(meta);
       navigator.mediaSession.setActionHandler('play', play);
       navigator.mediaSession.setActionHandler('pause', pause);
@@ -633,10 +689,7 @@
       else el.currentTime = 0;
       bindMedia(t);
       paintPlayer(s);
-      if (autoplay) {
-        applyEq(eqOf(s));
-        return el.play().catch(function () {});
-      }
+      if (autoplay) return el.play().catch(function () {});
     });
   }
 
@@ -697,7 +750,6 @@
       loadTrack(t.id, true);
       return;
     }
-    applyEq(eqOf(s));
     el.play().catch(function () {});
   }
   function pause() { el.pause(); persistPos(); paintPlayer(); }
@@ -726,102 +778,6 @@
     fillRange($('vol'), v * 100);
     if ($('volPct')) $('volPct').textContent = Math.round(v * 100) + '%';
   }
-  var ac = null;
-  var eqNodes = null;
-  var EQ_PRESETS = { normal: { v: 50, b: 50 }, voz: { v: 82, b: 32 }, fondo: { v: 18, b: 72 } };
-  function eqOf(s) {
-    var e = (s && s.player && s.player.eq) || {};
-    return { v: e.v == null ? 50 : Number(e.v), b: e.b == null ? 50 : Number(e.b) };
-  }
-  function eqNeutral(e) { return e.v === 50 && e.b === 50; }
-  function eqDb(pct, up, down) {
-    return pct >= 50 ? ((pct - 50) / 50) * up : -((50 - pct) / 50) * down;
-  }
-  function ensureGraph() {
-    if (eqNodes) return true;
-    var AC = w.AudioContext || w.webkitAudioContext;
-    if (!AC) return false;
-    try {
-      ac = new AC();
-      var src = ac.createMediaElementSource(el);
-      var low = ac.createBiquadFilter();
-      low.type = 'lowshelf';
-      low.frequency.value = 300;
-      var body = ac.createBiquadFilter();
-      body.type = 'peaking';
-      body.frequency.value = 950;
-      body.Q.value = 0.8;
-      var pres = ac.createBiquadFilter();
-      pres.type = 'peaking';
-      pres.frequency.value = 2700;
-      pres.Q.value = 1;
-      var air = ac.createBiquadFilter();
-      air.type = 'highshelf';
-      air.frequency.value = 6500;
-      var out = ac.createGain();
-      src.connect(low);
-      low.connect(body);
-      body.connect(pres);
-      pres.connect(air);
-      air.connect(out);
-      out.connect(ac.destination);
-      eqNodes = { low: low, body: body, pres: pres, air: air, out: out };
-      return true;
-    } catch (e) {
-      eqNodes = null;
-      return false;
-    }
-  }
-  function wakeAudio() {
-    if (ac && ac.state === 'suspended') ac.resume().catch(function () {});
-  }
-  function applyEq(e) {
-    e = e || eqOf(load());
-    if (eqNeutral(e) && !eqNodes) return;
-    if (!ensureGraph()) return;
-    var gv = eqDb(e.v, 9, 26);
-    var gb = eqDb(e.b, 12, 20);
-    var now = ac.currentTime;
-    eqNodes.body.gain.setTargetAtTime(gv, now, 0.04);
-    eqNodes.pres.gain.setTargetAtTime(gv, now, 0.04);
-    eqNodes.low.gain.setTargetAtTime(gb, now, 0.04);
-    eqNodes.air.gain.setTargetAtTime(gb * 0.7, now, 0.04);
-    var boost = Math.max(0, gv, gb);
-    eqNodes.out.gain.setTargetAtTime(Math.pow(10, (-boost * 0.6) / 20), now, 0.04);
-    wakeAudio();
-  }
-  function eqLabel(pct) {
-    var n = Math.round((pct - 50) * 2);
-    if (!n) return 'Normal';
-    return (n > 0 ? '+' : '−') + Math.abs(n);
-  }
-  function paintEq(s) {
-    var e = eqOf(s || load());
-    if ($('eqVoice')) { $('eqVoice').value = e.v; fillRange($('eqVoice'), e.v); }
-    if ($('eqBg')) { $('eqBg').value = e.b; fillRange($('eqBg'), e.b); }
-    if ($('eqVoicePct')) $('eqVoicePct').textContent = eqLabel(e.v);
-    if ($('eqBgPct')) $('eqBgPct').textContent = eqLabel(e.b);
-    var box = $('eqPresets');
-    if (box) {
-      Array.prototype.forEach.call(box.querySelectorAll('[data-eq]'), function (b) {
-        var p = EQ_PRESETS[b.getAttribute('data-eq')];
-        b.classList.toggle('on', !!p && p.v === e.v && p.b === e.b);
-      });
-    }
-  }
-  function setEq(next) {
-    var s = patch(function (st) {
-      st.player = st.player || {};
-      var cur = eqOf(st);
-      st.player.eq = {
-        v: Math.max(0, Math.min(100, Math.round(next.v != null ? next.v : cur.v))),
-        b: Math.max(0, Math.min(100, Math.round(next.b != null ? next.b : cur.b)))
-      };
-    });
-    applyEq(eqOf(s));
-    paintEq(s);
-  }
-
   function cycleLoop() {
     var cur = loopMode();
     var nextMode = cur === 'all' ? 'one' : cur === 'one' ? 'off' : 'all';
@@ -939,6 +895,7 @@
     render(load());
   }
   function deletePlaylist(id) {
+    dropImage('pl', id);
     patch(function (st) {
       st.playlists = (st.playlists || []).filter(function (p) { return p.id !== id; });
       if (st.player && st.player.playlistId === id) {
@@ -950,6 +907,7 @@
   }
 
   function removeTrack(id) {
+    dropImage('a', id);
     return idbDel(id).then(function () {
       var s = patch(function (st) {
         st.library = (st.library || []).filter(function (t) { return t.id !== id; });
@@ -1002,7 +960,6 @@
     renderNudge(s, 'upgradeHoy');
     renderUpgradeAudios(s);
     paintPlayer(s);
-    paintEq(s);
     if (s.player && s.player.vol != null) el.volume = s.player.vol;
     applyLoopToEl(loopMode(s));
   }
@@ -1035,18 +992,6 @@
     if ($('vol')) {
       $('vol').oninput = function () { setVol(this.value); };
     }
-    if ($('eqVoice')) $('eqVoice').oninput = function () { setEq({ v: Number(this.value) }); };
-    if ($('eqBg')) $('eqBg').oninput = function () { setEq({ b: Number(this.value) }); };
-    if ($('eqPresets')) {
-      $('eqPresets').onclick = function (e) {
-        var k = hit(e.target, 'data-eq');
-        if (k && EQ_PRESETS[k]) setEq(EQ_PRESETS[k]);
-      };
-    }
-    if ($('eqNote') && /iPad|iPhone|iPod/.test(navigator.userAgent || '')) {
-      $('eqNote').textContent = 'En iPhone, si lo mueves, el audio puede pausarse al bloquear la pantalla. Para la noche déjalo en Normal.';
-      $('eqNote').hidden = false;
-    }
     if ($('seek')) {
       $('seek').onmousedown = $('seek').ontouchstart = function () { seeking = true; };
       $('seek').oninput = function () {
@@ -1072,6 +1017,13 @@
     }
     if ($('vaultList')) {
       $('vaultList').onclick = function (e) {
+        var imgT = hit(e.target, 'data-img');
+        if (imgT) {
+          e.stopPropagation();
+          var ip = imgT.split(':');
+          pickImage(ip[0], ip[1]);
+          return;
+        }
         var delId = hit(e.target, 'data-del');
         var addId = hit(e.target, 'data-add-pl');
         var playId = hit(e.target, 'data-play');
@@ -1152,6 +1104,12 @@
     }
     if ($('plQueue')) {
       $('plQueue').onclick = function (e) {
+        var imgQ = hit(e.target, 'data-img');
+        if (imgQ) {
+          var qp = imgQ.split(':');
+          pickImage(qp[0], qp[1]);
+          return;
+        }
         if (e.target.id === 'btnPlPlay' || (e.target.closest && e.target.closest('#btnPlPlay'))) {
           var pl0 = activePl();
           if (pl0) playPlaylist(pl0.id);
@@ -1254,7 +1212,6 @@
       tickUI();
     });
     el.addEventListener('play', function () {
-      wakeAudio();
       startListenClock();
       paintPlayer();
     });
