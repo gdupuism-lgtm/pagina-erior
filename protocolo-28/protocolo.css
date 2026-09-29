@@ -1088,6 +1088,8 @@ a.mm-want{text-decoration:none}
     backdrop-filter:blur(16px) saturate(1.25);
     -webkit-backdrop-filter:blur(16px) saturate(1.25);
   }
+  .iam-wall-glow{animation:none;filter:blur(12px)}
+  .iam-wall-txt{animation:metalshift 9s ease infinite}
   .foil-card::after,.pack-card::after,.journey article::after,.btn-gold::after{animation:none!important;opacity:.28}
   .foil-card::before,.pack-card::before{animation:none}
   .card,.foil-card,.post,.app-dock,.journey article{
@@ -1183,23 +1185,99 @@ button.home-iam{
   display:block;width:100%;text-align:left;margin-top:1rem;cursor:pointer;
   appearance:none;-webkit-appearance:none;
 }
-.affirm-strip{
-  display:grid;grid-template-columns:repeat(7,1fr);gap:.4rem;margin-top:.85rem;
+#viewAffirm.view-afirma{
+  margin:0 -1rem;
+  width:calc(100% + 2rem);
 }
-.affirm-chip{
-  display:grid;place-items:center;height:36px;border-radius:11px;
-  border:1px solid var(--line);background:rgba(255,255,255,.03);
-  font-size:.72rem;font-weight:800;color:var(--dim);pointer-events:none;
+#viewAffirm.view-afirma.view.on{
+  display:flex;
+  min-height:calc(100dvh - 7.6rem - env(safe-area-inset-top,0px));
 }
-.affirm-chip.past{opacity:.7;color:var(--soft)}
-.affirm-chip.now{
-  color:#06140c;
-  border-color:transparent;
-  background:linear-gradient(135deg,var(--gold-hot),var(--rose));
+body.is-app.has-mini #viewAffirm.view-afirma.view.on{
+  min-height:calc(100dvh - 10.4rem - env(safe-area-inset-top,0px));
 }
-.affirm-said{margin-top:1rem}
-.affirm-said p{margin:.45rem 0;color:var(--soft);font-size:.92rem}
-.affirm-said b{color:var(--gold);margin-right:.35rem}
+.iam-wall{
+  --gx:50%;
+  --gy:42%;
+  appearance:none;-webkit-appearance:none;
+  flex:1;
+  width:100%;
+  min-height:100%;
+  margin:0;
+  border:0;
+  border-radius:0;
+  cursor:pointer;
+  text-align:center;
+  color:inherit;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:calc(1.2rem + env(safe-area-inset-top,0px)) 1.35rem 1.6rem;
+  position:relative;
+  overflow:hidden;
+  isolation:isolate;
+  background:
+    radial-gradient(ellipse 80% 55% at var(--gx) var(--gy), rgba(126,255,178,.28), transparent 52%),
+    radial-gradient(ellipse 70% 50% at 88% 12%, rgba(224,140,255,.22), transparent 50%),
+    radial-gradient(ellipse 80% 45% at 12% 92%, rgba(94,246,255,.16), transparent 55%),
+    linear-gradient(180deg, rgba(8,12,16,.2), rgba(3,4,10,.55));
+}
+.iam-wall-glow{
+  position:absolute;inset:-20%;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(circle 42% at var(--gx) var(--gy), rgba(255,255,255,.22), transparent 58%),
+    radial-gradient(circle 28% at 70% 30%, rgba(255,107,168,.18), transparent 62%);
+  filter:blur(18px);
+  mix-blend-mode:screen;
+  animation:iamGlow 7.5s ease-in-out infinite;
+}
+.iam-wall-kicker,.iam-wall-txt,.iam-wall-hint{position:relative;z-index:1}
+.iam-wall-kicker{
+  font-family:var(--brand);font-weight:800;font-size:.68rem;letter-spacing:.28em;
+  text-transform:uppercase;margin-bottom:auto;padding-top:.2rem;
+  background-image:var(--metal-hot);background-size:180% 180%;
+  -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+}
+.iam-wall-txt{
+  font-family:var(--display);font-weight:800;
+  font-size:clamp(2.55rem,11.2vw,4.35rem);
+  letter-spacing:-.055em;line-height:.98;
+  max-width:11.2ch;margin:0 auto;
+  background-image:var(--metal-hot);background-size:180% 180%;
+  -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+  animation:metalshift 9s ease infinite, iamBreath 5.6s ease-in-out infinite;
+  filter:
+    drop-shadow(0 1px 0 rgba(255,255,255,.55))
+    drop-shadow(0 10px 24px rgba(126,255,178,.28))
+    drop-shadow(0 18px 40px rgba(0,0,0,.35));
+}
+.iam-wall.is-long .iam-wall-txt{font-size:clamp(2.15rem,9.2vw,3.55rem);max-width:12.4ch;line-height:1.02}
+.iam-wall-hint{
+  margin-top:auto;
+  font-size:.78rem;letter-spacing:.02em;color:var(--dim);
+  max-width:22ch;
+}
+.iam-wall.is-lit .iam-wall-txt{animation:iamLit .72s var(--ease)}
+.iam-wall.is-lit .iam-wall-glow{animation:iamFlash .72s var(--ease)}
+@keyframes iamBreath{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.028)}
+}
+@keyframes iamGlow{
+  0%,100%{opacity:.75;transform:scale(1)}
+  50%{opacity:1;transform:scale(1.06)}
+}
+@keyframes iamLit{
+  0%{transform:scale(1)}
+  35%{transform:scale(1.055)}
+  100%{transform:scale(1)}
+}
+@keyframes iamFlash{
+  0%{opacity:.7}
+  30%{opacity:1}
+  100%{opacity:.8}
+}
 .viz-card{
   margin:.7rem 0 1rem;padding:1.4rem 1.2rem 1.5rem;border-radius:22px;min-height:220px;
   background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(255,230,238,.92));

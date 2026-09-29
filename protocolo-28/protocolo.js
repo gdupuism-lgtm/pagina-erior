@@ -904,13 +904,41 @@
     $('remindMsg').textContent = remindHint();
   }
 
+  function hideWelcome() {
+    pauseWelcomeVideos();
+    document.body.classList.remove('is-welcome');
+    if ($('welcomeGate')) {
+      $('welcomeGate').classList.add('hidden');
+      $('welcomeGate').setAttribute('hidden', '');
+    }
+  }
+
+  function alreadySawWelcome(s) {
+    if (s && s.welcomed) return true;
+    try {
+      if (sessionStorage.getItem('p28-intro') === '1') return true;
+    } catch (e) {}
+    if (s && s.purpose) return true;
+    if (s && s.days && Object.keys(s.days).length) return true;
+    if (s && s.checks) {
+      var used = false;
+      Object.keys(s.checks).forEach(function (d) {
+        if (s.checks[d] && Object.keys(s.checks[d]).length) used = true;
+      });
+      if (used) return true;
+    }
+    return false;
+  }
+
   function maybeWelcome(s) {
     var box = $('welcomeGate');
     if (!box) return;
-    try {
-      if (sessionStorage.getItem('p28-intro') === '1') return;
-    } catch (e) {
-      if (s && s.welcomed) return;
+    if (alreadySawWelcome(s)) {
+      if (s && !s.welcomed) {
+        try { patch(function (st) { st.welcomed = true; }); } catch (e) {}
+      }
+      hideWelcome();
+      return;
     }
     document.body.classList.add('is-welcome');
     box.classList.remove('hidden');
@@ -1305,12 +1333,7 @@
   $('btnWelcomeGo') && $('btnWelcomeGo').addEventListener('click', function () {
     patch(function (st) { st.welcomed = true; });
     try { sessionStorage.setItem('p28-intro', '1'); } catch (e) {}
-    pauseWelcomeVideos();
-    document.body.classList.remove('is-welcome');
-    if ($('welcomeGate')) {
-      $('welcomeGate').classList.add('hidden');
-      $('welcomeGate').setAttribute('hidden', '');
-    }
+    hideWelcome();
     go('hoy');
   });
 

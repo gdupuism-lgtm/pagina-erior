@@ -294,30 +294,48 @@
   function paintIamCard(el, s, n, teaser) {
     if (!el) return;
     el.innerHTML =
-      '<span class="num">Afirmación · día ' + n + ' de 28</span>' +
+      '<span class="num">Afirmación de hoy</span>' +
       '<div class="iam-txt">' + dailyAffirm(s) + '</div>' +
       '<p class="note">' + (teaser
         ? 'Toca. Hoy es esta. Mañana cambia sola.'
         : 'Léela en voz alta. Hoy es esta. Mañana cambia sola. No se elige.') + '</p>';
   }
 
-  function paintAffirmList(el, s, n) {
+  function moveWallGlow(el, e) {
+    var r = el.getBoundingClientRect();
+    if (!r.width || !r.height) return;
+    el.style.setProperty('--gx', ((e.clientX - r.left) / r.width * 100).toFixed(2) + '%');
+    el.style.setProperty('--gy', ((e.clientY - r.top) / r.height * 100).toFixed(2) + '%');
+  }
+
+  function bindWallpaper(el) {
+    if (!el || el._iamBound) return;
+    el._iamBound = true;
+    el.addEventListener('pointerdown', function (e) {
+      moveWallGlow(el, e);
+      el.classList.remove('is-lit');
+      void el.offsetWidth;
+      el.classList.add('is-lit');
+      try { if (navigator.vibrate) navigator.vibrate(12); } catch (err) {}
+    });
+    el.addEventListener('pointermove', function (e) {
+      moveWallGlow(el, e);
+    });
+    el.addEventListener('animationend', function (e) {
+      if (e.animationName === 'iamLit') el.classList.remove('is-lit');
+    });
+  }
+
+  function paintWallpaper(el, s) {
     if (!el) return;
-    var list = w.P28_AFFIRMS || [];
-    var said = '';
-    if (n > 1) {
-      said = '<div class="affirm-said">' + list.slice(0, n - 1).map(function (line, i) {
-        return '<p><b>' + (i + 1) + '</b> ' + line + '</p>';
-      }).join('') + '</div>';
-    }
+    var line = dailyAffirm(s);
+    el.classList.toggle('is-long', line.length > 26);
     el.innerHTML =
-      '<span class="num">Los 28 días</span>' +
-      '<p class="note">Hoy se ve. Las que ya pasaron se quedan aquí. Las de adelante aparecen solas.</p>' +
-      '<div class="affirm-strip">' + list.map(function (_, i) {
-        var d = i + 1;
-        var cls = 'affirm-chip' + (d === n ? ' now' : (d < n ? ' past' : ''));
-        return '<span class="' + cls + '">' + d + '</span>';
-      }).join('') + '</div>' + said;
+      '<i class="iam-wall-glow" aria-hidden="true"></i>' +
+      '<span class="iam-wall-kicker">Hoy</span>' +
+      '<p class="iam-wall-txt">' + line + '</p>' +
+      '<span class="iam-wall-hint">Toca. Léela en voz alta. Mañana es otra.</span>';
+    bindWallpaper(el);
   }
 
   function waMind() {
@@ -370,8 +388,7 @@
     var n = dayIndex(s);
     paintQuote($('homeAffirm'), s, n);
     paintIamCard($('homeIam'), s, n, true);
-    paintIamCard($('affirmHero'), s, n, false);
-    paintAffirmList($('affirmAll'), s, n);
+    paintWallpaper($('affirmHero'), s);
     if ($('homeIam')) {
       $('homeIam').onclick = function () {
         if (w.P28 && P28.go) P28.go('afirma');

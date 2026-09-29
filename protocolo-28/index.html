@@ -17,7 +17,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="protocolo.css?v=47">
+  <link rel="stylesheet" href="protocolo.css?v=48">
   <script>
     window.__p28Install = null;
     window.addEventListener('beforeinstallprompt', function (e) {
@@ -173,7 +173,7 @@
         <div class="logo-tile logo-tile-mid">
           <img src="logo-tile.png?v=35" alt="">
         </div>
-        <p class="copy">Tu video de inicio. Luego queda en Inicio.</p>
+        <p class="copy">Solo esta vez. Luego queda en Inicio, por si lo quieres volver a ver.</p>
         <video id="appVideo" controls playsinline webkit-playsinline preload="none" src="bienvenida.mp4"></video>
         <button type="button" class="btn btn-gold btn-full" id="btnWelcomeGo" style="margin-top:1rem">Entrar</button>
       </div>
@@ -277,11 +277,8 @@
         <div id="mmWantWrap" class="mm-want-wrap" hidden></div>
       </section>
 
-      <section class="view" id="viewAffirm" data-view="afirma">
-        <h2 class="sec-title">Afirmaciones</h2>
-        <p class="sec-sub">Una “yo soy” al día. No se elige ni se cambia. Mañana es otra.</p>
-        <div class="card foil-card" id="affirmHero"></div>
-        <div class="card foil-card" id="affirmAll" style="margin-top:1rem"></div>
+      <section class="view view-afirma" id="viewAffirm" data-view="afirma">
+        <button type="button" class="iam-wall" id="affirmHero" aria-label="Afirmación de hoy"></button>
       </section>
 
       <section class="view" id="viewCal" data-view="cal">
@@ -416,11 +413,11 @@
   <script src="routines.js?v=24"></script>
   <script src="plan.js?v=22"></script>
   <script src="vault.js?v=29"></script>
-  <script src="vision.js?v=5"></script>
-  <script src="protocolo.js?v=41"></script>
+  <script src="vision.js?v=6"></script>
+  <script src="protocolo.js?v=42"></script>
   <script>
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js?v=41', { scope: './' }).catch(function () {});
+      navigator.serviceWorker.register('sw.js?v=43', { scope: './' }).catch(function () {});
     }
   </script>
 </body>

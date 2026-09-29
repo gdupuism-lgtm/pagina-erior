@@ -38,7 +38,16 @@
     .dock b{color:#ff6ba8}
     .chk{font-size:10px;padding:5px 0;border-bottom:1px solid #1d3328;color:#d4efe0}
     .post{border:1px solid #1d3a2c;border-radius:10px;padding:8px;margin:0 0 7px;background:#071810}
-    .center{text-align:center;padding-top:18px}
+    .chips{display:flex;gap:4px;margin:6px 0}
+    .chip{font-size:7px;padding:4px 7px;border-radius:99px;border:1px solid #2a4a38;color:#9ecbb4}
+    .chip.on{background:linear-gradient(90deg,#7effb2,#ff6ba8);color:#06140c;border:0;font-weight:800}
+    .times{display:flex;align-items:center;justify-content:space-between;font-size:9px;margin-top:6px;color:#d4efe0}
+    .row{display:flex;justify-content:space-between;align-items:center;padding:6px 7px;border:1px dashed #2a4a38;border-radius:8px;font-size:9px;margin-top:5px}
+    .wall{min-height:168px;display:flex;flex-direction:column;justify-content:center;text-align:center;border-radius:12px;background:radial-gradient(circle at 50% 40%,#1a3a2a,#06140c 70%)}
+    .days{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-top:6px}
+    .d{height:18px;border-radius:5px;background:#0a1c14;border:1px solid #1d3a2c;font-size:7px;display:grid;place-items:center;color:#8aa896}
+    .d.on{background:linear-gradient(135deg,#7effb2,#ff6ba8);color:#06140c;font-weight:800;border:0}
+    .d.now{box-shadow:0 0 0 1px #5ef6ff}
     @media print{
       .bar{display:none}
       body{background:#fff}
@@ -65,17 +74,19 @@
           <ol>
             <li>Instalar en Android</li>
             <li>Instalar en iPhone</li>
-            <li>Entrar y usar el menú</li>
-            <li>Audio, Mind Movie, quote, afirmaciones y avisos</li>
+            <li>Código, video de bienvenida y menú</li>
+            <li>Inicio: lista del día</li>
+            <li>Audios: listas, veces, loop</li>
+            <li>Movie, Afirma, Días, avisos</li>
           </ol>
         </div>
         <div class="card">
           <span class="num">Antes de empezar</span>
-          <p style="margin-top:6px">Erior te manda un <b>link</b> y un código <b>P28-</b>. No hay compras dentro. Entras, instalas, pones tu audio, enciendes avisos.</p>
+          <p style="margin-top:6px">Erior te manda un <b>link</b> y un código <b>P28-</b>. No hay compras dentro. Entras, instalas, subes tu audio, enciendes avisos.</p>
         </div>
       </div>
       <div class="warn"><b>WhatsApp</b> +52 1 443 231 1761 · eriorcenter@gmail.com · @eriorcenter</div>
-      <div class="foot"><span>P28-GUIA</span><span>1 / 6</span></div>
+      <div class="foot"><span>P28-GUIA</span><span>1 / 8</span></div>
     </article>
 
     <article class="page">
@@ -114,7 +125,7 @@
           </div>
         </div>
       </div>
-      <div class="foot"><span>Android = Chrome → Instalar → icono</span><span>2 / 6</span></div>
+      <div class="foot"><span>Android = Chrome → Instalar → icono</span><span>2 / 8</span></div>
     </article>
 
     <article class="page">
@@ -148,12 +159,12 @@
           <div class="warn">Los avisos en iPhone solo llegan si la abres desde el icono, no desde Safari.</div>
         </div>
       </div>
-      <div class="foot"><span>iPhone = Safari → Compartir → Añadir</span><span>3 / 6</span></div>
+      <div class="foot"><span>iPhone = Safari → Compartir → Añadir</span><span>3 / 8</span></div>
     </article>
 
     <article class="page">
-      <p class="brand">Usar la app</p>
-      <h2>Código, menú y el día de hoy</h2>
+      <p class="brand">Entrar</p>
+      <h2>Código, video una vez, menú</h2>
       <div class="grid2" style="margin-top:10px">
         <div>
           <div class="phone">
@@ -162,43 +173,116 @@
               <p class="num" style="color:#7effb2">Tu código</p>
               <div class="field">P28-XXXX-XXXX</div>
               <div class="gold">ENTRAR</div>
-              <div class="dock" style="margin-top:28px"><b>Inicio</b><span>Audios</span><span>Movie</span><span>Afirma</span><span>Días</span><span>Yo</span></div>
+              <div class="post" style="margin-top:14px;text-align:center">
+                <p style="font-size:9px;opacity:.75">Video de inicio</p>
+                <p style="font-size:22px;margin:8px 0">▶</p>
+                <div class="gold">ENTRAR</div>
+              </div>
+              <div class="dock"><b>Inicio</b><span>Audios</span><span>Movie</span><span>Afirma</span><span>Días</span><span>Yo</span></div>
             </div>
           </div>
-          <p class="cap"><b>Foto 3.</b> Pegas el código. Tocas <b>Entrar</b>. Abajo está el menú.</p>
+          <p class="cap"><b>Foto 3.</b> Código → video <b>solo la primera vez</b> → menú de abajo.</p>
         </div>
         <div>
           <ol>
             <li><span class="arrow">1</span>Pega tu código <b>P28-</b> y toca <b>Entrar</b>.</li>
-            <li><span class="arrow">2</span>Responde solo lo de <b>tu</b> prioridad (dinero, amor, etc.). No te van a salir preguntas de penthouse si no elegiste dinero.</li>
-            <li><span class="arrow">3</span>Eso se guarda para tus pasos de cada día.</li>
-            <li><span class="arrow">4</span>Menú de abajo: <b>Inicio · Audios · Movie · Afirma · Días · Yo</b>.</li>
-            <li><span class="arrow">5</span>En Inicio marcas: noche + 4 h + pasos. El día pasado se sella o se tacha solo. Ya no se toca.</li>
+            <li><span class="arrow">2</span>Responde tu ficha (prioridad, lo que te frena). Se guarda para tus pasos.</li>
+            <li><span class="arrow">3</span>Sale el <b>video de bienvenida una sola vez</b>. Toca <b>Entrar</b>.</li>
+            <li><span class="arrow">4</span>La próxima vez abre <b>Inicio</b> normal. El video se queda ahí, por si lo quieres volver a ver.</li>
+            <li><span class="arrow">5</span>Menú: <b>Inicio · Audios · Movie · Afirma · Días · Yo</b>.</li>
           </ol>
         </div>
       </div>
-      <div class="foot"><span>Entrar → ficha → Inicio</span><span>4 / 6</span></div>
+      <div class="foot"><span>El video no vuelve a tapar la app</span><span>4 / 8</span></div>
     </article>
 
     <article class="page">
-      <p class="brand">Audios y Mind Movie</p>
-      <h2>Tu audio y tu película</h2>
+      <p class="brand">Inicio</p>
+      <h2>Hoy: lista, quote y el video</h2>
+      <div class="grid2" style="margin-top:10px">
+        <div>
+          <div class="phone">
+            <div class="notch"></div>
+            <div class="screen">
+              <p class="ig">Inicio</p>
+              <div class="post">
+                <p class="num" style="color:#7effb2">Bienvenida</p>
+                <p style="font-size:18px;text-align:center;margin:6px 0">▶</p>
+              </div>
+              <div class="post">
+                <p class="num" style="color:#7effb2">Lista de hoy</p>
+                <div class="chk">✓ Noche: audio en loop</div>
+                <div class="chk">☐ Día: 4 horas</div>
+                <div class="chk">☐ Pasos del día</div>
+              </div>
+              <div class="dock"><b>Inicio</b><span>Audios</span><span>Movie</span><span>Afirma</span><span>Días</span><span>Yo</span></div>
+            </div>
+          </div>
+          <p class="cap"><b>Foto 4.</b> El video vive aquí. La lista: tocas una casilla y <b>queda</b>.</p>
+        </div>
+        <div>
+          <ol>
+            <li><span class="arrow">1</span>El video de Erior está en Inicio. Tócalo cuando quieras. No se abre solo otra vez.</li>
+            <li><span class="arrow">2</span>El <b>quote</b> del día está aquí. Mañana cambia solo.</li>
+            <li><span class="arrow">3</span><b>Lista de hoy:</b> toca una tarea. Se marca y se traba. No la destaches.</li>
+            <li><span class="arrow">4</span>Al día siguiente las nuevas salen sin tachar. Las de ayer ya no se tocan.</li>
+            <li><span class="arrow">5</span>Noche + 4 h + pasos. Si cumpliste, al cambiar el día se sella solo.</li>
+          </ol>
+          <div class="card" style="margin-top:12px">
+            <span class="num">No se elige el día</span>
+            <p>Hoy sí. El pasado ya quedó. El calendario de 28 está en <b>Días</b>, no aquí.</p>
+          </div>
+        </div>
+      </div>
+      <div class="foot"><span>Toca una. Queda. El video está en Inicio</span><span>5 / 8</span></div>
+    </article>
+
+    <article class="page">
+      <p class="brand">Audios</p>
+      <h2>Listas, veces y loop</h2>
       <div class="grid2" style="margin-top:10px">
         <div>
           <div class="phone">
             <div class="notch"></div>
             <div class="screen">
               <p class="ig">Audios</p>
-              <div class="post">
-                <p class="num" style="color:#7effb2">Subir audio</p>
-                <div class="gold">ELEGIR ARCHIVO</div>
+              <div class="post" style="text-align:center">
+                <p style="font-size:28px;margin:4px 0">◉</p>
+                <p style="font-size:11px;font-weight:800">Noche</p>
+                <p style="font-size:8px;opacity:.7">LISTA</p>
               </div>
-              <p style="font-size:16px;text-align:center;margin:10px 0">◀ ▶ ∞</p>
+              <div class="chips">
+                <span class="chip">+ Lista</span>
+                <span class="chip on">Noche smart</span>
+              </div>
+              <div class="row"><span>Noche</span><span>− ×4 +</span></div>
+              <div class="gold" style="margin-top:8px">OÍR</div>
               <div class="dock"><span>Inicio</span><b>Audios</b><span>Movie</span><span>Afirma</span><span>Días</span><span>Yo</span></div>
             </div>
           </div>
-          <p class="cap"><b>Foto 4.</b> Audios. <b>Elegir archivo</b> = tu MP3. Play y loop (∞) de noche.</p>
+          <p class="cap"><b>Foto 5.</b> Una lista es una carpeta. Metes audios. Eliges veces. Tocas <b>Oír</b>.</p>
         </div>
+        <div>
+          <ol>
+            <li><span class="arrow">1</span><b>Subir audio:</b> el MP3 que te mandó Erior. Ponle nombre.</li>
+            <li><span class="arrow">2</span><b>+ Lista:</b> creas una carpeta (ej. Noche). Tocas la ficha para abrirla. No se pone a sonar sola.</li>
+            <li><span class="arrow">3</span><b>Meter</b> o arrastra el audio a la carpeta.</li>
+            <li><span class="arrow">4</span>Con − / + eliges cuántas veces se oye (×3, ×5, ×22…).</li>
+            <li><span class="arrow">5</span><b>Oír</b> pone la lista. El botón de loop: <b>LISTA</b> / <b>1</b> / apagado.</li>
+          </ol>
+          <div class="card" style="margin-top:12px">
+            <span class="num">Regla</span>
+            <p style="margin-top:6px"><b>Noche:</b> loop LISTA, bocina bajito. <b>Día:</b> audífonos, mínimo 4 horas (las puedes partir).</p>
+          </div>
+        </div>
+      </div>
+      <div class="foot"><span>Carpeta + veces + Oír. Loop lista o uno</span><span>6 / 8</span></div>
+    </article>
+
+    <article class="page">
+      <p class="brand">Movie y Afirma</p>
+      <h2>Tu película. Un “yo soy” enorme.</h2>
+      <div class="grid2" style="margin-top:10px">
         <div>
           <div class="phone">
             <div class="notch"></div>
@@ -212,57 +296,68 @@
               <div class="dock"><span>Inicio</span><span>Audios</span><b>Movie</b><span>Afirma</span><span>Días</span><span>Yo</span></div>
             </div>
           </div>
-          <p class="cap"><b>Foto 5.</b> Movie. Subes el video que te armó Erior. Una sola película.</p>
+          <p class="cap"><b>Foto 6.</b> Una sola película. Si no la tienes, pide la tuya por WhatsApp.</p>
+        </div>
+        <div>
+          <div class="phone">
+            <div class="notch"></div>
+            <div class="screen">
+              <p class="ig">Hoy</p>
+              <div class="wall">
+                <p style="font-size:7px;letter-spacing:.2em;color:#7effb2;margin-bottom:10px">HOY</p>
+                <p style="font-size:18px;font-weight:800;line-height:1.05;letter-spacing:-.04em">Yo soy abundante.</p>
+                <p style="font-size:7px;opacity:.7;margin-top:12px">Toca. Léela en voz alta.</p>
+              </div>
+              <div class="dock"><span>Inicio</span><span>Audios</span><span>Movie</span><b>Afirma</b><span>Días</span><span>Yo</span></div>
+            </div>
+          </div>
+          <p class="cap"><b>Foto 7.</b> Afirma es un wallpaper. Tócala. Mañana es otra. No se elige.</p>
         </div>
       </div>
       <div class="card" style="margin-top:12px">
-        <span class="num">Regla</span>
-        <p style="margin-top:6px"><b>Noche:</b> loop ON, bocina bajito. <b>Día:</b> audífonos, mínimo 4 horas (las puedes partir). Si no tienes Mind Movie, en esa misma pantalla hay un botón para pedírsela a Erior por WhatsApp.</p>
+        <span class="num">Quote vs yo soy</span>
+        <p style="margin-top:6px">El quote potente está en <b>Inicio</b>. El “yo soy” enorme está en <b>Afirma</b>. El calendario de 28 no está aquí: está en <b>Días</b>.</p>
       </div>
-      <div class="foot"><span>Audios = archivo. Movie = video</span><span>5 / 6</span></div>
+      <div class="foot"><span>Movie = tu video. Afirma = wallpaper del día</span><span>7 / 8</span></div>
     </article>
 
     <article class="page">
-      <p class="brand">Afirmaciones y avisos</p>
-      <h2>Un “yo soy” al día. Avisos que no se apagan solos.</h2>
+      <p class="brand">Días y Yo</p>
+      <h2>Calendario, avisos y día 28</h2>
       <div class="grid2" style="margin-top:10px">
         <div>
           <div class="phone">
             <div class="notch"></div>
             <div class="screen">
-              <p class="ig">Afirmaciones</p>
-              <div class="post">
-                <p class="num" style="color:#7effb2">Afirmación · día 2 de 28</p>
-                <p style="font-size:13px;margin:8px 0;font-weight:800">Yo soy abundante.</p>
-                <p style="font-size:8px;opacity:.7">Léela en voz alta. Mañana cambia sola.</p>
+              <p class="ig">Días</p>
+              <div class="days">
+                <span class="d on">1</span><span class="d now">2</span><span class="d">3</span><span class="d">4</span><span class="d">5</span><span class="d">6</span><span class="d">7</span>
+                <span class="d">8</span><span class="d">9</span><span class="d">10</span><span class="d">11</span><span class="d">12</span><span class="d">13</span><span class="d">14</span>
+                <span class="d">15</span><span class="d">16</span><span class="d">17</span><span class="d">18</span><span class="d">19</span><span class="d">20</span><span class="d">21</span>
+                <span class="d">22</span><span class="d">23</span><span class="d">24</span><span class="d">25</span><span class="d">26</span><span class="d">27</span><span class="d">28</span>
               </div>
-              <div class="dock"><span>Inicio</span><span>Audios</span><span>Movie</span><b>Afirma</b><span>Días</span><span>Yo</span></div>
-            </div>
-          </div>
-          <p class="cap"><b>Foto 6.</b> Menú <b>Afirma</b>. Hoy: “Yo soy…”. El quote potente va en Inicio. Tú no eliges ni cambias.</p>
-        </div>
-        <div>
-          <div class="phone">
-            <div class="notch"></div>
-            <div class="screen">
-              <p class="ig">Yo</p>
-              <div class="post">
+              <div class="post" style="margin-top:8px">
                 <p class="num" style="color:#7effb2">Avisos</p>
-                <p style="font-size:9px;margin:6px 0">4 al día. Solo se apagan si tú cancelas.</p>
+                <p style="font-size:8px;margin:5px 0">4 al día. Toca una vez.</p>
                 <div class="gold">ACTIVAR AVISOS</div>
               </div>
-              <div class="dock"><span>Inicio</span><span>Audios</span><span>Movie</span><span>Afirma</span><span>Días</span><b>Yo</b></div>
+              <div class="dock"><span>Inicio</span><span>Audios</span><span>Movie</span><span>Afirma</span><b>Días</b><span>Yo</span></div>
             </div>
           </div>
-          <p class="cap"><b>Foto 7.</b> Yo → <b>Activar avisos</b>. Acepta el permiso. Te llega uno de prueba.</p>
+          <p class="cap"><b>Foto 8.</b> Días = el 28. Yo = avisos y propósito.</p>
+        </div>
+        <div>
+          <ol>
+            <li><span class="arrow">1</span><b>Días:</b> tornasol = cumplido. Tachado = no. Solo hoy se toca.</li>
+            <li><span class="arrow">2</span><b>Yo → Propósito:</b> una frase, una vez. Se sella.</li>
+            <li><span class="arrow">3</span><b>Yo → Activar avisos.</b> Acepta Permitir. Te llega <b>uno de prueba</b>.</li>
+            <li><span class="arrow">4</span>Después van <b>4 al día</b>, a horas distintas. No se apagan solos. Solo si tocas <b>Cancelar avisos</b>.</li>
+            <li><span class="arrow">5</span><b>Día 28:</b> en el último post de <b>@eriorcenter</b> escribe <b>reto 28</b>.</li>
+          </ol>
+          <div class="warn">Si no llegan avisos: ¿abriste el <b>icono</b>? ¿Tocaste Permitir en ese celular? WhatsApp +52 1 443 231 1761</div>
         </div>
       </div>
-      <div class="card" style="margin-top:12px">
-        <span class="num">Avisos</span>
-        <p style="margin-top:6px">Van 4 al día. En cada celular toca una vez <b>Permitir</b>. Solo se apagan si tocas <b>Cancelar avisos</b>.</p>
-      </div>
-      <div class="warn">Si algo no abre: ¿el código es el P28 de esta app? ¿Abriste el icono? WhatsApp +52 1 443 231 1761</div>
-      <div class="foot"><span>Un yo soy. Avisos hasta que tú canceles</span><span>6 / 6</span></div>
+      <div class="foot"><span>4 avisos. Día 28: comenta reto 28</span><span>8 / 8</span></div>
     </article>
 
   </div>
