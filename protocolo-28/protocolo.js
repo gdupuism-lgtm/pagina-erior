@@ -613,36 +613,43 @@
     m = ((m % 1440) + 1440) % 1440;
     return pad2(Math.floor(m / 60)) + ':' + pad2(m % 60);
   }
-  function upcomingSlots() {
-    var c = clockInTz(localTz());
-    var start = c.h * 60 + c.m + 12;
-    var end = 22 * 60;
+  function daySlots(dateYmd, seed) {
+    var h = hashStr(String(dateYmd) + '|' + String(seed || ''));
+    var used = {};
     var out = [];
-    if (start > end - 30) {
-      var usedH = {};
-      while (out.length < 4) {
-        var hour = 8 + Math.floor(Math.random() * 14);
-        if (usedH[hour]) continue;
-        usedH[hour] = true;
-        out.push(pad2(hour) + ':' + pad2(Math.floor(Math.random() * 60)));
+    var guard = 0;
+    while (out.length < 4 && guard < 80) {
+      h = (Math.imul(h, 1664525) + 1013904223) >>> 0;
+      var hour = 8 + (h % 14);
+      if (!used[hour]) {
+        used[hour] = true;
+        h = (Math.imul(h, 1664525) + 1013904223) >>> 0;
+        out.push(pad2(hour) + ':' + pad2(h % 60));
       }
-      out.sort();
-      return out;
+      guard += 1;
     }
-    var span = end - start;
-    for (var i = 0; i < 4; i++) {
-      var lo = start + Math.floor((span * i) / 4);
-      var hi = start + Math.floor((span * (i + 1)) / 4) - 1;
-      if (hi < lo) hi = lo;
-      out.push(minsToHm(lo + Math.floor(Math.random() * (hi - lo + 1))));
-    }
+    out.sort();
     return out;
   }
-  function nearSlot(clock, slot, windowMin) {
-    var p = String(slot || '').split(':');
-    var th = Number(p[0]) || 0;
+  function slotMinutes(hm) {
+    var p = String(hm || '').split(':');
+    var th = Number(p[0]);
     var tm = Number(p[1]) || 0;
-    return Math.abs(clock.h * 60 + clock.m - (th * 60 + tm)) <= (windowMin || 2);
+    if (th === 24) th = 0;
+    return (th || 0) * 60 + tm;
+  }
+  function soonBonus(slots, clock) {
+    var nowM = clock.h * 60 + clock.m;
+    if (nowM >= 21 * 60 + 45) return '';
+    var remaining = false;
+    (slots || []).forEach(function (s) {
+      if (slotMinutes(s) > nowM + 6) remaining = true;
+    });
+    if (remaining) return '';
+    return minsToHm(nowM + 14);
+  }
+  function nearSlot(clock, slot, windowMin) {
+    return Math.abs(clock.h * 60 + clock.m - slotMinutes(slot)) <= (windowMin || 12);
   }
   function refreshRemindSlots(st, force) {
     st = st || {};
@@ -650,7 +657,8 @@
     var today = clockInTz(tz).date;
     if (!force && st.remindSlotsDate === today && st.remindSlots && st.remindSlots.length === 4) return false;
     st.remindTz = tz;
-    st.remindSlots = upcomingSlots();
+    st.remindSeed = st.remindSeed || ((st.access && st.access.code) || 'erior');
+    st.remindSlots = daySlots(today, st.remindSeed);
     st.remindSlotsDate = today;
     return true;
   }
@@ -669,11 +677,13 @@
         if (p.type === 'month') mo = p.value;
         if (p.type === 'day') d = p.value;
       });
-      return { hm: h + ':' + m, date: y + '-' + mo + '-' + d, h: Number(h), m: Number(m) };
+      var hour = Number(h);
+      if (hour === 24) hour = 0;
+      return { hm: pad2(hour) + ':' + m, date: y + '-' + mo + '-' + d, h: hour, m: Number(m) };
     } catch (e) {
       var now = new Date();
       return {
-        hm: ('0' + now.getHours()).slice(-2) + ':' + ('0' + now.getMinutes()).slice(-2),
+        hm: pad2(now.getHours()) + ':' + pad2(now.getMinutes()),
         date: now.toISOString().slice(0, 10),
         h: now.getHours(),
         m: now.getMinutes()
@@ -1079,8 +1089,10 @@
 
   function subscribePhone(sendTest) {
     var s = load();
-    if (!navigator.serviceWorker || !window.P28Access) return Promise.resolve();
-    if (typeof Notification === 'undefined' || Notification.permission !== 'granted') return Promise.resolve();
+    if (!navigator.serviceWorker || !window.P28Access) return Promise.reject(new Error('Sin avisos en este aparato.'));
+    if (typeof Notification === 'undefined' || Notification.permission !== 'granted') {
+      return Promise.reject(new Error('Falta el permiso de avisos.'));
+    }
     return P28Access.vapidPublic().then(function (pub) {
       if (!pub) throw new Error('Falta la llave de avisos.');
       return navigator.serviceWorker.ready.then(function (reg) {
@@ -1094,17 +1106,50 @@
         var json = sub.toJSON();
         var tz = now.remindTz || localTz();
         var seed = now.remindSeed || (now.access && now.access.code) || '';
+        var clock = clockInTz(tz);
+        if (!now.remindSlots || now.remindSlotsDate !== clock.date) {
+          now = patch(function (st) { refreshRemindSlots(st, true); });
+        }
         return P28Access.subscribePush(json, now.access && now.access.code, {
           tz: tz,
           seed: seed,
-          slots: now.remindSlots || upcomingSlots(),
-          slotsDate: now.remindSlotsDate || clockInTz(tz).date
-        }).then(function () {
-          if (!sendTest || !P28Access.pushTest) return { ok: true };
-          return P28Access.pushTest(json);
+          slots: now.remindSlots || daySlots(clock.date, seed),
+          slotsDate: clock.date,
+          bonusSlot: now.remindBonus || '',
+          bonusDate: now.remindBonusDate || ''
+        }).then(function (res) {
+          if (!res || !res.ok) throw new Error((res && res.data && res.data.error) || 'No se guardaron los avisos.');
+          if (!sendTest || !P28Access.pushTest) return { ok: true, sent: 0 };
+          return P28Access.pushTest(json).then(function (test) {
+            if (!test || !test.ok) {
+              return { ok: true, sent: 0, error: (test && test.data && test.data.error) || '' };
+            }
+            return { ok: true, sent: (test.data && test.data.sent) || 1 };
+          });
         });
       });
     });
+  }
+
+  var lastPushSync = 0;
+  function keepRemindAlive() {
+    var s = restoreRemind(load());
+    if (!s.remindOn || s.remindOff) {
+      paintRemindUi(s);
+      return;
+    }
+    save(s);
+    paintRemindUi(s);
+    if (typeof Notification === 'undefined' || Notification.permission !== 'granted') return;
+    var changed = false;
+    s = patch(function (st) {
+      st.remindTz = st.remindTz || localTz();
+      st.remindSeed = st.remindSeed || ((st.access && st.access.code) || 'erior');
+      changed = refreshRemindSlots(st, false);
+    });
+    if (!changed && Date.now() - lastPushSync < 6 * 3600 * 1000) return;
+    lastPushSync = Date.now();
+    subscribePhone(false).catch(function () {});
   }
 
   function paintRemindUi(s) {
@@ -1128,23 +1173,6 @@
     if (wanted && !granted && $('remindMsg') && !($('remindMsg').textContent || '').trim()) {
       $('remindMsg').textContent = 'Los avisos ya están pedidos. En este celular toca Permitir para que te lleguen aquí también.';
     }
-  }
-
-  function keepRemindAlive() {
-    var s = restoreRemind(load());
-    if (!s.remindOn || s.remindOff) {
-      paintRemindUi(s);
-      return;
-    }
-    save(s);
-    paintRemindUi(s);
-    if (typeof Notification === 'undefined' || Notification.permission !== 'granted') return;
-    s = patch(function (st) {
-      st.remindTz = st.remindTz || localTz();
-      st.remindSeed = st.remindSeed || ((st.access && st.access.code) || 'erior');
-      refreshRemindSlots(st, false);
-    });
-    subscribePhone(false).catch(function () {});
   }
 
   function cancelReminders() {
@@ -1188,6 +1216,9 @@
       st.remindTz = localTz();
       st.remindSeed = st.remindSeed || ((st.access && st.access.code) || String(Date.now()));
       refreshRemindSlots(st, true);
+      var clock = clockInTz(st.remindTz);
+      st.remindBonus = soonBonus(st.remindSlots, clock);
+      st.remindBonusDate = st.remindBonus ? clock.date : '';
     });
     saveRemind({ on: true, off: false, tz: s.remindTz, seed: s.remindSeed });
     syncProfile(s);
@@ -1199,11 +1230,17 @@
         return;
       }
       paintRemindUi(load());
-      showNativeNotif('Erior Center', 'Avisos encendidos.', 'p28-test');
-      subscribePhone(false).then(function () {
-        if ($('remindMsg')) $('remindMsg').textContent = 'Avisos activos.';
-      }).catch(function () {
-        if ($('remindMsg')) $('remindMsg').textContent = 'Avisos activos.';
+      lastPushSync = Date.now();
+      subscribePhone(true).then(function (res) {
+        if (res && res.sent) {
+          if ($('remindMsg')) $('remindMsg').textContent = 'Avisos activos. Te llegan aunque cierres la app.';
+          return;
+        }
+        showNativeNotif('Erior Center', 'Avisos encendidos.', 'p28-test');
+        if ($('remindMsg')) $('remindMsg').textContent = 'Avisos activos. Te llegan aunque cierres la app.';
+      }).catch(function (err) {
+        showNativeNotif('Erior Center', 'Avisos encendidos.', 'p28-test');
+        if ($('remindMsg')) $('remindMsg').textContent = (err && err.message) || 'Avisos activos en este celular.';
       });
     });
   }
@@ -1268,13 +1305,14 @@
     if (s.remindSlotsDate !== clock.date || !s.remindSlots || !s.remindSlots.length) {
       s = patch(function (st) { refreshRemindSlots(st, true); });
     }
-    var slots = s.remindSlots || [];
+    var slots = (s.remindSlots || []).slice();
+    if (s.remindBonus && s.remindBonusDate === clock.date) slots.push(s.remindBonus);
     var kinds = ['listen', 'portal', 'offer', 'night'];
     var kind = '';
     var slot = '';
     for (var i = 0; i < slots.length; i++) {
-      if (nearSlot(clock, slots[i], 2)) {
-        kind = kinds[i];
+      if (nearSlot(clock, slots[i], 12)) {
+        kind = kinds[i] || 'listen';
         slot = slots[i];
         break;
       }

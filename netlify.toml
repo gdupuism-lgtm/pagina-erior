@@ -123,7 +123,7 @@
 
 [functions]
   node_bundler = "esbuild"
-  external_node_modules = ["@netlify/blobs"]
+  external_node_modules = ["@netlify/blobs", "web-push"]
 
 [functions.claude]
   timeout = 26
@@ -139,12 +139,12 @@
 
 [functions.p28-api]
   timeout = 20
-  external_node_modules = ["@netlify/blobs"]
+  external_node_modules = ["@netlify/blobs", "web-push"]
 
 [functions."p28-cron"]
   timeout = 20
-  schedule = "*/15 * * * *"
-  external_node_modules = ["@netlify/blobs"]
+  schedule = "*/5 * * * *"
+  external_node_modules = ["@netlify/blobs", "web-push"]
 
 [[redirects]]
   from = "/reto-28"

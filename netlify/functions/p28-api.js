@@ -404,6 +404,8 @@ exports.handler = async (event, context) => {
         seed: String(body.seed || body.code || ''),
         slots: Array.isArray(body.slots) ? body.slots : [],
         slotsDate: String(body.slotsDate || ''),
+        bonusSlot: String(body.bonusSlot || ''),
+        bonusDate: String(body.bonusDate || ''),
         on: true,
       };
       const subs = await blobGet('subs', []);

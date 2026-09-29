@@ -457,16 +457,21 @@ function slotsForDay(dateYmd, seed) {
 
 function tickPush() {
   const now = new Date();
-  const hm = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+  const nowM = now.getHours() * 60 + now.getMinutes();
   const date = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
   const db = load();
   const kinds = ['listen', 'portal', 'offer', 'night'];
   (db.subs || []).forEach(async (s) => {
-    const slots = (Array.isArray(s.slots) && s.slots.length && s.slotsDate === date)
-      ? s.slots
-      : slotsForDay(date, s.seed || s.code || s.endpoint);
-    const idx = slots.indexOf(hm);
+    const slots = slotsForDay(date, s.seed || s.code || s.endpoint);
+    if (s.bonusSlot && s.bonusDate === date) slots.push(s.bonusSlot);
+    let idx = -1;
+    for (let i = 0; i < slots.length; i += 1) {
+      const p = String(slots[i] || '').split(':');
+      const t = (Number(p[0]) || 0) * 60 + (Number(p[1]) || 0);
+      if (Math.abs(nowM - t) <= 2) { idx = i; break; }
+    }
     if (idx < 0) return;
+    const hm = slots[idx];
     const today = date + '-' + hm + '-' + String(s.endpoint || '').slice(-12);
     db.sent = db.sent || {};
     if (db.sent[today]) return;

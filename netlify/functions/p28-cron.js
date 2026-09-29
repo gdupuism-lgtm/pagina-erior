@@ -1,6 +1,6 @@
 /**
  * Manda 4 avisos al día aunque la app esté cerrada.
- * Corre cada 15 min. Horas al azar en la zona del celular.
+ * Corre cada 5 min. Horas al azar en la zona del celular.
  * No borra suscripciones salvo 410/404 o cancelación manual (on: false).
  */
 const MESSAGES = {
@@ -53,7 +53,9 @@ function clockInTz(tz) {
     });
     const p = {};
     fmt.formatToParts(new Date()).forEach((x) => { p[x.type] = x.value; });
-    return { date: p.year + '-' + p.month + '-' + p.day, h: Number(p.hour), m: Number(p.minute) };
+    let h = Number(p.hour);
+    if (h === 24) h = 0;
+    return { date: p.year + '-' + p.month + '-' + p.day, h: h, m: Number(p.minute) };
   } catch (e) {
     const d = new Date();
     return { date: d.toISOString().slice(0, 10), h: d.getUTCHours(), m: d.getUTCMinutes() };
@@ -61,12 +63,15 @@ function clockInTz(tz) {
 }
 
 function near(h, m, th, tm, windowMin) {
-  return Math.abs(h * 60 + m - (th * 60 + tm)) <= (windowMin || 16);
+  return Math.abs(h * 60 + m - (th * 60 + tm)) <= (windowMin || 12);
 }
 
 function parseHour(hm) {
   const p = String(hm || '12:00').split(':');
-  return { h: Number(p[0]) || 12, m: Number(p[1]) || 0 };
+  let h = Number(p[0]);
+  if (h === 24) h = 0;
+  if (!Number.isFinite(h)) h = 12;
+  return { h: h, m: Number(p[1]) || 0 };
 }
 
 function subBlobKey(endpoint) {
@@ -168,6 +173,7 @@ async function run() {
   webpush.setVapidDetails('mailto:eriorcenter@gmail.com', pub, priv);
 
   let sent = 0;
+  let lastErr = '';
   const keep = [];
   for (let i = 0; i < subs.length; i += 1) {
     const sub = subs[i];
@@ -175,15 +181,14 @@ async function run() {
     const tz = sub.tz || 'America/Mexico_City';
     const now = clockInTz(tz);
     const seed = sub.seed || sub.code || sub.endpoint;
-    const slots = (Array.isArray(sub.slots) && sub.slots.length && sub.slotsDate === now.date)
-      ? sub.slots
-      : slotsForDay(now.date, seed);
+    const slots = slotsForDay(now.date, seed);
+    if (sub.bonusSlot && sub.bonusDate === now.date) slots.push(sub.bonusSlot);
     const kinds = ['listen', 'portal', 'offer', 'night'];
     let kind = '';
     let slot = '';
     for (let n = 0; n < slots.length; n += 1) {
       const hm = parseHour(slots[n]);
-      if (near(now.h, now.m, hm.h, hm.m, 16)) {
+      if (near(now.h, now.m, hm.h, hm.m, 12)) {
         kind = kinds[n] || 'listen';
         slot = slots[n];
         break;
@@ -201,6 +206,7 @@ async function run() {
       pings[key] = true;
       sent += 1;
     } catch (e) {
+      lastErr = String(e.statusCode || e.message || 'send');
       if (e.statusCode === 404 || e.statusCode === 410) {
         keep.pop();
         await writeJson(s, subBlobKey(sub.endpoint), Object.assign({}, sub, { on: false }));
@@ -210,10 +216,10 @@ async function run() {
   await writeJson(s, 'subs', keep);
   await writeJson(s, 'pings', pings);
   const stamp = clockInTz('UTC');
-  return { ok: true, sent: sent, total: keep.length, at: stamp.date + ' ' + stamp.h + ':' + stamp.m };
+  return { ok: true, sent: sent, total: keep.length, at: stamp.date + ' ' + stamp.h + ':' + stamp.m, lastErr: lastErr };
 }
 
-exports.config = { schedule: '*/10 * * * *' };
+exports.config = { schedule: '*/5 * * * *' };
 
 exports.handler = async (event) => {
   attachBlobs(event);

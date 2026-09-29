@@ -211,7 +211,9 @@
 
   function vapidPublic() {
     return call('vapid', {}).then(function (res) {
-      return res.data && res.data.publicKey;
+      var key = res.data && res.data.publicKey;
+      if (!key) throw new Error('Falta la llave de avisos.');
+      return key;
     });
   }
 
@@ -225,7 +227,12 @@
       tz: extra.tz || '',
       seed: extra.seed || '',
       slots: extra.slots || [],
-      slotsDate: extra.slotsDate || ''
+      slotsDate: extra.slotsDate || '',
+      bonusSlot: extra.bonusSlot || '',
+      bonusDate: extra.bonusDate || ''
+    }).then(function (res) {
+      if (!res.ok) throw new Error((res.data && res.data.error) || 'No se guardaron los avisos.');
+      return res;
     });
   }
 
