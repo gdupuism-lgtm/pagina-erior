@@ -366,12 +366,109 @@ async function sendOnePush(sub, title, body, tag) {
 
 const P28_TICK_KEY = 'p28-tick-8e2f41';
 
-const DAILY_MESSAGES = {
-  listen: { title: 'Erior Center', body: '¿Ya escuchaste tu audio hoy?' },
-  portal: { title: 'Erior Center', body: 'Estás en el reto. No en el piloto automático.' },
-  offer: { title: 'Erior Center', body: 'Tu audio está ahí. Ponlo ahora.' },
-  night: { title: 'Erior Center', body: 'Audio en loop, bajito. Déjalo trabajar.' },
+/* {n} = "Nombre, " (o vacío) · {g} = lo que la persona escribió que quiere manifestar */
+const DAILY_POOLS = {
+  listen: [
+    '{n}¿ya escuchaste tu audio hoy?',
+    'Tu audio está listo. Dale play y sigue con tu día.',
+    'Audífonos o bocina, da igual. Lo que importa es que suene.',
+    'Repetición es instalación. Pon tu audio otra vez.',
+    'Mientras cocinas, caminas o trabajas: tu audio de fondo.',
+    'Tu mente aprende por repetición. Play.',
+    'No lo pienses. Solo ponlo.',
+    '{n}tu audio te está esperando. Aunque sea bajito.',
+    'Un rato más de escucha hoy. Tu subconsciente lo nota.',
+  ],
+  goal: [
+    '{n}recuerda lo que pediste: {g}.',
+    'Lo que estás instalando: {g}. Siéntelo como hecho.',
+    'Cierra los ojos 10 segundos y míralo hecho: {g}.',
+    '{n}recuerda por qué empezaste: {g}.',
+    'Esto ya viene en camino: {g}.',
+    '{n}no lo sueltes: {g}. Ya es tuyo.',
+    'Hoy actúa como si ya fuera real: {g}.',
+    'Tu intención de estos 28 días: {g}. Sostenla hoy.',
+    'Imagina cómo se siente tenerlo: {g}.',
+    '{n}lo que escribiste sigue vivo: {g}.',
+  ],
+  phrase: [
+    'Lo que crees de ti se vuelve tu realidad.',
+    'No es suerte. Es frecuencia.',
+    'Lo que buscas también te está buscando.',
+    'Tu nueva versión ya existe. Solo la estás alcanzando.',
+    'Donde pones tu atención, pones tu energía.',
+    'No hay coincidencias. Hay alineación.',
+    'Merecer no se gana. Se recuerda.',
+    'La vida responde a quien eres, no a lo que pides.',
+    'Tu calma también manifiesta.',
+    'Lo que hoy sientes es lo que mañana ves.',
+    'Eres la causa, no el efecto.',
+    'Todo lo que quieres está del otro lado de lo que crees posible.',
+  ],
+  motiv: [
+    'Un día más cumplido es un día más instalado. Vamos.',
+    'No midas resultados. Mide que te cumpliste.',
+    'Si hoy cuesta, igual cuenta. Sigue.',
+    'Pequeño pero diario. Así se cambia el programa.',
+    'No pares ahora. Lo viejo se resiste justo antes de irse.',
+    '{n}hoy elige a la persona que ya lo logró.',
+    'Te prometiste 28 días. Cúmplete.',
+    'La constancia le gana a la motivación.',
+    '{n}vas mejor de lo que crees. Sigue.',
+    'Hoy no se trata de sentirlo perfecto. Se trata de hacerlo.',
+  ],
+  remind: [
+    'Marca tus pasos de hoy en la app. Cada uno cuenta.',
+    'Lee tu afirmación de hoy en voz alta.',
+    '{n}abre la app y revisa tu día del reto.',
+    'Toma 2 minutos para tu misión de hoy.',
+    'Respira 3 veces profundo y pon tu audio.',
+    'Date 2 minutos hoy para revisar tu día en la app.',
+    'Escribe una cosa buena que te pasó hoy. Eso también es evidencia.',
+    'Hoy toca cuidar tus pensamientos. Cambia uno viejo por uno nuevo.',
+  ],
+  night: [
+    'Esta noche: audio en loop, bajito, mientras duermes.',
+    'Antes de dormir: audio en loop y agradece 3 cosas del día.',
+    '{n}tu audio para dormir: en loop y bajito. Déjalo trabajar toda la noche.',
+    'Cierra el día sintiéndolo hecho. Pon tu audio y descansa.',
+  ],
 };
+const DAILY_KINDS = ['listen', 'goal', 'phrase', 'motiv', 'remind'];
+const AREA_GOALS = {
+  dinero: 'abundancia con movimiento real',
+  amor: 'amor sin carencia',
+  propio: 'seguridad que no pide permiso',
+  claridad: 'foco y propósito',
+  salud: 'energía limpia',
+  cuerpo: 'paz con tu cuerpo',
+  paz: 'una vida tranquila',
+};
+
+function dailyMessage(sub, date, index, slot) {
+  const seed = String(sub.seed || sub.code || sub.endpoint || '');
+  const order = DAILY_KINDS.slice();
+  let h = hashStr(date + '|order|' + seed);
+  for (let i = order.length - 1; i > 0; i -= 1) {
+    h = (Math.imul(h, 1664525) + 1013904223) >>> 0;
+    const j = h % (i + 1);
+    const t = order[i]; order[i] = order[j]; order[j] = t;
+  }
+  let kind = order[index % order.length];
+  const name = String(sub.name || '').trim().split(/\s+/)[0] || '';
+  let goal = String(sub.goal || '').replace(/\s+/g, ' ').trim().replace(/[.!?¡¿]+$/, '');
+  if (!goal) goal = AREA_GOALS[String(sub.area || '')] || '';
+  let shift = 0;
+  if (kind === 'goal' && !goal) { kind = 'phrase'; shift = 1 + (hashStr(date + '|alt|' + seed) % 5); }
+  if ((kind === 'listen' || kind === 'remind') && Number(String(slot || '').slice(0, 2)) >= 21) kind = 'night';
+  if (goal.length > 90) goal = goal.slice(0, 87).replace(/\s+\S*$/, '') + '…';
+  const pool = DAILY_POOLS[kind];
+  const raw = pool[(hashStr(date + '|' + kind + '|' + seed) + shift) % pool.length];
+  let body = raw.replace('{g}', goal);
+  if (name) body = body.replace('{n}', name + ', ');
+  else body = body.replace('{n}', '').replace(/^([¿¡]?)(.)/, (m, a, c) => a + c.toUpperCase());
+  return { kind, title: 'Erior Center', body };
+}
 
 function hashStr(s) {
   let h = 2166136261;
@@ -389,7 +486,7 @@ function slotsForDay(dateYmd, seed) {
   const used = {};
   const out = [];
   let guard = 0;
-  while (out.length < 4 && guard < 80) {
+  while (out.length < 5 && guard < 80) {
     h = (Math.imul(h, 1664525) + 1013904223) >>> 0;
     const hour = 8 + (h % 14);
     if (!used[hour]) {
@@ -435,9 +532,7 @@ function hmMinutes(hm) {
 }
 
 function daySlotsFor(sub, date) {
-  const slots = slotsForDay(date, sub.seed || sub.code || sub.endpoint);
-  if (sub.bonusSlot && sub.bonusDate === date) slots.push(sub.bonusSlot);
-  return slots;
+  return slotsForDay(date, sub.seed || sub.code || sub.endpoint);
 }
 
 function pingKey(date, slot, endpoint) {
@@ -473,7 +568,6 @@ async function runTick(source) {
   const oldest = new Date(Date.now() - 3 * 86400000).toISOString().slice(0, 10);
   Object.keys(pings).forEach((k) => { if (k.slice(0, 10) < oldest) delete pings[k]; });
 
-  const kinds = ['listen', 'portal', 'offer', 'night'];
   const errors = [];
   const dead = [];
   let sent = 0;
@@ -490,9 +584,9 @@ async function runTick(source) {
     }
     if (n < 0) continue;
     due += 1;
-    const msg = DAILY_MESSAGES[kinds[n]] || DAILY_MESSAGES.listen;
+    const msg = dailyMessage(sub, now.date, n, slots[n]);
     try {
-      await sendOnePush(sub, msg.title, msg.body, 'p28-' + (kinds[n] || 'listen'));
+      await sendOnePush(sub, msg.title, msg.body, 'p28-' + msg.kind);
       pings[pingKey(now.date, slots[n], sub.endpoint)] = new Date().toISOString();
       sent += 1;
     } catch (e) {
@@ -544,6 +638,7 @@ exports.handler = async (event, context) => {
       if (!sub || !sub.endpoint) {
         return { statusCode: 400, headers, body: JSON.stringify({ ok: false, error: 'Falta suscripción' }) };
       }
+      const prev = (await blobGet(subBlobKey(sub.endpoint), null)) || {};
       const next = {
         endpoint: sub.endpoint,
         keys: sub.keys,
@@ -553,8 +648,9 @@ exports.handler = async (event, context) => {
         seed: String(body.seed || body.code || ''),
         slots: Array.isArray(body.slots) ? body.slots : [],
         slotsDate: String(body.slotsDate || ''),
-        bonusSlot: String(body.bonusSlot || ''),
-        bonusDate: String(body.bonusDate || ''),
+        name: String(body.name || prev.name || '').slice(0, 40),
+        goal: String(body.goal || prev.goal || '').slice(0, 160),
+        area: String(body.area || prev.area || '').slice(0, 20),
         at: new Date().toISOString(),
         on: true,
       };
@@ -840,6 +936,9 @@ exports.handler = async (event, context) => {
           now: now.date + ' ' + String(now.h).padStart(2, '0') + ':' + String(now.m).padStart(2, '0'),
           slots,
           sentToday: slots.filter((x) => pings[pingKey(now.date, x, s.endpoint)]),
+          name: s.name || '',
+          goal: s.goal || '',
+          today: slots.map((x, i) => x + ' ' + dailyMessage(s, now.date, i, x).body),
         };
       });
       const tickLast = await blobGet('tick-last', null);

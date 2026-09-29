@@ -609,16 +609,12 @@
     return h >>> 0;
   }
   function pad2(n) { return ('0' + n).slice(-2); }
-  function minsToHm(m) {
-    m = ((m % 1440) + 1440) % 1440;
-    return pad2(Math.floor(m / 60)) + ':' + pad2(m % 60);
-  }
   function daySlots(dateYmd, seed) {
     var h = hashStr(String(dateYmd) + '|' + String(seed || ''));
     var used = {};
     var out = [];
     var guard = 0;
-    while (out.length < 4 && guard < 80) {
+    while (out.length < 5 && guard < 80) {
       h = (Math.imul(h, 1664525) + 1013904223) >>> 0;
       var hour = 8 + (h % 14);
       if (!used[hour]) {
@@ -631,31 +627,11 @@
     out.sort();
     return out;
   }
-  function slotMinutes(hm) {
-    var p = String(hm || '').split(':');
-    var th = Number(p[0]);
-    var tm = Number(p[1]) || 0;
-    if (th === 24) th = 0;
-    return (th || 0) * 60 + tm;
-  }
-  function soonBonus(slots, clock) {
-    var nowM = clock.h * 60 + clock.m;
-    if (nowM >= 21 * 60 + 45) return '';
-    var remaining = false;
-    (slots || []).forEach(function (s) {
-      if (slotMinutes(s) > nowM + 6) remaining = true;
-    });
-    if (remaining) return '';
-    return minsToHm(nowM + 14);
-  }
-  function nearSlot(clock, slot, windowMin) {
-    return Math.abs(clock.h * 60 + clock.m - slotMinutes(slot)) <= (windowMin || 12);
-  }
   function refreshRemindSlots(st, force) {
     st = st || {};
     var tz = st.remindTz || localTz();
     var today = clockInTz(tz).date;
-    if (!force && st.remindSlotsDate === today && st.remindSlots && st.remindSlots.length === 4) return false;
+    if (!force && st.remindSlotsDate === today && st.remindSlots && st.remindSlots.length === 5) return false;
     st.remindTz = tz;
     st.remindSeed = st.remindSeed || ((st.access && st.access.code) || 'erior');
     st.remindSlots = daySlots(today, st.remindSeed);
@@ -1115,8 +1091,9 @@
           seed: seed,
           slots: now.remindSlots || daySlots(clock.date, seed),
           slotsDate: clock.date,
-          bonusSlot: now.remindBonus || '',
-          bonusDate: now.remindBonusDate || ''
+          name: firstName((now.data && now.data.name) || ''),
+          goal: String(now.purpose || (now.data && now.data.wants) || '').replace(/\s+/g, ' ').trim().slice(0, 120),
+          area: (now.data && now.data.area) || ''
         }).then(function (res) {
           if (!res || !res.ok) throw new Error((res && res.data && res.data.error) || 'No se guardaron los avisos.');
           if (!sendTest || !P28Access.pushTest) return { ok: true, sent: 0 };
@@ -1216,9 +1193,6 @@
       st.remindTz = localTz();
       st.remindSeed = st.remindSeed || ((st.access && st.access.code) || String(Date.now()));
       refreshRemindSlots(st, true);
-      var clock = clockInTz(st.remindTz);
-      st.remindBonus = soonBonus(st.remindSlots, clock);
-      st.remindBonusDate = st.remindBonus ? clock.date : '';
     });
     saveRemind({ on: true, off: false, tz: s.remindTz, seed: s.remindSeed });
     syncProfile(s);
@@ -1243,85 +1217,6 @@
         if ($('remindMsg')) $('remindMsg').textContent = 'Con la app cerrada todavía no llegan: ' + ((err && err.message) || 'error') + '. Toca de nuevo en un rato.';
       });
     });
-  }
-
-  function txtOwn(s) {
-    return String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-  }
-
-  function ownedNames(s) {
-    var names = [];
-    (s.library || []).forEach(function (t) { names.push(txtOwn(t.title)); });
-    var rec = s.rec || {};
-    ['primary', 'second', 'third'].forEach(function (k) {
-      if (rec[k] && rec[k].name) names.push(txtOwn(rec[k].name));
-    });
-    return names;
-  }
-
-  function missingCatalog(s) {
-    var have = ownedNames(s);
-    return (window.P28_CATALOG || []).filter(function (c) {
-      var n = txtOwn(c.name);
-      var id = txtOwn(c.id);
-      return !have.some(function (h) { return h.indexOf(n) !== -1 || h.indexOf(id) !== -1; });
-    });
-  }
-
-  function pickListen() {
-    var list = window.P28_LISTEN || [];
-    if (!list.length) return { t: 'ERIOR', x: '¿Ya escuchaste tu audio hoy?' };
-    return list[Math.floor(Math.random() * list.length)];
-  }
-
-  function pickOffer(s) {
-    var miss = missingCatalog(s);
-    if (!miss.length) return pickListen();
-    var n = currentDay(s);
-    return { t: miss[(n - 1) % miss.length].name, x: miss[(n - 1) % miss.length].pitch };
-  }
-
-  function pickNotif(kind, s, force) {
-    if (kind === 'listen' || kind === 'night') return pickListen();
-    if (kind === 'offer') return pickOffer(s);
-    var n = currentDay(s);
-    return phraseOfDay(n + (force ? Math.floor(Math.random() * 8) : 0));
-  }
-
-  function firePhrase(force, kind) {
-    var s = load();
-    if (!s.access) return;
-    var p = pickNotif(kind || 'portal', s, force);
-    showNativeNotif(p.t, p.x, force ? 'p28-demo' : ('p28-' + (kind || 'portal')));
-    renderNotif(s);
-  }
-
-  function tryNotify() {
-    var s = load();
-    if (!s.remindOn || s.remindOff || !s.access) return;
-    if (typeof Notification === 'undefined' || Notification.permission !== 'granted') return;
-    var tz = s.remindTz || localTz();
-    var clock = clockInTz(tz);
-    if (s.remindSlotsDate !== clock.date || !s.remindSlots || !s.remindSlots.length) {
-      s = patch(function (st) { refreshRemindSlots(st, true); });
-    }
-    var slots = (s.remindSlots || []).slice();
-    if (s.remindBonus && s.remindBonusDate === clock.date) slots.push(s.remindBonus);
-    var kinds = ['listen', 'portal', 'offer', 'night'];
-    var kind = '';
-    var slot = '';
-    for (var i = 0; i < slots.length; i++) {
-      if (nearSlot(clock, slots[i], 12)) {
-        kind = kinds[i] || 'listen';
-        slot = slots[i];
-        break;
-      }
-    }
-    if (!kind) return;
-    var key = clock.date + '-' + slot;
-    if (s.lastPing === key) return;
-    patch(function (st) { st.lastPing = key; });
-    firePhrase(false, kind);
   }
 
   function lockPurpose(s) {
@@ -1507,7 +1402,6 @@
     $('bootSplash').addEventListener('click', endSplash);
   }
   setTimeout(endSplash, 2200);
-  setInterval(tryNotify, 30000);
   setInterval(keepRemindAlive, 45000);
   function refreshToday() {
     var s = load();

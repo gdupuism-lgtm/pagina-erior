@@ -228,8 +228,9 @@
       seed: extra.seed || '',
       slots: extra.slots || [],
       slotsDate: extra.slotsDate || '',
-      bonusSlot: extra.bonusSlot || '',
-      bonusDate: extra.bonusDate || ''
+      name: extra.name || '',
+      goal: extra.goal || '',
+      area: extra.area || ''
     }).then(function (res) {
       if (!res.ok) throw new Error((res.data && res.data.error) || 'No se guardaron los avisos.');
       return res;

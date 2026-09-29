@@ -440,7 +440,7 @@ function slotsForDay(dateYmd, seed) {
   const used = {};
   const out = [];
   let guard = 0;
-  while (out.length < 4 && guard < 80) {
+  while (out.length < 5 && guard < 80) {
     h = (Math.imul(h, 1664525) + 1013904223) >>> 0;
     const hour = 8 + (h % 14);
     if (!used[hour]) {
