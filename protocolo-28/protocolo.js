@@ -872,14 +872,7 @@
     if (!$('remindMsg')) return;
     var wanted = !!(s && s.remindOn && !s.remindOff);
     var granted = typeof Notification !== 'undefined' && Notification.permission === 'granted';
-    if (wanted && granted) return;
-    if (wanted) {
-      $('remindMsg').textContent = (isIOSPhone() && !isStandaloneApp())
-        ? remindHint()
-        : 'Los avisos ya están pedidos. En este celular toca Permitir para que te lleguen aquí también.';
-      return;
-    }
-    $('remindMsg').textContent = remindHint();
+    $('remindMsg').textContent = (wanted && !granted && isIOSPhone() && !isStandaloneApp()) ? remindHint() : '';
   }
 
   function hideWelcome() {
@@ -1125,23 +1118,16 @@
     s = s || load();
     var wanted = !!(s.remindOn && !s.remindOff);
     var granted = typeof Notification !== 'undefined' && Notification.permission === 'granted';
-    if ($('btnRemind')) {
-      if (wanted && granted) $('btnRemind').textContent = 'Avisos activos';
-      else if (wanted) $('btnRemind').textContent = 'Permitir en este celular';
-      else $('btnRemind').textContent = 'Activar avisos';
+    function show(el, on) {
+      if (!el) return;
+      el.classList.toggle('hidden', !on);
+      if (on) el.removeAttribute('hidden'); else el.setAttribute('hidden', '');
     }
-    if ($('btnRemindOff')) {
-      if (wanted) {
-        $('btnRemindOff').classList.remove('hidden');
-        $('btnRemindOff').removeAttribute('hidden');
-      } else {
-        $('btnRemindOff').classList.add('hidden');
-        $('btnRemindOff').setAttribute('hidden', '');
-      }
-    }
-    if (wanted && !granted && $('remindMsg') && !($('remindMsg').textContent || '').trim()) {
-      $('remindMsg').textContent = 'Los avisos ya están pedidos. En este celular toca Permitir para que te lleguen aquí también.';
-    }
+    if ($('btnRemind')) $('btnRemind').textContent = wanted ? 'Permitir' : 'Activar';
+    show($('btnRemind'), !(wanted && granted));
+    show($('btnRemindOff'), wanted);
+    if ($('remindState')) $('remindState').textContent = !wanted ? 'Apagados' : (granted ? 'Encendidos' : 'Falta permitir');
+    if ($('remindCard')) $('remindCard').classList.toggle('is-on', wanted && granted);
   }
 
   function cancelReminders() {
@@ -1152,7 +1138,7 @@
     saveRemind({ on: false, off: true, at: s.remindAt || '21:00' });
     syncProfile(s);
     paintRemindUi(s);
-    if ($('remindMsg')) $('remindMsg').textContent = 'Avisos apagados. Ya no te llegan hasta que los enciendas otra vez.';
+    if ($('remindMsg')) $('remindMsg').textContent = '';
     if (!navigator.serviceWorker || !window.P28Access || !P28Access.unsubscribePush) return;
     navigator.serviceWorker.ready.then(function (reg) {
       return reg.pushManager.getSubscription();
@@ -1199,7 +1185,7 @@
       lastPushSync = Date.now();
       subscribePhone(true).then(function (res) {
         if (res && res.sent) {
-          if ($('remindMsg')) $('remindMsg').textContent = 'Avisos activos. Te llegan aunque cierres la app.';
+          if ($('remindMsg')) $('remindMsg').textContent = '';
           return;
         }
         showNativeNotif('Erior Center', 'Avisos encendidos.', 'p28-test');

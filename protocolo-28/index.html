@@ -17,7 +17,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="protocolo.css?v=52">
+  <link rel="stylesheet" href="protocolo.css?v=53">
   <script>
     window.__p28Install = null;
     window.addEventListener('beforeinstallprompt', function (e) {
@@ -173,7 +173,6 @@
         <div class="logo-tile logo-tile-mid">
           <img src="logo-tile.png?v=35" alt="">
         </div>
-        <p class="copy">Solo esta vez. Luego queda en Yo, por si lo quieres volver a ver.</p>
         <video id="appVideo" controls playsinline webkit-playsinline preload="none" poster="bienvenida-portada.jpg?v=1" src="bienvenida.mp4?v=2"></video>
         <button type="button" class="btn btn-gold btn-full" id="btnWelcomeGo" style="margin-top:1rem">Entrar</button>
       </div>
@@ -207,7 +206,16 @@
 
       <section class="view" id="viewAudios" data-view="audios">
         <div class="player foil-card player-now" id="playerCard">
-          <div class="now-art vinyl" id="vinyl" aria-hidden="true"></div>
+          <div class="now-art vinyl" id="vinyl" aria-hidden="true">
+            <svg class="vinyl-label" viewBox="0 0 100 100">
+              <defs>
+                <path id="vinylArcTop" d="M 33.2 50 A 16.8 16.8 0 0 1 66.8 50"/>
+                <path id="vinylArcBot" d="M 28.8 50 A 21.2 21.2 0 0 0 71.2 50"/>
+              </defs>
+              <text><textPath href="#vinylArcTop" startOffset="50%" text-anchor="middle">MANIFIESTA</textPath></text>
+              <text><textPath href="#vinylArcBot" startOffset="50%" text-anchor="middle">ERIOR</textPath></text>
+            </svg>
+          </div>
           <div class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
           <span class="num" id="playerLayer">Ahora</span>
           <h3 id="playerTitle">Elige un audio</h3>
@@ -296,11 +304,18 @@
           <p class="note" id="purposeMsg"></p>
         </div>
         <div id="upgradeBox" hidden></div>
-        <div class="card foil-card" style="margin-top:1rem">
-          <span class="num">Avisos</span>
-          <p class="copy" style="margin:.4rem 0 .8rem">5 al día. En cada celular, una vez. Se apagan solo si cancelas.</p>
-          <button type="button" class="btn btn-gold btn-full" id="btnRemind">Activar avisos</button>
-          <button type="button" class="btn btn-ghost btn-full hidden" id="btnRemindOff" hidden style="margin-top:.7rem">Cancelar avisos</button>
+        <div class="card foil-card remind-mini" id="remindCard">
+          <span class="remind-bell" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M12 22a2 2 0 0 0 2-2h-4a2 2 0 0 0 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4a1.5 1.5 0 0 0-3 0v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+          </span>
+          <div class="remind-txt">
+            <b>Avisos</b>
+            <small id="remindState">Apagados</small>
+          </div>
+          <div class="remind-acts">
+            <button type="button" class="btn btn-gold remind-btn" id="btnRemind">Activar</button>
+            <button type="button" class="btn btn-ghost remind-btn hidden" id="btnRemindOff" hidden>Desactivar</button>
+          </div>
           <input id="remindAt" type="time" value="21:00" hidden>
           <p class="note" id="remindMsg"></p>
         </div>
@@ -405,7 +420,7 @@
   <script src="plan.js?v=22"></script>
   <script src="vault.js?v=34"></script>
   <script src="vision.js?v=7"></script>
-  <script src="protocolo.js?v=46"></script>
+  <script src="protocolo.js?v=47"></script>
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js?v=45', { scope: './' }).catch(function () {});

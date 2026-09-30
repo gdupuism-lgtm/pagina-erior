@@ -463,6 +463,26 @@ input:focus,select:focus,textarea:focus{border-color:rgba(62,255,197,.55)}
 .chip:has(input:checked){border-color:rgba(255,107,168,.6);background:rgba(255,107,168,.16);color:var(--ink)}
 .hidden{display:none!important}
 
+.remind-mini{
+  margin-top:1rem;padding:.75rem .85rem;
+  display:grid;grid-template-columns:auto 1fr auto;gap:.75rem;align-items:center;
+}
+.remind-bell{
+  width:40px;height:40px;border-radius:13px;display:grid;place-items:center;
+  background:rgba(255,255,255,.06);border:1px solid var(--line);color:var(--dim);
+}
+.remind-bell svg{width:20px;height:20px;fill:currentColor}
+.remind-mini.is-on .remind-bell{
+  color:#06140c;border-color:transparent;
+  background:linear-gradient(145deg,#e8fff4,var(--gold) 55%,var(--rose));
+}
+.remind-txt b{display:block;font-family:var(--display);font-weight:800;font-size:1rem;letter-spacing:-.02em}
+.remind-txt small{display:block;font-size:.72rem;color:var(--dim);margin-top:.1rem}
+.remind-acts{display:flex;gap:.4rem;align-items:center}
+.remind-btn{padding:.6rem .9rem;border-radius:14px;font-size:.62rem}
+.remind-mini .note{grid-column:1/-1;margin:0}
+.remind-mini .note:empty{display:none}
+
 #gate,#intake,#expiredGate{display:none}
 body.is-lock #gate{display:block}
 body.is-expired #expiredGate{display:block}
@@ -745,6 +765,13 @@ body.is-playing .eq i{opacity:1;animation:eqbeat .7s ease-in-out infinite altern
   content:"";position:absolute;inset:32%;border-radius:50%;
   background:linear-gradient(135deg,var(--gold-hot),var(--rose),var(--aqua));
 }
+.player-now .vinyl::after{inset:27%}
+.vinyl-label{position:absolute;inset:0;width:100%;height:100%;z-index:1;overflow:visible}
+.vinyl-label text{
+  font-family:var(--display);font-weight:800;font-size:6px;letter-spacing:.06em;
+  fill:#06140c;
+}
+.now-art.has-cover .vinyl-label{display:none}
 .vinyl.spin{animation:spinvinyl 4.8s linear infinite}
 @keyframes spinvinyl{to{transform:rotate(360deg)}}
 .seek-row,.vol-row{display:grid;grid-template-columns:auto 1fr auto;gap:.65rem;align-items:center}
