@@ -334,8 +334,113 @@
       '<i class="iam-wall-glow" aria-hidden="true"></i>' +
       '<span class="iam-wall-kicker">Hoy</span>' +
       '<p class="iam-wall-txt">' + line + '</p>' +
-      '<span class="iam-wall-hint">Toca. Léela en voz alta. Mañana es otra.</span>';
+      '<span class="iam-wall-hint">Toca. Léela en voz alta. Mañana es otra.</span>' +
+      '<span class="iam-wall-brand">Erior Center</span>';
     bindWallpaper(el);
+  }
+
+  function wrapLines(ctx, text, maxW) {
+    var words = text.split(/\s+/);
+    var lines = [];
+    var line = '';
+    words.forEach(function (wd) {
+      var test = line ? line + ' ' + wd : wd;
+      if (ctx.measureText(test).width > maxW && line) {
+        lines.push(line);
+        line = wd;
+      } else {
+        line = test;
+      }
+    });
+    if (line) lines.push(line);
+    return lines;
+  }
+
+  function affirmImage(text) {
+    var W = 1080, H = 1920;
+    var c = document.createElement('canvas');
+    c.width = W;
+    c.height = H;
+    var ctx = c.getContext('2d');
+    ctx.fillStyle = '#05070c';
+    ctx.fillRect(0, 0, W, H);
+    [[W * .5, H * .4, W * .75, 'rgba(126,255,178,.30)'],
+      [W * .88, H * .12, W * .6, 'rgba(224,140,255,.26)'],
+      [W * .12, H * .9, W * .7, 'rgba(94,246,255,.18)']].forEach(function (g) {
+      var r = ctx.createRadialGradient(g[0], g[1], 0, g[0], g[1], g[2]);
+      r.addColorStop(0, g[3]);
+      r.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = r;
+      ctx.fillRect(0, 0, W, H);
+    });
+    var size = text.length > 26 ? 118 : 146;
+    ctx.font = '800 ' + size + 'px Outfit, system-ui, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    var lines = wrapLines(ctx, text, W - 170);
+    var lh = size * 1.02;
+    var top = H * .47 - (lines.length - 1) * lh / 2;
+    var metal = ctx.createLinearGradient(0, top - lh, 0, top + lines.length * lh);
+    metal.addColorStop(0, '#ffffff');
+    metal.addColorStop(.2, '#e8fff4');
+    metal.addColorStop(.42, '#7effb2');
+    metal.addColorStop(.56, '#ffffff');
+    metal.addColorStop(.74, '#ff6ba8');
+    metal.addColorStop(.9, '#5ef6ff');
+    metal.addColorStop(1, '#ffffff');
+    ctx.shadowColor = 'rgba(126,255,178,.35)';
+    ctx.shadowBlur = 40;
+    ctx.fillStyle = metal;
+    lines.forEach(function (ln, i) { ctx.fillText(ln, W / 2, top + i * lh); });
+    ctx.shadowBlur = 0;
+    ctx.font = '800 38px Outfit, system-ui, sans-serif';
+    if ('letterSpacing' in ctx) ctx.letterSpacing = '14px';
+    var brand = ctx.createLinearGradient(W / 2 - 220, 0, W / 2 + 220, 0);
+    brand.addColorStop(0, '#9eada6');
+    brand.addColorStop(.3, '#ffffff');
+    brand.addColorStop(.5, '#c5d2cc');
+    brand.addColorStop(.7, '#ffc1d8');
+    brand.addColorStop(1, '#e8fff4');
+    ctx.fillStyle = brand;
+    ctx.fillText('ERIOR CENTER', W / 2, H - 170);
+    return new Promise(function (resolve) {
+      c.toBlob(function (b) { resolve(b); }, 'image/png');
+    });
+  }
+
+  var shareCache = { text: '', file: null };
+
+  function affirmText(s) {
+    var tmp = document.createElement('div');
+    tmp.innerHTML = dailyAffirm(s);
+    return (tmp.textContent || '').replace(/\s+/g, ' ').trim();
+  }
+
+  function prepShare(s) {
+    var text = affirmText(s);
+    if (shareCache.text === text) return;
+    shareCache = { text: text, file: null };
+    var ready = document.fonts && document.fonts.load ? document.fonts.load('800 40px Outfit').catch(function () {}) : Promise.resolve();
+    ready.then(function () { return affirmImage(text); }).then(function (blob) {
+      if (!blob || typeof File === 'undefined' || shareCache.text !== text) return;
+      shareCache.file = new File([blob], 'afirmacion-erior.png', { type: 'image/png' });
+    }).catch(function () {});
+  }
+
+  /* Safari pierde el permiso de compartir si se espera algo async antes de navigator.share */
+  function shareAffirm(s) {
+    var text = affirmText(s);
+    var caption = text + '\n\n✨ Erior Center · @eriorcenter';
+    var file = shareCache.text === text ? shareCache.file : null;
+    var p;
+    if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
+      p = navigator.share({ files: [file], text: caption });
+    } else if (navigator.share) {
+      p = navigator.share({ text: caption });
+    } else {
+      w.open('https://wa.me/?text=' + encodeURIComponent(caption), '_blank');
+    }
+    if (p && p.catch) p.catch(function () {});
   }
 
   function waMind() {
@@ -389,6 +494,10 @@
     paintQuote($('homeAffirm'), s, n);
     paintIamCard($('homeIam'), s, n, true);
     paintWallpaper($('affirmHero'), s);
+    if ($('btnShareAffirm')) {
+      prepShare(s);
+      $('btnShareAffirm').onclick = function () { shareAffirm(load()); };
+    }
     if ($('homeIam')) {
       $('homeIam').onclick = function () {
         if (w.P28 && P28.go) P28.go('afirma');

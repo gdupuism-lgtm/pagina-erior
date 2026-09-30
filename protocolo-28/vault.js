@@ -395,46 +395,9 @@
           attrs: ' data-play="' + t.id + '" draggable="true" data-drag="' + t.id + '"'
         });
       }).join('') + '</div>';
-    playlists(s).forEach(function (p) {
-      var items = (p.items || []).filter(function (it) { return trackById(s, it.id); });
-      if (!items.length) return;
-      var plImg = imgFor('pl', p);
-      var firstIdx = (p.items || []).indexOf(items[0]);
-      html += '<div class="rail-head"><h3>' + esc(p.name) + '</h3>' +
-        '<button type="button" class="rail-open" data-pl-open="' + p.id + '">Editar</button></div>' +
-        '<div class="rail rail-row" data-rail="' + p.id + '">' +
-        posterHtml({ title: p.name }, {
-          sm: true,
-          img: plImg,
-          on: pl && pl.id === p.id && !el.paused,
-          top: '<button type="button" class="poster-pic" data-img="pl:' + p.id + '" aria-label="Poner foto a la lista">' + PIC_SVG + '</button>',
-          chip: 'Lista · ' + items.length,
-          attrs: ' data-pl-start="' + p.id + ':' + firstIdx + '"'
-        }) +
-        items.map(function (it) {
-          var t = trackById(s, it.id);
-          var idx = (p.items || []).indexOf(it);
-          var on = pl && pl.id === p.id && cur && cur.id === t.id;
-          return posterHtml(t, {
-            sm: true,
-            img: imgFor('a', t),
-            on: on,
-            chip: (it.times || 1) > 1 ? '×' + it.times : '',
-            attrs: ' data-pl-start="' + p.id + ':' + idx + '"'
-          });
-        }).join('') + '</div>';
-    });
     if (box.getAttribute('data-sig') === html) return;
-    var keep = {};
-    Array.prototype.forEach.call(box.querySelectorAll('.rail-row'), function (r) {
-      keep[r.getAttribute('data-rail')] = r.scrollLeft;
-    });
     box.innerHTML = html;
     box.setAttribute('data-sig', html);
-    Array.prototype.forEach.call(box.querySelectorAll('.rail-row'), function (r) {
-      var k = r.getAttribute('data-rail');
-      if (keep[k]) r.scrollLeft = keep[k];
-    });
     var hero = box.querySelector('.rail-hero');
     if (hero) {
       hero.onscroll = function () { heroDepth(hero); };

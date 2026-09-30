@@ -1294,6 +1294,31 @@ button.home-iam{
 #viewAffirm.view-afirma{
   margin:0 -1rem;
   width:calc(100% + 2rem);
+  position:relative;
+}
+.iam-share{
+  position:absolute;z-index:3;
+  top:calc(.85rem + env(safe-area-inset-top,0px));right:1rem;
+  display:inline-flex;align-items:center;gap:.35rem;
+  padding:.42rem .8rem .42rem .62rem;
+  border:1px solid rgba(255,255,255,.22);border-radius:999px;cursor:pointer;
+  background:rgba(8,12,16,.45);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  color:#eafff4;
+  font-family:var(--brand);font-size:.62rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
+}
+.iam-share svg{width:15px;height:15px;fill:currentColor}
+.iam-share:active{transform:scale(.96)}
+.iam-wall-brand{
+  position:relative;z-index:1;
+  margin-top:.9rem;
+  font-family:var(--brand);font-weight:800;font-size:.62rem;
+  letter-spacing:.42em;text-transform:uppercase;
+  padding-left:.42em;
+  background-image:var(--metal);background-size:140% 180%;
+  -webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+  animation:metalshift 9s ease infinite;
+  filter:drop-shadow(0 1px 0 rgba(255,255,255,.35)) drop-shadow(0 4px 10px rgba(0,0,0,.4));
 }
 #viewAffirm.view-afirma.view.on{
   display:flex;

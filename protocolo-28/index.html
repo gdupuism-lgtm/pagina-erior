@@ -17,7 +17,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="protocolo.css?v=51">
+  <link rel="stylesheet" href="protocolo.css?v=52">
   <script>
     window.__p28Install = null;
     window.addEventListener('beforeinstallprompt', function (e) {
@@ -272,6 +272,10 @@
 
       <section class="view view-afirma" id="viewAffirm" data-view="afirma">
         <button type="button" class="iam-wall" id="affirmHero" aria-label="Afirmación de hoy"></button>
+        <button type="button" class="iam-share" id="btnShareAffirm" aria-label="Compartir afirmación">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2 7.6 7.6l1.4 1.4 2-2V15h2V7l2 2 1.4-1.4L12 3.2zM5 12v7.5A1.5 1.5 0 0 0 6.5 21h11a1.5 1.5 0 0 0 1.5-1.5V12h-2v7H7v-7H5z"/></svg>
+          <span>Compartir</span>
+        </button>
       </section>
 
       <section class="view" id="viewCal" data-view="cal">
@@ -293,11 +297,6 @@
           <p class="note" id="purposeMsg"></p>
         </div>
         <div id="upgradeBox" hidden></div>
-        <div class="card foil-card install-cta" id="installCard">
-          <span class="num">Instalar como app</span>
-          <p class="copy" style="margin:.4rem 0 .8rem">En el celular ábrela desde el icono, no desde Chrome. Así se ve como app y ahí sí llegan los avisos.</p>
-          <button type="button" class="btn btn-gold btn-full" id="btnInstallYo">Instalar app</button>
-        </div>
         <div class="card foil-card" style="margin-top:1rem">
           <span class="num">Avisos</span>
           <p class="copy" style="margin:.4rem 0 .8rem">5 al día. En cada celular, una vez. Se apagan solo si cancelas.</p>
@@ -405,8 +404,8 @@
   <script src="phrases.js?v=24"></script>
   <script src="routines.js?v=24"></script>
   <script src="plan.js?v=22"></script>
-  <script src="vault.js?v=33"></script>
-  <script src="vision.js?v=6"></script>
+  <script src="vault.js?v=34"></script>
+  <script src="vision.js?v=7"></script>
   <script src="protocolo.js?v=45"></script>
   <script>
     if ('serviceWorker' in navigator) {
