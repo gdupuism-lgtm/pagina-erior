@@ -794,19 +794,11 @@
     if (!bar) return;
     var days = (s && s.days) || {};
     var today = currentDay(s || load());
-    var html = '<button type="button" class="story story-video" id="storyVideo"><span class="story-ring"><i></i></span><em>Video</em></button>';
+    var html = '';
     for (var i = 1; i <= 28; i++) {
       html += '<button type="button" class="story' + (days[i] ? ' on' : '') + (i === today ? ' now' : '') + '" data-day="' + i + '"><span>' + i + '</span><em>Día</em></button>';
     }
     bar.innerHTML = html;
-    var vid = $('storyVideo');
-    if (vid) vid.onclick = function () {
-      var player = $('homeVideo');
-      if (player) {
-        player.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        player.play().catch(function () {});
-      }
-    };
     bar.querySelectorAll('[data-day]').forEach(function (b) {
       b.onclick = function () { go('cal'); };
     });
@@ -986,7 +978,7 @@
       b.classList.toggle('on', b.getAttribute('data-go') === name);
     });
     patch(function (s) { s.view = name; });
-    if (name !== 'hoy') {
+    if (name !== 'cuenta') {
       var homeVid = $('homeVideo');
       if (homeVid && !homeVid.paused) homeVid.pause();
     }

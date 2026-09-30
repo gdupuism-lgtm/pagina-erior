@@ -173,8 +173,8 @@
         <div class="logo-tile logo-tile-mid">
           <img src="logo-tile.png?v=35" alt="">
         </div>
-        <p class="copy">Solo esta vez. Luego queda en Inicio, por si lo quieres volver a ver.</p>
-        <video id="appVideo" controls playsinline webkit-playsinline preload="none" src="bienvenida.mp4"></video>
+        <p class="copy">Solo esta vez. Luego queda en Yo, por si lo quieres volver a ver.</p>
+        <video id="appVideo" controls playsinline webkit-playsinline preload="none" src="bienvenida.mp4?v=2"></video>
         <button type="button" class="btn btn-gold btn-full" id="btnWelcomeGo" style="margin-top:1rem">Entrar</button>
       </div>
     </div>
@@ -182,17 +182,6 @@
     <div id="appShell" class="app-shell no-print">
       <section class="view on" id="viewHoy" data-view="hoy">
         <div class="stories" id="storyBar"></div>
-
-        <article class="post" id="homeVideoCard">
-          <header class="post-head">
-            <span class="avatar avatar-mark"><img src="logo-tile.png?v=35" alt=""></span>
-            <div>
-              <b>Erior</b>
-              <small>Bienvenida</small>
-            </div>
-          </header>
-          <video id="homeVideo" controls playsinline webkit-playsinline preload="none" src="bienvenida.mp4"></video>
-        </article>
 
         <div class="card foil-card" id="homeAffirm" style="margin-top:1rem"></div>
         <div id="progressBox"></div>
@@ -288,6 +277,16 @@
       <section class="view" id="viewCuenta" data-view="cuenta">
         <h2 class="sec-title">Yo</h2>
         <div id="myPackBox"></div>
+        <article class="post" id="homeVideoCard" style="margin-top:1rem">
+          <header class="post-head">
+            <span class="avatar avatar-mark"><img src="logo-tile.png?v=35" alt=""></span>
+            <div>
+              <b>Erior</b>
+              <small>Bienvenida y cómo usar</small>
+            </div>
+          </header>
+          <video id="homeVideo" controls playsinline webkit-playsinline preload="none" src="bienvenida.mp4?v=2"></video>
+        </article>
         <div class="card foil-card sand-card" id="purposeCard" style="margin-top:1rem">
           <span class="num">Propósito</span>
           <label for="purposeIn">Una vez</label>
@@ -406,7 +405,7 @@
   <script src="plan.js?v=22"></script>
   <script src="vault.js?v=34"></script>
   <script src="vision.js?v=7"></script>
-  <script src="protocolo.js?v=45"></script>
+  <script src="protocolo.js?v=46"></script>
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js?v=45', { scope: './' }).catch(function () {});
