@@ -1041,7 +1041,7 @@ body.is-boot .wrap{visibility:hidden}
   color:#06140c;
 }
 #installHome{margin:0 0 1rem;padding:1rem 1.05rem}
-#btnInstall{display:inline-flex;align-items:center}
+#btnInstall{display:inline-flex;align-items:center;white-space:nowrap}
 
 body.is-app .wrap{width:min(480px,100vw);padding:0 1rem 7.4rem}
 body.is-app.has-mini .wrap{padding-bottom:10.2rem}
