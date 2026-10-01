@@ -80,7 +80,7 @@
       "offers": {
         "@type": "AggregateOffer",
         "priceCurrency": "USD",
-        "lowPrice": "777",
+        "lowPrice": "888",
         "highPrice": "3333",
         "offerCount": "25",
         "availability": "https://schema.org/OnlineOnly",
@@ -482,7 +482,7 @@ body::before{
   display:block;font-family:'Cormorant Garamond',serif;font-size:clamp(1.5rem,5vw,2rem);
   font-weight:600;color:#fff;line-height:1;text-shadow:0 0 20px rgba(212,175,95,.45);
 }
-.promo-countdown-unit span{
+.promo-countdown-unit span:not(.promo-countdown-num){
   display:block;font-size:.48rem;letter-spacing:.12em;text-transform:uppercase;
   color:rgba(200,195,220,.55);margin-top:.25rem;
 }
@@ -3306,8 +3306,8 @@ body.has-referral-banner .cover-vip-widget:not(.is-cover-inflow){top:calc(1.2rem
   35%{transform:scale(1.08);filter:brightness(1.3);box-shadow:0 0 44px rgba(212,175,95,.45),0 0 60px rgba(200,190,175,.22);}
   100%{transform:scale(1);filter:brightness(1);}
 }
-#mjHeroBlock .btn-amor4-crystal,#mjHeroBlock .btn-icon-aura-metal,#mjHeroBlock #btnLimitless,#mjHeroBlock #btnBooster,#mjHeroBlock #btnMagicHombre{pointer-events:auto;}
-.mj-hero-btns .btn-amor4-crystal,.mj-hero-btns .btn-icon-aura-metal,.mj-hero-btns #btnLimitless,.mj-hero-btns #btnBooster,.mj-hero-btns #btnMagicHombre{width:100%;max-width:100%;}
+#mjHeroBlock .btn-amor4-crystal,#mjHeroBlock .btn-icon-aura-metal{pointer-events:auto;}
+.mj-hero-btns .btn-amor4-crystal,.mj-hero-btns .btn-icon-aura-metal{width:100%;max-width:100%;}
 .cover-mj-col .mj-hero-btns{max-width:min(100%,13.25rem);}
 .cover-promo-slides{position:relative;min-height:4.75rem;margin-bottom:.45rem;overflow:hidden}
 .cover-promo-slide{display:none;text-align:center;animation:promoSlideIn .55s cubic-bezier(.22,1,.36,1) both}
@@ -3908,6 +3908,66 @@ body::before{
   font-family:'Cormorant Garamond',serif;font-size:clamp(1.15rem,4vw,1.45rem);color:var(--gold);margin:0 0 .2rem;
 }
 .cover-combo-price span{font-size:.72em;opacity:.55;text-decoration:line-through;margin-right:.4rem;color:rgba(200,195,220,.55)}
+.cover-feature-row{display:flex;align-items:center;gap:.9rem;text-align:left;margin:.15rem 0 .2rem}
+.cover-feature-art{
+  flex:0 0 auto;width:clamp(92px,26vw,120px);height:auto;aspect-ratio:2/3;object-fit:cover;border-radius:14px;
+  box-shadow:0 10px 28px rgba(0,0,0,.5),0 0 22px rgba(255,215,0,.18);border:1px solid rgba(255,215,0,.28);
+}
+.cover-feature--glow .cover-feature-art{aspect-ratio:3/4;box-shadow:0 10px 28px rgba(0,0,0,.5),0 0 22px rgba(125,249,255,.2);border-color:rgba(125,249,255,.3)}
+.cover-feature-txt{min-width:0}
+.cover-feature-txt .cover-combo-title{font-size:clamp(1.15rem,4.4vw,1.45rem);letter-spacing:.06em}
+.cover-feature-txt .cover-combo-sub{margin-bottom:.45rem}
+.cover-feature-note{font-family:'Jost',sans-serif;font-size:.64rem;letter-spacing:.06em;color:rgba(255,220,140,.9);margin:0 0 .3rem}
+.cover-app-btn{
+  position:relative;isolation:isolate;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;gap:.7rem;grid-column:1/-1;
+  width:100%;padding:.95rem 1.2rem;border-radius:18px;cursor:pointer;
+  border:1px solid rgba(255,255,255,.22);color:#fff;
+  background:linear-gradient(120deg,#2a0f3d 0%,#3a1060 35%,#0f3a4a 70%,#2a0f3d 100%);
+  background-size:220% 220%;animation:appBtnShift 6s ease-in-out infinite;
+  box-shadow:0 12px 34px rgba(155,109,255,.35),0 0 28px rgba(126,255,178,.18),inset 0 1px 0 rgba(255,255,255,.18);
+  transition:transform .25s cubic-bezier(.22,1,.36,1),box-shadow .25s ease;
+}
+.cover-app-btn::after{
+  content:'';position:absolute;top:0;left:-60%;width:40%;height:100%;z-index:-1;
+  background:linear-gradient(100deg,transparent,rgba(255,255,255,.28),transparent);
+  animation:appBtnSheen 3.2s ease-in-out infinite;
+}
+.cover-app-btn:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(155,109,255,.45),0 0 34px rgba(126,255,178,.26)}
+.cover-app-ico{font-size:1.5rem;line-height:1;filter:drop-shadow(0 0 8px rgba(126,255,178,.55))}
+.cover-app-copy{display:flex;flex-direction:column;align-items:flex-start;text-align:left}
+.cover-app-label{font-family:'Syne',sans-serif;font-weight:700;font-size:clamp(.9rem,3.4vw,1.05rem);letter-spacing:.08em;text-transform:uppercase}
+.cover-app-sub{font-family:'Jost',sans-serif;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(190,255,220,.88);margin-top:.15rem}
+@keyframes appBtnShift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+@keyframes appBtnSheen{0%{left:-60%}55%,100%{left:130%}}
+.feature-modal-art{display:block;width:min(260px,70%);margin:0 auto 1rem;border-radius:16px;box-shadow:0 14px 36px rgba(0,0,0,.5)}
+.feature-modal-copy{font-size:.86rem;line-height:1.6;color:rgba(225,220,240,.88);white-space:pre-line;margin:0 0 1rem}
+.feature-modal-copy strong{color:#FFE7A8;font-weight:600}
+.app-modal-list{list-style:none;padding:0;margin:0 0 1rem;display:grid;gap:.5rem}
+.app-modal-list li{
+  padding:.7rem .9rem;border-radius:14px;border:1px solid rgba(126,255,178,.22);
+  background:rgba(126,255,178,.06);font-size:.88rem;color:rgba(235,245,240,.92)
+}
+.app-modal-list li::before{content:'●';color:#7effb2;margin-right:.55rem;font-size:.7rem}
+.app-modal-foot{font-size:.8rem;color:rgba(200,195,220,.75);text-align:center;margin:0 0 1rem}
+#appManifModal .promo-modal-title,#glowUpModal .promo-modal-title{padding-right:2.6rem}
+#appManifModal .promo-cta-wa{
+  background:linear-gradient(135deg,#25D366,#128C7E);color:#fff;border-color:transparent;
+  font-size:.95rem;padding:.95rem 1rem;box-shadow:0 8px 24px rgba(37,211,102,.28);
+}
+.promo-tier{
+  padding:.85rem .95rem;border-radius:16px;border:1px solid rgba(255,215,0,.2);
+  background:rgba(255,215,0,.04);margin-bottom:.6rem
+}
+.promo-tier-head{display:flex;justify-content:space-between;align-items:baseline;gap:.6rem;flex-wrap:wrap}
+.promo-tier-name{font-family:'Syne',sans-serif;font-weight:700;font-size:.95rem;letter-spacing:.08em;color:#fff}
+.promo-tier-name small{display:block;font-family:'Jost',sans-serif;font-weight:500;font-size:.58rem;letter-spacing:.14em;color:rgba(255,220,140,.85);text-transform:uppercase}
+.promo-tier-price{font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:var(--gold);white-space:nowrap}
+.promo-tier ul{list-style:none;padding:0;margin:.45rem 0 .6rem;display:grid;gap:.2rem}
+.promo-tier li{font-size:.8rem;color:rgba(220,215,235,.85)}
+.promo-tier li::before{content:'✦';color:rgba(255,215,0,.8);margin-right:.45rem;font-size:.65rem}
+.promo-tier .promo-cta-pay{width:100%}
+.promo-tier--identidad{border-color:rgba(125,249,255,.3);background:rgba(125,249,255,.05)}
 .cover-mapa-entry{
   display:block;width:min(520px,94vw);margin:0 auto .85rem;
   padding:.95rem 1.1rem;text-align:center;text-decoration:none;color:inherit;
@@ -4433,7 +4493,7 @@ body::before{
         <div class="cover-actions-hero">
           <button type="button" class="btn-metallic btn-liquid btn-catalog-hero cover-action-btn cover-action-primary" data-shatter-action="catalog" id="btnCatalogHero">
             <span class="btn-metallic-txt btn-premium-label">View Catalog</span>
-            <span class="btn-hero-badge">33 personalized audios</span>
+            <span class="btn-hero-badge">32 personalized audios</span>
           </button>
           <button type="button" class="btn-alicia-glow cover-action-btn btn-alicia-hero cover-action-primary" onclick="goTo('alicia')">
             <span class="btn-alicia-orb" aria-hidden="true"><img src="img/alicia-orb.png" alt="" width="36" height="36" decoding="async"></span>
@@ -4442,23 +4502,42 @@ body::before{
               <span class="btn-hero-badge btn-hero-badge--alicia">The most powerful AI · free</span>
             </span>
           </button>
+          <button type="button" class="cover-app-btn cover-action-btn" id="btnAppManif" onclick="openAppManifModal()">
+            <span class="cover-app-ico" aria-hidden="true">📱</span>
+            <span class="cover-app-copy">
+              <span class="cover-app-label">Manifestation App</span>
+              <span class="cover-app-sub">New · Erior Center's #1 app</span>
+            </span>
+          </button>
           <p class="cover-alicia-fomo" id="coverAliciaFomo" aria-live="polite">Today Alicia already helped <strong id="coverFomoNum">42</strong> people choose an audio</p>
         </div>
       </div>
 
-      <div class="cover-combo-impact" id="coverComboImpact" role="button" tabindex="0" aria-label="Combo Booster 2.0 + LIMITLESS + MENTAL TECH book" onclick="openComboPackPay()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openComboPackPay();}">
-        <span class="cover-combo-badge">Star combo · September</span>
-        <h2 class="cover-combo-title">2 frequencies. <em>1 book.</em> A new mind.</h2>
-        <p class="cover-combo-sub">BOOSTER 2.0 + LIMITLESS<br>and you get MENTAL TECH free</p>
-        <div class="cover-combo-arts" aria-hidden="true">
-          <img src="img/catalog/booster-2-0.jpg" alt="" width="88" height="88" loading="lazy" decoding="async">
-          <span class="cover-combo-plus">+</span>
-          <img src="img/catalog/limitless.jpg" alt="" width="88" height="88" loading="lazy" decoding="async">
-          <span class="cover-combo-plus">+</span>
-          <img src="img/mental-tech-cover.png" alt="" width="88" height="88" loading="lazy" decoding="async" style="object-fit:contain;background:#0a0a0f">
+      <div class="cover-combo-impact cover-feature" id="coverGoldGlitch" role="button" tabindex="0" aria-label="New audio GOLD GLITCH" onclick="goToGoldGlitch()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();goToGoldGlitch();}">
+        <span class="cover-combo-badge">New audio · abundance &amp; authenticity</span>
+        <div class="cover-feature-row">
+          <img class="cover-feature-art" src="img/catalog/gold-glitch.jpg" alt="GOLD GLITCH — Erior Center abundance and authenticity audio" width="120" height="178" loading="lazy" decoding="async">
+          <div class="cover-feature-txt">
+            <h2 class="cover-combo-title">GOLD <em>GLITCH</em></h2>
+            <p class="cover-combo-sub">Your authenticity is your GOLD. The GLITCH happens when you break the patterns that made you shrink and open up to more money, opportunities and expansion.</p>
+            <p class="cover-feature-note">+ Abundance Telegram included</p>
+            <p class="cover-combo-price">From $53 USD</p>
+          </div>
         </div>
-        <p class="cover-combo-price"><span>~~$142~~</span>$85 USD</p>
-        <span class="cover-combo-cta">I want this combo →</span>
+        <span class="cover-combo-cta">I want GOLD GLITCH →</span>
+      </div>
+
+      <div class="cover-combo-impact cover-feature cover-feature--glow" id="coverGlowUp" role="button" tabindex="0" aria-label="Glow Up Your Mind master class" onclick="openGlowUpModal()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openGlowUpModal();}">
+        <span class="cover-combo-badge">Master class · October 28 · 3 hours</span>
+        <div class="cover-feature-row">
+          <img class="cover-feature-art" src="img/glow-up-your-mind.jpg" alt="Glow Up Your Mind master class — Erior Center + Binoqular" width="120" height="160" loading="lazy" decoding="async">
+          <div class="cover-feature-txt">
+            <h2 class="cover-combo-title">GLOW UP <em>YOUR MIND</em></h2>
+            <p class="cover-combo-sub">With Marbella Luján from Binoqular and Pauline from Erior Center. Includes a personalized audio, Binoqular glasses, Telegram and the App.</p>
+            <p class="cover-combo-price">$190 USD</p>
+          </div>
+        </div>
+        <span class="cover-combo-cta">Save my spot →</span>
       </div>
 
       <a class="cover-mapa-entry" href="/en/mapa/">
@@ -4467,12 +4546,12 @@ body::before{
         <span class="cover-mapa-sub">4 questions · your pattern · suggested neural frequency</span>
       </a>
 
-      <div class="cover-promo-countdown cover-promo-jewel promo-countdown-block promo-summer-glow" id="coverPromoJewel" onclick="openPromoModal()" role="button" tabindex="0" aria-label="View September promo Erior">
+      <div class="cover-promo-countdown cover-promo-jewel promo-countdown-block promo-summer-glow" id="coverPromoJewel" onclick="openPromoModal()" role="button" tabindex="0" aria-label="View Erior October deals">
         <div class="cover-promo-offer">
-          <span class="promo-badge-lastmonth">SEPTEMBER PROMO</span>
-          <strong class="cover-promo-title">ANY AUDIO $46 USD</strong>
-          <p class="cover-promo-line">1 audio $46 · 2 for $85 (+ book) · 3 for $135 (+ Alicia Premium)</p>
-          <p class="cover-promo-prices"><span class="promo-price-old">was from $71</span> now from $46 USD</p>
+          <span class="promo-badge-lastmonth">OCTOBER DEALS 🎃</span>
+          <strong class="cover-promo-title">PORTAL $53 USD</strong>
+          <p class="cover-promo-line">Expansion $86 · Immersion $136 · Identity $190</p>
+          <p class="cover-promo-prices">Personalized audio + App + 28-day challenge + Telegram</p>
         </div>
         <span class="promo-countdown-label">⏳ Ends in</span>
         <div class="promo-countdown-grid">
@@ -4481,7 +4560,7 @@ body::before{
           <div class="promo-countdown-unit"><span class="promo-countdown-num" data-cd="mins">00</span><span>min</span></div>
           <div class="promo-countdown-unit"><span class="promo-countdown-num" data-cd="secs">00</span><span>sec</span></div>
         </div>
-        <p class="cover-promo-bonus">Tap for details · pay or WhatsApp</p>
+        <p class="cover-promo-bonus">Tap to see the 4 packages · pay or WhatsApp</p>
       </div>
       </div>
 
@@ -4495,17 +4574,17 @@ body::before{
           <div class="cover-mj-col">
             <div id="mjHeroBlock" aria-hidden="true">
               <div class="mj-hero-btns">
-                <button type="button" class="btn-amor4-crystal" id="btnBooster" onclick="goToBooster()">
-                  <span class="btn-premium-label">BOOSTER 2.0</span>
-                  <span class="btn-amor4-badge">NEW UPGRADE · zero point · $46</span>
+                <button type="button" class="btn-amor4-crystal" id="btnGoldGlitch" onclick="goToGoldGlitch()">
+                  <span class="btn-premium-label">GOLD GLITCH</span>
+                  <span class="btn-amor4-badge">NEW AUDIO · abundance</span>
                 </button>
-                <button type="button" class="btn-icon-aura-metal" id="btnLimitless" onclick="goToLimitless()">
-                  <span class="btn-premium-label">LIMITLESS</span>
-                  <span class="btn-amor4-badge" style="position:relative;z-index:2;display:block;margin-top:.2rem;font-size:.55rem;letter-spacing:.08em;opacity:.85">genius mind · $46</span>
+                <button type="button" class="btn-icon-aura-metal" id="btnAppManifHero" onclick="openAppManifModal()">
+                  <span class="btn-premium-label">MANIFESTATION APP</span>
+                  <span class="btn-amor4-badge" style="position:relative;z-index:2;display:block;margin-top:.2rem;font-size:.55rem;letter-spacing:.08em;opacity:.85">new · 28-day challenge</span>
                 </button>
-                <button type="button" class="btn-icon-aura-metal" id="btnMagicHombre" onclick="goToMagicHombre()">
-                  <span class="btn-premium-label">MAGIC HOMBRE 2.0</span>
-                  <span class="btn-amor4-badge" style="position:relative;z-index:2;display:block;margin-top:.2rem;font-size:.55rem;letter-spacing:.08em;opacity:.85">NEW UPGRADE · hold & sustain</span>
+                <button type="button" class="btn-icon-aura-metal" id="btnGlowUp" onclick="openGlowUpModal()">
+                  <span class="btn-premium-label">GLOW UP YOUR MIND</span>
+                  <span class="btn-amor4-badge" style="position:relative;z-index:2;display:block;margin-top:.2rem;font-size:.55rem;letter-spacing:.08em;opacity:.85">master class · Oct 28</span>
                 </button>
               </div>
               <div id="mjFloatWrap">
@@ -4641,8 +4720,8 @@ body::before{
               <p class="alicia-mode-card-sub">Advisor + closer · she gets you and helps you buy</p>
               <ul class="alicia-mode-card-list">
                 <li>💜 She listens with clarity and care</li>
-                <li>⚡ September promo: any audio $46 USD</li>
-                <li>🐇 Booster 2.0 · LIMITLESS · Magic Hombre 2.0</li>
+                <li>🎃 October deals: Portal from $53 USD</li>
+                <li>🪙 GOLD GLITCH · 📱 Manifestation App · 🧠 Glow Up Your Mind</li>
               </ul>
               <button type="button" class="alicia-mode-free-btn" onclick="startAliciaFree()">START SHOPPING →</button>
               <button type="button" class="alicia-mode-express-btn" onclick="startAliciaExpress()">⚡ I know what I want — quote me</button>
@@ -4723,9 +4802,9 @@ body::before{
             </div>
           <canvas class="alicia-sales-sparkle" id="aliciaSalesSparkle" aria-hidden="true"></canvas>
           <div class="alicia-express-chips" id="aliciaExpressChips" hidden>
-            <button type="button" class="alicia-express-chip" onclick="sendAliciaExpressPick('Booster 2.0')">⚡ BOOSTER 2.0</button>
-            <button type="button" class="alicia-express-chip" onclick="sendAliciaExpressPick('LIMITLESS')">🧠 LIMITLESS</button>
-            <button type="button" class="alicia-express-chip" onclick="sendAliciaExpressPick('Amor Propio Magic Hombre 2.0')">👽 MAGIC HOMBRE 2.0</button>
+            <button type="button" class="alicia-express-chip" onclick="sendAliciaExpressPick('GOLD GLITCH')">🪙 GOLD GLITCH</button>
+            <button type="button" class="alicia-express-chip" onclick="sendAliciaExpressPick('the Manifestation App')">📱 APP</button>
+            <button type="button" class="alicia-express-chip" onclick="sendAliciaExpressPick('the Glow Up Your Mind master class (Identity)')">🧠 GLOW UP YOUR MIND</button>
             <button type="button" class="alicia-express-chip" onclick="sendAliciaExpressPick('SEDUCTION')">💋 SEDUCTION</button>
             <button type="button" class="alicia-express-chip" onclick="sendAliciaExpressPick('IMAGINE')">🌌 IMAGINE</button>
           </div>
@@ -4858,8 +4937,8 @@ body::before{
         <div class="faq-item">
           <button type="button" class="faq-q" aria-expanded="false">¿Cómo sé cuál audio es para mí?<span class="faq-q-icon">+</span></button>
           <div class="faq-a"><div class="faq-a-inner">
-            <p>Habla con Alicia IA en esta misma página: te recomienda 2 audios según tu dolor real, te cotiza la promo de septiembre y te ayuda a cerrar hoy por pago o WhatsApp. También puedes explorar el catálogo por categoría.</p>
-            <p>Promo septiembre: cualquier audio $777 MXN · 2 por $1,444 (libro gratis) · 3 por $2,299 (Alicia Premium). Destacados: Booster 2.0, LIMITLESS y Amor Propio Magic Hombre 2.0.</p>
+            <p>Habla con Alicia IA en esta misma página: te recomienda 2 audios según tu dolor real, te cotiza los descuentos de octubre y te ayuda a cerrar hoy por pago o WhatsApp. También puedes explorar el catálogo por categoría.</p>
+            <p>Descuentos octubre: Portal $888 MXN (audio + App + reto 28 días + Telegram) · Expansión $1,444 (2 audios) · Inmersión $2,299 (3 audios + IA avanzada) · Identidad $3,333 (master class Glow Up Your Mind, 28 de octubre). Destacados: GOLD GLITCH, la App de manifestación y Glow Up Your Mind.</p>
             <p>¿Quieres que Alicia te guíe ahora mismo?</p>
             <button type="button" class="faq-cta-btn" onclick="goTo('alicia')">Hablar con Alicia ✦</button>
           </div></div>
@@ -5115,7 +5194,7 @@ body::before{
     <div class="pay-modal-header">
       <div class="pay-modal-label" id="payModalLabel">Elige cómo pagar y empieza hoy</div>
       <div class="pay-modal-product" id="payProductName"></div>
-      <div class="pay-modal-price" id="payModalPrice">$46 USD · September promo</div>
+      <div class="pay-modal-price" id="payModalPrice">$53 USD · October Portal</div>
     </div>
     <div class="pay-methods" id="payMethods"></div>
     <div class="pay-panel" id="payPanel"></div>
@@ -5130,25 +5209,25 @@ body::before{
   </div>
   <div class="pay-promo-popup" id="payPromoPopup" aria-hidden="true" role="dialog" aria-labelledby="payPromoTitle">
     <button type="button" class="pay-promo-close" id="payPromoClose" aria-label="Cerrar">✕</button>
-    <div class="pay-promo-kicker" id="payPromoKicker">Promo septiembre activa</div>
-    <div class="pay-promo-title" id="payPromoTitle">Cualquier audio $777 · 2 por $1,444 · 3 por $2,299 (+ Alicia Premium). ¿Armamos tu combo? ⚡</div>
+    <div class="pay-promo-kicker" id="payPromoKicker">October deals 🎃</div>
+    <div class="pay-promo-title" id="payPromoTitle">Portal $53 · Expansion $86 · Immersion $136 · Identity $190 USD. Which one is yours? ⚡</div>
     <a href="#" class="pay-promo-wa" id="payPromoWaBtn" target="_blank" rel="noopener noreferrer">Escribir al equipo</a>
   </div>
 </div>
 
-<!-- PROMO SEPTIEMBRE -->
+<!-- OCTOBER DEALS -->
 <div class="modal-bg" id="promoModal" aria-hidden="true">
   <div class="modal-box promo-modal-box">
     <div class="promo-modal-inner">
       <div class="promo-modal-head">
         <div>
-          <div class="promo-modal-title">Promo septiembre</div>
-          <p class="promo-modal-sub">BOOSTER 2.0 · LIMITLESS · MAGIC HOMBRE 2.0</p>
+          <div class="promo-modal-title">October deals 🎃</div>
+          <p class="promo-modal-sub">GOLD GLITCH · MANIFESTATION APP · GLOW UP YOUR MIND</p>
         </div>
-        <button type="button" class="modal-close" onclick="closePromoModal()" aria-label="Cerrar">✕</button>
+        <button type="button" class="modal-close" onclick="closePromoModal()" aria-label="Close">✕</button>
       </div>
       <div class="promo-countdown-block" id="modalPromoCountdown">
-        <span class="promo-countdown-label">⏳ La promo termina en</span>
+        <span class="promo-countdown-label">⏳ Deals end in</span>
         <div class="promo-countdown-grid">
           <div class="promo-countdown-unit"><span class="promo-countdown-num" data-cd="days">00</span><span>days</span></div>
           <div class="promo-countdown-unit"><span class="promo-countdown-num" data-cd="hours">00</span><span>hrs</span></div>
@@ -5157,28 +5236,147 @@ body::before{
         </div>
       </div>
       <div class="promo-panel active" id="promoPanelLaunch" role="tabpanel">
-        <p class="promo-dates">🛸 PROMO SEPTIEMBRE · ERIOR</p>
-        <p class="promo-desc"><strong>Cualquier audio</strong> del catálogo a precio de mes. Telegram incluido con tu compra.</p>
-        <ul class="promo-benefit-list">
-          <li>⚡ <strong>1 audio</strong> — $46 USD · Telegram included</li>
-          <li>💿 <strong>2 audios</strong> — $85 USD · free MENTAL TECH book + Telegram</li>
-          <li>🚀 <strong>3 audios</strong> — $135 USD · Alicia Premium + Telegram</li>
-          <li>⚡ <strong>BOOSTER 2.0</strong> — NUEVO UPGRADE · punto cero · salir del loop</li>
-          <li>🛸 <strong>LIMITLESS</strong> — mente genio · detectar el patrón</li>
-          <li>👽 <strong>Magic Hombre 2.0</strong> — NEW UPGRADE · hold & sustain y abundancia</li>
-        </ul>
+        <p class="promo-dates">🎃 OCTOBER DEALS · ERIOR</p>
+        <div class="promo-tier">
+          <div class="promo-tier-head">
+            <span class="promo-tier-name"><small>01</small>PORTAL</span>
+            <span class="promo-tier-price">$53 USD</span>
+          </div>
+          <ul>
+            <li>1 personalized Erior audio</li>
+            <li>Erior Center App + 28-day challenge</li>
+            <li>1 month in the private Telegram</li>
+          </ul>
+          <button type="button" class="promo-cta-pay" onclick="openPromoPay('portal')">💳 I want Portal</button>
+        </div>
+        <div class="promo-tier">
+          <div class="promo-tier-head">
+            <span class="promo-tier-name"><small>02</small>EXPANSION</span>
+            <span class="promo-tier-price">$86 USD</span>
+          </div>
+          <ul>
+            <li>Everything in Portal</li>
+            <li>2 Erior audios</li>
+            <li>25% off your next Mind Movie</li>
+          </ul>
+          <button type="button" class="promo-cta-pay" onclick="openPromoPay('expansion')">💳 I want Expansion</button>
+        </div>
+        <div class="promo-tier">
+          <div class="promo-tier-head">
+            <span class="promo-tier-name"><small>03</small>IMMERSION</span>
+            <span class="promo-tier-price">$136 USD</span>
+          </div>
+          <ul>
+            <li>Everything above</li>
+            <li>3 Erior audios</li>
+            <li>Advanced AI · existential guidance</li>
+          </ul>
+          <button type="button" class="promo-cta-pay" onclick="openPromoPay('inmersion')">💳 I want Immersion</button>
+        </div>
+        <div class="promo-tier promo-tier--identidad">
+          <div class="promo-tier-head">
+            <span class="promo-tier-name"><small>04 · October 28</small>IDENTITY</span>
+            <span class="promo-tier-price">$190 USD</span>
+          </div>
+          <ul>
+            <li>Glow Up Your Mind master class</li>
+            <li>Binoqular glasses</li>
+            <li>1 audio</li>
+            <li>Telegram</li>
+            <li>App</li>
+          </ul>
+          <button type="button" class="promo-cta-pay" onclick="openPromoPay('identidad')">💳 I want Identity</button>
+        </div>
         <div class="promo-cta-row">
-          <button type="button" class="promo-cta-pay" onclick="openPromoPay('booster')">💳 Quiero BOOSTER 2.0</button>
-          <button type="button" class="promo-cta-pay" onclick="openPromoPay('limitless')">💳 Quiero LIMITLESS</button>
-          <button type="button" class="promo-cta-pay" onclick="openPromoPay('hombre')">💳 Quiero Magic Hombre 2.0</button>
-          <a class="promo-cta-wa" href="#" onclick="event.preventDefault();window.open(promoWaUrl('launch'),'_blank','noopener');closePromoModal();">💬 WhatsApp: quiero la promo</a>
+          <a class="promo-cta-wa" href="#" onclick="event.preventDefault();window.open(promoWaUrl('launch'),'_blank','noopener');closePromoModal();">💬 Which one is yours? Message us on WhatsApp</a>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<button type="button" class="promo-float-btn" id="promoFloatBtn" onclick="openPromoModal()" aria-label="Ver promoción septiembre">Promo septiembre $777</button>
+<button type="button" class="promo-float-btn" id="promoFloatBtn" onclick="openPromoModal()" aria-label="View October deals">October deals 🎃</button>
+
+<!-- MANIFESTATION APP -->
+<div class="modal-bg" id="appManifModal" aria-hidden="true">
+  <div class="modal-box promo-modal-box">
+    <div class="promo-modal-inner">
+      <div class="promo-modal-head">
+        <div>
+          <div class="promo-modal-title">ERIOR CENTER'S #1 MANIFESTATION APP 📱</div>
+        </div>
+        <button type="button" class="modal-close" onclick="closeFeatureModal('appManifModal')" aria-label="Close">✕</button>
+      </div>
+      <ul class="app-modal-list">
+        <li>Personalized visualizations.</li>
+        <li>Listen to your audios your way.</li>
+        <li>Daily affirmations.</li>
+        <li>A protocol for every day.</li>
+        <li>28-day challenge.</li>
+      </ul>
+      <p class="app-modal-foot">All with your profile.</p>
+      <div class="promo-cta-row">
+        <a class="promo-cta-wa" id="appManifWa" href="#" target="_blank" rel="noopener" onclick="registrarEvento('click_app_manifestacion','cover');closeFeatureModal('appManifModal');">💬 I want the manifestation app</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- GLOW UP YOUR MIND -->
+<div class="modal-bg" id="glowUpModal" aria-hidden="true">
+  <div class="modal-box promo-modal-box">
+    <div class="promo-modal-inner">
+      <div class="promo-modal-head">
+        <div>
+          <div class="promo-modal-title">✨🧠💖 GLOW UP YOUR MIND 💖🧠✨</div>
+          <p class="promo-modal-sub">Master class · October 28 · 3 hours</p>
+        </div>
+        <button type="button" class="modal-close" onclick="closeFeatureModal('glowUpModal')" aria-label="Close">✕</button>
+      </div>
+      <img class="feature-modal-art" src="img/glow-up-your-mind.jpg" alt="Glow Up Your Mind master class — Erior Center + Binoqular" loading="lazy" decoding="async">
+      <p class="feature-modal-copy">A 3-hour MASTER CLASS to give a glow up to the most important part of all: <strong>YOUR MIND</strong>.
+
+Because yes… changing your look is fun, but what happens when you start changing the way you see yourself, think, choose and create your reality? 👀✨
+
+In Glow Up Your Mind you'll learn to be much more aware of yourself, your thoughts and the version you're choosing to be every day… so you can start becoming the version of you who already has, lives and enjoys what she wants. 💅🏻🪩🧠
+
+An experience created and taught by <strong>Marbella Luján from Binoqular</strong> and <strong>Pauline from Erior Center / She is Magique</strong>, where we'll blend consciousness, identity, mind, perception and A LOT of inner glow up. ✨
+
+And because obviously we didn't want it to be just any master class…
+
+💖 It includes a personalized audio created especially for you.
+👓 It includes your Binoqular glasses, to help you connect with your best version.
+✨ And 3 hours to see yourself, get to know yourself and choose yourself from a completely different place.
+
+The question is…
+
+Who would you be if you started thinking, feeling and choosing like the version of you who already has what she wants?
+
+Well… 👀
+let's go meet her.
+
+🧠✨ GLOW UP YOUR MIND ✨🧠
+Because your next version starts in your mind first. 💖</p>
+      <div class="promo-tier promo-tier--identidad">
+        <div class="promo-tier-head">
+          <span class="promo-tier-name"><small>04 · October 28</small>IDENTITY</span>
+          <span class="promo-tier-price">$190 USD</span>
+        </div>
+        <ul>
+          <li>3-hour master class</li>
+          <li>Binoqular glasses</li>
+          <li>1 personalized audio</li>
+          <li>Telegram</li>
+          <li>App</li>
+        </ul>
+        <button type="button" class="promo-cta-pay" onclick="closeFeatureModal('glowUpModal');openPromoPay('identidad')">💳 Save my spot</button>
+      </div>
+      <div class="promo-cta-row">
+        <a class="promo-cta-wa" href="#" onclick="event.preventDefault();window.open(promoWaUrl('identidad'),'_blank','noopener');closeFeatureModal('glowUpModal');">💬 WhatsApp: I want the master class</a>
+      </div>
+    </div>
+  </div>
+</div>
 
 <div class="chat-img-lightbox" id="chatImgLightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Vista de promoción">
   <button type="button" class="chat-img-lightbox-close" onclick="closeChatPromoLightbox()" aria-label="Cerrar">✕</button>
@@ -5454,7 +5652,7 @@ async function guardarProspecto(datos){
   }catch(e){console.log('prospecto error',e);}
 }
 
-var PROMO_COUNTDOWN_END=new Date('2026-09-30T23:59:59-06:00');
+var PROMO_COUNTDOWN_END=new Date('2026-10-31T23:59:59-06:00');
 var COVER_PROMO_IDS=['launch'];
 var _coverPromoSlide=0;
 
@@ -5521,26 +5719,52 @@ function closePromoModal(){
 function switchPromoTab(){/* promo única lanzamiento */}
 function promoWaUrl(tab){
   var msgs={
-    launch:'Hola! Quiero la promo de septiembre: cualquier audio a $777 MXN (2 por $1,444 / 3 por $2,299)',
-    limitless:'Hola! Quiero LIMITLESS con promo septiembre a $777 MXN',
-    booster:'Hola! Quiero BOOSTER 2.0 con promo septiembre a $777 MXN',
-    hombre:'Hola! Quiero Amor Propio Magic Hombre 2.0 con promo septiembre a $777 MXN'
+    launch:'Hi! I want the Erior October deals (Portal $53 / Expansion $86 / Immersion $136 / Identity $190 USD)',
+    portal:'Hi! I want the October PORTAL ($53 USD): personalized audio + App + 28-day challenge + Telegram',
+    expansion:'Hi! I want the October EXPANSION ($86 USD): 2 audios + App + Telegram + 25% off Mind Movie',
+    inmersion:'Hi! I want the October IMMERSION ($136 USD): 3 audios + App + Telegram + advanced AI',
+    identidad:'Hi! I want IDENTITY ($190 USD): the Glow Up Your Mind master class on October 28',
+    goldglitch:'Hi! I want GOLD GLITCH with the October deals'
   };
   return payWaUrl(msgs[tab]||msgs.launch);
 }
+var PROMO_PAY_LABELS={
+  launch:'🌀 PORTAL — 1 audio + App + Telegram',
+  portal:'🌀 PORTAL — 1 audio + App + Telegram',
+  expansion:'💿 EXPANSION — 2 audios + App + Telegram',
+  inmersion:'🚀 IMMERSION — 3 audios + App + Telegram + advanced AI',
+  identidad:'🧠 IDENTITY — Glow Up Your Mind master class (Oct 28)'
+};
 function openPromoPay(tab){
   closePromoModal();
-  var map={
-    launch:'🛸 September promo — Audio $46 USD',
-    limitless:'🧠 LIMITLESS — September promo',
-    booster:'⚡ Booster 2.0 — September promo',
-    hombre:'👽 Self-Love Magic for Men 2.0 — September promo',
-    combo:'💿 Pack 2 — BOOSTER 2.0 + LIMITLESS + book ($85 USD)'
-  };
-  openPaymentModal(map[tab]||map.launch);
+  openPaymentModal(PROMO_PAY_LABELS[tab]||PROMO_PAY_LABELS.launch);
 }
-function openComboPackPay(){
-  openPaymentModal('💿 Pack 2 — BOOSTER 2.0 + LIMITLESS + book ($85 USD)');
+var APP_MANIF_WA_MSG='I want the Erior manifestation app';
+function openFeatureModal(id){
+  var m=document.getElementById(id);
+  if(!m)return;
+  m.classList.add('open');
+  m.setAttribute('aria-hidden','false');
+  var box=m.querySelector('.modal-box');
+  if(box)box.scrollTop=0;
+  if(typeof lockPageScroll==='function')lockPageScroll();
+}
+function closeFeatureModal(id){
+  var m=document.getElementById(id);
+  if(!m||!m.classList.contains('open'))return;
+  m.classList.remove('open');
+  m.setAttribute('aria-hidden','true');
+  if(typeof unlockPageScroll==='function')unlockPageScroll();
+}
+function openAppManifModal(){
+  var wa=document.getElementById('appManifWa');
+  if(wa)wa.href=payWaUrlRaw(APP_MANIF_WA_MSG);
+  registrarEvento('abrio_app_manifestacion','cover');
+  openFeatureModal('appManifModal');
+}
+function openGlowUpModal(){
+  registrarEvento('abrio_glow_up','cover');
+  openFeatureModal('glowUpModal');
 }
 function openAmor4Payment(){
   openPaymentModal('💖 Amor Propio Magic 4.0');
@@ -5548,6 +5772,10 @@ function openAmor4Payment(){
 (function(){
   var pm=document.getElementById('promoModal');
   if(pm)pm.addEventListener('click',function(e){if(e.target===pm)closePromoModal();});
+  ['appManifModal','glowUpModal'].forEach(function(id){
+    var fm=document.getElementById(id);
+    if(fm)fm.addEventListener('click',function(e){if(e.target===fm)closeFeatureModal(id);});
+  });
   var coverCd=document.getElementById('coverPromoJewel');
   if(coverCd){
     coverCd.addEventListener('keydown',function(e){
@@ -5977,6 +6205,7 @@ function goToSeduction(){goToCatalogAudio('seduction',/^SEDUCTION$/i);}
 function goToLimitless(){goToCatalogAudio('limitless',/^LIMITLESS$/i);}
 function goToBooster(){goToCatalogAudio('booster',/Booster\s*2\.0|Booster/i);}
 function goToMagicHombre(){goToCatalogAudio('magic-hombre',/Amor Propio Magic Hombre|Magic for Men/i);}
+function goToGoldGlitch(){goToCatalogAudio('gold-glitch',/GOLD GLITCH/i);}
 function goToIconAuraAnimated(){
   var btn=document.getElementById('btnIconAura');
   if(!btn){goToIconAura();return;}
@@ -6390,14 +6619,13 @@ document.getElementById('mmModal').addEventListener('click',function(e){if(e.tar
 // CATALOG DATA
 // ══════════════════════════════════
 var audiosEs=[
+  {nombre:"GOLD GLITCH",cat:"dinero",emoji:"🪙",bg:"linear-gradient(135deg,rgba(255,215,0,.24),rgba(12,11,20,.88))",desc:"✨ NUEVO AUDIO · GOLD GLITCH es un audio de abundancia y autenticidad diseñado para ayudarte a conectar con una versión de ti tan segura, magnética y genuina que empieza a atraer más dinero, oportunidades y expansión.\n\nParte de una idea poderosa: tu autenticidad es tu GOLD; tus ideas, talentos, presencia y forma única de ser tienen valor.\n\nEl GLITCH ocurre cuando rompes los patrones que te hacían disminuirte y empiezas a abrirte a nuevas fuentes de ingresos, crecimiento profesional, mejores oportunidades y más abundancia.\n\nAdemás, incluye acceso al Telegram de abundancia, para acompañar y potenciar toda la experiencia.",isNew:true,img:"img/catalog/gold-glitch.jpg"},
   {nombre:"🐇 Booster 2.0",cat:"manifestacion",emoji:"🐇",bg:"linear-gradient(135deg,rgba(155,109,255,.25),rgba(12,11,20,.85))",desc:"⚡ NUEVO UPGRADE · Booster 2.0. El nuevo BOOSTER 2.0 funciona como una aspiradora de creencias y loops (bucles) mentales: una tecnología espiritual diseñada para llevarte al Punto Cero, neutralizar el ruido y reconfigurar los códigos desde los que seleccionas tu realidad. A través de comandos de identidad, frecuencia y neutralidad, instala una nueva señal dominante: PRESENCIA → ELECCIÓN → MATERIALIZACIÓN. No persigues una nueva versión de ti: cierras el programa anterior, vuelves a la Fuente y eliges desde ahí. Si estás list@ para salir del loop (bucle), este audio es para ti.",isNew:true,isUpgrade:true,isLimited:true,priceMXN:777,img:"img/catalog/booster-2-0.jpg"},
   {nombre:"LIMITLESS",cat:"autoestima",emoji:"🧠",bg:"linear-gradient(135deg,rgba(80,180,255,.28),rgba(212,175,95,.2))",desc:"⚡ UPGRADE MENTAL · NUEVO. LIMITLESS es un audio de frecuencias diseñado para activar una mente extraordinariamente despierta, inteligente y expansiva. 🧠⚡\n\nSus frecuencias te conectan con tu versión genio: aprendes más rápido, comprendes conceptos complejos con facilidad, desarrollas una metacognición increíble y puedes observar tus propios pensamientos desde una perspectiva superior.\n\nTu mente empieza a ver más allá de lo evidente, reconocer patrones, conectar información y encontrar respuestas que otros no perciben.\n\nIdeal si sientes que algo te bloquea para manifestar… pero no logras ver qué es. LIMITLESS es el antídoto: te ayuda a detectar el patrón invisible que te frena, con foco laser, claridad y una mente que funciona como súper poder.\n\nExpande percepción, intuición, creatividad, memoria e inteligencia hasta hacerte sentir que tu mente no tiene techo.\n\nMás foco. Más entendimiento. Más memoria. Más genio.",isNew:true,isLimited:true,isUpgrade:true,priceMXN:777,img:"img/catalog/limitless.jpg"},
   {nombre:"🦱🏼‍♂️ Amor Propio Magic Hombre 2.0",cat:"autoestima",emoji:"🦱🏼‍♂️",bg:"linear-gradient(135deg,rgba(212,175,95,.24),rgba(60,90,140,.2))",desc:"AMOR PROPIO MAGIC PARA HOMBRE 2.0 🦱🏼‍♂️ 🧙🏼‍♂️\nUn audio para conectar profundamente con tu masculinidad y convertirte en un hombre capaz de sostener: sostenerte a ti mismo, tus decisiones, tus relaciones, tus proyectos y la abundancia que llega a tu vida. Trabaja amor propio, independencia, seguridad, virilidad, sensualidad y desapego desde una masculinidad firme y madura. 🧞✨\n\n💰 Porque no se trata solamente de atraer abundancia, sino de convertirte en el hombre capaz de recibirla, administrarla y sostenerla. Cuando fortaleces quién eres, también fortaleces tu capacidad de construir la vida, las relaciones y la abundancia que deseas. 🎧 Se puede intencionar y personalizar al tema de tu elección. ☀️",isNew:true,isUpgrade:true,isLimited:true,priceMXN:777,img:"img/catalog/amor-propio-magic-hombre-2-0.jpg"},
   {nombre:"IMAGINE",cat:"autoestima",emoji:"🌌",bg:"linear-gradient(135deg,rgba(120,90,255,.28),rgba(212,175,95,.18))",desc:"Tu imaginación no es un sueño. Es el plano original de tu realidad.\n\nTodo lo que existe en tu vida — tu dinero, tus relaciones, tu cuerpo, tu éxito — primero existió en tu mente. Primero fue imaginado.\n\nEl problema no es que no puedas tenerlo. El problema es que tu mente ha aprendido a imaginar desde el miedo, desde la carencia, desde el \"¿y si no funciona?\"\n\nIMAGINE es el nuevo audio de ERIOR CENTER diseñado para cambiar eso.\n\nMientras lo escuchas, tu subconsciente aprende a imaginar desde el resultado. Desde el ya lo tengo. Desde el ya soy esa persona.\n\nIncluye:\n• Mini script personalizado que grabas con tu propia voz — adaptado exactamente al área de tu vida que quieres expandir\n• Guía de visualización nocturna — para leer antes de dormir y que tu subconsciente trabaje toda la noche mientras descansas: tu mente crea, tu realidad obedece.",isNew:true,isLimited:true,priceMXN:1199,img:"img/catalog/imagine.jpg"},
-  {nombre:"SEDUCTION",cat:"amor",emoji:"💋",bg:"linear-gradient(135deg,rgba(220,80,140,.28),rgba(120,60,200,.2))",desc:"¿Y si el problema nunca fue que \"no te pelaran\"… sino que tu energía seguía aplicando para el puesto de perseguidor oficial?\n\nSeduction es la evolución de Attraction y Erior Love.\n\nAttraction reprogramaba las creencias inconscientes que saboteaban tu vida amorosa. Erior Love elevaba tu autoconcepto para que te convirtieras en la persona más valiosa de tu propia vida.\n\nAhora ambos se fusionan en un solo audio, mucho más completo y potente.\n\nAttraction y Erior Love tienen su último mes en el catálogo; Seduction es la evolución que los reemplaza.\n\nNo es un audio para aprender trucos, manipulación ni frases de conquista. Es un audio para convertirte, desde adentro, en alguien tan coherente con el amor, el valor y la seguridad, que tu presencia empieza a hacer el trabajo por ti.\n\nAquí no se trata de perseguir. Se trata de convertirte en alguien imposible de ignorar.\n\nPorque las personas más seductoras no son las que más intentan gustar… Son las que ya saben quiénes son.\n\nEmpieza a proyectar una energía que invita, atrae, despierta curiosidad y hace que los demás quieran acercarse sin que tengas que convencer a nadie.\n\nHazte la persona más cotizada de la habitación.\n\nAdemás, Seduction integra algunas de las frecuencias sonoras más poderosas de toda la colección, diseñadas para potenciar tu magnetismo, reforzar tu autoconcepto y ayudarte a entrar en coherencia con el amor.\n\nIdeal si deseas atraer a una persona en específico, abrirte a una nueva relación o, simplemente, dejar de repetir las mismas historias una y otra vez.\n\nMenos persecución. Más magnetismo.\nMenos ansiedad. Más presencia.\nMenos \"¿por qué no me escribe?\" Más \"¿cómo le hago para responderle a todos?\"\n\nPorque la verdadera seducción… siempre empieza por dentro.\n\nIncluye Telegram para atraer a una persona en específico o una nueva pareja — aquí puedes preguntar tus dudas y te guiaremos paso a paso.",isNew:true,priceMXN:1199,img:"img/catalog/seduction.jpg"},
+  {nombre:"SEDUCTION",cat:"amor",emoji:"💋",bg:"linear-gradient(135deg,rgba(220,80,140,.28),rgba(120,60,200,.2))",desc:"¿Y si el problema nunca fue que \"no te pelaran\"… sino que tu energía seguía aplicando para el puesto de perseguidor oficial?\n\nSeduction es la evolución de Attraction y Erior Love.\n\nAttraction reprogramaba las creencias inconscientes que saboteaban tu vida amorosa. Erior Love elevaba tu autoconcepto para que te convirtieras en la persona más valiosa de tu propia vida.\n\nAhora ambos se fusionan en un solo audio, mucho más completo y potente.\n\nNo es un audio para aprender trucos, manipulación ni frases de conquista. Es un audio para convertirte, desde adentro, en alguien tan coherente con el amor, el valor y la seguridad, que tu presencia empieza a hacer el trabajo por ti.\n\nAquí no se trata de perseguir. Se trata de convertirte en alguien imposible de ignorar.\n\nPorque las personas más seductoras no son las que más intentan gustar… Son las que ya saben quiénes son.\n\nEmpieza a proyectar una energía que invita, atrae, despierta curiosidad y hace que los demás quieran acercarse sin que tengas que convencer a nadie.\n\nHazte la persona más cotizada de la habitación.\n\nAdemás, Seduction integra algunas de las frecuencias sonoras más poderosas de toda la colección, diseñadas para potenciar tu magnetismo, reforzar tu autoconcepto y ayudarte a entrar en coherencia con el amor.\n\nIdeal si deseas atraer a una persona en específico, abrirte a una nueva relación o, simplemente, dejar de repetir las mismas historias una y otra vez.\n\nMenos persecución. Más magnetismo.\nMenos ansiedad. Más presencia.\nMenos \"¿por qué no me escribe?\" Más \"¿cómo le hago para responderle a todos?\"\n\nPorque la verdadera seducción… siempre empieza por dentro.\n\nIncluye Telegram para atraer a una persona en específico o una nueva pareja — aquí puedes preguntar tus dudas y te guiaremos paso a paso.",isNew:true,priceMXN:1199,img:"img/catalog/seduction.jpg"},
   
-  {nombre:"💖 Erior LOVE",cat:"amor",emoji:"💖",bg:"linear-gradient(135deg,rgba(232,128,138,.2),rgba(212,175,95,.1))",desc:"⏳ ÚLTIMO MES — después se despide del catálogo. Evolucionó hacia SEDUCTION, pero aún puedes llevarlo este mes. ¿Te gustaría mejorar la relación con alguien? Cambia a la otra persona a través de ti 💖. En este workshop aprenderás cómo hacerlo y en el audio te cambiarás a ti para atraer el reflejo que deseas en las otras personas, además de asumir lo mejor de esa persona. Un paquete completo para atraer a tu persona. Equilibra tu energía femenina y masculina. Además puedes personalizarlo a tu gusto.",isNew:false,isLastMonth:true,img:"img/catalog/erior-love.jpg"},
-  {nombre:"🌹 ATTRACTION",cat:"amor",emoji:"🌹",bg:"linear-gradient(135deg,rgba(232,128,138,.25),rgba(155,109,255,.15))",desc:"⏳ ÚLTIMO MES — después se despide del catálogo. Evolucionó hacia SEDUCTION, pero aún puedes llevarlo este mes. ATTRACTION es un workshop de 7 clases en video. Está especialmente diseñado para que quites todos tus bloqueos en el amor; ya sea atrayendo a una nueva pareja, atrayendo a una persona en específico o mejorando tu relación actual. Incluye workbook de ejercicios y una fórmula binaural personalizada para quitar tus bloqueos más rápido, y así manifestar la vida en pareja que siempre has soñado o a tu persona en específico.",isNew:false,isLastMonth:true,img:"img/catalog/attraction.jpg"},
   {nombre:"✨ Éclat",cat:"autoestima",emoji:"✨",bg:"linear-gradient(135deg,rgba(212,175,95,.18),rgba(155,109,255,.12))",desc:"Resplandor, belleza y energía elevada desde el punto cero. ¿Y si la verdadera belleza no tuviera nada que ver con lo externo? Éclat te recuerda que todo es una ilusión, y que la transformación real nace desde el estado más neutro: el punto donde no hay forma, solo posibilidad. Desde esa quietud interna, tu cuerpo, tu piel, tu rostro y tu energía comienzan a renderizarse según tus preferencias. Cada célula responde a tu decisión de ser tu versión más bella — no desde la lucha, sino desde la conciencia pura. Con este audio puedes realizar hasta cinco cambios físicos, elegidos desde tu propia conciencia. Tu cuerpo los asimila con naturalidad, como si siempre hubieran formado parte de ti. Escúchalo para activar tu avatar ideal, manifestar tu belleza más auténtica y pulir tu realidad física desde adentro hacia afuera. Con facilidad, ligereza y poder.",img:"img/catalog/eclat.jpg"},
 
   {nombre:"💖 Amor Propio Magic 4.0",cat:"autoestima",emoji:"💖",bg:"linear-gradient(135deg,rgba(232,128,138,.22),rgba(155,109,255,.18))",desc:"✨ ¡NUEVO! Nuestra fórmula mejorada de AMOR PROPIO — la evolución que reemplaza al 2.0 y al 3.0. 💖 Manifiesta desde el merecimiento. 🌸 Libera codependencia y validación externa. 🫶 Sana el dolor y el trauma almacenado en tu cuerpo para avanzar al siguiente nivel. 🎮✨ Incluye Telegram Liberar Emociones. ⚠️ CUIDADO: tu merecimiento estará por las nubes. 🚀💕",isNew:true,img:"img/catalog/amor-propio-magic-4-0.jpg"},
@@ -6432,14 +6660,13 @@ var audiosEs=[
   {nombre:"✨ ICON AURA",cat:"autoestima",emoji:"✨",bg:"linear-gradient(135deg,rgba(212,175,95,.25),rgba(155,109,255,.22))",desc:"Audio especialmente diseñado y sintonizado en frecuencias elevadas que activan en ti una presencia impecable, una coherencia interna natural y un aura profundamente magnética. Cada capa sonora trabaja en perfecta armonía para alinear tu energía con tu versión más icónica: esa que entra en cualquier espacio y lo transforma sin esfuerzo, que no busca atención porque la atrae de forma automática. A medida que lo escuchas, tu campo energético se vuelve más claro, más estable y más poderoso. Tu identidad se ordena, tu señal se fortalece y tu aura comienza a irradiar seguridad, elegancia y magnetismo puro. Este audio no crea nada nuevo: revela lo que ya eres en esencia. Una presencia que impacta, una energía que se siente, una vibra que permanece. Tu mejor versión ya está aquí. Y ahora… simplemente se está expresando.",isNew:true,img:"img/catalog/icon-aura.jpg"}
 ];
 var audiosEn=[
+  {nombre:"GOLD GLITCH",cat:"dinero",emoji:"🪙",bg:"linear-gradient(135deg,rgba(255,215,0,.24),rgba(12,11,20,.88))",desc:"✨ NEW AUDIO · GOLD GLITCH is an abundance and authenticity audio designed to help you connect with a version of yourself so confident, magnetic and genuine that it starts attracting more money, opportunities and expansion.\n\nIt starts from a powerful idea: your authenticity is your GOLD; your ideas, talents, presence and unique way of being have value.\n\nThe GLITCH happens when you break the patterns that made you shrink and start opening up to new sources of income, professional growth, better opportunities and more abundance.\n\nIt also includes access to the abundance Telegram, to support and amplify the whole experience.",isNew:true,img:"img/catalog/gold-glitch.jpg"},
   {nombre:"🐇 Booster 2.0",cat:"manifestacion",emoji:"🐇",bg:"linear-gradient(135deg,rgba(155,109,255,.25),rgba(12,11,20,.85))",desc:"⚡ NEW UPGRADE · Booster 2.0. The new BOOSTER 2.0 works like a vacuum for beliefs and mental loops: spiritual technology designed to take you to Zero Point, neutralize the noise and reconfigure the codes from which you select your reality. Through identity, frequency and neutrality commands, it installs a new dominant signal: PRESENCE → CHOICE → MATERIALIZATION. You don't chase a new version of yourself: you close the previous program, return to Source and choose from there. If you're ready to exit the loop, this audio is for you.",isNew:true,isUpgrade:true,isLimited:true,priceMXN:777,img:"img/catalog/booster-2-0-en.jpg"},
   {nombre:"LIMITLESS",cat:"autoestima",emoji:"🧠",bg:"linear-gradient(135deg,rgba(80,180,255,.28),rgba(212,175,95,.2))",desc:"⚡ MENTAL UPGRADE · NEW. LIMITLESS is a frequency audio designed to activate an extraordinarily awake, intelligent and expansive mind. 🧠⚡\n\nIts frequencies connect you with your genius version: you learn faster, grasp complex concepts with ease, develop incredible metacognition and can observe your own thoughts from a higher perspective.\n\nYour mind starts seeing beyond the obvious, recognizing patterns, connecting information and finding answers others miss.\n\nIdeal if something blocks your manifestations… but you can't see what it is. LIMITLESS is the antidote: it helps you detect the invisible pattern holding you back — with laser focus, clarity and a mind that feels like a superpower.\n\nIt expands perception, intuition, creativity, memory and intelligence until your mind feels ceiling-free.\n\nMore focus. More understanding. More memory. More genius.",isNew:true,isLimited:true,isUpgrade:true,priceMXN:777,img:"img/catalog/limitless.jpg"},
   {nombre:"🦱🏼‍♂️ Amor Propio Magic for Men 2.0",cat:"autoestima",emoji:"🦱🏼‍♂️",bg:"linear-gradient(135deg,rgba(212,175,95,.24),rgba(60,90,140,.2))",desc:"SELF-LOVE MAGIC FOR MEN 2.0 🦱🏼‍♂️ 🧙🏼‍♂️\nAn audio to deeply connect with your masculinity and become a man who can hold: hold yourself, your decisions, your relationships, your projects and the abundance that enters your life. It works self-love, independence, security, virility, sensuality and detachment from a firm, mature masculinity. 🧞✨\n\n💰 It is not only about attracting abundance — it is about becoming the man who can receive it, manage it and sustain it. When you strengthen who you are, you also strengthen your capacity to build the life, relationships and abundance you desire. 🎧 Can be intended and personalized to your chosen topic. ☀️",isNew:true,isUpgrade:true,isLimited:true,priceMXN:777,img:"img/catalog/amor-propio-magic-hombre-2-0-en.jpg"},
   {nombre:"IMAGINE",cat:"autoestima",emoji:"🌌",bg:"linear-gradient(135deg,rgba(120,90,255,.28),rgba(212,175,95,.18))",desc:"Your imagination is not a dream. It is the original blueprint of your reality.\n\nEverything in your life — your money, your relationships, your body, your success — first existed in your mind. First it was imagined.\n\nThe problem is not that you can't have it. The problem is that your mind has learned to imagine from fear, from lack, from \"what if it doesn't work?\"\n\nIMAGINE is the new ERIOR CENTER audio designed to change that.\n\nAs you listen, your subconscious learns to imagine from the result. From already having it. From already being that person.\n\nIncludes:\n• Personalized mini script you record with your own voice — adapted exactly to the area of your life you want to expand\n• Nighttime visualization guide — to read before sleep so your subconscious works all night while you rest: your mind creates, your reality obeys.",isNew:true,isLimited:true,priceMXN:1199,img:"img/catalog/imagine.jpg"},
-  {nombre:"SEDUCTION",cat:"amor",emoji:"💋",bg:"linear-gradient(135deg,rgba(220,80,140,.28),rgba(120,60,200,.2))",desc:"What if the problem was never that they \"weren't into you\"… but that your energy was still applying for the official pursuer role?\n\nSeduction is the evolution of Attraction and Erior Love.\n\nAttraction reprogrammed the unconscious beliefs that sabotaged your love life. Erior Love elevated your self-concept so you became the most valuable person in your own life.\n\nNow both fuse into one audio — more complete and powerful.\n\nAttraction and Erior Love have their last month in the catalog; Seduction is the evolution that replaces them.\n\nThis is not an audio for tricks, manipulation or pickup lines. It is an audio to become, from within, someone so coherent with love, worth and security that your presence starts doing the work for you.\n\nIt's not about chasing. It's about becoming impossible to ignore.\n\nBecause the most seductive people aren't the ones who try hardest to be liked… They're the ones who already know who they are.\n\nStart projecting an energy that invites, attracts, sparks curiosity and makes others want to come closer — without you having to convince anyone.\n\nBecome the most sought-after person in the room.\n\nSeduction also integrates some of the most powerful sound frequencies in the whole collection, designed to boost your magnetism, strengthen your self-concept and help you enter coherence with love.\n\nIdeal if you want to attract a specific person, open to a new relationship, or simply stop repeating the same stories again and again.\n\nLess chasing. More magnetism.\nLess anxiety. More presence.\nLess \"why don't they text me?\" More \"how do I reply to everyone?\"\n\nBecause true seduction… always begins within.\n\nIncludes Telegram to attract a specific person or a new partner — ask your questions and we'll guide you step by step.",isNew:true,priceMXN:1199,img:"img/catalog/seduction.jpg"},
+  {nombre:"SEDUCTION",cat:"amor",emoji:"💋",bg:"linear-gradient(135deg,rgba(220,80,140,.28),rgba(120,60,200,.2))",desc:"What if the problem was never that they \"weren't into you\"… but that your energy was still applying for the official pursuer role?\n\nSeduction is the evolution of Attraction and Erior Love.\n\nAttraction reprogrammed the unconscious beliefs that sabotaged your love life. Erior Love elevated your self-concept so you became the most valuable person in your own life.\n\nNow both fuse into one audio — more complete and powerful.\n\nThis is not an audio for tricks, manipulation or pickup lines. It is an audio to become, from within, someone so coherent with love, worth and security that your presence starts doing the work for you.\n\nIt's not about chasing. It's about becoming impossible to ignore.\n\nBecause the most seductive people aren't the ones who try hardest to be liked… They're the ones who already know who they are.\n\nStart projecting an energy that invites, attracts, sparks curiosity and makes others want to come closer — without you having to convince anyone.\n\nBecome the most sought-after person in the room.\n\nSeduction also integrates some of the most powerful sound frequencies in the whole collection, designed to boost your magnetism, strengthen your self-concept and help you enter coherence with love.\n\nIdeal if you want to attract a specific person, open to a new relationship, or simply stop repeating the same stories again and again.\n\nLess chasing. More magnetism.\nLess anxiety. More presence.\nLess \"why don't they text me?\" More \"how do I reply to everyone?\"\n\nBecause true seduction… always begins within.\n\nIncludes Telegram to attract a specific person or a new partner — ask your questions and we'll guide you step by step.",isNew:true,priceMXN:1199,img:"img/catalog/seduction.jpg"},
   
-  {nombre:"💖 Erior LOVE",cat:"amor",emoji:"💖",bg:"linear-gradient(135deg,rgba(232,128,138,.2),rgba(212,175,95,.1))",desc:"⏳ LAST MONTH — then it leaves the catalog. It evolved into SEDUCTION, but you can still get it this month. Would you like to improve your relationship with someone? Change the other person through yourself 💖. In this workshop you will learn how, and the audio will transform you to attract the reflection you desire in others, while also assuming the best of that person. A complete package to attract your person. Balances your feminine and masculine energy. You can also personalize it to your liking.",isNew:false,isLastMonth:true,img:"img/catalog/erior-love-2.jpg"},
-  {nombre:"🌹 ATTRACTION",cat:"amor",emoji:"🌹",bg:"linear-gradient(135deg,rgba(232,128,138,.25),rgba(155,109,255,.15))",desc:"⏳ LAST MONTH — then it leaves the catalog. It evolved into SEDUCTION, but you can still get it this month. ATTRACTION is a 7-class video workshop. Specially designed to remove all your love blocks — whether attracting a new partner, attracting a specific person or improving your current relationship. Includes an exercise workbook and a personalized binaural formula to remove your blocks faster and manifest the romantic life you've always dreamed of, or your specific person.",isNew:false,isLastMonth:true,img:"img/catalog/attraction-2.jpg"},
   {nombre:"✨ Éclat",cat:"autoestima",emoji:"✨",bg:"linear-gradient(135deg,rgba(212,175,95,.18),rgba(155,109,255,.12))",desc:"Radiance, beauty and elevated energy from ground zero. What if true beauty had nothing to do with the external? Éclat reminds you that everything is an illusion, and that real transformation is born from the most neutral state: the point where there is no form, only possibility. From that inner stillness, your body, your skin, your face and your energy begin to render according to your preferences. Each cell responds to your decision to be your most beautiful version — not through struggle, but through pure awareness. With this audio you can make up to five physical changes, chosen from your own consciousness. Your body assimilates them naturally, as if they had always been part of you. Listen to it to activate your ideal avatar, manifest your most authentic beauty and polish your physical reality from the inside out. With ease, lightness and power.",img:"img/catalog/eclat-2.jpg"},
 
   {nombre:"💖 Amor Propio Magic 4.0",cat:"autoestima",emoji:"💖",bg:"linear-gradient(135deg,rgba(232,128,138,.22),rgba(155,109,255,.18))",desc:"✨ NEW! Our upgraded SELF-LOVE formula — the evolution that replaces 2.0 and 3.0. 💖 Manifest from worthiness. 🌸 Release codependency and external validation. 🫶 Heal pain and trauma stored in the body. 🎮✨ Includes Liberate Emotions Telegram. ⚠️ WARNING: your worthiness will go through the roof. 🚀💕",isNew:true,img:"img/catalog/amor-propio-magic-4-0-2.jpg"},
@@ -6513,7 +6740,7 @@ function buildCatalog(){
     var d=document.createElement('div');
     d.className='ac-card';
     if(/ICON AURA/i.test(a.nombre))d.dataset.audioKey='icon-aura';
-    if(/ATTRACTION/i.test(a.nombre))d.dataset.audioKey='attraction';
+    if(/GOLD GLITCH/i.test(a.nombre))d.dataset.audioKey='gold-glitch';
     if(/^IMAGINE$/i.test(a.nombre))d.dataset.audioKey='imagine';
     if(/^SEDUCTION$/i.test(a.nombre))d.dataset.audioKey='seduction';
     if(/^LIMITLESS$/i.test(a.nombre))d.dataset.audioKey='limitless';
@@ -6582,7 +6809,7 @@ function unlockPageScroll(){
 var payCurrentMethod='wire';
 var payCurrentProduct='';
 var PAY_WHATSAPP='5214432311761';
-var WA_PROMO_MSG='Hi! I want the September promo: any audio for $46 USD (2 for $85 / 3 for $135).';
+var WA_PROMO_MSG='Hi! I want the Erior October deals: Portal $53 / Expansion $86 / Immersion $136 / Identity $190 USD.';
 var PAY_FOOTER_ES='Realiza el pago, manda el comprobante a eriorcenter@gmail.com indicando en el asunto el programa elegido y tu Instagram. Te enviaremos una forma digital para personalizar tu audio binaural y lo recibirás por mail con PDF de instrucciones.';
 var PAY_FOOTER_EN='Complete your payment and send the receipt to eriorcenter@gmail.com with the program name and your Instagram in the subject line. We will send you a digital form to personalize your binaural audio and deliver it by email with a PDF guide.';
 var PAY_METHODS=[
@@ -6744,13 +6971,14 @@ function dismissPayPromoPopup(){
 function getPayModalPrice(productName){
   var n=(productName||'').toLowerCase();
   if(/emergency\s*999|emergencia\s*999/.test(n))return '$197 USD · EMERGENCY 999 package';
-  if(/mind\s*movie/.test(n))return '$46 USD · September promo';
-  if(/telegram privado|private telegram/.test(n))return '$52 USD / month · or included with audio purchase';
-  if(/3 audios|pack 3|alicia premium|\$2,?299|\$135/.test(n))return '$135 USD · 3 audios + Alicia Premium';
-  if(/2 audios|pack 2|\$1,?444|\$85/.test(n))return '$85 USD · 2 audios + MENTAL TECH book';
-  if(/promo septiembre|cualquier audio|\$777|september promo/.test(n))return '$46 USD · September promo';
-  if(/liberar emociones|release emotions telegram/.test(n))return 'Included with Magic 4.0 · audio from $46 USD';
-  return '$46 USD · September promo (Telegram included)';
+  if(/identity|identidad|master class|glow up your mind/.test(n))return '$190 USD · IDENTITY: Oct 28 master class + Binoqular glasses + audio + Telegram + App';
+  if(/immersion|inmersi[oó]n|3 audios|pack 3|alicia premium|\$136/.test(n))return '$136 USD · IMMERSION: 3 audios + App + Telegram + advanced AI';
+  if(/expansion|expansi[oó]n|2 audios|pack 2|\$86/.test(n))return '$86 USD · EXPANSION: 2 audios + App + Telegram + 25% off Mind Movie';
+  if(/mind\s*movie/.test(n))return '$69 USD · Mind Movie';
+  if(/portal|gold glitch/.test(n))return '$53 USD · PORTAL: personalized audio + App + 28-day challenge + 1 month Telegram';
+  if(/telegram privado|private telegram/.test(n))return '$52 USD / month · or 1 month included with any package';
+  if(/liberar emociones|release emotions telegram/.test(n))return 'Included with Magic 4.0 · Portal from $53 USD';
+  return '$53 USD · PORTAL: personalized audio + App + 28-day challenge + 1 month Telegram';
 }
 
 function openPaymentModal(productName){
@@ -6764,7 +6992,7 @@ function openPaymentModal(productName){
   document.getElementById('payFooterText').textContent=lang==='en'?PAY_FOOTER_EN:PAY_FOOTER_ES;
   selectPayMethod(payCurrentMethod||'wire');
   bindPayCopyButtons(document.getElementById('payModal'));
-  var promoWa=payWaUrl('Hi! I want the September promo: any audio for $46 USD');
+  var promoWa=promoWaUrl('launch');
   var promoBtn=document.getElementById('payPromoWaBtn');
   if(promoBtn)promoBtn.href=promoWa;
   hidePayPromoPopup();
@@ -7137,7 +7365,7 @@ function getFreeLimitBlockMessage(q){
   }else if(audios.length>=2){
     audioLine=' Alicia recommended '+audios[0]+' and '+audios[1]+'.';
   }
-  return 'You used your '+limit+' free messages for today.'+audioLine+' Tomorrow you get new messages. To continue TODAY and close with September promo ($46 / 2×$85 / 3×$135), message us on WhatsApp — the green button below already carries your recommendation.';
+  return 'You used your '+limit+' free messages for today.'+audioLine+' Tomorrow you get new messages. To continue TODAY and close with the October deals (Portal $53 / Expansion $86 / Immersion $136 / Identity $190), message us on WhatsApp — the green button below already carries your recommendation.';
 }
 function collectAliciaRecommendedAudios(maxCount){
   maxCount=maxCount||2;
@@ -7167,11 +7395,11 @@ function buildAliciaWhatsAppContinueMessage(){
   var msg='Hi Pauline! I am coming from Alicia AI on Erior Center';
   if(nombre)msg+=', my name is '+nombre;
   if(audios.length===1){
-    msg+='. Alicia recommended '+audios[0]+' and I want to buy it now with September promo ($46 USD)';
+    msg+='. Alicia recommended '+audios[0]+' and I want to buy it now with the October Portal ($53 USD)';
   }else if(audios.length>=2){
-    msg+='. Alicia recommended '+audios[0]+' and '+audios[1]+' and I want to close the September pack 2 ($85 USD)';
+    msg+='. Alicia recommended '+audios[0]+' and '+audios[1]+' and I want to close the October Expansion ($86 USD)';
   }else{
-    msg+='. I want to continue and close with September promo ($46 / 2×$85 / 3×$135)';
+    msg+='. I want to continue and close with the October deals (Portal $53 / Expansion $86 / Immersion $136 / Identity $190)';
   }
   msg+=' ';
   return msg;
@@ -7350,13 +7578,13 @@ function getAliciaWelcomeMessage(){
   }
   var quotaNote=getAliciaFreeWelcomeNote(aliciaFreeQuota);
   if(aliciaExpressMode){
-    return 'Express close mode ⚡\n\nTell me the audio you want (or tap a shortcut below) and I will quote you NOW with September promo: $46 / 2×$85 / 3×$135.\n\nWhich one are we closing today?'+quotaNote;
+    return 'Express close mode ⚡\n\nTell me the audio you want (or tap a shortcut below) and I will quote you NOW with the October deals: Portal $53 · Expansion $86 · Immersion $136 · Identity $190.\n\nWhich one is yours?'+quotaNote;
   }
   var ref=getReferralCode();
   if(ref){
-    return 'Welcome ⚡ I\'m Alicia. Someone you trust brought you here — that already says a lot.\n\nSeptember promo: any audio $46 · 2 for $85 (+book) · 3 for $135 (+Alicia Premium). Heroes: Booster 2.0, LIMITLESS, Magic for Men 2.0. Tell me what you want to transform (mind, money, love or presence) and I\'ll build your combo today.'+quotaNote;
+    return 'Welcome ⚡ I\'m Alicia. Someone you trust brought you here — that already says a lot.\n\nOctober deals 🎃: Portal $53 (audio + App + 28-day challenge + Telegram) · Expansion $86 · Immersion $136 · Identity $190 (Glow Up Your Mind master class). New: GOLD GLITCH and the Manifestation App. Tell me what you want to transform (mind, money, love or presence) and I\'ll build your combo today.'+quotaNote;
   }
-  return 'Welcome ⚡ I\'m Alicia — your Erior advisor and closer.\n\nI truly listen and build the exact combo for you. September promo: $46 / 2×$85 / 3×$135. Heroes: Booster 2.0, LIMITLESS, Magic for Men 2.0. If you were looking for Self-Love 2.0 or 3.0: they evolved into Self-Love Magic 4.0.\n\nTell me what you are living (mind, money, love or presence) and we close today.'+quotaNote;
+  return 'Welcome ⚡ I\'m Alicia — your Erior advisor and closer.\n\nI truly listen and build the exact combo for you. October deals 🎃: Portal $53 · Expansion $86 · Immersion $136 · Identity $190. New: GOLD GLITCH, the Manifestation App and Glow Up Your Mind. If you were looking for Self-Love 2.0 or 3.0: they evolved into Self-Love Magic 4.0.\n\nTell me what you are living (mind, money, love or presence) and we close today.'+quotaNote;
 }
 function startAliciaFree(){
   resetAliciaChatSession();
@@ -7398,7 +7626,7 @@ function getAliciaFomoStats(){
     {main:'There are <em>'+production+'</em> audios in production right now',sub:'Those who reserve today get priority'},
     {main:'Only <em>'+slots+'</em> priority delivery spots left',sub:'When they fill, the queue moves to tomorrow'},
     {main:'<em>'+liveNow+'</em> people are choosing an audio with Alicia now',sub:'The signal is hot — do not stay out'},
-    {main:'Today they already activated <em>'+seductionToday+'</em> magnetism combos and <em>'+imagineToday+'</em> imagination ones',sub:'September promo: $46 · 2×$85 · 3×$135'}
+    {main:'Today they already activated <em>'+seductionToday+'</em> magnetism combos and <em>'+imagineToday+'</em> imagination ones',sub:'October deals: Portal $53 · Expansion $86 · Immersion $136'}
   ];
 }
 function renderAliciaFomo(forceIdx){
@@ -7843,14 +8071,13 @@ function buildAliciaAudioIndex(){
   var catalogList=getAliciaCatalogAudios();
   var extraAliases={
     'SEDUCTION':['seduction','seduccion','seducción','attraction','atraccion','workshop attraction'],
-    'ATTRACTION':['attraction','atraccion','workshop attraction'],
+    'GOLD GLITCH':['gold glitch','goldglitch'],
     'BOOSTER':['booster','booster 2.0','booster2'],
     'ICON AURA':['icon aura','iconaura'],
     'WONDERLAND COHERENCE':['wonderland coherence','wonderland'],
     'MESMERIZING LOVE':['mesmerizing love','mesmerizing'],
     'ÉCLAT':['eclat','éclat','eclat'],
     'ECLAT':['eclat','éclat'],
-    'ERIOR LOVE':['erior love','eriorlove'],
     'MASTER MIND':['master mind','mastermind'],
     'LIMITLESS':['limitless','mente ilimitada','mente genio'],
     'MASTER ABUNDANCE':['master abundance'],
@@ -8203,21 +8430,29 @@ function isEmergency999Context(txt){
 }
 function stripExpiredJulyPromoPrices(reply){
   var r=String(reply||'');
-  // Corrige promos julio/agosto vencidas (NO tocar Telegram Privado $888 / $52 USD)
-  r=r.replace(/\$999\s*MXN(?:\s*\/\s*\$58\s*USD(?:\s*\/\s*€51\s*EUR)?)?/gi,'$777 MXN / ≈ $46 USD');
-  r=r.replace(/\$888\s*MXN\s*\/\s*\$49\s*USD(?:\s*\/\s*€43\s*EUR)?/gi,'$777 MXN / ≈ $46 USD');
-  r=r.replace(/\$1[,.]?699\s*MXN(?:\s*\/\s*\$96\s*USD(?:\s*\/\s*€85\s*EUR)?)?/gi,'$1,444 MXN / ≈ $85 USD (pack 2)');
-  r=r.replace(/\$2[,.]?888\s*MXN(?:\s*\/\s*\$168\s*USD(?:\s*\/\s*€146\s*EUR)?)?/gi,'promo septiembre: desde $777 MXN');
-  r=r.replace(/total julio:\s*\$?1[,.]?887\s*MXN/gi,'Total pack 2: $1,444 MXN');
+  // Corrige promos julio/agosto/septiembre vencidas (NO tocar Telegram Privado $888 / $52 USD)
+  var PORTAL='$888 MXN / ≈ $53 USD';
+  r=r.replace(/\$999\s*MXN(?:\s*\/\s*\$58\s*USD(?:\s*\/\s*€51\s*EUR)?)?/gi,PORTAL);
+  r=r.replace(/\$888\s*MXN\s*\/\s*\$49\s*USD(?:\s*\/\s*€43\s*EUR)?/gi,PORTAL);
+  r=r.replace(/\$777\s*MXN(?:\s*\/\s*≈?\s*\$46\s*USD)?/gi,PORTAL);
+  r=r.replace(/(≈\s*)?\$46\s*USD/gi,function(m,a){return (a||'')+'$53 USD';});
+  r=r.replace(/\$1[,.]?699\s*MXN(?:\s*\/\s*\$96\s*USD(?:\s*\/\s*€85\s*EUR)?)?/gi,'$1,444 MXN / ≈ $86 USD (Expansion)');
+  r=r.replace(/\$2[,.]?888\s*MXN(?:\s*\/\s*\$168\s*USD(?:\s*\/\s*€146\s*EUR)?)?/gi,'October deals: from $53 USD');
+  r=r.replace(/total julio:\s*\$?1[,.]?887\s*MXN/gi,'Expansion total: $1,444 MXN');
   r=r.replace(/\$1[,.]?887\s*MXN/gi,'$1,444 MXN');
+  r=r.replace(/(≈\s*)?\$85\s*USD/gi,function(m,a){return (a||'')+'$86 USD';});
+  r=r.replace(/(≈\s*)?\$135\s*USD/gi,function(m,a){return (a||'')+'$136 USD';});
   r=r.replace(/pack despedida amor propio/gi,'Amor Propio Magic 4.0');
-  r=r.replace(/summer wonderland(?:\s*pack)?/gi,'promo septiembre');
-  r=r.replace(/\b(?:promo(?:ci[oó]n)?|oferta)\s+de\s+julio\b/gi,'promo septiembre');
-  r=r.replace(/promo de lanzamiento|promo lanzamiento|segundo audio al 50%|2[ºo]\s*al\s*50%/gi,'promo septiembre');
-  r=r.replace(/\$1[,.]?199\s*MXN(?:\s*\/\s*\$70\s*USD(?:\s*\/\s*€61\s*EUR)?)?/gi,'$777 MXN / ≈ $46 USD');
-  r=r.replace(/\$1[,.]?190\s*MXN(?:\s*\/\s*\$69\s*USD(?:\s*\/\s*€60\s*EUR)?)?/gi,'$777 MXN / ≈ $46 USD');
-  r=r.replace(/\$2[,.]?380\s*MXN(?:\s*\/\s*\$138\s*USD(?:\s*\/\s*€120\s*EUR)?)?/gi,'$1,444 MXN / ≈ $85 USD');
-  // No borrar FOMO legitimo de Attraction / Erior Love (ultimo mes real)
+  r=r.replace(/summer wonderland(?:\s*pack)?/gi,'October deals');
+  r=r.replace(/\b(?:promo(?:ci[oó]n)?|oferta)\s+de\s+(?:julio|septiembre)\b/gi,'descuentos de octubre');
+  r=r.replace(/\bpromo(?:ci[oó]n)?\s+septiembre\b/gi,'descuentos octubre');
+  r=r.replace(/\bSeptember\s+(?:promo|pack(?:\s*\d)?|deal)s?\b/gi,'October deals');
+  r=r.replace(/promo de lanzamiento|promo lanzamiento|segundo audio al 50%|2[ºo]\s*al\s*50%/gi,'October deals');
+  r=r.replace(/\$1[,.]?199\s*MXN(?:\s*\/\s*\$70\s*USD(?:\s*\/\s*€61\s*EUR)?)?/gi,PORTAL);
+  r=r.replace(/\$1[,.]?190\s*MXN(?:\s*\/\s*\$69\s*USD(?:\s*\/\s*€60\s*EUR)?)?/gi,function(m,off,str){
+    return /mind\s*movie/i.test(str.slice(Math.max(0,off-90),off))?m:PORTAL;
+  });
+  r=r.replace(/\$2[,.]?380\s*MXN(?:\s*\/\s*\$138\s*USD(?:\s*\/\s*€120\s*EUR)?)?/gi,'$1,444 MXN / ≈ $86 USD');
   r=r.replace(/\b[uú]ltimo mes\b(?=[^.!?]{0,60}(?:amor magic 2|amor propio magic 3|2\.0|3\.0|pack despedida))/gi,'descontinuado');
   return r;
 }
@@ -8227,13 +8462,13 @@ function fixAmorPackPricing(reply,userTxt){
   if(!asks)return reply;
   var r=String(reply||'');
   if(/descontinu|ya no se vende|magic 4\.0|f[oó]rmula mejorada/i.test(r)&&!/1[,.]?699|1699|te aparto.*(2\.0|3\.0)|\$888\s*mxn\s*\/\s*\$49/i.test(r))return r;
-  return 'Te entiendo ⚡ Amor Magic 2.0 y Amor Propio Magic 3.0 ya se descontinuaron porque sacamos la fórmula mejorada: Amor Propio Magic 4.0.\n\nUne lo mejor de ambos + sana el dolor en el cuerpo. Incluye Telegram Liberar Emociones. Promo septiembre: $777 MXN (o pack 2 $1,444 / pack 3 $2,299).\n\n¿Te aparto Magic 4.0 hoy? Usa el botón Quiero pagar abajo o WhatsApp con Pauline ⚡';
+  return 'Te entiendo ⚡ Amor Magic 2.0 y Amor Propio Magic 3.0 ya se descontinuaron porque sacamos la fórmula mejorada: Amor Propio Magic 4.0.\n\nUne lo mejor de ambos + sana el dolor en el cuerpo. Incluye Telegram Liberar Emociones. Descuentos octubre: Portal $888 MXN (audio + App + Telegram) o Expansión $1,444 / Inmersión $2,299.\n\n¿Te aparto Magic 4.0 hoy? Usa el botón Quiero pagar abajo o WhatsApp con Pauline ⚡';
 }
 function normalizeAliciaPromoReply(reply,userTxt){
   var r=String(reply||'');
   r=r.replace(/\b(?:solo|solamente|nada mas que|nada más que)\s+(?:dos|2)\s*horas?\b/gi,'muchas horas en loop (entre más escucha, mejor)');
   r=r.replace(/\bcon\s+(?:dos|2)\s*horas?\s+(?:al\s+d[ií]a\s+)?(?:es\s+)?(?:suficiente|basta)\b/gi,'cuanto más horas en loop, más profundo el cambio');
-  r=r.replace(/\$1[,.]?170\s*MXN/gi,'$777 MXN');
+  r=r.replace(/\$1[,.]?170\s*MXN/gi,'$888 MXN');
   if(isEmergency999Context(r)||isEmergency999Context(userTxt)){
     r=r.replace(/\$1[,.]?(?:170|190|199|777)(?:\s*MXN)?/gi,'$3,333 MXN');
     r=r.replace(/\$11(?:70|90|99)(?:\s*MXN)?/gi,'$3,333 MXN');
