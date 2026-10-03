@@ -17,8 +17,17 @@
   el.setAttribute('playsinline', '');
   el.hidden = true;
   var wantPlay = false;
-  var hiddenAt = 0;
   var resumeTries = 0;
+  var resumeTimer = null;
+  var playingSince = 0;
+  var deviceChangedAt = 0;
+  var RESUME_DELAYS = [300, 1000, 2500, 5000, 10000, 20000];
+  try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) {}
+  try {
+    if (navigator.mediaDevices && navigator.mediaDevices.addEventListener) {
+      navigator.mediaDevices.addEventListener('devicechange', function () { deviceChangedAt = Date.now(); });
+    }
+  } catch (e) {}
   function mountEl() { if (document.body && !el.parentNode) document.body.appendChild(el); }
   if (document.body) mountEl(); else document.addEventListener('DOMContentLoaded', mountEl);
 
@@ -722,7 +731,18 @@
     }
     el.play().catch(function () {});
   }
-  function pause() { wantPlay = false; el.pause(); persistPos(); paintPlayer(); }
+  function pause() { wantPlay = false; clearTimeout(resumeTimer); el.pause(); persistPos(); paintPlayer(); }
+  /* Notificaciones, avisos del sistema o cambiar de app pueden cortar el audio; si ella no lo pausó, vuelve solo. */
+  function scheduleResume() {
+    clearTimeout(resumeTimer);
+    if (!wantPlay || el.ended || !el.src || resumeTries >= RESUME_DELAYS.length) return;
+    var wait = RESUME_DELAYS[resumeTries];
+    resumeTries += 1;
+    resumeTimer = setTimeout(function () {
+      if (!wantPlay || !el.paused || el.ended || !el.src) return;
+      el.play().catch(scheduleResume);
+    }, wait);
+  }
   function toggle() { if (el.paused) play(); else pause(); }
   function step(dir) {
     var s = load();
@@ -892,6 +912,8 @@
       if (el.src && current(s) && current(s).id !== id) {
         /* keep playing other */
       } else {
+        wantPlay = false;
+        clearTimeout(resumeTimer);
         el.pause();
         el.removeAttribute('src');
         el.load();
@@ -1183,20 +1205,18 @@
     });
     el.addEventListener('play', function () {
       wantPlay = true;
+      playingSince = Date.now();
       startListenClock();
       paintPlayer();
     });
     el.addEventListener('pause', function () {
       persistPos();
       paintPlayer();
-      if (!document.hidden || el.ended) { wantPlay = false; return; }
-      /* El sistema a veces corta el audio al saltar a otra app; si no lo pausó ella, se reanuda. */
-      if (wantPlay && Date.now() - hiddenAt < 4000 && resumeTries < 2) {
-        resumeTries += 1;
-        setTimeout(function () {
-          if (wantPlay && el.paused) el.play().catch(function () {});
-        }, 350);
-      }
+      if (el.ended || !wantPlay) return;
+      /* Al desconectar audífonos el sistema pausa: no se reanuda por la bocina. */
+      if (Date.now() - deviceChangedAt < 2000) { wantPlay = false; return; }
+      if (Date.now() - playingSince > 30000) resumeTries = 0;
+      scheduleResume();
     });
     el.addEventListener('ended', function () {
       persistPos();
@@ -1228,12 +1248,13 @@
     });
     document.addEventListener('visibilitychange', function () {
       if (document.hidden) {
-        hiddenAt = Date.now();
-        resumeTries = 0;
         persistPos();
         return;
       }
-      if (wantPlay && el.paused && el.src && !el.ended) el.play().catch(function () {});
+      if (wantPlay && el.paused && el.src && !el.ended) {
+        resumeTries = 0;
+        el.play().catch(scheduleResume);
+      }
     });
   }
 
