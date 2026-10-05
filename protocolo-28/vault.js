@@ -11,6 +11,7 @@
   var counted = {};
   var listenTick = null;
   var cheerTimer = null;
+  var cheerQueue = [];
 
   el.preload = 'metadata';
   el.loop = false;
@@ -268,6 +269,14 @@
   }
 
   function showCelebrate(title, text) {
+    /* Si el audio sigue en curso (noche en loop), no despertar la pantalla ni cortar el sonido. */
+    if (wantPlay) {
+      cheerQueue.push({ title: title, text: text || '' });
+      return;
+    }
+    paintCelebrate(title, text);
+  }
+  function paintCelebrate(title, text) {
     var box = $('celebrate');
     if (!box) return;
     $('celebrateTitle').textContent = title;
@@ -288,6 +297,11 @@
     box.removeAttribute('hidden');
     clearTimeout(cheerTimer);
     cheerTimer = setTimeout(hideCelebrate, 4200);
+  }
+  function flushCheerQueue() {
+    if (wantPlay || !cheerQueue.length) return;
+    var next = cheerQueue.shift();
+    paintCelebrate(next.title, next.text);
   }
   function hideCelebrate() {
     var box = $('celebrate');
@@ -731,7 +745,14 @@
     }
     el.play().catch(function () {});
   }
-  function pause() { wantPlay = false; clearTimeout(resumeTimer); el.pause(); persistPos(); paintPlayer(); }
+  function pause() {
+    wantPlay = false;
+    clearTimeout(resumeTimer);
+    el.pause();
+    persistPos();
+    paintPlayer();
+    flushCheerQueue();
+  }
   /* Notificaciones, avisos del sistema o cambiar de app pueden cortar el audio; si ella no lo pausó, vuelve solo. */
   function scheduleResume() {
     clearTimeout(resumeTimer);
@@ -1214,7 +1235,8 @@
       paintPlayer();
       if (el.ended || !wantPlay) return;
       /* Al desconectar audífonos el sistema pausa: no se reanuda por la bocina. */
-      if (Date.now() - deviceChangedAt < 2000) { wantPlay = false; return; }
+      /* Audífonos desconectados: no reanudar por bocina. Si la pantalla está apagada, no asumir eso: una notificación también dispara devicechange. */
+      if (!document.hidden && Date.now() - deviceChangedAt < 2000) { wantPlay = false; return; }
       if (Date.now() - playingSince > 30000) resumeTries = 0;
       scheduleResume();
     });
@@ -1254,7 +1276,9 @@
       if (wantPlay && el.paused && el.src && !el.ended) {
         resumeTries = 0;
         el.play().catch(scheduleResume);
+        return;
       }
+      flushCheerQueue();
     });
   }
 
