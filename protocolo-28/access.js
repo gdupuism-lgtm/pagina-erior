@@ -257,6 +257,17 @@
     return call('push-code', { code: code }, adminKey);
   }
 
+  function savedAccess(code) {
+    var keys = ['erior-p28-' + code, 'erior-p28'];
+    for (var i = 0; i < keys.length; i++) {
+      try {
+        var st = JSON.parse(localStorage.getItem(keys[i]) || '{}');
+        if (st.access && normalize(st.access.code) === code) return st.access;
+      } catch (e) {}
+    }
+    return null;
+  }
+
   function unlock(code) {
     var c = normalize(code);
     var device = deviceId();
@@ -267,6 +278,10 @@
         var access = res.data.access;
         access.profile = res.data.profile || null;
         return access;
+      }
+      if (res.status === 0) {
+        var offline = savedAccess(c);
+        if (offline) { bindSession(c); return offline; }
       }
       if (res.data && res.data.error) {
         var err = new Error(res.data.error);

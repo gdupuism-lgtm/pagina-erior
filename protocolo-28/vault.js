@@ -309,13 +309,12 @@
     box.classList.add('hidden');
     box.setAttribute('hidden', '');
   }
-  function cheerOnce(key, title, text) {
+  function cheerOnce(key) {
     var s = load();
     s.cheers = s.cheers || {};
     if (s.cheers[key]) return false;
     s.cheers[key] = true;
     save(s);
-    showCelebrate(title, text);
     return true;
   }
 
