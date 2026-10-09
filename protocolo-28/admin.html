@@ -6,7 +6,7 @@
   <meta name="robots" content="noindex,nofollow">
   <title>Erior Center Admin · códigos</title>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="protocolo.css?v=48">
+  <link rel="stylesheet" href="protocolo.css?v=54">
 </head>
 <body class="is-admin">
   <div class="sky" aria-hidden="true"></div>
@@ -28,6 +28,16 @@
     </div>
 
     <div id="panelView" class="hidden">
+      <section class="card foil-card">
+        <span class="kicker">Cerrar / abrir la app</span>
+        <h2 class="sec-title">Acceso de todas</h2>
+        <p class="sec-sub" id="haltState">Revisando…</p>
+        <p class="copy">Si la cierras, nadie entra al reto hasta que tú la reabras. Sus audios y su ficha no se borran.</p>
+        <button type="button" class="btn btn-gold btn-full" id="btnHaltOn" style="margin-top:1rem">Cerrar la app para todas</button>
+        <button type="button" class="btn btn-ghost btn-full" id="btnHaltOff" style="margin-top:.6rem">Reabrir la app</button>
+        <p class="note" id="haltMsg"></p>
+      </section>
+
       <section>
         <span class="kicker">Por cada audio que vendas</span>
         <h1 class="title-3d" aria-label="Tú abres 30 días.">
@@ -101,7 +111,7 @@
       </section>
     </div>
   </div>
-  <script src="access.js?v=35"></script>
+  <script src="access.js?v=37"></script>
   <script>
     var key = '';
     try { key = sessionStorage.getItem('erior-p28-admin') || ''; } catch (e) { key = ''; }
@@ -241,10 +251,38 @@
         };
       });
     }
+    function paintHalt() {
+      if (!P28Access.getHalt) return;
+      P28Access.getHalt().then(function (h) {
+        if (!h) { $('haltState').textContent = 'No pude revisar el estado.'; return; }
+        $('haltState').textContent = h.suspended
+          ? 'La app está CERRADA. Nadie puede entrar.'
+          : 'La app está ABIERTA.';
+      });
+    }
     function refresh() {
       P28Access.listCodes(key).then(renderList);
       P28Access.getWall().then(renderWallAdmin);
+      paintHalt();
     }
+    $('btnHaltOn') && ($('btnHaltOn').onclick = function () {
+      if (!window.confirm('¿Cerrar la app para todas? Nadie va a poder entrar hasta que la reabras.')) return;
+      $('haltMsg').textContent = 'Cerrando…';
+      P28Access.setHalt(true, key, 'Erior Center está cerrada por ahora. Tus audios y tu reto se quedan en este celular. Vuelve cuando te avisemos.').then(function (res) {
+        if (!res.ok) { $('haltMsg').textContent = 'No se pudo cerrar.'; return; }
+        $('haltMsg').textContent = 'Cerrada. En menos de un minuto deja de abrir en los celulares.';
+        paintHalt();
+      });
+    });
+    $('btnHaltOff') && ($('btnHaltOff').onclick = function () {
+      if (!window.confirm('¿Reabrir la app para todas?')) return;
+      $('haltMsg').textContent = 'Abriendo…';
+      P28Access.setHalt(false, key, '').then(function (res) {
+        if (!res.ok) { $('haltMsg').textContent = 'No se pudo abrir.'; return; }
+        $('haltMsg').textContent = 'Abierta. Ya pueden entrar otra vez.';
+        paintHalt();
+      });
+    });
     $('btnPush') && ($('btnPush').onclick = function () {
       var body = $('pushBody').value.trim();
       if (!body) { $('pushMsg').textContent = 'Escribe el mensaje.'; return; }

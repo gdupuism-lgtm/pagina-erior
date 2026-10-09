@@ -266,8 +266,42 @@
     st.access.expires_at = st.access.expires_at || new Date(0).toISOString();
   }
 
-  function applyMode(s) {
+  function haltStore() {
+    try { return JSON.parse(localStorage.getItem('erior-p28-halt') || '{}'); } catch (e) { return {}; }
+  }
+  function haltSave(h) {
+    try { localStorage.setItem('erior-p28-halt', JSON.stringify(h || {})); } catch (e) {}
+  }
+  function showHalt(msg) {
     document.body.classList.remove('is-app', 'is-unlocked', 'is-lock', 'is-expired');
+    document.body.classList.add('is-halt');
+    if ($('haltText') && msg) $('haltText').textContent = msg;
+    if (window.P28Vault && P28Vault.pause) P28Vault.pause();
+  }
+  function isHaltErr(err) {
+    var msg = (err && err.message) || '';
+    return (err && err.code === 'halt') || /cerrada por ahora|app cerrada/i.test(msg);
+  }
+  function checkHalt() {
+    if (!window.P28Access || !P28Access.getHalt) {
+      return Promise.resolve(!!haltStore().suspended);
+    }
+    return P28Access.getHalt().then(function (h) {
+      if (!h) return !!haltStore().suspended;
+      haltSave(h);
+      return !!h.suspended;
+    });
+  }
+  function enforceHalt(h) {
+    h = h || haltStore();
+    if (!h.suspended) return false;
+    showHalt(h.message || 'Tus audios y tu reto se quedan en este celular. Vuelve cuando te avisemos.');
+    return true;
+  }
+
+  function applyMode(s) {
+    if (enforceHalt()) return;
+    document.body.classList.remove('is-app', 'is-unlocked', 'is-lock', 'is-expired', 'is-halt');
     syncInstallUi();
     if (s.access) lockClock(s);
     if (s.access && expiredAccess(s)) {
@@ -1228,6 +1262,11 @@
       applyMode(state);
     }).catch(function (err) {
       var msg = (err && err.message) || '';
+      if (isHaltErr(err)) {
+        haltSave({ suspended: true, message: msg });
+        showHalt(msg);
+        return;
+      }
       if ((err && err.code === 'expired') || /30 días terminó|venc/i.test(msg)) {
         patch(markExpired);
         applyMode(load());
@@ -1333,6 +1372,11 @@
       applyMode(state);
     }).catch(function (err) {
       var msg = (err && err.message) || '';
+      if (isHaltErr(err)) {
+        haltSave({ suspended: true, message: msg });
+        showHalt(msg);
+        return;
+      }
       if ((err && err.code === 'expired') || /30 días terminó|venc/i.test(msg)) {
         patch(markExpired);
         applyMode(load());
@@ -1353,21 +1397,24 @@
     if (params.get('reset') === '1') {
       try {
         Object.keys(localStorage).forEach(function (k) {
-          if (k && k.indexOf('erior-p28') === 0 && k.indexOf('issued') < 0) localStorage.removeItem(k);
+          if (k && k.indexOf('erior-p28') === 0 && k.indexOf('issued') < 0 && k.indexOf('halt') < 0) localStorage.removeItem(k);
         });
       } catch (e) {}
       if (history.replaceState) history.replaceState({}, '', location.pathname + location.hash);
     }
-    var q = params.get('acceso') || params.get('k');
-    var saved = load();
-    if (q) {
-      if ($('accessCode')) $('accessCode').value = q;
-      doUnlock(q);
-    } else if (saved.access) {
-      refreshThenApply(saved);
-    } else {
-      document.body.classList.add('is-lock');
-    }
+    checkHalt().then(function (on) {
+      if (on) { enforceHalt(); return; }
+      var q = params.get('acceso') || params.get('k');
+      var saved = load();
+      if (q) {
+        if ($('accessCode')) $('accessCode').value = q;
+        doUnlock(q);
+      } else if (saved.access) {
+        refreshThenApply(saved);
+      } else {
+        document.body.classList.add('is-lock');
+      }
+    });
   }
 
   var bootDone = false;
@@ -1390,10 +1437,18 @@
   setInterval(refreshToday, 60000);
   setInterval(paintTimer, 1000);
   function guardAccess() {
-    var s = load();
-    if (s.access && expiredAccess(s)) applyMode(s);
+    checkHalt().then(function (on) {
+      if (on) { enforceHalt(); return; }
+      if (document.body.classList.contains('is-halt')) {
+        document.body.classList.remove('is-halt');
+        finishBoot();
+        return;
+      }
+      var s = load();
+      if (s.access && expiredAccess(s)) applyMode(s);
+    });
   }
-  setInterval(guardAccess, 30000);
+  setInterval(guardAccess, 20000);
   document.addEventListener('visibilitychange', function () {
     if (document.hidden) return;
     guardAccess();

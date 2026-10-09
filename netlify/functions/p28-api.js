@@ -628,6 +628,19 @@ exports.handler = async (event, context) => {
   const sb = !!getSupabaseConfig();
 
   try {
+    if (action === 'status') {
+      const halt = (await blobGet('halt', { suspended: false })) || { suspended: false };
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({
+          ok: true,
+          suspended: !!halt.suspended,
+          message: String(halt.message || ''),
+        }),
+      };
+    }
+
     if (action === 'vapid') {
       const pub = process.env.P28_VAPID_PUBLIC || 'BAiWc2iqXyjI9cHcH1SjemkJyEXVG__4CKyOngh1hnZsIjhzTB19ul1Dv6x09d7Gt7fRwZoKg6glr4hZPvH3hRo';
       return { statusCode: 200, headers, body: JSON.stringify({ ok: true, publicKey: pub }) };
@@ -748,6 +761,18 @@ exports.handler = async (event, context) => {
     }
 
     if (action === 'unlock') {
+      const halt = (await blobGet('halt', { suspended: false })) || { suspended: false };
+      if (halt.suspended) {
+        return {
+          statusCode: 403,
+          headers,
+          body: JSON.stringify({
+            ok: false,
+            error: halt.message || 'Erior Center está cerrada por ahora. Vuelve cuando te avisemos.',
+            code: 'halt',
+          }),
+        };
+      }
       const code = normalizeCode(body.code);
       const device = String(body.device || '').slice(0, 80);
       const deviceLabel = String(body.deviceLabel || 'Aparato').slice(0, 40);
@@ -822,6 +847,18 @@ exports.handler = async (event, context) => {
 
     if (!p28AdminOk(event)) {
       return { statusCode: 401, headers, body: JSON.stringify({ ok: false, error: 'No autorizado' }) };
+    }
+
+    if (action === 'halt') {
+      const suspended = !!body.suspended;
+      const message = String(body.message || '').trim().slice(0, 280);
+      const halt = {
+        suspended: suspended,
+        message: message,
+        at: new Date().toISOString(),
+      };
+      await blobSet('halt', halt);
+      return { statusCode: 200, headers, body: JSON.stringify({ ok: true, suspended: halt.suspended, message: halt.message }) };
     }
 
     if (action === 'list') {

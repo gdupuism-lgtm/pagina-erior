@@ -1,15 +1,15 @@
-var CACHE = 'erior-p28-v46';
+var CACHE = 'erior-p28-v47';
 var PRECACHE = [
   './',
   './index.html',
-  './protocolo.css?v=53',
-  './access.js?v=36',
+  './protocolo.css?v=54',
+  './access.js?v=37',
   './phrases.js?v=24',
   './routines.js?v=24',
   './plan.js?v=22',
   './vault.js?v=37',
   './vision.js?v=7',
-  './protocolo.js?v=47',
+  './protocolo.js?v=48',
   './manifest.webmanifest',
   './icon.svg?v=35',
   './icon-192.png',

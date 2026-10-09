@@ -17,7 +17,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="protocolo.css?v=53">
+  <link rel="stylesheet" href="protocolo.css?v=54">
   <script>
     window.__p28Install = null;
     window.addEventListener('beforeinstallprompt', function (e) {
@@ -55,6 +55,14 @@
       </p>
       <button type="button" class="ig-install install-cta" id="btnInstall">Instalar app</button>
     </header>
+
+    <section id="haltGate" class="no-print">
+      <div class="card foil-card gate-box">
+        <span class="kicker">Erior Center</span>
+        <h2 class="sec-title">App cerrada por ahora</h2>
+        <p class="sec-sub" id="haltText">Tus audios y tu reto se quedan en este celular. Vuelve cuando te avisemos.</p>
+      </div>
+    </section>
 
     <section id="expiredGate" class="no-print">
       <div class="card foil-card gate-box">
@@ -414,16 +422,16 @@
     </div>
   </div>
 
-  <script src="access.js?v=36"></script>
+  <script src="access.js?v=37"></script>
   <script src="phrases.js?v=24"></script>
   <script src="routines.js?v=24"></script>
   <script src="plan.js?v=22"></script>
   <script src="vault.js?v=37"></script>
   <script src="vision.js?v=7"></script>
-  <script src="protocolo.js?v=47"></script>
+  <script src="protocolo.js?v=48"></script>
   <script>
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js?v=46', { scope: './' }).catch(function () {});
+      navigator.serviceWorker.register('sw.js?v=47', { scope: './' }).catch(function () {});
     }
     (function () {
       /* Si hay versión nueva en línea, recarga al volver a la app (nunca con audio sonando). */

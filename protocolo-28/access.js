@@ -383,6 +383,17 @@
     apiBase: apiBase,
     firstName: firstName,
     normalize: normalize,
+    getHalt: function () {
+      return fetch(apiBase() + '?action=status')
+        .then(function (r) { return r.json(); })
+        .then(function (j) {
+          return { suspended: !!(j && j.suspended), message: (j && j.message) || '' };
+        })
+        .catch(function () { return null; });
+    },
+    setHalt: function (suspended, adminKey, message) {
+      return call('halt', { suspended: !!suspended, message: message || '' }, adminKey);
+    },
     unlock: unlock,
     issue: issue,
     reactivate: reactivate,
