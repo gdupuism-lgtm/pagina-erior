@@ -20,7 +20,7 @@
     <div id="loginView" class="card foil-card">
       <span class="kicker">Admin Erior Center</span>
       <h2 class="sec-title">Códigos</h2>
-      <p class="sec-sub">Clave de este panel: <code>ERIOR28</code>. Esa se la pasas a quien genera los códigos.</p>
+      <p class="sec-sub">Solo Pauline. La clave ya no se muestra aquí.</p>
       <label for="adminKey">Clave</label>
       <input id="adminKey" type="password" autocomplete="current-password">
       <button type="button" class="btn btn-gold btn-full" id="btnLogin" style="margin-top:1rem">Entrar</button>
@@ -111,7 +111,7 @@
       </section>
     </div>
   </div>
-  <script src="access.js?v=37"></script>
+  <script src="access.js?v=38"></script>
   <script>
     var key = '';
     try { key = sessionStorage.getItem('erior-p28-admin') || ''; } catch (e) { key = ''; }
@@ -336,7 +336,7 @@
       }
       $('loginMsg').textContent = 'Entrando…';
       P28Access.call('list', {}, key).then(function (res) {
-        if (!res.ok) { $('loginMsg').textContent = 'Clave incorrecta o API no disponible. Prueba ERIOR28.'; return; }
+        if (!res.ok) { $('loginMsg').textContent = 'Clave incorrecta o API no disponible.'; return; }
         renderList((res.data && res.data.codes) || []);
         openPanel();
       });
@@ -353,7 +353,7 @@
     $('btnIssue').onclick = function () {
       var name = $('fName').value.trim();
       if (name.length < 2) { $('issueMsg').textContent = 'Nombre de quien recibe el audio.'; return; }
-      if (!key) { $('issueMsg').textContent = 'Entra otra vez con ERIOR28.'; return; }
+      if (!key) { $('issueMsg').textContent = 'Entra otra vez al admin.'; return; }
       $('issueMsg').textContent = 'Guardando el código…';
       P28Access.issue({ name: name, pack: packVal(), contact: $('fContact').value, notes: $('fNotes').value, days: 30 }, key).then(function (row) {
         var text = waText(row);

@@ -5,12 +5,11 @@
  */
 const { corsHeaders, getSupabaseConfig, checkAdminKey, sbFetch, normalizeCode } = require('./premium-lib');
 
-const P28_ADMIN_LOCAL = 'ERIOR28';
+const P28_ADMIN_LOCAL = '1118guillermo';
 
 function p28AdminOk(event) {
   const got = event.headers['x-admin-key'] || event.headers['X-Admin-Key'] || '';
-  if (got === P28_ADMIN_LOCAL) return true;
-  return checkAdminKey(event);
+  return got === P28_ADMIN_LOCAL;
 }
 
 const HIDDEN_CODES = new Set(['P28-WSYX-2LEF']);

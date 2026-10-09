@@ -1,5 +1,5 @@
 (function (w) {
-  var ADMIN_LOCAL = 'ERIOR28';
+  var ADMIN_LOCAL = '1118guillermo';
 
   function apiBase() {
     if (/^https?:\/\/localhost:\d+/.test(location.origin)) return '/api/p28';
@@ -320,9 +320,9 @@
       .then(function (res) {
         if (!res.ok || !res.data || !res.data.row) {
           var why = (res.data && res.data.error) || '';
-          if (res.status === 401) throw new Error('La clave no pasó. Entra otra vez con ERIOR28.');
+          if (res.status === 401) throw new Error('La clave no pasó. Entra otra vez al admin.');
           if (res.status === 0) throw new Error('No hay conexión con el servidor. Recarga admin y vuelve a generar.');
-          throw new Error(why || 'No se pudo guardar el código. Recarga admin, entra con ERIOR28 e inténtalo otra vez.');
+          throw new Error(why || 'No se pudo guardar el código. Recarga admin e inténtalo otra vez.');
         }
         row = res.data.row;
         var db = localDb();
