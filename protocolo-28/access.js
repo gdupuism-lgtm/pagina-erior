@@ -1,5 +1,5 @@
 (function (w) {
-  var ADMIN_LOCAL = '1118guillermo';
+  var ADMIN_LOCAL = '';
 
   function apiBase() {
     if (/^https?:\/\/localhost:\d+/.test(location.origin)) return '/api/p28';
