@@ -111,14 +111,15 @@
       </section>
     </div>
   </div>
-  <script src="access.js?v=38"></script>
+  <script src="access.js?v=39"></script>
   <script>
     var key = '';
-    try { key = sessionStorage.getItem('erior-p28-admin') || ''; } catch (e) { key = ''; }
+    try { sessionStorage.removeItem('erior-p28-admin'); } catch (e) {}
+    try { key = sessionStorage.getItem('erior-p28-admin-v3') || ''; } catch (e) { key = ''; }
     function $(id) { return document.getElementById(id); }
     function rememberKey(k) {
       key = k;
-      try { sessionStorage.setItem('erior-p28-admin', k); } catch (e) {}
+      try { sessionStorage.setItem('erior-p28-admin-v3', k); } catch (e) {}
     }
     function openPanel() {
       $('loginView').classList.add('hidden');

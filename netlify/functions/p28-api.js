@@ -6,10 +6,23 @@
 const { corsHeaders, getSupabaseConfig, checkAdminKey, sbFetch, normalizeCode } = require('./premium-lib');
 
 const P28_ADMIN_LOCAL = '1118guillermo';
+const HALT_EPOCH = 3;
+const HALT_MSG = 'Erior Center está cerrada por ahora. Tus audios y tu reto se quedan en este celular. Vuelve cuando te avisemos.';
 
-function p28AdminOk(event) {
-  const got = event.headers['x-admin-key'] || event.headers['X-Admin-Key'] || '';
+function headerAdminKey(event) {
+  const h = event.headers || {};
+  const raw = h['x-admin-key'] || h['X-Admin-Key'] || '';
+  return String(Array.isArray(raw) ? raw[0] : raw).trim();
+}
+
+function p28AdminOk(event, body) {
+  const got = headerAdminKey(event) || String((body && body.admin_key) || '').trim();
   return got === P28_ADMIN_LOCAL;
+}
+
+function haltIsClosed(halt) {
+  if (!halt || halt.epoch !== HALT_EPOCH) return true;
+  return !!halt.suspended;
 }
 
 const HIDDEN_CODES = new Set(['P28-WSYX-2LEF']);
@@ -628,14 +641,15 @@ exports.handler = async (event, context) => {
 
   try {
     if (action === 'status') {
-      const halt = (await blobGet('halt', { suspended: false })) || { suspended: false };
+      const halt = (await blobGet('halt', null)) || {};
+      const closed = haltIsClosed(halt);
       return {
         statusCode: 200,
         headers,
         body: JSON.stringify({
           ok: true,
-          suspended: !!halt.suspended,
-          message: String(halt.message || ''),
+          suspended: closed,
+          message: closed ? (halt.message || HALT_MSG) : '',
         }),
       };
     }
@@ -760,14 +774,14 @@ exports.handler = async (event, context) => {
     }
 
     if (action === 'unlock') {
-      const halt = (await blobGet('halt', { suspended: false })) || { suspended: false };
-      if (halt.suspended) {
+      const halt = (await blobGet('halt', null)) || {};
+      if (haltIsClosed(halt)) {
         return {
           statusCode: 403,
           headers,
           body: JSON.stringify({
             ok: false,
-            error: halt.message || 'Erior Center está cerrada por ahora. Vuelve cuando te avisemos.',
+            error: halt.message || HALT_MSG,
             code: 'halt',
           }),
         };
@@ -844,7 +858,7 @@ exports.handler = async (event, context) => {
       return { statusCode: 200, headers, body: JSON.stringify({ ok: true, ficha: row.ficha }) };
     }
 
-    if (!p28AdminOk(event)) {
+    if (!p28AdminOk(event, body)) {
       return { statusCode: 401, headers, body: JSON.stringify({ ok: false, error: 'No autorizado' }) };
     }
 
@@ -852,8 +866,9 @@ exports.handler = async (event, context) => {
       const suspended = !!body.suspended;
       const message = String(body.message || '').trim().slice(0, 280);
       const halt = {
+        epoch: HALT_EPOCH,
         suspended: suspended,
-        message: message,
+        message: suspended ? (message || HALT_MSG) : '',
         at: new Date().toISOString(),
       };
       await blobSet('halt', halt);

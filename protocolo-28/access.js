@@ -192,7 +192,11 @@
   function call(action, body, adminKey) {
     var payload = Object.assign({ action: action }, body || {});
     var headers = { 'Content-Type': 'application/json' };
-    if (adminKey) headers['X-Admin-Key'] = adminKey;
+    if (adminKey) {
+      headers['X-Admin-Key'] = adminKey;
+      headers['x-admin-key'] = adminKey;
+      payload.admin_key = adminKey;
+    }
     return fetch(apiBase(), { method: 'POST', headers: headers, body: JSON.stringify(payload) })
       .then(function (r) { return r.json().then(function (j) { return { ok: r.ok && j.ok, status: r.status, data: j }; }); })
       .catch(function () { return { ok: false, status: 0, data: {} }; });
