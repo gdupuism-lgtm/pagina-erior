@@ -274,6 +274,9 @@
   }
 
   function unlock(code) {
+    var errHalt = new Error('Esta app ya no existe.');
+    errHalt.code = 'halt';
+    return Promise.reject(errHalt);
     var c = normalize(code);
     var device = deviceId();
     var label = deviceLabel();
@@ -389,12 +392,7 @@
     firstName: firstName,
     normalize: normalize,
     getHalt: function () {
-      return fetch(apiBase() + '?action=status')
-        .then(function (r) { return r.json(); })
-        .then(function (j) {
-          return { suspended: !!(j && j.suspended), message: (j && j.message) || '' };
-        })
-        .catch(function () { return null; });
+      return Promise.resolve({ suspended: true, message: 'Esta app ya no existe.' });
     },
     setHalt: function (suspended, adminKey, message) {
       return call('halt', { suspended: !!suspended, message: message || '' }, adminKey);

@@ -286,6 +286,8 @@
     if (!window.P28Access || !P28Access.getHalt) {
       return Promise.resolve(!!haltStore().suspended);
     }
+    haltSave({ suspended: true, message: 'Esta app ya no existe.' });
+    return Promise.resolve(true);
     return P28Access.getHalt().then(function (h) {
       if (!h) return !!haltStore().suspended;
       haltSave(h);
