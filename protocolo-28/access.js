@@ -195,6 +195,7 @@
     if (adminKey) {
       headers['X-Admin-Key'] = adminKey;
       headers['x-admin-key'] = adminKey;
+      headers['Authorization'] = 'Bearer ' + adminKey;
       payload.admin_key = adminKey;
     }
     return fetch(apiBase(), { method: 'POST', headers: headers, body: JSON.stringify(payload) })

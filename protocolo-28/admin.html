@@ -111,7 +111,7 @@
       </section>
     </div>
   </div>
-  <script src="access.js?v=39"></script>
+  <script src="access.js?v=40"></script>
   <script>
     var key = '';
     try { sessionStorage.removeItem('erior-p28-admin'); } catch (e) {}
@@ -329,6 +329,18 @@
         $('pushStatus').textContent = lines.join('\n');
       });
     });
+    function afterLogin(res) {
+      if (!res.ok) {
+        if (res.status === 401) $('loginMsg').textContent = 'Clave incorrecta. Bórrala y escríbela otra vez.';
+        else if (!res.status) $('loginMsg').textContent = 'Sin conexión. Revisa internet y vuelve a entrar.';
+        else $('loginMsg').textContent = 'El servidor todavía no actualizó. Espera 2 minutos y recarga.';
+        return;
+      }
+      openPanel();
+      P28Access.call('list', {}, key).then(function (listRes) {
+        renderList((listRes.data && listRes.data.codes) || []);
+      });
+    }
     $('btnLogin').onclick = function () {
       rememberKey($('adminKey').value.trim());
       if (P28Access.checkLocalAdmin(key)) {
@@ -336,19 +348,12 @@
         return;
       }
       $('loginMsg').textContent = 'Entrando…';
-      P28Access.call('list', {}, key).then(function (res) {
-        if (!res.ok) { $('loginMsg').textContent = 'Clave incorrecta o API no disponible.'; return; }
-        renderList((res.data && res.data.codes) || []);
-        openPanel();
-      });
+      P28Access.call('login', {}, key).then(afterLogin);
     };
     if (key) {
       $('adminKey').value = key;
-      P28Access.call('list', {}, key).then(function (res) {
-        if (res.ok) {
-          renderList((res.data && res.data.codes) || []);
-          openPanel();
-        }
+      P28Access.call('login', {}, key).then(function (res) {
+        if (res.ok) afterLogin(res);
       });
     }
     $('btnIssue').onclick = function () {

@@ -1,23 +1,48 @@
 /**
  * Reto de Manifestación 28 — códigos de acceso + muro (solo nombre).
- * Admin: header X-Admin-Key = ALICIA_ADMIN_PASSWORD
+ * Admin: solo P28_ADMIN_PASSWORD o la clave local. No usa ALICIA_ADMIN_PASSWORD.
  * Si hay Supabase (erior_p28_*), lo usa. Si no, Netlify Blobs.
  */
-const { corsHeaders, getSupabaseConfig, checkAdminKey, sbFetch, normalizeCode } = require('./premium-lib');
+const { corsHeaders, getSupabaseConfig, sbFetch, normalizeCode } = require('./premium-lib');
 
+const P28_BUILD = 'p28-20261010';
 const P28_ADMIN_LOCAL = '1118guillermo';
 const HALT_EPOCH = 3;
 const HALT_MSG = 'Erior Center está cerrada por ahora. Tus audios y tu reto se quedan en este celular. Vuelve cuando te avisemos.';
 
+function headerVal(headers, name) {
+  const h = headers || {};
+  const want = String(name).toLowerCase();
+  for (const k of Object.keys(h)) {
+    if (String(k).toLowerCase() === want) {
+      const raw = h[k];
+      return String(Array.isArray(raw) ? raw[0] : raw).trim();
+    }
+  }
+  return '';
+}
+
 function headerAdminKey(event) {
-  const h = event.headers || {};
-  const raw = h['x-admin-key'] || h['X-Admin-Key'] || '';
-  return String(Array.isArray(raw) ? raw[0] : raw).trim();
+  const h = (event && event.headers) || {};
+  const direct = headerVal(h, 'x-admin-key');
+  if (direct) return direct;
+  const auth = headerVal(h, 'authorization');
+  if (/^bearer\s+/i.test(auth)) return auth.replace(/^bearer\s+/i, '').trim();
+  return '';
+}
+
+function expectedAdminKey() {
+  return String(process.env.P28_ADMIN_PASSWORD || P28_ADMIN_LOCAL).trim();
 }
 
 function p28AdminOk(event, body) {
-  const got = headerAdminKey(event) || String((body && body.admin_key) || '').trim();
-  return got === P28_ADMIN_LOCAL;
+  const expected = expectedAdminKey();
+  if (!expected) return false;
+  const candidates = [
+    headerAdminKey(event),
+    String((body && (body.admin_key || body.adminKey || body.key)) || '').trim(),
+  ];
+  return candidates.some((got) => got && got === expected);
 }
 
 function haltIsClosed(halt) {
@@ -648,10 +673,18 @@ exports.handler = async (event, context) => {
         headers,
         body: JSON.stringify({
           ok: true,
+          build: P28_BUILD,
           suspended: closed,
           message: closed ? (halt.message || HALT_MSG) : '',
         }),
       };
+    }
+
+    if (action === 'login') {
+      if (!p28AdminOk(event, body)) {
+        return { statusCode: 401, headers, body: JSON.stringify({ ok: false, error: 'No autorizado', build: P28_BUILD }) };
+      }
+      return { statusCode: 200, headers, body: JSON.stringify({ ok: true, login: true, build: P28_BUILD }) };
     }
 
     if (action === 'vapid') {

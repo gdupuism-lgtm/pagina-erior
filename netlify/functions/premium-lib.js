@@ -6,7 +6,7 @@ function corsHeaders(origin) {
   const o = origin && /^https?:\/\//.test(origin) ? origin : '*';
   return {
     'Access-Control-Allow-Origin': o,
-    'Access-Control-Allow-Headers': 'Content-Type, X-Admin-Key',
+    'Access-Control-Allow-Headers': 'Content-Type, X-Admin-Key, Authorization',
     'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
     'Content-Type': 'application/json; charset=utf-8',
   };
